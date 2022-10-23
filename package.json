@@ -6,5 +6,8 @@
   "repository": "https://github.com/bozonx/sls-publish-bot",
   "author": "Kozyrin Ivan <ipkozyrin@gmail.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "telegraf": "^4.10.0"
+  }
 }
