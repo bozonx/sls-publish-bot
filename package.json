@@ -1,0 +1,10 @@
+{
+  "name": "sls-publish-bot",
+  "version": "0.0.1",
+  "description": "Publish bot for SLS",
+  "main": "index.js",
+  "repository": "https://github.com/bozonx/sls-publish-bot",
+  "author": "Kozyrin Ivan <ipkozyrin@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
