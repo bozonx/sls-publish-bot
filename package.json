@@ -2,12 +2,19 @@
   "name": "sls-publish-bot",
   "version": "0.0.1",
   "description": "Publish bot for SLS",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": "https://github.com/bozonx/sls-publish-bot",
   "author": "Kozyrin Ivan <ipkozyrin@gmail.com>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "dev": "ts-node ./src/index.ts"
+  },
   "dependencies": {
     "telegraf": "^4.10.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   }
 }
