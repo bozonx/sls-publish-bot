@@ -15,10 +15,11 @@ export default class App {
 
 
     async init() {
-
+        await this.tg.init();
+        
     }
 
-    
+
     private makeConf(): AppConfig {
         return config;
     }
