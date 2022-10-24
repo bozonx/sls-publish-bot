@@ -1,6 +1,6 @@
 import App from "../App";
 import { ignorePromiseError } from "../lib/common";
-import {AppEvents, MENU_MANAGE_SITE} from "../types/consts";
+import {AppEvents, MENU_MANAGE_SITE, MENU_NEW_RAW_PAGE} from "../types/consts";
 import {waitEvent} from '../lib/waitEvent';
 import NotionListItem from '../notionApi/types/NotionListItem';
 
@@ -24,31 +24,47 @@ export default class PublishHelper {
     const rawPages = await this.app.notionRequest.getDbList(
       this.app.config.channels[channelId].notionRawPagesDbId
     );
+
     const messageResult = await this.app.tg.bot.telegram.sendMessage(
       this.app.tg.botChatId,
       this.app.i18n.menu.selectPage,
       {
         reply_markup: {
           inline_keyboard: [
-            rawPages.map((item, index) => {
-              return {
-                text: item.title,
-                callback_data: eventMarker + index,
+            [
+              ...rawPages.map((item, index) => {
+                return {
+                  text: item.title,
+                  callback_data: eventMarker + index,
+                }
+              }),
+              {
+                text: this.app.i18n.menu.btnNewPage,
+                callback_data: MENU_NEW_RAW_PAGE,
               }
-            }),
+            ],
           ]
         }
       }
     );
 
     const selectedResult: string = await waitEvent(this.app.events, AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if (queryData.indexOf(eventMarker) === 0) return true;
+      if (queryData === MENU_NEW_RAW_PAGE && queryData.indexOf(eventMarker) === 0) return true;
     });
+
+    ignorePromiseError(this.app.tg.ctx.deleteMessage(messageResult.message_id));
+
+    if (selectedResult === MENU_NEW_RAW_PAGE) {
+
+      // TODO: !!!!
+
+      throw new Error('UNDER CONSTRUCTION!!!')
+
+    }
+
     const splat: string[] = selectedResult.split(':');
     const pageIndex = Number(splat[1])
     const selectedItem: NotionListItem = rawPages[pageIndex];
-
-    ignorePromiseError(this.app.tg.ctx.deleteMessage(messageResult.message_id));
 
     await this.app.tg.bot.telegram.sendMessage(
       this.app.tg.botChatId,

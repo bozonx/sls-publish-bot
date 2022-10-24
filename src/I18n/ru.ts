@@ -4,12 +4,13 @@ const dict = {
     btnCreateArticle: 'Создать статью',
     btnCreatePost1000: 'Создать пост1000/мем',
     btnCreateStory: 'Создать сторис',
+    btnNewPage: 'СОЗДАТЬ НОВУЮ',
     selectChannel: 'Выберете канал',
     selectManageSite: 'Сайт slsfreedom',
-    selectPage: 'Выберете сырую страницу из раздела "К выкладке"',
+    selectPage: 'Выберете заготовку или создайте новую',
     selectedType: 'Выбран тип: ',
     selectedChannel: 'Выбран канал: ',
-    selectedRawPage: 'Выбран заготовка: ',
+    selectedRawPage: 'Выбрана заготовка: ',
     selectedSlsSite: 'Управление сайтом slsfreedom.org'
   }
   

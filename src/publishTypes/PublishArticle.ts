@@ -19,7 +19,7 @@ export default class PublishArticle {
     const notionPageContent = await this.app.notionRequest
       .getPageContent(notionPage.pageId)
 
-    console.log(1111, channelId, notionPageContent)
+    console.log(33333, channelId, notionPageContent)
   }
 
 }

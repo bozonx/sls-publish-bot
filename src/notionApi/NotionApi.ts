@@ -35,8 +35,6 @@ export default class NotionApi {
   ): Promise<NotionListItem[]> {
     const items = await this.getDbItemList(dbId, page_size);
 
-    console.log(2222, items)
-
     return items.map((item): NotionListItem => {
 
       const NameProp = item.properties.Name
