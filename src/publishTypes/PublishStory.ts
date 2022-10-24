@@ -2,7 +2,7 @@ import App from "../App";
 import PublishHelper from "./PublishHelper";
 
 
-export default class PublishArticle {
+export default class PublishStory {
   private readonly app: App;
   private readonly publishHelper: PublishHelper;
 

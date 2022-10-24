@@ -1,5 +1,8 @@
 import App from "./App";
 import { ignorePromiseError } from "./lib/common";
+import PublishArticle from "./publishTypes/PublishArticle";
+import PublishPost1000 from "./publishTypes/PublishPost1000";
+import PublishStory from "./publishTypes/PublishStory";
 import { AppEvents, MENU_MAKE_ARTICLE, MENU_MAKE_POST1000, MENU_MAKE_STORY } from "./types/consts";
 
 
@@ -8,7 +11,6 @@ export default class MainMenuHandler {
   public readonly app: App;
   private startMessageId: number = -1;
   private channelMessageId: number = -1;
-  private pageSelectMessageId: number = -1;
 
 
   constructor(app: App) {
@@ -21,12 +23,7 @@ export default class MainMenuHandler {
       else if (queryData.indexOf('channel:') === 0) {
         const splat: string[] = queryData.split(':');
 
-        this.askPageToUse(Number(splat[1]), splat[2]).catch((e) => { throw e });
-      }
-      else if (queryData.indexOf('selectedPage:') === 0) {
-        const splat: string[] = queryData.split(':');
-
-        this.startMakingMaterial(Number(splat[1]), splat[2], splat[3]).catch((e) => { throw e });
+        this.startMakingMaterial(Number(splat[1]), splat[2]).catch((e) => { throw e });
       }
     });
   }
@@ -59,8 +56,12 @@ export default class MainMenuHandler {
   }
 
 
-  private async askChannel(selection: string | undefined) {
+  private async askChannel(menuAction: string | undefined) {
     ignorePromiseError(this.app.tg.ctx.deleteMessage(this.startMessageId));
+    await this.app.tg.bot.telegram.sendMessage(
+      this.app.tg.botChatId,
+      this.app.i18n.menu.selectedType + menuAction
+    );
 
     const result = await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, this.app.i18n.menu.selectChannel, {
       reply_markup: {
@@ -68,7 +69,7 @@ export default class MainMenuHandler {
           this.app.config.channels.map((item, index: number): any => {
             return {
               text: item.dispname,
-              callback_data: `channel:${index}:${selection}`,
+              callback_data: `channel:${index}:${menuAction}`,
             };
           }),
         ]
@@ -78,29 +79,35 @@ export default class MainMenuHandler {
     this.channelMessageId = result.message_id;
   }
 
-  private async askPageToUse(channelId: number, menuAction: string) {
+
+  private async startMakingMaterial(channelId: number, menuAction: string) {
     ignorePromiseError(this.app.tg.ctx.deleteMessage(this.channelMessageId));
+    await this.app.tg.bot.telegram.sendMessage(
+      this.app.tg.botChatId,
+      this.app.i18n.menu.selectedChannel + channelId
+    );
 
-    const rawPages = await this.app.notionRequest.getRawPageList();
-    const result = await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, this.app.i18n.menu.selectPage, {
-      reply_markup: {
-        inline_keyboard: [
-          rawPages.map((item) => {
-            return {
-              text: item.caption,
-              callback_data: `selectedPage:${channelId}:${menuAction}:${item.pageId}`,
-            }
-          }),
-        ]
-      }
-    });
+    switch (menuAction) {
+      case MENU_MAKE_ARTICLE:
+        const article = new PublishArticle(this.app);
 
-    this.pageSelectMessageId = result.message_id;
-  }
+        await article.start(channelId, menuAction);
+        break;
 
-  private async startMakingMaterial(channelId: number, menuAction: string, pageId: string) {
-    ignorePromiseError(this.app.tg.ctx.deleteMessage(this.pageSelectMessageId));
+      case MENU_MAKE_POST1000:
+        const post1000 = new PublishPost1000(this.app);
 
-    console.log(1111, channelId, menuAction, pageId)
+        await post1000.start(channelId, menuAction);
+        break;
+
+      case MENU_MAKE_STORY:
+        const story = new PublishStory(this.app);
+
+        await story.start(channelId, menuAction);
+        break;
+    
+      default:
+        break;
+    }
   }
 }

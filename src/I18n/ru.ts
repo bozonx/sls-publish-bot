@@ -5,7 +5,10 @@ const dict = {
     btnCreatePost1000: 'Создать пост1000/мем',
     btnCreateStory: 'Создать сторис',
     selectChannel: 'Выберете канал',
-    selectPage: 'Выберете сырую страницу из раздела "К выкладке"'
+    selectPage: 'Выберете сырую страницу из раздела "К выкладке"',
+    selectedType: 'Выбран тип: ',
+    selectedChannel: 'Выбран канал: ',
+    selectedRawPage: 'Выбран заготовка: ',
   }
   
 }

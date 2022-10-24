@@ -40,9 +40,6 @@ export default class Tg {
 }
 
 
-
-      //bot.telegram.sendMessage(ctx.chat.id, 'hello there! Welcome to my new telegram bot.', {
-      //})
     // bot.help((ctx) => ctx.reply('Send me a sticker'));
     // bot.hears('hi', (ctx) => ctx.reply('Hey there'));
 
