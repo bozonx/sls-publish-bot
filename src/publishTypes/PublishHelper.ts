@@ -1,9 +1,8 @@
 import App from "../App";
 import { ignorePromiseError } from "../lib/common";
-import {AppEvents, MENU_MANAGE_SITE, MENU_NEW_RAW_PAGE} from "../types/consts";
+import {AppEvents, MENU_NEW_RAW_PAGE} from "../types/consts";
 import {waitEvent} from '../lib/waitEvent';
 import NotionListItem from '../notionApi/types/NotionListItem';
-
 
 
 export default class PublishHelper {
@@ -32,16 +31,16 @@ export default class PublishHelper {
         reply_markup: {
           inline_keyboard: [
             [
+              {
+                text: this.app.i18n.menu.btnNewPage,
+                callback_data: MENU_NEW_RAW_PAGE,
+              },
               ...rawPages.map((item, index) => {
                 return {
                   text: item.title,
                   callback_data: eventMarker + index,
                 }
-              }),
-              {
-                text: this.app.i18n.menu.btnNewPage,
-                callback_data: MENU_NEW_RAW_PAGE,
-              }
+              })
             ],
           ]
         }
@@ -49,7 +48,7 @@ export default class PublishHelper {
     );
 
     const selectedResult: string = await waitEvent(this.app.events, AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if (queryData === MENU_NEW_RAW_PAGE && queryData.indexOf(eventMarker) === 0) return true;
+      if (queryData === MENU_NEW_RAW_PAGE || queryData.indexOf(eventMarker) === 0) return true;
     });
 
     ignorePromiseError(this.app.tg.ctx.deleteMessage(messageResult.message_id));
@@ -59,7 +58,6 @@ export default class PublishHelper {
       // TODO: !!!!
 
       throw new Error('UNDER CONSTRUCTION!!!')
-
     }
 
     const splat: string[] = selectedResult.split(':');

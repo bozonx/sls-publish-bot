@@ -11,7 +11,7 @@ export async function waitEvent(
       const timeout = setTimeout(() => {
         events.removeListener(handlerIndex);
         reject(`Event ${eventName} timout`);
-      }, DEFAULT_WAIT_EVENT_TIMEOUT_SEC);
+      }, DEFAULT_WAIT_EVENT_TIMEOUT_SEC * 1000);
 
       try {
         const result = cb(data);
