@@ -37,6 +37,7 @@ export default class MainMenuHandler {
 
 
   private async askChannel(): Promise<number> {
+    const eventMarker = 'channel:';
     const messageResult = await this.app.tg.bot.telegram.sendMessage(
       this.app.tg.botChatId,
       this.app.i18n.menu.selectChannel,
@@ -47,7 +48,7 @@ export default class MainMenuHandler {
               ...this.app.config.channels.map((item, index: number): any => {
                 return {
                   text: item.dispname,
-                  callback_data: `channel:${index}`,
+                  callback_data: eventMarker + index,
                 };
               }),
               {
@@ -61,7 +62,7 @@ export default class MainMenuHandler {
     );
 
     const selectedResult: string = await waitEvent(this.app.events, AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if (queryData === MENU_MANAGE_SITE || queryData.indexOf('channel:') === 0) return true;
+      if (queryData === MENU_MANAGE_SITE || queryData.indexOf(eventMarker) === 0) return true;
     });
 
     if (selectedResult === MENU_MANAGE_SITE) {

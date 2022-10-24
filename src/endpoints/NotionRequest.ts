@@ -1,6 +1,7 @@
 import App from "../App";
 import NotionPage from "../notionApi/types/NotionPage";
 import NotionApi from "../notionApi/NotionApi";
+import NotionListItem from '../notionApi/types/NotionListItem';
 
 
 export default class NotionRequest {
@@ -16,19 +17,14 @@ export default class NotionRequest {
   // async init() {
   // }
 
-  async test(channelId: number) {
-    await this.notion.getPreparedDbItemList(this.app.config.channels[channelId].notionRawPagesDbId)
+  // async test(channelId: number) {
+  //   await this.notion.getPreparedDbItemList(this.app.config.channels[channelId].notionRawPagesDbId)
+  //
+  // }
 
-  }
 
-
-  async getRawPageList(): Promise<NotionPage[]> {
-    return [
-      {
-        pageId: '123',
-        title: 'заголовок заготовки',
-      },
-    ];
+  async getDbList(dbId: string): Promise<NotionListItem[]> {
+    return this.notion.getPreparedDbItemList(dbId)
   }
 
   async getPageContent(pageId: string): Promise<string> {

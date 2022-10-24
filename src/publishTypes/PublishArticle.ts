@@ -1,5 +1,6 @@
 import App from "../App";
 import PublishHelper from "./PublishHelper";
+import NotionListItem from '../notionApi/types/NotionListItem';
 
 
 export default class PublishArticle {
@@ -14,7 +15,7 @@ export default class PublishArticle {
 
 
   async start(channelId: number) {
-    const notionPage = await this.publishHelper.askPageToUse(channelId);
+    const notionPage: NotionListItem = await this.publishHelper.askPageToUse(channelId);
     const notionPageContent = await this.app.notionRequest
       .getPageContent(notionPage.pageId)
 
