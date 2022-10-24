@@ -1,7 +1,7 @@
 import App from "../App";
 import { ignorePromiseError } from "../lib/common";
 import { AppEvents } from "../types/consts";
-import NotionPage from "../types/NotionPage";
+import NotionPage from "../notionApi/types/NotionPage";
 
 
 

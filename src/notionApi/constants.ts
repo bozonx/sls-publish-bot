@@ -1,0 +1,1 @@
+export const DB_DEFAULT_PAGE_SIZE = 10;
