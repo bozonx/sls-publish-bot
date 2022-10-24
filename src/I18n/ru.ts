@@ -5,6 +5,7 @@ const dict = {
     btnCreatePost1000: 'Создать пост1000/мем',
     btnCreateStory: 'Создать сторис',
     selectChannel: 'Выберете канал',
+    selectManageSite: 'Сайт slsfreedom',
     selectPage: 'Выберете сырую страницу из раздела "К выкладке"',
     selectedType: 'Выбран тип: ',
     selectedChannel: 'Выбран канал: ',

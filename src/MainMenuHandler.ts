@@ -10,12 +10,13 @@ import {
   MENU_MAKE_STORY,
   MENU_MANAGE_SITE
 } from "./types/consts";
+import {waitEvent} from "./lib/waitEvent";
 
 
 export default class MainMenuHandler {
   public readonly app: App;
-  private startMessageId: number = -1;
-  private channelMessageId: number = -1;
+  //private startMessageId: number = -1;
+  //private channelMessageId: number = -1;
 
 
   constructor(app: App) {
@@ -31,7 +32,8 @@ export default class MainMenuHandler {
         // TODO: add
       }
       else if ([MENU_MAKE_ARTICLE, MENU_MAKE_POST1000, MENU_MAKE_STORY].includes(queryData)) {
-        this.askChannel(queryData).catch((e) => { throw e });
+        // TODO: add
+        //.catch((e) => { throw e });
       }
 
     });
@@ -39,10 +41,47 @@ export default class MainMenuHandler {
 
 
   async startFromBeginning() {
+    await this.askChannel();
 
   }
 
-  async askPublishType() {
+
+  private async askChannel() {
+    const messageResult = await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, this.app.i18n.menu.selectChannel, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            ...this.app.config.channels.map((item, index: number): any => {
+              return {
+                text: item.dispname,
+                callback_data: `channel:${index}`,
+              };
+            }),
+            {
+              text: this.app.i18n.menu.selectManageSite,
+              callback_data: MENU_MANAGE_SITE,
+            }
+          ],
+        ]
+      }
+    });
+
+    const selectedResult: string = await waitEvent(this.app.events, AppEvents.CALLBACK_QUERY, (queryData: string) => {
+      if (queryData.indexOf('channel:') === 0) return true;
+    });
+
+    const splat: string[] = selectedResult.split(':');
+
+    ignorePromiseError(this.app.tg.ctx.deleteMessage(messageResult.message_id));
+    await this.app.tg.bot.telegram.sendMessage(
+      this.app.tg.botChatId,
+      this.app.i18n.menu.selectedType + menuAction
+    );
+
+    return splat[1];
+  }
+
+  private async askPublishType() {
     const result = await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, this.app.i18n.menu.whatToDo, {
       reply_markup: {
         inline_keyboard: [
@@ -66,31 +105,6 @@ export default class MainMenuHandler {
 
     this.startMessageId = result.message_id;
   }
-
-
-  private async askChannel(menuAction: string | undefined) {
-    ignorePromiseError(this.app.tg.ctx.deleteMessage(this.startMessageId));
-    await this.app.tg.bot.telegram.sendMessage(
-      this.app.tg.botChatId,
-      this.app.i18n.menu.selectedType + menuAction
-    );
-
-    const result = await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, this.app.i18n.menu.selectChannel, {
-      reply_markup: {
-        inline_keyboard: [
-          this.app.config.channels.map((item, index: number): any => {
-            return {
-              text: item.dispname,
-              callback_data: `channel:${index}:${menuAction}`,
-            };
-          }),
-        ]
-      }
-    });
-
-    this.channelMessageId = result.message_id;
-  }
-
 
   private async startMakingMaterial(channelId: number, menuAction: string) {
     ignorePromiseError(this.app.tg.ctx.deleteMessage(this.channelMessageId));
