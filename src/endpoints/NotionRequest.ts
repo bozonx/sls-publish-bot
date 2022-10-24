@@ -1,25 +1,34 @@
+import App from "../App";
+import NotionPage from "../types/NotionPage";
 
 
 export default class NotionRequest {
-    constructor() {
-
-    }
+  private readonly app: App;
 
 
-    async init() {
+  constructor(app: App) {
+    this.app = app;
+  }
 
-    }
+  async init() {
+
+  }
 
 
-    /**
-     * Get pre publish pages list.
-     */
-    async getPrePublishPageList() {
+  /**
+   * Get pre publish pages list.
+   */
+  async getRawPageList(): Promise<NotionPage[]> {
+    return [
+      {
+        pageId: 'qwe',
+        caption: '123',
+      },
+    ];
+  }
 
-    }
+  async getPage() {
 
-    async getPage() {
+  }
 
-    }
-    
 }

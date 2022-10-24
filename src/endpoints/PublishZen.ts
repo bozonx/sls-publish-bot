@@ -1,17 +1,17 @@
 
 
 export default class PublishZen {
-    constructor() {
+	constructor() {
 
-    }
+	}
 
 
-    async init() {
+	async init() {
 
-    }
+	}
 
-    async publish() {
+	async publish() {
 
-    }
+	}
     
 }

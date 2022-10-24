@@ -1,97 +1,48 @@
 import { Context, Telegraf } from 'telegraf';
-import config from './config';
-import { MENU_MAKE_ARTICLE, MENU_MAKE_POST, MENU_MAKE_STORY } from './types/consts';
+import App from './App';
+import MainMenuHandler from './MainMenuHandler';
+import { AppEvents } from './types/consts';
 
 
 export default class Tg {
-    public readonly bot: Telegraf;
-    public ctx!: Context;
-    public botChatId!: number;
-    private startMessageId: number = -1;
+  public readonly bot: Telegraf;
+  public ctx!: Context;
+  public botChatId!: number;
+  private readonly app: App;
+  private readonly mainMenuHandler: MainMenuHandler
 
 
-    constructor() {
-        this.bot = new Telegraf(process.env.BOT_TOKEN as any);
-    }
+  constructor(app: App) {
+    this.app = app;
+    this.bot = new Telegraf(this.app.config.botToken);
+    this.mainMenuHandler = new MainMenuHandler(app);
+  }
 
 
-    async init() {
-        this.bot.start(async (ctx) => {
-            this.ctx = ctx;
-            this.botChatId = ctx.chat.id;
-            this.ctx.reply('Welcome');
+  async init() {
+    this.bot.start(async (ctx) => {
+      this.ctx = ctx;
+      this.botChatId = ctx.chat.id;
+      this.ctx.reply('Welcome');
 
-            //bot.telegram.sendMessage(ctx.chat.id, 'hello there! Welcome to my new telegram bot.', {
-            //})
-            const result = await this.bot.telegram.sendMessage(ctx.chat.id, 'Что хотите сделать?', {
-                reply_markup: {
-                    inline_keyboard: [
-                        [
-                            {
-                                text: "Создать статью",
-                                callback_data: MENU_MAKE_ARTICLE,
-                            },
-                            {
-                                text: "Создать пост",
-                                callback_data: MENU_MAKE_POST,
-                            },
-                            {
-                                text: "Создать сторис",
-                                callback_data: MENU_MAKE_STORY,
-                            },
-                        ],
-        
-                    ]
-                }
-            });
+      this.mainMenuHandler.askPublishType().catch((e) => {throw e});
+    });
 
-            this.startMessageId = result.message_id;
-        });
-        // bot.help((ctx) => ctx.reply('Send me a sticker'));
-        // bot.on('sticker', (ctx) => ctx.reply('👍'));
-        // bot.hears('hi', (ctx) => ctx.reply('Hey there'));
-        this.bot.launch();
+    this.bot.on('callback_query', (ctx) => {
+      if (!ctx.update.callback_query.data) throw new Error('Empty data in callback_query');
 
-        this.bot.on('callback_query', (ctx) => {
-            if (!ctx.update.callback_query.data) throw new Error('Empty data in callback_query');
+      this.app.events.emit(AppEvents.CALLBACK_QUERY, ctx.update.callback_query.data);
+    });
 
-            if ([MENU_MAKE_ARTICLE, MENU_MAKE_POST, MENU_MAKE_STORY].includes(ctx.update.callback_query.data)) {
-                this.askChannel(ctx.update.callback_query.data).catch((e) => {throw e});
-                
-                return;
-            }
-            else if (ctx.update.callback_query.data.indexOf('channel:') === 0) {
-                const splat: string[] = ctx.update.callback_query.data.split(':');
-                const channelId: number = Number(splat[1]);
-                const menuAction: string = splat[2];
-
-                console.log(22222, channelId, menuAction)
-
-
-                return;
-            }
-
-            throw new Error('No data in callback_query');
-        });
-    }
-
-
-    private async askChannel(selection: string | undefined) {
-        await this.ctx.deleteMessage(this.startMessageId);
-        
-        this.bot.telegram.sendMessage(this.ctx.chat?.id || -1, 'Выберете канал', {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        {
-                            text: "Тестовый канал",
-                            callback_data: 'channel:0:' + selection,
-                        },
-                    ],
-    
-                ]
-            }
-        })
-    }
+    this.bot.launch();
+  }
 
 }
+
+
+
+      //bot.telegram.sendMessage(ctx.chat.id, 'hello there! Welcome to my new telegram bot.', {
+      //})
+    // bot.help((ctx) => ctx.reply('Send me a sticker'));
+    // bot.hears('hi', (ctx) => ctx.reply('Hey there'));
+
