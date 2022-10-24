@@ -20,7 +20,7 @@ export default class PublishArticle {
       notionPage.pageId
     );
 
-    console.log(33333, channelId, notionPageContent)
+    console.log(33333, channelId, notionPageContent[0], notionPageContent[1])
   }
 
 }

@@ -28,7 +28,7 @@ export default class NotionRequest {
     return this.notion.getPreparedDbItemList(dbId);
   }
 
-  async getPageContent(pageId: string): Promise<MdBlock[]> {
+  async getPageContent(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
     return this.notion.getPageMdBlocks(pageId);
   }
 

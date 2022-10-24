@@ -5,8 +5,8 @@ export default interface Sections {
   MainImage: string;
   MainImageDescr: string;
   Header: string,
-  PostText: MdBlock[],
-  ArticleText: MdBlock[],
   TgTags: string[];
   InstaPostTags: string[];
+  PostText: MdBlock[],
+  ArticleText: MdBlock[],
 }
