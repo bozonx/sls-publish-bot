@@ -10,6 +10,7 @@ const dict = {
     selectedType: 'Выбран тип: ',
     selectedChannel: 'Выбран канал: ',
     selectedRawPage: 'Выбран заготовка: ',
+    selectedSlsSite: 'Управление сайтом slsfreedom.org'
   }
   
 }

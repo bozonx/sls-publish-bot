@@ -7,3 +7,10 @@ export const DEFAULT_WAIT_EVENT_TIMEOUT_SEC = 30;
 export enum AppEvents {
   CALLBACK_QUERY,
 }
+
+export enum PublicationTypes {
+  Article,
+  Post1000,
+  Post2000,
+  Story,
+}

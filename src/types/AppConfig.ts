@@ -1,8 +1,9 @@
 export interface ConfigChannel {
+  channelId: string;
   name: string;
   dispname: string;
-  id: string;
   notionRawPagesDbId: string;
+  supportedTypes: number[];
 }
 
 

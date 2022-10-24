@@ -13,9 +13,9 @@ export default class PublishPost1000 {
   }
 
 
-  async start(channelId: number, menuAction: string) {
+  async start(channelId: number) {
 
-    console.log(1111, channelId, menuAction)
+    console.log(1111, channelId)
   }
 
 }
