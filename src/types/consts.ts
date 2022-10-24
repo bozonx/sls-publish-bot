@@ -13,11 +13,17 @@ export const SECTIONS_NAMES = {
   PostText: 'PostText',
   ArticleText: 'ArticleText',
 };
+export const PUBLICATION_TYPES = {
+  Article: 'Article',
+  Post1000: 'Post1000',
+  Story: 'Story',
+}
 
 export enum AppEvents {
   CALLBACK_QUERY,
 }
 
+// TODO: WTF????
 export enum PublicationTypes {
   Article,
   Post1000,

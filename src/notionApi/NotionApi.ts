@@ -1,13 +1,12 @@
 import {NotionToMarkdown} from 'notion-to-md';
-import { Client, APIResponseError } from "@notionhq/client";
+import { Client } from "@notionhq/client";
 import NotionListItem from "./types/NotionPage";
 import {DB_DEFAULT_PAGE_SIZE} from "./constants";
 import {
-  GetPageResponse,
   PageObjectResponse, RichTextItemResponse
 } from "@notionhq/client/build/src/api-endpoints";
 import {MdBlock} from 'notion-to-md/build/types';
-import {SECTIONS_NAMES} from '../../../../../../home/ivan/disk2/workspace/sls-publish-bot/src/types/consts';
+import {SECTIONS_NAMES} from '../types/consts';
 
 
 export default class NotionApi {
