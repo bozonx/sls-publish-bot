@@ -7,5 +7,6 @@ export interface ConfigChannel {
 
 export default interface AppConfig {
   botToken: string;
+  notionToken: string;
   channels: ConfigChannel[];
 }
