@@ -23,7 +23,7 @@ export default class PublishHelper {
         inline_keyboard: [
           rawPages.map((item, index) => {
             return {
-              text: item.caption,
+              text: item.title,
               callback_data: eventMarker + index,
             }
           }),
@@ -44,7 +44,7 @@ export default class PublishHelper {
           ignorePromiseError(this.app.tg.ctx.deleteMessage(this.pageSelectMessageId));
           this.app.tg.bot.telegram.sendMessage(
             this.app.tg.botChatId,
-            this.app.i18n.menu.selectedRawPage + notionPage.caption
+            this.app.i18n.menu.selectedRawPage + notionPage.title
           )
             .then(() => resolve(notionPage))
             .catch(reject);

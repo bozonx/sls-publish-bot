@@ -1,7 +1,9 @@
 import { Client, APIResponseError } from "@notionhq/client";
-import NotionPage from "./types/NotionPage";
+import NotionListItem from "./types/NotionPage";
 import {DB_DEFAULT_PAGE_SIZE} from "./constants";
-import {PartialPageObjectResponse, QueryDatabaseResponse} from "@notionhq/client/build/src/api-endpoints";
+import {
+  PageObjectResponse, RichTextItemResponse
+} from "@notionhq/client/build/src/api-endpoints";
 
 
 export default class NotionApi {
@@ -18,19 +20,34 @@ export default class NotionApi {
     // TODO: wait initialization finished
   }
 
-  async getDbItemList(dbId: string, page_size = DB_DEFAULT_PAGE_SIZE): Promise<PartialPageObjectResponse[]> {
+  async getDbItemList(dbId: string, page_size = DB_DEFAULT_PAGE_SIZE): Promise<PageObjectResponse[]> {
     const response = await this.notion.databases.query({
       database_id: dbId,
       page_size,
     });
 
-    return response.results;
+    return response.results as PageObjectResponse[];
   }
 
-  async getPreparedDbItemList(dbId: string, page_size = DB_DEFAULT_PAGE_SIZE) {
+  async getPreparedDbItemList(
+    dbId: string,
+    page_size = DB_DEFAULT_PAGE_SIZE
+  ): Promise<NotionListItem[]> {
     const items = await this.getDbItemList(dbId, page_size);
 
     console.log(2222, items)
+
+    return items.map((item): NotionListItem => {
+
+      const NameProp = item.properties.Name
+      const richTextTitle: RichTextItemResponse = (NameProp as any).title[0]
+
+      return {
+        pageId: item.id,
+        title: richTextTitle.plain_text,
+      }
+    });
+
   }
 
 }
