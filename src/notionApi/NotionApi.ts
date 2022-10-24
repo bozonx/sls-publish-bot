@@ -3,15 +3,13 @@ import { Client, APIResponseError } from "@notionhq/client";
 import NotionListItem from "./types/NotionPage";
 import {DB_DEFAULT_PAGE_SIZE} from "./constants";
 import {
-  GetBlockResponse,
-  GetPageResponse, ListBlockChildrenResponse,
   PageObjectResponse, RichTextItemResponse
 } from "@notionhq/client/build/src/api-endpoints";
-import NotionPage from './types/NotionPage';
+import {MdBlock} from 'notion-to-md/build/types';
 
 
 export default class NotionApi {
-  private notion: Client;
+  private readonly notion: Client;
 
 
   constructor(notionToken: string) {
@@ -20,9 +18,6 @@ export default class NotionApi {
     });
   }
 
-  async init() {
-    // TODO: wait initialization finished
-  }
 
   async getDbItemList(dbId: string, page_size = DB_DEFAULT_PAGE_SIZE): Promise<PageObjectResponse[]> {
     const response = await this.notion.databases.query({
@@ -52,24 +47,10 @@ export default class NotionApi {
 
   }
 
-  async getPage(pageId: string): Promise<NotionPage> {
+  async getPageMdBlocks(pageId: string): Promise<MdBlock[]> {
     const n2m = new NotionToMarkdown({ notionClient: this.notion });
 
-    const result = await n2m.pageToMarkdown(pageId);
-
-    console.log(result)
-
-    // const result: GetBlockResponse = await this.notion.blocks.retrieve({block_id: pageId});
-    //
-    // console.log(result)
-    //
-    // const resultChildren: ListBlockChildrenResponse = await this.notion.blocks.children.list({block_id: pageId});
-    //
-    // // @ts-ignore
-    // console.log(222, resultChildren.results[0].paragraph.rich_text)
-
-
-    throw new Error('1111')
+    return n2m.pageToMarkdown(pageId);
   }
 
 }

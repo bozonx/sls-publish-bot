@@ -13,7 +13,7 @@ const conf: AppConfig = {
       channelId: '',
       name: 'test',
       dispname: 'Тестовый канал',
-      notionRawPagesDbId: '7c866a978313462a9d164a7e3923f1bc',
+      notionRawPagesDbId: '60be6ecd4b4d41ae83e72a807d889052',
       supportedTypes: [
         PublicationTypes.Article,
         PublicationTypes.Post1000,

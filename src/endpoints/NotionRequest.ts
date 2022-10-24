@@ -2,6 +2,7 @@ import App from "../App";
 import NotionPage from "../notionApi/types/NotionPage";
 import NotionApi from "../notionApi/NotionApi";
 import NotionListItem from '../notionApi/types/NotionListItem';
+import {MdBlock} from 'notion-to-md/build/types';
 
 
 export default class NotionRequest {
@@ -27,8 +28,8 @@ export default class NotionRequest {
     return this.notion.getPreparedDbItemList(dbId);
   }
 
-  async getPageContent(pageId: string): Promise<NotionPage> {
-    return this.notion.getPage(pageId);
+  async getPageContent(pageId: string): Promise<MdBlock[]> {
+    return this.notion.getPageMdBlocks(pageId);
   }
 
 }

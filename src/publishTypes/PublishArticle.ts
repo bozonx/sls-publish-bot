@@ -17,9 +17,8 @@ export default class PublishArticle {
   async start(channelId: number) {
     const notionPage: NotionListItem = await this.publishHelper.askPageToUse(channelId);
     const notionPageContent = await this.app.notionRequest.getPageContent(
-      //this.app.config.channels[channelId].notionRawPagesDbId,
       notionPage.pageId
-    )
+    );
 
     console.log(33333, channelId, notionPageContent)
   }
