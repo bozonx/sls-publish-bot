@@ -1,9 +1,13 @@
+import {NotionToMarkdown} from 'notion-to-md';
 import { Client, APIResponseError } from "@notionhq/client";
 import NotionListItem from "./types/NotionPage";
 import {DB_DEFAULT_PAGE_SIZE} from "./constants";
 import {
+  GetBlockResponse,
+  GetPageResponse, ListBlockChildrenResponse,
   PageObjectResponse, RichTextItemResponse
 } from "@notionhq/client/build/src/api-endpoints";
+import NotionPage from './types/NotionPage';
 
 
 export default class NotionApi {
@@ -46,6 +50,26 @@ export default class NotionApi {
       }
     });
 
+  }
+
+  async getPage(pageId: string): Promise<NotionPage> {
+    const n2m = new NotionToMarkdown({ notionClient: this.notion });
+
+    const result = await n2m.pageToMarkdown(pageId);
+
+    console.log(result)
+
+    // const result: GetBlockResponse = await this.notion.blocks.retrieve({block_id: pageId});
+    //
+    // console.log(result)
+    //
+    // const resultChildren: ListBlockChildrenResponse = await this.notion.blocks.children.list({block_id: pageId});
+    //
+    // // @ts-ignore
+    // console.log(222, resultChildren.results[0].paragraph.rich_text)
+
+
+    throw new Error('1111')
   }
 
 }

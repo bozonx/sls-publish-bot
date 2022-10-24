@@ -24,11 +24,11 @@ export default class NotionRequest {
 
 
   async getDbList(dbId: string): Promise<NotionListItem[]> {
-    return this.notion.getPreparedDbItemList(dbId)
+    return this.notion.getPreparedDbItemList(dbId);
   }
 
-  async getPageContent(pageId: string): Promise<string> {
-    return 'connnnntent';
+  async getPageContent(pageId: string): Promise<NotionPage> {
+    return this.notion.getPage(pageId);
   }
 
 }

@@ -26,7 +26,7 @@ export default class App {
     await this.tg.init();
 
     // TODO: remove
-    //const data = await this.notionRequest.test(0);
+    const data = await this.notionRequest.getPageContent('62f8e052-8149-4b40-8b19-ca6889f8268a');
 
   }
 
