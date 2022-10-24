@@ -26,7 +26,7 @@ export default class App {
     await this.tg.init();
 
     // TODO: remove
-    const data = await this.notionRequest.test(0);
+    //const data = await this.notionRequest.test(0);
 
   }
 

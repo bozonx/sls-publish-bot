@@ -3,8 +3,13 @@ import { ignorePromiseError } from "./lib/common";
 import PublishArticle from "./publishTypes/PublishArticle";
 import PublishPost1000 from "./publishTypes/PublishPost1000";
 import PublishStory from "./publishTypes/PublishStory";
-import { AppEvents, MENU_MAKE_ARTICLE, MENU_MAKE_POST1000, MENU_MAKE_STORY } from "./types/consts";
-
+import {
+  AppEvents,
+  MENU_MAKE_ARTICLE,
+  MENU_MAKE_POST1000,
+  MENU_MAKE_STORY,
+  MENU_MANAGE_SITE
+} from "./types/consts";
 
 
 export default class MainMenuHandler {
@@ -17,18 +22,25 @@ export default class MainMenuHandler {
     this.app = app;
 
     this.app.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if ([MENU_MAKE_ARTICLE, MENU_MAKE_POST1000, MENU_MAKE_STORY].includes(queryData)) {
-        this.askChannel(queryData).catch((e) => { throw e });
-      }
-      else if (queryData.indexOf('channel:') === 0) {
+      if (queryData.indexOf('channel:') === 0) {
         const splat: string[] = queryData.split(':');
 
         this.startMakingMaterial(Number(splat[1]), splat[2]).catch((e) => { throw e });
       }
+      else if (queryData === MENU_MANAGE_SITE) {
+        // TODO: add
+      }
+      else if ([MENU_MAKE_ARTICLE, MENU_MAKE_POST1000, MENU_MAKE_STORY].includes(queryData)) {
+        this.askChannel(queryData).catch((e) => { throw e });
+      }
+
     });
   }
 
 
+  async startFromBeginning() {
+
+  }
 
   async askPublishType() {
     const result = await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, this.app.i18n.menu.whatToDo, {

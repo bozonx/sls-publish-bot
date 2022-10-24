@@ -20,12 +20,12 @@ export default class Tg {
 
 
   async init() {
-    this.bot.start(async (ctx) => {
+    this.bot.start((ctx) => {
       this.ctx = ctx;
       this.botChatId = ctx.chat.id;
       this.ctx.reply('Welcome');
-
-      this.mainMenuHandler.askPublishType().catch((e) => {throw e});
+      // Start main menu
+      this.mainMenuHandler.startFromBeginning().catch((e) => {throw e});
     });
 
     this.bot.on('callback_query', (ctx) => {
@@ -34,12 +34,9 @@ export default class Tg {
       this.app.events.emit(AppEvents.CALLBACK_QUERY, ctx.update.callback_query.data);
     });
 
-    this.bot.launch();
+    await this.bot.launch();
+
+    console.info('--- Launched');
   }
 
 }
-
-
-    // bot.help((ctx) => ctx.reply('Send me a sticker'));
-    // bot.hears('hi', (ctx) => ctx.reply('Hey there'));
-

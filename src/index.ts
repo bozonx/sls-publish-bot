@@ -4,7 +4,7 @@ import App from "./App";
 const app = new App();
 
 app.init().then(() => {
-    console.log('--- Initialized');
+    console.info('--- Initialized');
 }, (e) => {throw e});
 
 // Enable graceful stop
