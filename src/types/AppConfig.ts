@@ -2,6 +2,7 @@ export interface ConfigChannel {
   name: string;
   dispname: string;
   id: string;
+  notionRawPagesDbId: string;
 }
 
 

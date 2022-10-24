@@ -12,6 +12,7 @@ const conf: AppConfig = {
       name: 'test',
       dispname: 'Тестовый канал',
       id: '',
+      notionRawPagesDbId: '7c866a978313462a9d164a7e3923f1bc',
     },
   ]
 }

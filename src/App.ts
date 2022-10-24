@@ -25,6 +25,7 @@ export default class App {
     async init() {
         await this.tg.init();
         
+        await this.notionRequest.test(0);
     }
 
 
