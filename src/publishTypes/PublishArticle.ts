@@ -14,8 +14,11 @@ export default class PublishArticle {
 
 
   async start(channelId: number, menuAction: string) {
+    const notionPage = await this.publishHelper.askPageToUse(channelId);
+    const notionPageContent = await this.app.notionRequest
+      .getPageContent(notionPage.pageId)
 
-    console.log(1111, channelId, menuAction)
+    console.log(1111, channelId, menuAction, notionPageContent)
   }
 
 }

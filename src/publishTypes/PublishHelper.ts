@@ -1,5 +1,7 @@
 import App from "../App";
+import { ignorePromiseError } from "../lib/common";
 import { AppEvents } from "../types/consts";
+import NotionPage from "../types/NotionPage";
 
 
 
@@ -10,33 +12,19 @@ export default class PublishHelper {
 
   constructor(app: App) {
     this.app = app;
-
-    this.app.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if (queryData.indexOf('selectedPage:') === 0) {
-        const splat: string[] = queryData.split(':');
-
-        //this.askPageToUse(Number(splat[1]), splat[2]).catch((e) => { throw e });
-        //this.startMakingMaterial(Number(splat[1]), splat[2], splat[3]).catch((e) => { throw e });
-      }
-    });
   }
 
 
-  async askPageToUse(channelId: number, menuAction: string) {
-    ignorePromiseError(this.app.tg.ctx.deleteMessage(this.channelMessageId));
-    await this.app.tg.bot.telegram.sendMessage(
-      this.app.tg.botChatId,
-      this.app.i18n.menu.selectedType + this.app.config.channels[channelId].dispname
-    );
-
+  async askPageToUse(channelId: number): Promise<NotionPage> {
+    const eventMarker = 'selectedPage:';
     const rawPages = await this.app.notionRequest.getRawPageList();
     const result = await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, this.app.i18n.menu.selectPage, {
       reply_markup: {
         inline_keyboard: [
-          rawPages.map((item) => {
+          rawPages.map((item, index) => {
             return {
               text: item.caption,
-              callback_data: `selectedPage:${channelId}:${menuAction}:${item.pageId}`,
+              callback_data: eventMarker + index,
             }
           }),
         ]
@@ -44,5 +32,27 @@ export default class PublishHelper {
     });
 
     this.pageSelectMessageId = result.message_id;
+
+    return new Promise((resolve, reject) => {
+      const eventIindex = this.app.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
+        if (queryData.indexOf(eventMarker) === 0) {
+          const splat: string[] = queryData.split(':');
+          const notionPage = rawPages[Number(splat[1])];
+  
+          this.app.events.removeListener(eventIindex);
+  
+          ignorePromiseError(this.app.tg.ctx.deleteMessage(this.pageSelectMessageId));
+          this.app.tg.bot.telegram.sendMessage(
+            this.app.tg.botChatId,
+            this.app.i18n.menu.selectedRawPage + notionPage.caption
+          )
+            .then(() => resolve(notionPage))
+            .catch(reject);
+        }
+  
+        // TODO: add timeout
+        // TODO: add cancelation
+      });
+    });
   }
 }

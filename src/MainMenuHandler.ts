@@ -84,7 +84,7 @@ export default class MainMenuHandler {
     ignorePromiseError(this.app.tg.ctx.deleteMessage(this.channelMessageId));
     await this.app.tg.bot.telegram.sendMessage(
       this.app.tg.botChatId,
-      this.app.i18n.menu.selectedChannel + channelId
+      this.app.i18n.menu.selectedChannel + this.app.config.channels[channelId].dispname
     );
 
     switch (menuAction) {
