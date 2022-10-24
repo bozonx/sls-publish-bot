@@ -1,5 +1,6 @@
 import { Client, APIResponseError } from "@notionhq/client";
 //import fetch from "node-fetch";
+//import { NotionAPI } from 'notion-client'
 import App from "../App";
 import NotionPage from "../types/NotionPage";
 
@@ -15,7 +16,7 @@ export default class NotionRequest {
   constructor(app: App) {
     this.app = app;
     this.notion = new Client({
-      auth: this.app.config.notionToken,
+      //auth: this.app.config.notionToken,
       //fetch: fetch,
     });
   }
@@ -24,6 +25,18 @@ export default class NotionRequest {
   // }
 
   async test(channelId: number) {
+    // const api = new NotionAPI({
+    //   authToken: this.app.config.notionToken
+    // });
+
+    // api.getCollectionData(this.app.config.channels[channelId].notionRawPagesDbId)
+
+    // const response = await this.notion.databases.query({
+    //   database_id: "FIXME",
+    // });
+  
+    // console.log("Got response:", response);
+
     // const response = await this.notion.pages.create({
     //   parent: {
     //     database_id: this.app.config.channels[channelId].notionRawPagesDbId
@@ -42,7 +55,7 @@ export default class NotionRequest {
     // })
 
 
-    console.log(await this.notion.users.list({}))
+    //console.log(await this.notion.users.list({}))
 
     // const response = await this.notion.databases.query({
     //   database_id: this.app.config.channels[channelId].notionRawPagesDbId,
@@ -58,12 +71,6 @@ export default class NotionRequest {
 
 
   async getRawPageList(): Promise<NotionPage[]> {
-    const response = await this.notion.databases.query({
-      database_id: "FIXME",
-    });
-  
-    console.log("Got response:", response);
-
     return [
       {
         pageId: '123',

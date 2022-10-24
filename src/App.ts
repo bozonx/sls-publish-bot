@@ -7,32 +7,32 @@ import ru from "./I18n/ru";
 
 
 export default class App {
-    public readonly config: AppConfig;
-    public readonly events: IndexedEventEmitter;
-    public readonly tg: Tg;
-    public readonly notionRequest: NotionRequest;
-    public readonly i18n = ru;
+  public readonly config: AppConfig;
+  public readonly events: IndexedEventEmitter;
+  public readonly tg: Tg;
+  public readonly notionRequest: NotionRequest;
+  public readonly i18n = ru;
 
 
-    constructor() {
-        this.config = this.makeConf();
-        this.events = new IndexedEventEmitter();
-        this.tg = new Tg(this);
-        this.notionRequest = new NotionRequest(this);
-    }
+  constructor() {
+    this.config = this.makeConf();
+    this.events = new IndexedEventEmitter();
+    this.tg = new Tg(this);
+    this.notionRequest = new NotionRequest(this);
+  }
 
 
-    async init() {
-        await this.tg.init();
-        
-        await this.notionRequest.test(0);
-    }
+  async init() {
+    //await this.tg.init();
+
+    await this.notionRequest.test(0);
+  }
 
 
-    private makeConf(): AppConfig {
-        // TODO: check conf
+  private makeConf(): AppConfig {
+    // TODO: check conf
 
-        return config;
-    }
+    return config;
+  }
 
 }
