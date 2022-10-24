@@ -4,7 +4,7 @@ import config from "./config";
 import IndexedEventEmitter from "./lib/IndexedEventEmitter";
 import NotionRequest from "./endpoints/NotionRequest";
 import ru from "./I18n/ru";
-import {checkSection, parseSections} from './lib/parseMdBlocks';
+import {checkSection, makeSectionsInfo, parseSections} from './lib/parseMdBlocks';
 
 
 export default class App {
@@ -27,15 +27,17 @@ export default class App {
     await this.tg.init();
 
     // TODO: remove
-    const data = await this.notionRequest.getPageContent('62f8e05281494b408b19ca6889f8268a');
-
-    const sections = parseSections(data[0], data[1]);
-
-    checkSection(sections);
-
-    console.log(sections)
-
-    throw new Error(`3333`)
+    // const data = await this.notionRequest.getPageContent('62f8e05281494b408b19ca6889f8268a');
+    //
+    // const sections = parseSections(data[0], data[1]);
+    //
+    // checkSection(sections);
+    //
+    // const info = makeSectionsInfo(sections);
+    //
+    // console.log(info)
+    //
+    // throw new Error(`3333`)
   }
 
 

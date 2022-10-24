@@ -32,6 +32,8 @@ export default class PublishArticle {
     }
 
     const info = makeSectionsInfo(sections);
+
+    await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, info)
   }
 
 }

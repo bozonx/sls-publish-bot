@@ -36,12 +36,13 @@ export function checkSection(sections: Sections) {
 }
 
 export function makeSectionsInfo(sections: Sections): string {
+  // TODO: писать предупреждения если не нужного
   return ''
     + `Type: ${sections.Type}\n`
-    + `Header: ${sections.Header}`
-    + `MainImageDescr: ${sections.MainImageDescr}`
-    + `TgTags: ${makeTags(sections.TgTags)}`
-    + `InstaPostTags: ${makeTags(sections.InstaPostTags)}`
+    + `Header: ${sections.Header}\n`
+    + `MainImageDescr: ${sections.MainImageDescr}\n`
+    + `TgTags: ${makeTags(sections.TgTags)}\n`
+    + `InstaPostTags: ${makeTags(sections.InstaPostTags)}\n`
     + `ArticleText block count: ${sections.ArticleText?.length}`;
   // TODO: add PostText
   // TODO: add MainImage
