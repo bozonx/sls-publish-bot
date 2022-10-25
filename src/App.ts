@@ -1,4 +1,4 @@
-import Tg from "./Tg";
+import TgMain from "./tgApi/TgMain";
 import AppConfig from "./types/AppConfig";
 import config from "./config";
 import NotionRequest from "./endpoints/NotionRequest";
@@ -7,14 +7,14 @@ import ru from "./I18n/ru";
 
 export default class App {
   public readonly config: AppConfig;
-  public readonly tg: Tg;
+  public readonly tg: TgMain;
   public readonly notionRequest: NotionRequest;
   public readonly i18n = ru;
 
 
   constructor() {
     this.config = this.makeConf();
-    this.tg = new Tg(this);
+    this.tg = new TgMain(this);
     this.notionRequest = new NotionRequest(this);
   }
 

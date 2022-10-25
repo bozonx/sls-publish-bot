@@ -1,10 +1,10 @@
 import { Context, Telegraf } from 'telegraf';
-import App from './App';
-import MainMenuHandler from './MainMenuHandler';
-import TgChatContext from './tgApi/TgChatContext';
+import App from '../App';
+import MainMenuHandler from '../MainMenuHandler';
+import TgChatContext from './TgChatContext';
 
 
-export default class Tg {
+export default class TgMain {
   public readonly bot: Telegraf;
   private readonly app: App;
   private readonly mainMenuHandler: MainMenuHandler;
@@ -13,8 +13,11 @@ export default class Tg {
 
 
   constructor(app: App) {
+    // TODO: наверное не нужно
     this.app = app;
     this.bot = new Telegraf(this.app.config.botToken);
+
+    // TODO WTF ???
     this.mainMenuHandler = new MainMenuHandler(app);
   }
 
