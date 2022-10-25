@@ -2,9 +2,10 @@
 export interface BreadCrumbsStep {
   // It will be called when step is started
   onStart(state: Record<string, any>): Promise<void>;
-  // It will be called when step is
-  //   finished or cancel or back button is pressed
-  onStop(state: Record<string, any>): Promise<void>;
+  // It will be called when step is finished (the next is added)
+  onEnd(state: Record<string, any>): Promise<void>;
+  // It will be called on canceling step
+  onCancel(state: Record<string, any>): Promise<void>;
   state: Record<string, any>;
 }
 
@@ -30,6 +31,11 @@ export default class BreadCrumbs {
     const stepNum = this.steps.length -1;
 
     try {
+      // normally end prev step
+      if (stepNum > 0) {
+        await this.justEndStep(stepNum - 1);
+      }
+
       await this.justExecuteStep(stepNum);
     }
     catch (e) {
@@ -49,8 +55,8 @@ export default class BreadCrumbs {
   async runStep(stepNum: number) {
     if (this.steps.length -1 < stepNum) {
       // run one of previous steps
-      // stop currently running step
-      await this.justStopStep(this.steps.length - 1);
+      // cancel currently running step
+      await this.justCancelStep(this.steps.length - 1);
       // remove steps after specified
       this.deleteStepAndAfter(stepNum + 1);
       // run specified state
@@ -59,8 +65,8 @@ export default class BreadCrumbs {
     else if (this.steps.length -1 === stepNum) {
       // run current step
       // restart current step
-      // just stop current step
-      await this.justStopStep(stepNum);
+      // just cancel current step
+      await this.justCancelStep(stepNum);
       // just run current step
       return this.justExecuteStep(stepNum);
     }
@@ -73,8 +79,8 @@ export default class BreadCrumbs {
     if (this.steps.length < 1) return;
 
     const currentStep = this.steps.length - 1;
-    // stop current step
-    await this.justStopStep(currentStep);
+    // cancel current step
+    await this.justCancelStep(currentStep);
     // remove current step
     this.deleteStepAndAfter(currentStep);
 
@@ -93,8 +99,8 @@ export default class BreadCrumbs {
   async cancel() {
     if (this.steps.length) {
       const currentStep = this.steps.length - 1;
-      // stop current step
-      await this.justStopStep(currentStep);
+      // cancel current step
+      await this.justCancelStep(currentStep);
       // clear all the steps
       this.deleteStepAndAfter(0);
     }
@@ -116,8 +122,12 @@ export default class BreadCrumbs {
     return this.steps[stepNum].onStart(this.steps[stepNum].state);
   }
 
-  private justStopStep(stepNum: number): Promise<void> {
-    return this.steps[stepNum].onStop(this.steps[stepNum].state);
+  private justEndStep(stepNum: number): Promise<void> {
+    return this.steps[stepNum].onEnd(this.steps[stepNum].state);
+  }
+
+  private justCancelStep(stepNum: number): Promise<void> {
+    return this.steps[stepNum].onCancel(this.steps[stepNum].state);
   }
 
 }

@@ -68,7 +68,7 @@ export default class MainMenuHandler {
             state.channelId = channelId;
             // don't wait of removing the asking message
             ignorePromiseError(this.tgChat.deleteMessage(messageId));
-
+            // print result
             await this.tgChat.reply(
               this.tgChat.app.i18n.menu.selectedChannel
               + this.tgChat.app.config.channels[channelId].dispname
@@ -82,7 +82,10 @@ export default class MainMenuHandler {
           }
         });
       },
-      onStop: async (state: Record<string, any>): Promise<void> => {
+      onEnd: async (state: Record<string, any>): Promise<void> => {
+        this.tgChat.events.removeListener(handlerIndex);
+      },
+      onCancel: async (state: Record<string, any>): Promise<void> => {
         this.tgChat.events.removeListener(handlerIndex);
       },
       state,
