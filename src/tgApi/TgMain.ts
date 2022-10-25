@@ -1,24 +1,18 @@
 import { Context, Telegraf } from 'telegraf';
 import App from '../App';
-import MainMenuHandler from '../MainMenuHandler';
-import TgChatContext from './TgChatContext';
+import TgChat from './TgChat';
 
 
 export default class TgMain {
   public readonly bot: Telegraf;
   private readonly app: App;
-  private readonly mainMenuHandler: MainMenuHandler;
   // chats where users talk to bot
-  private readonly chats: Record<string, TgChatContext> = {};
+  private readonly chats: Record<string, TgChat> = {};
 
 
   constructor(app: App) {
-    // TODO: наверное не нужно
     this.app = app;
     this.bot = new Telegraf(this.app.config.botToken);
-
-    // TODO WTF ???
-    this.mainMenuHandler = new MainMenuHandler(app);
   }
 
 
@@ -27,7 +21,7 @@ export default class TgMain {
       if (!ctx.chat?.id) throw new Error(`No chat id`);
 
       if (!this.chats[ctx.chat.id]) {
-        this.chats[ctx.chat.id] = new TgChatContext(ctx);
+        this.chats[ctx.chat.id] = new TgChat(ctx, this.app);
       }
 
       this.chats[ctx.chat.id].start()

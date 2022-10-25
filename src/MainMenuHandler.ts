@@ -1,4 +1,3 @@
-import App from "./App";
 import { ignorePromiseError } from "./lib/common";
 import PublishArticle from "./publishTypes/PublishArticle";
 import PublishPost1000 from "./publishTypes/PublishPost1000";
@@ -11,16 +10,17 @@ import {
   MENU_MANAGE_SITE, PublicationTypes
 } from "./types/consts";
 import {waitEvent} from "./lib/waitEvent";
+import TgChat from './tgApi/TgChat';
 
 
 export default class MainMenuHandler {
-  public readonly app: App;
+  public readonly tgChat: TgChat;
   //private startMessageId: number = -1;
   //private channelMessageId: number = -1;
 
 
-  constructor(app: App) {
-    this.app = app;
+  constructor(tgChat: TgChat) {
+    this.tgChat = tgChat;
   }
 
 

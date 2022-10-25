@@ -12,8 +12,8 @@ const dict = {
     selectedChannel: 'Выбран канал: ',
     selectedRawPage: 'Выбрана заготовка: ',
     selectedSlsSite: 'Управление сайтом slsfreedom.org'
-  }
-  
+  },
+  greet: 'Добро пожаловать в бот блогов свободы.',
 }
 
 export default dict;
