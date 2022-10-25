@@ -39,4 +39,9 @@ export default class Tg {
     console.info('--- Launched');
   }
 
+
+  async initialStep() {
+    // TODO: !!!!
+  }
+
 }

@@ -4,12 +4,13 @@ import config from "./config";
 import IndexedEventEmitter from "./lib/IndexedEventEmitter";
 import NotionRequest from "./endpoints/NotionRequest";
 import ru from "./I18n/ru";
-import {checkSection, makeSectionsInfo, parseSections} from './lib/parseMdBlocks';
+import BreadCrumbs from './helpers/BreadCrumbs';
 
 
 export default class App {
   public readonly config: AppConfig;
   public readonly events: IndexedEventEmitter;
+  public readonly steps: BreadCrumbs;
   public readonly tg: Tg;
   public readonly notionRequest: NotionRequest;
   public readonly i18n = ru;
@@ -19,6 +20,7 @@ export default class App {
     this.config = this.makeConf();
     this.events = new IndexedEventEmitter();
     this.tg = new Tg(this);
+    this.steps = new BreadCrumbs(this.tg.initialStep);
     this.notionRequest = new NotionRequest(this);
   }
 

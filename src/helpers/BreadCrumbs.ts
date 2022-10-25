@@ -19,52 +19,83 @@ export default class BreadCrumbs {
   }
 
 
-  addStep(step: BreadCrumbsStep): number {
+  /**
+   * Add a step and run it
+   */
+  async addAndRunStep(step: BreadCrumbsStep): Promise<number> {
     this.steps.push(step);
 
     if (this.steps.length < 1) throw new Error(`Step didn't added`);
 
-    return this.steps.length - 1;
-  }
+    const stepNum = this.steps.length -1;
 
-  async startStep(stepNum: number) {
-    await this.executeStep(stepNum);
+    try {
+      await this.justExecuteStep(stepNum);
+    }
+    catch (e) {
+      // TODO: или может запустить stop. Или разрешить ошибку
+      this.deleteStepAndAfter(stepNum);
+
+      throw e;
+    }
+
+    return stepNum;
   }
 
   /**
-   * Remove steps after specified and start it
-   * @param stepNum
+   * Run step which is in step stack.
+   * Removes steps after specified and start it
    */
-  async toStep(stepNum: number) {
-    if (this.steps.length < 1) throw new Error(`Steps are empty`);
-    else if (!this.steps[stepNum]) throw new Error(`Can't find the step ${stepNum}`);
-    // stop current step
-    await this.stopAndDeleteStep(this.steps.length - 1);
-    // remove steps after it
-    this.deleteStepAndAfter(stepNum + 1);
-    // start specified step
-    await this.executeStep(stepNum);
+  async runStep(stepNum: number) {
+    if (this.steps.length -1 < stepNum) {
+      // run one of previous steps
+      // stop currently running step
+      await this.justStopStep(this.steps.length - 1);
+      // remove steps after specified
+      this.deleteStepAndAfter(stepNum + 1);
+      // run specified state
+      return this.justExecuteStep(stepNum);
+    }
+    else if (this.steps.length -1 === stepNum) {
+      // run current step
+      // restart current step
+      // just stop current step
+      await this.justStopStep(stepNum);
+      // just run current step
+      return this.justExecuteStep(stepNum);
+    }
+
+    throw new Error(`Wrong stepNum ${stepNum}`);
   }
 
   async back() {
-    if (this.steps.length < 1) throw new Error(`Steps are empty`);
+    // do nothing if no steps
+    if (this.steps.length < 1) return;
+
+    const currentStep = this.steps.length - 1;
     // stop current step
-    await this.stopAndDeleteStep(this.steps.length - 1);
+    await this.justStopStep(currentStep);
+    // remove current step
+    this.deleteStepAndAfter(currentStep);
+
+    const newCurrentStep = this.steps.length - 1;
 
     if (this.steps.length) {
-      // start specified step
-      await this.executeStep(this.steps.length - 1);
+      // if it has some other steps - run the last
+      await this.justExecuteStep(newCurrentStep);
     }
     else {
+      // if no steps - run initial step
       await this.initialStep();
     }
   }
 
   async cancel() {
     if (this.steps.length) {
+      const currentStep = this.steps.length - 1;
       // stop current step
-      await this.stopAndDeleteStep(this.steps.length - 1);
-      // clear steps
+      await this.justStopStep(currentStep);
+      // clear all the steps
       this.deleteStepAndAfter(0);
     }
 
@@ -73,29 +104,20 @@ export default class BreadCrumbs {
 
 
   /**
-   * Stop previous step and execute specified.
-   * It runs onStart callback of step
+   * Just delete step and those which after it
    */
-  private async executeStep(stepNum: number) {
-    // TODO: WTF???
-    await this.stopAndDeleteStep(stepNum);
-
-    return this.steps[stepNum].onStart(this.steps[stepNum].state);
-  }
-
-  /**
-   * Run onStop callback and remove step
-   */
-  private async stopAndDeleteStep(stepNum: number) {
-    await this.steps[stepNum].onStop(this.steps[stepNum].state);
-
-    this.deleteStepAndAfter(stepNum);
-  }
-
   private deleteStepAndAfter(stepNum: number) {
     if (this.steps.length -1 < stepNum) return;
 
     this.steps.splice(stepNum);
+  }
+
+  private justExecuteStep(stepNum: number): Promise<void> {
+    return this.steps[stepNum].onStart(this.steps[stepNum].state);
+  }
+
+  private justStopStep(stepNum: number): Promise<void> {
+    return this.steps[stepNum].onStop(this.steps[stepNum].state);
   }
 
 }
