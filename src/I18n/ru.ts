@@ -11,7 +11,7 @@ const dict = {
     selectedType: 'Выбран тип: ',
     selectedChannel: 'Выбран канал: ',
     selectedRawPage: 'Выбрана заготовка: ',
-    selectedSlsSite: 'Управление сайтом slsfreedom.org'
+    //selectedSlsSite: 'Управление сайтом slsfreedom.org'
   },
   greet: 'Добро пожаловать в бот блогов свободы.',
 }

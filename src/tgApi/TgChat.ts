@@ -4,6 +4,7 @@ import IndexedEventEmitter from '../lib/IndexedEventEmitter';
 import {AppEvents} from '../types/consts';
 import MainMenuHandler from '../MainMenuHandler';
 import App from '../App';
+import TgReplyButton from '../types/TgReplyButton';
 
 
 export default class TgChat {
@@ -46,6 +47,23 @@ export default class TgChat {
     await this.ctx.reply(this.app.i18n.greet);
     // Start main menu
     await this.mainMenuHandler.startFromBeginning();
+  }
+
+  async reply(message: string, buttons?: TgReplyButton[]): Promise<number> {
+    const messageResult = await this.ctx.reply(
+      this.app.i18n.menu.selectChannel,
+      buttons && {
+        reply_markup: {
+          inline_keyboard: [ buttons ]
+        }
+      }
+    );
+
+    return messageResult.message_id;
+  }
+
+  async deleteMessage(messageId: number) {
+    await this.ctx.deleteMessage(messageId);
   }
 
 }
