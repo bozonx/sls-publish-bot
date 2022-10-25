@@ -1,15 +1,15 @@
 import { Context, Telegraf } from 'telegraf';
 import App from './App';
 import MainMenuHandler from './MainMenuHandler';
-import { AppEvents } from './types/consts';
+import TgChatContext from './tgApi/TgChatContext';
 
 
 export default class Tg {
   public readonly bot: Telegraf;
-  public ctx!: Context;
-  public botChatId!: number;
   private readonly app: App;
-  private readonly mainMenuHandler: MainMenuHandler
+  private readonly mainMenuHandler: MainMenuHandler;
+  // chats where users talk to bot
+  private readonly chats: Record<string, TgChatContext> = {};
 
 
   constructor(app: App) {
@@ -20,28 +20,30 @@ export default class Tg {
 
 
   async init() {
-    this.bot.start((ctx) => {
-      this.ctx = ctx;
-      this.botChatId = ctx.chat.id;
-      this.ctx.reply('Welcome');
-      // Start main menu
-      this.mainMenuHandler.startFromBeginning().catch((e) => {throw e});
+    this.bot.start((ctx: Context) => {
+      if (!ctx.chat?.id) throw new Error(`No chat id`);
+
+      if (!this.chats[ctx.chat.id]) {
+        this.chats[ctx.chat.id] = new TgChatContext(ctx);
+      }
+
+      this.chats[ctx.chat.id].start()
+        .catch((e) => {throw e})
     });
 
     this.bot.on('callback_query', (ctx) => {
-      if (!ctx.update.callback_query.data) throw new Error('Empty data in callback_query');
+      if (!ctx.chat?.id) {
+        console.warn('No chat id in callback_query');
 
-      this.app.events.emit(AppEvents.CALLBACK_QUERY, ctx.update.callback_query.data);
+        return;
+      }
+
+      this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
     });
 
     await this.bot.launch();
 
-    console.info('--- Launched');
-  }
-
-
-  async initialStep() {
-    // TODO: !!!!
+    console.info('--- Bot launched');
   }
 
 }
