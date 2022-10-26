@@ -30,7 +30,8 @@ export default class TgChat {
   }
 
   async start() {
-    await this.initialStep();
+    // Start from very beginning and cancel current state if need.
+    await this.steps.cancel();
   }
 
   handleCallbackQueryEvent(queryData: any) {
@@ -43,11 +44,6 @@ export default class TgChat {
     this.events.emit(AppEvents.CALLBACK_QUERY, queryData);
   }
 
-  async initialStep() {
-    await this.ctx.reply(this.app.i18n.greet);
-    // Start main menu
-    await this.mainMenuHandler.startFromBeginning();
-  }
 
   async reply(message: string, buttons?: TgReplyButton[]): Promise<number> {
     const messageResult = await this.ctx.reply(
@@ -64,6 +60,13 @@ export default class TgChat {
 
   async deleteMessage(messageId: number) {
     await this.ctx.deleteMessage(messageId);
+  }
+
+
+  private async initialStep() {
+    await this.ctx.reply(this.app.i18n.greet);
+    // Start main menu
+    await this.mainMenuHandler.startFromBeginning();
   }
 
 }

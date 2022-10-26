@@ -25,7 +25,7 @@ export default class TgMain {
       }
 
       this.chats[ctx.chat.id].start()
-        .catch((e) => {throw e})
+        .catch((e) => {throw e});
     });
 
     this.bot.on('callback_query', (ctx) => {
