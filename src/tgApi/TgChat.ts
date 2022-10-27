@@ -72,12 +72,12 @@ export default class TgChat {
         await onStart(state);
       },
       onEnd: async (state: BaseState): Promise<void> => {
-        this.events.removeListener(state.handlerIndex);
+        this.events.removeListener(state.handlerIndex, AppEvents.CALLBACK_QUERY);
         // don't wait of removing the asking message
         ignorePromiseError(this.deleteMessage(state.messageId));
       },
       onCancel: async (state: BaseState): Promise<void> => {
-        this.events.removeListener(state.handlerIndex);
+        this.events.removeListener(state.handlerIndex, AppEvents.CALLBACK_QUERY);
         // don't wait of removing the asking message
         ignorePromiseError(this.deleteMessage(state.messageId));
       },
