@@ -1,6 +1,8 @@
 import IndexedEventEmitter from "./IndexedEventEmitter";
 import {DEFAULT_WAIT_EVENT_TIMEOUT_SEC} from "../types/consts";
 
+
+// TODO: remove
 export async function waitEvent(
   events: IndexedEventEmitter,
   eventName: string | number,

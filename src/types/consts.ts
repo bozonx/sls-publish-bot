@@ -1,6 +1,6 @@
-export const MENU_MAKE_ARTICLE = 'make_article';
-export const MENU_MAKE_POST1000 = 'make_post1000';
-export const MENU_MAKE_STORY = 'make_story';
+// export const MENU_MAKE_ARTICLE = 'make_article';
+// export const MENU_MAKE_POST1000 = 'make_post1000';
+// export const MENU_MAKE_STORY = 'make_story';
 export const MENU_MANAGE_SITE = 'manage_site';
 export const MENU_NEW_RAW_PAGE = 'new_raw_page';
 export const DEFAULT_WAIT_EVENT_TIMEOUT_SEC = 30;
@@ -14,9 +14,10 @@ export const SECTIONS_NAMES = {
   ArticleText: 'ArticleText',
 };
 export const PUBLICATION_TYPES = {
-  Article: 'Article',
-  Post1000: 'Post1000',
-  Story: 'Story',
+  article: 'article',
+  post1000: 'post1000',
+  post2000: 'post2000',
+  story: 'story',
 }
 
 export enum AppEvents {

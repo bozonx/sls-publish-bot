@@ -1,9 +1,6 @@
 const dict = {
   menu: {
     whatToDo: 'Что хотите сделать?',
-    btnCreateArticle: 'Создать статью',
-    btnCreatePost1000: 'Создать пост1000/мем',
-    btnCreateStory: 'Создать сторис',
     btnNewPage: 'СОЗДАТЬ НОВУЮ',
     selectChannel: 'Выберете канал',
     selectManageSite: 'Сайт slsfreedom',
@@ -12,6 +9,12 @@ const dict = {
     selectedChannel: 'Выбран канал: ',
     selectedRawPage: 'Выбрана заготовка: ',
     //selectedSlsSite: 'Управление сайтом slsfreedom.org'
+  },
+  publicationType: {
+    article: 'Статью',
+    post1000: 'Пост1000/мем',
+    post2000: 'Пост2000/мем',
+    story: 'Cторис',
   },
   greet: 'Добро пожаловать в бот блогов свободы.',
 }
