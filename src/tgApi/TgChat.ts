@@ -49,7 +49,7 @@ export default class TgChat {
 
 
   async reply(message: string, buttons?: TgReplyButton[]): Promise<number> {
-    const messageResult = await this.ctx.reply(
+    const messageResult = await this.ctx.sendMessage(
       message,
       buttons && {
         reply_markup: {

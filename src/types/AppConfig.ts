@@ -5,6 +5,7 @@ export interface ConfigChannel {
   notionRawPagesDbId: string;
   // some PUBLICATION_TYPES
   supportedTypes: string[];
+  sn: Record<any, Record<string, any>>;
 }
 
 

@@ -1,8 +1,9 @@
-import {PublicationTypes} from '../types/PublicationTypes';
+import {PublicationTypes} from '../types/types';
 
 const dict = {
   menu: {
-    whatToDo: 'Что хотите сделать?',
+    whatToDo: 'Что хотите опубликовать?',
+    whichSns: 'В какие соц сети публиковать',
     btnNewPage: 'СОЗДАТЬ НОВУЮ',
     selectChannel: 'Выберете канал',
     selectManageSite: 'Сайт slsfreedom',

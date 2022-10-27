@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import AppConfig from './types/AppConfig';
-import {PUBLICATION_TYPES} from './types/consts';
+import {PUBLICATION_TYPES, SN_TYPES} from './types/consts';
 
 
 dotenv.config();
@@ -17,7 +17,12 @@ const conf: AppConfig = {
       supportedTypes: [
         PUBLICATION_TYPES.article,
         PUBLICATION_TYPES.post1000,
-      ]
+      ],
+      sn: {
+        [SN_TYPES.telegram]: {},
+        [SN_TYPES.instagram]: {},
+        [SN_TYPES.zen]: {},
+      }
     },
   ]
 }

@@ -4,11 +4,11 @@ import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK, CREATE_PREFIX,
   PUBLICATION_TYPES
 } from '../types/consts';
 import TgChat from '../tgApi/TgChat';
-import {PublicationTypes} from '../types/PublicationTypes';
+import {PublicationTypes} from '../types/types';
 // import PublishArticle from '../publishTypes/PublishArticle';
 // import PublishPost1000 from '../publishTypes/PublishPost1000';
 // import PublishStory from '../publishTypes/PublishStory';
@@ -17,8 +17,6 @@ import {PublicationTypes} from '../types/PublicationTypes';
 interface AskPublishState extends BaseState {
   channelId: number;
 }
-
-const CREATE_PREFIX = 'create_';
 
 
 export async function askPublishType(channelId: number, tgChat: TgChat, onDone: (channelId: number) => void) {
@@ -30,7 +28,7 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
 
   await tgChat.addOrdinaryStep(state, async () => {
     // print ask type message
-    state.messageId = await printAskTypeMessage(state.channelId, tgChat);
+    state.messageId = await printAskMessage(state.channelId, tgChat);
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
       // if (queryData === BACK_BTN_CALLBACK) {
@@ -60,7 +58,7 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
   });
 }
 
-async function printAskTypeMessage(channelId: number, tgChat: TgChat): Promise<number> {
+async function printAskMessage(channelId: number, tgChat: TgChat): Promise<number> {
   return tgChat.reply(
     tgChat.app.i18n.menu.whatToDo,
     [
@@ -90,7 +88,6 @@ async function printAskTypeMessage(channelId: number, tgChat: TgChat): Promise<n
             throw new Error(`Unsupported publication type`)
         }
       }),
-      //BACK_BTN,
       CANCEL_BTN,
     ]
   );

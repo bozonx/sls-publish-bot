@@ -1,6 +1,7 @@
 import TgChat from './tgApi/TgChat';
 import {askMainMenu} from './askUser/askMainMenu';
 import {askPublishType} from './askUser/askPublishType';
+import {askSNs} from './askUser/askSNs';
 
 
 export default class MainMenuHandler {
@@ -15,9 +16,9 @@ export default class MainMenuHandler {
   async startFromBeginning() {
     await askMainMenu(this.tgChat, (channelId: number) => {
       askPublishType(channelId, this.tgChat, () => {
-
-        // TODO: выбрать соцсети
-
+        askSNs(channelId, this.tgChat, () => {
+          // TODO: what to do ???
+        })
       })
         .catch((e) => {throw e});
     });
