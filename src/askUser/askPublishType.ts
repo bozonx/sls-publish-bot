@@ -1,8 +1,6 @@
 import BaseState from '../types/BaseState';
 import {
   AppEvents,
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK, CREATE_PREFIX,
   PUBLICATION_TYPES
@@ -19,7 +17,7 @@ interface AskPublishState extends BaseState {
 }
 
 
-export async function askPublishType(channelId: number, tgChat: TgChat, onDone: (channelId: number) => void) {
+export async function askPublishType(channelId: number, tgChat: TgChat, onDone: (pubType: PublicationTypes) => void) {
   const state: AskPublishState = {
     channelId,
     messageId: -1,
@@ -31,10 +29,6 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
     state.messageId = await printAskMessage(state.channelId, tgChat);
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      // if (queryData === BACK_BTN_CALLBACK) {
-      //   return tgChat.steps.back()
-      //     .catch((e) => {throw e});
-      // }
       if (queryData === CANCEL_BTN_CALLBACK) {
         return tgChat.steps.cancel()
           .catch((e) => {throw e});
@@ -48,12 +42,16 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
         return;
       }
 
-      startMakingRecord(
-        state.channelId,
-        queryData.slice(CREATE_PREFIX.length) as PublicationTypes,
-        tgChat
-      )
-        .catch((e) => {throw e})
+      finish(queryData, tgChat, onDone)
+        .catch((e) => {throw e});
+
+
+      // startMakingRecord(
+      //   state.channelId,
+      //   queryData.slice(CREATE_PREFIX.length) as PublicationTypes,
+      //   tgChat
+      // )
+      //   .catch((e) => {throw e})
     });
   });
 }
@@ -93,35 +91,47 @@ async function printAskMessage(channelId: number, tgChat: TgChat): Promise<numbe
   );
 }
 
-export async function startMakingRecord(channelId: number, selectedType: PublicationTypes, tgChat: TgChat) {
+async function finish(
+  queryData: string,
+  tgChat: TgChat,
+  onDone: (pubType: PublicationTypes) => void
+) {
+  const pubType = queryData.slice(CREATE_PREFIX.length) as PublicationTypes;
+
   await tgChat.reply(
     tgChat.app.i18n.menu.selectedType
-    + tgChat.app.i18n.publicationType[selectedType]
+    + tgChat.app.i18n.publicationType[pubType]
   );
 
-  // switch (selectedType) {
-  //   case CREATE_PREFIX + PUBLICATION_TYPES.article:
-  //     const article = new PublishArticle(tgChat);
-  //
-  //     await article.start(channelId);
-  //     break;
-  //
-  //   case CREATE_PREFIX + PUBLICATION_TYPES.post1000:
-  //     const post1000 = new PublishPost1000(tgChat);
-  //
-  //     await post1000.start(channelId);
-  //     break;
-  //
-  //   // TODO: add post 2000
-  //
-  //   case CREATE_PREFIX + PUBLICATION_TYPES.story:
-  //     const story = new PublishStory(tgChat);
-  //
-  //     await story.start(channelId);
-  //     break;
-  //
-  //   default:
-  //     break;
-  // }
-
+  onDone(pubType);
 }
+
+// export async function startMakingRecord(channelId: number, selectedType: PublicationTypes, tgChat: TgChat) {
+//
+//
+//   // switch (selectedType) {
+//   //   case CREATE_PREFIX + PUBLICATION_TYPES.article:
+//   //     const article = new PublishArticle(tgChat);
+//   //
+//   //     await article.start(channelId);
+//   //     break;
+//   //
+//   //   case CREATE_PREFIX + PUBLICATION_TYPES.post1000:
+//   //     const post1000 = new PublishPost1000(tgChat);
+//   //
+//   //     await post1000.start(channelId);
+//   //     break;
+//   //
+//   //   // TODO: add post 2000
+//   //
+//   //   case CREATE_PREFIX + PUBLICATION_TYPES.story:
+//   //     const story = new PublishStory(tgChat);
+//   //
+//   //     await story.start(channelId);
+//   //     break;
+//   //
+//   //   default:
+//   //     break;
+//   // }
+//
+// }

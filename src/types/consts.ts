@@ -5,6 +5,7 @@ export const MENU_NEW_RAW_PAGE = 'new_raw_page';
 export const DEFAULT_WAIT_EVENT_TIMEOUT_SEC = 30;
 export const BACK_BTN_CALLBACK = 'back_btn';
 export const CANCEL_BTN_CALLBACK = 'cancel_btn';
+export const OK_BTN_CALLBACK = 'ok_btn';
 export const CREATE_PREFIX = 'create_';
 
 export const SN_TYPES: Record<SnTypes, SnTypes> = {
@@ -42,6 +43,11 @@ export const BACK_BTN = {
 export const CANCEL_BTN = {
   text: 'Cancel',
   callback_data: CANCEL_BTN_CALLBACK,
+}
+
+export const OK_BTN = {
+  text: 'OK',
+  callback_data: OK_BTN_CALLBACK,
 }
 
 // TODO: WTF????

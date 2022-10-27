@@ -2,6 +2,7 @@ import TgChat from './tgApi/TgChat';
 import {askMainMenu} from './askUser/askMainMenu';
 import {askPublishType} from './askUser/askPublishType';
 import {askSNs} from './askUser/askSNs';
+import {PublicationTypes} from './types/types';
 
 
 export default class MainMenuHandler {
@@ -15,8 +16,8 @@ export default class MainMenuHandler {
 
   async startFromBeginning() {
     await askMainMenu(this.tgChat, (channelId: number) => {
-      askPublishType(channelId, this.tgChat, () => {
-        askSNs(channelId, this.tgChat, () => {
+      askPublishType(channelId, this.tgChat, (pubType: PublicationTypes) => {
+        askSNs(channelId, pubType, this.tgChat, () => {
           // TODO: what to do ???
         })
       })
