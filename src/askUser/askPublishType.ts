@@ -1,5 +1,12 @@
 import BaseState from '../types/BaseState';
-import {AppEvents, PUBLICATION_TYPES} from '../types/consts';
+import {
+  AppEvents,
+  BACK_BTN,
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN,
+  CANCEL_BTN_CALLBACK,
+  PUBLICATION_TYPES
+} from '../types/consts';
 import TgChat from '../tgApi/TgChat';
 import {PublicationTypes} from '../types/PublicationTypes';
 // import PublishArticle from '../publishTypes/PublishArticle';
@@ -26,14 +33,28 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
     state.messageId = await printAskTypeMessage(state.channelId, tgChat);
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if (![
+      if (queryData === BACK_BTN_CALLBACK) {
+        tgChat.steps.back()
+          .catch((e) => {throw e});
+      }
+      else if (queryData === CANCEL_BTN_CALLBACK) {
+        tgChat.steps.cancel()
+          .catch((e) => {throw e});
+      }
+      else if (![
         CREATE_PREFIX + PUBLICATION_TYPES.article,
         CREATE_PREFIX + PUBLICATION_TYPES.post1000,
         CREATE_PREFIX + PUBLICATION_TYPES.post2000,
         CREATE_PREFIX + PUBLICATION_TYPES.story
-      ].includes(queryData)) return;
+      ].includes(queryData)) {
+        return;
+      }
 
-      startMakingRecord(state.channelId, queryData as PublicationTypes, tgChat)
+      startMakingRecord(
+        state.channelId,
+        queryData.slice(CREATE_PREFIX.length) as PublicationTypes,
+        tgChat
+      )
         .catch((e) => {throw e})
     });
   });
@@ -42,32 +63,36 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
 async function printAskTypeMessage(channelId: number, tgChat: TgChat): Promise<number> {
   return tgChat.reply(
     tgChat.app.i18n.menu.whatToDo,
-    tgChat.app.config.channels[channelId].supportedTypes.map((type: string) => {
-      switch (type) {
-        case PUBLICATION_TYPES.article:
-          return {
-            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.article],
-            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.article,
-          }
-        case PUBLICATION_TYPES.post1000:
-          return {
-            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post1000],
-            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post1000,
-          }
-        case PUBLICATION_TYPES.post2000:
-          return {
-            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post2000],
-            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post2000,
-          }
-        case PUBLICATION_TYPES.story:
-          return {
-            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.story],
-            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.story,
-          }
-        default:
-          throw new Error(`Unsupported publication type`)
-      }
-    })
+    [
+      ...tgChat.app.config.channels[channelId].supportedTypes.map((type: string) => {
+        switch (type) {
+          case PUBLICATION_TYPES.article:
+            return {
+              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.article],
+              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.article,
+            }
+          case PUBLICATION_TYPES.post1000:
+            return {
+              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post1000],
+              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post1000,
+            }
+          case PUBLICATION_TYPES.post2000:
+            return {
+              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post2000],
+              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post2000,
+            }
+          case PUBLICATION_TYPES.story:
+            return {
+              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.story],
+              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.story,
+            }
+          default:
+            throw new Error(`Unsupported publication type`)
+        }
+      }),
+      BACK_BTN,
+      CANCEL_BTN,
+    ]
   );
 }
 

@@ -3,6 +3,8 @@ import {PublicationTypes} from './PublicationTypes';
 export const MENU_MANAGE_SITE = 'manage_site';
 export const MENU_NEW_RAW_PAGE = 'new_raw_page';
 export const DEFAULT_WAIT_EVENT_TIMEOUT_SEC = 30;
+export const BACK_BTN_CALLBACK = 'back_btn';
+export const CANCEL_BTN_CALLBACK = 'cancel_btn';
 export const SECTIONS_NAMES = {
   Header: 'Header',
   MainImage: 'MainImage',
@@ -21,6 +23,16 @@ export const PUBLICATION_TYPES: Record<PublicationTypes, PublicationTypes> = {
 
 export enum AppEvents {
   CALLBACK_QUERY,
+}
+
+export const BACK_BTN = {
+  text: 'Back',
+  callback_data: BACK_BTN_CALLBACK,
+}
+
+export const CANCEL_BTN = {
+  text: 'Cancel',
+  callback_data: CANCEL_BTN_CALLBACK,
 }
 
 // TODO: WTF????
