@@ -13,9 +13,9 @@ const dict = {
     //selectedSlsSite: 'Управление сайтом slsfreedom.org'
   },
   publicationType: {
-    article: 'Статью',
+    article: 'Статья',
     post1000: 'Пост1000/мем',
-    post2000: 'Пост2000/мем',
+    post2000: 'Пост2000',
     story: 'Cторис',
   } as Record<PublicationTypes, string>,
   greet: 'Добро пожаловать в бот блогов свободы.',

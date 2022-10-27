@@ -33,12 +33,12 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
     state.messageId = await printAskTypeMessage(state.channelId, tgChat);
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if (queryData === BACK_BTN_CALLBACK) {
-        tgChat.steps.back()
-          .catch((e) => {throw e});
-      }
-      else if (queryData === CANCEL_BTN_CALLBACK) {
-        tgChat.steps.cancel()
+      // if (queryData === BACK_BTN_CALLBACK) {
+      //   return tgChat.steps.back()
+      //     .catch((e) => {throw e});
+      // }
+      if (queryData === CANCEL_BTN_CALLBACK) {
+        return tgChat.steps.cancel()
           .catch((e) => {throw e});
       }
       else if (![
@@ -90,7 +90,7 @@ async function printAskTypeMessage(channelId: number, tgChat: TgChat): Promise<n
             throw new Error(`Unsupported publication type`)
         }
       }),
-      BACK_BTN,
+      //BACK_BTN,
       CANCEL_BTN,
     ]
   );

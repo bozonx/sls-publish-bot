@@ -25,13 +25,14 @@ export default class TgChat {
 
     this.ctx = ctx;
     this.app = app;
-    this.steps = new BreadCrumbs(() => this.initialStep());
+    this.steps = new BreadCrumbs(() => this.mainMenuHandler.startFromBeginning());
     this.events = new IndexedEventEmitter();
     this.mainMenuHandler = new MainMenuHandler(this);
     this.botChatId = ctx.chat.id;
   }
 
   async start() {
+    await this.ctx.reply(this.app.i18n.greet);
     // Start from very beginning and cancel current state if need.
     await this.steps.cancel();
   }
@@ -81,12 +82,6 @@ export default class TgChat {
         ignorePromiseError(this.deleteMessage(state.messageId));
       },
     });
-  }
-
-  private async initialStep() {
-    await this.ctx.reply(this.app.i18n.greet);
-    // Start main menu
-    await this.mainMenuHandler.startFromBeginning();
   }
 
 }
