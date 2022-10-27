@@ -3,7 +3,8 @@ export interface ConfigChannel {
   name: string;
   dispname: string;
   notionRawPagesDbId: string;
-  supportedTypes: number[];
+  // some PUBLICATION_TYPES
+  supportedTypes: string[];
 }
 
 

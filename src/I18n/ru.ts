@@ -1,3 +1,5 @@
+import {PublicationTypes} from '../types/PublicationTypes';
+
 const dict = {
   menu: {
     whatToDo: 'Что хотите сделать?',
@@ -15,7 +17,7 @@ const dict = {
     post1000: 'Пост1000/мем',
     post2000: 'Пост2000/мем',
     story: 'Cторис',
-  },
+  } as Record<PublicationTypes, string>,
   greet: 'Добро пожаловать в бот блогов свободы.',
 }
 

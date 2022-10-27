@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import AppConfig from './types/AppConfig';
-import {PublicationTypes} from "./types/consts";
+import {PUBLICATION_TYPES} from './types/consts';
 
 
 dotenv.config();
@@ -15,8 +15,8 @@ const conf: AppConfig = {
       dispname: 'Тестовый канал',
       notionRawPagesDbId: '60be6ecd4b4d41ae83e72a807d889052',
       supportedTypes: [
-        PublicationTypes.Article,
-        PublicationTypes.Post1000,
+        PUBLICATION_TYPES.article,
+        PUBLICATION_TYPES.post1000,
       ]
     },
   ]
