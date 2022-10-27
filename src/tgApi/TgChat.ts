@@ -5,6 +5,8 @@ import {AppEvents} from '../types/consts';
 import MainMenuHandler from '../MainMenuHandler';
 import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';
+import BaseState from '../types/BaseState';
+import {ignorePromiseError} from '../lib/common';
 
 
 export default class TgChat {
@@ -62,6 +64,24 @@ export default class TgChat {
     await this.ctx.deleteMessage(messageId);
   }
 
+  async addOrdinaryStep(initialState: BaseState, onStart: (state: BaseState) => Promise<void>) {
+    await this.steps.addAndRunStep({
+      state: initialState,
+      onStart: async (state: BaseState): Promise<void> => {
+        await onStart(state);
+      },
+      onEnd: async (state: BaseState): Promise<void> => {
+        this.events.removeListener(state.handlerIndex);
+        // don't wait of removing the asking message
+        ignorePromiseError(this.deleteMessage(state.messageId));
+      },
+      onCancel: async (state: BaseState): Promise<void> => {
+        this.events.removeListener(state.handlerIndex);
+        // don't wait of removing the asking message
+        ignorePromiseError(this.deleteMessage(state.messageId));
+      },
+    });
+  }
 
   private async initialStep() {
     await this.ctx.reply(this.app.i18n.greet);
