@@ -10,7 +10,9 @@ const dict = {
     selectPage: 'Выберете заготовку или создайте новую',
     selectedType: 'Выбран тип: ',
     selectedChannel: 'Выбран канал: ',
+    selectedSns: 'Выбраны соц сети: ',
     selectedRawPage: 'Выбрана заготовка: ',
+    removeSn: 'Убрать ',
     //selectedSlsSite: 'Управление сайтом slsfreedom.org'
   },
   publicationType: {

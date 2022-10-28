@@ -8,30 +8,46 @@ import {
   CREATE_PREFIX,
   SN_TYPES
 } from '../types/consts';
-import {PublicationTypes} from '../types/types';
+import {PublicationTypes, SnTypes} from '../types/types';
 import {OK_BTN} from '../types/consts';
 import {OK_BTN_CALLBACK} from '../types/consts';
 
 
 interface AskSnsState extends BaseState {
   channelId: number;
+  pubType: PublicationTypes;
+  sns: string[];
 }
 
 
 export async function askSNs(
   channelId: number,
   pubType: PublicationTypes,
-  tgChat: TgChat, onDone: () => void
+  tgChat: TgChat,
+  onDone: () => void
 ) {
   const state: AskSnsState = {
     channelId,
+    pubType,
+    sns: Object.keys(tgChat.app.config.channels[channelId].sn),
     messageId: -1,
     handlerIndex: -1,
   };
 
+  // skit if only one sn
+  if (state.sns.length === 1) {
+    await finish(state, tgChat, onDone);
+
+    return;
+  }
+  else if (state.sns.length < 1) {
+    // TODO: написать юзеру и сделать cancel
+    throw new Error(`No one sn`);
+  }
+
   await tgChat.addOrdinaryStep(state, async () => {
     // print ask type message
-    state.messageId = await printAskMessage(state.channelId, tgChat);
+    state.messageId = await printAskMessage(state, tgChat);
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
       if (queryData === BACK_BTN_CALLBACK) {
@@ -43,52 +59,43 @@ export async function askSNs(
           .catch((e) => {throw e});
       }
       else if (queryData === OK_BTN_CALLBACK) {
-        // TODO: what to do????
+        finish(state, tgChat, onDone)
+          .catch((e) => {throw e});
 
         return;
-        // return tgChat.steps.cancel()
-        //   .catch((e) => {throw e});
       }
-      // else if (![
-      //   CREATE_PREFIX + SN_TYPES.telegram,
-      //   CREATE_PREFIX + SN_TYPES.instagram,
-      //   CREATE_PREFIX + SN_TYPES.zen,
-      // ].includes(queryData)) {
-      //   return;
-      // }
+      else if (![
+        CREATE_PREFIX + SN_TYPES.telegram,
+        CREATE_PREFIX + SN_TYPES.instagram,
+        CREATE_PREFIX + SN_TYPES.zen,
+      ].includes(queryData)) {
+        return;
+      }
 
-      // finish(queryData, tgChat, onDone)
-      //   .catch((e) => {throw e});
+      handleSnRemoved(queryData, state, tgChat, onDone);
     });
   });
 }
 
-async function printAskMessage(channelId: number, tgChat: TgChat): Promise<number> {
-  // TODO: делаем так:
-  //       * сначала пишем список всех соц сетей
-  //       * выводим кнопки - убрать тг, инс или дзен.и ОК
-  //       * если посли убирания осталась одна соц сеть то завершаем
-  //       * если осталось больше то опять спрашиваем
-  //       * либо нажал ок
-
+async function printAskMessage(state: AskSnsState, tgChat: TgChat): Promise<number> {
   return tgChat.reply(
     tgChat.app.i18n.menu.whichSns,
     [
-      ...Object.keys(tgChat.app.config.channels[channelId].sn).map((item) => {
+      ...state.sns.map((item) => {
         switch (item) {
           case SN_TYPES.telegram:
             return {
-              text: 'Telegram',
+              text: tgChat.app.i18n.menu.removeSn + 'Telegram',
               callback_data: CREATE_PREFIX + SN_TYPES.telegram,
             }
           case SN_TYPES.instagram:
             return {
-              text: 'Instagram',
+              text: tgChat.app.i18n.menu.removeSn + 'Instagram',
               callback_data: CREATE_PREFIX + SN_TYPES.instagram,
             }
           case SN_TYPES.zen:
             return {
-              text: 'Zen',
+              text: tgChat.app.i18n.menu.removeSn + 'Zen',
               callback_data: CREATE_PREFIX + SN_TYPES.zen,
             }
           default:
@@ -102,17 +109,36 @@ async function printAskMessage(channelId: number, tgChat: TgChat): Promise<numbe
   );
 }
 
-async function finish(
+async function handleSnRemoved(
   queryData: string,
+  state: AskSnsState,
   tgChat: TgChat,
   onDone: () => void
 ) {
-  // const pubType = queryData.slice(CREATE_PREFIX.length) as PublicationTypes;
-  //
-  // await tgChat.reply(
-  //   tgChat.app.i18n.menu.selectedType
-  //   + tgChat.app.i18n.publicationType[pubType]
-  // );
+  const snType = queryData.slice(CREATE_PREFIX.length);
+  const index = state.sns.indexOf(snType);
+
+  if (index < 0) throw new Error(`Can't find selected sn`);
+
+  state.sns.splice(index, 1);
+
+  if (state.sns.length > 1) {
+    await askSNs(state.channelId, state.pubType, tgChat, onDone);
+  }
+  else if (state.sns.length == 1) {
+    await finish(state, tgChat, onDone);
+  }
+  if (state.sns.length < 1) {
+    throw new Error(`Invalid count of sns`)
+  }
+}
+
+async function finish(
+  state: AskSnsState,
+  tgChat: TgChat,
+  onDone: () => void
+) {
+  await tgChat.reply(tgChat.app.i18n.menu.selectedSns + state.sns.join(', '));
 
   onDone();
 }
