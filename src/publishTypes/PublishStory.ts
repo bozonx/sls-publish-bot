@@ -1,15 +1,15 @@
-import App from "../App";
 import PublishHelper from "./PublishHelper";
+import TgChat from '../tgApi/TgChat';
 
 
 export default class PublishStory {
-  private readonly app: App;
+  private readonly tgChat: TgChat;
   private readonly publishHelper: PublishHelper;
 
 
-  constructor(app: App) {
-    this.app = app;
-    this.publishHelper = new PublishHelper(this.app);
+  constructor(channelId: number, sns: string[], tgChat: TgChat) {
+    this.tgChat = tgChat;
+    this.publishHelper = new PublishHelper(this.tgChat);
   }
 
 

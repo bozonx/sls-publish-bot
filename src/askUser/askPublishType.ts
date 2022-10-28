@@ -7,9 +7,6 @@ import {
 } from '../types/consts';
 import TgChat from '../tgApi/TgChat';
 import {PublicationTypes} from '../types/types';
-// import PublishArticle from '../publishTypes/PublishArticle';
-// import PublishPost1000 from '../publishTypes/PublishPost1000';
-// import PublishStory from '../publishTypes/PublishStory';
 
 
 interface AskPublishState extends BaseState {
@@ -44,14 +41,6 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
 
       finish(queryData, tgChat, onDone)
         .catch((e) => {throw e});
-
-
-      // startMakingRecord(
-      //   state.channelId,
-      //   queryData.slice(CREATE_PREFIX.length) as PublicationTypes,
-      //   tgChat
-      // )
-      //   .catch((e) => {throw e})
     });
   });
 }
@@ -106,32 +95,3 @@ async function finish(
   onDone(pubType);
 }
 
-// export async function startMakingRecord(channelId: number, selectedType: PublicationTypes, tgChat: TgChat) {
-//
-//
-//   // switch (selectedType) {
-//   //   case CREATE_PREFIX + PUBLICATION_TYPES.article:
-//   //     const article = new PublishArticle(tgChat);
-//   //
-//   //     await article.start(channelId);
-//   //     break;
-//   //
-//   //   case CREATE_PREFIX + PUBLICATION_TYPES.post1000:
-//   //     const post1000 = new PublishPost1000(tgChat);
-//   //
-//   //     await post1000.start(channelId);
-//   //     break;
-//   //
-//   //   // TODO: add post 2000
-//   //
-//   //   case CREATE_PREFIX + PUBLICATION_TYPES.story:
-//   //     const story = new PublishStory(tgChat);
-//   //
-//   //     await story.start(channelId);
-//   //     break;
-//   //
-//   //   default:
-//   //     break;
-//   // }
-//
-// }

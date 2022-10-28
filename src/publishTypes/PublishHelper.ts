@@ -1,16 +1,16 @@
-import App from "../App";
 import { ignorePromiseError } from "../lib/common";
 import {AppEvents, MENU_NEW_RAW_PAGE} from "../types/consts";
 import {waitEvent} from '../lib/waitEvent';
 import NotionListItem from '../notionApi/types/NotionListItem';
+import TgChat from '../tgApi/TgChat';
 
 
 export default class PublishHelper {
-  public readonly app: App;
+  public readonly tgChat: TgChat;
 
 
-  constructor(app: App) {
-    this.app = app;
+  constructor(tgChat: TgChat) {
+    this.tgChat = tgChat;
   }
 
 

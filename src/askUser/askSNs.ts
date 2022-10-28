@@ -8,7 +8,7 @@ import {
   CREATE_PREFIX,
   SN_TYPES
 } from '../types/consts';
-import {PublicationTypes, SnTypes} from '../types/types';
+import {PublicationTypes} from '../types/types';
 import {OK_BTN} from '../types/consts';
 import {OK_BTN_CALLBACK} from '../types/consts';
 

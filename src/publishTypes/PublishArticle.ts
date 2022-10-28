@@ -1,24 +1,23 @@
-import App from "../App";
 import PublishHelper from "./PublishHelper";
 import NotionListItem from '../notionApi/types/NotionListItem';
 import {checkSection, makeSectionsInfo, parseSections} from '../lib/parseMdBlocks';
-import Sections from '../types/Sections';
+import TgChat from '../tgApi/TgChat';
 
 
 export default class PublishArticle {
-  private readonly app: App;
+  private readonly tgChat: TgChat;
   private readonly publishHelper: PublishHelper;
 
 
-  constructor(app: App) {
-    this.app = app;
-    this.publishHelper = new PublishHelper(this.app);
+  constructor(channelId: number, sns: string[], tgChat: TgChat) {
+    this.tgChat = tgChat;
+    this.publishHelper = new PublishHelper(this.tgChat);
   }
 
 
   async start(channelId: number) {
     const notionPage: NotionListItem = await this.publishHelper.askPageToUse(channelId);
-    const notionPageContent = await this.app.notionRequest.getPageContent(
+    const notionPageContent = await this.tgChat.app.notionRequest.getPageContent(
       notionPage.pageId
     );
     const sections = parseSections(notionPageContent[0], notionPageContent[1]);
