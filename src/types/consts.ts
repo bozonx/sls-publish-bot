@@ -1,7 +1,7 @@
 import {PublicationTypes, SnTypes} from './types';
 
 export const MENU_MANAGE_SITE = 'manage_site';
-export const MENU_NEW_RAW_PAGE = 'new_raw_page';
+//export const MENU_NEW_RAW_PAGE = 'new_raw_page';
 export const DEFAULT_WAIT_EVENT_TIMEOUT_SEC = 30;
 export const BACK_BTN_CALLBACK = 'back_btn';
 export const CANCEL_BTN_CALLBACK = 'cancel_btn';
