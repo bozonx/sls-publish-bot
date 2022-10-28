@@ -20,7 +20,7 @@ export async function askRawPageToUse(channelId: number, tgChat: TgChat, onDone:
       tgChat.app.config.channels[channelId].notionRawPagesDbId
     );
     // print main menu message
-    state.messageId = await printMainMenuMessage(channelId, rawPages, tgChat);
+    state.messageId = await printInitialMessage(channelId, rawPages, tgChat);
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
       if (queryData === BACK_BTN_CALLBACK) {
@@ -41,7 +41,7 @@ export async function askRawPageToUse(channelId: number, tgChat: TgChat, onDone:
   });
 }
 
-async function printMainMenuMessage(channelId: number, rawPages: NotionListItem[], tgChat: TgChat): Promise<number> {
+async function printInitialMessage(channelId: number, rawPages: NotionListItem[], tgChat: TgChat): Promise<number> {
   return tgChat.reply(tgChat.app.i18n.menu.selectPage, [
     ...rawPages.map((item, index) => {
       return {

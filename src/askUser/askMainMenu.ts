@@ -10,7 +10,7 @@ const CHANNEL_MARKER = 'channel:';
 export async function askMainMenu(tgChat: TgChat, onDone: (channelId: number) => void) {
   await tgChat.addOrdinaryStep(makeBaseState(), async (state: BaseState) => {
     // print main menu message
-    state.messageId = await printMainMenuMessage(tgChat);
+    state.messageId = await printInitialMessage(tgChat);
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
       if (queryData === MENU_MANAGE_SITE) {
@@ -43,7 +43,7 @@ async function handleMainMenuSelected(queryData: string, tgChat: TgChat, onDone:
   return onDone(channelId);
 }
 
-async function printMainMenuMessage(tgChat: TgChat): Promise<number> {
+async function printInitialMessage(tgChat: TgChat): Promise<number> {
   return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
     ...tgChat.app.config.channels.map((item, index: number): any => {
       return {

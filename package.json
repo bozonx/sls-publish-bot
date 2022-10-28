@@ -15,6 +15,7 @@
     "@notionhq/client": "^2.2.1",
     "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "node-fetch": "^3.2.10",
     "notion-to-md": "^2.5.5",
     "telegraf": "^4.10.0"
