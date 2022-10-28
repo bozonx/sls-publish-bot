@@ -23,19 +23,19 @@ export async function askPubTime(tgChat: TgChat, onDone: (selectedDateString: st
 
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      let addDays = 0;
+      let addDays = -1;
 
       if (queryData === DATE_TODAY) {
-        addDays = 1;
+        addDays = 0;
       }
       else if (queryData === DATE_TOMORROW) {
-        addDays = 2;
+        addDays = 1;
       }
       else if (queryData === DATE_AFTER_TOMORROW) {
-        addDays = 3;
+        addDays = 2;
       }
 
-      if (addDays) {
+      if (addDays !== -1) {
         pressedBtn(addDays, tgChat, onDone)
           .catch((e) => {throw e});
       }
@@ -75,7 +75,7 @@ async function pressedBtn(
 ) {
   const currentDate = moment().utcOffset(tgChat.app.config.utcOffset);
 
-  if (addDays) {
+  if (addDays > 0) {
     currentDate.add(addDays, 'days');
   }
 
@@ -118,8 +118,14 @@ async function incomeMessage(
       throw new Error(`Incorrect date`);
     }
 
+    const cloneDate = currentDate.clone();
+
     currentDate.month(monthNum - 1);
     currentDate.date(dateNum);
+
+    if (currentDate.unix() < cloneDate.unix()) {
+      currentDate.year(currentDate.year() + 1);
+    }
   }
   else {
     throw new Error(`Incorrect date`);
