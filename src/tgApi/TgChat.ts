@@ -48,12 +48,16 @@ export default class TgChat {
   }
 
 
-  async reply(message: string, buttons?: TgReplyButton[]): Promise<number> {
+  async reply(message: string, buttons?: TgReplyButton[], actionButtons: TgReplyButton[] = []): Promise<number> {
     const messageResult = await this.ctx.sendMessage(
       message,
       buttons && {
         reply_markup: {
-          inline_keyboard: [ buttons ]
+          inline_keyboard: [
+            // TODO: разбивать по 3 в ряд
+            buttons,
+            actionButtons,
+          ]
         }
       }
     );

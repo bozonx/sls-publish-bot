@@ -3,7 +3,9 @@ import {PublicationTypes} from '../types/types';
 const dict = {
   menu: {
     whatToDo: 'Что хотите опубликовать?',
-    whichSns: 'В какие соц сети публиковать? Выбраны: ',
+    whichSns: 'В какие соц сети публиковать?',
+    selectedSnsPre: 'Выбраны: ',
+    snsToDo: 'Можете убрать лишние или нажать ОК, если всё устраивает.',
     btnNewPage: 'СОЗДАТЬ НОВУЮ',
     selectChannel: 'Выберете канал',
     selectManageSite: 'Сайт slsfreedom',

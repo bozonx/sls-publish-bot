@@ -17,7 +17,7 @@ export default class MainMenuHandler {
   async startFromBeginning() {
     await askMainMenu(this.tgChat, (channelId: number) => {
       askPublishType(channelId, this.tgChat, (pubType: PublicationTypes) => {
-        askSNs(channelId, pubType, this.tgChat, () => {
+        askSNs(channelId, pubType, this.tgChat, (sns: string[]) => {
           // TODO: what to do ???
         })
       })

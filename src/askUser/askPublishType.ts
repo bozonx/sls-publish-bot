@@ -59,33 +59,33 @@ export async function askPublishType(channelId: number, tgChat: TgChat, onDone: 
 async function printAskMessage(channelId: number, tgChat: TgChat): Promise<number> {
   return tgChat.reply(
     tgChat.app.i18n.menu.whatToDo,
+    tgChat.app.config.channels[channelId].supportedTypes.map((type: string) => {
+      switch (type) {
+        case PUBLICATION_TYPES.article:
+          return {
+            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.article],
+            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.article,
+          }
+        case PUBLICATION_TYPES.post1000:
+          return {
+            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post1000],
+            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post1000,
+          }
+        case PUBLICATION_TYPES.post2000:
+          return {
+            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post2000],
+            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post2000,
+          }
+        case PUBLICATION_TYPES.story:
+          return {
+            text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.story],
+            callback_data: CREATE_PREFIX + PUBLICATION_TYPES.story,
+          }
+        default:
+          throw new Error(`Unsupported publication type`)
+      }
+    }),
     [
-      ...tgChat.app.config.channels[channelId].supportedTypes.map((type: string) => {
-        switch (type) {
-          case PUBLICATION_TYPES.article:
-            return {
-              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.article],
-              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.article,
-            }
-          case PUBLICATION_TYPES.post1000:
-            return {
-              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post1000],
-              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post1000,
-            }
-          case PUBLICATION_TYPES.post2000:
-            return {
-              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.post2000],
-              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.post2000,
-            }
-          case PUBLICATION_TYPES.story:
-            return {
-              text: tgChat.app.i18n.publicationType[PUBLICATION_TYPES.story],
-              callback_data: CREATE_PREFIX + PUBLICATION_TYPES.story,
-            }
-          default:
-            throw new Error(`Unsupported publication type`)
-        }
-      }),
       CANCEL_BTN,
     ]
   );

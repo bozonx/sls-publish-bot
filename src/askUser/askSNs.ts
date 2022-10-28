@@ -24,7 +24,7 @@ export async function askSNs(
   channelId: number,
   pubType: PublicationTypes,
   tgChat: TgChat,
-  onDone: () => void
+  onDone: (sns: string[]) => void
 ) {
   const state: AskSnsState = {
     channelId,
@@ -48,7 +48,7 @@ export async function askSNs(
   await addStep(state, tgChat, onDone);
 }
 
-async function addStep(state: AskSnsState, tgChat: TgChat, onDone: () => void) {
+async function addStep(state: AskSnsState, tgChat: TgChat, onDone: (sns: string[]) => void) {
   await tgChat.addOrdinaryStep(state, async () => {
     // print ask type message
     state.messageId = await printAskMessage(state, tgChat);
@@ -83,29 +83,33 @@ async function addStep(state: AskSnsState, tgChat: TgChat, onDone: () => void) {
 
 async function printAskMessage(state: AskSnsState, tgChat: TgChat): Promise<number> {
   return tgChat.reply(
-    tgChat.app.i18n.menu.whichSns + state.sns.join(', '),
+    tgChat.app.i18n.menu.whichSns + '\n'
+    + tgChat.app.i18n.menu.selectedSnsPre + state.sns.join(', ')  + '\n'
+    + tgChat.app.i18n.menu.snsToDo,
     [
       ...state.sns.map((item) => {
         switch (item) {
           case SN_TYPES.telegram:
             return {
-              text: 'del Telegram',
+              text: 'DEL Telegram',
               callback_data: CREATE_PREFIX + SN_TYPES.telegram,
             }
           case SN_TYPES.instagram:
             return {
-              text: 'del Instagram',
+              text: 'DEL Instagram',
               callback_data: CREATE_PREFIX + SN_TYPES.instagram,
             }
           case SN_TYPES.zen:
             return {
-              text: 'del Zen',
+              text: 'DEL Zen',
               callback_data: CREATE_PREFIX + SN_TYPES.zen,
             }
           default:
             throw new Error(`Unsupported social media type`)
         }
       }),
+    ],
+    [
       BACK_BTN,
       CANCEL_BTN,
       OK_BTN,
@@ -117,7 +121,7 @@ async function handleSnRemoved(
   queryData: string,
   state: AskSnsState,
   tgChat: TgChat,
-  onDone: () => void
+  onDone: (sns: string[]) => void
 ) {
   const snType = queryData.slice(CREATE_PREFIX.length);
   const index = state.sns.indexOf(snType);
@@ -140,9 +144,9 @@ async function handleSnRemoved(
 async function finish(
   state: AskSnsState,
   tgChat: TgChat,
-  onDone: () => void
+  onDone: (sns: string[]) => void
 ) {
   await tgChat.reply(tgChat.app.i18n.menu.selectedSns + state.sns.join(', '));
 
-  onDone();
+  onDone(state.sns);
 }
