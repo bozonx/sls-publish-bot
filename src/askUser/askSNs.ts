@@ -45,6 +45,10 @@ export async function askSNs(
     throw new Error(`No one sn`);
   }
 
+  await addStep(state, tgChat, onDone);
+}
+
+async function addStep(state: AskSnsState, tgChat: TgChat, onDone: () => void) {
   await tgChat.addOrdinaryStep(state, async () => {
     // print ask type message
     state.messageId = await printAskMessage(state, tgChat);
@@ -79,23 +83,23 @@ export async function askSNs(
 
 async function printAskMessage(state: AskSnsState, tgChat: TgChat): Promise<number> {
   return tgChat.reply(
-    tgChat.app.i18n.menu.whichSns,
+    tgChat.app.i18n.menu.whichSns + state.sns.join(', '),
     [
       ...state.sns.map((item) => {
         switch (item) {
           case SN_TYPES.telegram:
             return {
-              text: tgChat.app.i18n.menu.removeSn + 'Telegram',
+              text: 'del Telegram',
               callback_data: CREATE_PREFIX + SN_TYPES.telegram,
             }
           case SN_TYPES.instagram:
             return {
-              text: tgChat.app.i18n.menu.removeSn + 'Instagram',
+              text: 'del Instagram',
               callback_data: CREATE_PREFIX + SN_TYPES.instagram,
             }
           case SN_TYPES.zen:
             return {
-              text: tgChat.app.i18n.menu.removeSn + 'Zen',
+              text: 'del Zen',
               callback_data: CREATE_PREFIX + SN_TYPES.zen,
             }
           default:
@@ -123,7 +127,7 @@ async function handleSnRemoved(
   state.sns.splice(index, 1);
 
   if (state.sns.length > 1) {
-    await askSNs(state.channelId, state.pubType, tgChat, onDone);
+    await addStep(state, tgChat, onDone);
   }
   else if (state.sns.length == 1) {
     await finish(state, tgChat, onDone);
