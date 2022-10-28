@@ -1,8 +1,9 @@
 import {MdBlock} from 'notion-to-md/build/types';
+import {SectionTypes} from './types';
 
 
 export default interface Sections {
-  Type: 'Article' | 'Post1000' | 'Story';
+  Type: SectionTypes;
   Header: string,
   MainImage?: string;
   MainImageDescr?: string;

@@ -1,6 +1,7 @@
 import {MdBlock} from 'notion-to-md/build/types';
 import Sections from '../types/Sections';
 import {PUBLICATION_TYPES} from '../types/consts';
+import _ from 'lodash';
 
 
 export function parseSections(properties: Record<string, any>, mdBlocks: MdBlock[]): Sections {
@@ -21,17 +22,19 @@ export function checkSection(sections: Sections) {
   if (!sections.Type) throw new Error(`No type`);
   if (!sections.Header) throw new Error(`No header`);
 
-  if (sections.Type === PUBLICATION_TYPES.Article) {
+  if (sections.Type === _.upperFirst(PUBLICATION_TYPES.article)) {
     if (!sections.ArticleText?.length) throw new Error(`No article text`);
     // TODO: check image
     // TODO: check image descr
   }
-  else if (sections.Type === PUBLICATION_TYPES.Post1000) {
+  else if (sections.Type === _.upperFirst(PUBLICATION_TYPES.post1000)) {
     if (!sections.PostText?.length) throw new Error(`No article text`);
   }
-  else if (sections.Type === PUBLICATION_TYPES.Story) {
+  else if (sections.Type === _.upperFirst(PUBLICATION_TYPES.story)) {
     // TODO: check image
   }
+
+  // TODO: add post 2000
 
 }
 

@@ -2,6 +2,7 @@ import PublishHelper from "./PublishHelper";
 import NotionListItem from '../notionApi/types/NotionListItem';
 import {checkSection, makeSectionsInfo, parseSections} from '../lib/parseMdBlocks';
 import TgChat from '../tgApi/TgChat';
+import {askRawPageToUse} from '../askUser/askRawPageToUse';
 
 
 export default class PublishArticle {
@@ -16,9 +17,15 @@ export default class PublishArticle {
 
 
   async start(channelId: number) {
-    const notionPage: NotionListItem = await this.publishHelper.askPageToUse(channelId);
+    await askRawPageToUse(channelId, this.tgChat, (selectedItem: NotionListItem) => {
+      this.parsePage(selectedItem)
+        .catch((e) => {throw e});
+    });
+  }
+
+  async parsePage(selectedItem: NotionListItem) {
     const notionPageContent = await this.tgChat.app.notionRequest.getPageContent(
-      notionPage.pageId
+      selectedItem.pageId
     );
     const sections = parseSections(notionPageContent[0], notionPageContent[1]);
 
@@ -31,8 +38,10 @@ export default class PublishArticle {
     }
 
     const info = makeSectionsInfo(sections);
+    // send result to user
+    await this.tgChat.reply(info);
 
-    await this.app.tg.bot.telegram.sendMessage(this.app.tg.botChatId, info)
+    // TODO: what to do next ???
   }
 
 }
