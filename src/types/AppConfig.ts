@@ -12,5 +12,7 @@ export interface ConfigChannel {
 export default interface AppConfig {
   botToken: string;
   notionToken: string;
+  // offset of UTC in hours - 3 means Moscow
+  utcOffset: number;
   channels: ConfigChannel[];
 }

@@ -3,6 +3,7 @@ import NotionListItem from '../notionApi/types/NotionListItem';
 import {checkSection, makeSectionsInfo, parseSections} from '../lib/parseMdBlocks';
 import TgChat from '../tgApi/TgChat';
 import {askRawPageToUse} from '../askUser/askRawPageToUse';
+import {askPubTime} from '../askUser/askPubDate';
 
 
 export default class PublishArticle {
@@ -41,7 +42,9 @@ export default class PublishArticle {
     // send result to user
     await this.tgChat.reply(info);
 
-    // TODO: what to do next ???
+    await askPubTime(this.tgChat, (selectedDateString: string) => {
+      // TODO: what to do next ???
+    });
   }
 
 }

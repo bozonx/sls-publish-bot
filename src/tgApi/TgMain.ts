@@ -38,6 +38,12 @@ export default class TgMain {
       this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
     });
 
+    this.bot.on('message', (ctx) => {
+      const msg: string = (ctx.update.message as any).text;
+
+      this.chats[ctx.chat.id].handleIncomeMessageEvent(msg);
+    })
+
     await this.bot.launch();
 
     console.info('--- Bot launched');

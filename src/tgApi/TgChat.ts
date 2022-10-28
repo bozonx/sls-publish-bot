@@ -47,6 +47,16 @@ export default class TgChat {
     this.events.emit(AppEvents.CALLBACK_QUERY, queryData);
   }
 
+  handleIncomeMessageEvent(msg: string) {
+    if (!msg) {
+      console.warn('An empty string came');
+
+      return;
+    }
+
+    this.events.emit(AppEvents.MESSAGE, msg);
+  }
+
 
   async reply(message: string, buttons?: TgReplyButton[], actionButtons: TgReplyButton[] = []): Promise<number> {
     const messageResult = await this.ctx.sendMessage(

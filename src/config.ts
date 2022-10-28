@@ -8,6 +8,7 @@ dotenv.config();
 const conf: AppConfig = {
   botToken: process.env.BOT_TOKEN as any,
   notionToken: process.env.NOTION_TOKEN as any,
+  utcOffset: 3,
   channels: [
     {
       channelId: '',

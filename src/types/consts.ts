@@ -33,6 +33,7 @@ export const PUBLICATION_TYPES: Record<PublicationTypes, PublicationTypes> = {
 
 export enum AppEvents {
   CALLBACK_QUERY,
+  MESSAGE,
 }
 
 export const BACK_BTN = {

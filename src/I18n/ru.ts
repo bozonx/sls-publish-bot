@@ -25,6 +25,11 @@ const dict = {
     post2000: 'Пост2000',
     story: 'Cторис',
   } as Record<PublicationTypes, string>,
+  dates: {
+    today: 'Сегодня',
+    tomorrow: 'Завтра',
+    afterTomorrow: 'Послезавтра',
+  },
   greet: 'Добро пожаловать в бот блогов свободы.',
 }
 

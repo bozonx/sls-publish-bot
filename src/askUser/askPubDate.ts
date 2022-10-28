@@ -14,47 +14,51 @@ export async function askPubTime(tgChat: TgChat, onDone: (selectedDateString: st
   await tgChat.addOrdinaryStep(makeBaseState(), async (state: BaseState) => {
     // print main menu message
     state.messageId = await printInitialMessage(tgChat);
+
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
       let addDays = 0;
 
       if (queryData === DATE_TODAY) {
-        addDays += 1;
+        addDays = 1;
       }
       else if (queryData === DATE_TOMORROW) {
-        addDays += 2;
+        addDays = 2;
       }
       else if (queryData === DATE_AFTER_TOMORROW) {
-        addDays += 3;
+        addDays = 3;
       }
 
       if (addDays) {
         finish(addDays, state, tgChat, onDone);
       }
-
     });
   });
 }
 
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.selectDate, [
-    {
-      text: tgChat.app.i18n.menu.selectManageSite,
-      callback_data: DATE_TODAY,
-    },
-    {
-      text: tgChat.app.i18n.menu.selectManageSite,
-      callback_data: DATE_TOMORROW,
-    },
-    {
-      text: tgChat.app.i18n.menu.selectManageSite,
-      callback_data: DATE_AFTER_TOMORROW,
-    },
-  ], [
-    BACK_BTN,
-    CANCEL_BTN,
-  ]);
+  return tgChat.reply(
+    tgChat.app.i18n.menu.selectDate
+    + `Utc offset = ${tgChat.app.config.utcOffset}.`,
+    [
+      {
+        text: tgChat.app.i18n.dates.today,
+        callback_data: DATE_TODAY,
+      },
+      {
+        text: tgChat.app.i18n.dates.tomorrow,
+        callback_data: DATE_TOMORROW,
+      },
+      {
+        text: tgChat.app.i18n.dates.afterTomorrow,
+        callback_data: DATE_AFTER_TOMORROW,
+      },
+    ], [
+      BACK_BTN,
+      CANCEL_BTN,
+    ]
+  );
 }
 
 async function finish(
@@ -63,13 +67,13 @@ async function finish(
   tgChat: TgChat,
   onDone: (selectedDateString: string) => void
 ) {
-  const currentDateUtc = moment().utc();
+  const currentDate = moment().utcOffset(tgChat.app.config.utcOffset);
 
   if (addDays) {
-    currentDateUtc.add(addDays, 'days');
+    currentDate.add(addDays, 'days');
   }
 
-  const selectedDateString = currentDateUtc.format('DD.MM.YYYY')
+  const selectedDateString = currentDate.format('DD.MM.YYYY')
 
   await tgChat.reply(tgChat.app.i18n.menu.selectedDate + selectedDateString);
 
