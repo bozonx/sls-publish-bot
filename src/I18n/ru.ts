@@ -14,7 +14,7 @@ const dict = {
     selectedChannel: 'Выбран канал: ',
     selectedSns: 'Выбраны соц сети: ',
     selectedRawPage: 'Выбрана заготовка: ',
-    //removeSn: 'Убрать ',
+    removeSn: 'Убрать ',
     //selectedSlsSite: 'Управление сайтом slsfreedom.org'
   },
   publicationType: {

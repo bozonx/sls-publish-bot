@@ -91,17 +91,17 @@ async function printAskMessage(state: AskSnsState, tgChat: TgChat): Promise<numb
         switch (item) {
           case SN_TYPES.telegram:
             return {
-              text: 'DEL Telegram',
+              text: tgChat.app.i18n.menu.removeSn + 'Tg',
               callback_data: CREATE_PREFIX + SN_TYPES.telegram,
             }
           case SN_TYPES.instagram:
             return {
-              text: 'DEL Instagram',
+              text: tgChat.app.i18n.menu.removeSn + 'Insta',
               callback_data: CREATE_PREFIX + SN_TYPES.instagram,
             }
           case SN_TYPES.zen:
             return {
-              text: 'DEL Zen',
+              text: tgChat.app.i18n.menu.removeSn + 'Zen',
               callback_data: CREATE_PREFIX + SN_TYPES.zen,
             }
           default:
