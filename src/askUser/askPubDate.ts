@@ -15,6 +15,12 @@ export async function askPubTime(tgChat: TgChat, onDone: (selectedDateString: st
     // print main menu message
     state.messageId = await printInitialMessage(tgChat);
 
+    // TODO: надо удалить хэндлер
+    const msgHandlerIndex = tgChat.events.addListener(AppEvents.MESSAGE, (msg: string) => {
+      incomeMessage(msg, tgChat, onDone)
+        .catch((e) => {throw e});
+    });
+
     // listen to result
     state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
       let addDays = 0;
@@ -30,7 +36,8 @@ export async function askPubTime(tgChat: TgChat, onDone: (selectedDateString: st
       }
 
       if (addDays) {
-        finish(addDays, state, tgChat, onDone);
+        pressedBtn(addDays, tgChat, onDone)
+          .catch((e) => {throw e});
       }
     });
   });
@@ -61,9 +68,8 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
   );
 }
 
-async function finish(
+async function pressedBtn(
   addDays: number,
-  state: BaseState,
   tgChat: TgChat,
   onDone: (selectedDateString: string) => void
 ) {
@@ -71,6 +77,52 @@ async function finish(
 
   if (addDays) {
     currentDate.add(addDays, 'days');
+  }
+
+  const selectedDateString = currentDate.format('DD.MM.YYYY')
+
+  await tgChat.reply(tgChat.app.i18n.menu.selectedDate + selectedDateString);
+
+  onDone(selectedDateString);
+}
+
+async function incomeMessage(
+  msg: string,
+  tgChat: TgChat,
+  onDone: (selectedDateString: string) => void
+) {
+  const currentDate = moment().utcOffset(tgChat.app.config.utcOffset);
+  const splat = msg.split('.');
+
+  if (splat.length === 1) {
+    const dateNum = Number(splat[0]);
+
+    if (Number.isNaN(dateNum)) {
+      throw new Error(`Incorrect date`);
+    }
+
+    if (dateNum <= currentDate.date()) {
+      currentDate.month(currentDate.month() + 1);
+    }
+
+    currentDate.date(dateNum);
+  }
+  else if (splat.length === 2) {
+    const dateNum = Number(splat[0]);
+    const monthNum = Number(splat[1]);
+
+    if (Number.isNaN(dateNum)) {
+      throw new Error(`Incorrect date`);
+    }
+    else if (Number.isNaN(monthNum)) {
+      throw new Error(`Incorrect date`);
+    }
+
+    currentDate.month(monthNum - 1);
+    currentDate.date(dateNum);
+  }
+  else {
+    throw new Error(`Incorrect date`);
   }
 
   const selectedDateString = currentDate.format('DD.MM.YYYY')
