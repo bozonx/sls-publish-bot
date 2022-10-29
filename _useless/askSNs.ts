@@ -1,5 +1,5 @@
-import TgChat from '../tgApi/TgChat';
-import BaseState from '../types/BaseState';
+import TgChat from '../src/tgApi/TgChat';
+import BaseState from '../src/types/BaseState';
 import {
   AppEvents,
   BACK_BTN, BACK_BTN_CALLBACK,
@@ -7,10 +7,10 @@ import {
   CANCEL_BTN_CALLBACK,
   CREATE_PREFIX,
   SN_TYPES
-} from '../types/consts';
-import {PublicationTypes} from '../types/types';
-import {OK_BTN} from '../types/consts';
-import {OK_BTN_CALLBACK} from '../types/consts';
+} from '../src/types/consts';
+import {PublicationTypes} from '../src/types/types';
+import {OK_BTN} from '../src/types/consts';
+import {OK_BTN_CALLBACK} from '../src/types/consts';
 
 
 interface AskSnsState extends BaseState {

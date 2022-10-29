@@ -3,7 +3,7 @@ import NotionListItem from '../notionApi/types/NotionListItem';
 import {checkSection, makeSectionsInfo, parseSections} from '../lib/parseMdBlocks';
 import TgChat from '../tgApi/TgChat';
 import {askRawPageToUse} from '../askUser/askRawPageToUse';
-import {askPubTime} from '../askUser/askPubDate';
+import {askPubTime} from '../../_useless/askPubDate';
 
 
 export default class PublishArticle {

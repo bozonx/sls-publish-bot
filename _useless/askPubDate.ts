@@ -1,7 +1,7 @@
-import TgChat from '../tgApi/TgChat';
-import {makeBaseState} from '../helpers/helpers';
-import BaseState from '../types/BaseState';
-import {AppEvents, BACK_BTN, CANCEL_BTN, MENU_MANAGE_SITE} from '../types/consts';
+import TgChat from '../src/tgApi/TgChat';
+import {makeBaseState} from '../src/helpers/helpers';
+import BaseState from '../src/types/BaseState';
+import {AppEvents, BACK_BTN, CANCEL_BTN, MENU_MANAGE_SITE} from '../src/types/consts';
 import moment from 'moment';
 
 
