@@ -10,6 +10,7 @@ import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parse
 import ContentItem from '../types/ContentItem';
 import {SnTypes} from '../types/types';
 import RawPageContent from '../types/PageContent';
+import _ from 'lodash';
 
 
 
@@ -61,13 +62,22 @@ export default class PublishMaterial {
           this.tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
         );
 
-        const rawPage = await this.loadRawPage();
+        if (parsedContentItem.pageLink) {
+          const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
+          const rawPage = await this.loadRawPage(pageId);
 
-        await this.tgChat.reply(
-          this.tgChat.app.i18n.menu.pageContent + '\n\n' + contentInfoMsg
-        );
+          await this.tgChat.reply(
+            this.tgChat.app.i18n.menu.pageContent + '\n\n'
+          );
 
-        console.log(11111, rawPage)
+          console.log(11111, rawPage)
+        }
+        else {
+          // TODO: если нет ссылки то что делать? - обьявление
+          // TODO: проверить что для обьявления выбран telegram
+        }
+
+
       })()
         .catch((e) => {throw e});
     });
@@ -129,11 +139,9 @@ export default class PublishMaterial {
     return this.prepareItems((response as any).results);
   }
 
-  private async loadRawPage(): Promise<any> {
+  private async loadRawPage(pageId: string): Promise<any> {
     // TODO: если ошибка то показать пользователю
-    const response = await this.tgChat.app.notion.api.databases.query({
-      database_id: this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId,
-    });
+    const response = await this.tgChat.app.notion.getPageMdBlocks(pageId);
 
     console.log(22222, response)
   }

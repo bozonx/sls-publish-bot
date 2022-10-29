@@ -1,7 +1,7 @@
 export default interface RawPageContent {
   announcement: string;
   imageDescr: string;
-  instagramTags: string[];
+  instaTags: string[];
   tgTags: string[];
   textMd: string;
 }
