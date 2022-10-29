@@ -16,7 +16,10 @@ export default class App {
     this.config = this.makeConf();
     this.tg = new TgMain(this);
     //this.notionRequest = new NotionRequest(this);
-    this.notion = new NotionApi(this.config.notionToken)
+    this.notion = new NotionApi(
+      this.config.notionToken,
+      this.config.utcOffset
+    )
   }
 
 

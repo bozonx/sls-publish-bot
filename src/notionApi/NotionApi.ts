@@ -7,13 +7,16 @@ import {
 } from "@notionhq/client/build/src/api-endpoints";
 import {MdBlock} from 'notion-to-md/build/types';
 import {SECTIONS_NAMES} from '../types/consts';
+import moment from 'moment';
 
 
 export default class NotionApi {
+  private readonly utcOffset: number;
   private readonly notion: Client;
 
 
-  constructor(notionToken: string) {
+  constructor(notionToken: string, utcOffset: number) {
+    this.utcOffset = utcOffset;
     this.notion = new Client({
       auth: notionToken,
     });
@@ -21,9 +24,45 @@ export default class NotionApi {
 
 
   async getDbItemList(dbId: string, page_size = DB_DEFAULT_PAGE_SIZE): Promise<PageObjectResponse[]> {
+    const currentDate: string = moment()
+      .utcOffset(this.utcOffset).format('YYYY-MM-DD');
+
     const response = await this.notion.databases.query({
       database_id: dbId,
       page_size,
+      filter: {
+        and: [
+          {
+            property: 'date',
+            date: {
+              on_or_after: currentDate,
+            },
+          },
+          {
+            or: [
+              {
+                property: 'status',
+                select: {
+                  equals: 'to_edit',
+                },
+              },
+              {
+                property: 'status',
+                select: {
+                  equals: 'to_correct',
+                },
+              },
+              {
+                property: 'status',
+                select: {
+                  equals: 'to_publish',
+                },
+              },
+            ],
+          }
+        ],
+
+      },
     });
 
     return response.results as PageObjectResponse[];

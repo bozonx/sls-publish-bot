@@ -28,8 +28,10 @@ export default class PublishMaterial {
    */
   private async loadNotPublished() {
     // TODO: отфильтровать
+    // TODO: если ошибка то показать пользователю
     const contentPlanItems = await this.tgChat.app.notion.getDbItemList(
-      this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId
+      this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId,
+
     );
 
     console.log(11111, contentPlanItems)

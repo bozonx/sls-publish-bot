@@ -48,16 +48,18 @@ async function handleSiteSelected(tgChat: TgChat, onDone: (channelId: number) =>
 }
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [[
-    ...tgChat.app.config.channels.map((item, index: number): any => {
+  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
+    tgChat.app.config.channels.map((item, index: number): any => {
       return {
         text: item.dispname,
         callback_data: CHANNEL_MARKER + index,
       };
     }),
-    {
-      text: tgChat.app.i18n.menu.selectManageSite,
-      callback_data: MENU_MANAGE_SITE,
-    }
-  ]]);
+    [
+      {
+        text: tgChat.app.i18n.menu.selectManageSite,
+        callback_data: MENU_MANAGE_SITE,
+      }
+    ]
+  ]);
 }
