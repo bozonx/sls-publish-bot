@@ -9,6 +9,7 @@ import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem from '../types/ContentItem';
 import {SnTypes} from '../types/types';
+import RawPageContent from '../types/PageContent';
 
 
 
@@ -55,12 +56,20 @@ export default class PublishMaterial {
 
       const contentInfoMsg = makeContentInfoMsg(parsedContentItem, this.tgChat.app.i18n);
 
-      this.tgChat.reply(
-        this.tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
-      )
-        .catch((e) => {throw e})
+      (async () => {
+        await this.tgChat.reply(
+          this.tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
+        );
 
-      console.log(22222, parsedContentItem)
+        const rawPage = await this.loadRawPage();
+
+        await this.tgChat.reply(
+          this.tgChat.app.i18n.menu.pageContent + '\n\n' + contentInfoMsg
+        );
+
+        console.log(11111, rawPage)
+      })()
+        .catch((e) => {throw e});
     });
   }
 
@@ -118,6 +127,15 @@ export default class PublishMaterial {
     });
 
     return this.prepareItems((response as any).results);
+  }
+
+  private async loadRawPage(): Promise<any> {
+    // TODO: если ошибка то показать пользователю
+    const response = await this.tgChat.app.notion.api.databases.query({
+      database_id: this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId,
+    });
+
+    console.log(22222, response)
   }
 
   prepareItems(results: PageObjectResponse[]): ContentListItem[] {
