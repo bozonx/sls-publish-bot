@@ -11,88 +11,81 @@ import moment from 'moment';
 
 
 export default class NotionApi {
-  private readonly utcOffset: number;
-  private readonly notion: Client;
+  public readonly api: Client;
+  //private readonly utcOffset: number;
 
 
-  constructor(notionToken: string, utcOffset: number) {
-    this.utcOffset = utcOffset;
-    this.notion = new Client({
+  constructor(notionToken: string) {
+    //this.utcOffset = utcOffset;
+    this.api = new Client({
       auth: notionToken,
     });
   }
 
 
-  async getDbItemList(dbId: string, page_size = DB_DEFAULT_PAGE_SIZE): Promise<PageObjectResponse[]> {
-    const currentDate: string = moment()
-      .utcOffset(this.utcOffset).format('YYYY-MM-DD');
+  // async getDbItemList(dbId: string, page_size = DB_DEFAULT_PAGE_SIZE): Promise<PageObjectResponse[]> {
+  //   const currentDate: string = moment()
+  //     .utcOffset(this.utcOffset).format('YYYY-MM-DD');
+  //
+  //   const response = await this.notion.databases.query({
+  //     database_id: dbId,
+  //     page_size,
+  //     filter: {
+  //       and: [
+  //         {
+  //           property: 'date',
+  //           date: {
+  //             on_or_after: currentDate,
+  //           },
+  //         },
+  //         {
+  //           or: [
+  //             {
+  //               property: 'status',
+  //               select: {
+  //                 equals: 'to_edit',
+  //               },
+  //             },
+  //             {
+  //               property: 'status',
+  //               select: {
+  //                 equals: 'to_correct',
+  //               },
+  //             },
+  //             {
+  //               property: 'status',
+  //               select: {
+  //                 equals: 'to_publish',
+  //               },
+  //             },
+  //           ],
+  //         }
+  //       ],
+  //
+  //     },
+  //   });
+  //
+  //   return response.results as PageObjectResponse[];
+  // }
 
-    const response = await this.notion.databases.query({
-      database_id: dbId,
-      page_size,
-      filter: {
-        and: [
-          {
-            property: 'date',
-            date: {
-              on_or_after: currentDate,
-            },
-          },
-          {
-            or: [
-              {
-                property: 'status',
-                select: {
-                  equals: 'to_edit',
-                },
-              },
-              {
-                property: 'status',
-                select: {
-                  equals: 'to_correct',
-                },
-              },
-              {
-                property: 'status',
-                select: {
-                  equals: 'to_publish',
-                },
-              },
-            ],
-          }
-        ],
-
-      },
-    });
-
-    return response.results as PageObjectResponse[];
-  }
-
-  async getPreparedDbItemList(
-    dbId: string,
-    page_size = DB_DEFAULT_PAGE_SIZE
-  ): Promise<NotionListItem[]> {
-    const items = await this.getDbItemList(dbId, page_size);
-
-    return items.map((item): NotionListItem => {
-      // TODO: skip archived
-      //if (item.archived) return;
-
-      const NameProp = item.properties[SECTIONS_NAMES.Header]
-      const richTextTitle: RichTextItemResponse = (NameProp as any).title[0]
-
-      return {
-        pageId: item.id,
-        title: richTextTitle.plain_text,
-      }
-    });
-
-  }
+  // makePreparedDbItemList(results: PageObjectResponse[]): NotionListItem[] {
+  //   return results
+  //     .filter((item) => !item.archived)
+  //     .map((item): NotionListItem => {
+  //       const NameProp = item.properties[SECTIONS_NAMES.Header]
+  //       const richTextTitle: RichTextItemResponse = (NameProp as any).title[0]
+  //
+  //       return {
+  //         pageId: item.id,
+  //         title: richTextTitle.plain_text,
+  //       }
+  //     });
+  // }
 
   async getPageMdBlocks(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
-    const n2m = new NotionToMarkdown({ notionClient: this.notion });
+    const n2m = new NotionToMarkdown({ notionClient: this.api });
     const mdBlocks = await n2m.pageToMarkdown(pageId);
-    const page = await this.notion.pages.retrieve({ page_id: pageId });
+    const page = await this.api.pages.retrieve({ page_id: pageId });
     const properties = (page as any).properties;
 
     return [properties, mdBlocks];
