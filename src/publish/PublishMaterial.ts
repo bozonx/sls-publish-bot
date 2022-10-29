@@ -77,7 +77,8 @@ export default class PublishMaterial {
           );
 
           await askPublishConfirm(this.tgChat, () => {
-            publishFork(parsedContentItem, parsedPage, this.tgChat);
+            publishFork(parsedContentItem, parsedPage, this.channelId, this.tgChat)
+              .catch((e) => {throw e});
           });
         }
         else {

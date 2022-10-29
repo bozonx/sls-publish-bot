@@ -2,11 +2,13 @@ import RawPageContent from '../types/PageContent';
 import ContentItem from '../types/ContentItem';
 import {PUBLICATION_TYPES} from '../types/consts';
 import TgChat from '../tgApi/TgChat';
+import {publishTgPost} from './publishTgPost';
 
 
-export function publishFork(
+export async function publishFork(
   contentItem: ContentItem,
   parsedPage: RawPageContent,
+  channelId: number,
   tgChat: TgChat
 ) {
   // post like
@@ -15,7 +17,7 @@ export function publishFork(
     PUBLICATION_TYPES.post2000,
     PUBLICATION_TYPES.mem,
   ].includes(contentItem.type)) {
-    // TODO: add
+    await publishTgPost(parsedPage.textMd, channelId, tgChat);
   }
   // photos like
   else if ([
