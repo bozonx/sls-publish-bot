@@ -27,11 +27,12 @@ const dict = {
     pageContent: 'Содержание страницы:'
   },
   contentInfo: {
-    dateTime: 'Дата, время',
+    dateTime: 'Дата и время',
     content: 'Контент',
     type: 'Тип',
     status: 'Статус',
     sns: 'Соц сети',
+    note: 'Заметка'
   },
   pageInfo: {
     title: 'Название',

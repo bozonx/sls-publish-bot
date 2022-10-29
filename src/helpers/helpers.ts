@@ -1,6 +1,7 @@
 import BaseState from '../types/BaseState';
 import {PublicationTypes, SnTypes} from '../types/types';
 import {PUBLICATION_TYPES, SN_TYPES} from '../types/consts';
+import _ from 'lodash';
 
 
 export function makeBaseState(): BaseState {
@@ -14,8 +15,10 @@ export function makeTagsString(tags: string[]): string {
   return tags.map((item) => `#${item}`).join(' ');
 }
 
-export function nameFullNotionLink(internalLink: string): string {
-  return `https://www.notion.so${internalLink}`
+export function makeFullNotionLink(internalLink: string): string {
+  if (internalLink.indexOf('http') === 0) return internalLink;
+
+  return `https://www.notion.so/${_.trimStart(internalLink, '/')}`
 }
 
 export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {

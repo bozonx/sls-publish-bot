@@ -20,6 +20,6 @@ export function makePageInfoMsg(pageContent: RawPageContent, i18n: typeof ru): s
    + `${i18n.pageInfo.announcement}: ${pageContent.announcement}\n`
    + `${i18n.pageInfo.imageDescr}: ${pageContent.imageDescr}\n`
    + `${i18n.pageInfo.tgTags}: ${makeTagsString(pageContent.tgTags)}\n`
-   + `${i18n.pageInfo.instaTags}: ${makeTagsString(pageContent.instaTags)}`
-   + `${i18n.pageInfo.contentLength}: `;
+   + `${i18n.pageInfo.instaTags}: ${makeTagsString(pageContent.instaTags)}\n`
+   + `${i18n.pageInfo.contentLength}: ${pageContent.textMd.length}`;
 }

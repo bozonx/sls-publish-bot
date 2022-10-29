@@ -2,7 +2,7 @@ import ContentItem from '../types/ContentItem';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import {CONTENT_PROPS, CONTENT_STATUS, FULL_DATE_FORMAT, PUBLICATION_TYPES} from '../types/consts';
 import moment from 'moment';
-import {matchSnsForType, nameFullNotionLink} from '../helpers/helpers';
+import {makeFullNotionLink, matchSnsForType} from '../helpers/helpers';
 import {PublicationTypes, SnTypes} from '../types/types';
 import ru from '../I18n/ru';
 import _ from 'lodash';
@@ -30,10 +30,10 @@ export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]
 
 export function makeContentInfoMsg(item: ContentItem, i18n: typeof ru): string {
   return `${i18n.contentInfo.dateTime}: ${moment(item.date).format(FULL_DATE_FORMAT)} ${item.time}\n`
-    + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}`
+    + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}\n`
     + `${i18n.contentInfo.type}: ${item.type}. ${i18n.contentInfo.status}: ${item.status}\n`
-    + `${i18n.contentInfo.content}: ${item.gist} ${(item.pageLink) ? nameFullNotionLink(item.pageLink) : ''}\n`
-    + `\n\n${item.note}`;
+    + `${i18n.contentInfo.content}: ${item.gist} ${(item.pageLink) ? makeFullNotionLink(item.pageLink) : ''}\n`
+    + `${i18n.contentInfo.note}: ${item.note}`;
 }
 
 export function resolveSns(
