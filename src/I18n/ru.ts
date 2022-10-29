@@ -23,6 +23,7 @@ const dict = {
     makeStory: 'Создать story в tg',
     makeAdvert: 'Опубликовать рекламу',
     selectContent: 'Выберете запись к публикации',
+    contentParams: 'Параметры публикации:',
   },
   publicationType: {
     article: 'Статья',

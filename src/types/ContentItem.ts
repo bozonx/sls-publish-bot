@@ -1,5 +1,6 @@
 import {ContentStatus, PublicationTypes, SnTypes} from './types';
 
+
 export default interface ContentItem {
   date: string;
   time: string;
@@ -7,6 +8,6 @@ export default interface ContentItem {
   pageLink: string;
   note: string;
   status: ContentStatus,
-  onlySn: SnTypes[],
+  sns: SnTypes[],
   type: PublicationTypes,
 }

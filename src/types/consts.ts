@@ -7,6 +7,7 @@ export const BACK_BTN_CALLBACK = 'back_btn';
 export const CANCEL_BTN_CALLBACK = 'cancel_btn';
 export const OK_BTN_CALLBACK = 'ok_btn';
 export const CREATE_PREFIX = 'create_';
+export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
 
 // export const SECTIONS_NAMES = {
 //   Header: 'Header',
