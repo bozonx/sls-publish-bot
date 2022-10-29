@@ -6,8 +6,9 @@ import {
   RichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
-import {makeContentInfoMsg, parseContentItem} from './parseContent';
+import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem from '../types/ContentItem';
+import {SnTypes} from '../types/types';
 
 
 
@@ -31,18 +32,28 @@ export default class PublishMaterial {
   async start() {
     // TODO: * + запрашиваем контент план, фильтруем сегодня и после, не выложенное
     //       * + выводим в виде кнопок - дата и название, спрашиваем что использовать
-    //       * парсим и выводим инфу для проверки или ошибки если не всё заполнено
+    //       * + парсим и выводим инфу для проверки или ошибки если не всё заполнено
+    //       * парсим саму страницу и выводим инфу
     //       * спрашиваем подтверждения
     //       * публикуем
 
     const items: ContentListItem[] = await this.loadNotPublished();
 
     await askContentToUse(items, this.tgChat, (item: PageObjectResponse) => {
-      const parsedContentItem: ContentItem = parseContentItem(item);
+      const parsedContentItem: ContentItem = parseContentItem(
+        item,
+        Object.keys(this.tgChat.app.config.channels[this.channelId].sn) as SnTypes[],
+      );
 
-      // TODO: validate parsedContentItem
+      try {
+        validateContentItem(parsedContentItem);
+      }
+      catch (e) {
+        // TODO: !!!! сообщить пользователю
+        throw e;
+      }
 
-      const contentInfoMsg = makeContentInfoMsg(parsedContentItem);
+      const contentInfoMsg = makeContentInfoMsg(parsedContentItem, this.tgChat.app.i18n);
 
       this.tgChat.reply(
         this.tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg

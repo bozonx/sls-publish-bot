@@ -25,6 +25,13 @@ const dict = {
     selectContent: 'Выберете запись к публикации',
     contentParams: 'Параметры публикации:',
   },
+  contentInfo: {
+    dateTime: 'Дата, время',
+    content: 'Контент',
+    type: 'Тип',
+    status: 'Статус',
+    sns: 'Соц сети',
+  },
   publicationType: {
     article: 'Статья',
     post1000: 'Пост1000/мем',
