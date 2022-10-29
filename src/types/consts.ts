@@ -8,31 +8,55 @@ export const CANCEL_BTN_CALLBACK = 'cancel_btn';
 export const OK_BTN_CALLBACK = 'ok_btn';
 export const CREATE_PREFIX = 'create_';
 
-export const SN_TYPES: Record<SnTypes, SnTypes> = {
-  telegram: 'telegram',
-  instagram: 'instagram',
-  zen: 'zen',
-}
-
-export const SECTIONS_NAMES = {
-  Header: 'Header',
-  MainImage: 'MainImage',
-  MainImageDescr: 'MainImageDescr',
-  TgTags: 'TgTags',
-  InstaPostTags: 'InstaPostTags',
-  PostText: 'PostText',
-  ArticleText: 'ArticleText',
-};
+// export const SECTIONS_NAMES = {
+//   Header: 'Header',
+//   MainImage: 'MainImage',
+//   MainImageDescr: 'MainImageDescr',
+//   TgTags: 'TgTags',
+//   InstaPostTags: 'InstaPostTags',
+//   PostText: 'PostText',
+//   ArticleText: 'ArticleText',
+// };
 
 export const PUBLICATION_TYPES: Record<PublicationTypes, PublicationTypes> = {
   article: 'article',
   post1000: 'post1000',
   post2000: 'post2000',
+  mem: 'mem',
   photos: 'photos',
   story: 'story',
   narrative: 'narrative',
   announcement: 'announcement',
   poll: 'poll',
+  reels: 'reels',
+  video: 'video',
+}
+
+export const SN_TYPES: Record<SnTypes, SnTypes> = {
+  telegram: 'telegram',
+  instagram: 'instagram',
+  zen: 'zen',
+  site: 'site',
+  youtube: 'youtube',
+  tiktok: 'tiktok',
+}
+
+export const CONTENT_STATUS = {
+  to_write: 'to_write',
+  to_edit: 'to_edit',
+  to_correct: 'to_correct',
+  to_publish: 'to_publish',
+  published: 'published',
+};
+
+export const CONTENT_PROPS = {
+  date: 'date',
+  time: 'time',
+  gist: 'gist/link',
+  note: 'note',
+  status: 'status',
+  onlySn: 'onlySn',
+  type: 'type',
 }
 
 export enum AppEvents {

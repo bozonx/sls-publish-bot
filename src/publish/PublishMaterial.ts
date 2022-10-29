@@ -6,6 +6,8 @@ import {
   RichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
+import {parseContentItem} from './parseContent';
+
 
 
 export interface ContentListItem {
@@ -35,7 +37,11 @@ export default class PublishMaterial {
     const items: ContentListItem[] = await this.loadNotPublished();
 
     await askContentToUse(items, this.tgChat, (item: PageObjectResponse) => {
-      console.log(111111, item)
+      console.log(111111, item.properties)
+
+      const aaa = parseContentItem(item);
+
+      console.log(22222, aaa)
     });
   }
 

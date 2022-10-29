@@ -1,22 +1,13 @@
 import {NotionToMarkdown} from 'notion-to-md';
 import { Client } from "@notionhq/client";
-import NotionListItem from "./types/NotionPage";
-import {DB_DEFAULT_PAGE_SIZE} from "./constants";
-import {
-  PageObjectResponse, RichTextItemResponse
-} from "@notionhq/client/build/src/api-endpoints";
 import {MdBlock} from 'notion-to-md/build/types';
-import {SECTIONS_NAMES} from '../types/consts';
-import moment from 'moment';
 
 
 export default class NotionApi {
   public readonly api: Client;
-  //private readonly utcOffset: number;
 
 
   constructor(notionToken: string) {
-    //this.utcOffset = utcOffset;
     this.api = new Client({
       auth: notionToken,
     });
