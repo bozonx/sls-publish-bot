@@ -1,6 +1,7 @@
 import {NotionToMarkdown} from 'notion-to-md';
 import { Client } from "@notionhq/client";
 import {MdBlock} from 'notion-to-md/build/types';
+import {mdBlocksToString} from '../helpers/mdBlocksToString';
 
 
 export default class NotionApi {
@@ -76,9 +77,12 @@ export default class NotionApi {
   async getPageMdBlocks(pageId: string): Promise<[Record<string, any>, string]> {
     const n2m = new NotionToMarkdown({ notionClient: this.api });
     const mdBlocks = await n2m.pageToMarkdown(pageId);
-    const mdString = n2m.toMarkdownString(mdBlocks);
+    const mdString = mdBlocksToString(mdBlocks);
     const page = await this.api.pages.retrieve({ page_id: pageId });
     const properties = (page as any).properties;
+
+    console.log(11111111, mdBlocks)
+    console.log(22222222, mdString)
 
     return [properties, mdString];
   }
