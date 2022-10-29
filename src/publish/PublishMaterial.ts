@@ -13,6 +13,7 @@ import RawPageContent from '../types/PageContent';
 import _ from 'lodash';
 import {MdBlock} from 'notion-to-md/build/types';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
+import {askPublishConfirm} from '../askUser/askPublishConfirm';
 
 
 
@@ -70,18 +71,20 @@ export default class PublishMaterial {
           const parsedPage = parsePageContent(rawPage[0], rawPage[1]);
           const pageInfoMsg = makePageInfoMsg(parsedPage, this.tgChat.app.i18n);
 
-          console.log(11111, parsedPage.textMd)
-
           await this.tgChat.reply(
             this.tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
           );
+
+
         }
         else {
           // TODO: если нет ссылки то что делать? - обьявление
           // TODO: проверить что для обьявления выбран telegram
         }
 
-
+        await askPublishConfirm(this.tgChat, () => {
+          console.log(11111)
+        });
       })()
         .catch((e) => {throw e});
     });
