@@ -1,14 +1,14 @@
-import TgChat from '../tgApi/TgChat';
-import {makeBaseState} from '../helpers/helpers';
-import BaseState from '../types/BaseState';
+import TgChat from '../src/tgApi/TgChat';
+import {makeBaseState} from '../src/helpers/helpers';
+import BaseState from '../src/types/BaseState';
 import {
   AppEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-} from '../types/consts';
-import NotionListItem from '../notionApi/types/NotionListItem';
+} from '../src/types/consts';
+import NotionListItem from '../src/notionApi/types/NotionListItem';
 
 
 const EVENT_MARKER = 'selectedPage:';

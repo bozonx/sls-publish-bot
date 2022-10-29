@@ -2,7 +2,7 @@ import PublishHelper from "./PublishHelper";
 import NotionListItem from '../../src/notionApi/types/NotionListItem';
 import {checkSection, makeSectionsInfo, parseSections} from '../../src/lib/parseMdBlocks';
 import TgChat from '../../src/tgApi/TgChat';
-import {askRawPageToUse} from '../../src/askUser/askRawPageToUse';
+import {askRawPageToUse} from '../askRawPageToUse';
 import {askPubTime} from '../askPubDate';
 
 

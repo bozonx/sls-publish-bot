@@ -1,5 +1,5 @@
-import IndexedEventEmitter from "./IndexedEventEmitter";
-import {DEFAULT_WAIT_EVENT_TIMEOUT_SEC} from "../types/consts";
+import IndexedEventEmitter from "../src/lib/IndexedEventEmitter";
+import {DEFAULT_WAIT_EVENT_TIMEOUT_SEC} from "../src/types/consts";
 
 
 // TODO: remove
