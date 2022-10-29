@@ -31,7 +31,7 @@ export default class App {
       { type: 'paragraph', parent: 'абзац1', children: [] },
       {
         type: 'paragraph',
-        parent: 'строка1. (gggg) [bbbb]\nстрока2',
+        parent: 'строка1. _ ~ gh - (gggg) [bbbb]\nстрока2',
         children: []
       },
       { type: 'paragraph', parent: '', children: [] },
