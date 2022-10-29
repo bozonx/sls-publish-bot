@@ -4,6 +4,8 @@ import {askMainMenu} from './askUser/askMainMenu';
 // import {askSNs} from './askUser/askSNs';
 import {PublicationTypes} from './types/types';
 import {PUBLICATION_TYPES} from './types/consts';
+import {askChannelMenu, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
+import PublishMaterial from './publish/PublishMaterial';
 // import PublishArticle from './publishTypes/PublishArticle';
 // import PublishPost1000 from './publishTypes/PublishPost1000';
 // import PublishStory from './publishTypes/PublishStory';
@@ -25,7 +27,18 @@ export default class MainMenuHandler {
         return;
       }
 
+      askChannelMenu(this.tgChat, (action: string) => {
+        if (action === MENU_PUBLISH) {
+          const publish = new PublishMaterial(this.tgChat);
 
+          publish.start(channelId)
+            .catch((e) => {throw e});
+        }
+        else if (action === MENU_MAKE_STORY) {
+          // TODO: do it
+        }
+      })
+        .catch((e) => {throw e});
 
       // askPublishType(channelId, this.tgChat, (pubType: PublicationTypes) => {
       //   askSNs(channelId, pubType, this.tgChat, (sns: string[]) => {

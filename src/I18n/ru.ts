@@ -18,6 +18,9 @@ const dict = {
     //selectedSlsSite: 'Управление сайтом slsfreedom.org'
     selectDate: 'Выберете дату или ввидете число этого или следующего месяца, например "21" или число и дату в виде "21.04", "6.5".',
     selectedDate: 'Выбрана дата: ',
+    // new
+    publish: 'Опубликовать материал',
+    makeStory: 'Создать story в tg',
   },
   publicationType: {
     article: 'Статья',
