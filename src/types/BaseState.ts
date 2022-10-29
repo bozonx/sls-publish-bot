@@ -1,5 +1,8 @@
+import {AppEvents} from './consts';
+
+
 export default interface BaseState {
   messageId: number;
-  // [handlerIndex, eventName]
-  handlerIndexes: [number, string][];
+  // [handlerIndex, AppEvents]
+  handlerIndexes: [number, AppEvents][];
 }

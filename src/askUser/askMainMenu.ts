@@ -12,26 +12,26 @@ export async function askMainMenu(tgChat: TgChat, onDone: (channelId: number) =>
     // print main menu message
     state.messageId = await printInitialMessage(tgChat);
     // listen to result
-    state.handlerIndex = tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-      if (queryData === MENU_MANAGE_SITE) {
-        //this.tgChat.events.removeListener(handlerIndex);
-        // ignorePromiseError(this.tgChat.deleteMessage(messageId));
-        // //await this.tgChat.reply(this.tgChat.app.i18n.menu.selectedSlsSite);
-        //
-        // // TODO: do it !!!!
-        // console.log(11111, '!!!! manage site')
-        return;
-      }
-      else if (queryData.indexOf(CHANNEL_MARKER) === 0) {
-        handleMainMenuSelected(queryData, tgChat, onDone)
-          .catch((e) => {throw e})
-      }
-      // else do nothing
-    });
+    state.handlerIndexes.push([
+      tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
+        if (queryData === MENU_MANAGE_SITE) {
+          handleSiteSelected(tgChat, onDone)
+            .catch((e) => {throw e})
+
+          return;
+        }
+        else if (queryData.indexOf(CHANNEL_MARKER) === 0) {
+          handleChannelSelected(queryData, tgChat, onDone)
+            .catch((e) => {throw e})
+        }
+        // else do nothing
+      }),
+      AppEvents.CALLBACK_QUERY
+    ]);
   });
 }
 
-async function handleMainMenuSelected(queryData: string, tgChat: TgChat, onDone: (channelId: number) => void) {
+async function handleChannelSelected(queryData: string, tgChat: TgChat, onDone: (channelId: number) => void) {
   const splat: string[] = queryData.split(':');
   const channelId: number = Number(splat[1]);
   // print result
@@ -43,8 +43,12 @@ async function handleMainMenuSelected(queryData: string, tgChat: TgChat, onDone:
   return onDone(channelId);
 }
 
+async function handleSiteSelected(tgChat: TgChat, onDone: (channelId: number) => void) {
+  onDone(-1);
+}
+
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
+  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [[
     ...tgChat.app.config.channels.map((item, index: number): any => {
       return {
         text: item.dispname,
@@ -55,5 +59,5 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
       text: tgChat.app.i18n.menu.selectManageSite,
       callback_data: MENU_MANAGE_SITE,
     }
-  ]);
+  ]]);
 }

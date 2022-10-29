@@ -20,6 +20,13 @@ export default class MainMenuHandler {
 
   async startFromBeginning() {
     await askMainMenu(this.tgChat, (channelId: number) => {
+      if (channelId === -1) {
+        // site selected
+        return;
+      }
+
+
+
       // askPublishType(channelId, this.tgChat, (pubType: PublicationTypes) => {
       //   askSNs(channelId, pubType, this.tgChat, (sns: string[]) => {
       //     this.startMakingRecord(channelId, pubType, sns)
