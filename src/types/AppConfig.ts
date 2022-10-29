@@ -2,7 +2,7 @@ export interface ConfigChannel {
   channelId: string;
   name: string;
   dispname: string;
-  notionRawPagesDbId: string;
+  notionContentPlanDbId: string;
   // some PUBLICATION_TYPES
   supportedTypes: string[];
   sn: Record<any, Record<string, any>>;

@@ -14,10 +14,13 @@ const conf: AppConfig = {
       channelId: '',
       name: 'test',
       dispname: 'Тестовый канал',
-      notionRawPagesDbId: '60be6ecd4b4d41ae83e72a807d889052',
+      notionContentPlanDbId: '0ce847766986402f9d221852ded2b599',
       supportedTypes: [
         PUBLICATION_TYPES.article,
         PUBLICATION_TYPES.post1000,
+        PUBLICATION_TYPES.post2000,
+        PUBLICATION_TYPES.photos,
+        PUBLICATION_TYPES.story,
       ],
       sn: {
         [SN_TYPES.telegram]: {},

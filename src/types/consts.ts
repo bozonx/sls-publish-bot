@@ -28,7 +28,11 @@ export const PUBLICATION_TYPES: Record<PublicationTypes, PublicationTypes> = {
   article: 'article',
   post1000: 'post1000',
   post2000: 'post2000',
+  photos: 'photos',
   story: 'story',
+  narrative: 'narrative',
+  announcement: 'announcement',
+  poll: 'poll',
 }
 
 export enum AppEvents {

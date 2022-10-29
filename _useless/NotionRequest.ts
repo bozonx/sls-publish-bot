@@ -1,7 +1,7 @@
-import App from "../App";
-import NotionPage from "../notionApi/types/NotionPage";
-import NotionApi from "../notionApi/NotionApi";
-import NotionListItem from '../notionApi/types/NotionListItem';
+import App from "../src/App";
+import NotionPage from "../src/notionApi/types/NotionPage";
+import NotionApi from "../src/notionApi/NotionApi";
+import NotionListItem from '../src/notionApi/types/NotionListItem';
 import {MdBlock} from 'notion-to-md/build/types';
 
 
