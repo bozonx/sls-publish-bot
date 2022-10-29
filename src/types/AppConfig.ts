@@ -1,5 +1,5 @@
 export interface ConfigChannel {
-  channelId: string;
+  channelId: number;
   name: string;
   dispname: string;
   notionContentPlanDbId: string;

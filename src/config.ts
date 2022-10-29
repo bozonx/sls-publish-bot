@@ -11,7 +11,7 @@ const conf: AppConfig = {
   utcOffset: 3,
   channels: [
     {
-      channelId: '',
+      channelId: -1001664865912,
       name: 'test',
       dispname: 'Тестовый канал',
       notionContentPlanDbId: '0ce847766986402f9d221852ded2b599',

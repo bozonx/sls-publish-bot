@@ -26,6 +26,15 @@ export default class App {
   async init() {
     await this.tg.init();
 
+    // console.log(1111, await this.tg.bot.telegram.getMe());
+    // console.log(2222, await this.tg.bot.botInfo);
+    // console.log(3333, await this.tg.bot.telegram.getMyDefaultAdministratorRights());
+    // console.log(4444, await this.tg.bot.);
+    // console.log(4444, await this.tg.bot.context.state);
+    // console.log(5555, await this.tg.bot.context.channelPost);
+    // console.log(6666, await this.tg.bot.context.myChatMember);
+    // console.log(7777, await this.tg.bot.context.passportData);
+
     // TODO: remove
     // const data = await this.notionRequest.getPageContent('62f8e05281494b408b19ca6889f8268a');
     //
