@@ -18,6 +18,9 @@ export async function publishFork(
     PUBLICATION_TYPES.post2000,
     PUBLICATION_TYPES.mem,
   ].includes(contentItem.type)) {
+
+    console.log(22222222, parsedPage.textMd)
+
     await publishTgPost(mdBlocksToTelegram(parsedPage.textMd), channelId, tgChat);
   }
   // photos like

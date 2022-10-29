@@ -27,56 +27,10 @@ export default class App {
   async init() {
     await this.tg.init();
 
-    const aa = [
-      { type: 'paragraph', parent: 'абзац1', children: [] },
-      {
-        type: 'paragraph',
-        parent: 'строка1. _ ~ gh - (gggg) [bbbb]\nстрока2',
-        children: []
-      },
-      { type: 'paragraph', parent: '', children: [] },
-      {
-        type: 'paragraph',
-        parent: 'абзац с большим оступом',
-        children: []
-      },
-      { type: 'bulleted_list_item', parent: '- эл1', children: [] },
-      { type: 'bulleted_list_item', parent: '- вложенный', children: [] },
-      { type: 'bulleted_list_item', parent: '- эл2', children: [] },
-      { type: 'heading_2', parent: '## заголовок 2у', children: [] },
-      {
-        type: 'numbered_list_item',
-        parent: '1. нумерованный',
-        children: []
-      },
-      { type: 'numbered_list_item', parent: '2. список', children: [] },
-      { type: 'heading_3', parent: '### Заголовок 3у', children: [] },
-      {
-        type: 'paragraph',
-        parent: 'форматированный текст _наклонный_ **жирный** <u>подчёркнутый</u> ~~перечёркнутый~~ `код`',
-        children: []
-      },
-      {
-        type: 'paragraph',
-        parent: '[ссылка](/2465ac4b72d54032927d5664bb2ee592)',
-        children: []
-      },
-      { type: 'quote', parent: '> цитата  \n> стр2', children: [] },
-      { type: 'paragraph', parent: 'ввв', children: [] },
-      {
-        type: 'code',
-        parent: '```javascript\nбольшой код\n```',
-        children: []
-      },
-      { type: 'paragraph', parent: 'маленькая палка', children: [] },
-      { type: 'paragraph', parent: '—', children: [] },
-      { type: 'paragraph', parent: 'большая палка', children: [] },
-      { type: 'divider', parent: '---', children: [] },
-      { type: 'paragraph', parent: 'пррр', children: [] }
-    ]
 
 
-    console.log(222, mdBlocksToTelegram(aa));
+
+    //console.log(222, mdBlocksToTelegram(aa));
 
     // console.log(1111, await this.tg.bot.telegram.getMe());
     // console.log(2222, await this.tg.bot.botInfo);

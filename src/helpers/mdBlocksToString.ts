@@ -1,6 +1,61 @@
 import {MdBlock} from 'notion-to-md/build/types';
 import _ from 'lodash';
 
+const aa = [
+  { type: 'paragraph', parent: 'абзац1', children: [] },
+  {
+    type: 'paragraph',
+    parent: 'строка1. _ ~ gh - (gggg) [bbbb]\nстрока2',
+    children: []
+  },
+  { type: 'paragraph', parent: '', children: [] },
+  {
+    type: 'paragraph',
+    parent: 'абзац с большим оступом',
+    children: []
+  },
+  { type: 'bulleted_list_item', parent: '- эл1', children: [] },
+  { type: 'bulleted_list_item', parent: '- вложенный', children: [] },
+  { type: 'bulleted_list_item', parent: '- эл2', children: [] },
+  { type: 'heading_2', parent: '## заголовок 2у', children: [] },
+  {
+    type: 'numbered_list_item',
+    parent: '1. нумерованный',
+    children: []
+  },
+  { type: 'numbered_list_item', parent: '2. список', children: [] },
+  { type: 'heading_3', parent: '### Заголовок 3у', children: [] },
+  {
+    type: 'paragraph',
+    parent: 'форматированный текст _наклонный_ **жирный** <u>подчёркнутый</u> ~~перечёркнутый~~ `код`',
+    children: []
+  },
+  {
+    type: 'paragraph',
+    parent: '[ссылка](/2465ac4b72d54032927d5664bb2ee592)',
+    children: []
+  },
+  { type: 'quote', parent: '> цитата  \n> стр2', children: [] },
+  { type: 'paragraph', parent: 'ввв', children: [] },
+  {
+    type: 'code',
+    parent: '```javascript\nбольшой код\n```',
+    children: []
+  },
+  { type: 'paragraph', parent: 'маленькая палка', children: [] },
+  { type: 'paragraph', parent: '—', children: [] },
+  { type: 'paragraph', parent: 'большая палка', children: [] },
+  { type: 'divider', parent: '---', children: [] },
+  { type: 'paragraph', parent: 'пррр', children: [] }
+];
+
+// (async function main() {
+//   const file = await unified()
+//     //.use(remarkParse)
+//     //.process('# Hi\n\n*Hello*, world!')
+//
+//   //console.log(String(file))
+// })();
 
 export function mdBlocksToPrettyMd(mdBlocks: MdBlock[]): string {
   let result = '';
@@ -22,6 +77,9 @@ export function mdBlocksToPrettyMd(mdBlocks: MdBlock[]): string {
       result += '---\n\n';
     }
     else if (['quote', 'code', 'numbered_list_item', 'bulleted_list_item'].includes(item.type || '')) {
+
+      // TODO: обработать children
+
       result += item.parent + '\n';
     }
     else if (['heading_1', 'heading_2', 'heading_3', 'heading_4'].includes(item.type || '')) {
@@ -79,14 +137,11 @@ export function mdBlocksToTelegram(mdBlocks: MdBlock[]): string {
     result
       .replace(/([\-#>.!+=|{}])/g, '\\$1')
       .replace(/([\[\]\(\)])/g, '\\$1')
-      //.replace(/([^_])_([^_])/g, '$1\\_$2')
-    // []()_~`
+
     // Inside pre and code entities, all '`' and '\' characters must be escaped with a preceding '\' character.
     // Inside (...) part of inline link definition, all ')' and '\' must be escaped with a preceding '\' character.
     // Any character with code between 1 and 126 inclusively can be escaped anywhere with a preceding '\' character,
   );
-
-  // TODO: может нельзя пробелы вставлять ???
 
 }
 
