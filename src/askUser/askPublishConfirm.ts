@@ -5,8 +5,8 @@ import {
   AppEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
-  CANCEL_BTN, CANCEL_BTN_CALLBACK,
-  MENU_MANAGE_SITE,
+  CANCEL_BTN,
+  CANCEL_BTN_CALLBACK,
   OK_BTN,
   OK_BTN_CALLBACK
 } from '../types/consts';
@@ -37,7 +37,7 @@ export async function askPublishConfirm(tgChat: TgChat, onDone: () => void) {
 }
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
+  return tgChat.reply(tgChat.app.i18n.menu.publishConfirmation, [
     [
       BACK_BTN,
       CANCEL_BTN,

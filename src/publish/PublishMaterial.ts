@@ -14,6 +14,7 @@ import _ from 'lodash';
 import {MdBlock} from 'notion-to-md/build/types';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm} from '../askUser/askPublishConfirm';
+import {publishFork} from './publishFork';
 
 
 
@@ -75,16 +76,15 @@ export default class PublishMaterial {
             this.tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
           );
 
-
+          await askPublishConfirm(this.tgChat, () => {
+            publishFork(parsedContentItem, parsedPage, this.tgChat);
+          });
         }
         else {
           // TODO: если нет ссылки то что делать? - обьявление
           // TODO: проверить что для обьявления выбран telegram
         }
 
-        await askPublishConfirm(this.tgChat, () => {
-          console.log(11111)
-        });
       })()
         .catch((e) => {throw e});
     });

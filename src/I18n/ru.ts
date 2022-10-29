@@ -24,7 +24,8 @@ const dict = {
     makeAdvert: 'Опубликовать рекламу',
     selectContent: 'Выберете запись к публикации',
     contentParams: 'Параметры публикации:',
-    pageContent: 'Содержание страницы:'
+    pageContent: 'Содержание страницы:',
+    publishConfirmation: 'Опубликовать?',
   },
   contentInfo: {
     dateTime: 'Дата и время',
