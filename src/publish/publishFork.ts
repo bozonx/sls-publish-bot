@@ -3,6 +3,7 @@ import ContentItem from '../types/ContentItem';
 import {PUBLICATION_TYPES} from '../types/consts';
 import TgChat from '../tgApi/TgChat';
 import {publishTgPost} from './publishTgPost';
+import {mdBlocksToTelegram} from '../helpers/mdBlocksToString';
 
 
 export async function publishFork(
@@ -17,7 +18,7 @@ export async function publishFork(
     PUBLICATION_TYPES.post2000,
     PUBLICATION_TYPES.mem,
   ].includes(contentItem.type)) {
-    await publishTgPost(parsedPage.textMd, channelId, tgChat);
+    await publishTgPost(mdBlocksToTelegram(parsedPage.textMd), channelId, tgChat);
   }
   // photos like
   else if ([

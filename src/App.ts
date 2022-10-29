@@ -3,7 +3,7 @@ import AppConfig from "./types/AppConfig";
 import config from "./config";
 import ru from "./I18n/ru";
 import NotionApi from './notionApi/NotionApi';
-import {mdBlocksToString} from './helpers/mdBlocksToString';
+import {mdBlocksToTelegram} from './helpers/mdBlocksToString';
 
 
 export default class App {
@@ -29,7 +29,11 @@ export default class App {
 
     const aa = [
       { type: 'paragraph', parent: 'абзац1', children: [] },
-      { type: 'paragraph', parent: 'строка1\nстрока2', children: [] },
+      {
+        type: 'paragraph',
+        parent: 'строка1. (gggg) [bbbb]\nстрока2',
+        children: []
+      },
       { type: 'paragraph', parent: '', children: [] },
       {
         type: 'paragraph',
@@ -71,7 +75,8 @@ export default class App {
       { type: 'paragraph', parent: 'пррр', children: [] }
     ]
 
-    console.log(222, mdBlocksToString(aa));
+
+    console.log(222, mdBlocksToTelegram(aa));
 
     // console.log(1111, await this.tg.bot.telegram.getMe());
     // console.log(2222, await this.tg.bot.botInfo);

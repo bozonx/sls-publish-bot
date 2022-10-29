@@ -147,7 +147,7 @@ export default class PublishMaterial {
     return this.prepareItems((response as any).results);
   }
 
-  private async loadRawPage(pageId: string): Promise<[Record<string, any>, string]> {
+  private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
     // TODO: если ошибка то показать пользователю
     return await this.tgChat.app.notion.getPageMdBlocks(pageId);
   }

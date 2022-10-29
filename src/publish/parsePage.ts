@@ -2,9 +2,11 @@ import RawPageContent from '../types/PageContent';
 import {PAGE_CONTENT_PROPS} from '../types/consts';
 import ru from '../I18n/ru';
 import {makeTagsString} from '../helpers/helpers';
+import {MdBlock} from 'notion-to-md/build/types';
+import {mdToCleanText} from '../helpers/mdBlocksToString';
 
 
-export function parsePageContent(props: Record<string, any>, textMd: string): RawPageContent {
+export function parsePageContent(props: Record<string, any>, textMd: MdBlock[]): RawPageContent {
   return {
     title: props[PAGE_CONTENT_PROPS.title]?.title[0]?.plain_text,
     announcement: props[PAGE_CONTENT_PROPS.announcement]?.rich_text[0]?.plain_text,
@@ -21,5 +23,5 @@ export function makePageInfoMsg(pageContent: RawPageContent, i18n: typeof ru): s
    + `${i18n.pageInfo.imageDescr}: ${pageContent.imageDescr}\n`
    + `${i18n.pageInfo.tgTags}: ${makeTagsString(pageContent.tgTags)}\n`
    + `${i18n.pageInfo.instaTags}: ${makeTagsString(pageContent.instaTags)}\n`
-   + `${i18n.pageInfo.contentLength}: ${pageContent.textMd.length}`;
+   + `${i18n.pageInfo.contentLength}: ${mdToCleanText(pageContent.textMd).length}`;
 }
