@@ -67,9 +67,8 @@ export default class PublishMaterial {
         if (parsedContentItem.pageLink) {
           const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
           const rawPage = await this.loadRawPage(pageId);
-          const parsedPage = parsePageContent(rawPage[0]);
+          const parsedPage = parsePageContent(rawPage[0], rawPage[1]);
           const pageInfoMsg = makePageInfoMsg(parsedPage, this.tgChat.app.i18n);
-
 
           console.log(11111, parsedPage.textMd)
 
@@ -144,7 +143,7 @@ export default class PublishMaterial {
     return this.prepareItems((response as any).results);
   }
 
-  private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
+  private async loadRawPage(pageId: string): Promise<[Record<string, any>, string]> {
     // TODO: если ошибка то показать пользователю
     return await this.tgChat.app.notion.getPageMdBlocks(pageId);
   }

@@ -30,9 +30,9 @@ export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]
 
 export function makeContentInfoMsg(item: ContentItem, i18n: typeof ru): string {
   return `${i18n.contentInfo.dateTime}: ${moment(item.date).format(FULL_DATE_FORMAT)} ${item.time}\n`
-    + `${i18n.contentInfo.content}: ${item.gist} ${(item.pageLink) ? nameFullNotionLink(item.pageLink) : ''}\n`
-    + `${i18n.contentInfo.type}: ${item.type}. ${i18n.contentInfo.status}: ${item.status}\n`
     + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}`
+    + `${i18n.contentInfo.type}: ${item.type}. ${i18n.contentInfo.status}: ${item.status}\n`
+    + `${i18n.contentInfo.content}: ${item.gist} ${(item.pageLink) ? nameFullNotionLink(item.pageLink) : ''}\n`
     + `\n\n${item.note}`;
 }
 

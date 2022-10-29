@@ -10,6 +10,10 @@ export function makeBaseState(): BaseState {
   };
 }
 
+export function makeTagsString(tags: string[]): string {
+  return tags.map((item) => `#${item}`).join(' ');
+}
+
 export function nameFullNotionLink(internalLink: string): string {
   return `https://www.notion.so${internalLink}`
 }

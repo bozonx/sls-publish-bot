@@ -39,6 +39,7 @@ const dict = {
     imageDescr: 'Описание картинки',
     instaTags: 'Тэги Instagram',
     tgTags: 'Тэги Telegram',
+    contentLength: 'Количество символов в тексте',
   },
   publicationType: {
     article: 'Статья',
