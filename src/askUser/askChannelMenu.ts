@@ -6,6 +6,7 @@ import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/consts';
 
 export const MENU_PUBLISH = 'menu_publish';
 export const MENU_MAKE_STORY = 'menu_make_story';
+export const MENU_ADVERT = 'menu_advert';
 
 
 export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) => void) {
@@ -15,7 +16,7 @@ export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) =>
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-        if ([MENU_PUBLISH, MENU_MAKE_STORY].includes(queryData)) {
+        if ([MENU_PUBLISH, MENU_MAKE_STORY, MENU_ADVERT].includes(queryData)) {
           onDone(queryData);
         }
         else if (queryData === CANCEL_BTN_CALLBACK) {
@@ -41,6 +42,12 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
       {
         text: tgChat.app.i18n.menu.makeStory,
         callback_data: MENU_MAKE_STORY,
+      }
+    ],
+    [
+      {
+        text: tgChat.app.i18n.menu.makeAdvert,
+        callback_data: MENU_ADVERT,
       }
     ],
     [

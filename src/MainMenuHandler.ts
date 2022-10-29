@@ -1,6 +1,6 @@
 import TgChat from './tgApi/TgChat';
 import {askMainMenu} from './askUser/askMainMenu';
-import {askChannelMenu, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
+import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
 import PublishMaterial from './publish/PublishMaterial';
 
 
@@ -28,6 +28,9 @@ export default class MainMenuHandler {
             .catch((e) => {throw e});
         }
         else if (action === MENU_MAKE_STORY) {
+          // TODO: do it
+        }
+        else if (action === MENU_ADVERT) {
           // TODO: do it
         }
       })
