@@ -33,6 +33,13 @@ const dict = {
     status: 'Статус',
     sns: 'Соц сети',
   },
+  pageInfo: {
+    title: 'Название',
+    announcement: 'анонс',
+    imageDescr: 'Описание картинки',
+    instaTags: 'Тэги Instagram',
+    tgTags: 'Тэги Telegram',
+  },
   publicationType: {
     article: 'Статья',
     post1000: 'Пост1000/мем',

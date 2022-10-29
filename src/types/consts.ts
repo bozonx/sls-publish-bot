@@ -60,6 +60,15 @@ export const CONTENT_PROPS = {
   type: 'type',
 }
 
+export const PAGE_CONTENT_PROPS = {
+  title: 'title',
+  announcement: 'announcement',
+  imageDescr: 'imageDescr',
+  instaTags: 'instaTags',
+  tgTags: 'tgTags',
+  textMd: 'textMd',
+}
+
 export enum AppEvents {
   CALLBACK_QUERY,
   MESSAGE,

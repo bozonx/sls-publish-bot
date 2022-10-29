@@ -11,6 +11,8 @@ import ContentItem from '../types/ContentItem';
 import {SnTypes} from '../types/types';
 import RawPageContent from '../types/PageContent';
 import _ from 'lodash';
+import {MdBlock} from 'notion-to-md/build/types';
+import {makePageInfoMsg, parsePageContent} from './parsePage';
 
 
 
@@ -65,12 +67,15 @@ export default class PublishMaterial {
         if (parsedContentItem.pageLink) {
           const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
           const rawPage = await this.loadRawPage(pageId);
+          const parsedPage = parsePageContent(rawPage[0]);
+          const pageInfoMsg = makePageInfoMsg(parsedPage, this.tgChat.app.i18n);
+
+
+          console.log(11111, parsedPage.textMd)
 
           await this.tgChat.reply(
-            this.tgChat.app.i18n.menu.pageContent + '\n\n'
+            this.tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
           );
-
-          console.log(11111, rawPage)
         }
         else {
           // TODO: если нет ссылки то что делать? - обьявление
@@ -139,11 +144,9 @@ export default class PublishMaterial {
     return this.prepareItems((response as any).results);
   }
 
-  private async loadRawPage(pageId: string): Promise<any> {
+  private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
     // TODO: если ошибка то показать пользователю
-    const response = await this.tgChat.app.notion.getPageMdBlocks(pageId);
-
-    console.log(22222, response)
+    return await this.tgChat.app.notion.getPageMdBlocks(pageId);
   }
 
   prepareItems(results: PageObjectResponse[]): ContentListItem[] {
