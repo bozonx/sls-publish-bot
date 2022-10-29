@@ -6,9 +6,6 @@ import {PublicationTypes} from './types/types';
 import {PUBLICATION_TYPES} from './types/consts';
 import {askChannelMenu, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
 import PublishMaterial from './publish/PublishMaterial';
-// import PublishArticle from './publishTypes/PublishArticle';
-// import PublishPost1000 from './publishTypes/PublishPost1000';
-// import PublishStory from './publishTypes/PublishStory';
 
 
 export default class MainMenuHandler {

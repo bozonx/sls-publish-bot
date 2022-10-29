@@ -1,4 +1,4 @@
-import TgChat from '../tgApi/TgChat';
+import TgChat from '../../src/tgApi/TgChat';
 
 
 export default class PublishHelper {

@@ -1,5 +1,5 @@
 import PublishHelper from "./PublishHelper";
-import TgChat from '../tgApi/TgChat';
+import TgChat from '../../src/tgApi/TgChat';
 
 
 export default class PublishStory {
