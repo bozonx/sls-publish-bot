@@ -58,16 +58,12 @@ export default class TgChat {
   }
 
 
-  async reply(message: string, buttons?: TgReplyButton[], actionButtons: TgReplyButton[] = []): Promise<number> {
+  async reply(message: string, buttons?: TgReplyButton[][]): Promise<number> {
     const messageResult = await this.ctx.sendMessage(
       message,
       buttons && {
         reply_markup: {
-          inline_keyboard: [
-            // TODO: разбивать по 3 в ряд
-            buttons,
-            actionButtons,
-          ]
+          inline_keyboard: buttons
         }
       }
     );
@@ -86,12 +82,16 @@ export default class TgChat {
         await onStart(state);
       },
       onEnd: async (state: BaseState): Promise<void> => {
-        this.events.removeListener(state.handlerIndex, AppEvents.CALLBACK_QUERY);
+        for (const item of state.handlerIndexes) {
+          this.events.removeListener(item[0], item[1]);
+        }
         // don't wait of removing the asking message
         ignorePromiseError(this.deleteMessage(state.messageId));
       },
       onCancel: async (state: BaseState): Promise<void> => {
-        this.events.removeListener(state.handlerIndex, AppEvents.CALLBACK_QUERY);
+        for (const item of state.handlerIndexes) {
+          this.events.removeListener(item[0], item[1]);
+        }
         // don't wait of removing the asking message
         ignorePromiseError(this.deleteMessage(state.messageId));
       },

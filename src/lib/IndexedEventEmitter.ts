@@ -149,9 +149,6 @@ export default class IndexedEventEmitter<T extends DefaultHandler = DefaultHandl
    * You can omit eventName, but if you defined it then removing will be faster.
    */
   removeListener(handlerIndex: number, eventName?: string | number): void {
-
-    // TODO: если не указан eventName - то не работает
-
     if (typeof eventName !== 'undefined') {
       if (!this.indexes[eventName]) return
 
@@ -171,6 +168,9 @@ export default class IndexedEventEmitter<T extends DefaultHandler = DefaultHandl
 
       return
     }
+
+
+    // TODO: если не указан eventName - то не работает
 
     // find the event name and remove it's index.
     for (let eventName of Object.keys(this.indexes)) {

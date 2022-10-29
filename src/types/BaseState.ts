@@ -1,4 +1,5 @@
 export default interface BaseState {
   messageId: number;
-  handlerIndex: number;
+  // [handlerIndex, eventName]
+  handlerIndexes: [number, string][];
 }
