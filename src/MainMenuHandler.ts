@@ -22,9 +22,9 @@ export default class MainMenuHandler {
 
       askChannelMenu(this.tgChat, (action: string) => {
         if (action === MENU_PUBLISH) {
-          const publish = new PublishMaterial(this.tgChat);
+          const publish = new PublishMaterial(channelId, this.tgChat);
 
-          publish.start(channelId)
+          publish.start()
             .catch((e) => {throw e});
         }
         else if (action === MENU_MAKE_STORY) {

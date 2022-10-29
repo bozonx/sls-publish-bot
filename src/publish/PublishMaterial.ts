@@ -18,6 +18,8 @@ export default class PublishMaterial {
     //       * парсим и выводим инфу для проверки или ошибки если не всё заполнено
     //       * спрашиваем подтверждения
     //       * публикуем
+
+    await this.loadNotPublished();
   }
 
 
@@ -26,7 +28,7 @@ export default class PublishMaterial {
    */
   private async loadNotPublished() {
     // TODO: отфильтровать
-    const contentPlanItems = await this.tgChat.app.notionRequest.getDbList(
+    const contentPlanItems = await this.tgChat.app.notion.getDbItemList(
       this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId
     );
 
