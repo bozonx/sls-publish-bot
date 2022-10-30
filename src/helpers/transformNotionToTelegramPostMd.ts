@@ -1,4 +1,4 @@
-import {markdownv2 as format} from 'telegram-format';
+import {markdownv2 as mdFormat} from 'telegram-format';
 import _ from 'lodash';
 import {
   BlockObjectResponse,
@@ -73,7 +73,7 @@ export function transformNotionToTelegramPostMd(notionBlocks: BlockObjectRespons
         break;
       case NOTION_BLOCK_TYPES.code:
         // TODO: проверить требования по экранированию
-        result += '\n' + format.monospaceBlock(richTextToSimpleTextList((block as any)?.code?.rich_text), (block as any)?.code?.language) + '\n\n';
+        result += '\n' + mdFormat.monospaceBlock(richTextToSimpleTextList((block as any)?.code?.rich_text), (block as any)?.code?.language) + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.divider:
@@ -125,28 +125,28 @@ function parseRichText(rtItem: TextRichTextItemResponse): string {
 }
 
 function toMarkDown(text: string, annotations: Record<string, any>, link?: string | null): string {
-  let preparedText = format.escape(text);
+  let preparedText = mdFormat.escape(text);
 
   if (link) {
-    preparedText = format.url(preparedText, link);
+    preparedText = mdFormat.url(preparedText, link);
   }
 
   // TODO: а если несколько сразу ???
 
   if (annotations.bold) {
-    return format.bold(preparedText);
+    return mdFormat.bold(preparedText);
   }
   else if (annotations.italic) {
-    return format.italic(preparedText);
+    return mdFormat.italic(preparedText);
   }
   else if (annotations.strikethrough) {
-    return format.strikethrough(preparedText);
+    return mdFormat.strikethrough(preparedText);
   }
   else if (annotations.underline) {
-    return format.underline(preparedText);
+    return mdFormat.underline(preparedText);
   }
   else if (annotations.code) {
-    return format.monospace(preparedText);
+    return mdFormat.monospace(preparedText);
   }
   else {
     // no formatting

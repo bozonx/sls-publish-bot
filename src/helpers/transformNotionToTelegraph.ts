@@ -1,8 +1,10 @@
+import {html as htmlFormat} from 'telegram-format';
 import {
   BlockObjectResponse,
   TextRichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/consts';
+import {TelegraphNode} from '../tgApi/telegraPh/types';
 
 
 const test = [
@@ -677,77 +679,130 @@ const test = [
 ];
 
 
-export function transformNotionToTelegraph(notionBlocks: BlockObjectResponse[]) {
-  let result = '';
-  let numberListCounter = 0;
-  let bulletedListCounter = 0;
+export function transformNotionToTelegraph(): TelegraphNode[] {
+  // TODO: remove
+  const notionBlocks: BlockObjectResponse[] = test as any
+
+  let result: TelegraphNode[] = [];
+  let ulElIndex = -1;
+  let olElIndex = -1;
 
   for (const block of notionBlocks) {
     if (block.has_children) {
       // TODO: recurse
     }
 
-    if (block.type !== NOTION_BLOCK_TYPES.numbered_list_item) {
-      // if the end of ol block
-      if (numberListCounter > 0) {
-        result += '\n';
-      }
-
-      numberListCounter = 0;
+    if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
+      ulElIndex = -1;
     }
 
-    if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
-      // if the end of ul block
-      if (bulletedListCounter > 0) {
-        result += '\n';
-      }
-
-      bulletedListCounter = 0;
+    if (block.type !== NOTION_BLOCK_TYPES.numbered_list_item) {
+      olElIndex = -1;
     }
 
     switch (block.type) {
       case NOTION_BLOCK_TYPES.heading_1:
-        result += '# ' + richTextToSimpleTextList((block as any)?.heading_1?.rich_text) + '\n\n';
+        result.push({
+          // TODO: разве нету H1 ???
+          tag: 'h3',
+          children: [richTextToSimpleTextList((block as any)?.heading_1?.rich_text)],
+        })
 
         break;
       case NOTION_BLOCK_TYPES.heading_2:
-        result += '## ' + richTextToSimpleTextList((block as any)?.heading_2?.rich_text) + '\n\n';
+        result.push({
+          tag: 'h3',
+          children: [richTextToSimpleTextList((block as any)?.heading_2?.rich_text)],
+        })
 
         break;
       case NOTION_BLOCK_TYPES.heading_3:
-        result += '### ' + richTextToSimpleTextList((block as any)?.heading_3?.rich_text) + '\n\n';
+        result.push({
+          tag: 'h4',
+          children: [richTextToSimpleTextList((block as any)?.heading_3?.rich_text)],
+        })
 
         break;
       case NOTION_BLOCK_TYPES.paragraph:
         if ((block as any)?.paragraph?.rich_text.length) {
-          result += parseRichTextList((block as any)?.paragraph?.rich_text) + '\n\n';
+          result.push({
+            tag: 'p',
+            children: [
+              parseRichTextList((block as any)?.paragraph?.rich_text)
+                .replace(/\n/g, '<br />'),
+            ]
+          });
         }
         else {
-          result += '\n';
+          result.push({
+            tag: 'p',
+            children: [''],
+          })
         }
-
         break;
       case NOTION_BLOCK_TYPES.bulleted_list_item:
-        bulletedListCounter++;
-        result += `- ` + parseRichTextList((block as any)?.bulleted_list_item?.rich_text) + '\n';
+        const liItem: TelegraphNode = {
+          tag: 'li',
+          children: [parseRichTextList((block as any)?.bulleted_list_item?.rich_text)],
+        };
+
+        if (ulElIndex === -1) {
+          // create new UL
+          result.push({
+            tag: 'ul',
+            children: [liItem],
+          });
+
+          ulElIndex = result.length - 1;
+        }
+        else {
+          result[ulElIndex].children?.push(liItem);
+        }
 
         break;
       case NOTION_BLOCK_TYPES.numbered_list_item:
-        numberListCounter++;
-        result += `${numberListCounter}. ` + parseRichTextList((block as any)?.numbered_list_item?.rich_text) + '\n';
+        const liItemNum: TelegraphNode = {
+          tag: 'li',
+          children: [parseRichTextList((block as any)?.bulleted_list_item?.rich_text)],
+        };
+
+        if (olElIndex === -1) {
+          // create new UL
+          result.push({
+            tag: 'ol',
+            children: [liItemNum],
+          });
+
+          olElIndex = result.length - 1;
+        }
+        else {
+          result[olElIndex].children?.push(liItemNum);
+        }
 
         break;
       case NOTION_BLOCK_TYPES.quote:
-        result += `> ` + parseRichTextList((block as any)?.quote?.rich_text).replace(/\n/g, '\n> ') + '\n\n';
+        result.push({
+          tag: 'blockquote',
+          children: [
+            parseRichTextList((block as any)?.quote?.rich_text)
+              .replace(/\n/g, '<br />'),
+          ]
+        })
 
         break;
       case NOTION_BLOCK_TYPES.code:
         // TODO: проверить требования по экранированию
-        result += '\n' + format.monospaceBlock(richTextToSimpleTextList((block as any)?.code?.rich_text), (block as any)?.code?.language) + '\n\n';
+        // TODO: review - может надо использовать pre
+        result.push({
+          tag: 'pre',
+          children: [richTextToSimpleTextList((block as any)?.code?.rich_text)]
+        });
 
         break;
       case NOTION_BLOCK_TYPES.divider:
-        result += '---\n\n';
+        result.push({
+          tag: 'hr',
+        });
 
         break;
       default:
@@ -756,7 +811,10 @@ export function transformNotionToTelegraph(notionBlocks: BlockObjectResponse[]) 
     }
   }
 
-  return _.trim(result);
+
+  console.log(1111, result)
+
+  return result;
 }
 
 
@@ -779,7 +837,7 @@ function richTextToSimpleTextList(richText?: TextRichTextItemResponse[]): string
   let result = '';
 
   for (const item of richText) {
-    result += item.plain_text
+    result += item.plain_text;
   }
 
   return result;
@@ -795,28 +853,28 @@ function parseRichText(rtItem: TextRichTextItemResponse): string {
 }
 
 function toMarkDown(text: string, annotations: Record<string, any>, link?: string | null): string {
-  let preparedText = format.escape(text);
+  let preparedText = htmlFormat.escape(text);
 
   if (link) {
-    preparedText = format.url(preparedText, link);
+    preparedText = htmlFormat.url(preparedText, link);
   }
 
   // TODO: а если несколько сразу ???
 
   if (annotations.bold) {
-    return format.bold(preparedText);
+    return htmlFormat.bold(preparedText);
   }
   else if (annotations.italic) {
-    return format.italic(preparedText);
+    return htmlFormat.italic(preparedText);
   }
   else if (annotations.strikethrough) {
-    return format.strikethrough(preparedText);
+    return htmlFormat.strikethrough(preparedText);
   }
   else if (annotations.underline) {
-    return format.underline(preparedText);
+    return htmlFormat.underline(preparedText);
   }
   else if (annotations.code) {
-    return format.monospace(preparedText);
+    return htmlFormat.monospace(preparedText);
   }
   else {
     // no formatting
