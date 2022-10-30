@@ -16,7 +16,7 @@ export function ignorePromiseError(promise: Promise<any>) {
  * Makes ['info', 'warn', 'error'] if log level is 'info'
  */
 export function calcAllowedLogLevels(logLevel: LogLevel): LogLevel[] {
-  const currentLevelIndex: number = LOG_LEVELS.indexOf(logLevel)
+  const currentLevelIndex: number = Object.keys(LOG_LEVELS).indexOf(logLevel)
 
-  return LOG_LEVELS.slice(currentLevelIndex) as LogLevel[]
+  return Object.keys(LOG_LEVELS).slice(currentLevelIndex) as LogLevel[]
 }

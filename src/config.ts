@@ -9,8 +9,10 @@ dotenv.config();
 const conf: AppConfig = {
   botToken: process.env.BOT_TOKEN as any,
   notionToken: process.env.NOTION_TOKEN as any,
-  consoleLogLevel: process.env.LOG_LEVEL as any || LOG_LEVELS.error,
+  consoleLogLevel: process.env.CONSOLE_LOG_LEVEL as any || LOG_LEVELS.error,
+  channelLogLevel: process.env.CHANNEL_LOG_LEVEL as any || LOG_LEVELS.info,
   utcOffset: 3,
+  logChannelId: -1001664865912,
   telegram: {
     parseMode: 'MarkdownV2',
   },
