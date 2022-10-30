@@ -22,7 +22,7 @@ export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) =>
             onDone(queryData);
           }
           else if (queryData === CANCEL_BTN_CALLBACK) {
-            await tgChat.steps.cancel();
+            return tgChat.steps.cancel();
           }
         }
       )),

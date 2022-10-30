@@ -22,12 +22,10 @@ export async function askPublishConfirm(tgChat: TgChat, onDone: () => void) {
         AppEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
           if (queryData === BACK_BTN_CALLBACK) {
-            return tgChat.steps.back()
-              .catch((e) => {throw e});
+            return tgChat.steps.back();
           }
           else if (queryData === CANCEL_BTN_CALLBACK) {
-            return tgChat.steps.cancel()
-              .catch((e) => {throw e});
+            return tgChat.steps.cancel();
           }
           else if (queryData === OK_BTN_CALLBACK) {
             onDone();

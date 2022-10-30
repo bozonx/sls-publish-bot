@@ -9,9 +9,6 @@ import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 const CONTENT_MARKER = 'content:';
 
 
-// TODO: refactor
-
-
 export async function askContentToUse(
   items: ContentListItem[],
   tgChat: TgChat,
@@ -25,19 +22,17 @@ export async function askContentToUse(
       tgChat.events.addListener(
         AppEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
-          if (queryData.indexOf(CONTENT_MARKER) === 0) {
+          if (queryData === BACK_BTN_CALLBACK) {
+            return tgChat.steps.back();
+          }
+          else if (queryData === CANCEL_BTN_CALLBACK) {
+            return tgChat.steps.cancel();
+          }
+          else if (queryData.indexOf(CONTENT_MARKER) === 0) {
             const splat = queryData.split(':');
             const itemIndex = Number(splat[1]);
 
             onDone(items[itemIndex].item);
-          }
-          else if (queryData === BACK_BTN_CALLBACK) {
-            return tgChat.steps.back()
-              .catch((e) => {throw e});
-          }
-          else if (queryData === CANCEL_BTN_CALLBACK) {
-            return tgChat.steps.cancel()
-              .catch((e) => {throw e});
           }
         },
       )),
@@ -47,8 +42,7 @@ export async function askContentToUse(
 }
 
 async function printInitialMessage(tgChat: TgChat, items: ContentListItem[]): Promise<number> {
-  // TODO: что спрашивать ?????
-  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
+  return tgChat.reply(tgChat.app.i18n.menu.selectContent, [
       ...items.map((item, index) => {
       return [{
         text: item.title,

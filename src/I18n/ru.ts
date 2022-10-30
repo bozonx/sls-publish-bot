@@ -6,27 +6,13 @@ import {PublicationTypes} from '../types/types';
 
 const dict = {
   menu: {
-    whatToDo: 'Что хотите опубликовать?',
-    whichSns: 'В какие соц сети публиковать?',
-    selectedSnsPre: 'Выбраны: ',
-    snsToDo: 'Можете убрать лишние или нажать ОК, если всё устраивает.',
-    btnNewPage: 'СОЗДАТЬ НОВУЮ',
-    selectChannel: 'Выберете канал',
-    selectManageSite: 'Сайт slsfreedom',
-    selectPage: 'Выберете заготовку или создайте новую',
-    selectedType: 'Выбран тип публикации: ',
     selectedChannel: 'Выбран канал: ',
-    selectedSns: 'Выбраны соц сети: ',
-    selectedRawPage: 'Выбрана заготовка: ',
-    removeSn: 'Убрать ',
-    //selectedSlsSite: 'Управление сайтом slsfreedom.org'
-    selectDate: 'Выберете дату или ввидете число этого или следующего месяца, например "21" или число и дату в виде "21.04", "6.5".',
-    selectedDate: 'Выбрана дата: ',
-    // new
+    selectChannel: 'Выберете канал',
+    selectContent: 'Выберете запись для публикации',
+    selectManageSite: 'Сайт slsfreedom',
     publish: 'Опубликовать материал',
     makeStory: 'Создать story в tg',
     makeAdvert: 'Опубликовать рекламу',
-    selectContent: 'Выберете запись к публикации',
     contentParams: 'Параметры публикации:',
     pageContent: 'Содержание страницы:',
     publishConfirmation: 'Опубликовать?',
@@ -64,3 +50,18 @@ const dict = {
 }
 
 export default dict;
+
+
+//whatToDo: 'Что хотите опубликовать?',
+//whichSns: 'В какие соц сети публиковать?',
+//selectedSnsPre: 'Выбраны: ',
+//snsToDo: 'Можете убрать лишние или нажать ОК, если всё устраивает.',
+//btnNewPage: 'СОЗДАТЬ НОВУЮ',
+//selectPage: 'Выберете заготовку или создайте новую',
+//selectedType: 'Выбран тип публикации: ',
+//selectedSns: 'Выбраны соц сети: ',
+//selectedRawPage: 'Выбрана заготовка: ',
+//removeSn: 'Убрать ',
+//selectedSlsSite: 'Управление сайтом slsfreedom.org'
+//selectDate: 'Выберете дату или ввидете число этого или следующего месяца, например "21" или число и дату в виде "21.04", "6.5".',
+//selectedDate: 'Выбрана дата: ',
