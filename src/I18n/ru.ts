@@ -5,6 +5,7 @@ import {PublicationTypes} from '../types/types';
 
 
 const dict = {
+  greet: 'Добро пожаловать в бот блогов свободы.',
   menu: {
     selectedChannel: 'Выбран канал: ',
     selectChannel: 'Выберете канал',
@@ -46,7 +47,9 @@ const dict = {
     tomorrow: 'Завтра',
     afterTomorrow: 'Послезавтра',
   },
-  greet: 'Добро пожаловать в бот блогов свободы.',
+  errors: {
+    invalidContent: `Запить контент плана не валидна. Исправьте в notion: `,
+  },
 }
 
 export default dict;

@@ -6,6 +6,9 @@ import {MdBlock} from 'notion-to-md/build/types';
 import {mdToCleanText} from '../helpers/mdBlocksToString';
 
 
+// TODO: review, refactor
+
+
 export function parsePageContent(props: Record<string, any>, textMd: MdBlock[]): RawPageContent {
   return {
     title: props[PAGE_CONTENT_PROPS.title]?.title[0]?.plain_text,

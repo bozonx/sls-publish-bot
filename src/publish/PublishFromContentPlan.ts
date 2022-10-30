@@ -16,9 +16,6 @@ import {askPublishConfirm} from '../askUser/askPublishConfirm';
 import {publishFork} from './publishFork';
 
 
-// TODO: refactor
-
-
 export interface ContentListItem {
   title: string;
   item: PageObjectResponse;
@@ -49,39 +46,16 @@ export default class PublishFromContentPlan {
         validateContentItem(parsedContentItem);
       }
       catch (e) {
-        // TODO: !!!! сообщить пользователю
-        throw e;
+        this.tgChat.log.error(this.tgChat.app.i18n.errors.invalidContent + e);
+
+        // TODO: ждать пока отправится лог
+        // TODO: надо попробовать снова
+
+        return;
       }
 
-      const contentInfoMsg = makeContentInfoMsg(parsedContentItem, this.tgChat.app.i18n);
-
-      (async () => {
-        await this.tgChat.reply(
-          this.tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
-        );
-
-        if (parsedContentItem.pageLink) {
-          const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
-          const rawPage = await this.loadRawPage(pageId);
-          const parsedPage = parsePageContent(rawPage[0], rawPage[1]);
-          const pageInfoMsg = makePageInfoMsg(parsedPage, this.tgChat.app.i18n);
-
-          await this.tgChat.reply(
-            this.tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
-          );
-
-          await askPublishConfirm(this.tgChat, () => {
-            publishFork(parsedContentItem, parsedPage, this.channelId, this.tgChat)
-              .catch((e) => {throw e});
-          });
-        }
-        else {
-          // TODO: если нет ссылки то что делать? - обьявление
-          // TODO: проверить что для обьявления выбран telegram
-        }
-
-      })()
-        .catch((e) => {throw e});
+      this.printInfo(parsedContentItem)
+        .catch((e) => this.tgChat.app.consoleLog.error(e));
     });
   }
 
@@ -103,7 +77,10 @@ export default class PublishFromContentPlan {
       return this.prepareItems((response as any).results);
     }
     catch (e) {
-      await this.tgChat.log.error(`Can't load content plan data: ${e}`);
+      this.tgChat.log.error(`Can't load content plan data: ${e}`);
+
+      // TODO: what to do in error case ????
+      // TODO: нужно ли ждать отправки лога ????
 
       throw e;
     }
@@ -131,6 +108,34 @@ export default class PublishFromContentPlan {
       });
   }
 
+
+  private async printInfo(parsedContentItem: ContentItem) {
+    const contentInfoMsg = makeContentInfoMsg(parsedContentItem, this.tgChat.app.i18n);
+
+    await this.tgChat.reply(
+      this.tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
+    );
+
+    if (parsedContentItem.pageLink) {
+      const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
+      const rawPage = await this.loadRawPage(pageId);
+      const parsedPage = parsePageContent(rawPage[0], rawPage[1]);
+      const pageInfoMsg = makePageInfoMsg(parsedPage, this.tgChat.app.i18n);
+
+      await this.tgChat.reply(
+        this.tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
+      );
+
+      await askPublishConfirm(this.tgChat, () => {
+        publishFork(parsedContentItem, parsedPage, this.channelId, this.tgChat)
+          .catch((e) => {throw e});
+      });
+    }
+    else {
+      // TODO: если нет ссылки то что делать? - обьявление
+      // TODO: проверить что для обьявления выбран telegram
+    }
+  }
 
   private makeContentPlanQuery(currentDate: string): Record<string, any> {
     return {

@@ -8,6 +8,9 @@ import ru from '../I18n/ru';
 import _ from 'lodash';
 
 
+// TODO: review, refactor
+
+
 export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]): ContentItem {
   const pubType: PublicationTypes = (item.properties[CONTENT_PROPS.type] as any)?.select.name || '';
 
