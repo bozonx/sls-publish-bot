@@ -8,7 +8,7 @@ export default class ConsoleLogger implements Logger {
   private readonly allowWarn: boolean
 
 
-  constructor(level: LogLevel = 'info') {
+  constructor(level: LogLevel) {
     const allowedLogLevels: LogLevel[] = calcAllowedLogLevels(level)
 
     this.allowDebug = allowedLogLevels.includes('debug')

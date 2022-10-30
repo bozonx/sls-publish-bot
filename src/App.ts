@@ -15,8 +15,8 @@ export default class App {
   public readonly config: AppConfig;
   public readonly tg: TgMain;
   public readonly tasks: TasksMain;
-  public channelLogger: ChannelLogger;
-  public consoleLogger: ConsoleLogger;
+  public readonly channelLog: ChannelLogger;
+  public readonly consoleLog: ConsoleLogger;
   public readonly notion: NotionApi;
   public readonly i18n = ru;
 
@@ -25,6 +25,8 @@ export default class App {
     this.config = this.makeConf();
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
+    this.consoleLog = new ConsoleLogger(this.config.consoleLogLevel);
+    this.channelLog = new ChannelLogger(this.config.channelLogLevel, this);
     this.notion = new NotionApi(
       this.config.notionToken,
       //this.config.utcOffset
