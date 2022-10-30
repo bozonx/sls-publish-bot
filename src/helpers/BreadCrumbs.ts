@@ -17,6 +17,11 @@ export default class BreadCrumbs {
 
   constructor(initialStep: () => Promise<void>) {
     this.initialStep = initialStep;
+    // TODO: использовать логгер
+  }
+
+  destroy() {
+    // TODO: what to do ????
   }
 
 

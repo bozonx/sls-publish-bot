@@ -27,7 +27,7 @@ export default class TgMain {
         this.chats[ctx.chat.id] = new TgChat(ctx.chat.id, this.app);
       }
 
-      this.chats[ctx.chat.id].start()
+      this.chats[ctx.chat.id].startCmd()
         .catch((e) => this.app.consoleLog.error(e));
     });
 

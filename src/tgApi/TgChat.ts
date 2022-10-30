@@ -5,7 +5,6 @@ import MainMenuHandler from '../MainMenuHandler';
 import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';
 import BaseState from '../types/BaseState';
-import {ignorePromiseError} from '../lib/common';
 
 
 export default class TgChat {
@@ -25,19 +24,22 @@ export default class TgChat {
     this.botChatId = chatId;
   }
 
-  async start() {
+  async destroy() {
+    this.steps.destroy();
+    this.events.destroy();
+  }
+
+
+  async startCmd() {
     await this.reply(this.app.i18n.greet);
     // Start from very beginning and cancel current state if need.
     await this.steps.cancel();
   }
 
-  async destroy() {
-    // TODO: add
-  }
 
   handleCallbackQueryEvent(queryData: any) {
     if (!queryData) {
-      console.warn('Empty data in callback_query');
+      this.app.consoleLog.warn('Empty data came to handleCallbackQueryEvent');
 
       return;
     }
@@ -47,7 +49,7 @@ export default class TgChat {
 
   handleIncomeMessageEvent(msg: string) {
     if (!msg) {
-      console.warn('An empty string came');
+      this.app.consoleLog.warn('An empty string came to handleIncomeMessageEvent');
 
       return;
     }
@@ -85,14 +87,16 @@ export default class TgChat {
           this.events.removeListener(item[0], item[1]);
         }
         // don't wait of removing the asking message
-        ignorePromiseError(this.deleteMessage(state.messageId));
+        this.deleteMessage(state.messageId)
+          .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
       },
       onCancel: async (state: BaseState): Promise<void> => {
         for (const item of state.handlerIndexes) {
           this.events.removeListener(item[0], item[1]);
         }
         // don't wait of removing the asking message
-        ignorePromiseError(this.deleteMessage(state.messageId));
+        this.deleteMessage(state.messageId)
+          .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
       },
     });
   }

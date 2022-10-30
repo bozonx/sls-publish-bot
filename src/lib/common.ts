@@ -8,6 +8,7 @@ export function isPromise(toCheck: any): boolean {
     || false
 }
 
+// TODO: remove
 export function ignorePromiseError(promise: Promise<any>) {
   promise.catch((e: Error) => {});
 }
