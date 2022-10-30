@@ -31,22 +31,24 @@ export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) =>
 }
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
+  return tgChat.reply(tgChat.app.i18n.menu.channelMenu, [
     [
       {
         text: tgChat.app.i18n.menu.publish,
         callback_data: MENU_PUBLISH,
       },
+    ],
+    [
       {
         text: tgChat.app.i18n.menu.makeStory,
         callback_data: MENU_MAKE_STORY,
-      }
-    ],
-    [
+      },
       {
         text: tgChat.app.i18n.menu.makeAdvert,
         callback_data: MENU_ADVERT,
       },
+    ],
+    [
       CANCEL_BTN,
     ],
   ]);

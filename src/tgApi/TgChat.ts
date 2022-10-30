@@ -90,9 +90,10 @@ export default class TgChat {
   async reply(message: string, buttons?: TgReplyButton[][]): Promise<number> {
     const messageResult = await this.app.tg.bot.telegram.sendMessage(
       this.botChatId,
+      // TODO: экранировать спец символы и включить parse_mode
       message,
       {
-        parse_mode: this.app.config.telegram.parseMode,
+        //parse_mode: this.app.config.telegram.parseMode,
         reply_markup: buttons && {
           inline_keyboard: buttons
         }
