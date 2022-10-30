@@ -36,6 +36,31 @@ export default class TgChat {
     await this.steps.cancel();
   }
 
+  /**
+   * No error promise.
+   * It handles only positive result.
+   * If error occurs then it logs it and resolves promise.
+   */
+  asyncCb = (cb: (...p: any[]) => Promise<void>): (...p: any[]) => Promise<void> => {
+    return (...p) => {
+      try {
+        return new Promise((resolve) => {
+          cb(...p)
+            .then(resolve)
+            .catch((e) => {
+              this.app.consoleLog.error(e);
+              resolve();
+            });
+        });
+      }
+      catch (e) {
+        this.app.consoleLog.error(String(e));
+
+        return Promise.resolve();
+      }
+    }
+  }
+
 
   handleCallbackQueryEvent(queryData: any) {
     if (!queryData) {

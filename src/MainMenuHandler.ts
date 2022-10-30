@@ -1,5 +1,5 @@
 import TgChat from './tgApi/TgChat';
-import {askMainMenu} from './askUser/askMainMenu';
+import {askMainMenu, SITE_SELECTED_RESULT} from './askUser/askMainMenu';
 import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
 import PublishMaterial from './publish/PublishMaterial';
 
@@ -18,7 +18,7 @@ export default class MainMenuHandler {
 
   async startFromBeginning() {
     await askMainMenu(this.tgChat, (channelId: number) => {
-      if (channelId === -1) {
+      if (channelId === SITE_SELECTED_RESULT) {
         // site selected
         // TODO: handle site
         return;

@@ -4,6 +4,7 @@ import {AppEvents, MENU_MANAGE_SITE} from '../types/consts';
 import TgChat from '../tgApi/TgChat';
 
 
+export const SITE_SELECTED_RESULT = -1;
 const CHANNEL_MARKER = 'channel:';
 
 
@@ -13,25 +14,28 @@ export async function askMainMenu(tgChat: TgChat, onDone: (channelId: number) =>
     state.messageId = await printInitialMessage(tgChat);
     // listen to result
     state.handlerIndexes.push([
-      tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-        if (queryData === MENU_MANAGE_SITE) {
-          handleSiteSelected(tgChat, onDone)
-            .catch((e) => {throw e})
-
-          return;
+      tgChat.events.addListener(
+        AppEvents.CALLBACK_QUERY,
+        tgChat.asyncCb(async (queryData: string) => {
+          if (queryData === MENU_MANAGE_SITE) {
+            onDone(SITE_SELECTED_RESULT);
+          }
+          else if (queryData.indexOf(CHANNEL_MARKER) === 0) {
+            await handleChannelSelected(queryData, tgChat, onDone);
+          }
+          // else do nothing
         }
-        else if (queryData.indexOf(CHANNEL_MARKER) === 0) {
-          handleChannelSelected(queryData, tgChat, onDone)
-            .catch((e) => {throw e})
-        }
-        // else do nothing
-      }),
+      )),
       AppEvents.CALLBACK_QUERY
     ]);
   });
 }
 
-async function handleChannelSelected(queryData: string, tgChat: TgChat, onDone: (channelId: number) => void) {
+async function handleChannelSelected(
+  queryData: string,
+  tgChat: TgChat,
+  onDone: (channelId: number) => void
+) {
   const splat: string[] = queryData.split(':');
   const channelId: number = Number(splat[1]);
   // print result
@@ -40,11 +44,7 @@ async function handleChannelSelected(queryData: string, tgChat: TgChat, onDone: 
     + tgChat.app.config.channels[channelId].dispname
   );
 
-  return onDone(channelId);
-}
-
-async function handleSiteSelected(tgChat: TgChat, onDone: (channelId: number) => void) {
-  onDone(-1);
+  onDone(channelId);
 }
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
