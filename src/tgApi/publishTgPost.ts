@@ -1,12 +1,19 @@
 import TgChat from './TgChat';
 
 
-export async function publishTgPost(msg: string, channelId: number, tgChat: TgChat) {
-  await tgChat.app.tg.bot.telegram.sendMessage(
-    tgChat.app.config.channels[channelId].channelId,
+export async function publishTgPost(
+  chatId: number | string,
+  msg: string,
+  channelId: number,
+  tgChat: TgChat
+): Promise<number> {
+  const result = await tgChat.app.tg.bot.telegram.sendMessage(
+    chatId,
     msg,
     {
       parse_mode: tgChat.app.config.telegram.parseMode,
     }
   );
+
+  return result.message_id;
 }

@@ -51,6 +51,9 @@ const dict = {
   errors: {
     invalidContent: `Запить контент плана не валидна. Исправьте в notion: `,
   },
+  message: {
+    prePublishInfo: 'Это тот пост будет опубликован в канале ',
+  }
 }
 
 export default dict;

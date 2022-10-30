@@ -1,4 +1,4 @@
-import {PublicationTypes, SnTypes} from './types';
+import {PublicationTypes, SnTypes, TaskTypes} from './types';
 
 export const MENU_MANAGE_SITE = 'manage_site';
 //export const MENU_NEW_RAW_PAGE = 'new_raw_page';
@@ -89,7 +89,7 @@ export const OK_BTN = {
   callback_data: OK_BTN_CALLBACK,
 }
 
-export const TASK_TYPES = {
+export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
   postponePost: 'postponePost',
   deletePost: 'deletePost',
 };

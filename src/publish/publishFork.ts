@@ -1,9 +1,10 @@
 import RawPageContent from '../types/PageContent';
 import ContentItem from '../types/ContentItem';
-import {PUBLICATION_TYPES} from '../types/consts';
+import {FULL_DATE_FORMAT, PUBLICATION_TYPES, TASK_TYPES} from '../types/consts';
 import TgChat from '../tgApi/TgChat';
 import {publishTgPost} from '../tgApi/publishTgPost';
 import {mdBlocksToTelegram} from '../helpers/mdBlocksToString';
+import moment from 'moment';
 
 
 // TODO: review, refactor
@@ -21,10 +22,43 @@ export async function publishFork(
     PUBLICATION_TYPES.post2000,
     PUBLICATION_TYPES.mem,
   ].includes(contentItem.type)) {
+    let msgId: number;
 
     console.log(22222222, parsedPage.textMd)
 
-    await publishTgPost(mdBlocksToTelegram(parsedPage.textMd), channelId, tgChat);
+    try {
+      await tgChat.app.tg.bot.telegram.sendMessage(
+        tgChat.app.config.logChannelId,
+        tgChat.app.i18n.message.prePublishInfo
+        + tgChat.app.config.channels[channelId].name + ', '
+        + moment(contentItem.date).format(FULL_DATE_FORMAT) + ' '
+        + contentItem.time,
+      )
+
+      msgId = await publishTgPost(
+        tgChat.app.config.logChannelId,
+        mdBlocksToTelegram(parsedPage.textMd),
+        channelId,
+        tgChat
+      );
+    }
+    catch (e) {
+      await tgChat.app.channelLog.error(`Can't publish post to log channel`);
+
+      throw e;
+    }
+
+    tgChat.app.tasks.addTask({
+
+      // TODO: use post's time
+
+      startTime: '2022-10-30T14:10:00+03:00',
+      type: TASK_TYPES.postponePost,
+      data: {
+        chatId: tgChat.app.config.channels[channelId].channelId,
+        forwardMessageId: msgId,
+      }
+    });
   }
   // photos like
   else if ([

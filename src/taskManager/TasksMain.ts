@@ -76,17 +76,21 @@ export default class TasksMain {
   }
 
   private async executePostponePost(taskData: PostponePostTypeData) {
-    const content = 'qqqqq';
+    await this.app.tg.bot.telegram.copyMessage(
+      taskData.chatId,
+      this.app.config.logChannelId,
+      taskData.forwardMessageId,
+    );
 
-    // TODO: скопировать сообщение
-
-    await this.app.tg.bot.telegram.sendMessage(taskData.chatId, content, {
-      parse_mode: this.app.config.telegram.parseMode,
-    });
+    // TODO: если не получилось написать в лог канал
+    // TODO: удалить из timeouts и tasks
   }
 
   private async executeDeletePost(taskData: DeletePostTypeData) {
     await this.app.tg.bot.telegram.deleteMessage(taskData.chatId, taskData.messageId);
+
+    // TODO: если не получилось написать в лог канал
+    // TODO: удалить из timeouts и tasks
   }
 
   private registerTask(task: TaskItem): number {
