@@ -30,7 +30,7 @@ export default class TgMain {
 
     this.bot.on('callback_query', (ctx) => {
       if (!ctx.chat?.id) {
-        console.warn('No chat id in callback_query');
+        this.app.consoleLog.warn('No chat id in callback_query');
 
         return;
       }
@@ -46,11 +46,17 @@ export default class TgMain {
 
     await this.bot.launch();
 
-    console.info('--- Bot launched');
+    this.app.consoleLog.info('--- Bot launched');
   }
 
   async destroy(reason: string) {
-    this.bot.stop('SIGINT');
+    for (const itemIndex in this.chats) {
+      await this.chats[itemIndex].destroy();
+      // @ts-ignore
+      this.chats[itemIndex] = undefined;
+    }
+
+    this.bot.stop(reason);
   }
 
 }

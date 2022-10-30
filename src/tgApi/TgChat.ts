@@ -37,6 +37,10 @@ export default class TgChat {
     await this.steps.cancel();
   }
 
+  async destroy() {
+    // TODO: add
+  }
+
   handleCallbackQueryEvent(queryData: any) {
     if (!queryData) {
       console.warn('Empty data in callback_query');
