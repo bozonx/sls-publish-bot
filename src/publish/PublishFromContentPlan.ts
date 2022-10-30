@@ -94,13 +94,19 @@ export default class PublishFromContentPlan {
       .utcOffset(this.tgChat.app.config.utcOffset)
       .format('YYYY-MM-DD');
 
-    // TODO: если ошибка то показать пользователю
-    const response = await this.tgChat.app.notion.api.databases.query({
-      database_id: this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId,
-      ...this.makeContentPlanQuery(currentDate),
-    });
+    try {
+      const response = await this.tgChat.app.notion.api.databases.query({
+        database_id: this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId,
+        ...this.makeContentPlanQuery(currentDate),
+      });
 
-    return this.prepareItems((response as any).results);
+      return this.prepareItems((response as any).results);
+    }
+    catch (e) {
+      await this.tgChat.log.error(`Can't load content plan data: ${e}`);
+
+      throw e;
+    }
   }
 
   private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {

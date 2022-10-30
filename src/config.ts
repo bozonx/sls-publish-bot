@@ -11,6 +11,7 @@ const conf: AppConfig = {
   notionToken: process.env.NOTION_TOKEN as any,
   consoleLogLevel: process.env.CONSOLE_LOG_LEVEL as any || LOG_LEVELS.error,
   channelLogLevel: process.env.CHANNEL_LOG_LEVEL as any || LOG_LEVELS.info,
+  botChatLogLevel: process.env.BOT_CHAT_LOG_LEVEL as any || LOG_LEVELS.info,
   utcOffset: 3,
   logChannelId: -1001664865912,
   telegram: {

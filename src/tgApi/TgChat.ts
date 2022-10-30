@@ -6,23 +6,26 @@ import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';
 import BaseState from '../types/BaseState';
 import {makeBaseState} from '../helpers/helpers';
+import BotChatLog from '../helpers/BotChatLog';
 
 
 export default class TgChat {
+  public readonly app: App;
   public readonly events: IndexedEventEmitter;
   // chat id where was start function called
   public readonly botChatId: number | string;
   public readonly steps: BreadCrumbs;
-  public readonly app: App;
+  public readonly log: BotChatLog;
   private readonly mainMenuHandler: MainMenuHandler;
 
 
   constructor(chatId: number | string, app: App) {
+    this.botChatId = chatId;
     this.app = app;
     this.steps = new BreadCrumbs(() => this.mainMenuHandler.startFromBeginning());
     this.events = new IndexedEventEmitter();
     this.mainMenuHandler = new MainMenuHandler(this);
-    this.botChatId = chatId;
+    this.log = new BotChatLog(this.app.config.botChatLogLevel, this);
   }
 
   async destroy() {
@@ -88,11 +91,12 @@ export default class TgChat {
     const messageResult = await this.app.tg.bot.telegram.sendMessage(
       this.botChatId,
       message,
-      buttons && {
-        reply_markup: {
+      {
+        parse_mode: this.app.config.telegram.parseMode,
+        reply_markup: buttons && {
           inline_keyboard: buttons
         }
-      }
+      },
     );
 
     return messageResult.message_id;

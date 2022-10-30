@@ -1,4 +1,4 @@
-import {Logger, LogLevel} from '../types/Logger';
+import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger';
 import App from '../App';
 import {calcAllowedLogLevels} from '../lib/common';
 
@@ -15,9 +15,9 @@ export default class ChannelLogger implements Logger {
 
     const allowedLogLevels: LogLevel[] = calcAllowedLogLevels(level);
 
-    this.allowDebug = allowedLogLevels.includes('debug');
-    this.allowInfo = allowedLogLevels.includes('info');
-    this.allowWarn = allowedLogLevels.includes('warn');
+    this.allowDebug = allowedLogLevels.includes(LOG_LEVELS.debug);
+    this.allowInfo = allowedLogLevels.includes(LOG_LEVELS.info);
+    this.allowWarn = allowedLogLevels.includes(LOG_LEVELS.warn);
   }
 
 

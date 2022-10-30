@@ -18,6 +18,7 @@ export default interface AppConfig {
   utcOffset: number;
   consoleLogLevel: LogLevel;
   channelLogLevel: LogLevel;
+  botChatLogLevel: LogLevel;
   logChannelId: number | string;
   telegram: {
     parseMode: 'MarkdownV2';
