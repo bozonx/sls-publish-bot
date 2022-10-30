@@ -1,4 +1,5 @@
 import {markdownv2 as format} from 'telegram-format';
+import {quote} from 'notion-to-md/build/utils/md';
 
 
 const test = [
@@ -414,7 +415,11 @@ const test = [
         "href": null
       }], "color": "default"
     }
-  }, {
+  },
+
+  ////// LLLLLLLLL
+
+  {
     "object": "block",
     "id": "17c1ae56-d687-48b6-a143-9f600e7266f8",
     "parent": {"type": "page_id", "page_id": "2465ac4b-72d5-4032-927d-5664bb2ee592"},
@@ -441,7 +446,10 @@ const test = [
         "href": "https://duckduckgo.com/?t=ffab&q=javascript+regexp&ia=web"
       }], "color": "default"
     }
-  }, {
+  },
+
+  ///////// QQQQQQQ
+  {
     "object": "block",
     "id": "15da04fd-6eb7-45dc-aae3-cd7e2976e006",
     "parent": {"type": "page_id", "page_id": "2465ac4b-72d5-4032-927d-5664bb2ee592"},
@@ -495,7 +503,13 @@ const test = [
         "href": null
       }], "color": "default"
     }
-  }, {
+  },
+
+
+
+  /////// CODE
+
+  {
     "object": "block",
     "id": "e9a52c2b-832b-45e9-a651-c393d4ee8a29",
     "parent": {"type": "page_id", "page_id": "2465ac4b-72d5-4032-927d-5664bb2ee592"},
@@ -661,12 +675,15 @@ const test = [
 
 
 const NOTION_BLOCK_TYPES = {
-  paragraph: 'paragraph',
-  bulleted_list_item: 'bulleted_list_item',
-  numbered_list_item: 'numbered_list_item',
   heading_1: 'heading_1',
   heading_2: 'heading_2',
   heading_3: 'heading_3',
+  paragraph: 'paragraph',
+  bulleted_list_item: 'bulleted_list_item',
+  numbered_list_item: 'numbered_list_item',
+  quote: 'quote',
+  code: 'code',
+  divider: 'divider',
 };
 
 const NOTION_RICH_TEXT_TYPES = {
@@ -686,6 +703,7 @@ export function transformNotionToTelegraph() {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;
+  //let quoteListCounter = 0;
 
   for (const item of test) {
     if (item.has_children) {
@@ -709,6 +727,15 @@ export function transformNotionToTelegraph() {
 
       bulletedListCounter = 0;
     }
+
+    // if (item.type !== NOTION_BLOCK_TYPES.quote) {
+    //   // if the end of quote block
+    //   if (quoteListCounter > 0) {
+    //     result += '\n';
+    //   }
+    //
+    //   quoteListCounter = 0;
+    // }
 
     switch (item.type) {
       case NOTION_BLOCK_TYPES.heading_1:
@@ -735,6 +762,21 @@ export function transformNotionToTelegraph() {
       case NOTION_BLOCK_TYPES.numbered_list_item:
         numberListCounter++;
         result += `${numberListCounter}. ` + parseRichTextList(item?.numbered_list_item?.rich_text) + '\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.quote:
+        //quoteListCounter++;
+        // TODO: разбить на строки
+        result += `> ` + parseRichTextList(item?.quote?.rich_text) + '\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.code:
+        // TODO: проверить требования по экранированию
+        result += '```\n' + richTextToSimpleTextList(item?.code?.rich_text) + '\n````\n\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.divider:
+        result += '---\n\n';
 
         break;
       default:
@@ -797,8 +839,7 @@ function richTextToSimpleTextList(richText?: Record<string, any>[]): string {
 function parseRichText(rt: Record<string, any>): string {
   switch (rt.type) {
     case 'text':
-      // TODO: нужно ли обрабатывать href или text.link ???
-      return toMarkDown(rt.text.content, rt.annotations);
+      return toMarkDown(rt.text.content, rt.annotations, rt.href);
     default:
       // TODO: ругануться, но сделать plain text
       return rt.plain_text;
