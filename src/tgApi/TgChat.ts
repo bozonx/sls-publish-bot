@@ -1,4 +1,3 @@
-import {Context} from 'telegraf';
 import BreadCrumbs from '../helpers/BreadCrumbs';
 import IndexedEventEmitter from '../lib/IndexedEventEmitter';
 import {AppEvents} from '../types/consts';
@@ -11,28 +10,23 @@ import {ignorePromiseError} from '../lib/common';
 
 export default class TgChat {
   public readonly events: IndexedEventEmitter;
-  // context of start function
-  public readonly ctx: Context;
   // chat id where was start function called
-  public readonly botChatId: number;
+  public readonly botChatId: number | string;
   public readonly steps: BreadCrumbs;
   public readonly app: App;
   private readonly mainMenuHandler: MainMenuHandler;
 
 
-  constructor(ctx: Context, app: App) {
-    if (!ctx.chat?.id) throw new Error(`No chat id`);
-
-    this.ctx = ctx;
+  constructor(chatId: number | string, app: App) {
     this.app = app;
     this.steps = new BreadCrumbs(() => this.mainMenuHandler.startFromBeginning());
     this.events = new IndexedEventEmitter();
     this.mainMenuHandler = new MainMenuHandler(this);
-    this.botChatId = ctx.chat.id;
+    this.botChatId = chatId;
   }
 
   async start() {
-    await this.ctx.reply(this.app.i18n.greet);
+    await this.reply(this.app.i18n.greet);
     // Start from very beginning and cancel current state if need.
     await this.steps.cancel();
   }
@@ -63,7 +57,8 @@ export default class TgChat {
 
 
   async reply(message: string, buttons?: TgReplyButton[][]): Promise<number> {
-    const messageResult = await this.ctx.sendMessage(
+    const messageResult = await this.app.tg.bot.telegram.sendMessage(
+      this.botChatId,
       message,
       buttons && {
         reply_markup: {
@@ -76,7 +71,7 @@ export default class TgChat {
   }
 
   async deleteMessage(messageId: number) {
-    await this.ctx.deleteMessage(messageId);
+    await this.app.tg.bot.telegram.deleteMessage(this.botChatId, messageId);
   }
 
   async addOrdinaryStep(initialState: BaseState, onStart: (state: BaseState) => Promise<void>) {

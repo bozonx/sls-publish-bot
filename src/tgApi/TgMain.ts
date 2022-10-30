@@ -24,7 +24,7 @@ export default class TgMain {
       if (!ctx.chat?.id) throw new Error(`No chat id`);
 
       if (!this.chats[ctx.chat.id]) {
-        this.chats[ctx.chat.id] = new TgChat(ctx, this.app);
+        this.chats[ctx.chat.id] = new TgChat(ctx.chat.id, this.app);
       }
 
       this.chats[ctx.chat.id].start()
@@ -37,11 +37,27 @@ export default class TgMain {
 
         return;
       }
+      else if (!this.chats[ctx.chat.id]) {
+        this.app.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
+
+        return;
+      }
 
       this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
     });
 
     this.bot.on('message', (ctx) => {
+      if (!ctx.chat?.id) {
+        this.app.consoleLog.warn('No chat id in callback_query');
+
+        return;
+      }
+      if (!this.chats[ctx.chat.id]) {
+        this.app.consoleLog.error(`No chat id (${ctx.chat.id}) for handling income message`)
+
+        return;
+      }
+
       const msg: string = (ctx.update.message as any).text;
 
       this.chats[ctx.chat.id].handleIncomeMessageEvent(msg);
