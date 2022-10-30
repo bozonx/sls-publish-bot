@@ -181,7 +181,12 @@ const test = [
         "href": null
       }], "is_toggleable": false, "color": "default"
     }
-  }, {
+  },
+
+
+  ///// NNNNNNNNN
+
+  {
     "object": "block",
     "id": "e7100c40-77ac-4017-b3fc-f08f854719de",
     "parent": {"type": "page_id", "page_id": "2465ac4b-72d5-4032-927d-5664bb2ee592"},
@@ -262,7 +267,10 @@ const test = [
         "href": null
       }], "is_toggleable": false, "color": "default"
     }
-  }, {
+  },
+
+  ///// FFFFFFFFF
+  {
     "object": "block",
     "id": "f32946ff-a290-4bb8-ae61-e2850557d98a",
     "parent": {"type": "page_id", "page_id": "2465ac4b-72d5-4032-927d-5664bb2ee592"},
@@ -655,6 +663,10 @@ const test = [
 const NOTION_BLOCK_TYPES = {
   paragraph: 'paragraph',
   bulleted_list_item: 'bulleted_list_item',
+  numbered_list_item: 'numbered_list_item',
+  heading_1: 'heading_1',
+  heading_2: 'heading_2',
+  heading_3: 'heading_3',
 };
 
 const NOTION_RICH_TEXT_TYPES = {
@@ -672,22 +684,61 @@ const NOTION_RICH_TEXT_TYPES = {
 export function transformNotionToTelegraph() {
 
   let result = '';
+  let numberListCounter = 0;
+  let bulletedListCounter = 0;
 
   for (const item of test) {
     if (item.has_children) {
       // TODO: recurse
     }
 
+    if (item.type !== NOTION_BLOCK_TYPES.numbered_list_item) {
+      // if the end of ol block
+      if (numberListCounter > 0) {
+        result += '\n';
+      }
+
+      numberListCounter = 0;
+    }
+
+    if (item.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
+      // if the end of ul block
+      if (bulletedListCounter > 0) {
+        result += '\n';
+      }
+
+      bulletedListCounter = 0;
+    }
+
     switch (item.type) {
+      case NOTION_BLOCK_TYPES.heading_1:
+        result += '# ' + richTextToSimpleTextList(item?.heading_2?.rich_text) + '\n\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.heading_2:
+        result += '## ' + richTextToSimpleTextList(item?.heading_2?.rich_text) + '\n\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.heading_3:
+        result += '### ' + richTextToSimpleTextList(item?.heading_2?.rich_text) + '\n\n';
+
+        break;
       case NOTION_BLOCK_TYPES.paragraph:
-        result += parseParagraph(item?.paragraph?.rich_text) + '\n';
+        result += parseRichTextList(item?.paragraph?.rich_text) + '\n';
 
         break;
       case NOTION_BLOCK_TYPES.bulleted_list_item:
-        result += parseBulletedList() + '\n';
+        bulletedListCounter++;
+        result += `- ` + parseRichTextList(item?.bulleted_list_item?.rich_text) + '\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.numbered_list_item:
+        numberListCounter++;
+        result += `${numberListCounter}. ` + parseRichTextList(item?.numbered_list_item?.rich_text) + '\n';
 
         break;
       default:
+        // TODO: ругаться
         break;
     }
   }
@@ -714,7 +765,7 @@ export function transformNotionToTelegraph() {
         "href": null
       }
  */
-function parseParagraph(richText?: Record<string, any>[]): string {
+function parseRichTextList(richText?: Record<string, any>[]): string {
   if (!richText) return '';
   else if (!richText.length) return '\n';
 
@@ -727,9 +778,21 @@ function parseParagraph(richText?: Record<string, any>[]): string {
   return result;
 }
 
-function parseBulletedList(): string {
-  return '';
+function richTextToSimpleTextList(richText?: Record<string, any>[]): string {
+  if (!richText) return '';
+  else if (!richText.length) return '\n';
+  let result = '';
+
+  for (const item of richText) {
+    result += item.plain_text
+  }
+
+  return result;
 }
+
+// function parseBulletedList(): string {
+//   return '';
+// }
 
 function parseRichText(rt: Record<string, any>): string {
   switch (rt.type) {
