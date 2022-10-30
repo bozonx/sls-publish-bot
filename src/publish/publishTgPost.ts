@@ -7,7 +7,7 @@ export async function publishTgPost(msg: string, channelId: number, tgChat: TgCh
     tgChat.app.config.channels[channelId].channelId,
     msg,
     {
-      parse_mode: 'MarkdownV2',
+      parse_mode: tgChat.app.config.telegram.parseMode,
     }
   );
 }

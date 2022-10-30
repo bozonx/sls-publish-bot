@@ -14,5 +14,8 @@ export default interface AppConfig {
   notionToken: string;
   // offset of UTC in hours - 3 means Moscow
   utcOffset: number;
+  telegram: {
+    parseMode: 'MarkdownV2';
+  },
   channels: ConfigChannel[];
 }

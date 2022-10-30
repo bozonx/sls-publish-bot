@@ -9,6 +9,9 @@ const conf: AppConfig = {
   botToken: process.env.BOT_TOKEN as any,
   notionToken: process.env.NOTION_TOKEN as any,
   utcOffset: 3,
+  telegram: {
+    parseMode: 'MarkdownV2',
+  },
   channels: [
     {
       channelId: -1001664865912,

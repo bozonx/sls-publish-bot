@@ -3,12 +3,16 @@ import AppConfig from "./types/AppConfig";
 import config from "./config";
 import ru from "./I18n/ru";
 import NotionApi from './notionApi/NotionApi';
-import {mdBlocksToTelegram} from './helpers/mdBlocksToString';
+import TasksMain from './taskManager/TasksMain';
+
+
+//calcMsToDate('2022-10-30T10:00:00+03:00', 3);
 
 
 export default class App {
   public readonly config: AppConfig;
   public readonly tg: TgMain;
+  public readonly tasks: TasksMain;
   public readonly notion: NotionApi;
   public readonly i18n = ru;
 
@@ -16,7 +20,7 @@ export default class App {
   constructor() {
     this.config = this.makeConf();
     this.tg = new TgMain(this);
-    //this.notionRequest = new NotionRequest(this);
+    this.tasks = new TasksMain(this);
     this.notion = new NotionApi(
       this.config.notionToken,
       //this.config.utcOffset

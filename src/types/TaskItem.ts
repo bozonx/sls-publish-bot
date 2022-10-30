@@ -2,15 +2,12 @@ import {TaskTypes} from './types';
 
 
 export interface PostponePostTypeData {
-  chatId: number;
+  chatId: number | string;
   forwardMessageId: number;
-  //allowLinkPreview: boolean;
-  //isImageDescr: boolean;
-  // TODO: add images
 }
 
 export interface DeletePostTypeData {
-  chatId: number;
+  chatId: number | string;
   messageId: number;
 }
 

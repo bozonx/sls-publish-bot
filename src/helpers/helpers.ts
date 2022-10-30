@@ -2,6 +2,7 @@ import BaseState from '../types/BaseState';
 import {PublicationTypes, SnTypes} from '../types/types';
 import {PUBLICATION_TYPES, SN_TYPES} from '../types/consts';
 import _ from 'lodash';
+import moment from 'moment';
 
 
 export function makeBaseState(): BaseState {
@@ -63,4 +64,15 @@ export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {
   else {
     throw new Error(`Unsupported publication type`);
   }
+}
+
+/**
+ * Calculate seconds from now to specified date.
+ * The number can be less than 0!
+ */
+export function calcSecondsToDate(toDateStr: string, utcOffset: number): number {
+  const now = moment().utcOffset(utcOffset);
+  const toDate = moment(toDateStr).utcOffset(utcOffset);
+
+  return toDate.unix() - now.unix();
 }
