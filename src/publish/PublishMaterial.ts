@@ -9,7 +9,6 @@ import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem from '../types/ContentItem';
 import {SnTypes} from '../types/types';
-import RawPageContent from '../types/PageContent';
 import _ from 'lodash';
 import {MdBlock} from 'notion-to-md/build/types';
 import {makePageInfoMsg, parsePageContent} from './parsePage';

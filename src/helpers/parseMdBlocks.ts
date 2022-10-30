@@ -4,6 +4,9 @@ import {PUBLICATION_TYPES} from '../types/consts';
 import _ from 'lodash';
 
 
+// TODO: WTF ???
+
+
 export function parseSections(properties: Record<string, any>, mdBlocks: MdBlock[]): Sections {
   return {
     Type: properties.Type?.select?.name,

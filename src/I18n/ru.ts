@@ -30,6 +30,7 @@ const dict = {
   contentInfo: {
     dateTime: 'Дата и время',
     content: 'Контент',
+    link: 'Сылка',
     type: 'Тип',
     status: 'Статус',
     sns: 'Соц сети',
