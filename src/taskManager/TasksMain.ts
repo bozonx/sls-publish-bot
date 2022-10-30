@@ -23,7 +23,12 @@ export default class TasksMain {
   }
 
   async destroy() {
-    // TODO: clean timeouts
+    // clean timeouts
+    for (const itemIndex in this.timeouts) {
+      clearTimeout(this.timeouts[itemIndex]);
+      // @ts-ignore
+      this.timeouts[itemIndex] = undefined;
+    }
   }
 
 
@@ -41,6 +46,10 @@ export default class TasksMain {
       .catch((e) => {throw e});
 
     return taskNum;
+  }
+
+  getTaskList(): TaskItem[] {
+    return this.tasks;
   }
 
 

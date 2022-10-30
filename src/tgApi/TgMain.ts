@@ -49,4 +49,8 @@ export default class TgMain {
     console.info('--- Bot launched');
   }
 
+  async destroy(reason: string) {
+    this.bot.stop('SIGINT');
+  }
+
 }

@@ -3,9 +3,8 @@ import App from './App';
 
 const app = new App();
 
-app.init()
-  .catch((e) => {throw e});
+app.init();
 
 // Enable graceful stop
-process.once('SIGINT', () => app.tg.bot.stop('SIGINT'));
-process.once('SIGTERM', () => app.tg.bot.stop('SIGTERM'));
+process.once('SIGINT', () => app.destroy('SIGINT'));
+process.once('SIGTERM', () => app.destroy('SIGTERM'));

@@ -8,9 +8,6 @@ import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';
 
 
-//calcMsToDate('2022-10-30T10:00:00+03:00', 3);
-
-
 export default class App {
   public readonly config: AppConfig;
   public readonly tg: TgMain;
@@ -34,8 +31,15 @@ export default class App {
   }
 
 
-  async init() {
-    await this.tg.init();
+  init() {
+    (async () => {
+      await this.tg.init();
+      await this.tasks.init();
+    })()
+      .catch((e) => {
+        this.consoleLog.error(e);
+      });
+
 
 
 
@@ -63,6 +67,16 @@ export default class App {
     // console.log(info)
     //
     // throw new Error(`3333`)
+  }
+
+  destroy(reason: string) {
+    (async () => {
+      await this.tasks.destroy();
+      await this.tg.destroy(reason);
+    })()
+      .catch((e) => {
+        this.consoleLog.error(e);
+      });
   }
 
 
