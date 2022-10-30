@@ -1,5 +1,8 @@
 import {MdBlock} from 'notion-to-md/build/types';
 import _ from 'lodash';
+//import {unified} from 'unified';
+//const unified = import('unified');
+
 
 const aa = [
   { type: 'paragraph', parent: 'абзац1', children: [] },
@@ -49,13 +52,14 @@ const aa = [
   { type: 'paragraph', parent: 'пррр', children: [] }
 ];
 
-// (async function main() {
-//   const file = await unified()
-//     //.use(remarkParse)
-//     //.process('# Hi\n\n*Hello*, world!')
-//
-//   //console.log(String(file))
-// })();
+(async function main() {
+  //console.log(3333 , unified)
+  //const file = await unified()
+    //.use(remarkParse)
+    //.process('# Hi\n\n*Hello*, world!')
+
+  //console.log(String(file))
+})();
 
 export function mdBlocksToPrettyMd(mdBlocks: MdBlock[]): string {
   let result = '';
