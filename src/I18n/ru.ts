@@ -10,7 +10,7 @@ const dict = {
     selectChannel: 'Выберете канал',
     selectContent: 'Выберете запись для публикации',
     selectManageSite: 'Сайт slsfreedom',
-    publish: 'Опубликовать материал',
+    publish: 'Опубликовать из контент плана',
     makeStory: 'Создать story в tg',
     makeAdvert: 'Опубликовать рекламу',
     contentParams: 'Параметры публикации:',

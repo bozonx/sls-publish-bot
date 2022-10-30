@@ -37,13 +37,6 @@ export default class PublishMaterial {
 
 
   async start() {
-    // TODO: * + запрашиваем контент план, фильтруем сегодня и после, не выложенное
-    //       * + выводим в виде кнопок - дата и название, спрашиваем что использовать
-    //       * + парсим и выводим инфу для проверки или ошибки если не всё заполнено
-    //       * парсим саму страницу и выводим инфу
-    //       * спрашиваем подтверждения
-    //       * публикуем
-
     const items: ContentListItem[] = await this.loadNotPublished();
 
     await askContentToUse(items, this.tgChat, (item: PageObjectResponse) => {
@@ -98,11 +91,43 @@ export default class PublishMaterial {
    */
   private async loadNotPublished(): Promise<ContentListItem[]> {
     const currentDate: string = moment()
-      .utcOffset(this.tgChat.app.config.utcOffset).format('YYYY-MM-DD');
+      .utcOffset(this.tgChat.app.config.utcOffset)
+      .format('YYYY-MM-DD');
 
     // TODO: если ошибка то показать пользователю
     const response = await this.tgChat.app.notion.api.databases.query({
       database_id: this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId,
+      ...this.makeContentPlanQuery(currentDate),
+    });
+
+    return this.prepareItems((response as any).results);
+  }
+
+  private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
+    // TODO: если ошибка то показать пользователю
+    return await this.tgChat.app.notion.getPageMdBlocks(pageId);
+  }
+
+  prepareItems(results: PageObjectResponse[]): ContentListItem[] {
+    return results
+      .filter((item) => !item.archived)
+      .map((item): ContentListItem => {
+        const dateProp = item.properties['date'];
+        const dateText: string = (dateProp as any).date.start;
+        const shortDateText: string = moment(dateText).format('DD.MM');
+        const gistProp = item.properties['gist/link'];
+        const gistRichText: RichTextItemResponse = (gistProp as any).rich_text[0];
+
+        return {
+          title: `${shortDateText} ${gistRichText.plain_text}`,
+          item,
+        }
+      });
+  }
+
+
+  private makeContentPlanQuery(currentDate: string): Record<string, any> {
+    return {
       page_size: DB_DEFAULT_PAGE_SIZE,
       filter: {
         and: [
@@ -143,31 +168,7 @@ export default class PublishMaterial {
           direction: 'descending',
         },
       ],
-    });
-
-    return this.prepareItems((response as any).results);
-  }
-
-  private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
-    // TODO: если ошибка то показать пользователю
-    return await this.tgChat.app.notion.getPageMdBlocks(pageId);
-  }
-
-  prepareItems(results: PageObjectResponse[]): ContentListItem[] {
-    return results
-      .filter((item) => !item.archived)
-      .map((item): ContentListItem => {
-        const dateProp = item.properties['date'];
-        const dateText: string = (dateProp as any).date.start;
-        const shortDateText: string = moment(dateText).format('DD.MM');
-        const gistProp = item.properties['gist/link'];
-        const gistRichText: RichTextItemResponse = (gistProp as any).rich_text[0];
-
-        return {
-          title: `${shortDateText} ${gistRichText.plain_text}`,
-          item,
-        }
-      });
+    }
   }
 
 }
