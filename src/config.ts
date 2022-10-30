@@ -9,6 +9,7 @@ dotenv.config();
 const conf: AppConfig = {
   botToken: process.env.BOT_TOKEN as any,
   notionToken: process.env.NOTION_TOKEN as any,
+  telegraPhToken: process.env.TELEGRA_PH_TOKEN as any,
   consoleLogLevel: process.env.CONSOLE_LOG_LEVEL as any || LOG_LEVELS.error,
   channelLogLevel: process.env.CHANNEL_LOG_LEVEL as any || LOG_LEVELS.info,
   botChatLogLevel: process.env.BOT_CHAT_LOG_LEVEL as any || LOG_LEVELS.info,
@@ -31,9 +32,12 @@ const conf: AppConfig = {
         PUBLICATION_TYPES.story,
       ],
       sn: {
-        [SN_TYPES.telegram]: {},
-        [SN_TYPES.instagram]: {},
-        [SN_TYPES.zen]: {},
+        telegram: {
+          telegraPhAuthorName: 'Testtt',
+          telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6',
+        },
+        instagram: {},
+        zen: {},
       }
     },
   ]

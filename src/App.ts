@@ -6,6 +6,7 @@ import NotionApi from './notionApi/NotionApi';
 import TasksMain from './taskManager/TasksMain';
 import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';
+import TelegraPhMain from './tgApi/telegraPhMain';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
@@ -14,6 +15,7 @@ import ConsoleLogger from './helpers/ConsoleLogger';
 export default class App {
   public readonly config: AppConfig;
   public readonly tg: TgMain;
+  public readonly telegraPh: TelegraPhMain;
   public readonly tasks: TasksMain;
   public readonly channelLog: ChannelLogger;
   public readonly consoleLog: ConsoleLogger;
@@ -25,6 +27,7 @@ export default class App {
     this.config = this.makeConf();
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
+    this.telegraPh = new TelegraPhMain(this);
     this.consoleLog = new ConsoleLogger(this.config.consoleLogLevel);
     this.channelLog = new ChannelLogger(this.config.channelLogLevel, this);
     this.notion = new NotionApi(
@@ -37,6 +40,7 @@ export default class App {
   init() {
     (async () => {
       await this.tg.init();
+      await this.telegraPh.init();
       await this.tasks.init();
     })()
       .catch((e) => {

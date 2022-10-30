@@ -7,13 +7,25 @@ export interface ConfigChannel {
   notionContentPlanDbId: string;
   // some PUBLICATION_TYPES
   supportedTypes: string[];
-  sn: Record<any, Record<string, any>>;
+  sn: {
+    telegram: {
+      telegraPhAuthorName: string;
+      telegraPhAuthorUrl: string;
+    };
+    instagram: {
+
+    };
+    zen: {
+
+    };
+  };
 }
 
 
 export default interface AppConfig {
   botToken: string;
   notionToken: string;
+  telegraPhToken: string;
   // offset of UTC in hours - 3 means Moscow
   utcOffset: number;
   consoleLogLevel: LogLevel;
