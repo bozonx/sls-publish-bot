@@ -1,5 +1,9 @@
 import {markdownv2 as format} from 'telegram-format';
-import {quote} from 'notion-to-md/build/utils/md';
+import _ from 'lodash';
+import {
+  BlockObjectResponse,
+  TextRichTextItemResponse
+} from '@notionhq/client/build/src/api-endpoints';
 
 
 const test = [
@@ -691,26 +695,17 @@ const NOTION_RICH_TEXT_TYPES = {
 }
 
 
-
-// console.log(333333, format.escape('df * sf _'))
-// // code block
-// console.log(333333, format.monospaceBlock('monospaceBlock', 'bash'))
-
-
-
-export function transformNotionToTelegraph() {
-
+export function transformNotionToTelegraph(notionBlocks: BlockObjectResponse[]) {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;
-  //let quoteListCounter = 0;
 
-  for (const item of test) {
-    if (item.has_children) {
+  for (const block of notionBlocks) {
+    if (block.has_children) {
       // TODO: recurse
     }
 
-    if (item.type !== NOTION_BLOCK_TYPES.numbered_list_item) {
+    if (block.type !== NOTION_BLOCK_TYPES.numbered_list_item) {
       // if the end of ol block
       if (numberListCounter > 0) {
         result += '\n';
@@ -719,7 +714,7 @@ export function transformNotionToTelegraph() {
       numberListCounter = 0;
     }
 
-    if (item.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
+    if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
       // if the end of ul block
       if (bulletedListCounter > 0) {
         result += '\n';
@@ -728,51 +723,45 @@ export function transformNotionToTelegraph() {
       bulletedListCounter = 0;
     }
 
-    // if (item.type !== NOTION_BLOCK_TYPES.quote) {
-    //   // if the end of quote block
-    //   if (quoteListCounter > 0) {
-    //     result += '\n';
-    //   }
-    //
-    //   quoteListCounter = 0;
-    // }
-
-    switch (item.type) {
+    switch (block.type) {
       case NOTION_BLOCK_TYPES.heading_1:
-        result += '# ' + richTextToSimpleTextList(item?.heading_2?.rich_text) + '\n\n';
+        result += '# ' + richTextToSimpleTextList((block as any)?.heading_1?.rich_text) + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.heading_2:
-        result += '## ' + richTextToSimpleTextList(item?.heading_2?.rich_text) + '\n\n';
+        result += '## ' + richTextToSimpleTextList((block as any)?.heading_2?.rich_text) + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.heading_3:
-        result += '### ' + richTextToSimpleTextList(item?.heading_2?.rich_text) + '\n\n';
+        result += '### ' + richTextToSimpleTextList((block as any)?.heading_3?.rich_text) + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.paragraph:
-        result += parseRichTextList(item?.paragraph?.rich_text) + '\n';
+        if ((block as any)?.paragraph?.rich_text.length) {
+          result += parseRichTextList((block as any)?.paragraph?.rich_text) + '\n\n';
+        }
+        else {
+          result += '\n';
+        }
 
         break;
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         bulletedListCounter++;
-        result += `- ` + parseRichTextList(item?.bulleted_list_item?.rich_text) + '\n';
+        result += `- ` + parseRichTextList((block as any)?.bulleted_list_item?.rich_text) + '\n';
 
         break;
       case NOTION_BLOCK_TYPES.numbered_list_item:
         numberListCounter++;
-        result += `${numberListCounter}. ` + parseRichTextList(item?.numbered_list_item?.rich_text) + '\n';
+        result += `${numberListCounter}. ` + parseRichTextList((block as any)?.numbered_list_item?.rich_text) + '\n';
 
         break;
       case NOTION_BLOCK_TYPES.quote:
-        //quoteListCounter++;
-        // TODO: разбить на строки
-        result += `> ` + parseRichTextList(item?.quote?.rich_text) + '\n';
+        result += `> ` + parseRichTextList((block as any)?.quote?.rich_text).replace(/\n/g, '\n> ') + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.code:
         // TODO: проверить требования по экранированию
-        result += '```\n' + richTextToSimpleTextList(item?.code?.rich_text) + '\n````\n\n';
+        result += '\n' + format.monospaceBlock(richTextToSimpleTextList((block as any)?.code?.rich_text), (block as any)?.code?.language) + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.divider:
@@ -785,31 +774,13 @@ export function transformNotionToTelegraph() {
     }
   }
 
-  console.log(1111111, result)
-
-  return result;
+  return _.trim(result);
 }
 
 
-/*
-{
-        "type": "text",
-        "text": {"content": "абзац1", "link": null},
-        "annotations": {
-          "bold": false,
-          "italic": false,
-          "strikethrough": false,
-          "underline": false,
-          "code": false,
-          "color": "default"
-        },
-        "plain_text": "абзац1",
-        "href": null
-      }
- */
-function parseRichTextList(richText?: Record<string, any>[]): string {
+function parseRichTextList(richText?: TextRichTextItemResponse[]): string {
   if (!richText) return '';
-  else if (!richText.length) return '\n';
+  else if (!richText.length) return '';
 
   let result = '';
 
@@ -820,9 +791,9 @@ function parseRichTextList(richText?: Record<string, any>[]): string {
   return result;
 }
 
-function richTextToSimpleTextList(richText?: Record<string, any>[]): string {
+function richTextToSimpleTextList(richText?: TextRichTextItemResponse[]): string {
   if (!richText) return '';
-  else if (!richText.length) return '\n';
+  else if (!richText.length) return '';
   let result = '';
 
   for (const item of richText) {
@@ -832,21 +803,16 @@ function richTextToSimpleTextList(richText?: Record<string, any>[]): string {
   return result;
 }
 
-// function parseBulletedList(): string {
-//   return '';
-// }
-
-function parseRichText(rt: Record<string, any>): string {
-  switch (rt.type) {
-    case 'text':
-      return toMarkDown(rt.text.content, rt.annotations, rt.href);
+function parseRichText(rtItem: TextRichTextItemResponse): string {
+  switch (rtItem.type) {
+    case NOTION_RICH_TEXT_TYPES.text:
+      return toMarkDown(rtItem.text.content, rtItem.annotations, rtItem.href);
     default:
-      // TODO: ругануться, но сделать plain text
-      return rt.plain_text;
+      return rtItem.plain_text;
   }
 }
 
-function toMarkDown(text: string, annotations: Record<string, any>, link?: string): string {
+function toMarkDown(text: string, annotations: Record<string, any>, link?: string | null): string {
   let preparedText = format.escape(text);
 
   if (link) {
