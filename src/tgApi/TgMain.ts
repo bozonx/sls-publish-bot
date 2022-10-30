@@ -17,6 +17,9 @@ export default class TgMain {
 
 
   async init() {
+
+    // TODO: add bot error logger listener
+
     this.bot.start((ctx: Context) => {
       if (!ctx.chat?.id) throw new Error(`No chat id`);
 
@@ -25,7 +28,7 @@ export default class TgMain {
       }
 
       this.chats[ctx.chat.id].start()
-        .catch((e) => {throw e});
+        .catch((e) => this.app.consoleLog.error(e));
     });
 
     this.bot.on('callback_query', (ctx) => {
@@ -42,11 +45,11 @@ export default class TgMain {
       const msg: string = (ctx.update.message as any).text;
 
       this.chats[ctx.chat.id].handleIncomeMessageEvent(msg);
-    })
+    });
 
     await this.bot.launch();
-
-    this.app.consoleLog.info('--- Bot launched');
+    await this.app.channelLog.info('Bot launched');
+    this.app.consoleLog.info('Bot launched');
   }
 
   async destroy(reason: string) {

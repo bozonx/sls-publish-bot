@@ -30,7 +30,7 @@ export default class ChannelLogger implements Logger {
       { parse_mode: this.app.config.telegram.parseMode }
     )
       .catch((e) => {
-        this.app.consoleLogger.error(`Can't send DEBUG message to log channel: ${e}`);
+        this.app.consoleLog.error(`Can't send DEBUG message to log channel: ${e}`);
       });
   }
 
@@ -43,7 +43,7 @@ export default class ChannelLogger implements Logger {
       { parse_mode: this.app.config.telegram.parseMode }
     )
       .catch((e) => {
-        this.app.consoleLogger.error(`Can't send INFO message to log channel: ${e}`);
+        this.app.consoleLog.error(`Can't send INFO message to log channel: ${e}`);
       });
   }
 
@@ -56,7 +56,7 @@ export default class ChannelLogger implements Logger {
       { parse_mode: this.app.config.telegram.parseMode }
     )
       .catch((e) => {
-        this.app.consoleLogger.error(`Can't send WARNING message to log channel: ${e}`);
+        this.app.consoleLog.error(`Can't send WARNING message to log channel: ${e}`);
       });
   }
 
@@ -67,7 +67,7 @@ export default class ChannelLogger implements Logger {
       { parse_mode: this.app.config.telegram.parseMode }
     )
       .catch((e) => {
-        this.app.consoleLogger.error(`Can't send ERROR message to log channel: ${e}`);
+        this.app.consoleLog.error(`Can't send ERROR message to log channel: ${e}`);
       });
   }
 }

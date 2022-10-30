@@ -71,6 +71,9 @@ export default class App {
 
   destroy(reason: string) {
     (async () => {
+      // TODO: поидее надо дождаться
+      this.channelLog.info(`Bot is shutting down`);
+
       await this.tasks.destroy();
       await this.tg.destroy(reason);
     })()
@@ -79,6 +82,22 @@ export default class App {
       });
   }
 
+
+  asyncCb(cb: (...p: any[]) => Promise<any>): Promise<any> {
+    try {
+      return cb()
+        .catch((e) => this.consoleLog.error(e));
+    }
+    catch (e) {
+      this.consoleLog.error(String(e));
+
+      return Promise.reject(e);
+    }
+  }
+
+  catchE() {
+
+  }
 
   private makeConf(): AppConfig {
     // TODO: check conf
