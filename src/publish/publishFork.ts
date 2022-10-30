@@ -2,8 +2,11 @@ import RawPageContent from '../types/PageContent';
 import ContentItem from '../types/ContentItem';
 import {PUBLICATION_TYPES} from '../types/consts';
 import TgChat from '../tgApi/TgChat';
-import {publishTgPost} from './publishTgPost';
+import {publishTgPost} from '../tgApi/publishTgPost';
 import {mdBlocksToTelegram} from '../helpers/mdBlocksToString';
+
+
+// TODO: review, refactor
 
 
 export async function publishFork(

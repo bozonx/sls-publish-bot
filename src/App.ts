@@ -8,6 +8,9 @@ import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';
 
 
+//const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
+
+
 export default class App {
   public readonly config: AppConfig;
   public readonly tg: TgMain;
