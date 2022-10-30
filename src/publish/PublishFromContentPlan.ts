@@ -150,6 +150,9 @@ export default class PublishFromContentPlan {
   }
 
   private makeContentPlanQuery(currentDate: string): Record<string, any> {
+
+    // TODO: фильтровать только поддерживаемые типы
+
     return {
       page_size: DB_DEFAULT_PAGE_SIZE,
       filter: {

@@ -1,6 +1,8 @@
+/*
+ * Взято из https://github.com/husky-dev/telegraph-cli
+ */
 import {getApi} from './telegraPh/api';
 import App from '../App';
-import {createPage} from '@notionhq/client/build/src/api-endpoints';
 
 
 export default class TelegraPhMain {
@@ -23,8 +25,9 @@ export default class TelegraPhMain {
 
     //await this.create(0, 'some title');
 
-
-
+    // const md = `## ttt\ntext*dd* _sdf_`
+    //
+    // console.log(11111, parseMarkdownStr(md));
   }
 
 
@@ -44,7 +47,6 @@ export default class TelegraPhMain {
       ],
       author_name: this.app.config.channels[channelId].sn.telegram.telegraPhAuthorName,
       author_url: this.app.config.channels[channelId].sn.telegram.telegraPhAuthorUrl,
-      //return_content: true,
     });
 
     return result.path;
