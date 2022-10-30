@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import AppConfig from './types/AppConfig';
 import {PUBLICATION_TYPES, SN_TYPES} from './types/consts';
+import {LOG_LEVELS} from './types/Logger';
 
 
 dotenv.config();
@@ -8,6 +9,7 @@ dotenv.config();
 const conf: AppConfig = {
   botToken: process.env.BOT_TOKEN as any,
   notionToken: process.env.NOTION_TOKEN as any,
+  consoleLogLevel: process.env.LOG_LEVEL as any || LOG_LEVELS.error,
   utcOffset: 3,
   telegram: {
     parseMode: 'MarkdownV2',

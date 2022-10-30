@@ -4,6 +4,8 @@ import config from "./config";
 import ru from "./I18n/ru";
 import NotionApi from './notionApi/NotionApi';
 import TasksMain from './taskManager/TasksMain';
+import ChannelLogger from './helpers/ChannelLogger';
+import ConsoleLogger from './helpers/ConsoleLogger';
 
 
 //calcMsToDate('2022-10-30T10:00:00+03:00', 3);
@@ -13,6 +15,8 @@ export default class App {
   public readonly config: AppConfig;
   public readonly tg: TgMain;
   public readonly tasks: TasksMain;
+  public channelLogger: ChannelLogger;
+  public consoleLogger: ConsoleLogger;
   public readonly notion: NotionApi;
   public readonly i18n = ru;
 

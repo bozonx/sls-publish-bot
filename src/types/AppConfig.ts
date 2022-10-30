@@ -1,3 +1,5 @@
+import {LogLevel} from './Logger';
+
 export interface ConfigChannel {
   channelId: number;
   name: string;
@@ -14,6 +16,7 @@ export default interface AppConfig {
   notionToken: string;
   // offset of UTC in hours - 3 means Moscow
   utcOffset: number;
+  consoleLogLevel: LogLevel;
   telegram: {
     parseMode: 'MarkdownV2';
   },
