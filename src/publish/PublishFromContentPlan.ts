@@ -87,11 +87,20 @@ export default class PublishFromContentPlan {
   }
 
   private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
-    // TODO: если ошибка то показать пользователю
-    return await this.tgChat.app.notion.getPageMdBlocks(pageId);
+    try {
+      return await this.tgChat.app.notion.getPageMdBlocks(pageId);
+    }
+    catch (e) {
+      this.tgChat.log.error(`Can't load page (${pageId}) data: ${e}`);
+
+      // TODO: what to do in error case ????
+      // TODO: нужно ли ждать отправки лога ????
+
+      throw e;
+    }
   }
 
-  prepareItems(results: PageObjectResponse[]): ContentListItem[] {
+  private prepareItems(results: PageObjectResponse[]): ContentListItem[] {
     return results
       .filter((item) => !item.archived)
       .map((item): ContentListItem => {
@@ -108,15 +117,18 @@ export default class PublishFromContentPlan {
       });
   }
 
-
+  // TODO: refactor
   private async printInfo(parsedContentItem: ContentItem) {
     const contentInfoMsg = makeContentInfoMsg(parsedContentItem, this.tgChat.app.i18n);
-
+    // send record's info from content plan
     await this.tgChat.reply(
       this.tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
     );
 
     if (parsedContentItem.pageLink) {
+      // send page info
+      // TODO: лучше сделать сразу pageId
+
       const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
       const rawPage = await this.loadRawPage(pageId);
       const parsedPage = parsePageContent(rawPage[0], rawPage[1]);
@@ -128,7 +140,7 @@ export default class PublishFromContentPlan {
 
       await askPublishConfirm(this.tgChat, () => {
         publishFork(parsedContentItem, parsedPage, this.channelId, this.tgChat)
-          .catch((e) => {throw e});
+          .catch((e) => this.tgChat.app.consoleLog.error(e));
       });
     }
     else {

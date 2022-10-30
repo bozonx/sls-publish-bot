@@ -42,6 +42,7 @@ export default class TasksMain {
       return -1;
     }
 
+    // TODO: use log
     this.saveTask(task)
       .catch((e) => {throw e});
 
@@ -103,6 +104,7 @@ export default class TasksMain {
     this.tasks.push(task);
 
     const timeout = setTimeout(() => {
+      // TODO: use log
       this.executeFork(task)
         .catch((e) => {throw e});
     }, secondsToDate * 1000);
