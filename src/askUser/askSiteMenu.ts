@@ -14,8 +14,7 @@ export async function askSiteMenu(tgChat: TgChat, onDone: () => void) {
         AppEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
             if (queryData === CANCEL_BTN_CALLBACK) {
-              return tgChat.steps.cancel()
-                .catch((e) => tgChat.app.consoleLog.error(e));
+              return tgChat.steps.cancel();
             }
             // else do nothing
           }

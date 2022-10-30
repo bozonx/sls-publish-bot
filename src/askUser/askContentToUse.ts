@@ -22,28 +22,32 @@ export async function askContentToUse(
     state.messageId = await printInitialMessage(tgChat, items);
     // listen to result
     state.handlerIndexes.push([
-      tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-        if (queryData.indexOf(CONTENT_MARKER) === 0) {
-          const splat = queryData.split(':');
-          const itemIndex = Number(splat[1]);
+      tgChat.events.addListener(
+        AppEvents.CALLBACK_QUERY,
+        tgChat.asyncCb(async (queryData: string) => {
+          if (queryData.indexOf(CONTENT_MARKER) === 0) {
+            const splat = queryData.split(':');
+            const itemIndex = Number(splat[1]);
 
-          onDone(items[itemIndex].item);
-        }
-        else if (queryData === BACK_BTN_CALLBACK) {
-          return tgChat.steps.back()
-            .catch((e) => {throw e});
-        }
-        else if (queryData === CANCEL_BTN_CALLBACK) {
-          return tgChat.steps.cancel()
-            .catch((e) => {throw e});
-        }
-      }),
+            onDone(items[itemIndex].item);
+          }
+          else if (queryData === BACK_BTN_CALLBACK) {
+            return tgChat.steps.back()
+              .catch((e) => {throw e});
+          }
+          else if (queryData === CANCEL_BTN_CALLBACK) {
+            return tgChat.steps.cancel()
+              .catch((e) => {throw e});
+          }
+        },
+      )),
       AppEvents.CALLBACK_QUERY,
     ]);
   });
 }
 
 async function printInitialMessage(tgChat: TgChat, items: ContentListItem[]): Promise<number> {
+  // TODO: что спрашивать ?????
   return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
       ...items.map((item, index) => {
       return [{

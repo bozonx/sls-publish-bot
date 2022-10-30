@@ -15,18 +15,19 @@ export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) =>
     state.messageId = await printInitialMessage(tgChat);
     // listen to result
     state.handlerIndexes.push([
-      tgChat.events.addListener(AppEvents.CALLBACK_QUERY, (queryData: string) => {
-        if ([MENU_PUBLISH, MENU_MAKE_STORY, MENU_ADVERT].includes(queryData)) {
-          onDone(queryData);
+      tgChat.events.addListener(
+        AppEvents.CALLBACK_QUERY,
+        tgChat.asyncCb(async (queryData: string) => {
+          if ([MENU_PUBLISH, MENU_MAKE_STORY, MENU_ADVERT].includes(queryData)) {
+            onDone(queryData);
+          }
+          else if (queryData === CANCEL_BTN_CALLBACK) {
+            await tgChat.steps.cancel();
+          }
         }
-        else if (queryData === CANCEL_BTN_CALLBACK) {
-          return tgChat.steps.cancel()
-            .catch((e) => {throw e});
-        }
-      }),
+      )),
       AppEvents.CALLBACK_QUERY,
     ]);
-
   });
 }
 

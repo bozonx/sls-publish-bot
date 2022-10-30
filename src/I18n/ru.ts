@@ -1,5 +1,9 @@
 import {PublicationTypes} from '../types/types';
 
+
+// TODO: refactor
+
+
 const dict = {
   menu: {
     whatToDo: 'Что хотите опубликовать?',
