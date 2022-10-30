@@ -1,9 +1,8 @@
-import {markdownv2 as format} from 'telegram-format';
-import _ from 'lodash';
 import {
   BlockObjectResponse,
   TextRichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
+import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/consts';
 
 
 const test = [
@@ -676,23 +675,6 @@ const test = [
     "paragraph": {"rich_text": [], "color": "default"}
   }
 ];
-
-
-const NOTION_BLOCK_TYPES = {
-  heading_1: 'heading_1',
-  heading_2: 'heading_2',
-  heading_3: 'heading_3',
-  paragraph: 'paragraph',
-  bulleted_list_item: 'bulleted_list_item',
-  numbered_list_item: 'numbered_list_item',
-  quote: 'quote',
-  code: 'code',
-  divider: 'divider',
-};
-
-const NOTION_RICH_TEXT_TYPES = {
-  text: 'text',
-}
 
 
 export function transformNotionToTelegraph(notionBlocks: BlockObjectResponse[]) {
