@@ -3,6 +3,7 @@
  */
 import {getApi} from './telegraPh/api';
 import App from '../App';
+import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
 
 
 export default class TelegraPhMain {
@@ -13,9 +14,14 @@ export default class TelegraPhMain {
   constructor(app: App) {
     this.app = app;
     this.api = getApi({ token: this.app.config.telegraPhToken });
+
+
   }
 
   async init() {
+
+    transformNotionToTelegraph();
+
     // const res = await this.api.getPage(
     //   'Narushennaya-logika-v-putinskoj-propagande-09-26',
     //   { return_content: true }

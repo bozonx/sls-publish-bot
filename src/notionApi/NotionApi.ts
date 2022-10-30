@@ -13,14 +13,13 @@ export default class NotionApi {
     });
   }
 
-
-  async getPageMdBlocks(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
-    const n2m = new NotionToMarkdown({ notionClient: this.api });
-    const mdBlocks = await n2m.pageToMarkdown(pageId);
-    const page = await this.api.pages.retrieve({ page_id: pageId });
-    const properties = (page as any).properties;
-
-    return [properties, mdBlocks];
-  }
+  // async getPageMdBlocks(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
+  //   const n2m = new NotionToMarkdown({ notionClient: this.api });
+  //   const mdBlocks = await n2m.pageToMarkdown(pageId);
+  //   const page = await this.api.pages.retrieve({ page_id: pageId });
+  //   const properties = (page as any).properties;
+  //
+  //   return [properties, mdBlocks];
+  // }
 
 }

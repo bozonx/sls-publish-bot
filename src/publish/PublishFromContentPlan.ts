@@ -2,6 +2,7 @@ import TgChat from '../tgApi/TgChat';
 import {DB_DEFAULT_PAGE_SIZE} from '../notionApi/constants';
 import moment from 'moment';
 import {
+  GetBlockResponse,
   PageObjectResponse,
   RichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
@@ -87,8 +88,51 @@ export default class PublishFromContentPlan {
   }
 
   private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
+
+    /*
+      {
+        object: 'block',
+        id: '2465ac4b-72d5-4032-927d-5664bb2ee592',
+        parent: {
+          type: 'database_id',
+          database_id: 'f03e1717-ca62-4cd5-81c6-674551d53749'
+        },
+        created_time: '2022-10-29T09:57:00.000Z',
+        last_edited_time: '2022-10-29T18:03:00.000Z',
+        created_by: { object: 'user', id: 'dd4d9b08-24f5-4a24-9b36-19a42b496f44' },
+        last_edited_by: { object: 'user', id: 'dd4d9b08-24f5-4a24-9b36-19a42b496f44' },
+        has_children: true,
+        archived: false,
+        type: 'child_page',
+        child_page: { title: 'заголовокккк' }
+      }
+     */
+
+    const result = await this.tgChat.app.notion.api.blocks.retrieve({
+      block_id: pageId,
+    });
+
+    console.log(1111111, result)
+
+    if ((result as any).has_children) {
+      const resultCh = await this.tgChat.app.notion.api.blocks.children.list({
+        block_id: pageId,
+      });
+
+      /*
+        next_cursor: null,
+        has_more: false,
+        type: 'block',
+
+       */
+      console.log(222222, JSON.stringify(resultCh.results))
+    }
+
+    throw new Error(`111`)
+
+
     try {
-      return await this.tgChat.app.notion.getPageMdBlocks(pageId);
+      //return await this.tgChat.app.notion.getPageMdBlocks(pageId);
     }
     catch (e) {
       this.tgChat.log.error(`Can't load page (${pageId}) data: ${e}`);
