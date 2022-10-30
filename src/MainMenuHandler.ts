@@ -2,6 +2,7 @@ import TgChat from './tgApi/TgChat';
 import {askMainMenu, SITE_SELECTED_RESULT} from './askUser/askMainMenu';
 import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
 import PublishMaterial from './publish/PublishMaterial';
+import {askSiteMenu} from './askUser/askSiteMenu';
 
 
 // TODO: поидее нет смысла делать классом - можно просто функции
@@ -20,8 +21,10 @@ export default class MainMenuHandler {
     await askMainMenu(this.tgChat, (channelId: number) => {
       if (channelId === SITE_SELECTED_RESULT) {
         // site selected
-        // TODO: handle site
-        return;
+        return askSiteMenu(this.tgChat, () => {
+          // TODO: What to do on done???
+        })
+          .catch((e) => this.tgChat.app.consoleLog.error(e));
       }
 
       askChannelMenu(

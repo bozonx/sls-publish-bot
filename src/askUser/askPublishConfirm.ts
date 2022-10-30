@@ -12,6 +12,9 @@ import {
 } from '../types/consts';
 
 
+// TODO: refactor
+
+
 export async function askPublishConfirm(tgChat: TgChat, onDone: () => void) {
   await tgChat.addOrdinaryStep(makeBaseState(), async (state: BaseState) => {
     // print main menu message

@@ -26,6 +26,7 @@ const dict = {
     contentParams: 'Параметры публикации:',
     pageContent: 'Содержание страницы:',
     publishConfirmation: 'Опубликовать?',
+    siteMenu: 'Меню сайта slsfreedom.org',
   },
   contentInfo: {
     dateTime: 'Дата и время',
