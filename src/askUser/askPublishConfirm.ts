@@ -1,5 +1,4 @@
 import TgChat from '../tgApi/TgChat';
-import {makeBaseState} from '../helpers/helpers';
 import BaseState from '../types/BaseState';
 import {
   AppEvents,
@@ -13,7 +12,7 @@ import {
 
 
 export async function askPublishConfirm(tgChat: TgChat, onDone: () => void) {
-  await tgChat.addOrdinaryStep(makeBaseState(), async (state: BaseState) => {
+  await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageId = await printInitialMessage(tgChat);
     // listen to result

@@ -1,5 +1,4 @@
 import TgChat from '../tgApi/TgChat';
-import {makeBaseState} from '../helpers/helpers';
 import BaseState from '../types/BaseState';
 import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/consts';
 
@@ -10,7 +9,7 @@ export const MENU_ADVERT = 'menu_advert';
 
 
 export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) => void) {
-  await tgChat.addOrdinaryStep(makeBaseState(), async (state: BaseState) => {
+  await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageId = await printInitialMessage(tgChat);
     // listen to result

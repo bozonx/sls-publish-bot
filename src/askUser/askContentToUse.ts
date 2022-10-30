@@ -1,5 +1,4 @@
 import TgChat from '../tgApi/TgChat';
-import {makeBaseState} from '../helpers/helpers';
 import BaseState from '../types/BaseState';
 import {AppEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/consts';
 import {ContentListItem} from '../publish/PublishMaterial';
@@ -14,7 +13,7 @@ export async function askContentToUse(
   tgChat: TgChat,
   onDone: (item: PageObjectResponse) => void
 ) {
-  await tgChat.addOrdinaryStep(makeBaseState(), async (state: BaseState) => {
+  await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageId = await printInitialMessage(tgChat, items);
     // listen to result

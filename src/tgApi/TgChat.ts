@@ -5,6 +5,7 @@ import MainMenuHandler from '../MainMenuHandler';
 import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';
 import BaseState from '../types/BaseState';
+import {makeBaseState} from '../helpers/helpers';
 
 
 export default class TgChat {
@@ -101,9 +102,14 @@ export default class TgChat {
     await this.app.tg.bot.telegram.deleteMessage(this.botChatId, messageId);
   }
 
-  async addOrdinaryStep(initialState: BaseState, onStart: (state: BaseState) => Promise<void>) {
+  async addOrdinaryStep(
+    onStart: (state: BaseState) => Promise<void>,
+    initialState?: BaseState
+  ) {
+    const initState = initialState || makeBaseState();
+
     await this.steps.addAndRunStep({
-      state: initialState,
+      state: initState,
       onStart: async (state: BaseState): Promise<void> => {
         await onStart(state);
       },

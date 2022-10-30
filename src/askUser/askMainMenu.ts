@@ -1,4 +1,3 @@
-import {makeBaseState} from '../helpers/helpers';
 import BaseState from '../types/BaseState';
 import {AppEvents, MENU_MANAGE_SITE} from '../types/consts';
 import TgChat from '../tgApi/TgChat';
@@ -9,7 +8,7 @@ const CHANNEL_MARKER = 'channel:';
 
 
 export async function askMainMenu(tgChat: TgChat, onDone: (channelId: number) => void) {
-  await tgChat.addOrdinaryStep(makeBaseState(), async (state: BaseState) => {
+  await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageId = await printInitialMessage(tgChat);
     // listen to result
