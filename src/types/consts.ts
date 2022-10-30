@@ -89,6 +89,12 @@ export const OK_BTN = {
   callback_data: OK_BTN_CALLBACK,
 }
 
+export const TASK_TYPES = {
+  postponePost: 'postponePost',
+  deletePost: 'deletePost',
+};
+
+
 // TODO: WTF????
 // export enum PublicationTypes {
 //   Article,

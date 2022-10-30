@@ -29,3 +29,6 @@ export type PageContentProps = 'title'
   | 'instaTags'
   | 'tgTags'
   | 'textMd';
+
+export type TaskTypes = 'postponePost'
+  | 'deletePost';
