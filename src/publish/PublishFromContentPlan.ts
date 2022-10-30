@@ -25,7 +25,7 @@ export interface ContentListItem {
 }
 
 
-export default class PublishMaterial {
+export default class PublishFromContentPlan {
   private readonly channelId: number;
   private readonly tgChat: TgChat;
 

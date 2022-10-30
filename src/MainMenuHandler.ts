@@ -1,7 +1,7 @@
 import TgChat from './tgApi/TgChat';
 import {askMainMenu, SITE_SELECTED_RESULT} from './askUser/askMainMenu';
 import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
-import PublishMaterial from './publish/PublishMaterial';
+import PublishFromContentPlan from './publish/PublishFromContentPlan';
 import {askSiteMenu} from './askUser/askSiteMenu';
 
 
@@ -38,7 +38,7 @@ export default class MainMenuHandler {
 
   private askChannelCb(action: string, channelId: number) {
     if (action === MENU_PUBLISH) {
-      const publish = new PublishMaterial(channelId, this.tgChat);
+      const publish = new PublishFromContentPlan(channelId, this.tgChat);
 
       publish.start()
         .catch((e) => this.tgChat.app.consoleLog.error(e));

@@ -1,7 +1,7 @@
 import TgChat from '../tgApi/TgChat';
 import BaseState from '../types/BaseState';
 import {AppEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/consts';
-import {ContentListItem} from '../publish/PublishMaterial';
+import {ContentListItem} from '../publish/PublishFromContentPlan';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 
 
