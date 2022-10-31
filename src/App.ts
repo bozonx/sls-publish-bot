@@ -2,7 +2,7 @@ import TgMain from "./tgApi/TgMain";
 import AppConfig from "./types/AppConfig";
 import config from "./config";
 import ru from "./I18n/ru";
-import NotionApi from './notionApi/NotionApi';
+import NotionApi from './apiNotion/NotionApi';
 import TasksMain from './taskManager/TasksMain';
 import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';

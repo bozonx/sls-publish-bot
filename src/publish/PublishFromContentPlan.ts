@@ -1,5 +1,5 @@
 import TgChat from '../tgApi/TgChat';
-import {DB_DEFAULT_PAGE_SIZE} from '../notionApi/constants';
+import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants';
 import moment from 'moment';
 import {
   GetBlockResponse,
