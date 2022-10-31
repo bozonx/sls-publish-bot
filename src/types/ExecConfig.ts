@@ -1,7 +1,7 @@
 // Development config
 
 export interface ConfigChannel {
-  //name: string;
+  // name for displaying in menu
   dispname: string;
   notionContentPlanDbId: string;
   // some PUBLICATION_TYPES
@@ -26,5 +26,7 @@ export default interface ExecConfig {
   notionToken: string;
   telegraPhToken: string;
   logChannelId: number | string;
-  channels: ConfigChannel[];
+  // name of blog in object is just uniq name and doesn't matter the name.
+  // But please don't change it because it is used in tasks.
+  blogs: Record<string, ConfigChannel>;
 }

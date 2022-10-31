@@ -7,6 +7,7 @@ import {calcSecondsToDate} from '../helpers/helpers';
 const MINIMUM_SECONDS_TO_PUBLISH = 1;
 
 
+// TODO: добавить блог
 // TODO: добавить соц сеть в таски
 
 
