@@ -1,6 +1,6 @@
 import TgMain from "./apiTg/TgMain";
 import AppConfig from "./types/AppConfig";
-import config from "./config";
+import config from "./appConfig";
 import ru from "./I18n/ru";
 import NotionApi from './apiNotion/NotionApi';
 import TasksMain from './taskManager/TasksMain';
