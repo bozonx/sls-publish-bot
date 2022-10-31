@@ -1,11 +1,7 @@
-import dotenv from 'dotenv';
 import App from './App';
 import execConf from './execConfig.development';
 import * as fs from 'fs';
 import ExecConfig from './types/ExecConfig';
-
-
-dotenv.config();
 
 
 let conf: ExecConfig = execConf;

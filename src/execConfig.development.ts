@@ -1,5 +1,9 @@
 import ExecConfig from './types/ExecConfig';
 import {PUBLICATION_TYPES} from './types/ContentItem';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 
 const execConf: ExecConfig = {

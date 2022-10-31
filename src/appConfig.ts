@@ -1,5 +1,9 @@
 import AppConfig from './types/AppConfig';
 import {LOG_LEVELS} from './types/Logger';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 
 const appConfig: AppConfig = {
