@@ -7,6 +7,9 @@ import {calcSecondsToDate} from '../helpers/helpers';
 const MINIMUM_SECONDS_TO_PUBLISH = 1;
 
 
+// TODO: добавить соц сеть в таски
+
+
 export default class TasksMain {
   private readonly app: App;
   private readonly tasks: TaskItem[] = [];

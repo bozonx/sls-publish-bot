@@ -1,5 +1,5 @@
 import {MdBlock} from 'notion-to-md/build/types';
-import Sections from '../types/Sections';
+import Sections from '../../_useless/Sections';
 import {PUBLICATION_TYPES} from '../types/constants';
 import _ from 'lodash';
 

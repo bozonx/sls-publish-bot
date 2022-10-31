@@ -23,12 +23,5 @@ export type ContentStatus = 'to_write'
   | 'to_publish'
   | 'published';
 
-export type PageContentProps = 'title'
-  | 'announcement'
-  | 'imageDescr'
-  | 'instaTags'
-  | 'tgTags'
-  | 'textMd';
-
 export type TaskTypes = 'postponePost'
   | 'deletePost';

@@ -1,23 +1,22 @@
 // Development config
 
-
 export interface ConfigChannel {
-  channelId: number | string;
-  name: string;
+  //name: string;
   dispname: string;
   notionContentPlanDbId: string;
   // some PUBLICATION_TYPES
   supportedTypes: string[];
   sn: {
-    telegram: {
+    telegram?: {
       telegraPhAuthorName: string;
       telegraPhAuthorUrl: string;
+      channelId: number | string;
     };
-    instagram: {
-
+    instagram?: {
     };
-    zen: {
-
+    zen?: {
+    };
+    site?: {
     };
   };
 }

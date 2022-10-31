@@ -9,8 +9,7 @@ const execConf: ExecConfig = {
   logChannelId: process.env.LOG_CHANNEL_ID as any,
   channels: [
     {
-      channelId: -1001664865912,
-      name: 'test',
+      //name: 'test',
       dispname: 'Тестовый канал',
       notionContentPlanDbId: '0ce847766986402f9d221852ded2b599',
       supportedTypes: [
@@ -24,10 +23,12 @@ const execConf: ExecConfig = {
         telegram: {
           telegraPhAuthorName: 'Testtt',
           telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6',
+          channelId: -1001664865912,
         },
         instagram: {},
         zen: {},
-      }
+        site: {},
+      },
     },
   ]
 }
