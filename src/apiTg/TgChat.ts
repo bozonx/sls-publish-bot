@@ -123,16 +123,20 @@ export default class TgChat {
           this.events.removeListener(item[0], item[1]);
         }
         // don't wait of removing the asking message
-        this.deleteMessage(state.messageId)
-          .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
+        for (const messageId of state.messageIds) {
+          this.deleteMessage(messageId)
+            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
+        }
       },
       onCancel: async (state: BaseState): Promise<void> => {
         for (const item of state.handlerIndexes) {
           this.events.removeListener(item[0], item[1]);
         }
         // don't wait of removing the asking message
-        this.deleteMessage(state.messageId)
-          .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
+        for (const messageId of state.messageIds) {
+          this.deleteMessage(messageId)
+            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
+        }
       },
     });
   }

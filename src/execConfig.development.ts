@@ -1,5 +1,5 @@
-import {PUBLICATION_TYPES} from './types/constants';
 import ExecConfig from './types/ExecConfig';
+import {PUBLICATION_TYPES} from './types/ContentItem';
 
 
 const execConf: ExecConfig = {

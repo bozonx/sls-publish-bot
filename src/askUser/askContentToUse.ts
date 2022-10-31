@@ -15,7 +15,7 @@ export async function askContentToUse(
 ) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
-    state.messageId = await printInitialMessage(tgChat, items);
+    state.messageIds.push(await printInitialMessage(tgChat, items));
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(

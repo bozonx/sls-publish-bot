@@ -4,7 +4,7 @@ import TgChat from './TgChat';
 export async function publishTgPost(
   chatId: number | string,
   msg: string,
-  channelId: number,
+  blogName: string,
   tgChat: TgChat
 ): Promise<number> {
   const result = await tgChat.app.tg.bot.telegram.sendMessage(

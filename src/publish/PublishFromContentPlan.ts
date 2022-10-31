@@ -24,11 +24,11 @@ export interface ContentListItem {
 
 
 export default class PublishFromContentPlan {
-  private readonly channelId: number;
+  private readonly blogName: string;
   private readonly tgChat: TgChat;
 
 
-  constructor(channelId: number, tgChat: TgChat) {
+  constructor(blogName: string, tgChat: TgChat) {
     this.channelId = channelId;
     this.tgChat = tgChat;
   }

@@ -3,14 +3,14 @@ import {AppEvents, MENU_MANAGE_SITE} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 
 
-export const SITE_SELECTED_RESULT = -1;
-const CHANNEL_MARKER = 'channel:';
+export const SITE_SELECTED_RESULT = '!site';
+const BLOG_MARKER = 'blog:';
 
 
-export async function askMainMenu(tgChat: TgChat, onDone: (channelId: number) => void) {
+export async function askMainMenu(tgChat: TgChat, onDone: (blogName: string) => void) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
-    state.messageId = await printInitialMessage(tgChat);
+    state.messageIds.push(await printInitialMessage(tgChat));
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
@@ -19,7 +19,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (channelId: number) =>
           if (queryData === MENU_MANAGE_SITE) {
             onDone(SITE_SELECTED_RESULT);
           }
-          else if (queryData.indexOf(CHANNEL_MARKER) === 0) {
+          else if (queryData.indexOf(BLOG_MARKER) === 0) {
             await handleChannelSelected(queryData, tgChat, onDone);
           }
           // else do nothing
@@ -33,25 +33,25 @@ export async function askMainMenu(tgChat: TgChat, onDone: (channelId: number) =>
 async function handleChannelSelected(
   queryData: string,
   tgChat: TgChat,
-  onDone: (channelId: number) => void
+  onDone: (blogName: string) => void
 ) {
   const splat: string[] = queryData.split(':');
-  const channelId: number = Number(splat[1]);
+  const blogName: string = splat[1];
   // print result
   await tgChat.reply(
     tgChat.app.i18n.menu.selectedChannel
-    + tgChat.app.config.channels[channelId].dispname
+    + tgChat.app.config.blogs[blogName].dispname
   );
 
-  onDone(channelId);
+  onDone(blogName);
 }
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
   return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
-    tgChat.app.config.channels.map((item, index: number): any => {
+    Object.keys(tgChat.app.config.blogs).map((blogName, index: number): any => {
       return {
-        text: item.dispname,
-        callback_data: CHANNEL_MARKER + index,
+        text: tgChat.app.config.blogs[blogName].dispname,
+        callback_data: BLOG_MARKER + index,
       };
     }),
     [

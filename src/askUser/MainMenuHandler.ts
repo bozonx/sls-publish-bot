@@ -18,8 +18,8 @@ export default class MainMenuHandler {
 
 
   async startFromBeginning() {
-    await askMainMenu(this.tgChat, (channelId: number) => {
-      if (channelId === SITE_SELECTED_RESULT) {
+    await askMainMenu(this.tgChat, (blogName: string) => {
+      if (blogName === SITE_SELECTED_RESULT) {
         // site selected
         return askSiteMenu(this.tgChat, () => {
           // TODO: What to do on done???
@@ -29,16 +29,16 @@ export default class MainMenuHandler {
 
       askChannelMenu(
         this.tgChat,
-        (action: string) => this.askChannelCb(action, channelId)
+        (action: string) => this.askChannelCb(action, blogName)
       )
         .catch((e) => this.tgChat.app.consoleLog.error(e));
     });
   }
 
 
-  private askChannelCb(action: string, channelId: number) {
+  private askChannelCb(action: string, blogName: string) {
     if (action === MENU_PUBLISH) {
-      const publish = new PublishFromContentPlan(channelId, this.tgChat);
+      const publish = new PublishFromContentPlan(blogName, this.tgChat);
 
       publish.start()
         .catch((e) => this.tgChat.app.consoleLog.error(e));

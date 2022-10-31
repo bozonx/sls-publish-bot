@@ -14,7 +14,7 @@ import {
 export async function askPublishConfirm(tgChat: TgChat, onDone: () => void) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
-    state.messageId = await printInitialMessage(tgChat);
+    state.messageIds.push(await printInitialMessage(tgChat));
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(

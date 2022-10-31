@@ -13,7 +13,7 @@ import moment from 'moment';
 export async function publishFork(
   contentItem: ContentItem,
   parsedPage: RawPageContent,
-  channelId: number,
+  blogName: string,
   tgChat: TgChat
 ) {
   // post like
