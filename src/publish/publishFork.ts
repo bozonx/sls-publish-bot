@@ -1,10 +1,11 @@
 import RawPageContent from '../types/PageContent';
-import ContentItem from '../types/ContentItem';
-import {FULL_DATE_FORMAT, PUBLICATION_TYPES, TASK_TYPES} from '../types/constants';
+import ContentItem, {PUBLICATION_TYPES} from '../types/ContentItem';
+import {FULL_DATE_FORMAT} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 import {publishTgPost} from '../apiTg/publishTgPost';
 import {mdBlocksToTelegram} from '../../_useless/mdBlocksToString';
 import moment from 'moment';
+import {TASK_TYPES} from '../types/TaskItem';
 
 
 // TODO: review, refactor

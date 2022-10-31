@@ -1,11 +1,16 @@
-import ContentItem from '../types/ContentItem';
+import ContentItem, {
+  CONTENT_PROPS,
+  CONTENT_STATUS,
+  PUBLICATION_TYPES,
+  PublicationTypes,
+  SnTypes
+} from '../types/ContentItem';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import {CONTENT_PROPS, CONTENT_STATUS, FULL_DATE_FORMAT, PUBLICATION_TYPES} from '../types/constants';
 import moment from 'moment';
 import {makeFullNotionLink, matchSnsForType} from '../helpers/helpers';
-import {PublicationTypes, SnTypes} from '../types/types';
 import ru from '../I18n/ru';
 import _ from 'lodash';
+import {FULL_DATE_FORMAT} from '../types/constants';
 
 
 // TODO: review, refactor
