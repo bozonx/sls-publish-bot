@@ -1,19 +1,22 @@
 import TgMain from "./apiTg/TgMain";
 import AppConfig from "./types/AppConfig";
-import config from "./appConfig";
+import appConfig from "./appConfig";
 import ru from "./I18n/ru";
 import NotionApi from './apiNotion/NotionApi';
 import TasksMain from './taskManager/TasksMain';
 import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';
 import TelegraPhMain from './apiTg/telegraPhMain';
+import ExecConfig from './types/ExecConfig';
+import execConf from './execConfig';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
 
 
 export default class App {
-  public readonly config: AppConfig;
+  public readonly appConfig: AppConfig = appConfig;
+  public readonly config: ExecConfig;
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
   public readonly tasks: TasksMain;
@@ -24,12 +27,12 @@ export default class App {
 
 
   constructor() {
-    this.config = this.makeConf();
+    this.config = this.makeExecConf();
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
     this.telegraPh = new TelegraPhMain(this);
-    this.consoleLog = new ConsoleLogger(this.config.consoleLogLevel);
-    this.channelLog = new ChannelLogger(this.config.channelLogLevel, this);
+    this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
+    this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
     this.notion = new NotionApi(
       this.config.notionToken,
       //this.config.utcOffset
@@ -90,10 +93,10 @@ export default class App {
   }
 
 
-  private makeConf(): AppConfig {
+  private makeExecConf(): ExecConfig {
     // TODO: check conf
 
-    return config;
+    return execConf;
   }
 
 }
