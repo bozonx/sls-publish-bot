@@ -1,4 +1,4 @@
-import {PUBLICATION_TYPES} from './types/consts';
+import {PUBLICATION_TYPES} from './types/constants';
 import ExecConfig from './types/ExecConfig';
 
 

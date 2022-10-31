@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
-import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/consts';
+import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 
 
 export async function askSiteMenu(tgChat: TgChat, onDone: () => void) {

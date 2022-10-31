@@ -1,6 +1,6 @@
 import ContentItem from '../types/ContentItem';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import {CONTENT_PROPS, CONTENT_STATUS, FULL_DATE_FORMAT, PUBLICATION_TYPES} from '../types/consts';
+import {CONTENT_PROPS, CONTENT_STATUS, FULL_DATE_FORMAT, PUBLICATION_TYPES} from '../types/constants';
 import moment from 'moment';
 import {makeFullNotionLink, matchSnsForType} from '../helpers/helpers';
 import {PublicationTypes, SnTypes} from '../types/types';

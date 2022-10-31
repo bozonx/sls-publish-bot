@@ -4,7 +4,7 @@ import {
   BlockObjectResponse,
   TextRichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
-import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/consts';
+import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/constants';
 
 
 export function transformNotionToTelegramPostMd(notionBlocks: BlockObjectResponse[]): string {

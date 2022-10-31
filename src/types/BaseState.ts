@@ -1,4 +1,4 @@
-import {AppEvents} from './consts';
+import {AppEvents} from './constants';
 
 
 export default interface BaseState {

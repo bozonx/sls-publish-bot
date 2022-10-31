@@ -1,5 +1,5 @@
 import RawPageContent from '../types/PageContent';
-import {PAGE_CONTENT_PROPS} from '../types/consts';
+import {PAGE_CONTENT_PROPS} from '../types/constants';
 import ru from '../I18n/ru';
 import {makeTagsString} from '../helpers/helpers';
 import {MdBlock} from 'notion-to-md/build/types';

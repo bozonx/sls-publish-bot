@@ -1,6 +1,6 @@
 import BreadCrumbs from '../helpers/BreadCrumbs';
 import IndexedEventEmitter from '../lib/IndexedEventEmitter';
-import {AppEvents} from '../types/consts';
+import {AppEvents} from '../types/constants';
 import MainMenuHandler from '../askUser/MainMenuHandler';
 import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';

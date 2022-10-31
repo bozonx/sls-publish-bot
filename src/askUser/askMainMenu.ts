@@ -1,5 +1,5 @@
 import BaseState from '../types/BaseState';
-import {AppEvents, MENU_MANAGE_SITE} from '../types/consts';
+import {AppEvents, MENU_MANAGE_SITE} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 
 

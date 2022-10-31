@@ -8,7 +8,7 @@ import {
   CANCEL_BTN_CALLBACK,
   OK_BTN,
   OK_BTN_CALLBACK
-} from '../types/consts';
+} from '../types/constants';
 
 
 export async function askPublishConfirm(tgChat: TgChat, onDone: () => void) {

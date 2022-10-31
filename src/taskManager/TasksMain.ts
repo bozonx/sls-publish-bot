@@ -1,6 +1,6 @@
 import App from '../App';
 import TaskItem, {DeletePostTypeData, PostponePostTypeData} from '../types/TaskItem';
-import {TASK_TYPES} from '../types/consts';
+import {TASK_TYPES} from '../types/constants';
 import {calcSecondsToDate} from '../helpers/helpers';
 
 
