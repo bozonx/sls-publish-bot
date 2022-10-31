@@ -41,7 +41,7 @@ export default class TelegraPhMain {
    * Create a page
    * @return {string} path like 'some-title-10-30-3'
    */
-  async create(channelId: number, title: string, contentMd: string): Promise<string> {
+  async create(blogName: string, title: string, contentMd: string): Promise<string> {
     const result = await this.api.createPage({
       title,
       content: [
@@ -51,8 +51,8 @@ export default class TelegraPhMain {
           children: ['some string clind'],
         }
       ],
-      author_name: this.app.config.channels[channelId].sn.telegram.telegraPhAuthorName,
-      author_url: this.app.config.channels[channelId].sn.telegram.telegraPhAuthorUrl,
+      author_name: this.app.config.blogs[blogName].sn.telegram?.telegraPhAuthorName,
+      author_url: this.app.config.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
     });
 
     return result.path;

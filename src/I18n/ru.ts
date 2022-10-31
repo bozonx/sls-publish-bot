@@ -1,8 +1,8 @@
-import {PublicationTypes} from '../types/types';
-
 
 // TODO: refactor
 
+
+import {PublicationTypes} from '../types/ContentItem';
 
 const dict = {
   greet: 'Добро пожаловать в бот блогов свободы.',
@@ -57,18 +57,3 @@ const dict = {
 }
 
 export default dict;
-
-
-//whatToDo: 'Что хотите опубликовать?',
-//whichSns: 'В какие соц сети публиковать?',
-//selectedSnsPre: 'Выбраны: ',
-//snsToDo: 'Можете убрать лишние или нажать ОК, если всё устраивает.',
-//btnNewPage: 'СОЗДАТЬ НОВУЮ',
-//selectPage: 'Выберете заготовку или создайте новую',
-//selectedType: 'Выбран тип публикации: ',
-//selectedSns: 'Выбраны соц сети: ',
-//selectedRawPage: 'Выбрана заготовка: ',
-//removeSn: 'Убрать ',
-//selectedSlsSite: 'Управление сайтом slsfreedom.org'
-//selectDate: 'Выберете дату или ввидете число этого или следующего месяца, например "21" или число и дату в виде "21.04", "6.5".',
-//selectedDate: 'Выбрана дата: ',
