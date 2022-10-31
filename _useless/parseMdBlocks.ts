@@ -1,7 +1,7 @@
 import {MdBlock} from 'notion-to-md/build/types';
-import Sections from '../../_useless/Sections';
-import {PUBLICATION_TYPES} from '../types/constants';
+import Sections from '../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/Sections';
 import _ from 'lodash';
+import {PUBLICATION_TYPES} from '../src/types/ContentItem';
 
 
 // TODO: WTF ???

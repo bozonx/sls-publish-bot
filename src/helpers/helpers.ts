@@ -1,13 +1,12 @@
 import BaseState from '../types/BaseState';
-import {PublicationTypes, SnTypes} from '../types/types';
-import {PUBLICATION_TYPES, SN_TYPES} from '../types/constants';
 import _ from 'lodash';
 import moment from 'moment';
+import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 
 
 export function makeBaseState(): BaseState {
   return {
-    messageId: -1,
+    messageIds: [],
     handlerIndexes: [],
   };
 }
