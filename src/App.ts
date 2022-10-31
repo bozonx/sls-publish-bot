@@ -6,7 +6,7 @@ import NotionApi from './apiNotion/NotionApi';
 import TasksMain from './taskManager/TasksMain';
 import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';
-import TelegraPhMain from './apiTg/telegraPhMain';
+import TelegraPhMain from './apiTelegraPh/telegraPhMain';
 import ExecConfig from './types/ExecConfig';
 
 

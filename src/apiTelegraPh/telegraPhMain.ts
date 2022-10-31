@@ -1,7 +1,7 @@
 /*
  * Взято из https://github.com/husky-dev/telegraph-cli
  */
-import {getApi} from '../apiTelegraPh/api';
+import {getApi} from './telegraphCli/api';
 import App from '../App';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
 
