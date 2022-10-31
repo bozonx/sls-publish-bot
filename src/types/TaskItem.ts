@@ -1,5 +1,11 @@
-import {TaskTypes} from './types';
+export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
+  postponePost: 'postponePost',
+  deletePost: 'deletePost',
+};
 
+
+export type TaskTypes = 'postponePost'
+  | 'deletePost';
 
 export interface PostponePostTypeData {
   chatId: number | string;
