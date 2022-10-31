@@ -1,4 +1,4 @@
-import TgChat from '../tgApi/TgChat';
+import TgChat from '../apiTg/TgChat';
 import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants';
 import moment from 'moment';
 import {

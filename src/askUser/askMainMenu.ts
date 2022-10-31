@@ -1,6 +1,6 @@
 import BaseState from '../types/BaseState';
 import {AppEvents, MENU_MANAGE_SITE} from '../types/consts';
-import TgChat from '../tgApi/TgChat';
+import TgChat from '../apiTg/TgChat';
 
 
 export const SITE_SELECTED_RESULT = -1;

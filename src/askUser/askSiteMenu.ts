@@ -1,4 +1,4 @@
-import TgChat from '../tgApi/TgChat';
+import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
 import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/consts';
 

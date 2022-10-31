@@ -1,6 +1,6 @@
 import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger';
 import {calcAllowedLogLevels} from '../lib/common';
-import TgChat from '../tgApi/TgChat';
+import TgChat from '../apiTg/TgChat';
 
 
 export default class BotChatLog implements Logger {

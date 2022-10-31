@@ -1,4 +1,4 @@
-import TgMain from "./tgApi/TgMain";
+import TgMain from "./apiTg/TgMain";
 import AppConfig from "./types/AppConfig";
 import config from "./config";
 import ru from "./I18n/ru";
@@ -6,7 +6,7 @@ import NotionApi from './apiNotion/NotionApi';
 import TasksMain from './taskManager/TasksMain';
 import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';
-import TelegraPhMain from './tgApi/telegraPhMain';
+import TelegraPhMain from './apiTg/telegraPhMain';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'

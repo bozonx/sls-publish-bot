@@ -1,8 +1,8 @@
 import RawPageContent from '../types/PageContent';
 import ContentItem from '../types/ContentItem';
 import {FULL_DATE_FORMAT, PUBLICATION_TYPES, TASK_TYPES} from '../types/consts';
-import TgChat from '../tgApi/TgChat';
-import {publishTgPost} from '../tgApi/publishTgPost';
+import TgChat from '../apiTg/TgChat';
+import {publishTgPost} from '../apiTg/publishTgPost';
 import {mdBlocksToTelegram} from '../helpers/mdBlocksToString';
 import moment from 'moment';
 

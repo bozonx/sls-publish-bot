@@ -1,4 +1,4 @@
-import TgChat from '../tgApi/TgChat';
+import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
 import {
   AppEvents,

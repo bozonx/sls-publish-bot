@@ -1,4 +1,4 @@
-import TgChat from './tgApi/TgChat';
+import TgChat from './apiTg/TgChat';
 import {askMainMenu, SITE_SELECTED_RESULT} from './askUser/askMainMenu';
 import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
 import PublishFromContentPlan from './publish/PublishFromContentPlan';
