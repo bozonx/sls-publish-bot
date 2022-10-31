@@ -2,6 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants';
 import moment from 'moment';
 import {
+  BlockObjectResponse,
   GetBlockResponse,
   PageObjectResponse,
   RichTextItemResponse
@@ -86,7 +87,8 @@ export default class PublishFromContentPlan {
     }
   }
 
-  private async loadRawPage(pageId: string): Promise<[Record<string, any>, MdBlock[]]> {
+  // TODO: указать тип взвращаемого значения
+  private async loadRawPage(pageId: string): Promise<[Record<string, any>, BlockObjectResponse[]]> {
 
     /*
       {
