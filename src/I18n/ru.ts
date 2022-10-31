@@ -7,9 +7,9 @@ import {PublicationTypes} from '../types/ContentItem';
 const dict = {
   greet: 'Добро пожаловать в бот блогов свободы.',
   menu: {
-    selectedChannel: 'Выбран блог: ',
-    selectChannel: 'Выберете блог',
-    channelMenu: 'Выберете что сделать: ',
+    mainMenu: 'Главное меню',
+    selectedBlog: 'Выбран блог: ',
+    blogMenu: 'Выберете что сделать: ',
     selectContent: 'Выберете запись для публикации',
     selectManageSite: 'Сайт slsfreedom',
     publish: 'Опубликовать из контент плана',

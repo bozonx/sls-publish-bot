@@ -39,7 +39,7 @@ async function handleChannelSelected(
   const blogName: string = splat[1];
   // print result
   await tgChat.reply(
-    tgChat.app.i18n.menu.selectedChannel
+    tgChat.app.i18n.menu.selectedBlog
     + tgChat.app.config.blogs[blogName].dispname
   );
 
@@ -47,11 +47,11 @@ async function handleChannelSelected(
 }
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.selectChannel, [
-    Object.keys(tgChat.app.config.blogs).map((blogName, index: number): any => {
+  return tgChat.reply(tgChat.app.i18n.menu.mainMenu, [
+    Object.keys(tgChat.app.config.blogs).map((blogName): any => {
       return {
         text: tgChat.app.config.blogs[blogName].dispname,
-        callback_data: BLOG_MARKER + index,
+        callback_data: BLOG_MARKER + blogName,
       };
     }),
     [

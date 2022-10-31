@@ -1,6 +1,6 @@
 // Development config
 
-export interface ConfigChannel {
+export interface BlogConfig {
   // name for displaying in menu
   dispname: string;
   notionContentPlanDbId: string;
@@ -28,5 +28,5 @@ export default interface ExecConfig {
   logChannelId: number | string;
   // name of blog in object is just uniq name and doesn't matter the name.
   // But please don't change it because it is used in tasks.
-  blogs: Record<string, ConfigChannel>;
+  blogs: Record<string, BlogConfig>;
 }

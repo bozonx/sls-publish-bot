@@ -31,7 +31,7 @@ export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) =>
 }
 
 async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.channelMenu, [
+  return tgChat.reply(tgChat.app.i18n.menu.blogMenu, [
     [
       {
         text: tgChat.app.i18n.menu.publish,
