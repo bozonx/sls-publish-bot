@@ -1,3 +1,6 @@
+// Development config
+
+
 export interface ConfigChannel {
   channelId: number | string;
   name: string;

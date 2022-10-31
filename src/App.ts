@@ -8,7 +8,6 @@ import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './helpers/ConsoleLogger';
 import TelegraPhMain from './apiTg/telegraPhMain';
 import ExecConfig from './types/ExecConfig';
-import execConf from './execConfig';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
@@ -26,8 +25,8 @@ export default class App {
   public readonly i18n = ru;
 
 
-  constructor() {
-    this.config = this.makeExecConf();
+  constructor(rawExecConfig: ExecConfig) {
+    this.config = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
     this.telegraPh = new TelegraPhMain(this);
@@ -93,10 +92,10 @@ export default class App {
   }
 
 
-  private makeExecConf(): ExecConfig {
+  private makeExecConf(rawExecConfig: ExecConfig): ExecConfig {
     // TODO: check conf
 
-    return execConf;
+    return rawExecConfig;
   }
 
 }
