@@ -11,7 +11,7 @@ export async function publishTgPost(
     chatId,
     msg,
     {
-      parse_mode: tgChat.app.config.telegram.parseMode,
+      parse_mode: tgChat.app.appConfig.telegram.parseMode,
     }
   );
 

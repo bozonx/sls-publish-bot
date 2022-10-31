@@ -16,7 +16,7 @@ import {
   ThematicBreak,
 } from 'mdast-util-from-markdown/lib';
 
-import { TelegraphChild, TelegraphNode } from './types';
+import { TelegraphChild, TelegraphNode } from '../src/apiTelegraPh/types';
 
 // export const parseMarkdownFile = (filePath: string): TelegraphChild[] => {
 //   const content = readFileSync(filePath, 'utf-8');

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { log } from './log';
-import { isUnknownDict, isStr } from './utils/types';
+import { isUnknownDict, isStr } from './types';
 
 import { APIError } from './errors';
 import {
