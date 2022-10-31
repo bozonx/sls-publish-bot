@@ -17,9 +17,6 @@ export default class TgMain {
 
 
   async init() {
-
-    // TODO: add bot error logger listener
-
     this.bot.start((ctx: Context) => {
       if (!ctx.chat?.id) throw new Error(`No chat id`);
 
@@ -30,6 +27,28 @@ export default class TgMain {
       this.chats[ctx.chat.id].startCmd()
         .catch((e) => this.app.consoleLog.error(e));
     });
+
+    this.addListeners();
+
+    await this.bot.launch();
+    await this.app.channelLog.info('Bot launched');
+    this.app.consoleLog.info('Bot launched');
+  }
+
+  async destroy(reason: string) {
+    for (const itemIndex in this.chats) {
+      await this.chats[itemIndex].destroy();
+      // @ts-ignore
+      this.chats[itemIndex] = undefined;
+    }
+
+    this.bot.stop(reason);
+  }
+
+
+  private addListeners() {
+
+    // TODO: add bot error logger listener
 
     this.bot.on('callback_query', (ctx) => {
       if (!ctx.chat?.id) {
@@ -62,20 +81,6 @@ export default class TgMain {
 
       this.chats[ctx.chat.id].handleIncomeMessageEvent(msg);
     });
-
-    await this.bot.launch();
-    await this.app.channelLog.info('Bot launched');
-    this.app.consoleLog.info('Bot launched');
-  }
-
-  async destroy(reason: string) {
-    for (const itemIndex in this.chats) {
-      await this.chats[itemIndex].destroy();
-      // @ts-ignore
-      this.chats[itemIndex] = undefined;
-    }
-
-    this.bot.stop(reason);
   }
 
 }

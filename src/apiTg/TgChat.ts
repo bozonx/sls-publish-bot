@@ -1,7 +1,7 @@
 import BreadCrumbs from '../helpers/BreadCrumbs';
 import IndexedEventEmitter from '../lib/IndexedEventEmitter';
 import {AppEvents} from '../types/consts';
-import MainMenuHandler from '../MainMenuHandler';
+import MainMenuHandler from '../askUser/MainMenuHandler';
 import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';
 import BaseState from '../types/BaseState';
@@ -25,7 +25,7 @@ export default class TgChat {
     this.steps = new BreadCrumbs(() => this.mainMenuHandler.startFromBeginning());
     this.events = new IndexedEventEmitter();
     this.mainMenuHandler = new MainMenuHandler(this);
-    this.log = new BotChatLog(this.app.config.botChatLogLevel, this);
+    this.log = new BotChatLog(this.app.appConfig.botChatLogLevel, this);
   }
 
   async destroy() {

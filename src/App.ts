@@ -80,8 +80,7 @@ export default class App {
 
   destroy(reason: string) {
     (async () => {
-      // TODO: поидее надо дождаться
-      this.channelLog.info(`Bot is shutting down`);
+      await this.channelLog.info(`Bot is shutting down`);
 
       await this.tasks.destroy();
       await this.tg.destroy(reason);

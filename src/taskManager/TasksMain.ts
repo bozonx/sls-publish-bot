@@ -94,7 +94,7 @@ export default class TasksMain {
   }
 
   private registerTask(task: TaskItem): number {
-    const secondsToDate = calcSecondsToDate(task.startTime, this.app.config.utcOffset);
+    const secondsToDate = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
 
     if (secondsToDate <= MINIMUM_SECONDS_TO_PUBLISH) {
 

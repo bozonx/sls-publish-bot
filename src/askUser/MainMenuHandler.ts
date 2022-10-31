@@ -1,8 +1,8 @@
-import TgChat from './apiTg/TgChat';
-import {askMainMenu, SITE_SELECTED_RESULT} from './askUser/askMainMenu';
-import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askUser/askChannelMenu';
-import PublishFromContentPlan from './publish/PublishFromContentPlan';
-import {askSiteMenu} from './askUser/askSiteMenu';
+import TgChat from '../apiTg/TgChat';
+import {askMainMenu, SITE_SELECTED_RESULT} from './askMainMenu';
+import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askChannelMenu';
+import PublishFromContentPlan from '../publish/PublishFromContentPlan';
+import {askSiteMenu} from './askSiteMenu';
 
 
 // TODO: поидее нет смысла делать классом - можно просто функции
