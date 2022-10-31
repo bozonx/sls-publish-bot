@@ -7,7 +7,7 @@ export const PAGE_CONTENT_PROPS = {
   imageDescr: 'imageDescr',
   instaTags: 'instaTags',
   tgTags: 'tgTags',
-  textMd: 'textMd',
+  textBlocks: 'textBlocks',
 }
 
 export default interface RawPageContent {
@@ -16,5 +16,5 @@ export default interface RawPageContent {
   imageDescr: string;
   instaTags: string[];
   tgTags: string[];
-  textMd: BlockObjectResponse[];
+  textBlocks: BlockObjectResponse[];
 }

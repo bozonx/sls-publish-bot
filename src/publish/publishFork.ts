@@ -3,9 +3,9 @@ import ContentItem, {PUBLICATION_TYPES} from '../types/ContentItem';
 import {FULL_DATE_FORMAT} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 import {publishTgPost} from '../apiTg/publishTgPost';
-import {mdBlocksToTelegram} from '../../_useless/mdBlocksToString';
 import moment from 'moment';
 import {TASK_TYPES} from '../types/TaskItem';
+import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
 
 
 // TODO: review, refactor
@@ -25,20 +25,20 @@ export async function publishFork(
   ].includes(contentItem.type)) {
     let msgId: number;
 
-    console.log(22222222, parsedPage.textMd)
+    console.log(22222222, parsedPage.textBlocks)
 
     try {
       await tgChat.app.tg.bot.telegram.sendMessage(
         tgChat.app.config.logChannelId,
         tgChat.app.i18n.message.prePublishInfo
-        + tgChat.app.config.blogs[blogName].name + ', '
+        + tgChat.app.config.blogs[blogName].dispname + ', '
         + moment(contentItem.date).format(FULL_DATE_FORMAT) + ' '
         + contentItem.time,
       )
 
       msgId = await publishTgPost(
         tgChat.app.config.logChannelId,
-        mdBlocksToTelegram(parsedPage.textMd),
+        transformNotionToTelegramPostMd(parsedPage.textBlocks),
         blogName,
         tgChat
       );
