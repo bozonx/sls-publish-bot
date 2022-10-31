@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import App from './App';
-import execConf from './execConfig';
+import execConf from './execConfig.development';
 import * as fs from 'fs';
 import ExecConfig from './types/ExecConfig';
 
