@@ -8,8 +8,7 @@ import {
 } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
-import ContentItem from '../types/ContentItem';
-import {SnTypes} from '../types/types';
+import ContentItem, {SnTypes} from '../types/ContentItem';
 import _ from 'lodash';
 import {MdBlock} from 'notion-to-md/build/types';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
@@ -29,7 +28,7 @@ export default class PublishFromContentPlan {
 
 
   constructor(blogName: string, tgChat: TgChat) {
-    this.channelId = channelId;
+    this.blogName = blogName;
     this.tgChat = tgChat;
   }
 
@@ -40,7 +39,7 @@ export default class PublishFromContentPlan {
     await askContentToUse(items, this.tgChat, (item: PageObjectResponse) => {
       const parsedContentItem: ContentItem = parseContentItem(
         item,
-        Object.keys(this.tgChat.app.config.channels[this.channelId].sn) as SnTypes[],
+        Object.keys(this.tgChat.app.config.blogs[this.blogName].sn) as SnTypes[],
       );
 
       try {
@@ -66,12 +65,12 @@ export default class PublishFromContentPlan {
    */
   private async loadNotPublished(): Promise<ContentListItem[]> {
     const currentDate: string = moment()
-      .utcOffset(this.tgChat.app.config.utcOffset)
+      .utcOffset(this.tgChat.app.appConfig.utcOffset)
       .format('YYYY-MM-DD');
 
     try {
       const response = await this.tgChat.app.notion.api.databases.query({
-        database_id: this.tgChat.app.config.channels[this.channelId].notionContentPlanDbId,
+        database_id: this.tgChat.app.config.blogs[this.blogName].notionContentPlanDbId,
         ...this.makeContentPlanQuery(currentDate),
       });
 
@@ -183,7 +182,7 @@ export default class PublishFromContentPlan {
       );
 
       await askPublishConfirm(this.tgChat, () => {
-        publishFork(parsedContentItem, parsedPage, this.channelId, this.tgChat)
+        publishFork(parsedContentItem, parsedPage, this.blogName, this.tgChat)
           .catch((e) => this.tgChat.app.consoleLog.error(e));
       });
     }

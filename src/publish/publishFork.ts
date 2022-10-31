@@ -31,7 +31,7 @@ export async function publishFork(
       await tgChat.app.tg.bot.telegram.sendMessage(
         tgChat.app.config.logChannelId,
         tgChat.app.i18n.message.prePublishInfo
-        + tgChat.app.config.channels[channelId].name + ', '
+        + tgChat.app.config.blogs[blogName].name + ', '
         + moment(contentItem.date).format(FULL_DATE_FORMAT) + ' '
         + contentItem.time,
       )
@@ -39,7 +39,7 @@ export async function publishFork(
       msgId = await publishTgPost(
         tgChat.app.config.logChannelId,
         mdBlocksToTelegram(parsedPage.textMd),
-        channelId,
+        blogName,
         tgChat
       );
     }
@@ -49,6 +49,12 @@ export async function publishFork(
       throw e;
     }
 
+    const chatId = tgChat.app.config.blogs[blogName].sn.telegram?.channelId;
+
+    if (!chatId) {
+      throw new Error(`Telegram chat id doesn't set`);
+    }
+
     tgChat.app.tasks.addTask({
 
       // TODO: use post's time
@@ -56,7 +62,7 @@ export async function publishFork(
       startTime: '2022-10-30T14:10:00+03:00',
       type: TASK_TYPES.postponePost,
       data: {
-        chatId: tgChat.app.config.channels[channelId].channelId,
+        chatId,
         forwardMessageId: msgId,
       }
     });
