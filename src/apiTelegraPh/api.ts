@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { log } from './utils/log';
+import { log } from './log';
 import { isUnknownDict, isStr } from './utils/types';
 
 import { APIError } from './errors';
