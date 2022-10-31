@@ -4,7 +4,7 @@ import {
   TextRichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/consts';
-import {TelegraphNode} from '../tgApi/telegraPh/types';
+import {TelegraphNode} from '../apiTelegraPh/types';
 
 
 const test = [
