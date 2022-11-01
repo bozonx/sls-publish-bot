@@ -6,7 +6,7 @@ import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 export const TASK_ID_PREFIX = 'task:';
 
 
-export async function askTasksMenu(tgChat: TgChat, onDone: (taskId: string) => void) {
+export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) => void) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageIds.push(await printInitialMessage(tgChat));

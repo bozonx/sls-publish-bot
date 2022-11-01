@@ -3,7 +3,7 @@ import {askMainMenu, SITE_SELECTED_RESULT, TASKS_SELECTED_RESULT} from './askMai
 import {askBlogMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askBlogMenu';
 import PublishFromContentPlan from '../publish/PublishFromContentPlan';
 import {askSiteMenu} from './askSiteMenu';
-import {askTasksMenu} from './askTasksMenu';
+import {askTasksListMenu} from './askTasksListMenu';
 
 
 
@@ -17,7 +17,7 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
     else if (action === TASKS_SELECTED_RESULT) {
-      return askTasksMenu(tgChat, () => handleTasksMenu(tgChat))
+      return askTasksListMenu(tgChat, () => handleTasksMenu(tgChat))
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
     else {
