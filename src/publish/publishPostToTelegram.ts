@@ -1,14 +1,13 @@
 import moment from 'moment/moment';
-import {FULL_DATE_FORMAT} from '../types/constants';
 import {publishTgPost} from '../apiTg/publishTgPost';
-import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
-import {TASK_TYPES} from '../types/TaskItem';
+import TgChat from '../apiTg/TgChat';
+import {FULL_DATE_FORMAT} from '../types/constants';
+import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import ContentItem, {SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
-import TgChat from '../apiTg/TgChat';
 
 
-export async function publishPostLikeToTelegram(
+export async function publishPostToTelegram(
   contentItem: ContentItem,
   parsedPage: RawPageContent,
   blogName: string,
@@ -18,29 +17,33 @@ export async function publishPostLikeToTelegram(
 
   console.log(22222222, parsedPage.textBlocks)
 
-  // TODO: почему только в телеграм????
-
   // Print to log channel
   try {
     msgId = await publishTgPost(
       tgChat.app.config.logChannelId,
-      transformNotionToTelegramPostMd(parsedPage.textBlocks),
+      'test post',
+      //transformNotionToTelegramPostMd(parsedPage.textBlocks),
       blogName,
       tgChat
     );
 
-    // TODO: лучше сделать его ответом на пост
+    // TODO: проверить что он будет ответом на пост
     // TODO: может лучше использовать channelLog.log
+    // TODO: отформатировать почеловечи
     await tgChat.app.tg.bot.telegram.sendMessage(
       tgChat.app.config.logChannelId,
       tgChat.app.i18n.message.prePublishInfo
       + tgChat.app.config.blogs[blogName].dispname + ', '
       + moment(contentItem.date).format(FULL_DATE_FORMAT) + ' '
+      // TODO: add sn
       + contentItem.time,
+      {
+        reply_to_message_id: msgId,
+      }
     )
   }
   catch (e) {
-    await tgChat.app.channelLog.error(`Can't publish post to log channel`);
+    await tgChat.app.channelLog.error(`Can't publish prepared to telegram post to log channel`);
 
     throw e;
   }
@@ -51,7 +54,7 @@ export async function publishPostLikeToTelegram(
     throw new Error(`Telegram chat id doesn't set`);
   }
 
-  await tgChat.app.tasks.addTask({
+  const task: PostponePostTask = {
 
     // TODO: use post's time
 
@@ -61,5 +64,7 @@ export async function publishPostLikeToTelegram(
     blogUname: blogName,
     sn: SN_TYPES.telegram,
     forwardMessageId: msgId,
-  });
+  };
+
+  await tgChat.app.tasks.addTask(task);
 }

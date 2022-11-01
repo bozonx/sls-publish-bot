@@ -14,7 +14,7 @@ import _ from 'lodash';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm} from '../askUser/askPublishConfirm';
 import RawPageContent from '../types/PageContent';
-import {publishPostLikeToTelegram} from './publishPostLikeToTelegram';
+import {publishPostToTelegram} from './publishPostToTelegram';
 
 
 export interface ContentListItem {
@@ -253,11 +253,9 @@ export default class PublishFromContentPlan {
       PUBLICATION_TYPES.mem,
     ].includes(contentItem.type)) {
       for (const sn of contentItem.sns) {
-        if (sn === SN_TYPES.telegram) {}
-
         switch (sn) {
           case SN_TYPES.telegram:
-            return publishPostLikeToTelegram(contentItem, parsedPage, this.blogName, this.tgChat);
+            return publishPostToTelegram(contentItem, parsedPage, this.blogName, this.tgChat);
           // case SN_TYPES.zen:
           //   break;
           // case SN_TYPES.instagram:
@@ -278,10 +276,44 @@ export default class PublishFromContentPlan {
       PUBLICATION_TYPES.narrative,
     ].includes(contentItem.type)) {
       // TODO: add
+      for (const sn of contentItem.sns) {
+        switch (sn) {
+          case SN_TYPES.telegram:
+
+          // case SN_TYPES.zen:
+          //   break;
+          // case SN_TYPES.instagram:
+          //   break;
+          // case SN_TYPES.site:
+          //   break;
+          // case SN_TYPES.tiktok:
+          //   break;
+          // // and youtube
+          default:
+            throw new Error(`Unknown or unsupported sn type ${sn}`);
+        }
+      }
     }
     // article
     else if (contentItem.type === PUBLICATION_TYPES.article) {
       // TODO: add
+      for (const sn of contentItem.sns) {
+        switch (sn) {
+          case SN_TYPES.telegram:
+
+          // case SN_TYPES.zen:
+          //   break;
+          // case SN_TYPES.instagram:
+          //   break;
+          // case SN_TYPES.site:
+          //   break;
+          // case SN_TYPES.tiktok:
+          //   break;
+          // // and youtube
+          default:
+            throw new Error(`Unknown or unsupported sn type ${sn}`);
+        }
+      }
     }
     // TODO: add announcement
     // TODO: add poll
