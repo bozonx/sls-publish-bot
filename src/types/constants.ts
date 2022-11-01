@@ -1,4 +1,3 @@
-export const MENU_MANAGE_SITE = 'manage_site';
 export const BACK_BTN_CALLBACK = 'back_btn';
 export const CANCEL_BTN_CALLBACK = 'cancel_btn';
 export const OK_BTN_CALLBACK = 'ok_btn';

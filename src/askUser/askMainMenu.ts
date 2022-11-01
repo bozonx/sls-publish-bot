@@ -1,9 +1,12 @@
 import BaseState from '../types/BaseState';
-import {AppEvents, MENU_MANAGE_SITE} from '../types/constants';
+import {AppEvents} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 
 
+const MENU_MANAGE_SITE = 'manage_site';
+const MENU_MANAGE_TASKS = 'manage_tasks';
 export const SITE_SELECTED_RESULT = '!site';
+export const TASKS_SELECTED_RESULT = '!tasks';
 const BLOG_MARKER = 'blog:';
 
 
@@ -19,8 +22,11 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogName: string) => 
           if (queryData === MENU_MANAGE_SITE) {
             onDone(SITE_SELECTED_RESULT);
           }
+          else if (queryData === MENU_MANAGE_TASKS) {
+            onDone(TASKS_SELECTED_RESULT);
+          }
           else if (queryData.indexOf(BLOG_MARKER) === 0) {
-            await finish(queryData, tgChat, onDone);
+            await blogSelected(queryData, tgChat, onDone);
           }
           // else do nothing
         }
@@ -30,7 +36,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogName: string) => 
   });
 }
 
-async function finish(
+async function blogSelected(
   queryData: string,
   tgChat: TgChat,
   onDone: (blogName: string) => void
@@ -58,6 +64,10 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
       {
         text: tgChat.app.i18n.menu.selectManageSite,
         callback_data: MENU_MANAGE_SITE,
+      },
+      {
+        text: tgChat.app.i18n.menu.selectManageSite,
+        callback_data: MENU_MANAGE_TASKS,
       }
     ]
   ]);

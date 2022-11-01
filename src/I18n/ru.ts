@@ -12,6 +12,7 @@ const dict = {
     blogMenu: 'Выберете что сделать: ',
     selectContent: 'Выберете запись для публикации',
     selectManageSite: 'Сайт slsfreedom',
+    selectManageTasks: 'Управлять заданиями',
     publish: 'Опубликовать из контент плана',
     makeStory: 'Создать story в tg',
     makeAdvert: 'Опубликовать рекламу',
@@ -19,6 +20,8 @@ const dict = {
     pageContent: 'Содержание страницы:',
     publishConfirmation: 'Опубликовать?',
     siteMenu: 'Меню сайта slsfreedom.org',
+    taskList: 'Текущие задания',
+    emptyTaskList: 'Нет текущих заданий',
   },
   contentInfo: {
     dateTime: 'Дата и время',
