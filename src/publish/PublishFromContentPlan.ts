@@ -111,31 +111,36 @@ export default class PublishFromContentPlan {
       }
      */
 
-    const result = await this.tgChat.app.notion.api.blocks.retrieve({
+
+    // It needs to get propertities
+    const resultPage = await this.tgChat.app.notion.api.pages.retrieve({
+      page_id: pageId,
+    });
+    // It needs to check children
+    // const resultPageRootBlock = await this.tgChat.app.notion.api.blocks.retrieve({
+    //   block_id: pageId,
+    // });
+    // Loads children of page
+    const resultCh = await this.tgChat.app.notion.api.blocks.children.list({
       block_id: pageId,
     });
 
-    console.log(1111111, result)
+    console.log(1111111, resultPage)
 
-    if ((result as any).has_children) {
-      const resultCh = await this.tgChat.app.notion.api.blocks.children.list({
-        block_id: pageId,
-      });
+    /*
+      next_cursor: null,
+      has_more: false,
+      type: 'block',
 
-      /*
-        next_cursor: null,
-        has_more: false,
-        type: 'block',
+     */
+    //console.log(222222, JSON.stringify(resultCh.results))
 
-       */
-      console.log(222222, JSON.stringify(resultCh.results))
-    }
 
-    throw new Error(`111`)
+    //throw new Error(`111`)
 
 
     try {
-      //return await this.tgChat.app.notion.getPageMdBlocks(pageId);
+      return [(resultPage as any).properties, resultCh.results as any];
     }
     catch (e) {
       this.tgChat.log.error(`Can't load page (${pageId}) data: ${e}`);
