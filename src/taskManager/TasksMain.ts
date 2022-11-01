@@ -68,17 +68,17 @@ export default class TasksMain {
 
   private async executeFork(task: TaskItem) {
     if (task.type === TASK_TYPES.postponePost) {
-      await this.executePostponePost(task.data as PostponePostTypeData);
+      await this.executePostponePost(task);
     }
     else if (task.type === TASK_TYPES.deletePost) {
-      await this.executeDeletePost(task.data as DeletePostTypeData);
+      await this.executeDeletePost(task);
     }
     else {
       throw new Error(`Unknown task type: ${task.type}`);
     }
   }
 
-  private async executePostponePost(taskData: PostponePostTypeData) {
+  private async executePostponePost(task: TaskItem) {
     await this.app.tg.bot.telegram.copyMessage(
       taskData.chatId,
       this.app.config.logChannelId,

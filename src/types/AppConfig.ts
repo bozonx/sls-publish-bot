@@ -7,6 +7,7 @@ export default interface AppConfig {
   consoleLogLevel: LogLevel;
   channelLogLevel: LogLevel;
   botChatLogLevel: LogLevel;
+  stateDirPath: string;
   telegram: {
     parseMode: 'MarkdownV2';
   },

@@ -61,10 +61,8 @@ export async function publishFork(
 
       startTime: '2022-10-30T14:10:00+03:00',
       type: TASK_TYPES.postponePost,
-      data: {
-        chatId,
-        forwardMessageId: msgId,
-      }
+      chatId,
+      forwardMessageId: msgId,
     });
   }
   // photos like

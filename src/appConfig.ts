@@ -10,6 +10,7 @@ const appConfig: AppConfig = {
   consoleLogLevel: process.env.CONSOLE_LOG_LEVEL as any || LOG_LEVELS.error,
   channelLogLevel: process.env.CHANNEL_LOG_LEVEL as any || LOG_LEVELS.info,
   botChatLogLevel: process.env.BOT_CHAT_LOG_LEVEL as any || LOG_LEVELS.info,
+  stateDirPath: process.env.STATE_DIR_PATH as any || './_testState',
   utcOffset: 3,
   telegram: {
     parseMode: 'MarkdownV2',
