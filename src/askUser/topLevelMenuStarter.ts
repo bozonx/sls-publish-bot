@@ -4,6 +4,7 @@ import {askBlogMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askBlog
 import PublishFromContentPlan from '../publish/PublishFromContentPlan';
 import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
+import {askTaskMenu} from './askTaskMenu';
 
 
 
@@ -17,7 +18,12 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
     else if (action === TASKS_SELECTED_RESULT) {
-      return askTasksListMenu(tgChat, () => handleTasksMenu(tgChat))
+      return askTasksListMenu(
+        tgChat,
+        (taskId: string) => askTaskMenu(taskId, tgChat, () => {
+          tgChat.steps.back();
+        })
+      )
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
     else {

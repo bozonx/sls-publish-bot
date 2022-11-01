@@ -22,6 +22,9 @@ const dict = {
     siteMenu: 'Меню сайта slsfreedom.org',
     taskList: 'Текущие задания',
     emptyTaskList: 'Нет текущих заданий',
+    deleteTask: 'Удалить задание',
+    taskDetails: 'Детали задания ',
+    taskRemoveError: 'Ну удалось удалить задание. ',
   },
   contentInfo: {
     dateTime: 'Дата и время',

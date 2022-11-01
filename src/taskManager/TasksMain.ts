@@ -65,11 +65,18 @@ export default class TasksMain {
     return this.tasks;
   }
 
+  getTask(taskId: string): TaskItem {
+    return this.tasks[taskId];
+  }
+
   async removeTask(taskId: string) {
+    const removedTask = this.tasks[taskId];
+
     this.clearTask(taskId);
 
     // TODO: что если не удалось записать??? тогда восстановить???
     await this.saveTasks();
+    this.app.channelLog.info(`Task ${taskId} was removed. ${JSON.stringify(removedTask)}`)
   }
 
 
