@@ -79,28 +79,20 @@ export default class TasksMain {
     await fs.writeFile(path.resolve(), new Buffer(content, 'utf8'));
   }
 
-  private executeFork(taskId: string) {
-    (async () => {
-      const task = this.tasks[taskId];
+  private async executeFork(taskId: string) {
+    const task = this.tasks[taskId];
 
-      if (task.type === TASK_TYPES.postponePost) {
-        await this.executePostponePost(taskId);
-      }
-      else if (task.type === TASK_TYPES.deletePost) {
-        await this.executeDeletePost(taskId);
-      }
-      else {
-        throw new Error(`Unknown task type: ${task.type}`);
-      }
+    if (task.type === TASK_TYPES.postponePost) {
+      await this.executePostponePost(taskId);
+    }
+    else if (task.type === TASK_TYPES.deletePost) {
+      await this.executeDeletePost(taskId);
+    }
+    else {
+      throw new Error(`Unknown task type: ${task.type}`);
+    }
 
-      this.clearTask(taskId);
-    })()
-      .catch((e) => {
-        const msg = `Can't execute task fork in timeout: ${e}`;
-
-        this.app.channelLog.error(msg);
-        this.app.consoleLog.error(msg);
-      });
+    this.clearTask(taskId);
   }
 
   private async executePostponePost(taskId: string) {
@@ -116,7 +108,7 @@ export default class TasksMain {
   private async executeDeletePost(taskId: string) {
     const task = this.tasks[taskId] as DeletePostTask;
 
-    await this.app.tg.bot.telegram.deleteMessage(taskData.chatId, taskData.messageId);
+    await this.app.tg.bot.telegram.deleteMessage(task.chatId, task.messageId);
   }
 
   /**
@@ -145,7 +137,16 @@ export default class TasksMain {
 
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(
-      () => this.executeFork(taskId),
+      () => {
+        this.executeFork(taskId)
+          .catch((e) => {
+            const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
+
+            this.clearTask(taskId);
+            this.app.channelLog.error(msg);
+            this.app.consoleLog.error(msg);
+          });
+      },
       secondsToPublish * 1000
     );
 
