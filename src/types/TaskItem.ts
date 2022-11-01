@@ -7,20 +7,24 @@ export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
 export type TaskTypes = 'postponePost'
   | 'deletePost';
 
-export interface PostponePostTypeData {
-  chatId: number | string;
+
+export interface PostponePostTask extends TaskSnBase {
   forwardMessageId: number;
 }
 
-export interface DeletePostTypeData {
-  chatId: number | string;
+export interface DeletePostTask extends TaskSnBase {
   messageId: number;
 }
 
+interface TaskSnBase extends TaskItemBase {
+  chatId: number | string;
+  blogUname: string;
+  sn: string;
+}
 
-export default interface TaskItem {
+interface TaskItemBase {
   startTime: string;
   type: TaskTypes;
-  // TODO: должно быть или или
-  data: PostponePostTypeData | DeletePostTypeData
 }
+
+export type TaskItem = PostponePostTask | DeletePostTask;

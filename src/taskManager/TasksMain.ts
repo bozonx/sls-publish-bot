@@ -1,13 +1,9 @@
 import App from '../App';
-import TaskItem, {DeletePostTypeData, PostponePostTypeData, TASK_TYPES} from '../types/TaskItem';
+import {TaskItem, TASK_TYPES} from '../types/TaskItem';
 import {calcSecondsToDate} from '../helpers/helpers';
 
 
 const MINIMUM_SECONDS_TO_PUBLISH = 1;
-
-
-// TODO: добавить блог
-// TODO: добавить соц сеть в таски
 
 
 export default class TasksMain {
@@ -36,6 +32,10 @@ export default class TasksMain {
 
 
   addTask(task: TaskItem): number {
+
+    // TODO: добавить блог
+    // TODO: добавить соц сеть в таски
+
 
     // TODO: validate task
 
