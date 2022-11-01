@@ -1,5 +1,5 @@
 import App from '../App';
-import {TaskItem, TASK_TYPES} from '../types/TaskItem';
+import {TaskItem, TASK_TYPES, PostponePostTask, DeletePostTask} from '../types/TaskItem';
 import {calcSecondsToDate} from '../helpers/helpers';
 import * as fs from 'fs/promises';
 import path from 'path';
@@ -92,28 +92,28 @@ export default class TasksMain {
 
   private async executeFork(task: TaskItem) {
     if (task.type === TASK_TYPES.postponePost) {
-      await this.executePostponePost(task);
+      await this.executePostponePost(task as PostponePostTask);
     }
     else if (task.type === TASK_TYPES.deletePost) {
-      await this.executeDeletePost(task);
+      await this.executeDeletePost(task as DeletePostTask);
     }
     else {
       throw new Error(`Unknown task type: ${task.type}`);
     }
   }
 
-  private async executePostponePost(task: TaskItem) {
+  private async executePostponePost(task: PostponePostTask) {
     await this.app.tg.bot.telegram.copyMessage(
-      taskData.chatId,
+      task.chatId,
       this.app.config.logChannelId,
-      taskData.forwardMessageId,
+      task.forwardMessageId,
     );
 
     // TODO: если не получилось написать в лог канал
     // TODO: удалить из timeouts и tasks
   }
 
-  private async executeDeletePost(taskData: DeletePostTypeData) {
+  private async executeDeletePost(taskData: DeletePostTask) {
     await this.app.tg.bot.telegram.deleteMessage(taskData.chatId, taskData.messageId);
 
     // TODO: если не получилось написать в лог канал
