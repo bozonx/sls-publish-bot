@@ -8,7 +8,7 @@ export const MENU_MAKE_STORY = 'menu_make_story';
 export const MENU_ADVERT = 'menu_advert';
 
 
-export async function askChannelMenu(tgChat: TgChat, onDone: (action: string) => void) {
+export async function askBlogMenu(tgChat: TgChat, onDone: (action: string) => void) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageIds.push(await printInitialMessage(tgChat));

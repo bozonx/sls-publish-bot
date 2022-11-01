@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import {askMainMenu, SITE_SELECTED_RESULT} from './askMainMenu';
-import {askChannelMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askChannelMenu';
+import {askBlogMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askBlogMenu';
 import PublishFromContentPlan from '../publish/PublishFromContentPlan';
 import {askSiteMenu} from './askSiteMenu';
 
@@ -16,16 +16,16 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
 
-    askChannelMenu(
+    askBlogMenu(
       tgChat,
-      (action: string) => askChannelCb(action, blogName, tgChat)
+      (action: string) => blogActionSelected(action, blogName, tgChat)
     )
       .catch((e) => tgChat.app.consoleLog.error(e));
   });
 }
 
 
-function askChannelCb(action: string, blogName: string, tgChat: TgChat) {
+function blogActionSelected(action: string, blogName: string, tgChat: TgChat) {
   if (action === MENU_PUBLISH) {
     const publish = new PublishFromContentPlan(blogName, tgChat);
 
