@@ -6,13 +6,12 @@ import path from 'path';
 import {clearTimeout} from 'timers';
 
 
-const MINIMUM_SECONDS_TO_PUBLISH = 1;
 const STATE_TASKS_FILENAME = 'tasks.json';
 
 
 export default class TasksMain {
   private readonly app: App;
-  private filePath: string;
+  private readonly filePath: string;
   // Object like {taskId: TaskItem}
   private tasks: Record<string, TaskItem> = {};
   // Object like {taskId: Timeout}
@@ -29,13 +28,14 @@ export default class TasksMain {
 
 
   async init() {
-    // TODO: что если ошибка
+    // TODO: что если ошибка ???
     const fileContent = await fs.readFile(this.filePath);
 
-    this.tasks = JSON.parse(fileContent.toString('utf8'));
-
-    // TODO: нужно ли удалять файл тасков??? впринципе он актуальный сейчас
-    // TODO: запустить таймеры
+    const tasks: Record<string, TaskItem> = JSON.parse(fileContent.toString('utf8'));
+    // register and start timers
+    for (const taskId in tasks) {
+      this.registerTask(tasks[taskId], taskId);
+    }
   }
 
   async destroy() {
@@ -48,19 +48,13 @@ export default class TasksMain {
   }
 
 
-  async addTask(task: TaskItem): Promise<number> {
-
-    // TODO: добавить блог
-    // TODO: добавить соц сеть в таски
-
+  async addTask(task: TaskItem): Promise<string | null> {
 
     // TODO: validate task
 
     const taskNum = this.registerTask(task);
-    // TODO: так а что делать то????
-    if (taskNum === -1) {
-      return -1;
-    }
+
+    if (taskNum === null) return null;
 
     // TODO: писать пользователю если ошибка!
     // TODO: отменить добавление если ошибка
@@ -69,7 +63,7 @@ export default class TasksMain {
     return taskNum;
   }
 
-  getTaskList(): Record<string, TaskItem> {
+  getTasksList(): Record<string, TaskItem> {
     return this.tasks;
   }
 
@@ -90,7 +84,7 @@ export default class TasksMain {
     await fs.writeFile(path.resolve(), new Buffer(content, 'utf8'));
   }
 
-  private async executeFork(task: TaskItem) {
+  private executeFork(task: TaskItem) {
     if (task.type === TASK_TYPES.postponePost) {
       await this.executePostponePost(task as PostponePostTask);
     }
@@ -120,29 +114,37 @@ export default class TasksMain {
     // TODO: удалить из timeouts и tasks
   }
 
-  private registerTask(task: TaskItem): number {
-    const secondsToDate = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
+  /**
+   * Register a new task - set data to runtime and make timeout.
+   * @return {string | null} taskId or null if task haven't added.
+   * @private
+   */
+  private registerTask(task: TaskItem, specifiedTaskId?: string): string | null {
+    const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
 
-    if (secondsToDate <= MINIMUM_SECONDS_TO_PUBLISH) {
+    if (secondsToPublish <= this.app.appConfig.skipTasksEarlierSec) {
+      const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`
+        + `The minimum time is ${this.app.appConfig.skipTasksEarlierSec} seconds.\n`
+        + `Task:\n`
+        + `${JSON.stringify(task, null, 2)}`;
 
-      // TODO: сообщить в log канал
-
-      console.warn(`Invalid seconds ${secondsToDate} to publish task ${JSON.stringify(task)}`);
-
-      return -1;
+      this.app.channelLog.warn(msg);
+      console.warn(msg);
+      // means task haven't added
+      return null;
     }
 
-    this.tasks.push(task);
+    const taskId: string = (specifiedTaskId)
+      ? specifiedTaskId
+      : String(Object.keys(this.tasks).length);
 
-    const timeout = setTimeout(() => {
-      // TODO: use log
-      this.executeFork(task)
-        .catch((e) => {throw e});
-    }, secondsToDate * 1000);
+    this.tasks[taskId] = task;
+    this.timeouts[taskId] = setTimeout(
+      () => this.executeFork(task),
+      secondsToPublish * 1000
+    );
 
-    this.timeouts.push(timeout);
-
-    return this.timeouts.length - 1;
+    return taskId;
   }
 
 }

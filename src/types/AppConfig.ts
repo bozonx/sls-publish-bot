@@ -8,6 +8,7 @@ export default interface AppConfig {
   channelLogLevel: LogLevel;
   botChatLogLevel: LogLevel;
   stateDirPath: string;
+  skipTasksEarlierSec: number;
   telegram: {
     parseMode: 'MarkdownV2';
   },
