@@ -1,12 +1,12 @@
 import BreadCrumbs from '../helpers/BreadCrumbs';
 import IndexedEventEmitter from '../lib/IndexedEventEmitter';
 import {AppEvents} from '../types/constants';
-import MainMenuHandler from '../askUser/MainMenuHandler';
 import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';
 import BaseState from '../types/BaseState';
 import {makeBaseState} from '../helpers/helpers';
 import BotChatLog from '../helpers/BotChatLog';
+import {topLevelMenuStarter} from '../askUser/topLevelMenuStarter';
 
 
 export default class TgChat {
@@ -16,15 +16,13 @@ export default class TgChat {
   public readonly botChatId: number | string;
   public readonly steps: BreadCrumbs;
   public readonly log: BotChatLog;
-  private readonly mainMenuHandler: MainMenuHandler;
 
 
   constructor(chatId: number | string, app: App) {
     this.botChatId = chatId;
     this.app = app;
-    this.steps = new BreadCrumbs(() => this.mainMenuHandler.startFromBeginning());
+    this.steps = new BreadCrumbs(() => topLevelMenuStarter(this));
     this.events = new IndexedEventEmitter();
-    this.mainMenuHandler = new MainMenuHandler(this);
     this.log = new BotChatLog(this.app.appConfig.botChatLogLevel, this);
   }
 
@@ -41,7 +39,7 @@ export default class TgChat {
   }
 
   /**
-   * No error promise.
+   * No error promise helper.
    * It handles only positive result.
    * If error occurs then it logs it and resolves promise.
    */

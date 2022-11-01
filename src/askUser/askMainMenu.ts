@@ -20,7 +20,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogName: string) => 
             onDone(SITE_SELECTED_RESULT);
           }
           else if (queryData.indexOf(BLOG_MARKER) === 0) {
-            await handleChannelSelected(queryData, tgChat, onDone);
+            await finish(queryData, tgChat, onDone);
           }
           // else do nothing
         }
@@ -30,7 +30,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogName: string) => 
   });
 }
 
-async function handleChannelSelected(
+async function finish(
   queryData: string,
   tgChat: TgChat,
   onDone: (blogName: string) => void
