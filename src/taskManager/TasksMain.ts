@@ -41,9 +41,7 @@ export default class TasksMain {
   async destroy() {
     // clean timeouts
     for (const taskId of Object.keys(this.timeouts)) {
-      clearTimeout(this.timeouts[taskId]);
-
-      delete this.timeouts[taskId];
+      this.clearTask(taskId);
     }
   }
 
@@ -68,10 +66,7 @@ export default class TasksMain {
   }
 
   async removeTask(taskId: string) {
-    clearTimeout(this.timeouts[taskId]);
-
-    delete this.timeouts[taskId];
-    delete this.tasks[taskId];
+    this.clearTask(taskId);
 
     // TODO: что если не удалось записать??? тогда восстановить???
     await this.saveTasks();
@@ -84,34 +79,44 @@ export default class TasksMain {
     await fs.writeFile(path.resolve(), new Buffer(content, 'utf8'));
   }
 
-  private executeFork(task: TaskItem) {
-    if (task.type === TASK_TYPES.postponePost) {
-      await this.executePostponePost(task as PostponePostTask);
-    }
-    else if (task.type === TASK_TYPES.deletePost) {
-      await this.executeDeletePost(task as DeletePostTask);
-    }
-    else {
-      throw new Error(`Unknown task type: ${task.type}`);
-    }
+  private executeFork(taskId: string) {
+    (async () => {
+      const task = this.tasks[taskId];
+
+      if (task.type === TASK_TYPES.postponePost) {
+        await this.executePostponePost(taskId);
+      }
+      else if (task.type === TASK_TYPES.deletePost) {
+        await this.executeDeletePost(taskId);
+      }
+      else {
+        throw new Error(`Unknown task type: ${task.type}`);
+      }
+
+      this.clearTask(taskId);
+    })()
+      .catch((e) => {
+        const msg = `Can't execute task fork in timeout: ${e}`;
+
+        this.app.channelLog.error(msg);
+        this.app.consoleLog.error(msg);
+      });
   }
 
-  private async executePostponePost(task: PostponePostTask) {
+  private async executePostponePost(taskId: string) {
+    const task = this.tasks[taskId] as PostponePostTask;
+
     await this.app.tg.bot.telegram.copyMessage(
       task.chatId,
       this.app.config.logChannelId,
       task.forwardMessageId,
     );
-
-    // TODO: если не получилось написать в лог канал
-    // TODO: удалить из timeouts и tasks
   }
 
-  private async executeDeletePost(taskData: DeletePostTask) {
-    await this.app.tg.bot.telegram.deleteMessage(taskData.chatId, taskData.messageId);
+  private async executeDeletePost(taskId: string) {
+    const task = this.tasks[taskId] as DeletePostTask;
 
-    // TODO: если не получилось написать в лог канал
-    // TODO: удалить из timeouts и tasks
+    await this.app.tg.bot.telegram.deleteMessage(taskData.chatId, taskData.messageId);
   }
 
   /**
@@ -140,11 +145,18 @@ export default class TasksMain {
 
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(
-      () => this.executeFork(task),
+      () => this.executeFork(taskId),
       secondsToPublish * 1000
     );
 
     return taskId;
+  }
+
+  private clearTask(taskId: string) {
+    clearTimeout(this.timeouts[taskId]);
+
+    delete this.timeouts[taskId];
+    delete this.tasks[taskId];
   }
 
 }
