@@ -73,44 +73,6 @@ export default class TasksMain {
   }
 
 
-  private async saveTasks() {
-    const content = JSON.stringify(this.tasks, null, 2);
-
-    await fs.writeFile(path.resolve(), new Buffer(content, 'utf8'));
-  }
-
-  private async executeFork(taskId: string) {
-    const task = this.tasks[taskId];
-
-    if (task.type === TASK_TYPES.postponePost) {
-      await this.executePostponePost(taskId);
-    }
-    else if (task.type === TASK_TYPES.deletePost) {
-      await this.executeDeletePost(taskId);
-    }
-    else {
-      throw new Error(`Unknown task type: ${task.type}`);
-    }
-
-    this.clearTask(taskId);
-  }
-
-  private async executePostponePost(taskId: string) {
-    const task = this.tasks[taskId] as PostponePostTask;
-
-    await this.app.tg.bot.telegram.copyMessage(
-      task.chatId,
-      this.app.config.logChannelId,
-      task.forwardMessageId,
-    );
-  }
-
-  private async executeDeletePost(taskId: string) {
-    const task = this.tasks[taskId] as DeletePostTask;
-
-    await this.app.tg.bot.telegram.deleteMessage(task.chatId, task.messageId);
-  }
-
   /**
    * Register a new task - set data to runtime and make timeout.
    * @return {string | null} taskId or null if task haven't added.
@@ -151,6 +113,44 @@ export default class TasksMain {
     );
 
     return taskId;
+  }
+
+  private async saveTasks() {
+    const content = JSON.stringify(this.tasks, null, 2);
+
+    await fs.writeFile(path.resolve(), new Buffer(content, 'utf8'));
+  }
+
+  private async executeFork(taskId: string) {
+    const task = this.tasks[taskId];
+
+    if (task.type === TASK_TYPES.postponePost) {
+      await this.executePostponePost(taskId);
+    }
+    else if (task.type === TASK_TYPES.deletePost) {
+      await this.executeDeletePost(taskId);
+    }
+    else {
+      throw new Error(`Unknown task type: ${task.type}`);
+    }
+
+    this.clearTask(taskId);
+  }
+
+  private async executePostponePost(taskId: string) {
+    const task = this.tasks[taskId] as PostponePostTask;
+
+    await this.app.tg.bot.telegram.copyMessage(
+      task.chatId,
+      this.app.config.logChannelId,
+      task.forwardMessageId,
+    );
+  }
+
+  private async executeDeletePost(taskId: string) {
+    const task = this.tasks[taskId] as DeletePostTask;
+
+    await this.app.tg.bot.telegram.deleteMessage(task.chatId, task.messageId);
   }
 
   private clearTask(taskId: string) {

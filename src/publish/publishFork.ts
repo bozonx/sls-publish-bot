@@ -1,5 +1,5 @@
 import RawPageContent from '../types/PageContent';
-import ContentItem, {PUBLICATION_TYPES} from '../types/ContentItem';
+import ContentItem, {PUBLICATION_TYPES, SN_TYPES} from '../types/ContentItem';
 import {FULL_DATE_FORMAT} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 import {publishTgPost} from '../apiTg/publishTgPost';
@@ -26,6 +26,8 @@ export async function publishFork(
     let msgId: number;
 
     console.log(22222222, parsedPage.textBlocks)
+
+    // TODO: почему только в телеграм????
 
     try {
       await tgChat.app.tg.bot.telegram.sendMessage(
@@ -62,6 +64,8 @@ export async function publishFork(
       startTime: '2022-10-30T14:10:00+03:00',
       type: TASK_TYPES.postponePost,
       chatId,
+      blogUname: blogName,
+      sn: SN_TYPES.telegram,
       forwardMessageId: msgId,
     });
   }
