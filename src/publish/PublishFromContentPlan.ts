@@ -9,15 +9,18 @@ import {
 } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
-import ContentItem, {SnTypes} from '../types/ContentItem';
+import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
 import _ from 'lodash';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm} from '../askUser/askPublishConfirm';
-import {publishFork} from './publishFork';
+import RawPageContent from '../types/PageContent';
+import {publishPostLike} from './publishPostLike';
 
 
 export interface ContentListItem {
+  // title for menu
   title: string;
+  // item as is
   item: PageObjectResponse;
 }
 
@@ -183,7 +186,7 @@ export default class PublishFromContentPlan {
       );
 
       await askPublishConfirm(this.tgChat, () => {
-        publishFork(parsedContentItem, parsedPage, this.blogName, this.tgChat)
+        this.publishFork(parsedContentItem, parsedPage)
           .catch((e) => this.tgChat.app.consoleLog.error(e));
       });
     }
@@ -240,6 +243,32 @@ export default class PublishFromContentPlan {
         },
       ],
     }
+  }
+
+  private async publishFork(contentItem: ContentItem, parsedPage: RawPageContent) {
+    // post like
+    if ([
+      PUBLICATION_TYPES.post1000,
+      PUBLICATION_TYPES.post2000,
+      PUBLICATION_TYPES.mem,
+    ].includes(contentItem.type)) {
+      await publishPostLike(contentItem, parsedPage, this.blogName, this.tgChat);
+    }
+    // photos like
+    else if ([
+      PUBLICATION_TYPES.photos,
+      PUBLICATION_TYPES.narrative,
+    ].includes(contentItem.type)) {
+      // TODO: add
+    }
+    // article
+    else if (contentItem.type === PUBLICATION_TYPES.article) {
+      // TODO: add
+    }
+    // TODO: add announcement
+    // TODO: add poll
+    // TODO: add reels
+    // TODO: add video
   }
 
 }
