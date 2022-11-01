@@ -41,6 +41,10 @@ export default class App {
     })()
       .catch((e) => {
         this.consoleLog.error(e);
+
+        // TODO: нормально задестроить
+
+        process.exit(2);
       });
 
 

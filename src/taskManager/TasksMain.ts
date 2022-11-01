@@ -28,8 +28,23 @@ export default class TasksMain {
 
 
   async init() {
-    // TODO: что если ошибка ???
-    const fileContent = await fs.readFile(this.filePath);
+    let fileContent: Buffer | undefined;
+
+    try {
+      fileContent = await fs.readFile(this.filePath);
+    }
+    catch (e: any) {
+      if (e.code === 'ENOENT') {
+        return;
+      }
+      else {
+        const msg = `Can't load tasks file: ${e}`;
+
+        this.app.channelLog.error(msg);
+
+        throw new Error(msg);
+      }
+    }
 
     const tasks: Record<string, TaskItem> = JSON.parse(fileContent.toString('utf8'));
     // register and start timers
