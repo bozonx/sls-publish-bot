@@ -3,8 +3,13 @@ import {
   BlockObjectResponse,
   TextRichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
-import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/constants';
+import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
+
+
+
+
+//const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
 
 
 const test = [

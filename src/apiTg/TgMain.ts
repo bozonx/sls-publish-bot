@@ -47,9 +47,6 @@ export default class TgMain {
 
 
   private addListeners() {
-
-    // TODO: add bot error logger listener
-
     this.bot.on('callback_query', (ctx) => {
       if (!ctx.chat?.id) {
         this.app.consoleLog.warn('No chat id in callback_query');

@@ -12,7 +12,7 @@ const execConf: ExecConfig = {
   telegraPhToken: process.env.TELEGRA_PH_TOKEN as any,
   logChannelId: process.env.LOG_CHANNEL_ID as any,
   blogs: {
-    slsfreedom: {
+    test: {
       dispname: 'Тестовый канал',
       notionContentPlanDbId: '0ce847766986402f9d221852ded2b599',
       supportedTypes: [

@@ -10,9 +10,6 @@ import TelegraPhMain from './apiTelegraPh/telegraPhMain';
 import ExecConfig from './types/ExecConfig';
 
 
-//const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
-
-
 export default class App {
   public readonly appConfig: AppConfig = appConfig;
   public readonly config: ExecConfig;
@@ -32,10 +29,7 @@ export default class App {
     this.telegraPh = new TelegraPhMain(this);
     this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
     this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
-    this.notion = new NotionApi(
-      this.config.notionToken,
-      //this.config.utcOffset
-    )
+    this.notion = new NotionApi(this.config.notionToken)
   }
 
 

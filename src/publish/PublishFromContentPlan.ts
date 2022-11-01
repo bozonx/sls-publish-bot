@@ -196,7 +196,8 @@ export default class PublishFromContentPlan {
 
   private makeContentPlanQuery(currentDate: string): Record<string, any> {
 
-    // TODO: фильтровать только поддерживаемые типы
+    // TODO: фильтровать только поддерживаемые в данный момент
+    // TODO: фильтровать поддерживаемые типы канала
 
     return {
       page_size: DB_DEFAULT_PAGE_SIZE,
