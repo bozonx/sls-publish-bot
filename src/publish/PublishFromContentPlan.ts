@@ -9,12 +9,12 @@ import {
 } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
-import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
+import ContentItem, {PUBLICATION_TYPES, SN_TYPES, SnTypes} from '../types/ContentItem';
 import _ from 'lodash';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm} from '../askUser/askPublishConfirm';
 import RawPageContent from '../types/PageContent';
-import {publishPostLike} from './publishPostLike';
+import {publishPostLikeToTelegram} from './publishPostLikeToTelegram';
 
 
 export interface ContentListItem {
@@ -252,7 +252,25 @@ export default class PublishFromContentPlan {
       PUBLICATION_TYPES.post2000,
       PUBLICATION_TYPES.mem,
     ].includes(contentItem.type)) {
-      await publishPostLike(contentItem, parsedPage, this.blogName, this.tgChat);
+      for (const sn of contentItem.sns) {
+        if (sn === SN_TYPES.telegram) {}
+
+        switch (sn) {
+          case SN_TYPES.telegram:
+            return publishPostLikeToTelegram(contentItem, parsedPage, this.blogName, this.tgChat);
+          // case SN_TYPES.zen:
+          //   break;
+          // case SN_TYPES.instagram:
+          //   break;
+          // case SN_TYPES.site:
+          //   break;
+          // case SN_TYPES.tiktok:
+          //   break;
+          // // and youtube
+          default:
+            throw new Error(`Unknown or unsupported sn type ${sn}`);
+        }
+      }
     }
     // photos like
     else if ([

@@ -27,8 +27,8 @@ export const SN_TYPES: Record<SnTypes, SnTypes> = {
   instagram: 'instagram',
   zen: 'zen',
   site: 'site',
-  youtube: 'youtube',
   tiktok: 'tiktok',
+  youtube: 'youtube',
 }
 
 export const CONTENT_STATUS = {

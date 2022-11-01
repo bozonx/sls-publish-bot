@@ -8,8 +8,7 @@ import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
 
 
-
-export async function publishPostLike(
+export async function publishPostLikeToTelegram(
   contentItem: ContentItem,
   parsedPage: RawPageContent,
   blogName: string,
@@ -21,7 +20,17 @@ export async function publishPostLike(
 
   // TODO: почему только в телеграм????
 
+  // Print to log channel
   try {
+    msgId = await publishTgPost(
+      tgChat.app.config.logChannelId,
+      transformNotionToTelegramPostMd(parsedPage.textBlocks),
+      blogName,
+      tgChat
+    );
+
+    // TODO: лучше сделать его ответом на пост
+    // TODO: может лучше использовать channelLog.log
     await tgChat.app.tg.bot.telegram.sendMessage(
       tgChat.app.config.logChannelId,
       tgChat.app.i18n.message.prePublishInfo
@@ -29,20 +38,13 @@ export async function publishPostLike(
       + moment(contentItem.date).format(FULL_DATE_FORMAT) + ' '
       + contentItem.time,
     )
-
-    msgId = await publishTgPost(
-      tgChat.app.config.logChannelId,
-      transformNotionToTelegramPostMd(parsedPage.textBlocks),
-      blogName,
-      tgChat
-    );
   }
   catch (e) {
     await tgChat.app.channelLog.error(`Can't publish post to log channel`);
 
     throw e;
   }
-
+  // get id of channel to publish postpone post
   const chatId = tgChat.app.config.blogs[blogName].sn.telegram?.channelId;
 
   if (!chatId) {
