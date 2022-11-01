@@ -60,7 +60,8 @@ const dict = {
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
     taskDoneSuccessful: 'Задача была успешно выполнена.',
-  }
+    //loadedTask: 'Задача была загруженна с диска:',
+  },
 }
 
 export default dict;

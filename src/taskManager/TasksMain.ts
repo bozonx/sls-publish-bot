@@ -23,7 +23,7 @@ export default class TasksMain {
     this.filePath = path.resolve(
       this.app.appConfig.stateDirPath,
       STATE_TASKS_FILENAME
-    )
+    );
   }
 
 
@@ -50,7 +50,18 @@ export default class TasksMain {
     // register and start timers
     for (const taskId in tasks) {
       this.registerTask(tasks[taskId], taskId);
+
+      // TODO: не пишится что загрузилось задание если оно нормальное - надо по всем писать
+
+      // TODO: сделать Promise run
+      // this.app.channelLog.info(
+      //   this.app.i18n.message.loadedTask + '\n'
+      //   + this.makeTaskDetails(tasks[taskId])
+      // );
     }
+
+    // resave tasks. It removes expired tasks
+    await this.saveTasks();
   }
 
   async destroy() {
@@ -140,7 +151,7 @@ export default class TasksMain {
   private async saveTasks() {
     const content = JSON.stringify(this.tasks, null, 2);
 
-    await fs.writeFile(path.resolve(), new Buffer(content, 'utf8'));
+    await fs.writeFile(this.filePath, Buffer.from(content, 'utf8'));
   }
 
   private async executeFork(taskId: string) {
@@ -156,12 +167,14 @@ export default class TasksMain {
       throw new Error(`Unknown task type: ${task.type}`);
     }
 
+    this.clearTask(taskId);
+    // TODO: проверить ошибку
+    await this.saveTasks();
+
     this.app.channelLog.log(
       this.app.i18n.message.taskDoneSuccessful + '\n'
       + this.makeTaskDetails(task)
     );
-
-    this.clearTask(taskId);
   }
 
   private async executePostponePost(taskId: string) {
