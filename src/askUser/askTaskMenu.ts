@@ -3,7 +3,8 @@ import BaseState from '../types/BaseState';
 import {AppEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 
 
-export const DELETE_TASK_ACTION = 'delete_task';
+const DELETE_TASK_ACTION = 'delete_task';
+const FLUSH_TASK_ACTION = 'flush_task';
 
 
 export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => void) {
@@ -33,6 +34,13 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
 
               onDone();
             }
+            else if (queryData === FLUSH_TASK_ACTION) {
+              await tgChat.app.tasks.flushTask(taskId);
+
+              // TODO: нужно ли обрабаывать ошибку????
+
+              onDone();
+            }
             // else do nothing
           }
         )),
@@ -47,6 +55,10 @@ async function printInitialMessage(taskId: string, tgChat: TgChat): Promise<numb
 
   return tgChat.reply(taskDetails, [
     [
+      {
+        text: tgChat.app.i18n.menu.flushTask,
+        callback_data: FLUSH_TASK_ACTION,
+      },
       {
         text: tgChat.app.i18n.menu.deleteTask,
         callback_data: DELETE_TASK_ACTION,

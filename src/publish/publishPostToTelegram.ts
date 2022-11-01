@@ -14,9 +14,6 @@ export async function publishPostToTelegram(
   tgChat: TgChat
 ) {
   let msgId: number;
-
-  //console.log(22222222, parsedPage.textBlocks)
-
   // Print to log channel
   try {
     msgId = await publishTgPost(
@@ -27,7 +24,6 @@ export async function publishPostToTelegram(
       tgChat
     );
 
-    // TODO: может лучше использовать channelLog.log
     // TODO: отформатировать почеловечи
     await tgChat.app.tg.bot.telegram.sendMessage(
       tgChat.app.config.logChannelId,
@@ -54,10 +50,9 @@ export async function publishPostToTelegram(
   }
 
   const task: PostponePostTask = {
-
-    // TODO: use post's time
-
-    startTime: '2022-11-01T19:58:00+03:00',
+    //startTime: '2022-11-01T19:58:00+03:00',
+    startTime: moment(`${contentItem.date} ${contentItem.time}`)
+      .utcOffset(tgChat.app.appConfig.utcOffset).format(),
     type: TASK_TYPES.postponePost,
     chatId,
     blogUname: blogName,

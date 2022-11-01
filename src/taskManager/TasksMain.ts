@@ -95,6 +95,21 @@ export default class TasksMain {
     return this.tasks[taskId];
   }
 
+  async flushTask(taskId: string) {
+    clearTimeout(this.timeouts[taskId]);
+    // TODO: наверно лучше обработку засунуть обратно внутрь
+    try {
+      await this.executeFork(taskId)
+    }
+    catch(e) {
+      const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
+
+      this.clearTask(taskId);
+      this.app.channelLog.error(msg);
+      this.app.consoleLog.error(msg);
+    }
+  }
+
   async removeTask(taskId: string) {
     const removedTask = this.tasks[taskId];
 

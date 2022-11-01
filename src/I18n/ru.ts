@@ -23,6 +23,7 @@ const dict = {
     taskList: 'Текущие задания',
     emptyTaskList: 'Нет текущих заданий',
     deleteTask: 'Удалить задание',
+    flushTask: 'Выполнить сейчас',
     taskDetails: 'Детали задания ',
     taskRemoveError: 'Ну удалось удалить задание. ',
   },
