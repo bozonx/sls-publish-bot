@@ -10,7 +10,7 @@ export const TASKS_SELECTED_RESULT = '!tasks';
 const BLOG_MARKER = 'blog:';
 
 
-export async function askMainMenu(tgChat: TgChat, onDone: (blogName: string) => void) {
+export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: string) => void) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageIds.push(await printInitialMessage(tgChat));
@@ -39,10 +39,11 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogName: string) => 
 async function blogSelected(
   queryData: string,
   tgChat: TgChat,
-  onDone: (blogName: string) => void
+  onDone: (blogNameOrAction: string) => void
 ) {
   const splat: string[] = queryData.split(':');
   const blogName: string = splat[1];
+
   // print result
   await tgChat.reply(
     tgChat.app.i18n.menu.selectedBlog

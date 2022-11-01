@@ -58,7 +58,7 @@ export async function publishPostToTelegram(
 
     // TODO: use post's time
 
-    startTime: '2022-10-30T14:10:00+03:00',
+    startTime: '2022-11-01T18:54:00+03:00',
     type: TASK_TYPES.postponePost,
     chatId,
     blogUname: blogName,

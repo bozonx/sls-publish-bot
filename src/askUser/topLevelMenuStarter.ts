@@ -9,15 +9,15 @@ import {askTaskMenu} from './askTaskMenu';
 
 
 export async function topLevelMenuStarter(tgChat: TgChat) {
-  return askMainMenu(tgChat, (action: string) => {
-    if (action === SITE_SELECTED_RESULT) {
+  return askMainMenu(tgChat, (blogNameOrAction: string) => {
+    if (blogNameOrAction === SITE_SELECTED_RESULT) {
       // site selected
       return askSiteMenu(tgChat, () => {
         // TODO: What to do on done???
       })
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
-    else if (action === TASKS_SELECTED_RESULT) {
+    else if (blogNameOrAction === TASKS_SELECTED_RESULT) {
       return askTasksListMenu(
         tgChat,
         (taskId: string) => askTaskMenu(taskId, tgChat, () => {
@@ -29,7 +29,7 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
     else {
       askBlogMenu(
         tgChat,
-        (action: string) => blogActionSelected(action, action, tgChat)
+        (action: string) => blogActionSelected(action, blogNameOrAction, tgChat)
       )
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
