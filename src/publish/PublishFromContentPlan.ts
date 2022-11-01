@@ -11,7 +11,6 @@ import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem, {SnTypes} from '../types/ContentItem';
 import _ from 'lodash';
-import {MdBlock} from 'notion-to-md/build/types';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm} from '../askUser/askPublishConfirm';
 import {publishFork} from './publishFork';
