@@ -1,37 +1,54 @@
 import App from '../App';
 import {TaskItem, TASK_TYPES} from '../types/TaskItem';
 import {calcSecondsToDate} from '../helpers/helpers';
+import * as fs from 'fs/promises';
+import path from 'path';
+import {clearTimeout} from 'timers';
 
 
 const MINIMUM_SECONDS_TO_PUBLISH = 1;
+const STATE_TASKS_FILENAME = 'tasks.json';
 
 
 export default class TasksMain {
   private readonly app: App;
-  private readonly tasks: TaskItem[] = [];
-  private readonly timeouts: NodeJS.Timeout[] = [];
+  private filePath: string;
+  // Object like {taskId: TaskItem}
+  private tasks: Record<string, TaskItem> = {};
+  // Object like {taskId: Timeout}
+  private readonly timeouts: Record<string, NodeJS.Timeout> = {};
 
 
   constructor(app: App) {
     this.app = app;
+    this.filePath = path.resolve(
+      this.app.appConfig.stateDirPath,
+      STATE_TASKS_FILENAME
+    )
   }
 
 
   async init() {
-    // TODO: restore tasks
+    // TODO: что если ошибка
+    const fileContent = await fs.readFile(this.filePath);
+
+    this.tasks = JSON.parse(fileContent.toString('utf8'));
+
+    // TODO: нужно ли удалять файл тасков??? впринципе он актуальный сейчас
+    // TODO: запустить таймеры
   }
 
   async destroy() {
     // clean timeouts
-    for (const itemIndex in this.timeouts) {
-      clearTimeout(this.timeouts[itemIndex]);
-      // @ts-ignore
-      this.timeouts[itemIndex] = undefined;
+    for (const taskId of Object.keys(this.timeouts)) {
+      clearTimeout(this.timeouts[taskId]);
+
+      delete this.timeouts[taskId];
     }
   }
 
 
-  addTask(task: TaskItem): number {
+  async addTask(task: TaskItem): Promise<number> {
 
     // TODO: добавить блог
     // TODO: добавить соц сеть в таски
@@ -40,30 +57,37 @@ export default class TasksMain {
     // TODO: validate task
 
     const taskNum = this.registerTask(task);
-
+    // TODO: так а что делать то????
     if (taskNum === -1) {
       return -1;
     }
 
-    // TODO: use log
-    this.saveTask(task)
-      .catch((e) => {throw e});
+    // TODO: писать пользователю если ошибка!
+    // TODO: отменить добавление если ошибка
+    await this.saveTasks();
 
     return taskNum;
   }
 
-  getTaskList(): TaskItem[] {
+  getTaskList(): Record<string, TaskItem> {
     return this.tasks;
   }
 
+  async removeTask(taskId: string) {
+    clearTimeout(this.timeouts[taskId]);
 
-  private async saveTask(task: TaskItem) {
-    // TODO: save to file
+    delete this.timeouts[taskId];
+    delete this.tasks[taskId];
+
+    // TODO: что если не удалось записать??? тогда восстановить???
+    await this.saveTasks();
   }
 
-  private async loadTasks(): Promise<TaskItem[]> {
-    // TODO: read from file
-    return [];
+
+  private async saveTasks() {
+    const content = JSON.stringify(this.tasks, null, 2);
+
+    await fs.writeFile(path.resolve(), new Buffer(content, 'utf8'));
   }
 
   private async executeFork(task: TaskItem) {
