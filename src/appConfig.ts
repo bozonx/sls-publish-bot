@@ -13,7 +13,7 @@ const appConfig: AppConfig = {
   stateDirPath: process.env.STATE_DIR_PATH as any || './_testState',
   utcOffset: 3,
   // skip tasks which should be run earlier that specified value in seconds
-  skipTasksEarlierSec: 300,
+  skipTasksEarlierSec: (process.env.NODE_ENV === 'production') ? 300 : 1,
   telegram: {
     parseMode: 'MarkdownV2',
   },

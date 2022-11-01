@@ -59,6 +59,7 @@ const dict = {
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
+    taskDoneSuccessful: 'Задача была успешно выполнена.',
   }
 }
 

@@ -107,7 +107,7 @@ export default class TasksMain {
       const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`
         + `The minimum time is ${this.app.appConfig.skipTasksEarlierSec} seconds.\n`
         + `Task:\n`
-        + `${JSON.stringify(task, null, 2)}`;
+        + this.makeTaskDetails(task);
 
       this.app.channelLog.warn(msg);
       console.warn(msg);
@@ -156,6 +156,11 @@ export default class TasksMain {
       throw new Error(`Unknown task type: ${task.type}`);
     }
 
+    this.app.channelLog.log(
+      this.app.i18n.message.taskDoneSuccessful + '\n'
+      + this.makeTaskDetails(task)
+    );
+
     this.clearTask(taskId);
   }
 
@@ -180,6 +185,11 @@ export default class TasksMain {
 
     delete this.timeouts[taskId];
     delete this.tasks[taskId];
+  }
+
+  private makeTaskDetails(task: TaskItem): string {
+    // TODO: make beautiful details
+    return `${JSON.stringify(task, null, 2)}`;
   }
 
 }

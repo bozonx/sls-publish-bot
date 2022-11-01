@@ -21,13 +21,24 @@ export default class ChannelLogger implements Logger {
   }
 
 
+  log = async (message: string) => {
+    this.app.tg.bot.telegram.sendMessage(
+      this.app.config.logChannelId,
+      message,
+      //{ parse_mode: this.app.appConfig.telegram.parseMode }
+    )
+      .catch((e) => {
+        this.app.consoleLog.error(`Can't send LOG message to log channel: ${e}`);
+      });
+  }
+
   debug = (message: string) => {
     if (!this.allowDebug) return
 
     this.app.tg.bot.telegram.sendMessage(
       this.app.config.logChannelId,
       `DEBUG: ${message}`,
-      { parse_mode: this.app.appConfig.telegram.parseMode }
+      //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
       .catch((e) => {
         this.app.consoleLog.error(`Can't send DEBUG message to log channel: ${e}`);
@@ -40,7 +51,7 @@ export default class ChannelLogger implements Logger {
     await this.app.tg.bot.telegram.sendMessage(
       this.app.config.logChannelId,
       `INFO: ${message}`,
-      { parse_mode: this.app.appConfig.telegram.parseMode }
+      //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
       // TODO: удостовериться что catch после перехвата не сработает в возвращаемом промисе
       .catch((e) => {
@@ -54,7 +65,7 @@ export default class ChannelLogger implements Logger {
     this.app.tg.bot.telegram.sendMessage(
       this.app.config.logChannelId,
       `WARNING: ${message}`,
-      { parse_mode: this.app.appConfig.telegram.parseMode }
+      //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
       .catch((e) => {
         this.app.consoleLog.error(`Can't send WARNING message to log channel: ${e}`);
@@ -65,7 +76,7 @@ export default class ChannelLogger implements Logger {
     this.app.tg.bot.telegram.sendMessage(
       this.app.config.logChannelId,
       `ERROR: ${message}`,
-      { parse_mode: this.app.appConfig.telegram.parseMode }
+      //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
       .catch((e) => {
         this.app.consoleLog.error(`Can't send ERROR message to log channel: ${e}`);

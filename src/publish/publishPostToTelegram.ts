@@ -15,7 +15,7 @@ export async function publishPostToTelegram(
 ) {
   let msgId: number;
 
-  console.log(22222222, parsedPage.textBlocks)
+  //console.log(22222222, parsedPage.textBlocks)
 
   // Print to log channel
   try {
@@ -27,7 +27,6 @@ export async function publishPostToTelegram(
       tgChat
     );
 
-    // TODO: проверить что он будет ответом на пост
     // TODO: может лучше использовать channelLog.log
     // TODO: отформатировать почеловечи
     await tgChat.app.tg.bot.telegram.sendMessage(
@@ -58,7 +57,7 @@ export async function publishPostToTelegram(
 
     // TODO: use post's time
 
-    startTime: '2022-11-01T18:54:00+03:00',
+    startTime: '2022-11-01T19:25:00+03:00',
     type: TASK_TYPES.postponePost,
     chatId,
     blogUname: blogName,
