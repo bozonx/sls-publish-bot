@@ -1,15 +1,15 @@
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
 import {AppEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
-import {ContentListItem} from '../publish/PublishFromContentPlan';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
+import {ContentPlanButtonItem} from '../notionRequests/contentPlan';
 
 
 const CONTENT_MARKER = 'content:';
 
 
 export async function askContentToUse(
-  items: ContentListItem[],
+  items: ContentPlanButtonItem[],
   tgChat: TgChat,
   onDone: (item: PageObjectResponse) => void
 ) {
@@ -40,7 +40,7 @@ export async function askContentToUse(
   });
 }
 
-async function printInitialMessage(tgChat: TgChat, items: ContentListItem[]): Promise<number> {
+async function printInitialMessage(tgChat: TgChat, items: ContentPlanButtonItem[]): Promise<number> {
   return tgChat.reply(tgChat.app.i18n.menu.selectContent, [
       ...items.map((item, index) => {
       return [{
