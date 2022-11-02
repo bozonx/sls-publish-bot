@@ -7,7 +7,10 @@ import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 // TODO: review, refactor
 
 
-export function parsePageContent(props: Record<string, any>, textBlocks: BlockObjectResponse[]): RawPageContent {
+export function parsePageContent(
+  props: Record<string, any>,
+  textBlocks: Record<string, BlockObjectResponse[]>
+): RawPageContent {
   return {
     title: props[PAGE_CONTENT_PROPS.title]?.title[0]?.plain_text,
     announcement: props[PAGE_CONTENT_PROPS.announcement]?.rich_text[0]?.plain_text,

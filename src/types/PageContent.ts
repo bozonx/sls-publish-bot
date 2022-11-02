@@ -16,5 +16,5 @@ export default interface RawPageContent {
   imageDescr: string;
   instaTags: string[];
   tgTags: string[];
-  textBlocks: BlockObjectResponse[];
+  textBlocks: Record<string, BlockObjectResponse[]>;
 }
