@@ -1,21 +1,13 @@
 import moment from 'moment/moment';
 import TgChat from '../apiTg/TgChat';
 import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants';
-import {PageObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
-
-
-export interface ContentPlanButtonItem {
-  // title for menu
-  title: string;
-  // item as is
-  item: PageObjectResponse;
-}
+import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 
 
 /**
  * Load not published items from content plan
  */
-export async function loadNotPublished(blogName: string, tgChat: TgChat): Promise<ContentPlanButtonItem[]> {
+export async function loadNotPublished(blogName: string, tgChat: TgChat): Promise<PageObjectResponse[]> {
   const currentDate: string = moment()
     .utcOffset(tgChat.app.appConfig.utcOffset)
     .format('YYYY-MM-DD');
@@ -26,7 +18,7 @@ export async function loadNotPublished(blogName: string, tgChat: TgChat): Promis
       ...makeContentPlanQuery(currentDate),
     });
 
-    return prepareItems((response as any).results);
+    return (response as any).results.filter((item: any) => !item.archived);
   }
   catch (e) {
     tgChat.log.error(`Can't load content plan data: ${e}`);
@@ -36,24 +28,6 @@ export async function loadNotPublished(blogName: string, tgChat: TgChat): Promis
 
     throw e;
   }
-}
-
-
-function prepareItems(results: PageObjectResponse[]): ContentPlanButtonItem[] {
-  return results
-    .filter((item) => !item.archived)
-    .map((item): ContentPlanButtonItem => {
-      const dateProp = item.properties['date'];
-      const dateText: string = (dateProp as any).date.start;
-      const shortDateText: string = moment(dateText).format('DD.MM');
-      const gistProp = item.properties['gist/link'];
-      const gistRichText: RichTextItemResponse = (gistProp as any).rich_text[0];
-
-      return {
-        title: `${shortDateText} ${gistRichText.plain_text}`,
-        item,
-      }
-    });
 }
 
 function makeContentPlanQuery(currentDate: string): Record<string, any> {

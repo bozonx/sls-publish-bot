@@ -6,7 +6,7 @@ import ContentItem, {SnTypes} from '../types/ContentItem';
 import _ from 'lodash';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm} from '../askUser/askPublishConfirm';
-import {ContentPlanButtonItem, loadNotPublished} from '../notionRequests/contentPlan';
+import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
 
 
@@ -22,7 +22,7 @@ export default class PublishFromContentPlan {
 
 
   async start() {
-    const items: ContentPlanButtonItem[] = await loadNotPublished(
+    const items: PageObjectResponse[] = await loadNotPublished(
       this.blogName,
       this.tgChat
     );
