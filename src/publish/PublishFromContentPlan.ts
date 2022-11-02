@@ -9,6 +9,7 @@ import {askPublishConfirm} from '../askUser/askPublishConfirm';
 import RawPageContent from '../types/PageContent';
 import {publishPostToTelegram} from './publishPostToTelegram';
 import {ContentPlanButtonItem, loadNotPublished} from '../notionRequests/contentPlan';
+import {publishFork} from './publishFork';
 
 
 export default class PublishFromContentPlan {
@@ -134,7 +135,7 @@ export default class PublishFromContentPlan {
       );
 
       await askPublishConfirm(this.tgChat, () => {
-        this.publishFork(parsedContentItem, parsedPage)
+        publishFork(this.blogName, this.tgChat, parsedContentItem, parsedPage)
           .catch((e) => this.tgChat.app.consoleLog.error(e));
       });
     }
@@ -142,83 +143,6 @@ export default class PublishFromContentPlan {
       // TODO: если нет ссылки то что делать? - обьявление
       // TODO: проверить что для обьявления выбран telegram
     }
-  }
-
-
-  private async publishFork(contentItem: ContentItem, parsedPage: RawPageContent) {
-    // post like
-    if ([
-      PUBLICATION_TYPES.post1000,
-      PUBLICATION_TYPES.post2000,
-      PUBLICATION_TYPES.mem,
-    ].includes(contentItem.type)) {
-      for (const sn of contentItem.sns) {
-        switch (sn) {
-          case SN_TYPES.telegram:
-            return publishPostToTelegram(contentItem, parsedPage, this.blogName, this.tgChat);
-          // case SN_TYPES.zen:
-          //   break;
-          // case SN_TYPES.instagram:
-          //   break;
-          // case SN_TYPES.site:
-          //   break;
-          // case SN_TYPES.tiktok:
-          //   break;
-          // // and youtube
-          default:
-            throw new Error(`Unknown or unsupported sn type ${sn}`);
-        }
-      }
-    }
-    // photos like
-    else if ([
-      PUBLICATION_TYPES.photos,
-      PUBLICATION_TYPES.narrative,
-    ].includes(contentItem.type)) {
-      // TODO: add
-      for (const sn of contentItem.sns) {
-        switch (sn) {
-          case SN_TYPES.telegram:
-
-          // case SN_TYPES.zen:
-          //   break;
-          // case SN_TYPES.instagram:
-          //   break;
-          // case SN_TYPES.site:
-          //   break;
-          // case SN_TYPES.tiktok:
-          //   break;
-          // // and youtube
-          default:
-            throw new Error(`Unknown or unsupported sn type ${sn}`);
-        }
-      }
-    }
-    // article
-    else if (contentItem.type === PUBLICATION_TYPES.article) {
-      // TODO: add
-      for (const sn of contentItem.sns) {
-        switch (sn) {
-          case SN_TYPES.telegram:
-
-          // case SN_TYPES.zen:
-          //   break;
-          // case SN_TYPES.instagram:
-          //   break;
-          // case SN_TYPES.site:
-          //   break;
-          // case SN_TYPES.tiktok:
-          //   break;
-          // // and youtube
-          default:
-            throw new Error(`Unknown or unsupported sn type ${sn}`);
-        }
-      }
-    }
-    // TODO: add announcement
-    // TODO: add poll
-    // TODO: add reels
-    // TODO: add video
   }
 
 }
