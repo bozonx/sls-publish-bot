@@ -2,12 +2,10 @@ import TgChat from '../apiTg/TgChat';
 import { BlockObjectResponse, PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
-import ContentItem, {PUBLICATION_TYPES, SN_TYPES, SnTypes} from '../types/ContentItem';
+import ContentItem, {SnTypes} from '../types/ContentItem';
 import _ from 'lodash';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm} from '../askUser/askPublishConfirm';
-import RawPageContent from '../types/PageContent';
-import {publishPostToTelegram} from './publishPostToTelegram';
 import {ContentPlanButtonItem, loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
 
@@ -24,7 +22,10 @@ export default class PublishFromContentPlan {
 
 
   async start() {
-    const items: ContentPlanButtonItem[] = await loadNotPublished(this.blogName, this.tgChat);
+    const items: ContentPlanButtonItem[] = await loadNotPublished(
+      this.blogName,
+      this.tgChat
+    );
 
     await askContentToUse(items, this.tgChat, (item: PageObjectResponse) => {
       const parsedContentItem: ContentItem = parseContentItem(
