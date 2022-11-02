@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import { BlockObjectResponse, PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem, {SnTypes} from '../types/ContentItem';
@@ -9,6 +9,7 @@ import {askPublishConfirm} from '../askUser/askPublishConfirm';
 import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
 import {loadPageContent} from '../notionRequests/pageContent';
+import {loadPageProps} from '../notionRequests/pageProps';
 
 
 export default class PublishFromContentPlan {
@@ -66,8 +67,9 @@ export default class PublishFromContentPlan {
       // TODO: лучше сделать сразу pageId
 
       const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
-      const rawPage = await loadPageContent(pageId, this.tgChat);
-      const parsedPage = parsePageContent(this.selectedPage, rawPage);
+      const pageProperties = await loadPageProps(pageId, this.tgChat);
+      const pageContent = await loadPageContent(pageId, this.tgChat);
+      const parsedPage = parsePageContent(pageProperties, pageContent);
       const pageInfoMsg = makePageInfoMsg(parsedPage, this.tgChat.app.i18n);
 
       await this.tgChat.reply(

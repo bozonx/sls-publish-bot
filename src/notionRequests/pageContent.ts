@@ -37,11 +37,6 @@ export async function loadPageContent(
 ): Promise<Record<string, BlockObjectResponse[]>> {
   const blocks: Record<string, BlockObjectResponse[]> = {};
 
-
-  // It needs to get propertities
-  // const resultPage = await this.tgChat.app.notion.api.pages.retrieve({
-  //   page_id: pageId,
-  // });
   // It needs to check children
   // const resultPageRootBlock = await this.tgChat.app.notion.api.blocks.retrieve({
   //   block_id: pageId,

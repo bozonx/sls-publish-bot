@@ -6,6 +6,7 @@ import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 
 // TODO: review, refactor
 
+// PageObjectResponse['properties']
 
 export function parsePageContent(
   props: Record<string, any>,
