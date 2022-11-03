@@ -29,51 +29,60 @@ export function transformNotionToCleanText(notionBlocks: NOTION_BLOCKS): string 
       numberListCounter = 0;
     }
 
-    if ([
-      NOTION_BLOCK_TYPES.heading_1,
-      NOTION_BLOCK_TYPES.heading_2,
-      NOTION_BLOCK_TYPES.heading_3,
-    ].includes(block.type)) {
-      result += richTextToSimpleTextList((block as any)?.heading_1?.rich_text) + '\n\n';
+    switch (block.type) {
+      case NOTION_BLOCK_TYPES.heading_1:
+        result += richTextToSimpleTextList((block as any)?.heading_1?.rich_text) + '\n\n';
+        break;
+      case NOTION_BLOCK_TYPES.heading_2:
+        result += richTextToSimpleTextList((block as any)?.heading_2?.rich_text) + '\n\n';
+        break;
+      case NOTION_BLOCK_TYPES.heading_3:
+        result += richTextToSimpleTextList((block as any)?.heading_3?.rich_text) + '\n\n';
+        break;
+      case NOTION_BLOCK_TYPES.paragraph:
+        if ((block as any)?.paragraph?.rich_text.length) {
+          result += richTextToSimpleTextList((block as any)?.paragraph?.rich_text) + '\n\n';
+        }
+        else {
+          // empty row
+          result += '\n';
+        }
+
+        break;
+      case NOTION_BLOCK_TYPES.bulleted_list_item:
+        bulletedListCounter++;
+        result += `* `
+          + richTextToSimpleTextList((block as any)?.bulleted_list_item?.rich_text)
+          + '\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.numbered_list_item:
+        numberListCounter++;
+        result += `${numberListCounter}. `
+          + richTextToSimpleTextList((block as any)?.numbered_list_item?.rich_text)
+          + '\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.quote:
+        result += `| `
+          + richTextToSimpleTextList((block as any)?.quote?.rich_text)
+            .replace(/\n/g, '\n| ')
+          + '\n\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.code:
+        result += richTextToSimpleTextList((block as any)?.code?.rich_text)
+          + '\n\n';
+
+        break;
+      case NOTION_BLOCK_TYPES.divider:
+        result += '---\n\n';
+
+        break;
+      default:
+        throw new Error(`Unknown block type: ${block.type}`);
     }
-    else if (block.type === NOTION_BLOCK_TYPES.paragraph) {
-      if ((block as any)?.paragraph?.rich_text.length) {
-        result += richTextToSimpleTextList((block as any)?.paragraph?.rich_text) + '\n\n';
-      }
-      else {
-        // empty row
-        result += '\n';
-      }
-    }
-    else if (block.type === NOTION_BLOCK_TYPES.bulleted_list_item) {
-      bulletedListCounter++;
-      result += `* `
-        + richTextToSimpleTextList((block as any)?.bulleted_list_item?.rich_text)
-        + '\n';
-    }
-    else if (block.type === NOTION_BLOCK_TYPES.numbered_list_item) {
-      numberListCounter++;
-      result += `${numberListCounter}. `
-        + richTextToSimpleTextList((block as any)?.numbered_list_item?.rich_text)
-        + '\n';
-    }
-    else if (block.type === NOTION_BLOCK_TYPES.quote) {
-      result += `| `
-        + richTextToSimpleTextList((block as any)?.quote?.rich_text)
-          .replace(/\n/g, '\n| ')
-        + '\n\n';
-    }
-    else if (block.type === NOTION_BLOCK_TYPES.code) {
-      result += '\n'
-        + richTextToSimpleTextList((block as any)?.code?.rich_text)
-        + '\n\n';
-    }
-    else if (block.type === NOTION_BLOCK_TYPES.divider) {
-      result += '---\n\n';
-    }
-    else {
-      throw new Error(`Unknown block type: ${block.type}`);
-    }
+
   }
 
   return _.trim(result);

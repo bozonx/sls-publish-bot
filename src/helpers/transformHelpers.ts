@@ -12,7 +12,7 @@ export function richTextToSimpleTextList(richText?: TextRichTextItemResponse[]):
   if (!richText) return '';
   else if (!richText.length) return '';
 
-  return richText.map((item) => item.plain_text).join();
+  return richText.map((item) => item.plain_text).join('');
 }
 
 /**
@@ -29,7 +29,7 @@ export function richTextToMd(richText?: TextRichTextItemResponse[]): string {
       default:
         return item.plain_text;
     }
-  }).join();
+  }).join('');
 }
 
 export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {
@@ -43,7 +43,7 @@ export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {
       default:
         return item.plain_text;
     }
-  }).join();
+  }).join('');
 }
 
 export function richTextToMdCodeBlock(

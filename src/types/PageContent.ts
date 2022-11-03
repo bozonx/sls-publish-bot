@@ -1,4 +1,4 @@
-import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
+import {NOTION_BLOCKS} from './types';
 
 
 export const PAGE_CONTENT_PROPS = {
@@ -16,5 +16,5 @@ export default interface RawPageContent {
   imageDescr: string;
   instaTags: string[];
   tgTags: string[];
-  textBlocks: Record<string, BlockObjectResponse[]>;
+  textBlocks: NOTION_BLOCKS;
 }

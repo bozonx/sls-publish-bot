@@ -2,6 +2,7 @@ import RawPageContent, {PAGE_CONTENT_PROPS} from '../types/PageContent';
 import ru from '../I18n/ru';
 import {makeTagsString} from '../helpers/helpers';
 import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
+import {transformNotionToCleanText} from '../helpers/transformNotionToCleanText';
 
 
 // TODO: review, refactor
@@ -28,6 +29,6 @@ export function makePageInfoMsg(pageContent: RawPageContent, i18n: typeof ru): s
    + `${i18n.pageInfo.imageDescr}: ${pageContent.imageDescr}\n`
    + `${i18n.pageInfo.tgTags}: ${makeTagsString(pageContent.tgTags)}\n`
    + `${i18n.pageInfo.instaTags}: ${makeTagsString(pageContent.instaTags)}\n`
-    // TODO: сделать подсчёт
-   + `${i18n.pageInfo.contentLength}: ${pageContent.textBlocks.length}`;
+   + `${i18n.pageInfo.contentLength}: ` +
+     transformNotionToCleanText(pageContent.textBlocks).length;
 }
