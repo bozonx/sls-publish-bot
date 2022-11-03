@@ -40,7 +40,7 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
       tgChat.events.addListener(
         AppEvents.MESSAGE,
         tgChat.asyncCb(async (message: string) => {
-
+          console.log(11111, message)
         })
       ),
       AppEvents.MESSAGE

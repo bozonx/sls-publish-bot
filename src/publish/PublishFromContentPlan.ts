@@ -76,14 +76,23 @@ export default class PublishFromContentPlan {
         this.tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
       );
 
+      if (this.tgChat.app.config.blogs[this.blogName].sn.telegram?.postFooter) {
+        await this.tgChat.reply(
+          this.tgChat.app.i18n.menu.postFooter + ': '
+          + this.tgChat.app.config.blogs[this.blogName].sn.telegram?.postFooter
+        );
+      }
+
+
       await askPublishConfirm(this.tgChat, this.tgChat.asyncCb(async (action: PublishConfirmAction) => {
         switch (action) {
           case PUBLISH_CONFIRM_ACTION.OK:
             await publishFork(this.blogName, this.tgChat, parsedContentItem, parsedPage);
           case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
 
-
             break;
+
+            // TODO: не должно быть если не задан в конфиге
           case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
             // TODO: add
 

@@ -29,6 +29,7 @@ const dict = {
     changePostTime: 'Изменить время публикации',
     noPostFooter: 'Убрать footer',
     selectTime: 'Напишите время в таком формате: 03:59, 23:08',
+    postFooter: 'Футер поста: ',
   },
   contentInfo: {
     dateTime: 'Дата и время',

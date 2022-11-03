@@ -30,6 +30,7 @@ export async function askPublishConfirm(
         text: tgChat.app.i18n.menu.changePostTime,
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
+      // TODO: не должно быть если не задан в конфиге
       {
         text: tgChat.app.i18n.menu.noPostFooter,
         callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,

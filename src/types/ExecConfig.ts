@@ -11,7 +11,7 @@ export interface BlogConfig {
       telegraPhAuthorName: string;
       telegraPhAuthorUrl: string;
       channelId: number | string;
-      postFooter: string;
+      postFooter?: string;
     };
     instagram?: {
     };
