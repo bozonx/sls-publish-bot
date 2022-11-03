@@ -1,6 +1,6 @@
+import {markdownv2 as mdFormat} from 'telegram-format';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_RICH_TEXT_TYPES} from '../types/notion';
-import {markdownv2 as mdFormat} from 'telegram-format/dist/source/markdownv2';
 
 
 /**

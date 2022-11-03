@@ -5,6 +5,9 @@ import {
 } from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
+import {NOTION_BLOCKS} from '../types/types';
+import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageContent';
+import {richTextToSimpleTextList} from './transformHelpers';
 
 
 
@@ -686,13 +689,13 @@ const test = [
 
 export function transformNotionToTelegraph(): TelegraphNode[] {
   // TODO: remove
-  const notionBlocks: BlockObjectResponse[] = test as any
+  const notionBlocks: NOTION_BLOCKS = {'0': test} as any
 
   let result: TelegraphNode[] = [];
   let ulElIndex = -1;
   let olElIndex = -1;
 
-  for (const block of notionBlocks) {
+  for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
     if (block.has_children) {
       // TODO: recurse
     }
@@ -708,7 +711,7 @@ export function transformNotionToTelegraph(): TelegraphNode[] {
     switch (block.type) {
       case NOTION_BLOCK_TYPES.heading_1:
         result.push({
-          // TODO: разве нету H1 ???
+          // TODO: разве нету H2 ???
           tag: 'h3',
           children: [richTextToSimpleTextList((block as any)?.heading_1?.rich_text)],
         })
@@ -739,6 +742,7 @@ export function transformNotionToTelegraph(): TelegraphNode[] {
           });
         }
         else {
+          // empty row
           result.push({
             tag: 'p',
             children: [''],
@@ -831,18 +835,6 @@ function parseRichTextList(richText?: TextRichTextItemResponse[]): string {
 
   for (const item of richText) {
     result += parseRichText(item)
-  }
-
-  return result;
-}
-
-function richTextToSimpleTextList(richText?: TextRichTextItemResponse[]): string {
-  if (!richText) return '';
-  else if (!richText.length) return '';
-  let result = '';
-
-  for (const item of richText) {
-    result += item.plain_text;
   }
 
   return result;
