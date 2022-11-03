@@ -27,6 +27,7 @@ const execConf: ExecConfig = {
           telegraPhAuthorName: 'Testtt',
           telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6',
           channelId: -1001664865912,
+          postFooter: '[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) | ${TAGS}',
         },
         instagram: {},
         zen: {},
