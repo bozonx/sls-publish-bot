@@ -1,15 +1,8 @@
-import {html as htmlFormat} from 'telegram-format';
-import {
-  BlockObjectResponse,
-  TextRichTextItemResponse
-} from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
 import {NOTION_BLOCKS} from '../types/types';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageContent';
-import {richTextToSimpleTextList} from './transformHelpers';
-
-
+import {richTextToHtml, richTextToHtmlCodeBlock, richTextToSimpleTextList} from './transformHelpers';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
@@ -736,7 +729,7 @@ export function transformNotionToTelegraph(): TelegraphNode[] {
           result.push({
             tag: 'p',
             children: [
-              parseRichTextList((block as any)?.paragraph?.rich_text)
+              richTextToHtml((block as any)?.paragraph?.rich_text)
                 .replace(/\n/g, '<br />'),
             ]
           });
@@ -752,7 +745,7 @@ export function transformNotionToTelegraph(): TelegraphNode[] {
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         const liItem: TelegraphNode = {
           tag: 'li',
-          children: [parseRichTextList((block as any)?.bulleted_list_item?.rich_text)],
+          children: [richTextToHtml((block as any)?.bulleted_list_item?.rich_text)],
         };
 
         if (ulElIndex === -1) {
@@ -772,7 +765,7 @@ export function transformNotionToTelegraph(): TelegraphNode[] {
       case NOTION_BLOCK_TYPES.numbered_list_item:
         const liItemNum: TelegraphNode = {
           tag: 'li',
-          children: [parseRichTextList((block as any)?.bulleted_list_item?.rich_text)],
+          children: [richTextToHtml((block as any)?.bulleted_list_item?.rich_text)],
         };
 
         if (olElIndex === -1) {
@@ -793,18 +786,16 @@ export function transformNotionToTelegraph(): TelegraphNode[] {
         result.push({
           tag: 'blockquote',
           children: [
-            parseRichTextList((block as any)?.quote?.rich_text)
+            richTextToHtml((block as any)?.quote?.rich_text)
               .replace(/\n/g, '<br />'),
           ]
         })
 
         break;
       case NOTION_BLOCK_TYPES.code:
-        // TODO: проверить требования по экранированию
-        // TODO: review - может надо использовать pre
         result.push({
           tag: 'pre',
-          children: [richTextToSimpleTextList((block as any)?.code?.rich_text)]
+          children: [richTextToHtmlCodeBlock((block as any)?.code?.rich_text, (block as any)?.code?.language)]
         });
 
         break;
@@ -815,66 +806,14 @@ export function transformNotionToTelegraph(): TelegraphNode[] {
 
         break;
       default:
-        // TODO: ругаться
-        break;
+        throw new Error(`Unknown block type: ${block.type}`);
     }
   }
 
 
   console.log(1111, result)
 
-  return result;
-}
-
-
-function parseRichTextList(richText?: TextRichTextItemResponse[]): string {
-  if (!richText) return '';
-  else if (!richText.length) return '';
-
-  let result = '';
-
-  for (const item of richText) {
-    result += parseRichText(item)
-  }
+  // TODO: убрать пустые строки в начале и в конце
 
   return result;
-}
-
-function parseRichText(rtItem: TextRichTextItemResponse): string {
-  switch (rtItem.type) {
-    case NOTION_RICH_TEXT_TYPES.text:
-      return toMarkDown(rtItem.text.content, rtItem.annotations, rtItem.href);
-    default:
-      return rtItem.plain_text;
-  }
-}
-
-function toMarkDown(text: string, annotations: Record<string, any>, link?: string | null): string {
-  let preparedText = htmlFormat.escape(text);
-
-  if (link) {
-    preparedText = htmlFormat.url(preparedText, link);
-  }
-
-  // TODO: а если несколько сразу ???
-
-  if (annotations.bold) {
-    return htmlFormat.bold(preparedText);
-  }
-  else if (annotations.italic) {
-    return htmlFormat.italic(preparedText);
-  }
-  else if (annotations.strikethrough) {
-    return htmlFormat.strikethrough(preparedText);
-  }
-  else if (annotations.underline) {
-    return htmlFormat.underline(preparedText);
-  }
-  else if (annotations.code) {
-    return htmlFormat.monospace(preparedText);
-  }
-  else {
-    // no formatting
-    return preparedText;
-  }
 }
