@@ -43,6 +43,7 @@ const dict = {
     instaTags: 'Тэги Instagram',
     tgTags: 'Тэги Telegram',
     contentLength: 'Количество символов в тексте',
+    contentLengthWithTags: 'Количество символов в тексте + тэги инстаграмм',
   },
   publicationType: {
     article: 'Статья',

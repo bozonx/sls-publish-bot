@@ -24,11 +24,15 @@ export function parsePageContent(
 }
 
 export function makePageInfoMsg(pageContent: RawPageContent, i18n: typeof ru): string {
+  const instaTags = makeTagsString(pageContent.instaTags);
+
   return `${i18n.pageInfo.title}: ${pageContent.title}\n`
    + `${i18n.pageInfo.announcement}: ${pageContent.announcement}\n`
    + `${i18n.pageInfo.imageDescr}: ${pageContent.imageDescr}\n`
    + `${i18n.pageInfo.tgTags}: ${makeTagsString(pageContent.tgTags)}\n`
-   + `${i18n.pageInfo.instaTags}: ${makeTagsString(pageContent.instaTags)}\n`
+   + `${i18n.pageInfo.instaTags}: ${instaTags}\n`
    + `${i18n.pageInfo.contentLength}: ` +
-     transformNotionToCleanText(pageContent.textBlocks).length;
+     transformNotionToCleanText(pageContent.textBlocks).length + '\n'
+   + `${i18n.pageInfo.contentLengthWithTags}: ` +
+    (transformNotionToCleanText(pageContent.textBlocks) + '\n\n' + instaTags).length;
 }
