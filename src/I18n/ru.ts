@@ -25,7 +25,9 @@ const dict = {
     deleteTask: 'Удалить задание',
     flushTask: 'Выполнить сейчас',
     taskDetails: 'Детали задания ',
-    taskRemoveError: 'Ну удалось удалить задание. ',
+    taskRemoveError: 'Не удалось удалить задание. ',
+    changePostTime: 'Изменить время публикации',
+    noPostFooter: 'Убрать footer',
   },
   contentInfo: {
     dateTime: 'Дата и время',

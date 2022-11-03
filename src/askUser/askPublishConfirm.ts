@@ -1,7 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import BaseState from '../types/BaseState';
 import {
-  AppEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
@@ -9,39 +7,56 @@ import {
   OK_BTN,
   OK_BTN_CALLBACK
 } from '../types/constants';
+import {addSimpleStep} from '../helpers/helpers';
 
 
-export async function askPublishConfirm(tgChat: TgChat, onDone: () => void) {
-  await tgChat.addOrdinaryStep(async (state: BaseState) => {
-    // print main menu message
-    state.messageIds.push(await printInitialMessage(tgChat));
-    // listen to result
-    state.handlerIndexes.push([
-      tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
-        tgChat.asyncCb(async (queryData: string) => {
-          if (queryData === BACK_BTN_CALLBACK) {
-            return tgChat.steps.back();
-          }
-          else if (queryData === CANCEL_BTN_CALLBACK) {
-            return tgChat.steps.cancel();
-          }
-          else if (queryData === OK_BTN_CALLBACK) {
-            onDone();
-          }
-        }
-      )),
-      AppEvents.CALLBACK_QUERY
-    ]);
-  });
-}
+export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER';
 
-async function printInitialMessage(tgChat: TgChat): Promise<number> {
-  return tgChat.reply(tgChat.app.i18n.menu.publishConfirmation, [
+export const PUBLISH_CONFIRM_ACTION: Record<PublishConfirmAction, PublishConfirmAction> = {
+  OK: 'OK',
+  CHANGE_TIME: 'CHANGE_TIME',
+  NO_POST_FOOTER: 'NO_POST_FOOTER',
+};
+
+
+export async function askPublishConfirm(
+  tgChat: TgChat,
+  onDone: (action: PublishConfirmAction) => void
+) {
+  const msg = tgChat.app.i18n.menu.publishConfirmation;
+  const buttons = [
+    [
+      {
+        text: tgChat.app.i18n.menu.changePostTime,
+        callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
+      },
+      {
+        text: tgChat.app.i18n.menu.noPostFooter,
+        callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
+      },
+    ],
     [
       BACK_BTN,
       CANCEL_BTN,
       OK_BTN
     ]
-  ]);
+  ];
+
+  await addSimpleStep(tgChat, msg, buttons,(queryData: string) => {
+    if (queryData === BACK_BTN_CALLBACK) {
+      return tgChat.steps.back();
+    }
+    else if (queryData === CANCEL_BTN_CALLBACK) {
+      return tgChat.steps.cancel();
+    }
+    else if (queryData === OK_BTN_CALLBACK) {
+      onDone(PUBLISH_CONFIRM_ACTION.OK);
+    }
+    else if (queryData === PUBLISH_CONFIRM_ACTION.CHANGE_TIME) {
+      onDone(PUBLISH_CONFIRM_ACTION.CHANGE_TIME);
+    }
+    else if (queryData === PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER) {
+      onDone(PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER);
+    }
+  });
 }

@@ -2,6 +2,9 @@ import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import moment from 'moment';
 import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
+import TgChat from '../apiTg/TgChat';
+import {AppEvents} from '../types/constants';
+import TgReplyButton from '../types/TgReplyButton';
 
 
 export function makeBaseState(): BaseState {
@@ -74,4 +77,24 @@ export function calcSecondsToDate(toDateStr: string, utcOffset: number): number 
   const toDate = moment(toDateStr).utcOffset(utcOffset);
 
   return toDate.unix() - now.unix();
+}
+
+export async function addSimpleStep(
+  tgChat: TgChat,
+  msg: string,
+  buttons: TgReplyButton[][],
+  cb: (queryData: string) => void
+) {
+  await tgChat.addOrdinaryStep(async (state: BaseState) => {
+    // print main menu message
+    state.messageIds.push(await tgChat.reply(msg, buttons));
+    // listen to result
+    state.handlerIndexes.push([
+      tgChat.events.addListener(
+        AppEvents.CALLBACK_QUERY,
+        tgChat.asyncCb(async (queryData: string) => cb(queryData))
+      ),
+      AppEvents.CALLBACK_QUERY
+    ]);
+  });
 }

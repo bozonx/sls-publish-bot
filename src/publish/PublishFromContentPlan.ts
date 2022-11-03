@@ -5,7 +5,7 @@ import {makeContentInfoMsg, parseContentItem, validateContentItem} from './parse
 import ContentItem, {SnTypes} from '../types/ContentItem';
 import _ from 'lodash';
 import {makePageInfoMsg, parsePageContent} from './parsePage';
-import {askPublishConfirm} from '../askUser/askPublishConfirm';
+import {askPublishConfirm, PUBLISH_CONFIRM_ACTION, PublishConfirmAction} from '../askUser/askPublishConfirm';
 import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
 import {loadPageContent} from '../notionRequests/pageContent';
@@ -76,10 +76,24 @@ export default class PublishFromContentPlan {
         this.tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
       );
 
-      await askPublishConfirm(this.tgChat, () => {
-        publishFork(this.blogName, this.tgChat, parsedContentItem, parsedPage)
-          .catch((e) => this.tgChat.app.consoleLog.error(e));
-      });
+      await askPublishConfirm(this.tgChat, this.tgChat.asyncCb(async (action: PublishConfirmAction) => {
+        switch (action) {
+          case PUBLISH_CONFIRM_ACTION.OK:
+            await publishFork(this.blogName, this.tgChat, parsedContentItem, parsedPage);
+          case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
+
+
+            break;
+          case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
+            // TODO: add
+
+            break;
+          default:
+            throw new Error(`Unknown action ${action}`);
+
+            break;
+        }
+      }));
     }
     else {
       // TODO: если нет ссылки то что делать? - обьявление
