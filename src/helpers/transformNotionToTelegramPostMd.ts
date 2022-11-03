@@ -85,7 +85,7 @@ export function transformNotionToTelegramPostMd(notionBlocks: NOTION_BLOCKS): st
 
         break;
       case NOTION_BLOCK_TYPES.divider:
-        result += '---\n\n';
+        result += '\\-\\-\\-\n\n';
 
         break;
       default:

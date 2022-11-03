@@ -5,6 +5,7 @@ import {FULL_DATE_FORMAT} from '../types/constants';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import ContentItem, {SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
+import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
 
 
 export async function publishPostToTelegram(
@@ -13,13 +14,15 @@ export async function publishPostToTelegram(
   blogName: string,
   tgChat: TgChat
 ) {
+
+  console.log(3333, transformNotionToTelegramPostMd(parsedPage.textBlocks))
+
   let msgId: number;
   // Print to log channel
   try {
     msgId = await publishTgPost(
       tgChat.app.config.logChannelId,
-      'test post',
-      //transformNotionToTelegramPostMd(parsedPage.textBlocks),
+      transformNotionToTelegramPostMd(parsedPage.textBlocks),
       blogName,
       tgChat
     );

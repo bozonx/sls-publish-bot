@@ -5,7 +5,7 @@ import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageContent';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers';
 
 
-export function transformNotionToTelegramPostMd(notionBlocks: NOTION_BLOCKS): string {
+export function transformNotionToPrettyMd(notionBlocks: NOTION_BLOCKS): string {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;
