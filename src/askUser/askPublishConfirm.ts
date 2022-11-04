@@ -52,7 +52,7 @@ export async function askPublishConfirm(
             : tgChat.app.i18n.menu.yesPostFooter,
           callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
         }
-        : undefined,
+        : undefined as any,
     ],
     [
       BACK_BTN,

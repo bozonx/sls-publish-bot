@@ -112,10 +112,10 @@ async function askMenu(
   blogName: string,
   tgChat: TgChat,
   parsedContentItem: ContentItem,
-  parsedPage?: RawPageContent,
   correctedTime?: string,
   allowPreview = true,
-  allowFooter = true
+  allowFooter = true,
+  parsedPage?: RawPageContent,
 ) {
   await askPublishConfirm(
     blogName,

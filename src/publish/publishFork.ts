@@ -22,7 +22,13 @@ export async function publishFork(
     for (const sn of contentItem.sns) {
       switch (sn) {
         case SN_TYPES.telegram:
-          return publishPostToTelegram(contentItem, parsedPage, blogName, tgChat);
+          if (parsedPage) {
+            return publishPostToTelegram(contentItem, parsedPage, blogName, tgChat);
+          }
+          // TODO: тогда поидее надо делать объявление или чо ????
+          // TODO: или заранее проверить
+          // TODO: или если объявление то сразу его сделать pageContent??
+
         // case SN_TYPES.zen:
         //   break;
         // case SN_TYPES.instagram:
