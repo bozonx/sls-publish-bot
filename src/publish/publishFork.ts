@@ -23,7 +23,15 @@ export async function publishFork(
       switch (sn) {
         case SN_TYPES.telegram:
           if (parsedPage) {
-            return publishPostToTelegram(contentItem, parsedPage, blogName, tgChat);
+            return publishPostToTelegram(
+              contentItem,
+              parsedPage,
+              blogName,
+              tgChat,
+              allowPreview,
+              allowFooter,
+              correctedTime
+            );
           }
           // TODO: тогда поидее надо делать объявление или чо ????
           // TODO: или заранее проверить

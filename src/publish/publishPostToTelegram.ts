@@ -6,25 +6,39 @@ import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import ContentItem, {SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
+import {prepareFooterPost} from '../helpers/helpers';
 
 
 export async function publishPostToTelegram(
   contentItem: ContentItem,
   parsedPage: RawPageContent,
   blogName: string,
-  tgChat: TgChat
+  tgChat: TgChat,
+  allowPreview: boolean,
+  allowFooter: boolean,
+  correctedTime?: string,
 ) {
+  const resolvedTime = (correctedTime) ? correctedTime : contentItem.time;
+  let post = transformNotionToTelegramPostMd(parsedPage.textBlocks);
 
-  console.log(3333, transformNotionToTelegramPostMd(parsedPage.textBlocks))
+  if (allowFooter) {
+    post += '\n\n' + prepareFooterPost(
+      tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+      parsedPage.tgTags
+    )
+  }
+
+  //console.log(3333, transformNotionToTelegramPostMd(parsedPage.textBlocks))
 
   let msgId: number;
   // Print to log channel
   try {
     msgId = await publishTgPost(
       tgChat.app.config.logChannelId,
-      transformNotionToTelegramPostMd(parsedPage.textBlocks),
+      post,
       blogName,
-      tgChat
+      tgChat,
+      !allowPreview
     );
 
     // TODO: отформатировать почеловечи
@@ -34,7 +48,7 @@ export async function publishPostToTelegram(
       + tgChat.app.config.blogs[blogName].dispname + ', '
       + moment(contentItem.date).format(FULL_DATE_FORMAT) + ' '
       // TODO: add sn
-      + contentItem.time,
+      + resolvedTime,
       {
         reply_to_message_id: msgId,
       }
@@ -54,7 +68,7 @@ export async function publishPostToTelegram(
 
   const task: PostponePostTask = {
     //startTime: '2022-11-01T19:58:00+03:00',
-    startTime: moment(`${contentItem.date} ${contentItem.time}`)
+    startTime: moment(`${contentItem.date}T${resolvedTime}:00`)
       .utcOffset(tgChat.app.appConfig.utcOffset).format(),
     type: TASK_TYPES.postponePost,
     chatId,

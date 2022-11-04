@@ -76,6 +76,7 @@ const dict = {
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
     taskDoneSuccessful: 'Задача была успешно выполнена.',
+    taskRegistered: 'Задание успешно зарегистрировано',
     //loadedTask: 'Задача была загруженна с диска:',
   },
 }

@@ -147,6 +147,10 @@ async function askMenu(
             parsedPage,
           );
 
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+
+          await tgChat.steps.cancel();
+
           break;
         case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
           await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {

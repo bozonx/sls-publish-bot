@@ -8,7 +8,6 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
-import {compactUndefined} from '../lib/arrays';
 
 
 export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
