@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
@@ -19,23 +18,11 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
   const notPublishedItems: PageObjectResponse[] = await loadNotPublished(blogName,tgChat);
   // ask use select not published item
   await askContentToUse(notPublishedItems, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
-    // User selected page - parse it
-    const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
-    const parsedContentItem: ContentItem = parseContentItem(item, blogSns);
-
     try {
-      validateContentItem(parsedContentItem);
-    }
-    catch (e) {
-      await tgChat.reply(tgChat.app.i18n.errors.invalidContent + e);
+      const parsedContentItem = await prepareContentItem(item, blogName, tgChat);
+      const parsedPage = await preparePage(parsedContentItem, blogName, tgChat);
 
-      await tgChat.steps.back();
-
-      return;
-    }
-
-    try {
-      const parsedPage = await printAllDetails(parsedContentItem, blogName, tgChat);
+      await printAllDetails(blogName, tgChat, parsedContentItem, parsedPage);
 
       await askMenu(parsedContentItem, blogName, tgChat, parsedPage);
     }
@@ -50,17 +37,61 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 }
 
 
-async function printAllDetails(
+async function prepareContentItem(
+  rawItem: PageObjectResponse,
+  blogName: string,
+  tgChat: TgChat
+): Promise<ContentItem> {
+  const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
+  const parsedContentItem: ContentItem = parseContentItem(rawItem, blogSns);
+
+  try {
+    validateContentItem(parsedContentItem);
+  }
+  catch (e) {
+    throw new Error(tgChat.app.i18n.errors.invalidContent + e);
+  }
+
+  return parsedContentItem;
+}
+
+async function preparePage(
   parsedContentItem: ContentItem,
   blogName: string,
   tgChat: TgChat
 ): Promise<RawPageContent | undefined> {
-  let parsedPage: RawPageContent | undefined;
+  if (!parsedContentItem.relativePageId) return;
 
-  await printContentPlanDetails(parsedContentItem, blogName, tgChat);
+  // load props of page from notion
+  const pageProperties = await loadPageProps(parsedContentItem.relativePageId, tgChat);
+  // load all the page blocks from notion
+  const pageContent = await loadPageBlocks(parsedContentItem.relativePageId, tgChat);
+  const parsedPage = parsePageContent(pageProperties, pageContent);
 
-  if (parsedContentItem.relativePageId) {
-    parsedPage = await printPageDetails(parsedContentItem.relativePageId, blogName, tgChat);
+  // TODO: а валидация ???
+
+  return parsedPage;
+}
+
+async function printAllDetails(
+  blogName: string,
+  tgChat: TgChat,
+  parsedContentItem: ContentItem,
+  parsedPage?: RawPageContent
+) {
+  // make content plan info details message
+  const contentInfoMsg = makeContentPlanItemDetails(parsedContentItem, tgChat.app.i18n);
+  // send record's info from content plan
+  await tgChat.reply(
+    tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
+  );
+
+  if (parsedPage) {
+    const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
+
+    await tgChat.reply(
+      tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
+    );
   }
   else {
     // TODO: если нет ссылки то что делать? - обьявление
@@ -76,34 +107,6 @@ async function printAllDetails(
       false,
     );
   }
-
-  return parsedPage;
-}
-
-async function printContentPlanDetails(parsedContentItem: ContentItem, blogName: string, tgChat: TgChat) {
-  // make content plan info details message
-  const contentInfoMsg = makeContentPlanItemDetails(parsedContentItem, tgChat.app.i18n);
-  // send record's info from content plan
-  await tgChat.reply(
-    tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
-  );
-}
-
-async function printPageDetails(pageId: string, blogName: string, tgChat: TgChat): Promise<RawPageContent> {
-  // load props of page from notion
-  const pageProperties = await loadPageProps(pageId, tgChat);
-  // load all the page blocks from notion
-  const pageContent = await loadPageBlocks(pageId, tgChat);
-  const parsedPage = parsePageContent(pageProperties, pageContent);
-  const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
-
-  // TODO: а валидация ???
-
-  await tgChat.reply(
-    tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
-  );
-
-  return parsedPage;
 }
 
 async function askMenu(
