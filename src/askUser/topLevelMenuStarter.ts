@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat';
 import {askMainMenu, SITE_SELECTED_RESULT, TASKS_SELECTED_RESULT} from './askMainMenu';
 import {askBlogMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askBlogMenu';
-import PublishFromContentPlan from '../publish/PublishFromContentPlan';
+import {startPublishFromContentPlan} from '../publish/startPublishFromContentPlan';
 import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
@@ -29,7 +29,9 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
     else {
       askBlogMenu(
         tgChat,
-        (action: string) => blogActionSelected(action, blogNameOrAction, tgChat)
+        tgChat.asyncCb(
+          async (action: string) => blogActionSelected(action, blogNameOrAction, tgChat)
+        )
       )
         .catch((e) => tgChat.app.consoleLog.error(e));
     }
@@ -37,12 +39,9 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
 }
 
 
-function blogActionSelected(action: string, blogName: string, tgChat: TgChat) {
+async function blogActionSelected(action: string, blogName: string, tgChat: TgChat) {
   if (action === MENU_PUBLISH) {
-    const publish = new PublishFromContentPlan(blogName, tgChat);
-
-    publish.start()
-      .catch((e) => tgChat.app.consoleLog.error(e));
+    await startPublishFromContentPlan(blogName, tgChat);
   }
   else if (action === MENU_MAKE_STORY) {
     // TODO: do it

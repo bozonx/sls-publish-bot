@@ -66,7 +66,7 @@ const dict = {
     afterTomorrow: 'Послезавтра',
   },
   errors: {
-    invalidContent: `Запить контент плана не валидна. Исправьте в notion: `,
+    invalidContent: `Запись контент плана не валидна. Исправьте в notion: `,
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
