@@ -33,28 +33,28 @@ export async function askPublishConfirm(
   const buttons = [
     [
       {
+        text: (correctedTime)
+          ? tgChat.app.i18n.menu.changedPostTime + correctedTime
+          : tgChat.app.i18n.menu.changePostTime,
+        callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
+      },
+    ],
+    [
+      {
         text: (allowPreview)
           ? tgChat.app.i18n.menu.noPreview
           : tgChat.app.i18n.menu.yesPreview,
         callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
       },
     ],
-    compactUndefined([
-      {
-        text: (correctedTime)
-          ? tgChat.app.i18n.menu.changedPostTime + correctedTime
-          : tgChat.app.i18n.menu.changePostTime,
-        callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
-      },
-      (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
-        ? {
-          text: (allowFooter)
-            ? tgChat.app.i18n.menu.noPostFooter
-            : tgChat.app.i18n.menu.yesPostFooter,
-          callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
-        }
-        : undefined,
-    ]),
+    (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
+      ? [{
+        text: (allowFooter)
+          ? tgChat.app.i18n.menu.noPostFooter
+          : tgChat.app.i18n.menu.yesPostFooter,
+        callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
+      }]
+      : [],
     [
       BACK_BTN,
       CANCEL_BTN,
