@@ -81,6 +81,17 @@ async function printAllDetails(
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent
 ) {
+  if (parsedPage?.imageUrl) {
+    await tgChat.app.tg.bot.telegram.sendPhoto(
+      tgChat.botChatId,
+      parsedPage.imageUrl,
+      {
+        caption: `${parsedPage.imageBaseName}.${parsedPage.imageExt}`,
+        //parse_mode
+      }
+    )
+  }
+
   // make content plan info details message
   const contentInfoMsg = makeContentPlanItemDetails(parsedContentItem, tgChat.app.i18n);
   // send record's info from content plan
