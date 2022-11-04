@@ -21,6 +21,10 @@ export async function publishArticleTg(
   if (!tmpl) throw new Error(`Telegram config doesn't have article post template`);
 
   const telegraPhContent = transformNotionToTelegraph(parsedPage.textBlocks);
+
+  throw new Error(`1111`)
+
+  // create article on telegra.ph
   const tgPath = await tgChat.app.telegraPh.create(blogName, parsedPage.title, telegraPhContent);
   const articleUrl = makeTelegraPhUrl(tgPath);
 

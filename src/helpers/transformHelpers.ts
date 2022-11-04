@@ -186,12 +186,12 @@ function toTelegraPh(
       children: [preparedText],
     };
   }
-  else if (annotations.underline) {
-    return {
-      tag: 'em',
-      children: [preparedText],
-    };
-  }
+  // else if (annotations.underline) {
+  //   return {
+  //     tag: 'em',
+  //     children: [preparedText],
+  //   };
+  // }
   else if (annotations.code) {
     return {
       tag: 'code',

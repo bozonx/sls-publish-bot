@@ -793,10 +793,10 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
 
         break;
       case NOTION_BLOCK_TYPES.code:
-        // TODO: нет текста, только язык
         result.push({
           tag: 'pre',
-          children: [richTextToHtmlCodeBlock((block as any)?.code?.rich_text, (block as any)?.code?.language)]
+          attrs: {lang: (block as any)?.code?.language},
+          children: [richTextToSimpleTextList((block as any)?.code?.rich_text)]
         });
 
         break;
