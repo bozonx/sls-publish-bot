@@ -36,3 +36,7 @@ export function makePageDetailsMsg(pageContent: RawPageContent, i18n: typeof ru)
    + `${i18n.pageInfo.contentLengthWithTags}: ` +
     (transformNotionToCleanText(pageContent.textBlocks) + '\n\n' + instaTags).length;
 }
+
+export function validatePageItem(pageContent: RawPageContent) {
+  // TODO: add
+}

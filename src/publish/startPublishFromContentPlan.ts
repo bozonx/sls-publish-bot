@@ -3,7 +3,7 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentPlanItemDetails, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem, {SnTypes} from '../types/ContentItem';
-import {makePageDetailsMsg, parsePageContent} from './parsePage';
+import {makePageDetailsMsg, parsePageContent, validatePageItem} from './parsePage';
 import {askPublishConfirm, PUBLISH_CONFIRM_ACTION, PublishConfirmAction} from '../askUser/askPublishConfirm';
 import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
@@ -68,7 +68,7 @@ async function preparePage(
   const pageContent = await loadPageBlocks(parsedContentItem.relativePageId, tgChat);
   const parsedPage = parsePageContent(pageProperties, pageContent);
 
-  // TODO: а валидация ???
+  validatePageItem(parsedPage)
 
   return parsedPage;
 }
