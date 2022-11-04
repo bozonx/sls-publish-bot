@@ -89,8 +89,6 @@ export async function publishFork(
             parsedPage,
             blogName,
             tgChat,
-            allowPreview,
-            allowFooter,
             correctedTime
           );
 

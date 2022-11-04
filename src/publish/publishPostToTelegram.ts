@@ -22,13 +22,11 @@ export async function publishPostToTelegram(
   let post = transformNotionToTelegramPostMd(parsedPage.textBlocks);
 
   if (allowFooter) {
-    post += '\n\n' + prepareFooterPost(
+    post += prepareFooterPost(
       tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
       parsedPage.tgTags
     )
   }
-
-  //console.log(3333, transformNotionToTelegramPostMd(parsedPage.textBlocks))
 
   let msgId: number;
   // Print to log channel
@@ -55,7 +53,7 @@ export async function publishPostToTelegram(
     )
   }
   catch (e) {
-    await tgChat.app.channelLog.error(`Can't publish prepared to telegram post to log channel`);
+    await tgChat.app.channelLog.error(`Can't publish prepared post to telegram to log channel`);
 
     throw e;
   }
@@ -78,4 +76,9 @@ export async function publishPostToTelegram(
   };
 
   await tgChat.app.tasks.addTask(task);
+}
+
+
+export async function publishPostToTelegram111() {
+
 }

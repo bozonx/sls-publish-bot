@@ -13,5 +13,7 @@ export async function publishPost2000Tg(
   allowFooter: boolean,
   correctedTime?: string,
 ) {
+  const resolvedTime = (correctedTime) ? correctedTime : contentItem.time;
+
 
 }
