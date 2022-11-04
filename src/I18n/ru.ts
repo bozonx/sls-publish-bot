@@ -13,6 +13,7 @@ const dict = {
     selectContent: 'Выберете запись для публикации',
     selectManageSite: 'Сайт slsfreedom',
     selectManageTasks: 'Управлять заданиями',
+    selectManageTelegraph: 'Управлять telegra.ph',
     publish: 'Опубликовать из контент плана',
     makeStory: 'Создать story в tg',
     makeAdvert: 'Опубликовать рекламу',

@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import {askMainMenu, SITE_SELECTED_RESULT, TASKS_SELECTED_RESULT} from './askMainMenu';
+import {askMainMenu, MENU_MANAGE_TELEGRAPH_CB, SITE_SELECTED_RESULT, TASKS_SELECTED_RESULT} from './askMainMenu';
 import {askBlogMenu, MENU_ADVERT, MENU_MAKE_STORY, MENU_PUBLISH} from './askBlogMenu';
 import {startPublishFromContentPlan} from '../publish/startPublishFromContentPlan';
 import {askSiteMenu} from './askSiteMenu';
@@ -25,6 +25,9 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
         })
       )
         .catch((e) => tgChat.app.consoleLog.error(e));
+    }
+    else if (blogNameOrAction === MENU_MANAGE_TELEGRAPH_CB) {
+
     }
     else {
       askBlogMenu(

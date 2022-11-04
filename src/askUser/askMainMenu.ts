@@ -5,8 +5,9 @@ import TgChat from '../apiTg/TgChat';
 
 const MENU_MANAGE_SITE = 'manage_site';
 const MENU_MANAGE_TASKS = 'manage_tasks';
-export const SITE_SELECTED_RESULT = '!site';
-export const TASKS_SELECTED_RESULT = '!tasks';
+export const MENU_MANAGE_TELEGRAPH_CB = 'MENU_MANAGE_TELEGRAPH_CB';
+export const SITE_SELECTED_RESULT = 'SITE_SELECTED_RESULT';
+export const TASKS_SELECTED_RESULT = 'TASKS_SELECTED_RESULT';
 const BLOG_MARKER = 'blog:';
 
 
@@ -24,6 +25,9 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
           }
           else if (queryData === MENU_MANAGE_TASKS) {
             onDone(TASKS_SELECTED_RESULT);
+          }
+          else if (queryData === MENU_MANAGE_TELEGRAPH_CB) {
+            onDone(MENU_MANAGE_TELEGRAPH_CB);
           }
           else if (queryData.indexOf(BLOG_MARKER) === 0) {
             await blogSelected(queryData, tgChat, onDone);
@@ -65,6 +69,12 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
       {
         text: tgChat.app.i18n.menu.selectManageSite,
         callback_data: MENU_MANAGE_SITE,
+      },
+    ],
+    [
+      {
+        text: tgChat.app.i18n.menu.selectManageTelegraph,
+        callback_data: MENU_MANAGE_TELEGRAPH,
       },
       {
         text: tgChat.app.i18n.menu.selectManageTasks,
