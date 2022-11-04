@@ -63,3 +63,14 @@ export async function publishPreparedPostTg(
 
   await tgChat.app.tasks.addTask(task);
 }
+
+export function publishImageTg(
+  resolvedDate: string,
+  resolvedTime: string,
+  captionMd: string,
+  imageUrls: string[],
+  blogName: string,
+  tgChat: TgChat
+) {
+
+}

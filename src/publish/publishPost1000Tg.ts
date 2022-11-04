@@ -3,7 +3,7 @@ import ContentItem, {SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
 import {prepareFooterPost} from '../helpers/helpers';
-import {publishPreparedPostTg} from './publishHelpers';
+import {publishImageTg, publishPreparedPostTg} from './publishHelpers';
 
 
 export async function publishPost1000Tg(
@@ -25,12 +25,24 @@ export async function publishPost1000Tg(
     )
   }
 
-  await publishPreparedPostTg(
-    contentItem.date,
-    resolvedTime,
-    postStr,
-    blogName,
-    tgChat,
-    allowPreview
-  );
+  if (parsedPage.imageUrl) {
+    await publishImageTg(
+      contentItem.date,
+      resolvedTime,
+      postStr,
+      [parsedPage.imageUrl],
+      blogName,
+      tgChat
+    );
+  }
+  else {
+    await publishPreparedPostTg(
+      contentItem.date,
+      resolvedTime,
+      postStr,
+      blogName,
+      tgChat,
+      allowPreview
+    );
+  }
 }
