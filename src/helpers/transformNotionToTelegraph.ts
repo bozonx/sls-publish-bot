@@ -680,9 +680,9 @@ const test = [
 ];
 
 
-export function transformNotionToTelegraph(): TelegraphNode[] {
+export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): TelegraphNode[] {
   // TODO: remove
-  const notionBlocks: NOTION_BLOCKS = {'0': test} as any
+  //const notionBlocks: NOTION_BLOCKS = {'0': test} as any
 
   let result: TelegraphNode[] = [];
   let ulElIndex = -1;

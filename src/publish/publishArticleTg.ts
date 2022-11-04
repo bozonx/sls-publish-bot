@@ -4,7 +4,8 @@ import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
 import {publishPreparedPostTg} from './publishHelpers';
 import _ from 'lodash';
-import {makeTagsString} from '../helpers/helpers';
+import {makeTagsString, makeTelegraPhUrl} from '../helpers/helpers';
+import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
 
 
 export async function publishArticleTg(
@@ -19,21 +20,25 @@ export async function publishArticleTg(
 
   if (!tmpl) throw new Error(`Telegram config doesn't have article post template`);
 
+  const telegraPhContent = transformNotionToTelegraph(parsedPage.textBlocks);
+  const tgPath = await tgChat.app.telegraPh.create(blogName, parsedPage.title, telegraPhContent);
+  const articleUrl = makeTelegraPhUrl(tgPath);
+
+  console.log(5555, tgPath, articleUrl)
 
   // TODO: сделать статью
 
   //console.log(3333, transformNotionToTelegramPostMd(parsedPage.textBlocks))
 
 
-
-  // TODO: add
-  const articleUrl = '!!!!URL';
-
   const postStr = _.template(tmpl)({
     TITLE: parsedPage.title,
     ARTICLE_URL: articleUrl,
     TAGS: mdFormat.escape(makeTagsString(parsedPage.tgTags)),
   });
+
+  console.log(6666, postStr)
+
 
   await publishPreparedPostTg(
     contentItem.date,

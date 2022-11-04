@@ -25,6 +25,10 @@ export function makeFullNotionLink(pageId: string): string {
   return `https://www.notion.so/${pageId}`;
 }
 
+export function makeTelegraPhUrl(tgPath: string): string {
+  return `https://telegra.ph/${tgPath}`;
+}
+
 // export function makeFullNotionLink(internalLink: string): string {
 //   if (internalLink.indexOf('http') === 0) return internalLink;
 //

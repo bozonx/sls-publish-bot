@@ -3,7 +3,7 @@
  */
 import {getApi} from './telegraphCli/api';
 import App from '../App';
-import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
+import {TelegraphNode} from './telegraphCli/types';
 
 
 export default class TelegraPhMain {
@@ -20,7 +20,6 @@ export default class TelegraPhMain {
 
   async init() {
 
-    transformNotionToTelegraph();
 
     // const res = await this.api.getPage(
     //   'Narushennaya-logika-v-putinskoj-propagande-09-26',
@@ -41,16 +40,17 @@ export default class TelegraPhMain {
    * Create a page
    * @return {string} path like 'some-title-10-30-3'
    */
-  async create(blogName: string, title: string, contentMd: string): Promise<string> {
+  async create(blogName: string, title: string, content: TelegraphNode[]): Promise<string> {
     const result = await this.api.createPage({
       title,
-      content: [
-        {
-          tag: 'p',
-          // attrs: {},
-          children: ['some string clind'],
-        }
-      ],
+      content,
+      // content: [
+      //   {
+      //     tag: 'p',
+      //     // attrs: {},
+      //     children: ['some string clind'],
+      //   }
+      // ],
       author_name: this.app.config.blogs[blogName].sn.telegram?.telegraPhAuthorName,
       author_url: this.app.config.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
     });
