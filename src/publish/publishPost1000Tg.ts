@@ -30,7 +30,7 @@ export async function publishPost1000Tg(
       contentItem.date,
       resolvedTime,
       postStr,
-      [parsedPage.imageUrl],
+      parsedPage.imageUrl,
       blogName,
       tgChat
     );

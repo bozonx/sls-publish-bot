@@ -22,3 +22,25 @@ export async function publishTgPost(
 
   return result.message_id;
 }
+
+export async function publishTgImage(
+  chatId: number | string,
+  captionMd: string,
+  imageUrl: string,
+  blogName: string,
+  tgChat: TgChat,
+  disableNotification = false
+): Promise<number> {
+  const result = await tgChat.app.tg.bot.telegram.sendPhoto(
+    chatId,
+    imageUrl,
+    {
+      caption: captionMd,
+      parse_mode: tgChat.app.appConfig.telegram.parseMode,
+      disable_notification: disableNotification,
+      // TODO: add web buttons for ad
+    }
+  );
+
+  return result.message_id;
+}
