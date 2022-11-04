@@ -5,7 +5,7 @@ import {startPublishFromContentPlan} from '../publish/startPublishFromContentPla
 import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
-import {askTelegraphMenu} from './askTelegraphMenu';
+import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu';
 
 
 
@@ -26,8 +26,17 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
       );
     }
     else if (blogNameOrAction === MENU_MANAGE_TELEGRAPH_CB) {
-      return askTelegraphMenu(tgChat, () => {
-
+      return askTelegraphMenu(tgChat, (action: TelegraphMenu) => {
+        switch (action) {
+          case TELEGRAPH_MENU.LOGIN:
+            // TODO: add
+            break;
+          case TELEGRAPH_MENU.LIST:
+            // TODO: add
+            break;
+          default:
+            break;
+        }
       })
     }
     else {
