@@ -18,11 +18,15 @@ export function makeTagsString(tags: string[]): string {
   return tags.map((item) => `#${item}`).join(' ');
 }
 
-export function makeFullNotionLink(internalLink: string): string {
-  if (internalLink.indexOf('http') === 0) return internalLink;
-
-  return `https://www.notion.so/${_.trimStart(internalLink, '/')}`
+export function makeFullNotionLink(pageId: string): string {
+  return `https://www.notion.so/${pageId}`;
 }
+
+// export function makeFullNotionLink(internalLink: string): string {
+//   if (internalLink.indexOf('http') === 0) return internalLink;
+//
+//   return `https://www.notion.so/${_.trimStart(internalLink, '/')}`
+// }
 
 export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {
   if ([

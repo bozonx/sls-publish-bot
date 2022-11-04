@@ -37,8 +37,8 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     // TODO: обработать ошибку - вернуть назад или чо
     await printContentPlanDetails(parsedContentItem, blogName, tgChat);
 
-    if (parsedContentItem.pageLink) {
-      await printPageDetails(blogName, tgChat);
+    if (parsedContentItem.relativePageId) {
+      await printPageDetails(parsedContentItem.relativePageId, blogName, tgChat);
     }
     else {
       // TODO: если нет ссылки то что делать? - обьявление
@@ -77,12 +77,6 @@ async function printInfo(parsedContentItem: ContentItem, blogName: string, tgCha
 
   // TODO: refactor
   // send page info
-  // TODO: лучше сделать сразу pageId
-
-  const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
-
-
-
 
   if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
     await tgChat.reply(

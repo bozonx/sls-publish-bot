@@ -18,12 +18,17 @@ import {FULL_DATE_FORMAT} from '../types/constants';
 
 export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]): ContentItem {
   const pubType: PublicationTypes = (item.properties[CONTENT_PROPS.type] as any)?.select.name || '';
+  const link = (item.properties[CONTENT_PROPS.gist] as any)?.rich_text[0]?.href;
+  const relativePageId: string | undefined = (link)
+    // TODO: а если передана полная ссылка ????
+    ? _.trimStart(link, '/')
+    : undefined;
 
   return {
     date: (item.properties[CONTENT_PROPS.date] as any)?.date.start || '',
     time: (item.properties[CONTENT_PROPS.time] as any)?.select.name || '',
     gist: (item.properties[CONTENT_PROPS.gist] as any)?.rich_text[0]?.plain_text || '',
-    pageLink: (item.properties[CONTENT_PROPS.gist] as any)?.rich_text[0]?.href || '',
+    relativePageId,
     note: (item.properties[CONTENT_PROPS.note] as any)?.title[0]?.plain_text || '',
     status: (item.properties[CONTENT_PROPS.status] as any)?.select.name || '',
     sns: resolveSns(
@@ -41,7 +46,7 @@ export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru): 
     + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}\n`
     + `${i18n.contentInfo.type}: ${item.type}. ${i18n.contentInfo.status}: ${item.status}\n`
     + `${i18n.contentInfo.content}: ${item.gist}\n`
-    + `${i18n.contentInfo.link}: ${(item.pageLink) ? makeFullNotionLink(item.pageLink) : ''}\n`
+    + `${i18n.contentInfo.link}: ${(item.relativePageId) ? makeFullNotionLink(item.relativePageId) : ''}\n`
     + `${i18n.contentInfo.note}: ${item.note}`;
 }
 
@@ -65,7 +70,7 @@ export function resolveSns(
 export function validateContentItem(item: ContentItem) {
   if (!item.date) throw new Error(`No date`);
   if (!item.time) throw new Error(`No time`);
-  if (!item.gist && !item.pageLink) throw new Error(`No gist and link`);
+  if (!item.gist && !item.relativePageId) throw new Error(`No gist and link`);
   if (!item.status) throw new Error(`No status`);
   if (!item.type) throw new Error(`No type`);
   if (!item.sns.length) throw new Error(`No social networks`);

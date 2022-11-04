@@ -68,8 +68,8 @@ export default interface ContentItem {
   date: string;
   time: string;
   gist: string;
-  // link to page to make post
-  pageLink: string;
+  // if of relative page which is in link
+  relativePageId?: string;
   note: string;
   status: ContentStatus,
   sns: SnTypes[],
