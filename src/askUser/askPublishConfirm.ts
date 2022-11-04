@@ -21,6 +21,7 @@ export const PUBLISH_CONFIRM_ACTION: Record<PublishConfirmAction, PublishConfirm
 
 
 export async function askPublishConfirm(
+  blogName: string,
   tgChat: TgChat,
   onDone: (action: PublishConfirmAction) => void,
   allowPreview: boolean,
@@ -30,7 +31,6 @@ export async function askPublishConfirm(
   const msg = tgChat.app.i18n.menu.publishConfirmation;
   const buttons = [
     [
-      // TODO: сделать переключение
       {
         text: (allowPreview)
           ? tgChat.app.i18n.menu.noPreview
@@ -45,14 +45,14 @@ export async function askPublishConfirm(
           : tgChat.app.i18n.menu.changePostTime,
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
-      // TODO: не должно быть если не задан в конфиге
-      // TODO: сделать переключение
-      {
-        text: (allowFooter)
-          ? tgChat.app.i18n.menu.noPostFooter
-          : tgChat.app.i18n.menu.yesPostFooter,
-        callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
-      },
+      (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
+        ? {
+          text: (allowFooter)
+            ? tgChat.app.i18n.menu.noPostFooter
+            : tgChat.app.i18n.menu.yesPostFooter,
+          callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
+        }
+        : undefined,
     ],
     [
       BACK_BTN,

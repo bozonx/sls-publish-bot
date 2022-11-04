@@ -117,79 +117,83 @@ async function askMenu(
   allowPreview = true,
   allowFooter = true
 ) {
-  await askPublishConfirm(tgChat, tgChat.asyncCb(async (action: PublishConfirmAction) => {
+  await askPublishConfirm(
+    blogName,
+    tgChat,
+    tgChat.asyncCb(async (action: PublishConfirmAction) => {
 
-    // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
+      // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
 
-    switch (action) {
-      case PUBLISH_CONFIRM_ACTION.OK:
+      switch (action) {
+        case PUBLISH_CONFIRM_ACTION.OK:
 
-        // TODO: нужно обработать ошибку и написать пользователю
-        // Do publish
-        await publishFork(
-          blogName,
-          tgChat,
-          parsedContentItem,
-          allowPreview,
-          allowFooter,
-          correctedTime,
-          parsedPage,
-        );
+          // TODO: нужно обработать ошибку и написать пользователю
+          // Do publish
+          await publishFork(
+            blogName,
+            tgChat,
+            parsedContentItem,
+            allowPreview,
+            allowFooter,
+            correctedTime,
+            parsedPage,
+          );
 
-        break;
-      case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
-        await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+          break;
+        case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
+          await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+            await tgChat.reply(
+              tgChat.app.i18n.menu.selectedTimeMsg
+              + parsedContentItem.date + ' ' + newTime
+            );
+            await askMenu(
+              blogName,
+              tgChat,
+              parsedContentItem,
+              parsedPage,
+              newTime,
+              allowPreview,
+              allowFooter
+            );
+          }));
+
+          break;
+        case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
           await tgChat.reply(
-            tgChat.app.i18n.menu.selectedTimeMsg
-            + parsedContentItem.date + ' ' + newTime
+            tgChat.app.i18n.menu.selectedNoFooter
+            + tgChat.app.i18n.onOff[Number(allowPreview)]
           );
           await askMenu(
             blogName,
             tgChat,
             parsedContentItem,
             parsedPage,
-            newTime,
-            allowPreview,
-            allowFooter
+            correctedTime,
+            !allowPreview,
+            allowFooter,
           );
-        }));
 
-        break;
-      case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
-        await tgChat.reply(
-          tgChat.app.i18n.menu.selectedNoFooter
-          + tgChat.app.i18n.onOff[Number(allowPreview)]
-        );
-        await askMenu(
-          blogName,
-          tgChat,
-          parsedContentItem,
-          parsedPage,
-          correctedTime,
-          !allowPreview,
-          allowFooter,
-        );
+          break;
+        case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
+          await tgChat.reply(
+            tgChat.app.i18n.menu.selectedNoPreview
+            + tgChat.app.i18n.onOff[Number(!allowPreview)]
+          );
+          await askMenu(
+            blogName,
+            tgChat,
+            parsedContentItem,
+            parsedPage,
+            correctedTime,
+            !allowPreview,
+            allowFooter,
+          );
 
-        break;
-      case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
-        await tgChat.reply(
-          tgChat.app.i18n.menu.selectedNoPreview
-          + tgChat.app.i18n.onOff[Number(!allowPreview)]
-        );
-        await askMenu(
-          blogName,
-          tgChat,
-          parsedContentItem,
-          parsedPage,
-          correctedTime,
-          !allowPreview,
-          allowFooter,
-        );
-
-        break;
-      default:
-        throw new Error(`Unknown action ${action}`);
+          break;
+        default:
+          throw new Error(`Unknown action ${action}`);
+      }
     }
-  }), allowPreview, allowFooter, correctedTime);
+  ), allowPreview, allowFooter, correctedTime);
 
 }
