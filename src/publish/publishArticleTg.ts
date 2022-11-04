@@ -24,21 +24,11 @@ export async function publishArticleTg(
   const tgPath = await tgChat.app.telegraPh.create(blogName, parsedPage.title, telegraPhContent);
   const articleUrl = makeTelegraPhUrl(tgPath);
 
-  console.log(5555, tgPath, articleUrl)
-
-  // TODO: сделать статью
-
-  //console.log(3333, transformNotionToTelegramPostMd(parsedPage.textBlocks))
-
-
   const postStr = _.template(tmpl)({
     TITLE: parsedPage.title,
     ARTICLE_URL: articleUrl,
     TAGS: mdFormat.escape(makeTagsString(parsedPage.tgTags)),
   });
-
-  console.log(6666, postStr)
-
 
   await publishPreparedPostTg(
     contentItem.date,

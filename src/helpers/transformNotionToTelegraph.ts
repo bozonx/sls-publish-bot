@@ -737,7 +737,7 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
           });
         }
         else {
-          // TODO: нет пустых строк???
+          // TODO: нет пустых строк!!!
           // empty row
           result.push({
             tag: 'p',
