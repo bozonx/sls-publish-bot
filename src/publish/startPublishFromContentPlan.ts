@@ -134,7 +134,6 @@ async function askMenu(
 
       switch (action) {
         case PUBLISH_CONFIRM_ACTION.OK:
-
           // TODO: нужно обработать ошибку и написать пользователю
           // Do publish
           await publishFork(

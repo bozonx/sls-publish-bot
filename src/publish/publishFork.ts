@@ -25,7 +25,7 @@ export async function publishFork(
       switch (sn) {
         case SN_TYPES.telegram:
           if (parsedPage) {
-            if (PUBLICATION_TYPES.post2000) {
+            if (contentItem.type === PUBLICATION_TYPES.post2000) {
               return publishPost2000Tg(
                 contentItem,
                 parsedPage,
