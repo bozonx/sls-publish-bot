@@ -16,13 +16,23 @@ export async function publishArticleTg(
   correctedTime?: string,
 ) {
   const resolvedTime = (correctedTime) ? correctedTime : contentItem.time;
-  const tmpl = tgChat.app.config.blogs[blogName].sn.telegram?.articlePostTmpl
+  const tmpl = tgChat.app.config.blogs[blogName].sn.telegram?.articlePostTmpl;
+  const footer = tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter;
 
   if (!tmpl) throw new Error(`Telegram config doesn't have article post template`);
 
   const telegraPhContent = transformNotionToTelegraph(parsedPage.textBlocks);
 
-  throw new Error(`1111`)
+  // add footer
+  if (footer) {
+    telegraPhContent.push({
+      tag: 'p',
+      children: [
+        '\n',
+        ...footer,
+      ],
+    });
+  }
 
   // create article on telegra.ph
   const tgPath = await tgChat.app.telegraPh.create(blogName, parsedPage.title, telegraPhContent);

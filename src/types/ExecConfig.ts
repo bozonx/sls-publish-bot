@@ -1,5 +1,7 @@
 // Development config
 
+import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
+
 export interface BlogConfig {
   // name for displaying in menu
   dispname: string;
@@ -13,6 +15,7 @@ export interface BlogConfig {
       channelId: number | string;
       postFooter?: string;
       articlePostTmpl?: string;
+      articleFooter?: (TelegraphNode | string)[];
     };
     instagram?: {
     };

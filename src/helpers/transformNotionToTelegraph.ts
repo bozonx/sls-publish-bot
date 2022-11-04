@@ -737,11 +737,10 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
           });
         }
         else {
-          // TODO: нет пустых строк!!!
           // empty row
           result.push({
             tag: 'p',
-            children: [''],
+            children: ['\n'],
           })
         }
         break;
@@ -810,9 +809,6 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
         throw new Error(`Unknown block type: ${block.type}`);
     }
   }
-
-
-  console.log(1111, result)
 
   // TODO: убрать пустые строки в начале и в конце
 

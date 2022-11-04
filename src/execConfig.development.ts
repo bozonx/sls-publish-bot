@@ -29,6 +29,14 @@ const execConf: ExecConfig = {
           channelId: -1001664865912,
           postFooter: '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| ${ TAGS }',
           articlePostTmpl: '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }',
+          articleFooter: [
+            'Автор: Козырин Иван',
+            {
+              tag: 'a',
+              attrs: {href: 'https://t.me/+DT00UFZf3_IwYmY6'},
+              children: ['Система Личной Свободы'],
+            }
+          ],
         },
         instagram: {},
         zen: {},
