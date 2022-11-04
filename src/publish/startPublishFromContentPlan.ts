@@ -4,7 +4,7 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentPlanItemDetails, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem, {SnTypes} from '../types/ContentItem';
-import {makePageInfoMsg, parsePageContent} from './parsePage';
+import {makePageDetailsMsg, parsePageContent} from './parsePage';
 import {askPublishConfirm, PUBLISH_CONFIRM_ACTION, PublishConfirmAction} from '../askUser/askPublishConfirm';
 import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
@@ -62,10 +62,14 @@ async function printContentPlanDetails(parsedContentItem: ContentItem, blogName:
 async function printPageDetails(pageId: string, blogName: string, tgChat: TgChat) {
   // load props of page from notion
   const pageProperties = await loadPageProps(pageId, tgChat);
-  // load all of page blocks from notion
-  const pageContent = await loadPageContent(pageId, tgChat);
+  // load all the page blocks from notion
+  const pageContent = await loadPageBlocks(pageId, tgChat);
   const parsedPage = parsePageContent(pageProperties, pageContent);
-  const pageInfoMsg = makePageInfoMsg(parsedPage, tgChat.app.i18n);
+  const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
+
+  await tgChat.reply(
+    tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
+  );
 }
 
 async function printInfo(parsedContentItem: ContentItem, blogName: string, tgChat: TgChat) {
@@ -78,9 +82,7 @@ async function printInfo(parsedContentItem: ContentItem, blogName: string, tgCha
   const pageId: string = _.trimStart(parsedContentItem.pageLink, '/');
 
 
-  await tgChat.reply(
-    tgChat.app.i18n.menu.pageContent + '\n\n' + pageInfoMsg
-  );
+
 
   if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
     await tgChat.reply(

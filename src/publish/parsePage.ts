@@ -23,7 +23,7 @@ export function parsePageContent(
   };
 }
 
-export function makePageInfoMsg(pageContent: RawPageContent, i18n: typeof ru): string {
+export function makePageDetailsMsg(pageContent: RawPageContent, i18n: typeof ru): string {
   const instaTags = makeTagsString(pageContent.instaTags);
 
   return `${i18n.pageInfo.title}: ${pageContent.title}\n`
