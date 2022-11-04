@@ -133,8 +133,8 @@ async function askMenu(
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent,
   correctedTime?: string,
-  allowPreview = true,
-  allowFooter = true,
+  usePreview = true,
+  useFooter = true,
 ) {
   await askPublishConfirm(
     blogName,
@@ -151,8 +151,8 @@ async function askMenu(
             blogName,
             tgChat,
             parsedContentItem,
-            allowPreview,
-            allowFooter,
+            usePreview,
+            useFooter,
             correctedTime,
             parsedPage,
           );
@@ -174,8 +174,8 @@ async function askMenu(
               parsedContentItem,
               parsedPage,
               newTime,
-              allowPreview,
-              allowFooter
+              usePreview,
+              useFooter
             );
           }));
 
@@ -183,7 +183,7 @@ async function askMenu(
         case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
           await tgChat.reply(
             tgChat.app.i18n.menu.selectedNoFooter
-            + tgChat.app.i18n.onOff[Number(allowPreview)]
+            + tgChat.app.i18n.onOff[Number(usePreview)]
           );
           await askMenu(
             blogName,
@@ -191,15 +191,15 @@ async function askMenu(
             parsedContentItem,
             parsedPage,
             correctedTime,
-            allowPreview,
-            !allowFooter,
+            usePreview,
+            !useFooter,
           );
 
           break;
         case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
           await tgChat.reply(
             tgChat.app.i18n.menu.selectedNoPreview
-            + tgChat.app.i18n.onOff[Number(!allowPreview)]
+            + tgChat.app.i18n.onOff[Number(!usePreview)]
           );
           await askMenu(
             blogName,
@@ -207,8 +207,8 @@ async function askMenu(
             parsedContentItem,
             parsedPage,
             correctedTime,
-            !allowPreview,
-            allowFooter,
+            !usePreview,
+            useFooter,
           );
 
           break;
@@ -216,6 +216,12 @@ async function askMenu(
           throw new Error(`Unknown action ${action}`);
       }
     }
-  ), allowPreview, allowFooter, correctedTime);
+  ),
+    usePreview,
+    useFooter,
+    parsedContentItem.type,
+    Boolean(parsedPage?.imageUrl),
+    correctedTime
+  );
 
 }

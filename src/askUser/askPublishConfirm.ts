@@ -8,6 +8,7 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
+import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 
 
 export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
@@ -24,8 +25,10 @@ export async function askPublishConfirm(
   blogName: string,
   tgChat: TgChat,
   onDone: (action: PublishConfirmAction) => void,
-  allowPreview: boolean,
-  allowFooter: boolean,
+  usePreview: boolean,
+  useFooter: boolean,
+  pubType: PublicationTypes,
+  hasImage: boolean,
   correctedTime?: string,
 ) {
   const msg = tgChat.app.i18n.menu.publishConfirmation;
@@ -38,17 +41,31 @@ export async function askPublishConfirm(
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
     ],
-    [
-      {
-        text: (allowPreview)
-          ? tgChat.app.i18n.menu.noPreview
-          : tgChat.app.i18n.menu.yesPreview,
-        callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
-      },
-    ],
-    (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
+    (!hasImage && [
+      PUBLICATION_TYPES.post1000,
+      PUBLICATION_TYPES.post2000,
+      PUBLICATION_TYPES.announcement
+    ].includes(pubType))
       ? [{
-        text: (allowFooter)
+          text: (usePreview)
+            ? tgChat.app.i18n.menu.noPreview
+            : tgChat.app.i18n.menu.yesPreview,
+          callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
+        }]
+      : [],
+    (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter && [
+      PUBLICATION_TYPES.post1000,
+      PUBLICATION_TYPES.post2000,
+      PUBLICATION_TYPES.mem,
+      PUBLICATION_TYPES.photos,
+      PUBLICATION_TYPES.story,
+      PUBLICATION_TYPES.narrative,
+      PUBLICATION_TYPES.announcement,
+      PUBLICATION_TYPES.reels,
+      PUBLICATION_TYPES.video,
+    ].includes(pubType))
+      ? [{
+        text: (useFooter)
           ? tgChat.app.i18n.menu.noPostFooter
           : tgChat.app.i18n.menu.yesPostFooter,
         callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
