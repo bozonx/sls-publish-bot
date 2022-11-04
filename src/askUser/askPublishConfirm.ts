@@ -8,6 +8,7 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
+import {compactUndefined} from '../lib/arrays';
 
 
 export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
@@ -38,22 +39,23 @@ export async function askPublishConfirm(
         callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
       },
     ],
-    [
+    compactUndefined([
       {
         text: (correctedTime)
           ? tgChat.app.i18n.menu.changedPostTime + correctedTime
           : tgChat.app.i18n.menu.changePostTime,
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
-      (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
+      //(tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
+      (false)
         ? {
           text: (allowFooter)
             ? tgChat.app.i18n.menu.noPostFooter
             : tgChat.app.i18n.menu.yesPostFooter,
           callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
         }
-        : undefined as any,
-    ],
+        : undefined,
+    ]),
     [
       BACK_BTN,
       CANCEL_BTN,
@@ -75,10 +77,10 @@ export async function askPublishConfirm(
       onDone(PUBLISH_CONFIRM_ACTION.CHANGE_TIME);
     }
     else if (queryData === PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER) {
-      //onDone(PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER);
+      onDone(PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER);
     }
     else if (queryData === PUBLISH_CONFIRM_ACTION.NO_PREVIEW) {
-      //onDone(PUBLISH_CONFIRM_ACTION.NO_PREVIEW);
+      onDone(PUBLISH_CONFIRM_ACTION.NO_PREVIEW);
     }
   });
 }

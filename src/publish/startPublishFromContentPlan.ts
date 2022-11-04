@@ -1,3 +1,4 @@
+import {markdownv2 as mdFormat} from 'telegram-format';
 import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
@@ -11,6 +12,8 @@ import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
 import {askSelectTime} from '../askUser/askSelectTime';
 import RawPageContent from '../types/PageContent';
+import _ from 'lodash';
+import {prepareFooterPost} from '../helpers/helpers';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -100,10 +103,14 @@ async function printAllDetails(
   // print footer
   if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
     await tgChat.reply(
-      tgChat.app.i18n.menu.postFooter + ': '
-      + tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+      tgChat.app.i18n.menu.postFooter
+      + prepareFooterPost(
+        tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+        parsedPage?.tgTags
+      ),
       undefined,
-      false,
+      true,
+      true
     );
   }
 }
@@ -112,10 +119,10 @@ async function askMenu(
   blogName: string,
   tgChat: TgChat,
   parsedContentItem: ContentItem,
+  parsedPage?: RawPageContent,
   correctedTime?: string,
   allowPreview = true,
   allowFooter = true,
-  parsedPage?: RawPageContent,
 ) {
   await askPublishConfirm(
     blogName,

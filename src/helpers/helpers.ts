@@ -5,6 +5,7 @@ import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/C
 import TgChat from '../apiTg/TgChat';
 import {AppEvents} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';
+import {markdownv2 as mdFormat} from 'telegram-format/dist/source/markdownv2';
 
 
 export function makeBaseState(): BaseState {
@@ -109,5 +110,18 @@ export function validateTime(rawStr: string) {
     || !moment(`2022-01-01T${rawStr}`).isValid()
   ) {
     throw new Error(`Incorrect time`);
+  }
+}
+
+export function prepareFooterPost(text?: string, tags?: string[]): string {
+  if (!text) return '';
+
+  const preparedText = mdFormat.escape(text || '');
+
+  if (tags) {
+    return _.template(preparedText)({TAGS: makeTagsString(tags)});
+  }
+  else {
+    return text;
   }
 }
