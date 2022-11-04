@@ -34,7 +34,7 @@ export const ROOT_LEVEL_BLOCKS = '0';
   }
  */
 
-export async function loadPageContent(
+export async function loadPageBlocks(
   pageId: string,
   tgChat: TgChat
 ): Promise<NOTION_BLOCKS> {

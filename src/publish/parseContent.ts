@@ -36,7 +36,7 @@ export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]
   }
 }
 
-export function makeContentInfoMsg(item: ContentItem, i18n: typeof ru): string {
+export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru): string {
   return `${i18n.contentInfo.dateTime}: ${moment(item.date).format(FULL_DATE_FORMAT)} ${item.time}\n`
     + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}\n`
     + `${i18n.contentInfo.type}: ${item.type}. ${i18n.contentInfo.status}: ${item.status}\n`

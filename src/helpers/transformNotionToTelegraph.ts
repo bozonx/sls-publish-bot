@@ -1,7 +1,7 @@
 import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
 import {NOTION_BLOCKS} from '../types/types';
-import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageContent';
+import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 import {richTextToHtml, richTextToHtmlCodeBlock, richTextToSimpleTextList} from './transformHelpers';
 
 

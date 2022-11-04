@@ -68,6 +68,7 @@ export default interface ContentItem {
   date: string;
   time: string;
   gist: string;
+  // link to page to make post
   pageLink: string;
   note: string;
   status: ContentStatus,
