@@ -68,7 +68,7 @@ export default interface ContentItem {
   date: string;
   time: string;
   gist: string;
-  // if of relative page which is in link
+  // id of relative page which is in link
   relativePageId?: string;
   note: string;
   status: ContentStatus,

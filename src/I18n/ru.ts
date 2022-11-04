@@ -67,6 +67,7 @@ const dict = {
   },
   errors: {
     invalidContent: `Запись контент плана не валидна. Исправьте в notion: `,
+    errorLoadFromNotion: `Ошибка загрузки из notion: `,
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

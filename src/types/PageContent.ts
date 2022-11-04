@@ -10,6 +10,7 @@ export const PAGE_CONTENT_PROPS = {
   textBlocks: 'textBlocks',
 }
 
+// TODO: rename
 export default interface RawPageContent {
   title: string;
   announcement: string;

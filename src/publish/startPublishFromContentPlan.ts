@@ -11,6 +11,7 @@ import {publishFork} from './publishFork';
 import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
 import {askSelectTime} from '../askUser/askSelectTime';
+import RawPageContent from '../types/PageContent';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -18,10 +19,9 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
   const notPublishedItems: PageObjectResponse[] = await loadNotPublished(blogName,tgChat);
   // ask use select not published item
   await askContentToUse(notPublishedItems, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
-    const parsedContentItem: ContentItem = parseContentItem(
-      item,
-      Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[],
-    );
+    // User selected page - parse it
+    const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
+    const parsedContentItem: ContentItem = parseContentItem(item, blogSns);
 
     try {
       validateContentItem(parsedContentItem);
@@ -34,28 +34,51 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       return;
     }
 
-    // TODO: обработать ошибку - вернуть назад или чо
-    await printContentPlanDetails(parsedContentItem, blogName, tgChat);
+    try {
+      const parsedPage = await printAllDetails(parsedContentItem, blogName, tgChat);
 
-    if (parsedContentItem.relativePageId) {
-      await printPageDetails(parsedContentItem.relativePageId, blogName, tgChat);
+      await askMenu(parsedContentItem, blogName, tgChat, parsedPage);
     }
-    else {
-      // TODO: если нет ссылки то что делать? - обьявление
-      // TODO: проверить что для обьявления выбран telegram
-    }
+    catch (e) {
+      await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
 
-    await printInfo(parsedContentItem, blogName, tgChat);
+      await tgChat.steps.back();
 
-    if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
-      await tgChat.reply(
-        tgChat.app.i18n.menu.postFooter + ': '
-        + tgChat.app.config.blogs[blogName].sn.telegram?.postFooter
-      );
+      return;
     }
   }));
 }
 
+
+async function printAllDetails(
+  parsedContentItem: ContentItem,
+  blogName: string,
+  tgChat: TgChat
+): Promise<RawPageContent | undefined> {
+  let parsedPage: RawPageContent | undefined;
+
+  await printContentPlanDetails(parsedContentItem, blogName, tgChat);
+
+  if (parsedContentItem.relativePageId) {
+    parsedPage = await printPageDetails(parsedContentItem.relativePageId, blogName, tgChat);
+  }
+  else {
+    // TODO: если нет ссылки то что делать? - обьявление
+    // TODO: проверить что для обьявления выбран telegram
+  }
+
+  // print footer
+  if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
+    await tgChat.reply(
+      tgChat.app.i18n.menu.postFooter + ': '
+      + tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+      undefined,
+      false,
+    );
+  }
+
+  return parsedPage;
+}
 
 async function printContentPlanDetails(parsedContentItem: ContentItem, blogName: string, tgChat: TgChat) {
   // make content plan info details message
@@ -66,7 +89,7 @@ async function printContentPlanDetails(parsedContentItem: ContentItem, blogName:
   );
 }
 
-async function printPageDetails(pageId: string, blogName: string, tgChat: TgChat) {
+async function printPageDetails(pageId: string, blogName: string, tgChat: TgChat): Promise<RawPageContent> {
   // load props of page from notion
   const pageProperties = await loadPageProps(pageId, tgChat);
   // load all the page blocks from notion
@@ -74,20 +97,21 @@ async function printPageDetails(pageId: string, blogName: string, tgChat: TgChat
   const parsedPage = parsePageContent(pageProperties, pageContent);
   const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
 
+  // TODO: а валидация ???
+
   await tgChat.reply(
     tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
   );
+
+  return parsedPage;
 }
 
-async function printInfo(parsedContentItem: ContentItem, blogName: string, tgChat: TgChat) {
-
-
-  // TODO: refactor
-  // send page info
-
-
-
-
+async function askMenu(
+  parsedContentItem: ContentItem,
+  blogName: string,
+  tgChat: TgChat,
+  parsedPage?: RawPageContent
+) {
   await askPublishConfirm(tgChat, tgChat.asyncCb(async (action: PublishConfirmAction) => {
     switch (action) {
       case PUBLISH_CONFIRM_ACTION.OK:
