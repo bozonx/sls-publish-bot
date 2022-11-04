@@ -2,6 +2,8 @@ import ContentItem, {PUBLICATION_TYPES, SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import {publishPostToTelegram} from './publishPostToTelegram';
 import TgChat from '../apiTg/TgChat';
+import {publishPost2000Tg} from './publishPost2000Tg';
+import {publishArticleTg} from './publishArticleTg';
 
 
 export async function publishFork(
@@ -23,6 +25,17 @@ export async function publishFork(
       switch (sn) {
         case SN_TYPES.telegram:
           if (parsedPage) {
+            if (PUBLICATION_TYPES.post2000) {
+              return publishPost2000Tg(
+                contentItem,
+                parsedPage,
+                blogName,
+                tgChat,
+                allowFooter,
+                correctedTime
+              );
+            }
+
             return publishPostToTelegram(
               contentItem,
               parsedPage,
@@ -33,19 +46,13 @@ export async function publishFork(
               correctedTime
             );
           }
-          // TODO: тогда поидее надо делать объявление или чо ????
-          // TODO: или заранее проверить
-          // TODO: или если объявление то сразу его сделать pageContent??
+          else {
+            // TODO: тогда поидее надо делать объявление или чо ????
+            // TODO: или заранее проверить
+            // TODO: или если объявление то сразу его сделать pageContent??
+          }
 
-        // case SN_TYPES.zen:
-        //   break;
-        // case SN_TYPES.instagram:
-        //   break;
-        // case SN_TYPES.site:
-        //   break;
-        // case SN_TYPES.tiktok:
-        //   break;
-        // // and youtube
+        // also - zen, instagram, site, tiktok, youtube
         default:
           throw new Error(`Unknown or unsupported sn type ${sn}`);
       }
@@ -61,15 +68,8 @@ export async function publishFork(
       switch (sn) {
         case SN_TYPES.telegram:
 
-        // case SN_TYPES.zen:
-        //   break;
-        // case SN_TYPES.instagram:
-        //   break;
-        // case SN_TYPES.site:
-        //   break;
-        // case SN_TYPES.tiktok:
-        //   break;
-        // // and youtube
+
+        // also - zen, instagram, site, tiktok, youtube
         default:
           throw new Error(`Unknown or unsupported sn type ${sn}`);
       }
@@ -81,21 +81,26 @@ export async function publishFork(
     for (const sn of contentItem.sns) {
       switch (sn) {
         case SN_TYPES.telegram:
+          // TODO: а что делать с ошибками ???
+          if (!parsedPage) throw new Error(`No page to publish`);
 
-        // case SN_TYPES.zen:
-        //   break;
-        // case SN_TYPES.instagram:
-        //   break;
-        // case SN_TYPES.site:
-        //   break;
-        // case SN_TYPES.tiktok:
-        //   break;
-        // // and youtube
+          return publishArticleTg(
+            contentItem,
+            parsedPage,
+            blogName,
+            tgChat,
+            allowPreview,
+            allowFooter,
+            correctedTime
+          );
+
+        // also - zen, instagram, site, tiktok, youtube
         default:
           throw new Error(`Unknown or unsupported sn type ${sn}`);
       }
     }
   }
+
   // TODO: add announcement
   // TODO: add poll
   // TODO: add reels
