@@ -5,7 +5,7 @@ import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/C
 import TgChat from '../apiTg/TgChat';
 import {AppEvents} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';
-import {markdownv2 as mdFormat} from 'telegram-format/dist/source/markdownv2';
+import {markdownv2 as mdFormat} from 'telegram-format';
 
 
 export function makeBaseState(): BaseState {
@@ -16,6 +16,8 @@ export function makeBaseState(): BaseState {
 }
 
 export function makeTagsString(tags: string[]): string {
+  if (!tags.length) return '';
+
   return tags.map((item) => `#${item}`).join(' ');
 }
 
