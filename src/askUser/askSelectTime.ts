@@ -7,6 +7,8 @@ import {
   CANCEL_BTN_CALLBACK,
 } from '../types/constants';
 import BaseState from '../types/BaseState';
+import _ from 'lodash';
+import {validateTime} from '../helpers/helpers';
 
 
 export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => void) {
@@ -40,7 +42,18 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
       tgChat.events.addListener(
         AppEvents.MESSAGE,
         tgChat.asyncCb(async (message: string) => {
-          console.log(11111, message)
+          const trimmed = _.trim(message);
+
+          try {
+            validateTime(trimmed);
+          }
+          catch (e) {
+            await tgChat.reply(tgChat.app.i18n.menu.incorrectTime)
+
+            return;
+          }
+
+          onDone(message);
         })
       ),
       AppEvents.MESSAGE

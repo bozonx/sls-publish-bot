@@ -28,8 +28,13 @@ const dict = {
     taskRemoveError: 'Не удалось удалить задание. ',
     changePostTime: 'Изменить время публикации',
     noPostFooter: 'Убрать footer',
+    yesPostFooter: 'Добавить footer',
+    noPreview: 'Не делать предпросмотр ссылки',
+    yesPreview: 'Добавить предпросмотр ссылки',
     selectTime: 'Напишите время в таком формате: 03:59, 23:08',
     postFooter: 'Футер поста: ',
+    selectedTimeMsg: 'Пост будет опубликован: ',
+    incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
   },
   contentInfo: {
     dateTime: 'Дата и время',

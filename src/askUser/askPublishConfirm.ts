@@ -10,12 +10,13 @@ import {
 import {addSimpleStep} from '../helpers/helpers';
 
 
-export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER';
+export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
 
 export const PUBLISH_CONFIRM_ACTION: Record<PublishConfirmAction, PublishConfirmAction> = {
   OK: 'OK',
   CHANGE_TIME: 'CHANGE_TIME',
   NO_POST_FOOTER: 'NO_POST_FOOTER',
+  NO_PREVIEW: 'NO_PREVIEW',
 };
 
 
@@ -26,13 +27,23 @@ export async function askPublishConfirm(
   const msg = tgChat.app.i18n.menu.publishConfirmation;
   const buttons = [
     [
+      // TODO: сделать переключение
+      {
+        text: tgChat.app.i18n.menu.noPreview,
+        //text: tgChat.app.i18n.menu.yesPreview,
+        callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
+      },
+    ],
+    [
       {
         text: tgChat.app.i18n.menu.changePostTime,
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
       // TODO: не должно быть если не задан в конфиге
+      // TODO: сделать переключение
       {
         text: tgChat.app.i18n.menu.noPostFooter,
+        //text: tgChat.app.i18n.menu.yesPostFooter,
         callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
       },
     ],
@@ -57,7 +68,10 @@ export async function askPublishConfirm(
       onDone(PUBLISH_CONFIRM_ACTION.CHANGE_TIME);
     }
     else if (queryData === PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER) {
-      onDone(PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER);
+      //onDone(PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER);
+    }
+    else if (queryData === PUBLISH_CONFIRM_ACTION.NO_PREVIEW) {
+      //onDone(PUBLISH_CONFIRM_ACTION.NO_PREVIEW);
     }
   });
 }

@@ -10,6 +10,7 @@ import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
 import {loadPageContent} from '../notionRequests/pageContent';
 import {loadPageProps} from '../notionRequests/pageProps';
+import {askSelectTime} from '../askUser/askSelectTime';
 
 
 export default class PublishFromContentPlan {
@@ -88,7 +89,15 @@ export default class PublishFromContentPlan {
         switch (action) {
           case PUBLISH_CONFIRM_ACTION.OK:
             await publishFork(this.blogName, this.tgChat, parsedContentItem, parsedPage);
+
+            break;
           case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
+            await askSelectTime(this.tgChat, this.tgChat.asyncCb(async (time: string) => {
+              await this.tgChat.reply(
+                this.tgChat.app.i18n.menu.selectedTimeMsg
+                + parsedContentItem.date + ' ' + time
+              );
+            }));
 
             break;
 

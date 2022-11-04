@@ -98,3 +98,12 @@ export async function addSimpleStep(
     ]);
   });
 }
+
+export function validateTime(rawStr: string) {
+  if (
+    rawStr.indexOf(':') < 0
+    || !moment(`2022-01-01T${rawStr}`).isValid()
+  ) {
+    throw new Error(`Incorrect time`);
+  }
+}
