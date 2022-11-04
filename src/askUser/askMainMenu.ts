@@ -74,7 +74,7 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
     [
       {
         text: tgChat.app.i18n.menu.selectManageTelegraph,
-        callback_data: MENU_MANAGE_TELEGRAPH,
+        callback_data: MENU_MANAGE_TELEGRAPH_CB,
       },
       {
         text: tgChat.app.i18n.menu.selectManageTasks,

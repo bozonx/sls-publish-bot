@@ -20,6 +20,8 @@ const dict = {
     contentParams: 'Параметры публикации:',
     pageContent: 'Содержание страницы:',
     publishConfirmation: 'Опубликовать?',
+    telegraphMenu: 'Меню сервиса telegra.ph',
+    telegraphList: 'Список статей',
     siteMenu: 'Меню сайта slsfreedom.org',
     taskList: 'Текущие задания',
     emptyTaskList: 'Нет текущих заданий',

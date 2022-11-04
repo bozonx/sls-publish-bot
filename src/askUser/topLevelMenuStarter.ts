@@ -5,17 +5,17 @@ import {startPublishFromContentPlan} from '../publish/startPublishFromContentPla
 import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
+import {askTelegraphMenu} from './askTelegraphMenu';
 
 
 
 export async function topLevelMenuStarter(tgChat: TgChat) {
-  return askMainMenu(tgChat, (blogNameOrAction: string) => {
+  return askMainMenu(tgChat, tgChat.asyncCb(async (blogNameOrAction: string) => {
     if (blogNameOrAction === SITE_SELECTED_RESULT) {
       // site selected
       return askSiteMenu(tgChat, () => {
         // TODO: What to do on done???
-      })
-        .catch((e) => tgChat.app.consoleLog.error(e));
+      });
     }
     else if (blogNameOrAction === TASKS_SELECTED_RESULT) {
       return askTasksListMenu(
@@ -23,22 +23,22 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
         (taskId: string) => askTaskMenu(taskId, tgChat, () => {
           tgChat.steps.back();
         })
-      )
-        .catch((e) => tgChat.app.consoleLog.error(e));
+      );
     }
     else if (blogNameOrAction === MENU_MANAGE_TELEGRAPH_CB) {
+      return askTelegraphMenu(tgChat, () => {
 
+      })
     }
     else {
-      askBlogMenu(
+      return askBlogMenu(
         tgChat,
         tgChat.asyncCb(
           async (action: string) => blogActionSelected(action, blogNameOrAction, tgChat)
         )
-      )
-        .catch((e) => tgChat.app.consoleLog.error(e));
+      );
     }
-  });
+  }));
 }
 
 
