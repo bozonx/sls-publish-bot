@@ -22,7 +22,10 @@ export const PUBLISH_CONFIRM_ACTION: Record<PublishConfirmAction, PublishConfirm
 
 export async function askPublishConfirm(
   tgChat: TgChat,
-  onDone: (action: PublishConfirmAction) => void
+  onDone: (action: PublishConfirmAction) => void,
+  allowPreview: boolean,
+  allowFooter: boolean,
+  correctedTime?: string,
 ) {
   const msg = tgChat.app.i18n.menu.publishConfirmation;
   const buttons = [

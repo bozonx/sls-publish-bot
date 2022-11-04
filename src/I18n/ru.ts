@@ -34,6 +34,8 @@ const dict = {
     selectTime: 'Напишите время в таком формате: 03:59, 23:08',
     postFooter: 'Футер поста: ',
     selectedTimeMsg: 'Пост будет опубликован: ',
+    selectedNoPreview: 'Предпросмотр ссылки: ',
+    selectedNoFooter: 'Подпись поста: ',
     incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
   },
   contentInfo: {
@@ -65,6 +67,7 @@ const dict = {
     tomorrow: 'Завтра',
     afterTomorrow: 'Послезавтра',
   },
+  onOff: ['Выкл', 'Вкл'],
   errors: {
     invalidContent: `Запись контент плана не валидна. Исправьте в notion: `,
     errorLoadFromNotion: `Ошибка загрузки из notion: `,

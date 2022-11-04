@@ -8,7 +8,10 @@ export async function publishFork(
   blogName: string,
   tgChat: TgChat,
   contentItem: ContentItem,
-  parsedPage: RawPageContent
+  allowPreview: boolean,
+  allowFooter: boolean,
+  correctedTime?: string,
+  parsedPage?: RawPageContent,
 ) {
   // post like
   if ([

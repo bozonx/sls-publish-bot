@@ -23,8 +23,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       const parsedPage = await preparePage(parsedContentItem, blogName, tgChat);
 
       await printAllDetails(blogName, tgChat, parsedContentItem, parsedPage);
-
-      await askMenu(parsedContentItem, blogName, tgChat, parsedPage);
+      await askMenu(blogName, tgChat, parsedContentItem, parsedPage);
     }
     catch (e) {
       await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
@@ -110,37 +109,87 @@ async function printAllDetails(
 }
 
 async function askMenu(
-  parsedContentItem: ContentItem,
   blogName: string,
   tgChat: TgChat,
-  parsedPage?: RawPageContent
+  parsedContentItem: ContentItem,
+  parsedPage?: RawPageContent,
+  correctedTime?: string,
+  allowPreview = true,
+  allowFooter = true
 ) {
   await askPublishConfirm(tgChat, tgChat.asyncCb(async (action: PublishConfirmAction) => {
+
+    // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
+
     switch (action) {
       case PUBLISH_CONFIRM_ACTION.OK:
-        await publishFork(blogName, tgChat, parsedContentItem, parsedPage);
+
+        // TODO: нужно обработать ошибку и написать пользователю
+        // Do publish
+        await publishFork(
+          blogName,
+          tgChat,
+          parsedContentItem,
+          allowPreview,
+          allowFooter,
+          correctedTime,
+          parsedPage,
+        );
 
         break;
       case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
-        await askSelectTime(tgChat, tgChat.asyncCb(async (time: string) => {
+        await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
           await tgChat.reply(
             tgChat.app.i18n.menu.selectedTimeMsg
-            + parsedContentItem.date + ' ' + time
+            + parsedContentItem.date + ' ' + newTime
+          );
+          await askMenu(
+            blogName,
+            tgChat,
+            parsedContentItem,
+            parsedPage,
+            newTime,
+            allowPreview,
+            allowFooter
           );
         }));
 
         break;
-
-      // TODO: не должно быть если не задан в конфиге
       case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
-        // TODO: add
+        await tgChat.reply(
+          tgChat.app.i18n.menu.selectedNoFooter
+          + tgChat.app.i18n.onOff[Number(allowPreview)]
+        );
+        await askMenu(
+          blogName,
+          tgChat,
+          parsedContentItem,
+          parsedPage,
+          correctedTime,
+          !allowPreview,
+          allowFooter,
+        );
+
+        break;
+      case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
+        await tgChat.reply(
+          tgChat.app.i18n.menu.selectedNoPreview
+          + tgChat.app.i18n.onOff[Number(!allowPreview)]
+        );
+        await askMenu(
+          blogName,
+          tgChat,
+          parsedContentItem,
+          parsedPage,
+          correctedTime,
+          !allowPreview,
+          allowFooter,
+        );
 
         break;
       default:
         throw new Error(`Unknown action ${action}`);
-
-        break;
     }
-  }));
+  }), allowPreview, allowFooter, correctedTime);
 
 }
