@@ -1,6 +1,6 @@
 import ContentItem, {PUBLICATION_TYPES, SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
-import {publishPostToTelegram} from './publishPostToTelegram';
+import {publishPost1000Tg} from './publishPost1000Tg';
 import TgChat from '../apiTg/TgChat';
 import {publishPost2000Tg} from './publishPost2000Tg';
 import {publishArticleTg} from './publishArticleTg';
@@ -36,7 +36,7 @@ export async function publishFork(
               );
             }
 
-            return publishPostToTelegram(
+            return publishPost1000Tg(
               contentItem,
               parsedPage,
               blogName,

@@ -9,7 +9,7 @@ import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTeleg
 import {prepareFooterPost} from '../helpers/helpers';
 
 
-export async function publishPostToTelegram(
+export async function publishPost1000Tg(
   contentItem: ContentItem,
   parsedPage: RawPageContent,
   blogName: string,
