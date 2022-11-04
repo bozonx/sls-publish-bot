@@ -46,8 +46,7 @@ export async function askPublishConfirm(
           : tgChat.app.i18n.menu.changePostTime,
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
-      //(tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
-      (false)
+      (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter)
         ? {
           text: (allowFooter)
             ? tgChat.app.i18n.menu.noPostFooter

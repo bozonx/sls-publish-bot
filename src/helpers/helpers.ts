@@ -116,12 +116,9 @@ export function validateTime(rawStr: string) {
 export function prepareFooterPost(text?: string, tags?: string[]): string {
   if (!text) return '';
 
-  const preparedText = mdFormat.escape(text || '');
+  const resolvedText: string = (tags)
+    ? _.template(text)({TAGS: mdFormat.escape(makeTagsString(tags))})
+    : text
 
-  if (tags) {
-    return _.template(preparedText)({TAGS: makeTagsString(tags)});
-  }
-  else {
-    return text;
-  }
+  return resolvedText;
 }
