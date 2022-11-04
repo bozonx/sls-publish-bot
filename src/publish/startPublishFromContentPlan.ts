@@ -46,6 +46,13 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     }
 
     await printInfo(parsedContentItem, blogName, tgChat);
+
+    if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
+      await tgChat.reply(
+        tgChat.app.i18n.menu.postFooter + ': '
+        + tgChat.app.config.blogs[blogName].sn.telegram?.postFooter
+      );
+    }
   }));
 }
 
@@ -78,12 +85,7 @@ async function printInfo(parsedContentItem: ContentItem, blogName: string, tgCha
   // TODO: refactor
   // send page info
 
-  if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
-    await tgChat.reply(
-      tgChat.app.i18n.menu.postFooter + ': '
-      + tgChat.app.config.blogs[blogName].sn.telegram?.postFooter
-    );
-  }
+
 
 
   await askPublishConfirm(tgChat, tgChat.asyncCb(async (action: PublishConfirmAction) => {

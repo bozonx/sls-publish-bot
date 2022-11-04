@@ -85,7 +85,11 @@ export default class TgChat {
   }
 
 
-  async reply(message: string, buttons?: TgReplyButton[][]): Promise<number> {
+  async reply(
+    message: string,
+    buttons?: TgReplyButton[][],
+    disablePreview = false
+  ): Promise<number> {
     const messageResult = await this.app.tg.bot.telegram.sendMessage(
       this.botChatId,
       // TODO: экранировать спец символы и включить parse_mode
@@ -94,7 +98,8 @@ export default class TgChat {
         //parse_mode: this.app.config.telegram.parseMode,
         reply_markup: buttons && {
           inline_keyboard: buttons
-        }
+        },
+        disable_web_page_preview: disablePreview,
       },
     );
 
