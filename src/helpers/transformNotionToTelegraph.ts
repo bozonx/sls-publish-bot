@@ -2,7 +2,13 @@ import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
 import {NOTION_BLOCKS} from '../types/types';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
-import {richTextToHtml, richTextToHtmlCodeBlock, richTextToSimpleTextList} from './transformHelpers';
+import {
+  richTextToHtml,
+  richTextToHtmlCodeBlock,
+  richTextToSimpleTextList,
+  richTextToTelegraphNodes
+} from './transformHelpers';
+import {BlockObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
@@ -704,7 +710,6 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
     switch (block.type) {
       case NOTION_BLOCK_TYPES.heading_1:
         result.push({
-          // TODO: разве нету H2 ???
           tag: 'h3',
           children: [richTextToSimpleTextList((block as any)?.heading_1?.rich_text)],
         })
@@ -728,13 +733,11 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
         if ((block as any)?.paragraph?.rich_text.length) {
           result.push({
             tag: 'p',
-            children: [
-              richTextToHtml((block as any)?.paragraph?.rich_text)
-                .replace(/\n/g, '<br />'),
-            ]
+            children: richTextToTelegraphNodes((block as any)?.paragraph?.rich_text)
           });
         }
         else {
+          // TODO: нет пустых строк???
           // empty row
           result.push({
             tag: 'p',
@@ -745,7 +748,7 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         const liItem: TelegraphNode = {
           tag: 'li',
-          children: [richTextToHtml((block as any)?.bulleted_list_item?.rich_text)],
+          children: richTextToTelegraphNodes((block as any)?.bulleted_list_item?.rich_text),
         };
 
         if (ulElIndex === -1) {
@@ -765,7 +768,7 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
       case NOTION_BLOCK_TYPES.numbered_list_item:
         const liItemNum: TelegraphNode = {
           tag: 'li',
-          children: [richTextToHtml((block as any)?.bulleted_list_item?.rich_text)],
+          children: richTextToTelegraphNodes((block as any)?.numbered_list_item?.rich_text),
         };
 
         if (olElIndex === -1) {
@@ -785,14 +788,12 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
       case NOTION_BLOCK_TYPES.quote:
         result.push({
           tag: 'blockquote',
-          children: [
-            richTextToHtml((block as any)?.quote?.rich_text)
-              .replace(/\n/g, '<br />'),
-          ]
+          children: richTextToTelegraphNodes((block as any)?.quote?.rich_text),
         })
 
         break;
       case NOTION_BLOCK_TYPES.code:
+        // TODO: нет текста, только язык
         result.push({
           tag: 'pre',
           children: [richTextToHtmlCodeBlock((block as any)?.code?.rich_text, (block as any)?.code?.language)]

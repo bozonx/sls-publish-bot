@@ -1,8 +1,10 @@
 import {markdownv2 as mdFormat} from 'telegram-format';
-import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
+import {RichTextItemResponse, TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {NotionAnnotation} from '../types/types';
 import {html as htmlFormat} from 'telegram-format/dist/source/html';
+import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
+import {pre} from 'telegraf/format';
 
 
 /**
@@ -45,6 +47,23 @@ export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {
     }
   }).join('');
 }
+
+export function richTextToTelegraphNodes(
+  richText?: TextRichTextItemResponse[]
+): (TelegraphNode | string)[] {
+  if (!richText) return [];
+  else if (!richText.length) return [];
+
+  return richText.map((item: TextRichTextItemResponse) => {
+    switch (item.type) {
+      case NOTION_RICH_TEXT_TYPES.text:
+        return toTelegraPh(item.text.content, item.annotations, item.href);
+      default:
+        return item.plain_text;
+    }
+  });
+}
+
 
 export function richTextToMdCodeBlock(
   richText: TextRichTextItemResponse[],
@@ -130,6 +149,54 @@ function toHtml(
   }
   else if (annotations.code) {
     return htmlFormat.monospace(preparedText);
+  }
+  else {
+    // no formatting
+    return preparedText;
+  }
+}
+
+function toTelegraPh(
+  text: string,
+  annotations: NotionAnnotation,
+  link?: string | null
+): TelegraphNode | string {
+  // TODO: need escape???
+  let preparedText: TelegraphNode | string = text;
+
+  if (link) {
+    preparedText = {
+      tag: 'a',
+      attrs: {href: link},
+      children: [text],
+    };
+  }
+
+  // TODO: а если несколько сразу ???
+
+  if (annotations.bold) {
+    return {
+      tag: 'strong',
+      children: [preparedText],
+    };
+  }
+  else if (annotations.italic) {
+    return {
+      tag: 'i',
+      children: [preparedText],
+    };
+  }
+  else if (annotations.underline) {
+    return {
+      tag: 'em',
+      children: [preparedText],
+    };
+  }
+  else if (annotations.code) {
+    return {
+      tag: 'code',
+      children: [preparedText],
+    };
   }
   else {
     // no formatting
