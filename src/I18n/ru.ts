@@ -27,6 +27,7 @@ const dict = {
     taskDetails: 'Детали задания ',
     taskRemoveError: 'Не удалось удалить задание. ',
     changePostTime: 'Изменить время публикации',
+    changedPostTime: 'Время публикации ',
     noPostFooter: 'Убрать footer',
     yesPostFooter: 'Добавить footer',
     noPreview: 'Не делать предпросмотр ссылки',

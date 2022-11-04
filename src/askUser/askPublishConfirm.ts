@@ -32,21 +32,25 @@ export async function askPublishConfirm(
     [
       // TODO: сделать переключение
       {
-        text: tgChat.app.i18n.menu.noPreview,
-        //text: tgChat.app.i18n.menu.yesPreview,
+        text: (allowPreview)
+          ? tgChat.app.i18n.menu.noPreview
+          : tgChat.app.i18n.menu.yesPreview,
         callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
       },
     ],
     [
       {
-        text: tgChat.app.i18n.menu.changePostTime,
+        text: (correctedTime)
+          ? tgChat.app.i18n.menu.changedPostTime + correctedTime
+          : tgChat.app.i18n.menu.changePostTime,
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
       // TODO: не должно быть если не задан в конфиге
       // TODO: сделать переключение
       {
-        text: tgChat.app.i18n.menu.noPostFooter,
-        //text: tgChat.app.i18n.menu.yesPostFooter,
+        text: (allowFooter)
+          ? tgChat.app.i18n.menu.noPostFooter
+          : tgChat.app.i18n.menu.yesPostFooter,
         callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
       },
     ],
