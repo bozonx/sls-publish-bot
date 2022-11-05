@@ -6,6 +6,8 @@ import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
 import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu';
+import {startPublishStory} from '../publish/startPublishStory';
+import {startPublishAdvert} from '../publish/startPublishAdvert';
 
 
 
@@ -56,9 +58,9 @@ async function blogActionSelected(action: string, blogName: string, tgChat: TgCh
     await startPublishFromContentPlan(blogName, tgChat);
   }
   else if (action === MENU_MAKE_STORY) {
-    // TODO: do it
+    await startPublishStory(blogName, tgChat);
   }
   else if (action === MENU_ADVERT) {
-    // TODO: do it
+    await startPublishAdvert(blogName, tgChat);
   }
 }

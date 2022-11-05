@@ -1,4 +1,3 @@
-import {markdownv2 as mdFormat} from 'telegram-format';
 import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
@@ -12,7 +11,6 @@ import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
 import {askSelectTime} from '../askUser/askSelectTime';
 import RawPageContent from '../types/PageContent';
-import _ from 'lodash';
 import {prepareFooterPost} from '../helpers/helpers';
 
 
