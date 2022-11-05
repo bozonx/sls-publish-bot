@@ -8,10 +8,10 @@ export const MENU_MAKE_STORY = 'menu_make_story';
 export const MENU_ADVERT = 'menu_advert';
 
 
-export async function askBlogMenu(tgChat: TgChat, onDone: (action: string) => void) {
+export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (action: string) => void) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
-    state.messageIds.push(await printInitialMessage(tgChat));
+    state.messageIds.push(await printInitialMessage(blogName, tgChat));
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
@@ -30,7 +30,9 @@ export async function askBlogMenu(tgChat: TgChat, onDone: (action: string) => vo
   });
 }
 
-async function printInitialMessage(tgChat: TgChat): Promise<number> {
+async function printInitialMessage(blogName: string, tgChat: TgChat): Promise<number> {
+  const blogSns = tgChat.app.config.blogs[blogName].sn;
+
   return tgChat.reply(tgChat.app.i18n.menu.blogMenu, [
     [
       {
@@ -38,16 +40,18 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
         callback_data: MENU_PUBLISH,
       },
     ],
-    [
-      {
-        text: tgChat.app.i18n.menu.makeStory,
-        callback_data: MENU_MAKE_STORY,
-      },
-      {
-        text: tgChat.app.i18n.menu.makeAdvert,
+    (blogSns.instagram && blogSns.telegram)
+      ? [{
+          text: tgChat.app.i18n.menu.makeStory,
+          callback_data: MENU_MAKE_STORY,
+        }]
+      : [],
+    (blogSns.telegram)
+      ?[{
+        text: tgChat.app.i18n.menu.makeAdvertTg,
         callback_data: MENU_ADVERT,
-      },
-    ],
+      }]
+      : [],
     [
       CANCEL_BTN,
     ],

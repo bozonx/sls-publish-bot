@@ -43,6 +43,7 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
     }
     else {
       return askBlogMenu(
+        blogNameOrAction,
         tgChat,
         tgChat.asyncCb(
           async (action: string) => blogActionSelected(action, blogNameOrAction, tgChat)

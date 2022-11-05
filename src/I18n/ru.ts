@@ -16,7 +16,7 @@ const dict = {
     selectManageTelegraph: 'Управлять telegra.ph',
     publish: 'Опубликовать из контент плана',
     makeStory: 'Создать story в tg',
-    makeAdvert: 'Опубликовать рекламу',
+    makeAdvertTg: 'Опубликовать рекламу в Tg',
     contentParams: 'Параметры публикации:',
     pageContent: 'Содержание страницы:',
     publishConfirmation: 'Опубликовать?',
