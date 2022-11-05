@@ -41,13 +41,13 @@ export async function askStoryMenu(
       {
         text: (correctedDate)
           ? tgChat.app.i18n.commonPhrases.changedPubDate + correctedDate
-          : tgChat.app.i18n.commonPhrases.changePubDate,
+          : tgChat.app.i18n.commonPhrases.setPubDate,
         callback_data: STORY_MENU_ACTION.DATE_SELECT,
       },
       {
         text: (correctedTime)
           ? tgChat.app.i18n.commonPhrases.changedPubTime + correctedTime
-          : tgChat.app.i18n.commonPhrases.changePubTime,
+          : tgChat.app.i18n.commonPhrases.setPubTime,
         callback_data: STORY_MENU_ACTION.TIME_SELECT,
       },
     ],

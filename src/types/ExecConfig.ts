@@ -14,6 +14,7 @@ export interface BlogConfig {
       telegraPhAuthorUrl: string;
       channelId: number | string;
       postFooter?: string;
+      storyFooter?: string;
       articlePostTmpl?: string;
       articleFooter?: (TelegraphNode | string)[];
     };

@@ -39,12 +39,15 @@ const dict = {
     incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
   },
   commonPhrases: {
+    setPubTime: 'Установить время публикации',
     changePubTime: 'Изменить время публикации',
     changedPubTime: 'Время публикации ',
+    setPubDate: 'Установить дату публикации',
     changePubDate: 'Изменить дату публикации',
     changedPubDate: 'Дата публикации ',
     noPostFooter: 'Убрать подпись поста',
     yesPostFooter: 'Добавить подпись поста',
+    incorrectUrl: 'Не валидный URL. Попробуйте ещё раз.',
   },
   story: {
     upload: 'Загрузите картинку или ссылку на картинку и отправьте сообщение.',

@@ -29,6 +29,10 @@ export function makeTelegraPhUrl(tgPath: string): string {
   return `https://telegra.ph/${tgPath}`;
 }
 
+export function isValidUrl(url: string): boolean {
+  return Boolean(String(url).match(/^(https?|ftp)\:\/\//));
+}
+
 // export function makeFullNotionLink(internalLink: string): string {
 //   if (internalLink.indexOf('http') === 0) return internalLink;
 //
