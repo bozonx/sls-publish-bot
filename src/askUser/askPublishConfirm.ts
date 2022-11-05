@@ -14,7 +14,7 @@ import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
 
 export const PUBLISH_CONFIRM_ACTION: Record<PublishConfirmAction, PublishConfirmAction> = {
-  //OK: 'OK',
+  OK: 'OK',
   CHANGE_TIME: 'CHANGE_TIME',
   NO_POST_FOOTER: 'NO_POST_FOOTER',
   NO_PREVIEW: 'NO_PREVIEW',

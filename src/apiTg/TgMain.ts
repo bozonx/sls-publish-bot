@@ -62,7 +62,21 @@ export default class TgMain {
       this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
     });
 
+    // text
+    // document
+    // poll
+
+    this.bot.on('text', (ctx) => {
+      console.log(2222, ctx)
+    })
+
+    this.bot.on('photo', (ctx) => {
+      console.log(2222, ctx)
+    })
+
     this.bot.on('message', (ctx) => {
+      console.log(11111, ctx)
+
       if (!ctx.chat?.id) {
         this.app.consoleLog.warn('No chat id in callback_query');
 
