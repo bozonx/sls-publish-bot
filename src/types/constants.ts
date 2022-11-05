@@ -1,6 +1,6 @@
-export const BACK_BTN_CALLBACK = 'back_btn';
-export const CANCEL_BTN_CALLBACK = 'cancel_btn';
-export const OK_BTN_CALLBACK = 'ok_btn';
+export const BACK_BTN_CALLBACK = 'BACK_BTN_CALLBACK';
+export const CANCEL_BTN_CALLBACK = 'CANCEL_BTN_CALLBACK';
+export const OK_BTN_CALLBACK = 'OK';
 export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
 
 

@@ -14,7 +14,7 @@ import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
 
 export const PUBLISH_CONFIRM_ACTION: Record<PublishConfirmAction, PublishConfirmAction> = {
-  OK: 'OK',
+  //OK: 'OK',
   CHANGE_TIME: 'CHANGE_TIME',
   NO_POST_FOOTER: 'NO_POST_FOOTER',
   NO_PREVIEW: 'NO_PREVIEW',
@@ -36,8 +36,8 @@ export async function askPublishConfirm(
     [
       {
         text: (correctedTime)
-          ? tgChat.app.i18n.menu.changedPostTime + correctedTime
-          : tgChat.app.i18n.menu.changePostTime,
+          ? tgChat.app.i18n.commonPhrases.changedPubTime + correctedTime
+          : tgChat.app.i18n.commonPhrases.changePubTime,
         callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
       },
     ],
@@ -66,8 +66,8 @@ export async function askPublishConfirm(
     ].includes(pubType))
       ? [{
         text: (useFooter)
-          ? tgChat.app.i18n.menu.noPostFooter
-          : tgChat.app.i18n.menu.yesPostFooter,
+          ? tgChat.app.i18n.commonPhrases.noPostFooter
+          : tgChat.app.i18n.commonPhrases.yesPostFooter,
         callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
       }]
       : [],

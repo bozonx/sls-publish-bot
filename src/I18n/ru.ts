@@ -29,10 +29,6 @@ const dict = {
     flushTask: 'Выполнить сейчас',
     taskDetails: 'Детали задания ',
     taskRemoveError: 'Не удалось удалить задание. ',
-    changePostTime: 'Изменить время публикации',
-    changedPostTime: 'Время публикации ',
-    noPostFooter: 'Убрать подпись поста',
-    yesPostFooter: 'Добавить подпись поста',
     noPreview: 'Не делать предпросмотр ссылки',
     yesPreview: 'Добавить предпросмотр ссылки',
     selectTime: 'Напишите время в таком формате: 03:59, 23:08',
@@ -41,6 +37,17 @@ const dict = {
     selectedNoPreview: 'Предпросмотр ссылки: ',
     selectedNoFooter: 'Подпись поста: ',
     incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
+  },
+  commonPhrases: {
+    changePubTime: 'Изменить время публикации',
+    changedPubTime: 'Время публикации ',
+    changePubDate: 'Изменить дату публикации',
+    changedPubDate: 'Дата публикации ',
+    noPostFooter: 'Убрать подпись поста',
+    yesPostFooter: 'Добавить подпись поста',
+  },
+  story: {
+    actionMenu: 'Настройка публикации story',
   },
   contentInfo: {
     dateTime: 'Дата и время',
