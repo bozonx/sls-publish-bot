@@ -1,6 +1,7 @@
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
 import {AppEvents} from '../types/constants';
+import {PhotoMessageEvent} from '../types/MessageEvent';
 
 
 export async function askStoryImage(
@@ -16,12 +17,12 @@ export async function askStoryImage(
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.MESSAGE,
-        tgChat.asyncCb(async (queryData: string) => {
-          console.log(1111, queryData)
+        AppEvents.PHOTO,
+        tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
+          console.log(1111, photoMsg)
         })
       ),
-      AppEvents.MESSAGE
+      AppEvents.PHOTO
     ]);
   });
 }

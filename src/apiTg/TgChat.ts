@@ -7,7 +7,7 @@ import BaseState from '../types/BaseState';
 import {makeBaseState} from '../helpers/helpers';
 import BotChatLog from '../helpers/BotChatLog';
 import {topLevelMenuStarter} from '../askUser/topLevelMenuStarter';
-import MessageEvent, {MediaGroupItemMessageEvent, PhotoMessageEvent, TextMessageEvent} from '../types/MessageEvent';
+import {MediaGroupItemMessageEvent, PhotoMessageEvent, TextMessageEvent} from '../types/MessageEvent';
 
 
 export default class TgChat {
@@ -75,16 +75,6 @@ export default class TgChat {
     this.events.emit(AppEvents.CALLBACK_QUERY, queryData);
   }
 
-  handleIncomeMessageEvent(msg: string) {
-    if (!msg) {
-      this.app.consoleLog.warn('An empty string came to handleIncomeMessageEvent');
-
-      return;
-    }
-
-    this.events.emit(AppEvents.MESSAGE, msg);
-  }
-
   handleIncomeTextEvent(msgEvent: TextMessageEvent) {
     this.events.emit(AppEvents.TEXT, msgEvent);
   }
@@ -96,7 +86,6 @@ export default class TgChat {
   handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
     this.events.emit(AppEvents.MEDIA_GROUP_ITEM, msgEvent);
   }
-
 
   async reply(
     message: string,

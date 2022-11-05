@@ -9,6 +9,7 @@ import {
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import {validateTime} from '../helpers/helpers';
+import {TextMessageEvent} from '../types/MessageEvent';
 
 
 export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => void) {
@@ -40,9 +41,9 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
     ]);
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.MESSAGE,
-        tgChat.asyncCb(async (message: string) => {
-          const trimmed = _.trim(message);
+        AppEvents.TEXT,
+        tgChat.asyncCb(async (message: TextMessageEvent) => {
+          const trimmed = _.trim(message.text);
 
           try {
             validateTime(trimmed);
@@ -53,10 +54,10 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
             return;
           }
 
-          onDone(message);
+          onDone(trimmed);
         })
       ),
-      AppEvents.MESSAGE
+      AppEvents.TEXT
     ]);
   });
 

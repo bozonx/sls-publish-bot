@@ -216,6 +216,37 @@ Context {
   state: {}
 }
 
+
+poll
+{
+  message_id: 2243,
+  from: {
+    id: 456361709,
+    is_bot: false,
+    first_name: 'Ivan Kozyrin',
+    username: 'ivan_k8',
+    language_code: 'en'
+  },
+  chat: {
+    id: 456361709,
+    first_name: 'Ivan Kozyrin',
+    username: 'ivan_k8',
+    type: 'private'
+  },
+  date: 1667631927,
+  poll: {
+    id: '5417938632147206411',
+    question: 'ss',
+    options: [ [Object], [Object] ],
+    total_voter_count: 0,
+    is_closed: false,
+    is_anonymous: true,
+    type: 'regular',
+    allows_multiple_answers: true
+  }
+}
+
+
  */
 
   private addListeners() {
@@ -357,12 +388,11 @@ Context {
           }
         });
       }
+      // else if ((message as any).poll) {
+      //   // TODO: нужен???
+      // }
 
-      console.log(11111, message)
-
-      const msg: string = (ctx.update.message as any).text;
-
-      //this.chats[ctx.chat.id].handleIncomeMessageEvent(msg);
+      //console.log(11111, message)
     });
   }
 

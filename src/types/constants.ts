@@ -6,7 +6,7 @@ export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
 
 export enum AppEvents {
   CALLBACK_QUERY,
-  MESSAGE,
+  //MESSAGE,
   TEXT,
   PHOTO,
   MEDIA_GROUP_ITEM,
