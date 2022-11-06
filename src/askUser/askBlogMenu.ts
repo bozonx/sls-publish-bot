@@ -1,6 +1,7 @@
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
 import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
+import {compactUndefined} from '../lib/arrays';
 
 
 export const BLOG_MENU_ACTIONS = {
@@ -55,29 +56,29 @@ async function printInitialMessage(blogName: string, tgChat: TgChat): Promise<nu
         callback_data: BLOG_MENU_ACTIONS.CONTENT_PLAN,
       },
     ],
-    (blogSns.instagram && blogSns.telegram)
-      ? [{
-          text: tgChat.app.i18n.menu.makeStory,
-          callback_data: BLOG_MENU_ACTIONS.STORY,
-        }]
+    (blogSns.telegram)
+      ? compactUndefined([
+          (blogSns.instagram) ? {
+            text: tgChat.app.i18n.menu.makeStory,
+            callback_data: BLOG_MENU_ACTIONS.STORY,
+          } : undefined,
+          {
+            text: tgChat.app.i18n.menu.makeReel,
+            callback_data: BLOG_MENU_ACTIONS.REEL,
+          }
+        ])
       : [],
     (blogSns.telegram)
-      ?[{
+      ?[
+        {
         text: tgChat.app.i18n.menu.makeMem,
         callback_data: BLOG_MENU_ACTIONS.MEM,
-      }]
-      : [],
-    (blogSns.telegram)
-      ?[{
-        text: tgChat.app.i18n.menu.makeReel,
-        callback_data: BLOG_MENU_ACTIONS.REEL,
-      }]
-      : [],
-    (blogSns.telegram)
-      ?[{
-        text: tgChat.app.i18n.menu.makeReel,
-        callback_data: BLOG_MENU_ACTIONS.POST,
-      }]
+        },
+        {
+          text: tgChat.app.i18n.menu.makePost,
+          callback_data: BLOG_MENU_ACTIONS.POST,
+        }
+      ]
       : [],
     (blogSns.telegram)
       ?[{
