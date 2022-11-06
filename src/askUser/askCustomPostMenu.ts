@@ -11,6 +11,7 @@ import {compactUndefined} from '../lib/arrays';
 import moment from 'moment';
 import {askPubDate} from './askPubDate';
 import {askSelectTime} from './askSelectTime';
+import {askPostText} from './askPostText';
 
 
 export type CustomPostAction = 'FOOTER_SWITCH'
@@ -116,39 +117,62 @@ async function handleButtons(
     case CANCEL_BTN_CALLBACK:
       return tgChat.steps.cancel();
     case OK_BTN_CALLBACK:
+
+      // TODO: add
+
       break;
     case CUSTOM_POST_ACTION.FOOTER_SWITCH:
-      break;
+      // switch footer value
+      state.useFooter = !state.useFooter;
+      // print result
+      await tgChat.reply(
+        tgChat.app.i18n.commonPhrases.selectedNoFooter
+        + tgChat.app.i18n.onOff[Number(state.useFooter)]
+      );
+      // print menu again
+      return askCustomPostMenu(blogName, tgChat, state, onDone);
     case CUSTOM_POST_ACTION.PREVIEW_SWITCH:
+
+      // TODO: add
+
       break;
     case CUSTOM_POST_ACTION.ADD_TEXT:
-      await askPostText(blogName, tgChat, (text: string) => {
-        // TODO: add
-        //onDone(text);
-      });
-      break;
+      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text: string) => {
+
+        // TODO: validate text !!! количество символов
+        // TODO: наверное экранировать лишние символы???
+        // TODO: вырезать нечитаемые символы
+        // TODO: см модуль sanitize text
+
+        state.postText = text;
+        // print result
+        await tgChat.reply(
+          tgChat.app.i18n.menu.selectedPostText + '\n' + state.postText
+        );
+        // print menu again
+        return askCustomPostMenu(blogName, tgChat, state, onDone);
+      }));
     case CUSTOM_POST_ACTION.ADD_TAGS:
+
+      // TODO: add
+
       break;
     case CUSTOM_POST_ACTION.DATE_SELECT:
-      await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
+      return await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
         state.selectedDate = newDate;
-
+        // print result
         await tgChat.reply(makeDateTimeMsg(tgChat, state));
-
-        await askMenu(blogName, tgChat, photoUrl, footerStr, newDate, selectedTime, postText, useFooter);
+        // print menu again
+        return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
-
-      break;
     case CUSTOM_POST_ACTION.TIME_SELECT:
-      await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+      return await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         state.selectedTime = newTime;
-
+        // print result
         await tgChat.reply(makeDateTimeMsg(tgChat, state));
-
-        await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, newTime, postText, useFooter);
+        // print menu again
+        return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
-
-      break;
     default:
       throw new Error(`Unknown action`);
   }

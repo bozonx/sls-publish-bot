@@ -17,6 +17,9 @@ export async function askPostText(
     ]
   ];
 
+  // TODO: проверить поддерживается ли форвард сообщений
+  // TODO: если форвардится картинка то можно взять от туда caption
+
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageIds.push(await tgChat.reply(msg, buttons));

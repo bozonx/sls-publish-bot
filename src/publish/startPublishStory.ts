@@ -70,15 +70,15 @@ async function askMenu(
 
         break;
       case STORY_MENU_ACTION.ADD_TEXT:
-        await askPostText(blogName, tgChat, tgChat.asyncCb(async (newPostText: string) => {
-
-          // TODO: validate text ????
-
-          await tgChat.reply(
-            tgChat.app.i18n.menu.selectedPostText + '\n' + newPostText
-          );
-          await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, selectedTime, newPostText, useFooter);
-        }));
+        // await askPostText(blogName, tgChat, tgChat.asyncCb(async (newPostText: string) => {
+        //
+        //   // TODO: validate text ????
+        //
+        //   await tgChat.reply(
+        //     tgChat.app.i18n.menu.selectedPostText + '\n' + newPostText
+        //   );
+        //   await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, selectedTime, newPostText, useFooter);
+        // }));
 
         break;
       case STORY_MENU_ACTION.DATE_SELECT:
@@ -102,5 +102,3 @@ async function askMenu(
     }
   }), useFooter, selectedDate, selectedTime);
 }
-
-
