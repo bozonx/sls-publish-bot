@@ -112,7 +112,7 @@ async function printAllDetails(
   // print footer
   if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
     await tgChat.reply(
-      tgChat.app.i18n.menu.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
+      tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
       + tgChat.app.i18n.menu.postFooter
       + prepareFooterPost(
         tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
@@ -195,7 +195,7 @@ async function askMenu(
           break;
         case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
           await tgChat.reply(
-            tgChat.app.i18n.menu.selectedNoPreview
+            tgChat.app.i18n.commonPhrases.selectedNoPreview
             + tgChat.app.i18n.onOff[Number(!usePreview)]
           );
           await askMenu(

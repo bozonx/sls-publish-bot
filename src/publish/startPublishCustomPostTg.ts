@@ -1,6 +1,8 @@
 import TgChat from '../apiTg/TgChat';
 import {askPostMedia} from '../askUser/askPostMedia';
 import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
+import {compactUndefined} from '../lib/arrays';
+import {publishImageTg} from './publishHelpers';
 
 
 export async function startPublishCustomPostTg(
@@ -50,6 +52,22 @@ async function askMenu(
   state: CustomPostState
 ) {
   await askCustomPostMenu(blogName, tgChat, state, () => {
+    // TODO: показать результат и спросить подтверждение
 
+    const resultText = compactUndefined(
+      [postText, (useFooter) ? footerStr : undefined]
+    ).join('') || undefined;
+
+    await publishImageTg(
+      selectedDate!,
+      selectedTime!,
+      photoUrl,
+      blogName,
+      tgChat,
+      resultText
+    );
+
+    await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
+    await tgChat.steps.cancel();
   })
 }

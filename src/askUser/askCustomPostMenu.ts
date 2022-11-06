@@ -117,10 +117,7 @@ async function handleButtons(
     case CANCEL_BTN_CALLBACK:
       return tgChat.steps.cancel();
     case OK_BTN_CALLBACK:
-
-      // TODO: add
-
-      break;
+      return onDone();
     case CUSTOM_POST_ACTION.FOOTER_SWITCH:
       // switch footer value
       state.useFooter = !state.useFooter;
@@ -132,10 +129,15 @@ async function handleButtons(
       // print menu again
       return askCustomPostMenu(blogName, tgChat, state, onDone);
     case CUSTOM_POST_ACTION.PREVIEW_SWITCH:
-
-      // TODO: add
-
-      break;
+      // switch footer value
+      state.usePreview = !state.usePreview;
+      // print result
+      await tgChat.reply(
+        tgChat.app.i18n.commonPhrases.selectedNoPreview
+        + tgChat.app.i18n.onOff[Number(state.usePreview)]
+      );
+      // print menu again
+      return askCustomPostMenu(blogName, tgChat, state, onDone);
     case CUSTOM_POST_ACTION.ADD_TEXT:
       return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text: string) => {
 
