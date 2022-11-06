@@ -7,6 +7,7 @@ import {askSelectTime} from '../askUser/askSelectTime';
 import {askPubDate} from '../askUser/askPubDate';
 import {makeUtcOffsetStr} from '../helpers/helpers';
 import {publishImageTg} from './publishHelpers';
+import {askPostText} from '../askUser/askPostText';
 
 
 export async function startPublishStory(blogName: string, tgChat: TgChat) {
@@ -36,6 +37,7 @@ async function askMenu(
   caption?: string,
   selectedDate?: string,
   selectedTime?: string,
+  postText?: string,
   useFooter = true,
 ) {
   await askStoryMenu(blogName, tgChat, tgChat.asyncCb(async (action: StoryMenuAction | typeof OK_BTN_CALLBACK) => {
@@ -59,14 +61,26 @@ async function askMenu(
           tgChat.app.i18n.commonPhrases.selectedNoFooter
           + tgChat.app.i18n.onOff[Number(!useFooter)]
         );
-        await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, selectedTime, !useFooter);
+        await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, selectedTime, postText, !useFooter);
+
+        break;
+      case STORY_MENU_ACTION.ADD_TEXT:
+        await askPostText(blogName, tgChat, tgChat.asyncCb(async (newPostText: string) => {
+
+          // TODO: validate text ????
+
+          await tgChat.reply(
+            tgChat.app.i18n.menu.selectedPostText + newPostText
+          );
+          await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, selectedTime, newPostText, !useFooter);
+        }));
 
         break;
       case STORY_MENU_ACTION.DATE_SELECT:
         await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
           await tgChat.reply(makeDateTimeMsg(tgChat, newDate, selectedTime));
 
-          await askMenu(blogName, tgChat, photoUrl, caption, newDate, selectedTime, useFooter);
+          await askMenu(blogName, tgChat, photoUrl, caption, newDate, selectedTime, postText, useFooter);
         }));
 
         break;
@@ -74,7 +88,7 @@ async function askMenu(
         await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
           await tgChat.reply(makeDateTimeMsg(tgChat, selectedDate, newTime));
 
-          await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, newTime, useFooter);
+          await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, newTime, postText, useFooter);
         }));
 
         break;

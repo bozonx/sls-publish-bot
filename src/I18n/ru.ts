@@ -36,6 +36,9 @@ const dict = {
       + 'или следующего месяца (5, 11, 29). Либо число и месяц DD.MM (1.12. 5.5, 03.07, 20.12)',
     postFooter: 'Футер поста: ',
     selectedNoPreview: 'Предпросмотр ссылки: ',
+    btnAddText: 'Добавить текст',
+    askTypeText: 'Введите текст поста',
+    selectedPostText: 'Будет использован текст поста: ',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',

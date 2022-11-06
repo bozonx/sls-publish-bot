@@ -9,15 +9,17 @@ import {
 import {addSimpleStep} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
 import moment from 'moment';
+import {askPostText} from './askPostText';
 
 
-export type StoryMenuAction = 'FOOTER_SWITCH' | 'DATE_SELECT' | 'TIME_SELECT';
+export type StoryMenuAction = 'FOOTER_SWITCH' | 'DATE_SELECT' | 'TIME_SELECT' | 'ADD_TEXT';
 
 export const STORY_MENU_ACTION: Record<StoryMenuAction, StoryMenuAction> = {
   //OK: 'OK',
   FOOTER_SWITCH: 'FOOTER_SWITCH',
   DATE_SELECT: 'DATE_SELECT',
   TIME_SELECT: 'TIME_SELECT',
+  ADD_TEXT: 'ADD_TEXT',
 };
 
 
@@ -41,6 +43,12 @@ export async function askStoryMenu(
       : [],
     [
       {
+        text: tgChat.app.i18n.menu.btnAddText,
+        callback_data: STORY_MENU_ACTION.ADD_TEXT,
+      }
+    ],
+    [
+      {
         text: (correctedDate)
           ? tgChat.app.i18n.commonPhrases.changedPubDate
             + moment(correctedDate).format(PRINT_FULL_DATE_FORMAT)
@@ -61,13 +69,19 @@ export async function askStoryMenu(
     ]),
   ];
 
-  await addSimpleStep(tgChat, msg, buttons,(queryData: string) => {
+  await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
     if (queryData === BACK_BTN_CALLBACK) {
       return tgChat.steps.back();
     }
     else if (queryData === CANCEL_BTN_CALLBACK) {
       return tgChat.steps.cancel();
     }
+    // else if (queryData === STORY_MENU_ACTION.ADD_TEXT) {
+    //   await askPostText(blogName, tgChat, (text: string) => {
+    //     // TODO: add
+    //     //onDone(text);
+    //   });
+    // }
     else {
       onDone(queryData as StoryMenuAction);
     }
