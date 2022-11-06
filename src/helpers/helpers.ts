@@ -132,3 +132,17 @@ export function prepareFooterPost(text?: string, tags?: string[]): string {
 
   return resolvedText;
 }
+
+export function makeUtcOffsetStr(utcOffsetNum: number): string {
+  const timeStr = `${utcOffsetNum}:00`;
+
+  if (utcOffsetNum < 0) {
+    return `-${timeStr}`;
+  }
+  else if (utcOffsetNum === 0) {
+    return timeStr;
+  }
+  else {
+    return `+${timeStr}`;
+  }
+}

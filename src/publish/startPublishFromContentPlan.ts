@@ -11,7 +11,7 @@ import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
 import {askSelectTime} from '../askUser/askSelectTime';
 import RawPageContent from '../types/PageContent';
-import {prepareFooterPost} from '../helpers/helpers';
+import {makeUtcOffsetStr, prepareFooterPost} from '../helpers/helpers';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -163,7 +163,7 @@ async function askMenu(
           await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
             await tgChat.reply(
               tgChat.app.i18n.commonPhrases.selectedDateAndTime
-              + parsedContentItem.date + ' ' + newTime
+              + `${parsedContentItem.date} ${newTime} ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}`
             );
             await askMenu(
               blogName,

@@ -11,6 +11,7 @@ const appConfig: AppConfig = {
   channelLogLevel: process.env.CHANNEL_LOG_LEVEL as any || LOG_LEVELS.info,
   botChatLogLevel: process.env.BOT_CHAT_LOG_LEVEL as any || LOG_LEVELS.info,
   stateDirPath: process.env.STATE_DIR_PATH as any || './_testState',
+  // TODO: use env var
   utcOffset: 3,
   // skip tasks which should be run earlier that specified value in seconds
   skipTasksEarlierSec: (process.env.NODE_ENV === 'production') ? 300 : 1,

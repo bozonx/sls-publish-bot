@@ -9,6 +9,8 @@ import {
   FULL_DATE_FORMAT
 } from '../types/constants';
 import BaseState from '../types/BaseState';
+import {TextMessageEvent} from '../types/MessageEvent';
+import {makeUtcOffsetStr} from '../helpers/helpers';
 
 
 const SELECT_PUB_DATE = {
@@ -20,7 +22,7 @@ const SELECT_PUB_DATE = {
 
 export async function askPubDate(tgChat: TgChat, onDone: (selectedDateString: string) => void) {
   const msg = tgChat.app.i18n.menu.selectDate
-    + `. Utc offset = ${tgChat.app.appConfig.utcOffset} часа.`;
+    + `. ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}.`;
   const buttons = [
     [
       {
@@ -49,9 +51,7 @@ export async function askPubDate(tgChat: TgChat, onDone: (selectedDateString: st
     state.handlerIndexes.push([
       tgChat.events.addListener(
         AppEvents.TEXT,
-        tgChat.asyncCb(async (incomeMsg: string) => {
-          await incomeText(incomeMsg, tgChat, onDone);
-        })
+        tgChat.asyncCb( (m) => incomeText(m, tgChat, onDone))
       ),
       AppEvents.TEXT
     ]);
@@ -110,12 +110,12 @@ async function pressedBtn(
 }
 
 async function incomeText(
-  incomeMsg: string,
+  incomeMsg: TextMessageEvent,
   tgChat: TgChat,
   onDone: (selectedDateString: string) => void
 ) {
   const currentDate = moment().utcOffset(tgChat.app.appConfig.utcOffset);
-  const splat = incomeMsg.split('.');
+  const splat = incomeMsg.text.split('.');
 
   if (splat.length === 1) {
     // only date num. Without month
@@ -127,8 +127,11 @@ async function incomeText(
       return;
     }
 
-    if (dateNum <= currentDate.date()) {
+    if (dateNum < currentDate.date()) {
+      // if it is the past then increment month
+      // if month is 13 then it will be the next year
       // TODO: а если следующий год ???
+      // TODO: а если другое число дней в месяце ???
       currentDate.month(currentDate.month() + 1);
     }
     // change date num of current date

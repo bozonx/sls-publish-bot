@@ -5,6 +5,7 @@ import {askStoryMenu, STORY_MENU_ACTION, StoryMenuAction} from '../askUser/askSt
 import {OK_BTN_CALLBACK} from '../types/constants';
 import {askSelectTime} from '../askUser/askSelectTime';
 import {askPubDate} from '../askUser/askPubDate';
+import {makeUtcOffsetStr} from '../helpers/helpers';
 
 
 export async function startPublishStory(blogName: string, tgChat: TgChat) {
@@ -71,11 +72,7 @@ async function askMenu(
         break;
       case STORY_MENU_ACTION.DATE_SELECT:
         await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
-          await tgChat.reply(
-            (selectedTime)
-              ? tgChat.app.i18n.commonPhrases.selectedDateAndTime + newDate + ' ' + selectedTime
-              : tgChat.app.i18n.commonPhrases.selectedOnlyDate + newDate
-          );
+          await tgChat.reply(makeDateTimeMsg(tgChat, newDate, selectedTime));
 
           await askMenu(blogName, tgChat, newDate, selectedTime, useFooter);
         }));
@@ -83,11 +80,7 @@ async function askMenu(
         break;
       case STORY_MENU_ACTION.TIME_SELECT:
         await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-          await tgChat.reply(
-            (selectedDate)
-              ? tgChat.app.i18n.commonPhrases.selectedDateAndTime + selectedDate + ' ' + newTime
-              : tgChat.app.i18n.commonPhrases.selectedOnlyTime + newTime
-          );
+          await tgChat.reply(makeDateTimeMsg(tgChat, selectedDate, newTime));
 
           await askMenu(blogName, tgChat, selectedDate, newTime, useFooter);
         }));
@@ -97,4 +90,25 @@ async function askMenu(
         throw new Error(`Unknown action`);
     }
   }), useFooter, selectedDate, selectedTime);
+}
+
+
+function makeDateTimeMsg(tgChat: TgChat, selectedDate?: string, selectedTime?: string): string {
+  const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+
+  if (selectedDate && selectedTime) {
+    return tgChat.app.i18n.commonPhrases.selectedDateAndTime
+      + `${selectedDate} ${selectedTime} ${utcOffset}`
+  }
+  else if (selectedDate && !selectedTime) {
+    return tgChat.app.i18n.commonPhrases.selectedOnlyDate
+      + `${selectedDate} ${utcOffset}`
+  }
+  else if (!selectedDate && selectedTime) {
+    return tgChat.app.i18n.commonPhrases.selectedOnlyTime
+      + `${selectedTime} ${utcOffset}`
+  }
+  else {
+    return 'None';
+  }
 }

@@ -257,7 +257,8 @@ poll
         return;
       }
       else if (!this.chats[ctx.chat.id]) {
-        this.app.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
+        ctx.reply(this.app.i18n.errors.notRegisteredChat);
+        //this.app.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
 
         return;
       }
@@ -339,7 +340,8 @@ poll
         return;
       }
       if (!this.chats[message.chat.id]) {
-        this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
+        ctx.reply(this.app.i18n.errors.notRegisteredChat);
+        //this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
 
         return;
       }
