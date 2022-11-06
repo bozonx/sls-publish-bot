@@ -3,6 +3,7 @@ import {askPostMedia} from '../askUser/askPostMedia';
 import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
 import {compactUndefined} from '../lib/arrays';
 import {publishImageTg} from './publishHelpers';
+import {makeDateTimeStr} from '../helpers/helpers';
 
 
 export async function startPublishCustomPostTg(
@@ -25,11 +26,7 @@ export async function startPublishCustomPostTg(
       //let footerStr = (footerTmpl) ? footerTmpl: undefined;
 
       // print result
-      // TODO: а если несколько картинок ???
-      // await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, photoIdOrUrl[0], {
-      //   caption: footerTmpl,
-      //   parse_mode: tgChat.app.appConfig.telegram.parseMode,
-      // });
+
 
       const state: CustomPostState = {
         useFooter: true,
@@ -41,33 +38,63 @@ export async function startPublishCustomPostTg(
         postText: caption,
       };
 
-      await askMenu(blogName, tgChat, photoIdOrUrl, state);
+      await askCustomPostMenu(blogName, tgChat, state, tgChat.asyncCb(async  () => {
+        // TODO: текст для инсты
+        const resultText = compactUndefined(
+          // TODO: создать темплейт с тэгами
+          [state.postText, (state.useFooter) ? footerTmpl : undefined]
+        ).join('') || undefined;
+
+        await printPostPreview(
+          tgChat,
+          photoIdOrUrl,
+          state.selectedDate!,
+          state.selectedTime!,
+          state.usePreview,
+          resultText
+        );
+
+        // TODO: спросить подтверждение
+
+        await publishImageTg(
+          state.selectedDate!,
+          state.selectedTime!,
+          // TODO: несколько картинок как ???
+          photoIdOrUrl[0],
+          blogName,
+          tgChat,
+          resultText
+        );
+
+        await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
+        await tgChat.steps.cancel();
+      }));
     }));
 }
 
-async function askMenu(
-  blogName: string,
+
+async function printPostPreview(
   tgChat: TgChat,
   photoIdOrUrl: string[],
-  state: CustomPostState
+  pubDate: string,
+  pubTime: string,
+  usePreview: boolean,
+  caption?: string,
 ) {
-  await askCustomPostMenu(blogName, tgChat, state, () => {
-    // TODO: показать результат и спросить подтверждение
+  // TODO: а если несколько картинок ???
+  await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, photoIdOrUrl[0], {
+    caption,
+    parse_mode: tgChat.app.appConfig.telegram.parseMode,
+  });
 
-    const resultText = compactUndefined(
-      [postText, (useFooter) ? footerStr : undefined]
-    ).join('') || undefined;
+  // preview
+  await tgChat.reply(
+    tgChat.app.i18n.commonPhrases.selectedNoPreview
+    + tgChat.app.i18n.onOff[Number(usePreview)]
+  );
 
-    await publishImageTg(
-      selectedDate!,
-      selectedTime!,
-      photoUrl,
-      blogName,
-      tgChat,
-      resultText
-    );
-
-    await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-    await tgChat.steps.cancel();
-  })
+  // date and time
+  await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
+    pubDate, pubTime, tgChat.app.appConfig.utcOffset
+  ));
 }

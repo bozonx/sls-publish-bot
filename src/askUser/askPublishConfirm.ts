@@ -31,7 +31,7 @@ export async function askPublishConfirm(
   hasImage: boolean,
   correctedTime?: string,
 ) {
-  const msg = tgChat.app.i18n.menu.publishConfirmation;
+  const msg = tgChat.app.i18n.commonPhrases.publishConfirmation;
   const buttons = [
     [
       {

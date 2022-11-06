@@ -22,7 +22,6 @@ const dict = {
     makeAdvertTg: 'Создать РЕКЛАМУ в Tg',
     contentParams: 'Параметры публикации:',
     pageContent: 'Содержание страницы:',
-    publishConfirmation: 'Опубликовать?',
     telegraphMenu: 'Меню сервиса telegra.ph',
     telegraphList: 'Список статей',
     siteMenu: 'Меню сайта slsfreedom.org',
@@ -50,7 +49,7 @@ const dict = {
     changedPubTime: 'Время публикации ',
     setPubDate: 'Установить дату публикации',
     changePubDate: 'Изменить дату публикации',
-    changedPubDate: 'Дата публикации ',
+    pubDate: 'Дата публикации ',
     noPostFooter: 'Убрать подпись поста',
     yesPostFooter: 'Добавить подпись поста',
     noPreview: 'Убрать предпросмотр ссылки',
@@ -60,6 +59,7 @@ const dict = {
     selectedOnlyDate: 'Дата установлена на: ',
     selectedNoFooter: 'Подпись поста: ',
     selectedNoPreview: 'Предпросмотр ссылки: ',
+    publishConfirmation: 'Опубликовать?',
   },
   story: {
     upload: 'Загрузите картинку, видео или ссылку на картинку. Можно несколько. '

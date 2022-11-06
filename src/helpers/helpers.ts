@@ -3,7 +3,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
-import {AppEvents} from '../types/constants';
+import {AppEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
 
@@ -145,4 +145,9 @@ export function makeUtcOffsetStr(utcOffsetNum: number): string {
   else {
     return `+${timeStr}`;
   }
+}
+
+export function makeDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
+  return moment(dateStr).format(PRINT_FULL_DATE_FORMAT)
+    + ` ${timeStr} ${makeUtcOffsetStr(utcOffset)}`
 }

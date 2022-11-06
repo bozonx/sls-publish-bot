@@ -80,7 +80,7 @@ export async function askCustomPostMenu(
     [
       {
         text: (state.selectedDate)
-          ? tgChat.app.i18n.commonPhrases.changedPubDate
+          ? tgChat.app.i18n.commonPhrases.pubDate
             + moment(state.selectedDate).format(PRINT_FULL_DATE_FORMAT)
           : tgChat.app.i18n.commonPhrases.setPubDate,
         callback_data: CUSTOM_POST_ACTION.DATE_SELECT,
