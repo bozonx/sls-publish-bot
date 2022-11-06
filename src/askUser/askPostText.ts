@@ -7,7 +7,7 @@ import {TextMessageEvent} from '../types/MessageEvent';
 export async function askPostText(
   blogName: string,
   tgChat: TgChat,
-  onDone: (text: string) => void
+  onDone: (text?: string) => void
 ) {
   const msg = tgChat.app.i18n.menu.askTypeText;
   const buttons = [
@@ -28,7 +28,7 @@ export async function askPostText(
       tgChat.events.addListener(
         AppEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
-          onDone(textMsg.text);
+          onDone((textMsg.text === '0') ? undefined : textMsg.text);
         })
       ),
       AppEvents.TEXT

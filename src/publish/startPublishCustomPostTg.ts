@@ -6,6 +6,7 @@ import {compactUndefined} from '../lib/arrays';
 import {publishImageTg, publishPostNoImageTg} from './publishHelpers';
 import {makeDateTimeStr, makeTagsString} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
+import {publishTgImage, publishTgPost} from '../apiTg/publishTgPost';
 
 
 export async function startPublishCustomPostTg(
@@ -23,7 +24,7 @@ export async function startPublishCustomPostTg(
         useFooter: true,
         usePreview: !photoIdOrUrl.length,
         forceDisableFooter: !footerTmpl,
-        forceDisablePreview: !photoIdOrUrl.length,
+        forceDisablePreview: Boolean(photoIdOrUrl.length),
         tags: [],
         postText: caption,
       };
@@ -37,6 +38,7 @@ export async function startPublishCustomPostTg(
         ).join('') || undefined;
 
         await printPostPreview(
+          blogName,
           tgChat,
           photoIdOrUrl,
           state.selectedDate!,
@@ -85,6 +87,7 @@ export async function startPublishCustomPostTg(
 
 
 async function printPostPreview(
+  blogName: string,
   tgChat: TgChat,
   photoIdOrUrl: string[],
   pubDate: string,
@@ -93,12 +96,34 @@ async function printPostPreview(
   caption?: string,
 ) {
   // TODO: а если несколько картинок ???
-  await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, photoIdOrUrl[0], {
-    caption,
-    parse_mode: tgChat.app.appConfig.telegram.parseMode,
-  });
+  if (photoIdOrUrl.length) {
+    await publishTgImage(
+      tgChat.botChatId,
+      photoIdOrUrl[0],
+      blogName,
+      tgChat,
+      caption
+    )
+  }
+  else {
+    // TODO: проверит заранее
+    if (!caption) throw new Error(`No text`);
 
-  // preview
+    await publishTgPost(
+      tgChat.botChatId,
+      caption,
+      blogName,
+      tgChat,
+      !usePreview
+    );
+  }
+
+  // await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, photoIdOrUrl[0], {
+  //   caption,
+  //   parse_mode: tgChat.app.appConfig.telegram.parseMode,
+  // });
+
+  // preview state
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.selectedNoPreview
     + tgChat.app.i18n.onOff[Number(usePreview)]

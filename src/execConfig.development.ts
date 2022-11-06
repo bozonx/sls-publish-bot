@@ -27,10 +27,10 @@ const execConf: ExecConfig = {
           telegraPhAuthorName: 'Testtt',
           telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6',
           channelId: -1001664865912,
-          postFooter: '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| ${ TAGS }',
+          postFooter:  '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| ${ TAGS }',
           storyFooter: '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| \\#сторис',
-          memFooter: '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| \\#мем',
-          reelFooter: '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| \\#рилс',
+          memFooter:   '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| \\#мем',
+          reelFooter:  '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| \\#рилс',
           articlePostTmpl: '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }',
           articleFooter: [
             'Автор: Козырин Иван',

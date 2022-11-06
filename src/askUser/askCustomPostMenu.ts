@@ -74,7 +74,7 @@ export async function askCustomPostMenu(
     ],
     [
       {
-        text: tgChat.app.i18n.buttons.addText,
+        text: tgChat.app.i18n.buttons.addTags,
         callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
       }
     ],
@@ -140,7 +140,7 @@ async function handleButtons(
       // print menu again
       return askCustomPostMenu(blogName, tgChat, state, onDone);
     case CUSTOM_POST_ACTION.ADD_TEXT:
-      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text: string) => {
+      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text?: string) => {
 
         // TODO: validate text !!! количество символов
         // TODO: наверное экранировать лишние символы???
@@ -149,9 +149,15 @@ async function handleButtons(
 
         state.postText = text;
         // print result
-        await tgChat.reply(
-          tgChat.app.i18n.menu.selectedPostText + '\n' + state.postText
-        );
+        if (state.postText) {
+          await tgChat.reply(
+            tgChat.app.i18n.menu.selectedPostText + '\n' + state.postText
+          );
+        }
+        else {
+          await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText);
+        }
+
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
