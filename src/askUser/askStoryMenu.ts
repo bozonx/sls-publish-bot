@@ -4,7 +4,7 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  OK_BTN,
+  OK_BTN, OK_BTN_CALLBACK,
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
 
@@ -22,7 +22,7 @@ export const STORY_MENU_ACTION: Record<StoryMenuAction, StoryMenuAction> = {
 export async function askStoryMenu(
   blogName: string,
   tgChat: TgChat,
-  onDone: (action: StoryMenuAction) => void,
+  onDone: (action: StoryMenuAction | typeof OK_BTN_CALLBACK) => void,
   useFooter: boolean,
   correctedDate?: string,
   correctedTime?: string,

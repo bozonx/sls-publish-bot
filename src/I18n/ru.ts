@@ -33,9 +33,7 @@ const dict = {
     yesPreview: 'Добавить предпросмотр ссылки',
     selectTime: 'Напишите время в таком формате: 03:59, 23:08',
     postFooter: 'Футер поста: ',
-    selectedTimeMsg: 'Пост будет опубликован: ',
     selectedNoPreview: 'Предпросмотр ссылки: ',
-    selectedNoFooter: 'Подпись поста: ',
     incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
   },
   commonPhrases: {
@@ -48,6 +46,9 @@ const dict = {
     noPostFooter: 'Убрать подпись поста',
     yesPostFooter: 'Добавить подпись поста',
     incorrectUrl: 'Не валидный URL. Попробуйте ещё раз.',
+    selectedTimeMsg: 'Пост будет опубликован: ',
+    selectedOnlyTime: 'Установлено время на: ',
+    selectedNoFooter: 'Подпись поста: ',
   },
   story: {
     upload: 'Загрузите картинку или ссылку на картинку и отправьте сообщение.',
@@ -89,6 +90,8 @@ const dict = {
   errors: {
     invalidContent: `Запись контент плана не валидна. Исправьте в notion: `,
     errorLoadFromNotion: `Ошибка загрузки из notion: `,
+    notSelectedPubDate: `Выберете дату публикации`,
+    notSelectedPubTime: `Выберете время публикации`,
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

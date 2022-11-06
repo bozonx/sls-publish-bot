@@ -156,14 +156,13 @@ async function askMenu(
           );
 
           await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
-
           await tgChat.steps.cancel();
 
           break;
         case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
           await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
             await tgChat.reply(
-              tgChat.app.i18n.menu.selectedTimeMsg
+              tgChat.app.i18n.commonPhrases.selectedTimeMsg
               + parsedContentItem.date + ' ' + newTime
             );
             await askMenu(
@@ -180,8 +179,8 @@ async function askMenu(
           break;
         case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
           await tgChat.reply(
-            tgChat.app.i18n.menu.selectedNoFooter
-            + tgChat.app.i18n.onOff[Number(usePreview)]
+            tgChat.app.i18n.commonPhrases.selectedNoFooter
+            + tgChat.app.i18n.onOff[Number(useFooter)]
           );
           await askMenu(
             blogName,
