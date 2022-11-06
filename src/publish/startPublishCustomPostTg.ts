@@ -1,5 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import {askPostMedia} from '../askUser/askPostMedia';
+import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
 
 
 export async function startPublishCustomPostTg(
@@ -28,7 +29,17 @@ export async function startPublishCustomPostTg(
       //   parse_mode: tgChat.app.appConfig.telegram.parseMode,
       // });
 
-      await askMenu(blogName, tgChat, photoIdOrUrl, forceDisablePreview, footerTmpl, caption);
+      const state: CustomPostState = {
+        useFooter: true,
+        // TODO: resolve usePreview - взависимости от картинки
+        usePreview: true,
+        // TODO: resolve forceDisablePreview - взависимости от картинки
+        forceDisablePreview: true,
+        footerTmpl,
+        postText: caption,
+      };
+
+      await askMenu(blogName, tgChat, photoIdOrUrl, state);
     }));
 }
 
@@ -36,13 +47,9 @@ async function askMenu(
   blogName: string,
   tgChat: TgChat,
   photoIdOrUrl: string[],
-  forceDisablePreview: boolean,
-  footerTmpl?: string,
-  postText?: string,
-  // these are variables for recursive call
-  selectedDate?: string,
-  selectedTime?: string,
-  useFooter = true,
+  state: CustomPostState
 ) {
+  await askCustomPostMenu(blogName, tgChat, state, () => {
 
+  })
 }

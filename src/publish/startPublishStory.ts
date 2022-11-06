@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat';
 import {askPostMedia} from '../askUser/askPostMedia';
 import {PhotoMessageEvent} from '../types/MessageEvent';
-import {askStoryMenu, STORY_MENU_ACTION, StoryMenuAction} from '../askUser/askStoryMenu';
+import {askCustomPostMenu, STORY_MENU_ACTION, StoryMenuAction} from '../askUser/askCustomPostMenu';
 import {OK_BTN_CALLBACK} from '../types/constants';
 import {askSelectTime} from '../askUser/askSelectTime';
 import {askPubDate} from '../askUser/askPubDate';
@@ -41,7 +41,7 @@ async function askMenu(
   postText?: string,
   useFooter = true,
 ) {
-  await askStoryMenu(blogName, tgChat, tgChat.asyncCb(async (action: StoryMenuAction | typeof OK_BTN_CALLBACK) => {
+  await askCustomPostMenu(blogName, tgChat, tgChat.asyncCb(async (action: StoryMenuAction | typeof OK_BTN_CALLBACK) => {
     switch (action) {
       case OK_BTN_CALLBACK:
         const resultText = compactUndefined(
@@ -82,19 +82,19 @@ async function askMenu(
 
         break;
       case STORY_MENU_ACTION.DATE_SELECT:
-        await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
-          await tgChat.reply(makeDateTimeMsg(tgChat, newDate, selectedTime));
-
-          await askMenu(blogName, tgChat, photoUrl, footerStr, newDate, selectedTime, postText, useFooter);
-        }));
+        // await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
+        //   await tgChat.reply(makeDateTimeMsg(tgChat, newDate, selectedTime));
+        //
+        //   await askMenu(blogName, tgChat, photoUrl, footerStr, newDate, selectedTime, postText, useFooter);
+        // }));
 
         break;
       case STORY_MENU_ACTION.TIME_SELECT:
-        await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-          await tgChat.reply(makeDateTimeMsg(tgChat, selectedDate, newTime));
-
-          await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, newTime, postText, useFooter);
-        }));
+        // await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+        //   await tgChat.reply(makeDateTimeMsg(tgChat, selectedDate, newTime));
+        //
+        //   await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, newTime, postText, useFooter);
+        // }));
 
         break;
       default:
@@ -104,22 +104,3 @@ async function askMenu(
 }
 
 
-function makeDateTimeMsg(tgChat: TgChat, selectedDate?: string, selectedTime?: string): string {
-  const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
-
-  if (selectedDate && selectedTime) {
-    return tgChat.app.i18n.commonPhrases.selectedDateAndTime
-      + `${selectedDate} ${selectedTime} ${utcOffset}`
-  }
-  else if (selectedDate && !selectedTime) {
-    return tgChat.app.i18n.commonPhrases.selectedOnlyDate
-      + `${selectedDate} ${utcOffset}`
-  }
-  else if (!selectedDate && selectedTime) {
-    return tgChat.app.i18n.commonPhrases.selectedOnlyTime
-      + `${selectedTime} ${utcOffset}`
-  }
-  else {
-    return 'None';
-  }
-}

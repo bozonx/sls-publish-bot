@@ -48,8 +48,8 @@ export async function askPublishConfirm(
     ].includes(pubType))
       ? [{
           text: (usePreview)
-            ? tgChat.app.i18n.menu.noPreview
-            : tgChat.app.i18n.menu.yesPreview,
+            ? tgChat.app.i18n.commonPhrases.noPreview
+            : tgChat.app.i18n.commonPhrases.yesPreview,
           callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
         }]
       : [],
