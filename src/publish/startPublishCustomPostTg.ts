@@ -4,6 +4,7 @@ import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
 import {compactUndefined} from '../lib/arrays';
 import {publishImageTg} from './publishHelpers';
 import {makeDateTimeStr} from '../helpers/helpers';
+import {askPostConfirm} from '../askUser/askPostConfirm';
 
 
 export async function startPublishCustomPostTg(
@@ -54,20 +55,20 @@ export async function startPublishCustomPostTg(
           resultText
         );
 
-        // TODO: спросить подтверждение
+        await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+          await publishImageTg(
+            state.selectedDate!,
+            state.selectedTime!,
+            // TODO: несколько картинок как ???
+            photoIdOrUrl[0],
+            blogName,
+            tgChat,
+            resultText
+          );
 
-        await publishImageTg(
-          state.selectedDate!,
-          state.selectedTime!,
-          // TODO: несколько картинок как ???
-          photoIdOrUrl[0],
-          blogName,
-          tgChat,
-          resultText
-        );
-
-        await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-        await tgChat.steps.cancel();
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
+          await tgChat.steps.cancel();
+        }));
       }));
     }));
 }
