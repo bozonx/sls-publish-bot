@@ -5,8 +5,7 @@ import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  FULL_DATE_FORMAT
+  CANCEL_BTN_CALLBACK, ISO_DATE_FORMAT
 } from '../types/constants';
 import BaseState from '../types/BaseState';
 import {TextMessageEvent} from '../types/MessageEvent';
@@ -104,7 +103,7 @@ async function pressedBtn(
   }
   // else today
 
-  const selectedDateString = currentDate.format(FULL_DATE_FORMAT);
+  const selectedDateString = currentDate.format(ISO_DATE_FORMAT);
 
   onDone(selectedDateString);
 }
@@ -166,7 +165,7 @@ async function incomeText(
     return;
   }
 
-  const selectedDateString = currentDate.format(FULL_DATE_FORMAT);
+  const selectedDateString = currentDate.format(ISO_DATE_FORMAT);
 
   onDone(selectedDateString);
 }

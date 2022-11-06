@@ -65,6 +65,7 @@ export type SnTypes = 'telegram'
   | 'tiktok';
 
 export default interface ContentItem {
+  // date in ISO format
   date: string;
   time: string;
   gist: string;

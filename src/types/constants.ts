@@ -1,7 +1,8 @@
 export const BACK_BTN_CALLBACK = 'BACK_BTN_CALLBACK';
 export const CANCEL_BTN_CALLBACK = 'CANCEL_BTN_CALLBACK';
 export const OK_BTN_CALLBACK = 'OK';
-export const FULL_DATE_FORMAT = 'DD.MM.YYYY';
+export const PRINT_FULL_DATE_FORMAT = 'DD.MM.YYYY';
+export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 
 
 export enum AppEvents {

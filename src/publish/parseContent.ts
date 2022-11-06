@@ -10,7 +10,7 @@ import moment from 'moment';
 import {makeFullNotionLink, matchSnsForType} from '../helpers/helpers';
 import ru from '../I18n/ru';
 import _ from 'lodash';
-import {FULL_DATE_FORMAT} from '../types/constants';
+import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 
 
 // TODO: review, refactor
@@ -25,6 +25,7 @@ export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]
     : undefined;
 
   return {
+    // date in iso format
     date: (item.properties[CONTENT_PROPS.date] as any)?.date.start || '',
     time: (item.properties[CONTENT_PROPS.time] as any)?.select.name || '',
     gist: (item.properties[CONTENT_PROPS.gist] as any)?.rich_text[0]?.plain_text || '',
@@ -42,7 +43,7 @@ export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]
 }
 
 export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru): string {
-  return `${i18n.contentInfo.dateTime}: ${moment(item.date).format(FULL_DATE_FORMAT)} ${item.time}\n`
+  return `${i18n.contentInfo.dateTime}: ${moment(item.date).format(PRINT_FULL_DATE_FORMAT)} ${item.time}\n`
     + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}\n`
     + `${i18n.contentInfo.type}: ${item.type}. ${i18n.contentInfo.status}: ${item.status}\n`
     + `${i18n.contentInfo.content}: ${item.gist}\n`
