@@ -20,27 +20,18 @@ export async function startPublishCustomPostTg(
     tgChat,
     tgChat.asyncCb(async (photoIdOrUrl: string[], caption?: string) => {
       // TODO: photoIdOrUrl может быть пустой
-      // TODO: use caption
 
       //const footer = tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter;
-      // TODO: выполнит шаблон c тэгами
-      //let footerStr = (footerTmpl) ? footerTmpl: undefined;
-
-      // print result
-
 
       const state: CustomPostState = {
         useFooter: true,
-        // TODO: resolve usePreview - взависимости от картинки
-        usePreview: true,
+        usePreview: !photoIdOrUrl.length,
         forceDisableFooter: !footerTmpl,
-        // TODO: resolve forceDisablePreview - взависимости от картинки
-        forceDisablePreview: true,
+        forceDisablePreview: !photoIdOrUrl.length,
         postText: caption,
       };
 
       await askCustomPostMenu(blogName, tgChat, state, tgChat.asyncCb(async  () => {
-        // TODO: текст для инсты
         const resultText = compactUndefined(
           // TODO: создать темплейт с тэгами
           [state.postText, (state.useFooter) ? footerTmpl : undefined]
