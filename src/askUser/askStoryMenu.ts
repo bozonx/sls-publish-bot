@@ -7,6 +7,7 @@ import {
   OK_BTN, OK_BTN_CALLBACK,
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
+import {compactUndefined} from '../lib/arrays';
 
 
 export type StoryMenuAction = 'FOOTER_SWITCH' | 'DATE_SELECT' | 'TIME_SELECT';
@@ -51,11 +52,11 @@ export async function askStoryMenu(
         callback_data: STORY_MENU_ACTION.TIME_SELECT,
       },
     ],
-    [
+    compactUndefined([
       BACK_BTN,
       CANCEL_BTN,
-      OK_BTN
-    ]
+      (correctedDate && correctedTime) ? OK_BTN : undefined,
+    ]),
   ];
 
   await addSimpleStep(tgChat, msg, buttons,(queryData: string) => {

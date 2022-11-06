@@ -4,6 +4,7 @@ import {PhotoMessageEvent} from '../types/MessageEvent';
 import {askStoryMenu, STORY_MENU_ACTION, StoryMenuAction} from '../askUser/askStoryMenu';
 import {OK_BTN_CALLBACK} from '../types/constants';
 import {askSelectTime} from '../askUser/askSelectTime';
+import {askPubDate} from '../askUser/askPubDate';
 
 
 export async function startPublishStory(blogName: string, tgChat: TgChat) {
@@ -43,12 +44,16 @@ async function askMenu(
   await askStoryMenu(blogName, tgChat, tgChat.asyncCb(async (action: StoryMenuAction | typeof OK_BTN_CALLBACK) => {
     switch (action) {
       case OK_BTN_CALLBACK:
-        if (!selectedDate) {
-          return tgChat.reply(tgChat.app.i18n.errors.notSelectedPubDate);
-        }
-        else if (!selectedTime) {
-          return tgChat.reply(tgChat.app.i18n.errors.notSelectedPubTime)
-        }
+        // if (!selectedDate) {
+        //   await tgChat.reply(tgChat.app.i18n.errors.notSelectedPubDate);
+        //
+        //   return;
+        // }
+        // else if (!selectedTime) {
+        //   await tgChat.reply(tgChat.app.i18n.errors.notSelectedPubTime);
+        //
+        //   return;
+        // }
 
         // TODO: add
 
@@ -65,17 +70,22 @@ async function askMenu(
 
         break;
       case STORY_MENU_ACTION.DATE_SELECT:
+        await askPubDate(tgChat, tgChat.asyncCb(async (selectedDateString: string) => {
+          await tgChat.reply(
+            (selectedTime)
+              ? tgChat.app.i18n.commonPhrases.selectedDateAndTime + selectedDate + ' ' + selectedTime
+              : tgChat.app.i18n.commonPhrases.selectedOnlyDate + selectedDate
+          );
 
-        // TODO: add
-
-        await askMenu(blogName, tgChat, selectedDate, selectedTime, useFooter);
+          await askMenu(blogName, tgChat, selectedDate, selectedTime, useFooter);
+        }));
 
         break;
       case STORY_MENU_ACTION.TIME_SELECT:
         await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
           await tgChat.reply(
             (selectedDate)
-              ? tgChat.app.i18n.commonPhrases.selectedTimeMsg + selectedDate + ' ' + newTime
+              ? tgChat.app.i18n.commonPhrases.selectedDateAndTime + selectedDate + ' ' + newTime
               : tgChat.app.i18n.commonPhrases.selectedOnlyTime + newTime
           );
 

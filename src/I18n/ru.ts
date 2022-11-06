@@ -32,9 +32,10 @@ const dict = {
     noPreview: 'Не делать предпросмотр ссылки',
     yesPreview: 'Добавить предпросмотр ссылки',
     selectTime: 'Напишите время в таком формате: 03:59, 23:08',
+    selectDate: 'Выберете ближайшую дату или напишите число текущего '
+      + 'или следующего месяца (5, 11, 29). Либо число и месяц DD.MM (1.12. 5.5, 03.07, 20.12)',
     postFooter: 'Футер поста: ',
     selectedNoPreview: 'Предпросмотр ссылки: ',
-    incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',
@@ -45,9 +46,9 @@ const dict = {
     changedPubDate: 'Дата публикации ',
     noPostFooter: 'Убрать подпись поста',
     yesPostFooter: 'Добавить подпись поста',
-    incorrectUrl: 'Не валидный URL. Попробуйте ещё раз.',
-    selectedTimeMsg: 'Пост будет опубликован: ',
+    selectedDateAndTime: 'Пост будет опубликован: ',
     selectedOnlyTime: 'Установлено время на: ',
+    selectedOnlyDate: 'Дата установлена на: ',
     selectedNoFooter: 'Подпись поста: ',
   },
   story: {
@@ -90,8 +91,11 @@ const dict = {
   errors: {
     invalidContent: `Запись контент плана не валидна. Исправьте в notion: `,
     errorLoadFromNotion: `Ошибка загрузки из notion: `,
-    notSelectedPubDate: `Выберете дату публикации`,
-    notSelectedPubTime: `Выберете время публикации`,
+    // notSelectedPubDate: `Выберете дату публикации`,
+    // notSelectedPubTime: `Выберете время публикации`,
+    incorrectDate: 'Не валидная дата. Попробуйте ещё раз.',
+    incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
+    incorrectUrl: 'Не валидный URL. Попробуйте ещё раз.',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

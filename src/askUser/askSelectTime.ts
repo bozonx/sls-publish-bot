@@ -49,7 +49,7 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
             validateTime(trimmed);
           }
           catch (e) {
-            await tgChat.reply(tgChat.app.i18n.menu.incorrectTime)
+            await tgChat.reply(tgChat.app.i18n.errors.incorrectTime)
 
             return;
           }

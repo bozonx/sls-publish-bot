@@ -56,11 +56,11 @@ export async function askStoryImage(
             onDone(url);
           }
           else {
-            await tgChat.reply(tgChat.app.i18n.commonPhrases.incorrectUrl);
+            await tgChat.reply(tgChat.app.i18n.errors.incorrectUrl);
           }
         })
       ),
-      AppEvents.PHOTO
+      AppEvents.TEXT
     ]);
   });
 }

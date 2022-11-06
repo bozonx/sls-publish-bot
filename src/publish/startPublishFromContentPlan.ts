@@ -162,7 +162,7 @@ async function askMenu(
         case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
           await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
             await tgChat.reply(
-              tgChat.app.i18n.commonPhrases.selectedTimeMsg
+              tgChat.app.i18n.commonPhrases.selectedDateAndTime
               + parsedContentItem.date + ' ' + newTime
             );
             await askMenu(
