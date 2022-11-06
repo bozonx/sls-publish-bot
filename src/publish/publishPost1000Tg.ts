@@ -3,7 +3,7 @@ import ContentItem, {SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
 import {prepareFooterPost} from '../helpers/helpers';
-import {publishImageTg, publishPreparedPostTg} from './publishHelpers';
+import {publishImageTg, publishPostNoImageTg} from './publishHelpers';
 
 
 export async function publishPost1000Tg(
@@ -36,7 +36,7 @@ export async function publishPost1000Tg(
     );
   }
   else {
-    await publishPreparedPostTg(
+    await publishPostNoImageTg(
       contentItem.date,
       resolvedTime,
       postStr,

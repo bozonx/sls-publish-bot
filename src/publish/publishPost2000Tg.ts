@@ -3,7 +3,7 @@ import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
 import {prepareFooterPost} from '../helpers/helpers';
-import {publishPreparedPostTg} from './publishHelpers';
+import {publishPostNoImageTg} from './publishHelpers';
 
 // TODO: сделать текстом + картинка предпросмотром - точку сделать ссылкой
 // TODO: превью обязательно
@@ -26,7 +26,7 @@ export async function publishPost2000Tg(
     )
   }
 
-  await publishPreparedPostTg(
+  await publishPostNoImageTg(
     contentItem.date,
     resolvedTime,
     postStr,

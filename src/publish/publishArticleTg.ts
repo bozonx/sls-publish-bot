@@ -2,7 +2,7 @@ import {markdownv2 as mdFormat} from 'telegram-format';
 import ContentItem from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
-import {publishPreparedPostTg} from './publishHelpers';
+import {publishPostNoImageTg} from './publishHelpers';
 import _ from 'lodash';
 import {makeTagsString, makeTelegraPhUrl} from '../helpers/helpers';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
@@ -44,7 +44,7 @@ export async function publishArticleTg(
     TAGS: mdFormat.escape(makeTagsString(parsedPage.tgTags)),
   });
 
-  await publishPreparedPostTg(
+  await publishPostNoImageTg(
     contentItem.date,
     resolvedTime,
     postStr,

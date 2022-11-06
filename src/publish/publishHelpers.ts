@@ -7,7 +7,10 @@ import {makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 
 
-export async function publishPreparedPostTg(
+/**
+ * Post without image
+ */
+export async function publishPostNoImageTg(
   isoDate: string,
   resolvedTime: string,
   postStr: string,

@@ -26,6 +26,7 @@ export interface CustomPostState {
   usePreview: boolean;
   forceDisableFooter: boolean;
   forceDisablePreview: boolean;
+  tags: string[],
   postText?: string;
   selectedDate?: string;
   selectedTime?: string;
