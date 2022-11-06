@@ -10,13 +10,6 @@ import {publishImageTg} from './publishHelpers';
 
 
 export async function startPublishStory(blogName: string, tgChat: TgChat) {
-  // TODO: * + спрашиваем загрузить картинку
-  //       * + проверяем что она только одна
-  //       * + показываем что получилось
-  //       * кнопка выкл футер
-  //       * кнопка установка даты
-  //       * кнопка установка времени
-
   await askStoryImage(
     blogName,
     tgChat,
@@ -64,7 +57,7 @@ async function askMenu(
       case STORY_MENU_ACTION.FOOTER_SWITCH:
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.selectedNoFooter
-          + tgChat.app.i18n.onOff[Number(useFooter)]
+          + tgChat.app.i18n.onOff[Number(!useFooter)]
         );
         await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, selectedTime, !useFooter);
 

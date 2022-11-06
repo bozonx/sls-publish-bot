@@ -76,6 +76,8 @@ export default class TasksMain {
 
     // TODO: validate task
 
+    console.log(1111, task.startTime)
+
     const taskNum = this.registerTask(task);
 
     if (taskNum === null) return null;
@@ -127,7 +129,13 @@ export default class TasksMain {
    * @private
    */
   private registerTask(task: TaskItem, specifiedTaskId?: string): string | null {
+    // TODO: почему дата не предается???
     const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
+
+    console.log(2222, secondsToPublish)
+
+    // TODO: если слишком большое время ожидания то короче глюк - надо просто сохранить
+    // TODO: сделать крон который будет поднимать отложенные задачи и регистрировать
 
     if (secondsToPublish <= this.app.appConfig.skipTasksEarlierSec) {
       const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`

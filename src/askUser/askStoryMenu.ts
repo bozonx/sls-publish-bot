@@ -4,10 +4,11 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  OK_BTN, OK_BTN_CALLBACK,
+  OK_BTN, OK_BTN_CALLBACK, PRINT_FULL_DATE_FORMAT,
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
+import moment from 'moment';
 
 
 export type StoryMenuAction = 'FOOTER_SWITCH' | 'DATE_SELECT' | 'TIME_SELECT';
@@ -41,7 +42,8 @@ export async function askStoryMenu(
     [
       {
         text: (correctedDate)
-          ? tgChat.app.i18n.commonPhrases.changedPubDate + correctedDate
+          ? tgChat.app.i18n.commonPhrases.changedPubDate
+            + moment(correctedDate).format(PRINT_FULL_DATE_FORMAT)
           : tgChat.app.i18n.commonPhrases.setPubDate,
         callback_data: STORY_MENU_ACTION.DATE_SELECT,
       },
