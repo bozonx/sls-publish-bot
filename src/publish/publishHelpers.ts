@@ -4,6 +4,7 @@ import {FULL_DATE_FORMAT} from '../types/constants';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
+import {makeUtcOffsetStr} from '../helpers/helpers';
 
 
 export async function publishPreparedPostTg(
@@ -91,6 +92,10 @@ async function registerTaskTg(
 ) {
   // get id of channel to publish postpone post
   const chatId = tgChat.app.config.blogs[blogName].sn.telegram?.channelId;
+  const startTime = moment(`${moment(resolvedDate).format('YYYY-MM-DD')}T${resolvedTime}:00`)
+    .utcOffset(tgChat.app.appConfig.utcOffset).format();
+
+  console.log(11111, startTime, resolvedDate)
 
   if (!chatId) {
     throw new Error(`Telegram chat id doesn't set`);
@@ -98,8 +103,7 @@ async function registerTaskTg(
 
   const task: PostponePostTask = {
     //startTime: '2022-11-01T19:58:00+03:00',
-    startTime: moment(`${resolvedDate}T${resolvedTime}:00`)
-      .utcOffset(tgChat.app.appConfig.utcOffset).format(),
+    startTime,
     type: TASK_TYPES.postponePost,
     chatId,
     blogUname: blogName,
@@ -119,7 +123,6 @@ function makePublishInfoMessage(
   // TODO: отформатировать почеловечи
   return tgChat.app.i18n.message.prePublishInfo
   + tgChat.app.config.blogs[blogName].dispname + ', '
-  + moment(resolvedDate).format(FULL_DATE_FORMAT) + ' '
-  // TODO: add sn
-  + resolvedTime;
+    // TODO: add sn
+  + resolvedDate + ' ' + resolvedTime + ' ' + makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
 }

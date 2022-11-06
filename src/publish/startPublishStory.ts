@@ -48,17 +48,6 @@ async function askMenu(
   await askStoryMenu(blogName, tgChat, tgChat.asyncCb(async (action: StoryMenuAction | typeof OK_BTN_CALLBACK) => {
     switch (action) {
       case OK_BTN_CALLBACK:
-        // if (!selectedDate) {
-        //   await tgChat.reply(tgChat.app.i18n.errors.notSelectedPubDate);
-        //
-        //   return;
-        // }
-        // else if (!selectedTime) {
-        //   await tgChat.reply(tgChat.app.i18n.errors.notSelectedPubTime);
-        //
-        //   return;
-        // }
-
         await publishImageTg(
           selectedDate!,
           selectedTime!,
