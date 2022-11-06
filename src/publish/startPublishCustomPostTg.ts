@@ -35,9 +35,9 @@ export async function startPublishCustomPostTg(
         useFooter: true,
         // TODO: resolve usePreview - взависимости от картинки
         usePreview: true,
+        forceDisableFooter: !footerTmpl,
         // TODO: resolve forceDisablePreview - взависимости от картинки
         forceDisablePreview: true,
-        footerTmpl,
         postText: caption,
       };
 

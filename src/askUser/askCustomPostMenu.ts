@@ -24,8 +24,8 @@ export type CustomPostAction = 'FOOTER_SWITCH'
 export interface CustomPostState {
   useFooter: boolean;
   usePreview: boolean;
+  forceDisableFooter: boolean;
   forceDisablePreview: boolean;
-  footerTmpl?: string;
   postText?: string;
   selectedDate?: string;
   selectedTime?: string;
@@ -49,7 +49,7 @@ export async function askCustomPostMenu(
 ) {
   const msg = tgChat.app.i18n.customPost.actionMenu;
   const buttons = [
-    (state.footerTmpl)
+    (!state.forceDisableFooter)
       ? [{
           text: (state.useFooter)
             ? tgChat.app.i18n.commonPhrases.noPostFooter
