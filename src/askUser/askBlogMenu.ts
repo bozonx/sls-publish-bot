@@ -25,7 +25,14 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (act
       tgChat.events.addListener(
         AppEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
-          if ([MENU_PUBLISH, MENU_MAKE_STORY, MENU_ADVERT].includes(queryData)) {
+          if ([
+            BLOG_MENU_ACTIONS.CONTENT_PLAN,
+            BLOG_MENU_ACTIONS.STORY,
+            BLOG_MENU_ACTIONS.MEM,
+            BLOG_MENU_ACTIONS.REEL,
+            BLOG_MENU_ACTIONS.POST,
+            BLOG_MENU_ACTIONS.ADVERT,
+          ].includes(queryData)) {
             onDone(queryData);
           }
           else if (queryData === CANCEL_BTN_CALLBACK) {
