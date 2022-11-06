@@ -3,9 +3,17 @@ import BaseState from '../types/BaseState';
 import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 
 
-export const MENU_PUBLISH = 'menu_publish';
-export const MENU_MAKE_STORY = 'menu_make_story';
-export const MENU_ADVERT = 'menu_advert';
+export const BLOG_MENU_ACTIONS = {
+  CONTENT_PLAN: 'CONTENT_PLAN',
+  STORY: 'STORY',
+  MEM: 'MEM',
+  REEL: 'REEL',
+  POST: 'POST',
+  ADVERT: 'ADVERT',
+};
+// export const MENU_PUBLISH = 'menu_publish';
+// export const MENU_MAKE_STORY = 'menu_make_story';
+// export const MENU_ADVERT = 'menu_advert';
 
 
 export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (action: string) => void) {
@@ -37,19 +45,37 @@ async function printInitialMessage(blogName: string, tgChat: TgChat): Promise<nu
     [
       {
         text: tgChat.app.i18n.menu.publish,
-        callback_data: MENU_PUBLISH,
+        callback_data: BLOG_MENU_ACTIONS.CONTENT_PLAN,
       },
     ],
     (blogSns.instagram && blogSns.telegram)
       ? [{
           text: tgChat.app.i18n.menu.makeStory,
-          callback_data: MENU_MAKE_STORY,
+          callback_data: BLOG_MENU_ACTIONS.STORY,
         }]
       : [],
     (blogSns.telegram)
       ?[{
+        text: tgChat.app.i18n.menu.makeMem,
+        callback_data: BLOG_MENU_ACTIONS.MEM,
+      }]
+      : [],
+    (blogSns.telegram)
+      ?[{
+        text: tgChat.app.i18n.menu.makeReel,
+        callback_data: BLOG_MENU_ACTIONS.REEL,
+      }]
+      : [],
+    (blogSns.telegram)
+      ?[{
+        text: tgChat.app.i18n.menu.makeReel,
+        callback_data: BLOG_MENU_ACTIONS.POST,
+      }]
+      : [],
+    (blogSns.telegram)
+      ?[{
         text: tgChat.app.i18n.menu.makeAdvertTg,
-        callback_data: MENU_ADVERT,
+        callback_data: BLOG_MENU_ACTIONS.ADVERT,
       }]
       : [],
     [

@@ -15,6 +15,8 @@ export interface BlogConfig {
       channelId: number | string;
       postFooter?: string;
       storyFooter?: string;
+      memFooter?: string;
+      reelFooter?: string;
       articlePostTmpl?: string;
       articleFooter?: (TelegraphNode | string)[];
     };
