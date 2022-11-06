@@ -1,14 +1,14 @@
-import TgChat from '../apiTg/TgChat';
-import {askPostMedia} from '../askUser/askPostMedia';
-import {PhotoMessageEvent} from '../types/MessageEvent';
-import {askCustomPostMenu, STORY_MENU_ACTION, StoryMenuAction} from '../askUser/askCustomPostMenu';
-import {OK_BTN_CALLBACK} from '../types/constants';
-import {askSelectTime} from '../askUser/askSelectTime';
-import {askPubDate} from '../askUser/askPubDate';
-import {makeUtcOffsetStr} from '../helpers/helpers';
-import {publishImageTg} from './publishHelpers';
-import {askPostText} from '../askUser/askPostText';
-import {compactUndefined} from '../lib/arrays';
+import TgChat from '../src/apiTg/TgChat';
+import {askPostMedia} from '../src/askUser/askPostMedia';
+import {PhotoMessageEvent} from '../src/types/MessageEvent';
+import {askCustomPostMenu, STORY_MENU_ACTION, StoryMenuAction} from '../src/askUser/askCustomPostMenu';
+import {OK_BTN_CALLBACK} from '../src/types/constants';
+import {askSelectTime} from '../src/askUser/askSelectTime';
+import {askPubDate} from '../src/askUser/askPubDate';
+import {makeUtcOffsetStr} from '../src/helpers/helpers';
+import {publishImageTg} from '../src/publish/publishHelpers';
+import {askPostText} from '../src/askUser/askPostText';
+import {compactUndefined} from '../src/lib/arrays';
 
 
 export async function startPublishStory(blogName: string, tgChat: TgChat) {

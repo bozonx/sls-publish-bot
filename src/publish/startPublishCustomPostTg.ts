@@ -12,7 +12,6 @@ export async function startPublishCustomPostTg(
   blogName: string,
   tgChat: TgChat,
   footerTmpl?: string,
-  forceDisablePreview = false,
   mediaRequired = false,
 ) {
   await askPostMedia(
@@ -20,9 +19,6 @@ export async function startPublishCustomPostTg(
     blogName,
     tgChat,
     tgChat.asyncCb(async (photoIdOrUrl: string[], caption?: string) => {
-
-      //const footer = tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter;
-
       const state: CustomPostState = {
         useFooter: true,
         usePreview: !photoIdOrUrl.length,
