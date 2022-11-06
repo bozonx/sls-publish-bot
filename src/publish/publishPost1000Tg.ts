@@ -29,10 +29,10 @@ export async function publishPost1000Tg(
     await publishImageTg(
       contentItem.date,
       resolvedTime,
-      postStr,
       parsedPage.imageUrl,
       blogName,
-      tgChat
+      tgChat,
+      postStr
     );
   }
   else {

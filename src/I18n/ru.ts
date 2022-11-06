@@ -96,7 +96,7 @@ const dict = {
     incorrectDate: 'Не валидная дата. Попробуйте ещё раз.',
     incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
     incorrectUrl: 'Не валидный URL. Попробуйте ещё раз.',
-    notRegisteredChat: 'Начните с начала: /start',
+    notRegisteredChat: 'Бот был перезапущен. Начните с начала: /start',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

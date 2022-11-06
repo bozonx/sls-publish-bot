@@ -134,7 +134,7 @@ export function prepareFooterPost(text?: string, tags?: string[]): string {
 }
 
 export function makeUtcOffsetStr(utcOffsetNum: number): string {
-  const timeStr = `${utcOffsetNum}:00`;
+  const timeStr = `${utcOffsetNum}:00 UTC`;
 
   if (utcOffsetNum < 0) {
     return `-${timeStr}`;

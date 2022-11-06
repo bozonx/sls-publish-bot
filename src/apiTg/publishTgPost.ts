@@ -25,10 +25,10 @@ export async function publishTgPost(
 
 export async function publishTgImage(
   chatId: number | string,
-  captionMd: string,
   imageUrl: string,
   blogName: string,
   tgChat: TgChat,
+  captionMd?: string,
   disableNotification = false
 ): Promise<number> {
   const result = await tgChat.app.tg.bot.telegram.sendPhoto(

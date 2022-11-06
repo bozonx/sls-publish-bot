@@ -20,6 +20,7 @@ export async function publishFork(
     PUBLICATION_TYPES.post1000,
     PUBLICATION_TYPES.post2000,
     PUBLICATION_TYPES.mem,
+    PUBLICATION_TYPES.story,
   ].includes(contentItem.type)) {
     for (const sn of contentItem.sns) {
       switch (sn) {

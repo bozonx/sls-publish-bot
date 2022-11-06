@@ -130,8 +130,6 @@ async function incomeText(
     if (dateNum < currentDate.date()) {
       // if it is the past then increment month
       // if month is 13 then it will be the next year
-      // TODO: а если следующий год ???
-      // TODO: а если другое число дней в месяце ???
       currentDate.month(currentDate.month() + 1);
     }
     // change date num of current date

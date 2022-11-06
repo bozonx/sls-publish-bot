@@ -45,10 +45,10 @@ export async function publishPreparedPostTg(
 export async function publishImageTg(
   resolvedDate: string,
   resolvedTime: string,
-  captionMd: string,
   imageUrl: string,
   blogName: string,
-  tgChat: TgChat
+  tgChat: TgChat,
+  captionMd?: string,
 ) {
   let msgId: number;
   // Print to log channel
@@ -58,10 +58,10 @@ export async function publishImageTg(
 
     msgId = await publishTgImage(
       tgChat.app.config.logChannelId,
-      captionMd,
       imageUrl,
       blogName,
-      tgChat
+      tgChat,
+      captionMd
     )
 
     await tgChat.app.tg.bot.telegram.sendMessage(
