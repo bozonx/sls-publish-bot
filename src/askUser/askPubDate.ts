@@ -82,9 +82,7 @@ export async function askPubDate(tgChat: TgChat, onDone: (selectedDateString: st
               throw new Error(`Unknown action`);
           }
 
-          if (addDays !== -1) {
-            await pressedBtn(addDays, tgChat, onDone);
-          }
+          if (addDays !== -1) await pressedBtn(addDays, tgChat, onDone);
         })
       ),
       AppEvents.CALLBACK_QUERY
@@ -104,7 +102,7 @@ async function pressedBtn(
   if (addDays > 0) {
     currentDate.add(addDays, 'days');
   }
-  // else todate
+  // else today
 
   const selectedDateString = currentDate.format(FULL_DATE_FORMAT);
 

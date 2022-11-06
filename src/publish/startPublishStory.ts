@@ -70,14 +70,14 @@ async function askMenu(
 
         break;
       case STORY_MENU_ACTION.DATE_SELECT:
-        await askPubDate(tgChat, tgChat.asyncCb(async (selectedDateString: string) => {
+        await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
           await tgChat.reply(
             (selectedTime)
-              ? tgChat.app.i18n.commonPhrases.selectedDateAndTime + selectedDate + ' ' + selectedTime
-              : tgChat.app.i18n.commonPhrases.selectedOnlyDate + selectedDate
+              ? tgChat.app.i18n.commonPhrases.selectedDateAndTime + newDate + ' ' + selectedTime
+              : tgChat.app.i18n.commonPhrases.selectedOnlyDate + newDate
           );
 
-          await askMenu(blogName, tgChat, selectedDate, selectedTime, useFooter);
+          await askMenu(blogName, tgChat, newDate, selectedTime, useFooter);
         }));
 
         break;
