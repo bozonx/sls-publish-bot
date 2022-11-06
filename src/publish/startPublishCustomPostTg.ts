@@ -14,6 +14,7 @@ export async function startPublishCustomPostTg(
   tgChat: TgChat,
   footerTmpl?: string,
   mediaRequired = false,
+  disableTags = false,
 ) {
   await askPostMedia(
     mediaRequired,
@@ -25,6 +26,7 @@ export async function startPublishCustomPostTg(
         usePreview: !photoIdOrUrl.length,
         forceDisableFooter: !footerTmpl,
         forceDisablePreview: Boolean(photoIdOrUrl.length),
+        disableTags,
         tags: [],
         postText: caption,
       };

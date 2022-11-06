@@ -26,6 +26,7 @@ export interface CustomPostState {
   usePreview: boolean;
   forceDisableFooter: boolean;
   forceDisablePreview: boolean;
+  disableTags: boolean;
   tags: string[],
   postText?: string;
   selectedDate?: string;
@@ -66,18 +67,17 @@ export async function askCustomPostMenu(
         callback_data: CUSTOM_POST_ACTION.PREVIEW_SWITCH,
       }]
       : [],
-    [
+    compactUndefined([
       {
         text: tgChat.app.i18n.buttons.addText,
         callback_data: CUSTOM_POST_ACTION.ADD_TEXT,
-      }
-    ],
-    [
-      {
+      },
+      (state.disableTags) ? undefined
+      : {
         text: tgChat.app.i18n.buttons.addTags,
         callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
-      }
-    ],
+      },
+    ]),
     [
       {
         text: (state.selectedDate)

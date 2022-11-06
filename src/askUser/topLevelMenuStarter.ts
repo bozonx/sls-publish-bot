@@ -6,7 +6,6 @@ import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
 import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu';
-import {startPublishAdvert} from '../publish/startPublishAdvert';
 import {startPublishCustomPostTg} from '../publish/startPublishCustomPostTg';
 
 
@@ -79,6 +78,9 @@ async function blogActionSelected(action: string, blogName: string, tgChat: TgCh
     await startPublishCustomPostTg(blogName, tgChat, footer);
   }
   else if (action === BLOG_MENU_ACTIONS.ADVERT) {
-    await startPublishAdvert(blogName, tgChat);
+    // TODO: не нужны тэги
+    // TODO: нужно автоудаление
+    // TODO: нужно после регистрации задачи нужно внести рекламу в таблицу в notion
+    await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, true);
   }
 }
