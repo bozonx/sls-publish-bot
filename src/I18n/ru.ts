@@ -38,7 +38,7 @@ const dict = {
     selectedNoPreview: 'Предпросмотр ссылки: ',
     btnAddText: 'Добавить текст',
     askTypeText: 'Введите текст поста',
-    selectedPostText: 'Будет использован текст поста: ',
+    selectedPostText: 'Будет использован текст поста:',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',
@@ -99,7 +99,7 @@ const dict = {
     incorrectDate: 'Не валидная дата. Попробуйте ещё раз.',
     incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
     incorrectUrl: 'Не валидный URL. Попробуйте ещё раз.',
-    notRegisteredChat: 'Бот был перезапущен. Начните с начала: /start',
+    notRegisteredChat: 'Бот был ранее перезапущен поэтому начните с начала: /start',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

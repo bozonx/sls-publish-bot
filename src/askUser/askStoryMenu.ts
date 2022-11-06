@@ -9,7 +9,6 @@ import {
 import {addSimpleStep} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
 import moment from 'moment';
-import {askPostText} from './askPostText';
 
 
 export type StoryMenuAction = 'FOOTER_SWITCH' | 'DATE_SELECT' | 'TIME_SELECT' | 'ADD_TEXT';

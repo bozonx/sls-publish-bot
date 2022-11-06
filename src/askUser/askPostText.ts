@@ -25,7 +25,7 @@ export async function askPostText(
       tgChat.events.addListener(
         AppEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
-
+          onDone(textMsg.text);
         })
       ),
       AppEvents.TEXT

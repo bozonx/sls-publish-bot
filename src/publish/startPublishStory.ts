@@ -8,6 +8,7 @@ import {askPubDate} from '../askUser/askPubDate';
 import {makeUtcOffsetStr} from '../helpers/helpers';
 import {publishImageTg} from './publishHelpers';
 import {askPostText} from '../askUser/askPostText';
+import {compactUndefined} from '../lib/arrays';
 
 
 export async function startPublishStory(blogName: string, tgChat: TgChat) {
@@ -17,14 +18,14 @@ export async function startPublishStory(blogName: string, tgChat: TgChat) {
     tgChat.asyncCb(async (photoMsg: PhotoMessageEvent | string) => {
       const photoUrl = (typeof photoMsg === 'string') ? photoMsg : photoMsg.photo.fileId;
       const footer = tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter;
-      let caption = (footer) ? footer: undefined;
+      let footerStr = (footer) ? footer: undefined;
       // print result
       await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, photoUrl, {
-        caption,
+        caption: footerStr,
         parse_mode: tgChat.app.appConfig.telegram.parseMode,
       });
 
-      await askMenu(blogName, tgChat, photoUrl, caption);
+      await askMenu(blogName, tgChat, photoUrl, footerStr);
     }
   ));
 }
@@ -34,7 +35,7 @@ async function askMenu(
   blogName: string,
   tgChat: TgChat,
   photoUrl: string,
-  caption?: string,
+  footerStr?: string,
   selectedDate?: string,
   selectedTime?: string,
   postText?: string,
@@ -43,13 +44,17 @@ async function askMenu(
   await askStoryMenu(blogName, tgChat, tgChat.asyncCb(async (action: StoryMenuAction | typeof OK_BTN_CALLBACK) => {
     switch (action) {
       case OK_BTN_CALLBACK:
+        const resultText = compactUndefined(
+          [postText, (useFooter) ? footerStr : undefined]
+        ).join('') || undefined;
+
         await publishImageTg(
           selectedDate!,
           selectedTime!,
           photoUrl,
           blogName,
           tgChat,
-          caption
+          resultText
         );
 
         await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
@@ -61,7 +66,7 @@ async function askMenu(
           tgChat.app.i18n.commonPhrases.selectedNoFooter
           + tgChat.app.i18n.onOff[Number(!useFooter)]
         );
-        await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, selectedTime, postText, !useFooter);
+        await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, selectedTime, postText, !useFooter);
 
         break;
       case STORY_MENU_ACTION.ADD_TEXT:
@@ -70,9 +75,9 @@ async function askMenu(
           // TODO: validate text ????
 
           await tgChat.reply(
-            tgChat.app.i18n.menu.selectedPostText + newPostText
+            tgChat.app.i18n.menu.selectedPostText + '\n' + newPostText
           );
-          await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, selectedTime, newPostText, !useFooter);
+          await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, selectedTime, newPostText, useFooter);
         }));
 
         break;
@@ -80,7 +85,7 @@ async function askMenu(
         await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
           await tgChat.reply(makeDateTimeMsg(tgChat, newDate, selectedTime));
 
-          await askMenu(blogName, tgChat, photoUrl, caption, newDate, selectedTime, postText, useFooter);
+          await askMenu(blogName, tgChat, photoUrl, footerStr, newDate, selectedTime, postText, useFooter);
         }));
 
         break;
@@ -88,7 +93,7 @@ async function askMenu(
         await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
           await tgChat.reply(makeDateTimeMsg(tgChat, selectedDate, newTime));
 
-          await askMenu(blogName, tgChat, photoUrl, caption, selectedDate, newTime, postText, useFooter);
+          await askMenu(blogName, tgChat, photoUrl, footerStr, selectedDate, newTime, postText, useFooter);
         }));
 
         break;

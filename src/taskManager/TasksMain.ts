@@ -76,7 +76,7 @@ export default class TasksMain {
 
     // TODO: validate task
 
-    console.log(1111, task.startTime)
+    //console.log(1111, task.startTime)
 
     const taskNum = this.registerTask(task);
 
@@ -132,7 +132,7 @@ export default class TasksMain {
     // TODO: почему дата не предается???
     const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
 
-    console.log(2222, secondsToPublish)
+    //console.log(2222, secondsToPublish)
 
     // TODO: если слишком большое время ожидания то короче глюк - надо просто сохранить
     // TODO: сделать крон который будет поднимать отложенные задачи и регистрировать
