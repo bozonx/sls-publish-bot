@@ -89,7 +89,6 @@ async function printAllDetails(
       }
     )
   }
-
   // make content plan info details message
   const contentInfoMsg = makeContentPlanItemDetails(parsedContentItem, tgChat.app.i18n);
   // send record's info from content plan

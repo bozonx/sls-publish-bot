@@ -1,10 +1,10 @@
+import _ from 'lodash';
+import path from 'path';
 import RawPageContent, {PAGE_CONTENT_PROPS} from '../types/PageContent';
 import ru from '../I18n/ru';
 import {makeTagsString} from '../helpers/helpers';
 import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import {transformNotionToCleanText} from '../helpers/transformNotionToCleanText';
-import path from 'path';
-import _ from 'lodash';
 
 
 export function parsePageContent(

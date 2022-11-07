@@ -40,7 +40,7 @@ export async function askTelegraphMenu(tgChat: TgChat, onDone: (action: Telegrap
       case TELEGRAPH_MENU.LIST:
         return onDone(TELEGRAPH_MENU.LIST);
       default:
-        break;
+        throw new Error(`Unknown action`);
     }
   });
 }
