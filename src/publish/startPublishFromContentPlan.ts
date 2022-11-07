@@ -4,19 +4,13 @@ import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentPlanItemDetails, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
 import {makePageDetailsMsg, parsePageContent, validatePageItem} from './parsePage';
-import {
-  askPublishMenu,
-  PUBLISH_MENU_ACTION,
-  PublishMenuAction,
-  PublishMenuState
-} from '../askUser/askPublishMenu';
+import {askPublishMenu, PublishMenuState} from '../askUser/askPublishMenu';
 import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
 import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
-import {askSelectTime} from '../askUser/askSelectTime';
 import RawPageContent from '../types/PageContent';
-import {makeUtcOffsetStr, prepareFooterPost} from '../helpers/helpers';
+import {prepareFooterPost} from '../helpers/helpers';
 import {getFirstImageFromNotionBlocks, makeContentLengthString} from './publishHelpers';
 
 
@@ -164,32 +158,24 @@ async function askMenu(
     mainImgUrl,
   };
 
-  await askPublishMenu(
-    blogName,
-    tgChat,
-    state,
-    tgChat.asyncCb(async () => {
+  await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
 
-      // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
-      // TODO: может сделать доп подтверждение с предпросмотром???
+    // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
+    // TODO: может сделать доп подтверждение с предпросмотром???
+    // TODO: нужно обработать ошибку и написать пользователю
 
-      // TODO: нужно обработать ошибку и написать пользователю
-      // Do publish
-      await publishFork(
-        blogName,
-        tgChat,
-        parsedContentItem,
-        state.usePreview,
-        state.useFooter,
-        state.selectedTime,
-        parsedPage,
-      );
+    // Do publish
+    // await publishFork(
+    //   blogName,
+    //   tgChat,
+    //   parsedContentItem,
+    //   state.usePreview,
+    //   state.useFooter,
+    //   state.selectedTime,
+    //   parsedPage,
+    // );
 
-      await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
-      await tgChat.steps.cancel();
-    }
-  ),
-
-  );
-
+    await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+    await tgChat.steps.cancel();
+  }));
 }

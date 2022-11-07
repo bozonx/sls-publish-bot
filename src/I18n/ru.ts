@@ -44,6 +44,10 @@ const dict = {
     postMediaSkip: 'Без картинки',
     addText: 'Добавить текст',
     addTags: 'Добавить тэги',
+    changeSns: 'Изменить соц сети',
+    uploadMainImage: 'Загрузить главную картинку',
+    changeMainImage: 'Изменить главную картинку',
+    changeText: 'Изменить текст',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',

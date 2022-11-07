@@ -83,9 +83,27 @@ export async function askPublishMenu(
         : tgChat.app.i18n.commonPhrases.yesPostFooter,
       callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
     }] : [],
-    // TODO: add change text button
-    // TODO: add change image button
-    // TODO: add change sns button
+    (state.pubType === PUBLICATION_TYPES.announcement) ? [{
+      text: tgChat.app.i18n.buttons.changeText,
+      callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
+    }] : [],
+    (![
+      PUBLICATION_TYPES.poll,
+      PUBLICATION_TYPES.reels,
+      PUBLICATION_TYPES.video,
+    ].includes(state.pubType)) ? [{
+      text: (state.mainImgUrl)
+        ? tgChat.app.i18n.buttons.changeMainImage
+        : tgChat.app.i18n.buttons.uploadMainImage,
+      callback_data: PUBLISH_MENU_ACTION.CHANGE_IMAGE,
+    }] : [],
+    // TODO: если впринципе доступна только 1 сеть - то не показывать кнопку
+    [
+      {
+        text: tgChat.app.i18n.buttons.changeSns,
+        callback_data: PUBLISH_MENU_ACTION.CHANGE_SNS,
+      }
+    ],
     [
       BACK_BTN,
       CANCEL_BTN,
