@@ -89,7 +89,8 @@ const dict = {
     instaTags: 'Тэги Instagram',
     tgTags: 'Тэги Telegram',
     contentLength: 'Количество символов в тексте',
-    contentLengthWithTags: 'Количество символов в тексте + тэги инстаграмм',
+    contentLengthWithInstaTags: 'Количество символов в тексте + тэги инстаграмм',
+    contentLengthWithTgFooter: 'Количество символов в тексте + футер telegram',
   },
   publicationType: {
     article: 'Статья',
@@ -112,6 +113,7 @@ const dict = {
     incorrectTime: 'Не валидное время. Попробуйте ещё раз.',
     incorrectUrl: 'Не валидный URL. Попробуйте ещё раз.',
     notRegisteredChat: 'Бот был ранее перезапущен поэтому начните с начала: /start',
+    cantSendImage: '⚠️ Не получилось распознать картинку. Возможно она больше 5 мегабайт.',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

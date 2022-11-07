@@ -18,8 +18,5 @@ export default interface RawPageContent {
   imageDescr: string;
   instaTags: string[];
   tgTags: string[];
-  imageUrl?: string;
-  imageBaseName?: string;
-  imageExt?: string;
   textBlocks: NOTION_BLOCKS;
 }

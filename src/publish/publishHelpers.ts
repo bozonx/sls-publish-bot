@@ -3,8 +3,13 @@ import {publishTgImage, publishTgPost} from '../apiTg/publishTgPost';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
-import {makeUtcOffsetStr} from '../helpers/helpers';
+import {makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
+import {NOTION_BLOCKS} from '../types/types';
+import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
+import {transformNotionToCleanText} from '../helpers/transformNotionToCleanText';
+import ru from '../I18n/ru';
+import RawPageContent from '../types/PageContent';
 
 
 /**
@@ -86,6 +91,15 @@ export async function publishImageTg(
   await registerTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat);
 }
 
+export function getFirstImageFromNotionBlocks(blocks?: NOTION_BLOCKS): string | undefined {
+  if (!blocks) return;
+
+  for (const item of blocks[ROOT_LEVEL_BLOCKS]) {
+    if (item.type === 'image') return (item.image as any).file.url;
+  }
+}
+
+
 async function registerTaskTg(
   isoDate: string,
   resolvedTime: string,
@@ -115,6 +129,29 @@ async function registerTaskTg(
   await tgChat.app.tasks.addTask(task);
 }
 
+export function makeContentLengthString(
+  i18n: typeof ru,
+  parsedPage: RawPageContent,
+  tgFooter: string
+): string {
+  if (!parsedPage.textBlocks) return '';
+
+  const instaTags = makeTagsString(parsedPage.instaTags);
+  const cleanText = transformNotionToCleanText(parsedPage.textBlocks);
+  // TODO: better to use unified
+  const cleanFooter = tgFooter
+    .replace(/\\/g, '')
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+  const instaLength = (cleanText + '\n\n' + instaTags).length;
+  const tgLength = (cleanText + cleanFooter).length;
+
+  return ''
+    + `${i18n.pageInfo.contentLength}: ${cleanText.length}\n`
+    + `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}\n`
+    + `${i18n.pageInfo.contentLengthWithTgFooter}: ${tgLength}`;
+}
+
+
 function makePublishInfoMessage(
   isoDate: string,
   resolvedTime: string,
@@ -127,3 +164,4 @@ function makePublishInfoMessage(
     // TODO: add sn
   + moment(isoDate).format(PRINT_FULL_DATE_FORMAT) + ' ' + resolvedTime + ' ' + makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
 }
+

@@ -8,6 +8,7 @@ export const NOTION_BLOCK_TYPES = {
   quote: 'quote',
   code: 'code',
   divider: 'divider',
+  image: 'image',
 };
 
 export const NOTION_RICH_TEXT_TYPES = {

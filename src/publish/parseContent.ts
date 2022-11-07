@@ -45,7 +45,8 @@ export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]
 export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru): string {
   return `${i18n.contentInfo.dateTime}: ${moment(item.date).format(PRINT_FULL_DATE_FORMAT)} ${item.time}\n`
     + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}\n`
-    + `${i18n.contentInfo.type}: ${item.type}. ${i18n.contentInfo.status}: ${item.status}\n`
+    + `${i18n.contentInfo.type}: ${item.type}.\n`
+    + `${i18n.contentInfo.status}: ${item.status}\n`
     + `${i18n.contentInfo.content}: ${item.gist}\n`
     + `${i18n.contentInfo.link}: ${(item.relativePageId) ? makeFullNotionLink(item.relativePageId) : ''}\n`
     + `${i18n.contentInfo.note}: ${item.note}`;
