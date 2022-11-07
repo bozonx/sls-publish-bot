@@ -4,7 +4,12 @@ import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentPlanItemDetails, parseContentItem, validateContentItem} from './parseContent';
 import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
 import {makePageDetailsMsg, parsePageContent, validatePageItem} from './parsePage';
-import {askPublishConfirm, PUBLISH_CONFIRM_ACTION, PublishConfirmAction} from '../askUser/askPublishConfirm';
+import {
+  askPublishMenu,
+  PUBLISH_MENU_ACTION,
+  PublishMenuAction,
+  PublishMenuState
+} from '../askUser/askPublishMenu';
 import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
 import {loadPageBlocks} from '../notionRequests/pageBlocks';
@@ -141,27 +146,32 @@ async function printAllDetails(
 }
 
 
-// TODO: вычищать картинку из текста
-
 async function askMenu(
   blogName: string,
   tgChat: TgChat,
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent,
   mainImgUrl?: string,
-  correctedTime?: string,
-  usePreview = true,
-  useFooter = true,
 ) {
-  await askPublishConfirm(
+  const state: PublishMenuState = {
+    pubType: parsedContentItem.type,
+    usePreview: true,
+    useFooter: true,
+    // TODO: зарезолвить соц сети
+    sns: [],
+    mainImgUrl,
+  };
+
+  await askPublishMenu(
     blogName,
     tgChat,
-    tgChat.asyncCb(async (action: PublishConfirmAction) => {
+    state,
+    tgChat.asyncCb(async (action: PublishMenuAction) => {
 
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
 
       switch (action) {
-        case PUBLISH_CONFIRM_ACTION.OK:
+        case PUBLISH_MENU_ACTION.OK:
           // TODO: нужно обработать ошибку и написать пользователю
           // Do publish
           await publishFork(
@@ -178,7 +188,7 @@ async function askMenu(
           await tgChat.steps.cancel();
 
           break;
-        case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
+        case PUBLISH_MENU_ACTION.CHANGE_TIME:
           await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
             await tgChat.reply(
               tgChat.app.i18n.commonPhrases.selectedDateAndTime
@@ -196,7 +206,7 @@ async function askMenu(
           }));
 
           break;
-        case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
+        case PUBLISH_MENU_ACTION.NO_POST_FOOTER:
           await tgChat.reply(
             tgChat.app.i18n.commonPhrases.selectedNoFooter
             + tgChat.app.i18n.onOff[Number(useFooter)]
@@ -212,7 +222,7 @@ async function askMenu(
           );
 
           break;
-        case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
+        case PUBLISH_MENU_ACTION.NO_PREVIEW:
           await tgChat.reply(
             tgChat.app.i18n.commonPhrases.selectedNoPreview
             + tgChat.app.i18n.onOff[Number(!usePreview)]
@@ -233,11 +243,11 @@ async function askMenu(
       }
     }
   ),
-    usePreview,
-    useFooter,
-    parsedContentItem.type,
-    Boolean(parsedPage?.imageUrl),
-    correctedTime
+    // usePreview,
+    // useFooter,
+    // parsedContentItem.type,
+    // Boolean(parsedPage?.imageUrl),
+    // correctedTime
   );
 
 }

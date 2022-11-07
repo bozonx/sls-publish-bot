@@ -11,46 +11,52 @@ import {addSimpleStep} from '../helpers/helpers';
 import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 
 
-export type PublishConfirmAction = 'OK' | 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
+export type PublishMenuAction = 'CHANGE_TIME' | 'NO_POST_FOOTER' | 'NO_PREVIEW';
 
-export const PUBLISH_CONFIRM_ACTION: Record<PublishConfirmAction, PublishConfirmAction> = {
-  OK: 'OK',
+export interface PublishMenuState {
+  pubType: PublicationTypes;
+  useFooter: boolean;
+  usePreview: boolean;
+  sns: string[];
+  selectedTime?: string;
+  mainImgUrl?: string;
+  // it's for announcement
+  postText?: string;
+}
+
+export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> = {
   CHANGE_TIME: 'CHANGE_TIME',
   NO_POST_FOOTER: 'NO_POST_FOOTER',
   NO_PREVIEW: 'NO_PREVIEW',
 };
 
 
-export async function askPublishConfirm(
+export async function askPublishMenu(
   blogName: string,
   tgChat: TgChat,
-  onDone: (action: PublishConfirmAction) => void,
-  usePreview: boolean,
-  useFooter: boolean,
-  pubType: PublicationTypes,
-  hasImage: boolean,
-  correctedTime?: string,
+  state: PublishMenuState,
+  onDone: () => void,
 ) {
   const msg = tgChat.app.i18n.commonPhrases.publishConfirmation;
   const buttons = [
     [
       {
-        text: (correctedTime)
-          ? tgChat.app.i18n.commonPhrases.changedPubTime + correctedTime
+        text: (state.selectedTime)
+          ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
           : tgChat.app.i18n.commonPhrases.changePubTime,
-        callback_data: PUBLISH_CONFIRM_ACTION.CHANGE_TIME,
+        callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
       },
     ],
-    (!hasImage && [
+    (!state.mainImgUrl && [
       PUBLICATION_TYPES.post1000,
       PUBLICATION_TYPES.post2000,
       PUBLICATION_TYPES.announcement
-    ].includes(pubType))
+    ].includes(state.pubType))
       ? [{
-          text: (usePreview)
+          text: (state.usePreview)
             ? tgChat.app.i18n.commonPhrases.noPreview
             : tgChat.app.i18n.commonPhrases.yesPreview,
-          callback_data: PUBLISH_CONFIRM_ACTION.NO_PREVIEW,
+          callback_data: PUBLISH_MENU_ACTION.NO_PREVIEW,
         }]
       : [],
     (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter && [
@@ -63,12 +69,12 @@ export async function askPublishConfirm(
       PUBLICATION_TYPES.announcement,
       PUBLICATION_TYPES.reels,
       PUBLICATION_TYPES.video,
-    ].includes(pubType))
+    ].includes(state.pubType))
       ? [{
-        text: (useFooter)
+        text: (state.useFooter)
           ? tgChat.app.i18n.commonPhrases.noPostFooter
           : tgChat.app.i18n.commonPhrases.yesPostFooter,
-        callback_data: PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER,
+        callback_data: PUBLISH_MENU_ACTION.NO_POST_FOOTER,
       }]
       : [],
     [
@@ -86,16 +92,16 @@ export async function askPublishConfirm(
       return tgChat.steps.cancel();
     }
     else if (queryData === OK_BTN_CALLBACK) {
-      onDone(PUBLISH_CONFIRM_ACTION.OK);
+      //onDone(PUBLISH_MENU_ACTION.OK);
     }
-    else if (queryData === PUBLISH_CONFIRM_ACTION.CHANGE_TIME) {
-      onDone(PUBLISH_CONFIRM_ACTION.CHANGE_TIME);
+    else if (queryData === PUBLISH_MENU_ACTION.CHANGE_TIME) {
+      //onDone(PUBLISH_MENU_ACTION.CHANGE_TIME);
     }
-    else if (queryData === PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER) {
-      onDone(PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER);
+    else if (queryData === PUBLISH_MENU_ACTION.NO_POST_FOOTER) {
+      //onDone(PUBLISH_MENU_ACTION.NO_POST_FOOTER);
     }
-    else if (queryData === PUBLISH_CONFIRM_ACTION.NO_PREVIEW) {
-      onDone(PUBLISH_CONFIRM_ACTION.NO_PREVIEW);
+    else if (queryData === PUBLISH_MENU_ACTION.NO_PREVIEW) {
+      //onDone(PUBLISH_MENU_ACTION.NO_PREVIEW);
     }
   });
 }
