@@ -12,6 +12,9 @@ export function transformNotionToTelegramPostMd(notionBlocks: NOTION_BLOCKS): st
   let bulletedListCounter = 0;
 
   for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
+    // skip images
+    if (block.type === NOTION_BLOCK_TYPES.image) continue;
+
     if (block.has_children) {
       // TODO: recurse
     }

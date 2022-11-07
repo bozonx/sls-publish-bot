@@ -11,6 +11,10 @@ export function transformNotionToPrettyMd(notionBlocks: NOTION_BLOCKS): string {
   let bulletedListCounter = 0;
 
   for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
+    // TODO: не пропускать картинки а вставлять
+    // skip images
+    if (block.type === NOTION_BLOCK_TYPES.image) continue;
+
     if (block.has_children) {
       // TODO: recurse
     }

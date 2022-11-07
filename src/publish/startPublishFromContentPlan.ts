@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {makeContentPlanItemDetails, parseContentItem, validateContentItem} from './parseContent';
-import ContentItem, {SnTypes} from '../types/ContentItem';
+import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
 import {makePageDetailsMsg, parsePageContent, validatePageItem} from './parsePage';
 import {askPublishConfirm, PUBLISH_CONFIRM_ACTION, PublishConfirmAction} from '../askUser/askPublishConfirm';
 import {loadNotPublished} from '../notionRequests/contentPlan';
@@ -97,36 +97,46 @@ async function printAllDetails(
   );
 
   if (parsedPage) {
+    // if has nested page
     const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
 
     await tgChat.reply(
       tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
     );
+
+    const tgFooter = prepareFooterPost(
+      tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+      parsedPage?.tgTags
+    );
+
+    // print footer
+    if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
+      await tgChat.reply(
+        tgChat.app.i18n.menu.postFooter + tgFooter,
+        undefined,
+        true,
+        true
+      );
+    }
+
+    // tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
+
+    if (parsedPage) {
+      await tgChat.reply(makeContentLengthString(tgChat.app.i18n, parsedPage, tgFooter));
+    }
   }
   else {
-    // TODO: если нет ссылки то что делать? - обьявление
-    // TODO: проверить что для обьявления выбран telegram
-  }
+    if (parsedContentItem.type === PUBLICATION_TYPES.announcement) {
+      // TODO: проверить что для обьявления выбран telegram
+      await tgChat.reply(
+        tgChat.app.i18n.menu.announcementGist + '\n' + parsedContentItem.gist
+      );
+    }
+    else {
+      await tgChat.reply(tgChat.app.i18n.errors.noNestedPage);
 
-  const tgFooter = prepareFooterPost(
-    tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
-    parsedPage?.tgTags
-  );
-
-  // print footer
-  if (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter) {
-    await tgChat.reply(
-      tgChat.app.i18n.menu.postFooter + tgFooter,
-      undefined,
-      true,
-      true
-    );
-  }
-
-  // tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
-
-  if (parsedPage) {
-    await tgChat.reply(makeContentLengthString(tgChat.app.i18n, parsedPage, tgFooter));
+      await tgChat.steps.back();
+    }
   }
 }
 

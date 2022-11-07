@@ -695,6 +695,10 @@ export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): Telegra
   let olElIndex = -1;
 
   for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
+    // TODO: не пропускать картинки а вставлять
+    // skip images
+    if (block.type === NOTION_BLOCK_TYPES.image) continue;
+
     if (block.has_children) {
       // TODO: recurse
     }
