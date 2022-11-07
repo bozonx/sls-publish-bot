@@ -159,6 +159,8 @@ async function askMenu(
     useFooter: true,
     // TODO: зарезолвить соц сети
     sns: [],
+    selectedDate: parsedContentItem.date,
+    selectedTime: parsedContentItem.time,
     mainImgUrl,
   };
 
@@ -166,88 +168,28 @@ async function askMenu(
     blogName,
     tgChat,
     state,
-    tgChat.asyncCb(async (action: PublishMenuAction) => {
+    tgChat.asyncCb(async () => {
 
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
+      // TODO: может сделать доп подтверждение с предпросмотром???
 
-      switch (action) {
-        case PUBLISH_MENU_ACTION.OK:
-          // TODO: нужно обработать ошибку и написать пользователю
-          // Do publish
-          await publishFork(
-            blogName,
-            tgChat,
-            parsedContentItem,
-            usePreview,
-            useFooter,
-            correctedTime,
-            parsedPage,
-          );
+      // TODO: нужно обработать ошибку и написать пользователю
+      // Do publish
+      await publishFork(
+        blogName,
+        tgChat,
+        parsedContentItem,
+        state.usePreview,
+        state.useFooter,
+        state.selectedTime,
+        parsedPage,
+      );
 
-          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
-          await tgChat.steps.cancel();
-
-          break;
-        case PUBLISH_MENU_ACTION.CHANGE_TIME:
-          await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-            await tgChat.reply(
-              tgChat.app.i18n.commonPhrases.selectedDateAndTime
-              + `${parsedContentItem.date} ${newTime} ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}`
-            );
-            await askMenu(
-              blogName,
-              tgChat,
-              parsedContentItem,
-              parsedPage,
-              newTime,
-              usePreview,
-              useFooter
-            );
-          }));
-
-          break;
-        case PUBLISH_MENU_ACTION.NO_POST_FOOTER:
-          await tgChat.reply(
-            tgChat.app.i18n.commonPhrases.selectedNoFooter
-            + tgChat.app.i18n.onOff[Number(useFooter)]
-          );
-          await askMenu(
-            blogName,
-            tgChat,
-            parsedContentItem,
-            parsedPage,
-            correctedTime,
-            usePreview,
-            !useFooter,
-          );
-
-          break;
-        case PUBLISH_MENU_ACTION.NO_PREVIEW:
-          await tgChat.reply(
-            tgChat.app.i18n.commonPhrases.selectedNoPreview
-            + tgChat.app.i18n.onOff[Number(!usePreview)]
-          );
-          await askMenu(
-            blogName,
-            tgChat,
-            parsedContentItem,
-            parsedPage,
-            correctedTime,
-            !usePreview,
-            useFooter,
-          );
-
-          break;
-        default:
-          throw new Error(`Unknown action ${action}`);
-      }
+      await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+      await tgChat.steps.cancel();
     }
   ),
-    // usePreview,
-    // useFooter,
-    // parsedContentItem.type,
-    // Boolean(parsedPage?.imageUrl),
-    // correctedTime
+
   );
 
 }
