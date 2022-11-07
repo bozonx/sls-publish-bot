@@ -147,8 +147,8 @@ export function makeContentLengthString(
 
   return ''
     + `${i18n.pageInfo.contentLength}: ${cleanText.length}\n`
-    + `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}\n`
-    + `${i18n.pageInfo.contentLengthWithTgFooter}: ${tgLength}`;
+    + `${i18n.pageInfo.contentLengthWithTgFooter}: ${tgLength}\n`
+    + `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}`;
 }
 
 

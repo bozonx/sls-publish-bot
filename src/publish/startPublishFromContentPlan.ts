@@ -26,7 +26,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       const mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
 
       await printAllDetails(blogName, tgChat, parsedContentItem, parsedPage, mainImgUrl);
-      //await askMenu(blogName, tgChat, parsedContentItem, parsedPage, mainImgUrl);
+      await askMenu(blogName, tgChat, parsedContentItem, parsedPage, mainImgUrl);
     }
     catch (e) {
       await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
@@ -130,101 +130,104 @@ async function printAllDetails(
   }
 }
 
-// async function askMenu(
-//   blogName: string,
-//   tgChat: TgChat,
-//   parsedContentItem: ContentItem,
-//   parsedPage?: RawPageContent,
-//   mainImgUrl?: string,
-//   correctedTime?: string,
-//   usePreview = true,
-//   useFooter = true,
-// ) {
-//   await askPublishConfirm(
-//     blogName,
-//     tgChat,
-//     tgChat.asyncCb(async (action: PublishConfirmAction) => {
-//
-//       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
-//
-//       switch (action) {
-//         case PUBLISH_CONFIRM_ACTION.OK:
-//           // TODO: нужно обработать ошибку и написать пользователю
-//           // Do publish
-//           await publishFork(
-//             blogName,
-//             tgChat,
-//             parsedContentItem,
-//             usePreview,
-//             useFooter,
-//             correctedTime,
-//             parsedPage,
-//           );
-//
-//           await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
-//           await tgChat.steps.cancel();
-//
-//           break;
-//         case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
-//           await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-//             await tgChat.reply(
-//               tgChat.app.i18n.commonPhrases.selectedDateAndTime
-//               + `${parsedContentItem.date} ${newTime} ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}`
-//             );
-//             await askMenu(
-//               blogName,
-//               tgChat,
-//               parsedContentItem,
-//               parsedPage,
-//               newTime,
-//               usePreview,
-//               useFooter
-//             );
-//           }));
-//
-//           break;
-//         case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
-//           await tgChat.reply(
-//             tgChat.app.i18n.commonPhrases.selectedNoFooter
-//             + tgChat.app.i18n.onOff[Number(useFooter)]
-//           );
-//           await askMenu(
-//             blogName,
-//             tgChat,
-//             parsedContentItem,
-//             parsedPage,
-//             correctedTime,
-//             usePreview,
-//             !useFooter,
-//           );
-//
-//           break;
-//         case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
-//           await tgChat.reply(
-//             tgChat.app.i18n.commonPhrases.selectedNoPreview
-//             + tgChat.app.i18n.onOff[Number(!usePreview)]
-//           );
-//           await askMenu(
-//             blogName,
-//             tgChat,
-//             parsedContentItem,
-//             parsedPage,
-//             correctedTime,
-//             !usePreview,
-//             useFooter,
-//           );
-//
-//           break;
-//         default:
-//           throw new Error(`Unknown action ${action}`);
-//       }
-//     }
-//   ),
-//     usePreview,
-//     useFooter,
-//     parsedContentItem.type,
-//     Boolean(parsedPage?.imageUrl),
-//     correctedTime
-//   );
-//
-// }
+
+// TODO: вычищать картинку из текста
+
+async function askMenu(
+  blogName: string,
+  tgChat: TgChat,
+  parsedContentItem: ContentItem,
+  parsedPage?: RawPageContent,
+  mainImgUrl?: string,
+  correctedTime?: string,
+  usePreview = true,
+  useFooter = true,
+) {
+  await askPublishConfirm(
+    blogName,
+    tgChat,
+    tgChat.asyncCb(async (action: PublishConfirmAction) => {
+
+      // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
+
+      switch (action) {
+        case PUBLISH_CONFIRM_ACTION.OK:
+          // TODO: нужно обработать ошибку и написать пользователю
+          // Do publish
+          await publishFork(
+            blogName,
+            tgChat,
+            parsedContentItem,
+            usePreview,
+            useFooter,
+            correctedTime,
+            parsedPage,
+          );
+
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+          await tgChat.steps.cancel();
+
+          break;
+        case PUBLISH_CONFIRM_ACTION.CHANGE_TIME:
+          await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+            await tgChat.reply(
+              tgChat.app.i18n.commonPhrases.selectedDateAndTime
+              + `${parsedContentItem.date} ${newTime} ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}`
+            );
+            await askMenu(
+              blogName,
+              tgChat,
+              parsedContentItem,
+              parsedPage,
+              newTime,
+              usePreview,
+              useFooter
+            );
+          }));
+
+          break;
+        case PUBLISH_CONFIRM_ACTION.NO_POST_FOOTER:
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.selectedNoFooter
+            + tgChat.app.i18n.onOff[Number(useFooter)]
+          );
+          await askMenu(
+            blogName,
+            tgChat,
+            parsedContentItem,
+            parsedPage,
+            correctedTime,
+            usePreview,
+            !useFooter,
+          );
+
+          break;
+        case PUBLISH_CONFIRM_ACTION.NO_PREVIEW:
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.selectedNoPreview
+            + tgChat.app.i18n.onOff[Number(!usePreview)]
+          );
+          await askMenu(
+            blogName,
+            tgChat,
+            parsedContentItem,
+            parsedPage,
+            correctedTime,
+            !usePreview,
+            useFooter,
+          );
+
+          break;
+        default:
+          throw new Error(`Unknown action ${action}`);
+      }
+    }
+  ),
+    usePreview,
+    useFooter,
+    parsedContentItem.type,
+    Boolean(parsedPage?.imageUrl),
+    correctedTime
+  );
+
+}
