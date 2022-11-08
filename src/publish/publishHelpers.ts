@@ -131,18 +131,20 @@ async function registerTaskTg(
 
 export function makeContentLengthString(
   i18n: typeof ru,
-  parsedPage: RawPageContent,
-  tgFooter: string
+  textBlocks?: NOTION_BLOCKS,
+  tgTags?: string[],
+  instaTags?: string[],
+  tgFooter?: string,
 ): string {
-  if (!parsedPage.textBlocks) return '';
+  if (!textBlocks) return '';
 
-  const instaTags = makeTagsString(parsedPage.instaTags);
-  const cleanText = transformNotionToCleanText(parsedPage.textBlocks);
+  const instaTagsStr = makeTagsString(instaTags);
+  const cleanText = transformNotionToCleanText(textBlocks);
   // TODO: better to use unified
-  const cleanFooter = tgFooter
+  const cleanFooter = (tgFooter || '')
     .replace(/\\/g, '')
     .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
-  const instaLength = (cleanText + '\n\n' + instaTags).length;
+  const instaLength = (cleanText + '\n\n' + instaTagsStr).length;
   const tgLength = (cleanText + cleanFooter).length;
 
   return ''
