@@ -7,7 +7,7 @@ import ContentItem, {
 } from '../types/ContentItem';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import moment from 'moment';
-import {makeFullNotionLink, matchSnsForType} from '../helpers/helpers';
+import {makeDateTimeStr, makeFullNotionLink, matchSnsForType} from '../helpers/helpers';
 import ru from '../I18n/ru';
 import _ from 'lodash';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
@@ -42,8 +42,8 @@ export function parseContentItem(item: PageObjectResponse, channelSns: SnTypes[]
   }
 }
 
-export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru): string {
-  return `${i18n.contentInfo.dateTime}: ${moment(item.date).format(PRINT_FULL_DATE_FORMAT)} ${item.time}\n`
+export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru, utcOffset: number): string {
+  return `${i18n.contentInfo.dateTime}: ${makeDateTimeStr(item.date, item.time, utcOffset)}\n`
     + `${i18n.contentInfo.sns}: ${item.sns.join(', ')}\n`
     + `${i18n.contentInfo.type}: ${item.type}.\n`
     + `${i18n.contentInfo.status}: ${item.status}\n`

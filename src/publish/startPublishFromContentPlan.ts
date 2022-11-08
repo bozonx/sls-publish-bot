@@ -10,7 +10,7 @@ import {publishFork} from './publishFork';
 import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
 import RawPageContent from '../types/PageContent';
-import {prepareFooterPost} from '../helpers/helpers';
+import {makeDateTimeStr, prepareFooterPost} from '../helpers/helpers';
 import {getFirstImageFromNotionBlocks, makeContentLengthString} from './publishHelpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {NOTION_BLOCKS} from '../types/types';
@@ -93,7 +93,11 @@ async function printItemDetails(
   const footerStr = await printFooter(blogName, tgChat, true, parsedPage?.tgTags);
 
   // make content plan info details message
-  const contentInfoMsg = makeContentPlanItemDetails(parsedContentItem, tgChat.app.i18n);
+  const contentInfoMsg = makeContentPlanItemDetails(
+    parsedContentItem,
+    tgChat.app.i18n,
+    tgChat.app.appConfig.utcOffset
+  );
   // send record's info from content plan
   await tgChat.reply(
     tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
@@ -106,15 +110,6 @@ async function printItemDetails(
     await tgChat.reply(
       tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
     );
-  }
-  // TODO: наверное перенести в printPublicationContent
-  else if (parsedContentItem.type === PUBLICATION_TYPES.announcement) {
-    // don't have the nested page and it is annoucement
-    // TODO: проверить что для обьявления выбран telegram
-    await tgChat.reply(
-      tgChat.app.i18n.menu.announcementGist + '\n' + parsedContentItem.gist
-    );
-    // TODO: может тоже подсчитать длину???
   }
 
   await printContent(
@@ -210,14 +205,19 @@ async function askMenu(
   };
 
   await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
-    // TODO: sns
-    // TODO: date and time
-    // TODO: use preview
-    // tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
+
+    // TODO: текст для instagram
 
     await printImage(blogName, tgChat, mainImgUrl);
+
     const footerStr = await printFooter(blogName, tgChat, state.useFooter, parsedPage?.tgTags);
 
+    await tgChat.reply(
+      tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\m'
+      + tgChat.app.i18n.contentInfo.sns + ': ' + state.sns.join(', ')
+      + tgChat.app.i18n.contentInfo.dateTime + ': '
+        + makeDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
+    );
     await printContent(
       blogName,
       tgChat,
