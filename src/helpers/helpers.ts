@@ -15,8 +15,8 @@ export function makeBaseState(): BaseState {
   };
 }
 
-export function makeTagsString(tags: string[]): string {
-  if (!tags.length) return '';
+export function makeTagsString(tags?: string[]): string {
+  if (!tags || !tags.length) return '';
 
   return tags.map((item) => `#${item}`).join(' ');
 }

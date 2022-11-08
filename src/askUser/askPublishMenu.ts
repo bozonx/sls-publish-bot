@@ -47,7 +47,7 @@ export async function askPublishMenu(
   state: PublishMenuState,
   onDone: () => void,
 ) {
-  const msg = tgChat.app.i18n.commonPhrases.publishConfirmation;
+  const msg = tgChat.app.i18n.menu.publishFromCpMenu;
   const buttons = [
     [
       {

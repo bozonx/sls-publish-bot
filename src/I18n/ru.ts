@@ -39,6 +39,7 @@ const dict = {
     selectedPostText: 'Будет использован текст поста:',
     selectedNoPostText: 'У поста нет текста.',
     announcementGist: 'Объявление:',
+    publishFromCpMenu: 'Управление публикацией',
   },
   buttons: {
     postMediaSkip: 'Без картинки',
