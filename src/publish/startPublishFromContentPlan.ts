@@ -82,11 +82,12 @@ async function askMenu(
   };
 
   await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
+
+    // TODO: если не получилось распознать картинку - то нужно запретить публикацию
+
     const disableOk = !resolvedSns.length;
 
     await printPublishConfirmData(blogName, tgChat, resolvedSns, state, parsedPage);
-
-    // TODO: не показывать кнопку ok если нет соц сетей или другие ошибки
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
