@@ -88,6 +88,7 @@ async function askMenu(
     // TODO: если не совпадает тип публикации с поддержкой соц сетью - то запретить публикацию
     // TODO: если должен быть текст но его нет
     // TODO: если нет картинки, но должна быть - то блокировать ок
+    // TODO: проверить ограничения TELEGRAM_MAX_CAPTION и TELEGRAM_MAX_POST
 
     const disableOk = !resolvedSns.length;
 

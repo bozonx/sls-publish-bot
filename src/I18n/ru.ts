@@ -3,6 +3,7 @@
 
 
 import {PublicationTypes} from '../types/ContentItem';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
 
 const dict = {
   greet: 'Добро пожаловать в бот блогов свободы.',
@@ -132,6 +133,9 @@ const dict = {
     taskDoneSuccessful: 'Задача была успешно выполнена.',
     taskRegistered: 'Задание успешно зарегистрировано',
     removedImg: 'Картинка была удалена',
+    noImageNoText: 'Нет ни картинки ни текста',
+    bigCaption: `Подпись картинки превышает ${TELEGRAM_MAX_CAPTION} символа`,
+    bigPost: `Пост превышает ${TELEGRAM_MAX_POST} символа`,
     //loadedTask: 'Задача была загруженна с диска:',
   },
 }

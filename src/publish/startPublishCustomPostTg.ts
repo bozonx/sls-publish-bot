@@ -5,6 +5,7 @@ import {publishImageTg, publishPostNoImageTg} from './publishHelpers';
 import {makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
 
 
 export async function startPublishCustomPostTg(
@@ -34,17 +35,28 @@ export async function startPublishCustomPostTg(
       await askCustomPostMenu(blogName, tgChat, state, tgChat.asyncCb(async  () => {
         const footerStr = prepareFooter(footerTmpl, state.tags, state.useFooter);
         const resultText = (state.postText || '') + footerStr;
+        // TODO: remove links and formatting
+        const clearText = resultText;
+        let disableOk = false;
 
         await printPostPreview(blogName, tgChat, state, resultText);
 
-        // TODO: блокирова ok - если превышение текста 1032 если есть картинка
-        // TODO: блокирова ok - если превышение текста поста (2000 символов или сколько там)
-        // TODO: блокирова ok - если нет ни картинки ни текста
+        if (!state.postText && !state.images.length) {
+          disableOk = true;
 
-        // if (!resultText) {
-        //   // TODO: надо ещё заранее проверить наверное и написать пользователю
-        //   throw new Error(`No text`);
-        // }
+          await tgChat.reply(tgChat.app.i18n.message.noImageNoText);
+        }
+        else if (state.images.length && clearText.length > TELEGRAM_MAX_CAPTION) {
+          disableOk = true;
+
+          await tgChat.reply(tgChat.app.i18n.message.noImageNoText);
+        }
+        else if (!state.images.length && clearText.length > TELEGRAM_MAX_POST) {
+          disableOk = true;
+
+          await tgChat.reply(tgChat.app.i18n.message.noImageNoText);
+        }
+        // TODO: проверить если выбран вариант post2000
 
         await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
           if (photoIdOrUrl.length === 1) {
@@ -75,7 +87,7 @@ export async function startPublishCustomPostTg(
 
           await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
           await tgChat.steps.cancel();
-        }));
+        }), disableOk);
       }));
     }));
 }
@@ -122,4 +134,6 @@ async function printPostPreview(
   await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
     state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
   ));
+
+  // TODO: вывести количество символов
 }
