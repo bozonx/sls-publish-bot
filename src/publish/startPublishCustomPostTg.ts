@@ -38,36 +38,45 @@ export async function startPublishCustomPostTg(
         // TODO: remove links and formatting
         const clearText = resultText;
         let disableOk = false;
+        const isPost2000 = clearText.length > TELEGRAM_MAX_CAPTION
+          && clearText.length < TELEGRAM_MAX_POST;
 
-        await printPostPreview(blogName, tgChat, state, resultText);
+        if (isPost2000) await tgChat.reply(tgChat.app.i18n.message.post2000using);
+
+        await printPostPreview(blogName, tgChat, state, resultText, clearText);
 
         if (!state.postText && !state.images.length) {
           disableOk = true;
 
           await tgChat.reply(tgChat.app.i18n.message.noImageNoText);
         }
-        else if (state.images.length && clearText.length > TELEGRAM_MAX_CAPTION) {
+        else if (isPost2000 && state.images.length > 1) {
           disableOk = true;
 
-          await tgChat.reply(tgChat.app.i18n.message.noImageNoText);
+          await tgChat.reply(tgChat.app.i18n.message.post2000oneImg);
         }
         else if (!state.images.length && clearText.length > TELEGRAM_MAX_POST) {
           disableOk = true;
 
-          await tgChat.reply(tgChat.app.i18n.message.noImageNoText);
+          await tgChat.reply(tgChat.app.i18n.message.bigPost);
         }
-        // TODO: проверить если выбран вариант post2000
 
         await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
           if (photoIdOrUrl.length === 1) {
-            await publishImageTg(
-              state.selectedDate!,
-              state.selectedTime!,
-              photoIdOrUrl[0],
-              blogName,
-              tgChat,
-              resultText
-            );
+            if (isPost2000) {
+              // TODO: publishPost2000
+              throw new Error(`Not supported`);
+            }
+            else {
+              await publishImageTg(
+                state.selectedDate!,
+                state.selectedTime!,
+                photoIdOrUrl[0],
+                blogName,
+                tgChat,
+                resultText
+              );
+            }
           }
           else if (photoIdOrUrl.length > 1) {
             // several images
@@ -89,7 +98,8 @@ export async function startPublishCustomPostTg(
           await tgChat.steps.cancel();
         }), disableOk);
       }));
-    }));
+    })
+  );
 }
 
 
@@ -98,6 +108,7 @@ async function printPostPreview(
   tgChat: TgChat,
   state: CustomPostState,
   caption?: string,
+  clearText = '',
 ) {
   if (state.images.length === 1) {
     await publishTgImage(
@@ -134,6 +145,9 @@ async function printPostPreview(
   await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
     state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
   ));
-
-  // TODO: вывести количество символов
+  // print symbols count
+  await tgChat.reply(
+    `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ` +
+    clearText
+  );
 }
