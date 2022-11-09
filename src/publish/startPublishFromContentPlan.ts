@@ -10,7 +10,7 @@ import {publishFork} from './publishFork';
 import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
 import RawPageContent from '../types/PageContent';
-import {makeDateTimeStr, prepareFooterPost, resolveSns} from '../helpers/helpers';
+import {makeDateTimeStr, prepareFooter, resolveSns} from '../helpers/helpers';
 import {getFirstImageFromNotionBlocks, makeContentLengthString} from './publishHelpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {NOTION_BLOCKS} from '../types/types';
@@ -92,7 +92,19 @@ async function printItemDetails(
   mainImgUrl?: string
 ) {
   await printImage(blogName, tgChat, mainImgUrl);
-  const footerStr = await printFooter(blogName, tgChat, true, parsedPage?.tgTags);
+  const footerStr = prepareFooter(
+    tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+    parsedPage?.tgTags,
+    true
+  );
+  if (footerStr) {
+    await tgChat.reply(
+      tgChat.app.i18n.menu.postFooter + footerStr,
+      undefined,
+      true,
+      true
+    );
+  }
 
   // make content plan info details message
   const contentInfoMsg = makeContentPlanItemDetails(
@@ -136,32 +148,6 @@ async function printImage(blogName: string, tgChat: TgChat, mainImgUrl?: string)
       await tgChat.reply(tgChat.app.i18n.errors.cantSendImage)
     }
   }
-}
-
-async function printFooter(
-  blogName: string,
-  tgChat: TgChat,
-  useFooter: boolean,
-  tgTags?: string[]
-): Promise<string | undefined> {
-  let tgFooter: string | undefined;
-  const postFooter = tgChat.app.config.blogs[blogName].sn.telegram?.postFooter;
-
-  if (useFooter) {
-    tgFooter = prepareFooterPost(postFooter, tgTags);
-
-    // print footer
-    if (postFooter) {
-      await tgChat.reply(
-        tgChat.app.i18n.menu.postFooter + tgFooter,
-        undefined,
-        true,
-        true
-      );
-    }
-  }
-
-  return tgFooter;
 }
 
 async function printContent(
@@ -214,7 +200,19 @@ async function askMenu(
 
     await printImage(blogName, tgChat, mainImgUrl);
 
-    const footerStr = await printFooter(blogName, tgChat, state.useFooter, parsedPage?.tgTags);
+    const footerStr = prepareFooter(
+      tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+      parsedPage?.tgTags,
+      true
+    );
+    if (footerStr) {
+      await tgChat.reply(
+        tgChat.app.i18n.menu.postFooter + footerStr,
+        undefined,
+        true,
+        true
+      );
+    }
 
     await tgChat.reply(
       tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\m'

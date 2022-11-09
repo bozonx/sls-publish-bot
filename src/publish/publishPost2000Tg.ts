@@ -2,7 +2,7 @@ import ContentItem from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
-import {prepareFooterPost} from '../helpers/helpers';
+import {prepareFooter} from '../helpers/helpers';
 import {publishPostNoImageTg} from './publishHelpers';
 
 // TODO: сделать текстом + картинка предпросмотром - точку сделать ссылкой
@@ -20,9 +20,10 @@ export async function publishPost2000Tg(
   let postStr = transformNotionToTelegramPostMd(parsedPage.textBlocks);
 
   if (allowFooter) {
-    postStr += prepareFooterPost(
+    postStr += prepareFooter(
       tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
       parsedPage.tgTags
+      // TODO: add useFooter
     )
   }
 

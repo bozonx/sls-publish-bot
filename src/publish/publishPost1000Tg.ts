@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import ContentItem, {SN_TYPES} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
-import {prepareFooterPost} from '../helpers/helpers';
+import {prepareFooter} from '../helpers/helpers';
 import {publishImageTg, publishPostNoImageTg} from './publishHelpers';
 
 
@@ -19,9 +19,10 @@ export async function publishPost1000Tg(
   let postStr = transformNotionToTelegramPostMd(parsedPage.textBlocks);
 
   if (allowFooter) {
-    postStr += prepareFooterPost(
+    postStr += prepareFooter(
       tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
       parsedPage.tgTags
+      // TODO: add useFooter
     )
   }
 

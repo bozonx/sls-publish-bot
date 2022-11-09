@@ -143,14 +143,13 @@ export function validateTime(rawStr: string) {
   }
 }
 
-export function prepareFooterPost(text?: string, tags?: string[]): string {
-  if (!text) return '';
+// prepareFooterPost
+export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = true): string {
+  if (!tmpl || !useFooter) return '';
 
-  const resolvedText: string = (tags)
-    ? _.template(text)({TAGS: mdFormat.escape(makeTagsString(tags))})
-    : text
-
-  return resolvedText;
+  return _.template(tmpl)({
+    TAGS: mdFormat.escape(makeTagsString(tags))
+  });
 }
 
 export function makeUtcOffsetStr(utcOffsetNum: number): string {
