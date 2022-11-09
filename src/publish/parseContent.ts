@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import ContentItem, {
   CONTENT_PROPS,
   CONTENT_STATUS,
@@ -7,11 +8,8 @@ import ContentItem, {
 } from '../types/ContentItem';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import moment from 'moment';
-import {makeDateTimeStr, makeFullNotionLink, matchSnsForType, resolveSns} from '../helpers/helpers';
+import {makeDateTimeStr, makeFullNotionLink} from '../helpers/helpers';
 import ru from '../I18n/ru';
-import _ from 'lodash';
-import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
-import TgChat from '../apiTg/TgChat';
 
 
 // TODO: review, refactor

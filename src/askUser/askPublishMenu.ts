@@ -11,6 +11,7 @@ import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
 import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES} from '../types/ContentItem';
 import {askSelectTime} from './askSelectTime';
 import {askPostMedia} from './askPostMedia';
+import {printImage} from '../publish/printInfo';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -191,15 +192,26 @@ async function handleButtons(
       // TODO: add
       break;
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
+      return askPostMedia(
+        true,
+        true,
+        blogName,
+        tgChat,
+        tgChat.asyncCb(async (photoIdOrUrl: string[]) => {
+          if (photoIdOrUrl.length) {
+            state.mainImgUrl = photoIdOrUrl[0];
 
-      // TODO: добавить возможность убрать картинку вообще
-      // TODO: форма загрузки 1й картинки
+            await printImage(tgChat, state.mainImgUrl);
+          }
+          else {
+            delete state.mainImgUrl;
 
-      // return askPostMedia(true, blogName, tgChat, tgChat.asyncCb(async () => {
-      //
-      // }))
+            await tgChat.reply(tgChat.app.i18n.message.removedImg);
+          }
 
-      break;
+          return askPublishMenu(blogName, tgChat, state, onDone);
+        })
+      );
     case PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP:
       // TODO: add
       break;

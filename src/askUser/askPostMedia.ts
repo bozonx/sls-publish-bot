@@ -15,11 +15,14 @@ export const POST_MEDIA_ACTION = {
 
 export async function askPostMedia(
   mediaRequired: boolean,
+  onlyOneImage: boolean,
   blogName: string,
   tgChat: TgChat,
   onDone: AskPostMediaDone,
 ) {
-  const msg = tgChat.app.i18n.story.upload;
+  const msg = (onlyOneImage)
+    ? tgChat.app.i18n.menu.uploadOne
+    : tgChat.app.i18n.menu.uploadSeveral;
   const buttons = [
     (!mediaRequired)
       ? [{

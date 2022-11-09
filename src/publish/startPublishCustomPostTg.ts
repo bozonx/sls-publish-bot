@@ -18,6 +18,7 @@ export async function startPublishCustomPostTg(
 ) {
   await askPostMedia(
     mediaRequired,
+    true,
     blogName,
     tgChat,
     tgChat.asyncCb(async (photoIdOrUrl: string[], caption?: string) => {

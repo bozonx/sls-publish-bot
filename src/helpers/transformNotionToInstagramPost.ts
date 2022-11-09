@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import {NOTION_BLOCK_TYPES} from '../types/notion';
+import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 import {NOTION_BLOCKS} from '../types/types';
 import {richTextToSimpleTextList} from './transformHelpers';
+import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
 
 
 export function transformNotionToInstagramPost(notionBlocks: NOTION_BLOCKS): string {
@@ -45,8 +46,7 @@ export function transformNotionToInstagramPost(notionBlocks: NOTION_BLOCKS): str
         break;
       case NOTION_BLOCK_TYPES.paragraph:
         if ((block as any)?.paragraph?.rich_text.length) {
-          // TODO: форматировать bold и italic
-          result += richTextToSimpleTextList((block as any)?.paragraph?.rich_text) + '\n\n';
+          result += richTextToInstaTextList((block as any)?.paragraph?.rich_text) + '\n\n';
         }
         else {
           // empty row
@@ -57,29 +57,26 @@ export function transformNotionToInstagramPost(notionBlocks: NOTION_BLOCKS): str
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         bulletedListCounter++;
         result += `* `
-          // TODO: форматировать bold и italic
-          + richTextToSimpleTextList((block as any)?.bulleted_list_item?.rich_text)
+          + richTextToInstaTextList((block as any)?.bulleted_list_item?.rich_text)
           + '\n';
 
         break;
       case NOTION_BLOCK_TYPES.numbered_list_item:
         numberListCounter++;
         result += `${numberListCounter}. `
-          // TODO: форматировать bold и italic
-          + richTextToSimpleTextList((block as any)?.numbered_list_item?.rich_text)
+          + richTextToInstaTextList((block as any)?.numbered_list_item?.rich_text)
           + '\n';
 
         break;
       case NOTION_BLOCK_TYPES.quote:
         result += `| `
-          // TODO: форматировать bold и italic
-          + richTextToSimpleTextList((block as any)?.quote?.rich_text)
+          + richTextToInstaTextList((block as any)?.quote?.rich_text)
             .replace(/\n/g, '\n| ')
           + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.code:
-        result += richTextToSimpleTextList((block as any)?.code?.rich_text)
+        result += richTextToInstaTextList((block as any)?.code?.rich_text)
           + '\n\n';
 
         break;
@@ -94,4 +91,33 @@ export function transformNotionToInstagramPost(notionBlocks: NOTION_BLOCKS): str
   }
 
   return _.trim(result);
+}
+
+/**
+ * Make simple text without formatting from Rich text items
+ */
+function richTextToInstaTextList(richText?: TextRichTextItemResponse[]): string {
+  if (!richText) return '';
+  else if (!richText.length) return '';
+
+  return richText.map((item) => {
+    return item.plain_text;
+
+    // switch (item.type) {
+    //   case NOTION_RICH_TEXT_TYPES.text:
+    //     if (item.annotations.bold) {
+    //       return sansSerif(item.plain_text, { fontStyle: 'bold' });
+    //     }
+    //     else if (item.annotations.italic) {
+    //       return sansSerif(item.plain_text, { fontStyle: 'italic' });
+    //     }
+    //     else {
+    //       // no formatting
+    //       return item.plain_text;
+    //     }
+    //     //return toMarkDown(item.text.content, item.annotations, item.href);
+    //   default:
+    //     return item.plain_text;
+    // }
+  }).join('');
 }
