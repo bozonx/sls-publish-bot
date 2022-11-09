@@ -102,9 +102,9 @@ export async function printPublishConfirmData(
   // TODO: текст для instagram
 
   await tgChat.reply(
-    tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\m'
-    + tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', ')
-    + tgChat.app.i18n.contentInfo.dateTime + ': '
+    tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
+    + tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', ') + '\n'
+    + tgChat.app.i18n.contentInfo.dateTime + ': ' + '\n'
     + makeDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
   );
 
