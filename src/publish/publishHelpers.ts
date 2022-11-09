@@ -153,6 +153,15 @@ export function makeContentLengthString(
     + `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}`;
 }
 
+export async function makePost2000Text(tgChat: TgChat, rawText: string, img?: string) {
+
+  // TODO: сохранить картинку в telegra.ph
+  // TODO: получить ссылку на неё
+  // TODO: эту ссылку добавить в первую точку
+
+  return rawText;
+}
+
 
 function makePublishInfoMessage(
   isoDate: string,

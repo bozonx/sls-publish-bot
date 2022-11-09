@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat';
 import {askPostMedia} from '../askUser/askPostMedia';
 import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
-import {publishImageTg, publishPostNoImageTg} from './publishHelpers';
+import {makePost2000Text, publishImageTg, publishPostNoImageTg} from './publishHelpers';
 import {makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
@@ -64,8 +64,16 @@ export async function startPublishCustomPostTg(
         await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
           if (photoIdOrUrl.length === 1) {
             if (isPost2000) {
-              // TODO: publishPost2000
-              throw new Error(`Not supported`);
+              const post2000Txt = await makePost2000Text(tgChat, resultText, state.images[0]);
+
+              await publishPostNoImageTg(
+                state.selectedDate!,
+                state.selectedTime!,
+                post2000Txt,
+                blogName,
+                tgChat,
+                (state.images[0]) ? true : state.usePreview,
+              );
             }
             else {
               await publishImageTg(
