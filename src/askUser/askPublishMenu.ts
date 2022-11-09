@@ -10,6 +10,7 @@ import {
 import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
 import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES} from '../types/ContentItem';
 import {askSelectTime} from './askSelectTime';
+import {askPostMedia} from './askPostMedia';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -179,7 +180,7 @@ async function handleButtons(
       // print menu again
       return askPublishMenu(blogName, tgChat, state, onDone);
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
-      return await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+      return askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         state.selectedTime = newTime;
         // print result
         await tgChat.reply(makeTimeMsg(tgChat, state));
@@ -190,7 +191,14 @@ async function handleButtons(
       // TODO: add
       break;
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
-      // TODO: add
+
+      // TODO: добавить возможность убрать картинку вообще
+      // TODO: форма загрузки 1й картинки
+
+      // return askPostMedia(true, blogName, tgChat, tgChat.asyncCb(async () => {
+      //
+      // }))
+
       break;
     case PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP:
       // TODO: add
