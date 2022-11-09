@@ -40,6 +40,7 @@ const dict = {
     selectedNoPostText: 'У поста нет текста.',
     announcementGist: 'Объявление:',
     publishFromCpMenu: 'Управление публикацией',
+    textForInstagram: 'Текст поста для instagram 👇',
   },
   buttons: {
     postMediaSkip: 'Без картинки',

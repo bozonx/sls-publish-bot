@@ -78,6 +78,7 @@ async function askMenu(
     sns: resolvedSns,
     selectedDate: parsedContentItem.date,
     selectedTime: parsedContentItem.time,
+    instaTags: parsedPage?.instaTags,
     mainImgUrl,
   };
 
@@ -85,6 +86,7 @@ async function askMenu(
 
     // TODO: если не получилось распознать картинку - то нужно запретить публикацию
     // TODO: если не совпадает тип публикации с поддержкой соц сетью - то запретить публикацию
+    // TODO: если должен быть текст но его нет
 
     const disableOk = !resolvedSns.length;
 

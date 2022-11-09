@@ -1,12 +1,13 @@
 import TgChat from '../apiTg/TgChat';
-import ContentItem, {SnTypes} from '../types/ContentItem';
+import ContentItem, {SN_TYPES, SnTypes} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
-import {makeDateTimeStr, prepareFooter} from '../helpers/helpers';
+import {makeDateTimeStr, makeTagsString, prepareFooter} from '../helpers/helpers';
 import {makeContentPlanItemDetails} from './parseContent';
 import {makePageDetailsMsg} from './parsePage';
 import {NOTION_BLOCKS} from '../types/types';
 import {makeContentLengthString} from './publishHelpers';
 import {PublishMenuState} from '../askUser/askPublishMenu';
+import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost';
 
 
 export async function printItemDetails(
@@ -95,11 +96,9 @@ export async function printPublishConfirmData(
     parsedPage?.textBlocks,
     state.postText,
     parsedPage?.tgTags,
-    parsedPage?.instaTags,
+    state.instaTags,
     footerStr,
   );
-
-  // TODO: текст для instagram
 
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
@@ -107,6 +106,15 @@ export async function printPublishConfirmData(
     + tgChat.app.i18n.contentInfo.dateTime + ': ' + '\n'
     + makeDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
   );
+
+  if (state.sns.includes(SN_TYPES.instagram)) {
+    await tgChat.reply(tgChat.app.i18n.menu.textForInstagram);
+    await tgChat.reply(
+      transformNotionToInstagramPost(parsedPage!.textBlocks)
+      + '\n\n'
+      + makeTagsString(state.instaTags)
+    );
+  }
 
   if (!state.sns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
 }

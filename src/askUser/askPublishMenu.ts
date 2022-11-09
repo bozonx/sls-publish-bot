@@ -28,6 +28,7 @@ export interface PublishMenuState {
   sns: string[];
   selectedDate: string;
   selectedTime: string;
+  instaTags?: string[];
   mainImgUrl?: string;
   // it's for announcement
   postText?: string;
