@@ -4,7 +4,8 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  OK_BTN, OK_BTN_CALLBACK, PRINT_FULL_DATE_FORMAT,
+  OK_BTN, OK_BTN_CALLBACK,
+  PRINT_FULL_DATE_FORMAT,
 } from '../types/constants';
 import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';

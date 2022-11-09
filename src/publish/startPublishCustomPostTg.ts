@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import {askPostMedia} from '../askUser/askPostMedia';
 import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
 import {makePost2000Text, publishImageTg, publishPostNoImageTg} from './publishHelpers';
-import {makeDateTimeStr, prepareFooter} from '../helpers/helpers';
+import {clearMdText, makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
@@ -35,8 +35,7 @@ export async function startPublishCustomPostTg(
       await askCustomPostMenu(blogName, tgChat, state, tgChat.asyncCb(async  () => {
         const footerStr = prepareFooter(footerTmpl, state.tags, state.useFooter);
         const resultText = (state.postText || '') + footerStr;
-        // TODO: remove links and formatting
-        const clearText = resultText;
+        const clearText = clearMdText(resultText);
         let disableOk = false;
         const isPost2000 = clearText.length > TELEGRAM_MAX_CAPTION
           && clearText.length < TELEGRAM_MAX_POST;
@@ -55,7 +54,10 @@ export async function startPublishCustomPostTg(
 
           await tgChat.reply(tgChat.app.i18n.message.post2000oneImg);
         }
-        else if (!state.images.length && clearText.length > TELEGRAM_MAX_POST) {
+        else if (
+          (!state.images.length || isPost2000)
+          && clearText.length > TELEGRAM_MAX_POST
+        ) {
           disableOk = true;
 
           await tgChat.reply(tgChat.app.i18n.message.bigPost);

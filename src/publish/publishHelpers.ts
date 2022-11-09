@@ -3,7 +3,7 @@ import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
-import {makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
+import {clearMdText, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import {NOTION_BLOCKS} from '../types/types';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
@@ -140,10 +140,7 @@ export function makeContentLengthString(
 
   const instaTagsStr = makeTagsString(instaTags);
   const cleanText = transformNotionToCleanText(textBlocks);
-  // TODO: better to use unified
-  const cleanFooter = (tgFooter || '')
-    .replace(/\\/g, '')
-    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+  const cleanFooter = clearMdText(tgFooter || '');
   const instaLength = (cleanText + '\n\n' + instaTagsStr).length;
   const tgLength = (cleanText + cleanFooter).length;
 

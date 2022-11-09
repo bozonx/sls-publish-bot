@@ -170,3 +170,14 @@ export function makeDateTimeStr(dateStr: string, timeStr: string, utcOffset: num
   return moment(dateStr).format(PRINT_FULL_DATE_FORMAT)
     + ` ${timeStr} ${makeUtcOffsetStr(utcOffset)}`
 }
+
+/**
+ * Remove formatting of md from text to use it for collecting symbols count.
+ */
+export function clearMdText(mdText = ''): string {
+  // TODO: better to use unified
+  // TODO: remove other formatting
+  return mdText
+    .replace(/\\/g, '')
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+}
