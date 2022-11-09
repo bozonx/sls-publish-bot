@@ -41,8 +41,9 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
 
 export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru, utcOffset: number): string {
   return `${i18n.contentInfo.dateTime}: ${makeDateTimeStr(item.date, item.time, utcOffset)}\n`
-    + `${i18n.contentInfo.onlySn}: ${item.onlySn.join(', ')}\n`
-    + `${i18n.contentInfo.type}: ${item.type}.\n`
+    + `${i18n.contentInfo.onlySn}: `
+      + `${(item.onlySn.length) ? item.onlySn.join(', ') : i18n.contentInfo.noRestriction}\n`
+    + `${i18n.contentInfo.type}: ${item.type}\n`
     + `${i18n.contentInfo.status}: ${item.status}\n`
     + `${i18n.contentInfo.content}: ${item.gist}\n`
     + `${i18n.contentInfo.link}: ${(item.relativePageId) ? makeFullNotionLink(item.relativePageId) : ''}\n`

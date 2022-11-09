@@ -120,7 +120,7 @@ export async function askPublishMenu(
     }] : [],
     // and to setup instagram tags
     (state.sns.includes(SN_TYPES.instagram)) ? [{
-      text: tgChat.app.i18n.buttons.changeSns,
+      text: tgChat.app.i18n.buttons.changeInstaTags,
       callback_data: PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS,
     }] : [],
     // ask remove or add sn

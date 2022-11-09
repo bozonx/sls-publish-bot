@@ -94,15 +94,15 @@ async function askMenu(
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
       // TODO: нужно обработать ошибку и написать пользователю
       // Do publish
-      await publishFork(
-        blogName,
-        tgChat,
-        parsedContentItem,
-        state.usePreview,
-        state.useFooter,
-        state.selectedTime,
-        parsedPage,
-      );
+      // await publishFork(
+      //   blogName,
+      //   tgChat,
+      //   parsedContentItem,
+      //   state.usePreview,
+      //   state.useFooter,
+      //   state.selectedTime,
+      //   parsedPage,
+      // );
 
       await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
       await tgChat.steps.cancel();
