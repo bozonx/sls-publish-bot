@@ -84,6 +84,7 @@ async function askMenu(
   await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
 
     // TODO: если не получилось распознать картинку - то нужно запретить публикацию
+    // TODO: если не совпадает тип публикации с поддержкой соц сетью - то запретить публикацию
 
     const disableOk = !resolvedSns.length;
 

@@ -46,8 +46,9 @@ const dict = {
     addText: 'Добавить текст',
     addTags: 'Добавить тэги',
     changeSns: 'Изменить соц сети',
-    uploadMainImage: 'Загрузить главную картинку',
-    changeMainImage: 'Изменить главную картинку',
+    uploadMainImage: 'Загрузить главную картинку/видео',
+    changeMainImage: 'Изменить главную картинку/видео',
+    uploadMediaGroup: 'Загрузить медиа',
     changeText: 'Изменить текст',
   },
   commonPhrases: {

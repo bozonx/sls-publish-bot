@@ -8,7 +8,7 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
-import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES} from '../types/ContentItem';
 import {askSelectTime} from './askSelectTime';
 
 
@@ -16,7 +16,9 @@ export type PublishMenuAction = 'CHANGE_TIME'
   | 'FOOTER_SWITCH'
   | 'PREVIEW_SWITCH'
   | 'ADD_TEXT'
+  | 'CHANGE_INSTA_TAGS'
   | 'CHANGE_IMAGE'
+  | 'UPLOAD_MEDIA_GROUP'
   | 'CHANGE_SNS';
 
 export interface PublishMenuState {
@@ -36,7 +38,9 @@ export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> =
   FOOTER_SWITCH: 'FOOTER_SWITCH',
   PREVIEW_SWITCH: 'PREVIEW_SWITCH',
   ADD_TEXT: 'ADD_TEXT',
+  CHANGE_INSTA_TAGS: 'CHANGE_INSTA_TAGS',
   CHANGE_IMAGE: 'CHANGE_IMAGE',
+  UPLOAD_MEDIA_GROUP: 'UPLOAD_MEDIA_GROUP',
   CHANGE_SNS: 'CHANGE_SNS',
 };
 
@@ -49,6 +53,7 @@ export async function askPublishMenu(
 ) {
   const msg = tgChat.app.i18n.menu.publishFromCpMenu;
   const buttons = [
+    // ask time
     [
       {
         text: (state.selectedTime)
@@ -57,6 +62,7 @@ export async function askPublishMenu(
         callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
       },
     ],
+    // ask preview
     (!state.mainImgUrl && [
       PUBLICATION_TYPES.post1000,
       PUBLICATION_TYPES.post2000,
@@ -67,6 +73,7 @@ export async function askPublishMenu(
         : tgChat.app.i18n.commonPhrases.yesPreview,
       callback_data: PUBLISH_MENU_ACTION.PREVIEW_SWITCH,
     }] : [],
+    // ask footer
     (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter && [
       PUBLICATION_TYPES.post1000,
       PUBLICATION_TYPES.post2000,
@@ -83,21 +90,40 @@ export async function askPublishMenu(
         : tgChat.app.i18n.commonPhrases.yesPostFooter,
       callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
     }] : [],
+    // ask to change post text only for announcement
     (state.pubType === PUBLICATION_TYPES.announcement) ? [{
       text: tgChat.app.i18n.buttons.changeText,
       callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
     }] : [],
-    (![
-      PUBLICATION_TYPES.poll,
+    // ask to change main image/video
+    ([
+      PUBLICATION_TYPES.article,
+      PUBLICATION_TYPES.post1000,
+      PUBLICATION_TYPES.post2000,
+      PUBLICATION_TYPES.mem,
+      PUBLICATION_TYPES.story,
+      PUBLICATION_TYPES.announcement,
       PUBLICATION_TYPES.reels,
-      PUBLICATION_TYPES.video,
     ].includes(state.pubType)) ? [{
       text: (state.mainImgUrl)
         ? tgChat.app.i18n.buttons.changeMainImage
         : tgChat.app.i18n.buttons.uploadMainImage,
       callback_data: PUBLISH_MENU_ACTION.CHANGE_IMAGE,
     }] : [],
-    // TODO: если впринципе доступна только 1 сеть - то не показывать кнопку
+    // ask to upload several images for photos and narrative
+    ([
+      PUBLICATION_TYPES.photos,
+      PUBLICATION_TYPES.narrative,
+    ].includes(state.pubType)) ? [{
+      text: tgChat.app.i18n.buttons.uploadMediaGroup,
+      callback_data: PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP,
+    }] : [],
+    // and to setup instagram tags
+    (state.sns.includes(SN_TYPES.instagram)) ? [{
+      text: tgChat.app.i18n.buttons.changeSns,
+      callback_data: PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS,
+    }] : [],
+    // ask remove or add sn
     [
       {
         text: tgChat.app.i18n.buttons.changeSns,
@@ -163,6 +189,12 @@ async function handleButtons(
       // TODO: add
       break;
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
+      // TODO: add
+      break;
+    case PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP:
+      // TODO: add
+      break;
+    case PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS:
       // TODO: add
       break;
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
