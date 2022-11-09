@@ -1,9 +1,9 @@
 import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
-import {makeContentPlanItemDetails, parseContentItem, validateContentItem} from './parseContent';
+import {makeContentPlanItemDetails, prepareContentItem} from './parseContent';
 import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
-import {makePageDetailsMsg, parsePageContent, validatePageItem} from './parsePage';
+import {makePageDetailsMsg, preparePage} from './parsePage';
 import {askPublishMenu, PublishMenuState} from '../askUser/askPublishMenu';
 import {loadNotPublished} from '../notionRequests/contentPlan';
 import {publishFork} from './publishFork';
@@ -22,8 +22,8 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
   // ask use select not published item
   await askContentToUse(notPublishedItems, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
     try {
-      const parsedContentItem = await prepareContentItem(item, blogName, tgChat);
-      const parsedPage = await preparePage(parsedContentItem, blogName, tgChat);
+      const parsedContentItem = prepareContentItem(item, tgChat.app.i18n);
+      const parsedPage = await loadAndPreparePage(parsedContentItem, blogName, tgChat);
 
       if (!parsedPage && parsedContentItem.type !== PUBLICATION_TYPES.announcement) {
         // if not nested page and it isn't announcement
@@ -49,24 +49,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 }
 
 
-async function prepareContentItem(
-  rawItem: PageObjectResponse,
-  blogName: string,
-  tgChat: TgChat
-): Promise<ContentItem> {
-  const parsedContentItem: ContentItem = parseContentItem(rawItem);
-
-  try {
-    validateContentItem(parsedContentItem);
-  }
-  catch (e) {
-    throw new Error(tgChat.app.i18n.errors.invalidContent + e);
-  }
-
-  return parsedContentItem;
-}
-
-async function preparePage(
+async function loadAndPreparePage(
   parsedContentItem: ContentItem,
   blogName: string,
   tgChat: TgChat
@@ -76,11 +59,8 @@ async function preparePage(
   const pageProperties = await loadPageProps(parsedContentItem.relativePageId, tgChat);
   // load all the page blocks from notion
   const pageContent = await loadPageBlocks(parsedContentItem.relativePageId, tgChat);
-  const parsedPage = parsePageContent(pageProperties, pageContent);
 
-  validatePageItem(parsedPage);
-
-  return parsedPage;
+  return preparePage(pageProperties, pageContent, tgChat.app.i18n);
 }
 
 async function printItemDetails(

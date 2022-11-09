@@ -112,6 +112,7 @@ const dict = {
   onOff: ['Выкл', 'Вкл'],
   errors: {
     invalidContent: `Запись контент плана не валидна. Исправьте в notion: `,
+    invalidPage: `Страница не валидна. Исправьте в notion: `,
     errorLoadFromNotion: `Ошибка загрузки из notion: `,
     // notSelectedPubDate: `Выберете дату публикации`,
     // notSelectedPubTime: `Выберете время публикации`,

@@ -1,10 +1,8 @@
-import _ from 'lodash';
-import path from 'path';
 import RawPageContent, {PAGE_CONTENT_PROPS} from '../types/PageContent';
 import ru from '../I18n/ru';
 import {makeTagsString} from '../helpers/helpers';
-import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import {transformNotionToCleanText} from '../helpers/transformNotionToCleanText';
+import {BlockObjectResponse, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
+import {NOTION_BLOCKS} from '../types/types';
 
 
 export function parsePageContent(
@@ -39,4 +37,21 @@ export function makePageDetailsMsg(pageContent: RawPageContent, i18n: typeof ru)
 
 export function validatePageItem(pageContent: RawPageContent) {
   // TODO: add
+}
+
+export function preparePage(
+  pageProperties: PageObjectResponse['properties'],
+  pageContent: NOTION_BLOCKS,
+  i18n: typeof ru
+): RawPageContent {
+  const parsedPage = parsePageContent(pageProperties, pageContent);
+
+  try {
+    validatePageItem(parsedPage);
+  }
+  catch (e) {
+    throw new Error(i18n.errors.invalidContent + e);
+  }
+
+  return parsedPage;
 }

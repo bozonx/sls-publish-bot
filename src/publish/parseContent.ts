@@ -11,6 +11,7 @@ import {makeDateTimeStr, makeFullNotionLink, matchSnsForType, resolveSns} from '
 import ru from '../I18n/ru';
 import _ from 'lodash';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
+import TgChat from '../apiTg/TgChat';
 
 
 // TODO: review, refactor
@@ -61,4 +62,20 @@ export function validateContentItem(item: ContentItem) {
     throw new Error(`Unknown status: ${item.status}`);
   if (!Object.values(PUBLICATION_TYPES).includes(item.type))
     throw new Error(`Unknown type: ${item.type}`);
+}
+
+export function prepareContentItem(
+  rawItem: PageObjectResponse,
+  i18n: typeof ru
+): ContentItem {
+  const parsedContentItem: ContentItem = parseContentItem(rawItem);
+
+  try {
+    validateContentItem(parsedContentItem);
+  }
+  catch (e) {
+    throw new Error(i18n.errors.invalidContent + e);
+  }
+
+  return parsedContentItem;
 }
