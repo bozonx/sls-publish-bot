@@ -50,7 +50,7 @@ export function preparePage(
     validatePageItem(parsedPage);
   }
   catch (e) {
-    throw new Error(i18n.errors.invalidContent + e);
+    throw new Error(i18n.errors.invalidPage + e);
   }
 
   return parsedPage;
