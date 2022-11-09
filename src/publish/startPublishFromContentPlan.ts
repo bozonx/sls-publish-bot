@@ -10,7 +10,7 @@ import {publishFork} from './publishFork';
 import {loadPageBlocks} from '../notionRequests/pageBlocks';
 import {loadPageProps} from '../notionRequests/pageProps';
 import RawPageContent from '../types/PageContent';
-import {makeDateTimeStr, prepareFooterPost} from '../helpers/helpers';
+import {makeDateTimeStr, prepareFooterPost, resolveSns} from '../helpers/helpers';
 import {getFirstImageFromNotionBlocks, makeContentLengthString} from './publishHelpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {NOTION_BLOCKS} from '../types/types';
@@ -31,10 +31,12 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
         await tgChat.steps.back();
       }
 
+      const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
+      const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
       const mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
 
-      await printItemDetails(blogName, tgChat, parsedContentItem, parsedPage, mainImgUrl);
-      await askMenu(blogName, tgChat, parsedContentItem, parsedPage, mainImgUrl);
+      await printItemDetails(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
+      await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
     }
     catch (e) {
       await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
@@ -52,8 +54,7 @@ async function prepareContentItem(
   blogName: string,
   tgChat: TgChat
 ): Promise<ContentItem> {
-  const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
-  const parsedContentItem: ContentItem = parseContentItem(rawItem, blogSns);
+  const parsedContentItem: ContentItem = parseContentItem(rawItem);
 
   try {
     validateContentItem(parsedContentItem);
@@ -85,6 +86,7 @@ async function preparePage(
 async function printItemDetails(
   blogName: string,
   tgChat: TgChat,
+  resolvedSns: SnTypes[],
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent,
   mainImgUrl?: string
@@ -121,6 +123,8 @@ async function printItemDetails(
     parsedPage?.instaTags,
     footerStr,
   );
+
+  if (!resolvedSns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
 }
 
 async function printImage(blogName: string, tgChat: TgChat, mainImgUrl?: string) {
@@ -189,6 +193,7 @@ async function printContent(
 async function askMenu(
   blogName: string,
   tgChat: TgChat,
+  resolvedSns: SnTypes[],
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent,
   mainImgUrl?: string,
@@ -197,8 +202,7 @@ async function askMenu(
     pubType: parsedContentItem.type,
     usePreview: true,
     useFooter: true,
-    // TODO: зарезолвить соц сети
-    sns: [],
+    sns: resolvedSns,
     selectedDate: parsedContentItem.date,
     selectedTime: parsedContentItem.time,
     mainImgUrl,
@@ -214,10 +218,13 @@ async function askMenu(
 
     await tgChat.reply(
       tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\m'
-      + tgChat.app.i18n.contentInfo.sns + ': ' + state.sns.join(', ')
+      + tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', ')
       + tgChat.app.i18n.contentInfo.dateTime + ': '
         + makeDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
     );
+
+    if (!state.sns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
+
     await printContent(
       blogName,
       tgChat,
@@ -227,6 +234,8 @@ async function askMenu(
       parsedPage?.instaTags,
       footerStr,
     );
+
+    // TODO: не показывать кнопку ok если нет соц сетей или другие ошибки
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()

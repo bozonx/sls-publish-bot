@@ -39,6 +39,26 @@ export function isValidUrl(url: string): boolean {
 //   return `https://www.notion.so/${_.trimStart(internalLink, '/')}`
 // }
 
+/**
+ * Match blog sns, onlySns and sn for specific publication type
+ */
+export function resolveSns(
+  channelSns: SnTypes[],
+  onlySns: SnTypes[],
+  pubType: PublicationTypes
+): SnTypes[] {
+  let preSns = []
+
+  if (onlySns.length) {
+    preSns = onlySns;
+  }
+  else {
+    preSns = matchSnsForType(pubType);
+  }
+
+  return _.intersection(channelSns, preSns);
+}
+
 export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {
   if ([
     PUBLICATION_TYPES.post1000,

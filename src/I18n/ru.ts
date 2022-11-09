@@ -67,6 +67,7 @@ const dict = {
     selectedNoFooter: 'Подпись поста: ',
     selectedNoPreview: 'Предпросмотр ссылки: ',
     publishConfirmation: 'Опубликовать?',
+    sns: 'Cоц сети',
   },
   story: {
     upload: 'Загрузите картинку, видео или ссылку на картинку. Можно несколько. '
@@ -84,7 +85,7 @@ const dict = {
     link: 'Сылка',
     type: 'Тип',
     status: 'Статус',
-    sns: 'Соц сети',
+    onlySn: 'Только соц сети',
     note: 'Заметка'
   },
   pageInfo: {
@@ -120,6 +121,7 @@ const dict = {
     notRegisteredChat: 'Бот был ранее перезапущен поэтому начните с начала: /start',
     cantSendImage: '⚠️ Не получилось распознать картинку. Возможно она больше 5 мегабайт.',
     noNestedPage: 'Нет связанной страницы',
+    noSns: '⚠️ Нет соц сетей для публикации',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
