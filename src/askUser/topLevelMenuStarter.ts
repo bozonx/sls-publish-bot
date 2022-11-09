@@ -9,7 +9,6 @@ import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMen
 import {startPublishCustomPostTg} from '../publish/startPublishCustomPostTg';
 
 
-
 export async function topLevelMenuStarter(tgChat: TgChat) {
   return askMainMenu(tgChat, tgChat.asyncCb(async (blogNameOrAction: string) => {
     if (blogNameOrAction === SITE_SELECTED_RESULT) {
@@ -60,7 +59,7 @@ async function blogActionSelected(action: string, blogName: string, tgChat: TgCh
   else if (action === BLOG_MENU_ACTIONS.STORY) {
     const footer = tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter;
 
-    await startPublishCustomPostTg(blogName, tgChat, footer, true);
+    await startPublishCustomPostTg(blogName, tgChat, footer, true, true);
   }
   else if (action === BLOG_MENU_ACTIONS.MEM) {
     const footer = tgChat.app.config.blogs[blogName].sn.telegram?.memFooter;
@@ -70,7 +69,7 @@ async function blogActionSelected(action: string, blogName: string, tgChat: TgCh
   else if (action === BLOG_MENU_ACTIONS.REEL) {
     const footer = tgChat.app.config.blogs[blogName].sn.telegram?.reelFooter;
 
-    await startPublishCustomPostTg(blogName, tgChat, footer, true);
+    await startPublishCustomPostTg(blogName, tgChat, footer, true, true);
   }
   else if (action === BLOG_MENU_ACTIONS.POST) {
     const footer = tgChat.app.config.blogs[blogName].sn.telegram?.postFooter;
@@ -81,6 +80,6 @@ async function blogActionSelected(action: string, blogName: string, tgChat: TgCh
     // TODO: не нужны тэги
     // TODO: нужно автоудаление
     // TODO: нужно после регистрации задачи нужно внести рекламу в таблицу в notion
-    await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, true);
+    await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
   }
 }

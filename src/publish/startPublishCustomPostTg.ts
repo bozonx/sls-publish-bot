@@ -13,11 +13,12 @@ export async function startPublishCustomPostTg(
   tgChat: TgChat,
   footerTmpl?: string,
   mediaRequired = false,
+  onlyOneImage = false,
   disableTags = false,
 ) {
   await askPostMedia(
     mediaRequired,
-    true,
+    onlyOneImage,
     blogName,
     tgChat,
     tgChat.asyncCb(async (photoIdOrUrl: string[], caption?: string) => {
@@ -149,15 +150,10 @@ async function printPostPreview(
   // preview state
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.selectedNoPreview
-    + tgChat.app.i18n.onOff[Number(state.usePreview)]
-  );
-  // date and time
-  await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
-    state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
-  ));
-  // print symbols count
-  await tgChat.reply(
-    `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ` +
-    clearText
+    + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
+    + tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
+        state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
+      )+ '\n'
+    + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ` + clearText.length
   );
 }
