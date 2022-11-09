@@ -1,12 +1,10 @@
-import _ from 'lodash';
 import TgChat from '../apiTg/TgChat';
 import {askPostMedia} from '../askUser/askPostMedia';
 import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
-import {compactUndefined} from '../lib/arrays';
 import {publishImageTg, publishPostNoImageTg} from './publishHelpers';
-import {makeDateTimeStr, makeTagsString} from '../helpers/helpers';
+import {makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
-import {publishTgImage, publishTgPost} from '../apiTg/publishTgPost';
+import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
 
 
 export async function startPublishCustomPostTg(
@@ -30,47 +28,41 @@ export async function startPublishCustomPostTg(
         disableTags,
         tags: [],
         postText: caption,
+        images: photoIdOrUrl,
       };
 
       await askCustomPostMenu(blogName, tgChat, state, tgChat.asyncCb(async  () => {
-        const footer = (state.useFooter && footerTmpl)
-          ? _.template(footerTmpl)({ TAGS: makeTagsString(state.tags) })
-          : undefined;
-        const resultText = compactUndefined(
-          [state.postText, footer]
-        ).join('') || undefined;
+        const footerStr = prepareFooter(footerTmpl, state.tags, state.useFooter);
+        const resultText = (state.postText || '') + footerStr;
 
-        await printPostPreview(
-          blogName,
-          tgChat,
-          photoIdOrUrl,
-          state.selectedDate!,
-          state.selectedTime!,
-          state.usePreview,
-          resultText
-        );
+        await printPostPreview(blogName, tgChat, state, resultText);
+
+        // TODO: блокирова ok - если превышение текста 1032 если есть картинка
+        // TODO: блокирова ok - если превышение текста поста (2000 символов или сколько там)
+        // TODO: блокирова ok - если нет ни картинки ни текста
+
+        // if (!resultText) {
+        //   // TODO: надо ещё заранее проверить наверное и написать пользователю
+        //   throw new Error(`No text`);
+        // }
 
         await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
-
-          // TODO: photoIdOrUrl может быть пустой - тогда обычный пост
-
-          if (photoIdOrUrl.length) {
+          if (photoIdOrUrl.length === 1) {
             await publishImageTg(
               state.selectedDate!,
               state.selectedTime!,
-              // TODO: несколько картинок как ???
               photoIdOrUrl[0],
               blogName,
               tgChat,
               resultText
             );
           }
+          else if (photoIdOrUrl.length > 1) {
+            // several images
+            // TODO: а если несколько картинок ???
+            throw new Error(`Not supported`);
+          }
           else {
-            if (!resultText) {
-              // TODO: надо ещё заранее проверить наверное и написать пользователю
-              throw new Error(`No text`);
-            }
-
             await publishPostNoImageTg(
               state.selectedDate!,
               state.selectedTime!,
@@ -92,48 +84,42 @@ export async function startPublishCustomPostTg(
 async function printPostPreview(
   blogName: string,
   tgChat: TgChat,
-  photoIdOrUrl: string[],
-  pubDate: string,
-  pubTime: string,
-  usePreview: boolean,
+  state: CustomPostState,
   caption?: string,
 ) {
-  // TODO: а если несколько картинок ???
-  if (photoIdOrUrl.length) {
+  if (state.images.length === 1) {
     await publishTgImage(
       tgChat.botChatId,
-      photoIdOrUrl[0],
+      state.images[0],
       blogName,
       tgChat,
       caption
     )
   }
+  else if (state.images.length > 1) {
+    // several images
+    // TODO: а если несколько картинок ???
+    throw new Error(`Not supported`);
+  }
   else {
-    // TODO: проверит заранее
+    // no image
     if (!caption) throw new Error(`No text`);
 
-    await publishTgPost(
+    await publishTgPostNoImage(
       tgChat.botChatId,
       caption,
       blogName,
       tgChat,
-      !usePreview
+      !state.usePreview
     );
   }
-
-  // await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, photoIdOrUrl[0], {
-  //   caption,
-  //   parse_mode: tgChat.app.appConfig.telegram.parseMode,
-  // });
-
   // preview state
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.selectedNoPreview
-    + tgChat.app.i18n.onOff[Number(usePreview)]
+    + tgChat.app.i18n.onOff[Number(state.usePreview)]
   );
-
   // date and time
   await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
-    pubDate, pubTime, tgChat.app.appConfig.utcOffset
+    state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
   ));
 }

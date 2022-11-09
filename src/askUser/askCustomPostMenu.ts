@@ -31,6 +31,7 @@ export interface CustomPostState {
   postText?: string;
   selectedDate?: string;
   selectedTime?: string;
+  images: string[];
 }
 
 export const CUSTOM_POST_ACTION: Record<CustomPostAction, CustomPostAction> = {

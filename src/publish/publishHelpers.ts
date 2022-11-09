@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {publishTgImage, publishTgPost} from '../apiTg/publishTgPost';
+import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
@@ -26,7 +26,7 @@ export async function publishPostNoImageTg(
   let msgId: number;
   // Print to log channel
   try {
-    msgId = await publishTgPost(
+    msgId = await publishTgPostNoImage(
       tgChat.app.config.logChannelId,
       postStr,
       blogName,

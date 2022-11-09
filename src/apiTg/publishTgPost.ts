@@ -1,7 +1,7 @@
 import TgChat from './TgChat';
 
 
-export async function publishTgPost(
+export async function publishTgPostNoImage(
   chatId: number | string,
   msg: string,
   blogName: string,
