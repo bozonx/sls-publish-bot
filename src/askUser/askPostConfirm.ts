@@ -8,20 +8,22 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
+import {compactUndefined} from '../lib/arrays';
 
 
 export async function askPostConfirm(
   blogName: string,
   tgChat: TgChat,
-  onDone: () => void
+  onDone: () => void,
+  disableOk = false,
 ) {
   const msg = tgChat.app.i18n.commonPhrases.publishConfirmation;
   const buttons = [
-    [
+    compactUndefined([
       BACK_BTN,
       CANCEL_BTN,
-      OK_BTN
-    ]
+      (disableOk) ? undefined : OK_BTN,
+    ])
   ];
 
   await addSimpleStep(tgChat, msg, buttons,(queryData: string) => {

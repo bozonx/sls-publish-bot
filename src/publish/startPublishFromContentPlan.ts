@@ -82,6 +82,8 @@ async function askMenu(
   };
 
   await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
+    const disableOk = !resolvedSns.length;
+
     await printPublishConfirmData(blogName, tgChat, resolvedSns, state, parsedPage);
 
     // TODO: не показывать кнопку ok если нет соц сетей или другие ошибки
@@ -102,6 +104,6 @@ async function askMenu(
 
       await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
       await tgChat.steps.cancel();
-    }));
+    }), disableOk);
   }));
 }
