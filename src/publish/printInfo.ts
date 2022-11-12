@@ -104,7 +104,8 @@ export async function printPublishConfirmData(
     tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
     + tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', ') + '\n'
     + tgChat.app.i18n.contentInfo.dateTime + ': ' + '\n'
-    + makeDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
+    + makeDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset) + '\n'
+    + `${tgChat.app.i18n.pageInfo.instaTagsCount}: ` + (state.instaTags || []).length
   );
 
   if (state.sns.includes(SN_TYPES.instagram)) {

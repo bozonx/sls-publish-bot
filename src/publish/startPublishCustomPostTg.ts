@@ -153,7 +153,8 @@ async function printPostPreview(
     + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
     + tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
         state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
-      )+ '\n'
-    + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ` + clearText.length
+      ) + '\n'
+    + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${clearText.length}\n`
+    + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
   );
 }

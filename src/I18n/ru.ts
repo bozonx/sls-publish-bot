@@ -111,6 +111,8 @@ const dict = {
     contentLength: 'Количество символов в тексте',
     contentLengthWithInstaTags: 'Количество символов в тексте + тэги инстаграмм',
     contentLengthWithTgFooter: 'Количество символов в тексте + футер telegram',
+    instaTagsCount: 'Количество тэгов в Instagram',
+    tagsCount: 'Количество тэгов',
   },
   publicationType: {
     article: 'Статья',
