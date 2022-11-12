@@ -147,7 +147,8 @@ export function makeContentLengthString(
   return ''
     + `${i18n.pageInfo.contentLength}: ${cleanText.length}\n`
     + `${i18n.pageInfo.contentLengthWithTgFooter}: ${tgLength}\n`
-    + `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}`;
+    + `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}\n`
+    + `${i18n.pageInfo.instaTagsCount}: ` + (instaTags || []).length;
 }
 
 export async function makePost2000Text(tgChat: TgChat, rawText: string, img?: string) {
