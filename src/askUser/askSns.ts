@@ -36,8 +36,10 @@ export async function askSns(prevSns: string[], tgChat: TgChat, onDone: (tags: s
     }
     else if (queryData.indexOf(SN_TO_REMOVE_CB) === 0) {
       const splat = queryData.split('|');
-
-      onDone(removeItemFromArray(prevSns, splat[1]));
+      const newSns = removeItemFromArray(prevSns, splat[1]);
+      // print result
+      await tgChat.reply(tgChat.app.i18n.commonPhrases.snsForPub + newSns.join(', '));
+      onDone(newSns);
     }
   });
 

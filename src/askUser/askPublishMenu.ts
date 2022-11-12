@@ -212,7 +212,11 @@ async function handleButtons(
       }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
       return askPostMedia(
-        true,
+        [
+          PUBLICATION_TYPES.mem,
+          PUBLICATION_TYPES.story,
+          PUBLICATION_TYPES.reels,
+        ].includes(state.pubType),
         true,
         blogName,
         tgChat,
@@ -243,8 +247,6 @@ async function handleButtons(
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
       return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: string[]) => {
         state.sns = newSns;
-        // print result
-        await tgChat.reply(tgChat.app.i18n.commonPhrases.snsForPub + state.sns.join(', '));
         // print menu again
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));
