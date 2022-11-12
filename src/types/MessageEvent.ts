@@ -30,7 +30,7 @@ export interface MediaGroupItemMessageEvent extends MessageEventBase {
 
 export interface PollMessageEvent extends MessageEventBase {
   poll: {
-    id: string,
+    // id: string,
     question: string,
     options: string[][],
     isClosed: false,

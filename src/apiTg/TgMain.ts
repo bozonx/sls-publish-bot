@@ -390,7 +390,7 @@ poll
         this.chats[ctx.chat.id].handleIncomePollEvent({
           ...msgBase,
           poll: {
-            id: (message as any).poll.id,
+            //id: (message as any).poll.id,
             question: (message as any).poll.question,
             options: (message as any).poll.options.map((el: {text: string}) => el.text),
             isClosed: (message as any).poll.is_closed,

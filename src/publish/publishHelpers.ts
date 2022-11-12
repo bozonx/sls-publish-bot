@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
+import {publishTgCopy, publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
@@ -29,9 +29,42 @@ export async function publishPostNoImageTg(
     msgId = await publishTgPostNoImage(
       tgChat.app.config.logChannelId,
       postStr,
-      blogName,
       tgChat,
       !allowPreview
+    );
+
+    await tgChat.app.tg.bot.telegram.sendMessage(
+      tgChat.app.config.logChannelId,
+      makePublishInfoMessage(isoDate, resolvedTime, blogName, tgChat),
+      {
+        reply_to_message_id: msgId,
+      }
+    )
+  }
+  catch (e) {
+    await tgChat.app.channelLog.error(`Can't publish prepared post to telegram to log channel`);
+
+    throw e;
+  }
+
+  await registerTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat);
+}
+
+export async function publishCopyTg(
+  isoDate: string,
+  resolvedTime: string,
+  messageId: number,
+  blogName: string,
+  tgChat: TgChat
+) {
+  let msgId: number;
+  // Print to log channel
+  try {
+    msgId = await publishTgCopy(
+      tgChat.app.config.logChannelId,
+      tgChat.botChatId,
+      messageId,
+      tgChat
     );
 
     await tgChat.app.tg.bot.telegram.sendMessage(
@@ -68,7 +101,6 @@ export async function publishImageTg(
     msgId = await publishTgImage(
       tgChat.app.config.logChannelId,
       imageUrl,
-      blogName,
       tgChat,
       captionMd
     )

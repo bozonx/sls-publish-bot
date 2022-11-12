@@ -4,7 +4,6 @@ import TgChat from './TgChat';
 export async function publishTgPostNoImage(
   chatId: number | string,
   msg: string,
-  blogName: string,
   tgChat: TgChat,
   disablePreview = false,
   disableNotification = false
@@ -26,7 +25,6 @@ export async function publishTgPostNoImage(
 export async function publishTgImage(
   chatId: number | string,
   imageUrl: string,
-  blogName: string,
   tgChat: TgChat,
   captionMd?: string,
   disableNotification = false
@@ -39,6 +37,25 @@ export async function publishTgImage(
       parse_mode: tgChat.app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
       // TODO: add web buttons for ad
+    }
+  );
+
+  return result.message_id;
+}
+
+export async function publishTgCopy(
+  chatId: number | string,
+  fromChatId: number | string,
+  messageId: number,
+  tgChat: TgChat,
+  disableNotification = false
+): Promise<number> {
+  const result = await tgChat.app.tg.bot.telegram.copyMessage(
+    chatId,
+    fromChatId,
+    messageId,
+    {
+      disable_notification: disableNotification,
     }
   );
 

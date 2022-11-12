@@ -125,7 +125,6 @@ async function printPostPreview(
     await publishTgImage(
       tgChat.botChatId,
       state.images[0],
-      blogName,
       tgChat,
       caption
     )
@@ -142,7 +141,6 @@ async function printPostPreview(
     await publishTgPostNoImage(
       tgChat.botChatId,
       caption,
-      blogName,
       tgChat,
       !state.usePreview
     );
