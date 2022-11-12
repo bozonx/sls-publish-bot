@@ -29,3 +29,8 @@ export const OK_BTN = {
   text: 'OK',
   callback_data: OK_BTN_CALLBACK,
 }
+
+export const OFTEN_USED_TIME = [
+  '7:30', '8:00', '10:00', '11:00', '12:30', '13:00',
+  '15:00', '16:00', '17:00', '18:00', '18:30', '19:00'
+];
