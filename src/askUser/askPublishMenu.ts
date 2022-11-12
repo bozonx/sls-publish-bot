@@ -14,6 +14,7 @@ import {askPostMedia} from './askPostMedia';
 import {printImage} from '../publish/printInfo';
 import {askPostText} from './askPostText';
 import {askTags} from './askTags';
+import {askSns} from './askSns';
 
 
 export interface PublishMenuState {
@@ -245,8 +246,13 @@ async function handleButtons(
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
-      // TODO: add
-      break;
+      return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: string[]) => {
+        state.sns = newSns;
+        // print result
+        await tgChat.reply(tgChat.app.i18n.commonPhrases.sns + state.sns.join(', '));
+        // print menu again
+        return askPublishMenu(blogName, tgChat, state, onDone);
+      }));
     default:
       throw new Error(`Unknown action`);
   }
