@@ -143,12 +143,16 @@ export function makeContentLengthString(
   const cleanFooter = clearMdText(tgFooter || '');
   const instaLength = (cleanText + '\n\n' + instaTagsStr).length;
   const tgLength = (cleanText + cleanFooter).length;
+  let result = `${i18n.pageInfo.contentLength}: ${cleanText.length}\n`;
 
-  return ''
-    + `${i18n.pageInfo.contentLength}: ${cleanText.length}\n`
-    + `${i18n.pageInfo.contentLengthWithTgFooter}: ${tgLength}\n`
-    + `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}\n`
-    + `${i18n.pageInfo.instaTagsCount}: ` + (instaTags || []).length;
+  if (tgFooter) result += `${i18n.pageInfo.contentLengthWithTgFooter}: ${tgLength}\n`;
+
+  if (instaTags && instaTags.length) {
+    result += `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}\n`
+      + `${i18n.pageInfo.instaTagsCount}: ` + (instaTags || []).length;
+  }
+
+  return result;
 }
 
 export async function makePost2000Text(tgChat: TgChat, rawText: string, img?: string) {
