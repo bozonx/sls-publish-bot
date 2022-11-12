@@ -15,13 +15,6 @@ import {askSelectTime} from './askSelectTime';
 import {askPostText} from './askPostText';
 
 
-export type CustomPostAction = 'FOOTER_SWITCH'
-  | 'PREVIEW_SWITCH'
-  | 'DATE_SELECT'
-  | 'TIME_SELECT'
-  | 'ADD_TEXT'
-  | 'ADD_TAGS';
-
 export interface CustomPostState {
   useFooter: boolean;
   usePreview: boolean;
@@ -34,6 +27,13 @@ export interface CustomPostState {
   selectedTime?: string;
   images: string[];
 }
+
+export type CustomPostAction = 'FOOTER_SWITCH'
+  | 'PREVIEW_SWITCH'
+  | 'DATE_SELECT'
+  | 'TIME_SELECT'
+  | 'ADD_TEXT'
+  | 'ADD_TAGS';
 
 export const CUSTOM_POST_ACTION: Record<CustomPostAction, CustomPostAction> = {
   FOOTER_SWITCH: 'FOOTER_SWITCH',
@@ -143,12 +143,6 @@ async function handleButtons(
       return askCustomPostMenu(blogName, tgChat, state, onDone);
     case CUSTOM_POST_ACTION.ADD_TEXT:
       return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text?: string) => {
-
-        // TODO: validate text !!! количество символов
-        // TODO: наверное экранировать лишние символы???
-        // TODO: вырезать нечитаемые символы
-        // TODO: см модуль sanitize text
-
         state.postText = text;
         // print result
         if (state.postText) {

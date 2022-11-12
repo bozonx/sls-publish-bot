@@ -12,16 +12,9 @@ import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES} from '../types/ContentIte
 import {askSelectTime} from './askSelectTime';
 import {askPostMedia} from './askPostMedia';
 import {printImage} from '../publish/printInfo';
+import {askPostText} from './askPostText';
+import {askCustomPostMenu} from './askCustomPostMenu';
 
-
-export type PublishMenuAction = 'CHANGE_TIME'
-  | 'FOOTER_SWITCH'
-  | 'PREVIEW_SWITCH'
-  | 'ADD_TEXT'
-  | 'CHANGE_INSTA_TAGS'
-  | 'CHANGE_IMAGE'
-  | 'UPLOAD_MEDIA_GROUP'
-  | 'CHANGE_SNS';
 
 export interface PublishMenuState {
   pubType: PublicationTypes;
@@ -35,6 +28,15 @@ export interface PublishMenuState {
   // it's for announcement
   postText?: string;
 }
+
+export type PublishMenuAction = 'CHANGE_TIME'
+  | 'FOOTER_SWITCH'
+  | 'PREVIEW_SWITCH'
+  | 'ADD_TEXT'
+  | 'CHANGE_INSTA_TAGS'
+  | 'CHANGE_IMAGE'
+  | 'UPLOAD_MEDIA_GROUP'
+  | 'CHANGE_SNS';
 
 export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> = {
   CHANGE_TIME: 'CHANGE_TIME',
@@ -180,17 +182,33 @@ async function handleButtons(
       );
       // print menu again
       return askPublishMenu(blogName, tgChat, state, onDone);
-    case PUBLISH_MENU_ACTION.CHANGE_TIME:
-      return askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-        state.selectedTime = newTime;
+    case PUBLISH_MENU_ACTION.ADD_TEXT:
+      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text?: string) => {
+        state.postText = text;
         // print result
-        await tgChat.reply(makeTimeMsg(tgChat, state));
+        if (state.postText) {
+          await tgChat.reply(
+            tgChat.app.i18n.menu.selectedPostText + '\n' + state.postText
+          );
+        }
+        else {
+          await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText);
+        }
+
         // print menu again
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));
-    case PUBLISH_MENU_ACTION.ADD_TEXT:
-      // TODO: add
-      break;
+    case PUBLISH_MENU_ACTION.CHANGE_TIME:
+      return askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+        state.selectedTime = newTime;
+
+        const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+        // print result
+        await tgChat.reply(tgChat.app.i18n.commonPhrases.selectedDateAndTime
+          + `${state.selectedDate} ${state.selectedTime} ${utcOffset}`);
+        // print menu again
+        return askPublishMenu(blogName, tgChat, state, onDone);
+      }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
       return askPostMedia(
         true,
@@ -224,12 +242,4 @@ async function handleButtons(
     default:
       throw new Error(`Unknown action`);
   }
-}
-
-
-function makeTimeMsg(tgChat: TgChat, state: PublishMenuState): string {
-  const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
-
-  return tgChat.app.i18n.commonPhrases.selectedDateAndTime
-    + `${state.selectedDate} ${state.selectedTime} ${utcOffset}`
 }
