@@ -7,12 +7,13 @@ import {
   OK_BTN, OK_BTN_CALLBACK,
   PRINT_FULL_DATE_FORMAT,
 } from '../types/constants';
-import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
+import {addSimpleStep, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
 import moment from 'moment';
 import {askPubDate} from './askPubDate';
 import {askSelectTime} from './askSelectTime';
 import {askPostText} from './askPostText';
+import {askTags} from './askTags';
 
 
 export interface CustomPostState {
@@ -76,7 +77,9 @@ export async function askCustomPostMenu(
       },
       (state.disableTags) ? undefined
       : {
-        text: tgChat.app.i18n.buttons.addTags,
+        text: (state.tags.length)
+          ? tgChat.app.i18n.buttons.replaceTags
+          : tgChat.app.i18n.buttons.addTags,
         callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
       },
     ]),
@@ -158,10 +161,16 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
     case CUSTOM_POST_ACTION.ADD_TAGS:
-
-      // TODO: add
-
-      break;
+      return await askTags(state.tags, tgChat, tgChat.asyncCb(async (tags: string[]) => {
+        state.tags = tags;
+        // print result
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.telegramTags
+          + makeTagsString(state.tags)
+        );
+        // print menu again
+        return askCustomPostMenu(blogName, tgChat, state, onDone);
+      }));
     case CUSTOM_POST_ACTION.DATE_SELECT:
       return await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
         state.selectedDate = newDate;
