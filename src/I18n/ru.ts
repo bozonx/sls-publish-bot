@@ -87,6 +87,10 @@ const dict = {
     publishConfirmation: 'Опубликовать?',
     sns: 'Cоц сети',
     snsForPub: 'Cоц сети для публикации: ',
+    isAnonymous: 'Анонимный: ',
+    isMultipleAnswer: 'Возможно несколько ответов: ',
+    quizAnswer: 'Номер ответа quiz: ',
+    type: 'Тип: ',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',
@@ -128,6 +132,7 @@ const dict = {
     afterTomorrow: 'Послезавтра',
   },
   onOff: ['Выкл', 'Вкл'],
+  yesNo: ['Нет', 'Да'],
   errors: {
     invalidContent: `Запись контент плана не валидна. Исправьте в notion: `,
     invalidPage: `Страница не валидна. Исправьте в notion: `,
@@ -141,6 +146,7 @@ const dict = {
     cantSendImage: '⚠️ Не получилось распознать картинку. Возможно она больше 5 мегабайт.',
     noNestedPage: 'Нет связанной страницы',
     noSns: '⚠️ Нет соц сетей для публикации',
+    pollIsClosed: '⚠️ Опрос уже закрыт',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

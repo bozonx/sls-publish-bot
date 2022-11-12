@@ -10,7 +10,7 @@ import BaseState from '../types/BaseState';
 import {PollMessageEvent} from '../types/MessageEvent';
 
 
-export async function askPoll(tgChat: TgChat, onDone: () => void) {
+export async function askPoll(tgChat: TgChat, onDone: (message: PollMessageEvent) => void) {
   const msg = tgChat.app.i18n.menu.makePoll;
   const buttons = [
     [
@@ -18,7 +18,6 @@ export async function askPoll(tgChat: TgChat, onDone: () => void) {
       CANCEL_BTN
     ],
   ];
-
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
@@ -34,8 +33,6 @@ export async function askPoll(tgChat: TgChat, onDone: () => void) {
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel();
           }
-          // TODO: !!!!
-
         })
       ),
       AppEvents.CALLBACK_QUERY
@@ -44,11 +41,33 @@ export async function askPoll(tgChat: TgChat, onDone: () => void) {
       tgChat.events.addListener(
         AppEvents.POLL,
         tgChat.asyncCb(async (message: PollMessageEvent) => {
+          if (message.poll.isClosed) {
+            await tgChat.reply(tgChat.app.i18n.errors.pollIsClosed)
 
+            return;
+          }
+
+          await tgChat.reply(makePollInfo(message, tgChat))
+
+          onDone(message);
         })
       ),
       AppEvents.TEXT
     ]);
   });
 
+}
+
+function makePollInfo(message: PollMessageEvent, tgChat: TgChat): string {
+  let result = tgChat.app.i18n.commonPhrases.type + message.poll.type + '\n'
+    + tgChat.app.i18n.commonPhrases.isAnonymous
+      + tgChat.app.i18n.yesNo[Number(message.poll.isAnonymous)] + '\n'
+    + tgChat.app.i18n.commonPhrases.isMultipleAnswer
+    + tgChat.app.i18n.yesNo[Number(message.poll.multipleAnswers)] + '\n'
+
+  if (typeof message.poll.correctOptionId !== 'undefined') {
+    result += tgChat.app.i18n.commonPhrases.quizAnswer + message.poll.correctOptionId
+  }
+
+  return result;
 }
