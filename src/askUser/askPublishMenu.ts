@@ -249,7 +249,7 @@ async function handleButtons(
       return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: string[]) => {
         state.sns = newSns;
         // print result
-        await tgChat.reply(tgChat.app.i18n.commonPhrases.sns + state.sns.join(', '));
+        await tgChat.reply(tgChat.app.i18n.commonPhrases.snsForPub + state.sns.join(', '));
         // print menu again
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));

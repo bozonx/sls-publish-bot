@@ -83,6 +83,7 @@ const dict = {
     telegramTags: 'Тэги для telegram: ',
     publishConfirmation: 'Опубликовать?',
     sns: 'Cоц сети',
+    snsForPub: 'Cоц сети для публикации: ',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',
