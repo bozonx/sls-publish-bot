@@ -13,6 +13,7 @@ export enum AppEvents {
   TEXT,
   PHOTO,
   MEDIA_GROUP_ITEM,
+  POLL
 }
 
 export const BACK_BTN = {

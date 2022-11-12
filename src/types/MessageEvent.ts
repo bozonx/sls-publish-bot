@@ -27,3 +27,16 @@ export interface MediaGroupItemMessageEvent extends MessageEventBase {
   caption?: string;
   mediaGroupId: number;
 }
+
+export interface PollMessageEvent extends MessageEventBase {
+  poll: {
+    id: string,
+    question: string,
+    options: string[][],
+    isClosed: false,
+    isAnonymous: boolean,
+    type: 'regular' | 'quiz',
+    multipleAnswers: boolean;
+    correctOptionId?: number;
+  }
+}

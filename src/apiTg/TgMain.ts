@@ -266,10 +266,6 @@ poll
       this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
     });
 
-    // text
-    // document
-    // poll
-
     // this.bot.on('text', (ctx) => {
     //   const message = ctx.update.message;
     //
@@ -390,11 +386,21 @@ poll
           }
         });
       }
-      // else if ((message as any).poll) {
-      //   // TODO: нужен???
-      // }
-
-      //console.log(11111, message)
+      else if ((message as any).poll) {
+        this.chats[ctx.chat.id].handleIncomePollEvent({
+          ...msgBase,
+          poll: {
+            id: (message as any).poll.id,
+            question: (message as any).poll.question,
+            options: (message as any).poll.options.map((el: {text: string}) => el.text),
+            isClosed: (message as any).poll.is_closed,
+            isAnonymous: (message as any).poll.is_anonymous,
+            type: (message as any).poll.type,
+            multipleAnswers: (message as any).poll.allows_multiple_answers,
+            correctOptionId: (message as any).poll.correct_option_id,
+          }
+        });
+      }
     });
   }
 
