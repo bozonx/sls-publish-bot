@@ -7,13 +7,13 @@ import {
   OK_BTN,
   OK_BTN_CALLBACK
 } from '../types/constants';
-import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
+import {addSimpleStep, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
 import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES} from '../types/ContentItem';
 import {askSelectTime} from './askSelectTime';
 import {askPostMedia} from './askPostMedia';
 import {printImage} from '../publish/printInfo';
 import {askPostText} from './askPostText';
-import {askCustomPostMenu} from './askCustomPostMenu';
+import {askTags} from './askTags';
 
 
 export interface PublishMenuState {
@@ -234,8 +234,16 @@ async function handleButtons(
       // TODO: add
       break;
     case PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS:
-      // TODO: add
-      break;
+      return await askTags(state.instaTags || [], tgChat, tgChat.asyncCb(async (newTags: string[]) => {
+        state.instaTags = newTags;
+        // print result
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.telegramTags
+          + makeTagsString(state.instaTags)
+        );
+        // print menu again
+        return askPublishMenu(blogName, tgChat, state, onDone);
+      }));
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
       // TODO: add
       break;

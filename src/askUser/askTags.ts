@@ -16,7 +16,7 @@ export const CLEAR_CB = 'CLEAR_CB';
 
 
 export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags: string[]) => void) {
-  const msg = tgChat.app.i18n.menu.selectTgTags;
+  const msg = tgChat.app.i18n.menu.selectTags;
   const buttons = [
     [
       {

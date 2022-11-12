@@ -161,8 +161,8 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
     case CUSTOM_POST_ACTION.ADD_TAGS:
-      return await askTags(state.tags, tgChat, tgChat.asyncCb(async (tags: string[]) => {
-        state.tags = tags;
+      return await askTags(state.tags, tgChat, tgChat.asyncCb(async (newTags: string[]) => {
+        state.tags = newTags;
         // print result
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.telegramTags
