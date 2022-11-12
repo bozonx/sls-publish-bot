@@ -237,11 +237,6 @@ async function handleButtons(
     case PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS:
       return await askTags(state.instaTags || [], tgChat, tgChat.asyncCb(async (newTags: string[]) => {
         state.instaTags = newTags;
-        // print result
-        await tgChat.reply(
-          tgChat.app.i18n.commonPhrases.telegramTags
-          + makeTagsString(state.instaTags)
-        );
         // print menu again
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));

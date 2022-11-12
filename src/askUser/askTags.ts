@@ -49,6 +49,8 @@ export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags:
             return tgChat.steps.cancel();
           }
           else if (queryData === CLEAR_CB) {
+            await tgChat.reply(tgChat.app.i18n.commonPhrases.clearedTags);
+
             return onDone([]);
           }
         })
@@ -62,7 +64,13 @@ export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags:
           const trimmed = _.trim(message.text);
           const tagsArr = trimmed.split(' ')
             .map((el) => _.trimStart(_.trim(el), '#'));
-
+          // print result
+          await tgChat.reply(
+            _.template(tgChat.app.i18n.commonPhrases.selectedTags)({
+              COUNT: tagsArr.length
+            })
+            + makeTagsString(tagsArr)
+          );
           onDone(tagsArr);
         })
       ),
