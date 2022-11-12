@@ -13,10 +13,10 @@ export function breakArray(arr: any[], maxCount: number): any[] {
     // make new sub array if it is the start of cycle of if items exceeded max count
     if (!result.length || result[result.length - 1].length >= maxCount) {
       result.push([arr[index]]);
-      continue;
     }
-
-    result[result.length - 1].push([arr[index]]);
+    else {
+      result[result.length - 1].push(arr[index]);
+    }
   }
 
   return result;

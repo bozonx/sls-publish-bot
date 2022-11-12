@@ -20,16 +20,16 @@ const TIME_PRESET_CB = 'TIME_PRESET_CB|'
 export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => void) {
   const msg = tgChat.app.i18n.menu.selectTime;
   const buttons = [
-    [
-      BACK_BTN,
-      CANCEL_BTN
-    ],
     ...breakArray(OFTEN_USED_TIME.map((el): TgReplyButton => {
       return {
         text: el,
         callback_data: TIME_PRESET_CB + el,
       };
     }), 4),
+    [
+      BACK_BTN,
+      CANCEL_BTN
+    ],
   ];
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
@@ -62,15 +62,21 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
           const trimmed = _.trim(message.text);
 
           if (trimmed.match(/^\d{1,2}$/)) {
+            if (Number(trimmed) < 1 || Number(trimmed) > 23) {
+              await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
+
+              return;
+            }
+
             // only hour
-            return onDone((trimmed.length === 1) ? `0${trimmed}` : trimmed + ':00');
+            return onDone(((trimmed.length === 1) ? `0${trimmed}` : trimmed) + ':00');
           }
 
           try {
             validateTime(trimmed);
           }
           catch (e) {
-            await tgChat.reply(tgChat.app.i18n.errors.incorrectTime)
+            await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
 
             return;
           }
