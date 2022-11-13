@@ -4,15 +4,14 @@ import {publishPost1000Tg} from './publishPost1000Tg';
 import TgChat from '../apiTg/TgChat';
 import {publishPost2000Tg} from './publishPost2000Tg';
 import {publishArticleTg} from './publishArticleTg';
+import {PublishMenuState} from '../askUser/askPublishMenu';
 
 
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
+  state: PublishMenuState,
   contentItem: ContentItem,
-  allowPreview: boolean,
-  allowFooter: boolean,
-  correctedTime?: string,
   parsedPage?: RawPageContent,
 ) {
   // post like

@@ -117,16 +117,15 @@ async function askMenu(
       //         + картинка загружается на telegra.ph
 
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
+      // TODO: поддержка poll
       // Do publish
-      // await publishFork(
-      //   blogName,
-      //   tgChat,
-      //   parsedContentItem,
-      //   state.usePreview,
-      //   state.useFooter,
-      //   state.selectedTime,
-      //   parsedPage,
-      // );
+      await publishFork(
+        blogName,
+        tgChat,
+        state,
+        parsedContentItem,
+        parsedPage,
+      );
 
       await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
       await tgChat.steps.cancel();
