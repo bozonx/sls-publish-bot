@@ -2,17 +2,15 @@ import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/C
 import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
 import {NOTION_BLOCKS} from '../types/types';
 import {clearMdText, makeTagsString} from './helpers';
+import {BlogTelegramConfig} from '../types/ExecConfig';
 
 
 export function makeClearTextFromNotion(
   sns: string[],
   pubType: PublicationTypes,
+  tgBlogConfig?: BlogTelegramConfig,
   textBlocks?: NOTION_BLOCKS,
   postText?: string,
-  postFooter?: string,
-  storyFooter?: string,
-  memFooter?: string,
-  reelFooter?: string
 ): Record<SnTypes, string> {
   const result = {} as Record<SnTypes, string>;
 

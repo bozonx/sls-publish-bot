@@ -39,12 +39,9 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       const clearTexts = makeClearTextFromNotion(
         resolvedSns,
         parsedContentItem.type,
+        tgChat.app.config.blogs[blogName].sn.telegram,
         parsedPage?.textBlocks,
-        parsedContentItem.gist,
-        tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
-        tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter,
-        tgChat.app.config.blogs[blogName].sn.telegram?.memFooter,
-        tgChat.app.config.blogs[blogName].sn.telegram?.reelFooter,
+        parsedContentItem.gist
       );
       let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
 
@@ -103,12 +100,9 @@ async function askMenu(
     const clearTexts = makeClearTextFromNotion(
       state.sns,
       state.pubType,
+      tgChat.app.config.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
-      state.postText,
-      tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
-      tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter,
-      tgChat.app.config.blogs[blogName].sn.telegram?.memFooter,
-      tgChat.app.config.blogs[blogName].sn.telegram?.reelFooter,
+      state.postText
     );
 
     await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedPage);
@@ -133,6 +127,8 @@ async function askMenu(
           tgChat,
           state,
           parsedContentItem.type,
+          // TODO: add postTexts
+          // TODO: add articleTexts
         );
       }
       catch (e) {

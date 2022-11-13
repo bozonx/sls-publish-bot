@@ -2,6 +2,19 @@
 
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
 
+
+export interface BlogTelegramConfig {
+  telegraPhAuthorName: string;
+  telegraPhAuthorUrl: string;
+  channelId: number | string;
+  postFooter?: string;
+  storyFooter?: string;
+  memFooter?: string;
+  reelFooter?: string;
+  articlePostTmpl?: string;
+  articleFooter?: (TelegraphNode | string)[];
+}
+
 export interface BlogConfig {
   // name for displaying in menu
   dispname: string;
@@ -9,17 +22,7 @@ export interface BlogConfig {
   // some PUBLICATION_TYPES
   supportedTypes: string[];
   sn: {
-    telegram?: {
-      telegraPhAuthorName: string;
-      telegraPhAuthorUrl: string;
-      channelId: number | string;
-      postFooter?: string;
-      storyFooter?: string;
-      memFooter?: string;
-      reelFooter?: string;
-      articlePostTmpl?: string;
-      articleFooter?: (TelegraphNode | string)[];
-    };
+    telegram?: BlogTelegramConfig;
     instagram?: {
     };
     zen?: {
