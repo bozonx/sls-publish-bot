@@ -50,19 +50,24 @@ export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru, u
 
 export function validateContentItem(item: ContentItem) {
   if (!item.date) throw new Error(`No date`);
-  if (!item.time) throw new Error(`No time`);
-  if (!item.gist && !item.relativePageId) throw new Error(`No gist and link`);
-  if (!item.status) throw new Error(`No status`);
-  if (!item.type) throw new Error(`No type`);
-
-  // TODO: валидация что для статьи должна быть страница
+  else if (!item.time) throw new Error(`No time`);
+  else if (!item.gist && !item.relativePageId) throw new Error(`No gist and link`);
+  else if (!item.status) throw new Error(`No status`);
+  else if (!item.type) throw new Error(`No type`);
 
   if (!moment(`${item.date} ${item.time}`).isValid())
     throw new Error(`Incorrect date: ${item.date}`);
-  if (!Object.values(CONTENT_STATUS).includes(item.status))
+  else if (!Object.values(CONTENT_STATUS).includes(item.status))
     throw new Error(`Unknown status: ${item.status}`);
-  if (!Object.values(PUBLICATION_TYPES).includes(item.type))
+  else if (!Object.values(PUBLICATION_TYPES).includes(item.type))
     throw new Error(`Unknown type: ${item.type}`);
+  else if ([
+    PUBLICATION_TYPES.article,
+    PUBLICATION_TYPES.post1000,
+    PUBLICATION_TYPES.post2000,
+    PUBLICATION_TYPES.poll,
+  ].includes(item.type) && !item.relativePageId)
+    throw new Error(`No relative page id`);
 }
 
 export function prepareContentItem(
