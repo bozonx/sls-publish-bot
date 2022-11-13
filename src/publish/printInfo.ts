@@ -15,10 +15,9 @@ export async function printItemDetails(
   tgChat: TgChat,
   resolvedSns: SnTypes[],
   parsedContentItem: ContentItem,
-  parsedPage?: RawPageContent,
-  mainImgUrl?: string
+  parsedPage?: RawPageContent
 ) {
-  await printImage(tgChat, mainImgUrl);
+  //await printImage(tgChat, mainImgUrl);
   const footerStr = prepareFooter(
     tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
     parsedPage?.tgTags,
@@ -78,8 +77,6 @@ export async function printPublishConfirmData(
     true
   );
 
-  await printImage(tgChat, state.mainImgUrl);
-
   if (footerStr) {
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
@@ -116,10 +113,12 @@ export async function printPublishConfirmData(
   }
 }
 
-export async function printImage(tgChat: TgChat, mainImgUrl?: string) {
+export async function printImage(tgChat: TgChat, mainImgUrl?: string): Promise<string | undefined> {
   if (mainImgUrl) {
     try {
-      await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, mainImgUrl)
+      await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, mainImgUrl);
+
+      return mainImgUrl;
     }
     catch (e) {
       await tgChat.reply(tgChat.app.i18n.errors.cantSendImage)
@@ -127,7 +126,8 @@ export async function printImage(tgChat: TgChat, mainImgUrl?: string) {
   }
 }
 
-export async function printContent(
+
+async function printContent(
   blogName: string,
   tgChat: TgChat,
   textBlocks?: NOTION_BLOCKS,

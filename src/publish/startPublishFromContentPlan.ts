@@ -13,7 +13,7 @@ import RawPageContent from '../types/PageContent';
 import {resolveSns} from '../helpers/helpers';
 import {getFirstImageFromNotionBlocks,} from './publishHelpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
-import {printItemDetails, printPublishConfirmData} from './printInfo';
+import {printImage, printItemDetails, printPublishConfirmData} from './printInfo';
 import {WARN_SIGN} from '../types/constants';
 import validateContentPlanPost from './validateContentPlanPost';
 
@@ -35,9 +35,11 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
       const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
       const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
-      const mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
+      let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
 
-      await printItemDetails(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
+      mainImgUrl = await printImage(tgChat, mainImgUrl);
+
+      await printItemDetails(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage);
       await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
     }
     catch (e) {
@@ -85,6 +87,8 @@ async function askMenu(
   };
 
   await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
+    state.mainImgUrl = await printImage(tgChat, mainImgUrl);
+
     await printPublishConfirmData(blogName, tgChat, state, parsedPage);
 
     let disableOk = false;
@@ -97,9 +101,6 @@ async function askMenu(
 
       disableOk = true;
     }
-
-    // TODO: если не получилось распознать картинку - то нужно запретить публикацию
-    //       для этого убрать картинку из state
 
     // TODO: результирующий текст даже с футером. Включая статью
     // TODO: для каждой соц сети же будет свой текст !!!!!
