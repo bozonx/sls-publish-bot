@@ -1,4 +1,4 @@
-import ContentItem, {PUBLICATION_TYPES, SN_TYPES} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import {publishPost1000Tg} from './publishPost1000Tg';
 import TgChat from '../apiTg/TgChat';
@@ -15,31 +15,41 @@ import {PublishMenuState} from '../askUser/askPublishMenu';
 //       * Если есть картинка и символов более 1032 и менее 2096
 //         + картинка загружается на telegra.ph
 
-// TODO: add announcement
-// TODO: add poll
-// TODO: add reels
-// TODO: add video
-
 
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
-  contentItem: ContentItem,
-  parsedPage?: RawPageContent,
+  pubType: PublicationTypes,
+  postText: Record<SnTypes, string>,
+  articleText: Record<SnTypes, string>,
+  //parsedPage?: RawPageContent,
 ) {
-  // post like
-  if ([
-    PUBLICATION_TYPES.post1000,
-    PUBLICATION_TYPES.post2000,
-    PUBLICATION_TYPES.mem,
-    PUBLICATION_TYPES.story,
-  ].includes(contentItem.type)) {
-    for (const sn of contentItem.sns) {
-      switch (sn) {
-        case SN_TYPES.telegram:
+  for (const sn of state.sns) {
+    switch (sn) {
+      case SN_TYPES.telegram:
+        // article
+        if (pubType === PUBLICATION_TYPES.article) {
+          return publishArticleTg(
+            contentItem,
+            parsedPage,
+            blogName,
+            tgChat,
+            correctedTime
+          );
+        }
+        // poll
+        else if (pubType === PUBLICATION_TYPES.poll) {
+
+        }
+        // only text
+        else if ([
+          PUBLICATION_TYPES.post1000,
+          PUBLICATION_TYPES.post2000,
+          PUBLICATION_TYPES.announcement,
+        ].includes(pubType) && !state.mainImgUrl) {
           if (parsedPage) {
-            if (contentItem.type === PUBLICATION_TYPES.post2000) {
+            if (pubType === PUBLICATION_TYPES.post2000) {
               return publishPost2000Tg(
                 contentItem,
                 parsedPage,
@@ -66,50 +76,40 @@ export async function publishFork(
             // TODO: или если объявление то сразу его сделать pageContent??
           }
 
-        // also - zen, instagram, site, tiktok, youtube
-        default:
-          throw new Error(`Unknown or unsupported sn type ${sn}`);
-      }
-    }
-  }
-  // photos like
-  else if ([
-    PUBLICATION_TYPES.photos,
-    PUBLICATION_TYPES.narrative,
-  ].includes(contentItem.type)) {
-    // TODO: add
-    for (const sn of contentItem.sns) {
-      switch (sn) {
-        case SN_TYPES.telegram:
+        }
+        // one photo
+        else if ([
+          PUBLICATION_TYPES.post1000,
+          PUBLICATION_TYPES.mem,
+          PUBLICATION_TYPES.story,
+          PUBLICATION_TYPES.announcement,
+          PUBLICATION_TYPES.reels,
+        ].includes(pubType) && state.mainImgUrl) {
 
+        }
+        // several photo
+        else if ([
+          PUBLICATION_TYPES.photos,
+          PUBLICATION_TYPES.narrative,
+        ].includes(pubType)) {
 
-        // also - zen, instagram, site, tiktok, youtube
-        default:
-          throw new Error(`Unknown or unsupported sn type ${sn}`);
-      }
-    }
-  }
-  // article
-  else if (contentItem.type === PUBLICATION_TYPES.article) {
-    // TODO: add
-    for (const sn of contentItem.sns) {
-      switch (sn) {
-        case SN_TYPES.telegram:
-          // TODO: а что делать с ошибками ???
-          if (!parsedPage) throw new Error(`No page to publish`);
-
-          return publishArticleTg(
-            contentItem,
-            parsedPage,
-            blogName,
-            tgChat,
-            correctedTime
-          );
-
-        // also - zen, instagram, site, tiktok, youtube
-        default:
-          throw new Error(`Unknown or unsupported sn type ${sn}`);
-      }
+        }
+        else {
+          throw new Error(`Unknown or unsupported publication type "${pubType}" of sn ${sn}`);
+        }
+        break;
+      case SN_TYPES.site:
+        break;
+      // case SN_TYPES.instagram:
+      //   break;
+      // case SN_TYPES.zen:
+      //   break;
+      // case SN_TYPES.youtube:
+      //   break;
+      // case SN_TYPES.tiktok:
+      //   break;
+      default:
+        throw new Error(`Unknown or unsupported sn type ${sn}`);
     }
   }
 

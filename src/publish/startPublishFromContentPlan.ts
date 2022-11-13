@@ -113,7 +113,7 @@ async function askMenu(
           blogName,
           tgChat,
           state,
-          parsedContentItem,
+          parsedContentItem.type,
           parsedPage,
         );
       }
