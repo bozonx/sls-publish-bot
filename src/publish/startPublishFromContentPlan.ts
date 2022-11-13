@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {prepareContentItem} from './parseContent';
-import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
+import ContentItem, {PUBLICATION_TYPES, PublicationTypes, SnTypes} from '../types/ContentItem';
 import {preparePage} from './parsePage';
 import {askPublishMenu, PublishMenuState} from '../askUser/askPublishMenu';
 import {loadNotPublished} from '../notionRequests/contentPlan';
@@ -62,7 +62,7 @@ async function loadAndPreparePage(
   // load all the page blocks from notion
   const pageContent = await loadPageBlocks(parsedContentItem.relativePageId, tgChat);
 
-  return preparePage(pageProperties, pageContent, tgChat.app.i18n);
+  return preparePage(parsedContentItem.type, pageProperties, pageContent, tgChat.app.i18n);
 }
 
 async function askMenu(

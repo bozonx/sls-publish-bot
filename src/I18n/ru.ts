@@ -153,6 +153,7 @@ const dict = {
     unsupportedPubType: 'Соц сеть "${SN}" не поддерживает тип публикации ${PUB_TYPE}',
     bigCaption: `Подпись картинки превышает ${TELEGRAM_MAX_CAPTION} символа`,
     bigPost: `Пост превышает ${TELEGRAM_MAX_POST} символа`,
+    noTitle: 'Нет заголовка',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

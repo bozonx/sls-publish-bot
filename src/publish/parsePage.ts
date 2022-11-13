@@ -3,24 +3,19 @@ import ru from '../I18n/ru';
 import {makeTagsString} from '../helpers/helpers';
 import {BlockObjectResponse, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_BLOCKS} from '../types/types';
+import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 
 
 export function parsePageContent(
   props: Record<string, any>,
   textBlocks: Record<string, BlockObjectResponse[]>
 ): RawPageContent {
-  // const imageName: string | undefined = props[PAGE_CONTENT_PROPS.image]?.files[0]?.name;
-  // const imageExt = imageName && _.trimStart(path.extname(imageName), '.');
-
   return {
     title: props[PAGE_CONTENT_PROPS.title]?.title[0]?.plain_text,
     announcement: props[PAGE_CONTENT_PROPS.announcement]?.rich_text[0]?.plain_text,
     imageDescr: props[PAGE_CONTENT_PROPS.imageDescr]?.rich_text[0]?.plain_text,
     instaTags: props[PAGE_CONTENT_PROPS.instaTags]?.multi_select.map((el: any) => el.name),
     tgTags: props[PAGE_CONTENT_PROPS.tgTags]?.multi_select.map((el: any) => el.name),
-    //imageUrl: props[PAGE_CONTENT_PROPS.image]?.files[0]?.file.url,
-    // imageBaseName: imageName && path.basename(imageName, '.' + imageExt),
-    // imageExt,
     textBlocks,
   };
 }
@@ -35,11 +30,18 @@ export function makePageDetailsMsg(pageContent: RawPageContent, i18n: typeof ru)
    + `${i18n.pageInfo.instaTags}: ${instaTags}`
 }
 
-export function validatePageItem(pageContent: RawPageContent) {
-  // TODO: add
+export function validatePageItem(
+  pubType: PublicationTypes,
+  pageContent: RawPageContent,
+  i18n: typeof ru
+) {
+  if (pubType === PUBLICATION_TYPES.article && !pageContent.title) {
+    throw i18n.errors.noTitle;
+  }
 }
 
 export function preparePage(
+  pubType: PublicationTypes,
   pageProperties: PageObjectResponse['properties'],
   pageContent: NOTION_BLOCKS,
   i18n: typeof ru
@@ -47,7 +49,7 @@ export function preparePage(
   const parsedPage = parsePageContent(pageProperties, pageContent);
 
   try {
-    validatePageItem(parsedPage);
+    validatePageItem(pubType, parsedPage, i18n);
   }
   catch (e) {
     throw new Error(i18n.errors.invalidPage + e);
