@@ -7,6 +7,20 @@ import {publishArticleTg} from './publishArticleTg';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 
 
+// TODO: распределение post1000 и post2000
+//       картинка с описанием
+//       * Если есть картинка и символов менее 1032
+//       пост без картинки
+//       * Если нет картинки и символов менее 2096
+//       * Если есть картинка и символов более 1032 и менее 2096
+//         + картинка загружается на telegra.ph
+
+// TODO: add announcement
+// TODO: add poll
+// TODO: add reels
+// TODO: add video
+
+
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
@@ -98,10 +112,5 @@ export async function publishFork(
       }
     }
   }
-
-  // TODO: add announcement
-  // TODO: add poll
-  // TODO: add reels
-  // TODO: add video
 
 }

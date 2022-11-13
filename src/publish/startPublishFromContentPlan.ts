@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {prepareContentItem} from './parseContent';
-import ContentItem, {PUBLICATION_TYPES, PublicationTypes, SnTypes} from '../types/ContentItem';
+import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
 import {preparePage} from './parsePage';
 import {askPublishMenu, PublishMenuState} from '../askUser/askPublishMenu';
 import {loadNotPublished} from '../notionRequests/contentPlan';
@@ -107,25 +107,22 @@ async function askMenu(
     // TODO: call validateContentPlanPostText() for each sn
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+      try {
+        // Do publish
+        await publishFork(
+          blogName,
+          tgChat,
+          state,
+          parsedContentItem,
+          parsedPage,
+        );
+      }
+      catch (e) {
+        await tgChat.reply(`${WARN_SIGN} ${e}`);
+        await tgChat.steps.back();
 
-      // TODO: распределение post1000 и post2000
-      //       картинка с описанием
-      //       * Если есть картинка и символов менее 1032
-      //       пост без картинки
-      //       * Если нет картинки и символов менее 2096
-      //       * Если есть картинка и символов более 1032 и менее 2096
-      //         + картинка загружается на telegra.ph
-
-      // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
-      // TODO: поддержка poll
-      // Do publish
-      await publishFork(
-        blogName,
-        tgChat,
-        state,
-        parsedContentItem,
-        parsedPage,
-      );
+        return;
+      }
 
       await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
       await tgChat.steps.cancel();
