@@ -8,7 +8,7 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
-import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 import {askSelectTime} from './askSelectTime';
 import {askPostMedia} from './askPostMedia';
 import {printImage} from '../publish/printInfo';
@@ -21,7 +21,7 @@ export interface PublishMenuState {
   pubType: PublicationTypes;
   useFooter: boolean;
   usePreview: boolean;
-  sns: string[];
+  sns: SnTypes[];
   selectedDate: string;
   selectedTime: string;
   instaTags?: string[];
@@ -245,7 +245,7 @@ async function handleButtons(
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
-      return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: string[]) => {
+      return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: SnTypes[]) => {
         state.sns = newSns;
         // print menu again
         return askPublishMenu(blogName, tgChat, state, onDone);

@@ -1,12 +1,12 @@
 import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
-import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
 import {NOTION_BLOCKS} from '../types/types';
 import {clearMdText, makeTagsString} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
+import {transformNotionToCleanText} from './transformNotionToCleanText';
 
 
 export function makeClearTextFromNotion(
-  sns: string[],
+  sns: SnTypes[],
   pubType: PublicationTypes,
   tgBlogConfig?: BlogTelegramConfig,
   textBlocks?: NOTION_BLOCKS,
@@ -15,6 +15,12 @@ export function makeClearTextFromNotion(
   const result = {} as Record<SnTypes, string>;
 
   for (const sn of sns) {
+    const cleanText: string = (textBlocks)
+      ? transformNotionToCleanText(textBlocks)
+      : (postText || '');
+
+    result[sn] = cleanText;
+
     switch (sn) {
       case SN_TYPES.telegram:
         if (pubType === PUBLICATION_TYPES.article) {
@@ -28,7 +34,7 @@ export function makeClearTextFromNotion(
             const cleanFooter = clearMdText(tgFooter || '');
             const tgLength = (cleanText + cleanFooter).length;
             //throw new Error(`No text blocks`);
-            result[sn] = transformNotionToTelegramPostMd(textBlocks);
+            result[sn] = transformNotionToCleanText(textBlocks);
             // TODO: add footer
           }
           else if (postText) {
@@ -37,11 +43,10 @@ export function makeClearTextFromNotion(
 
           }
 
-          // TODO: sanitize
+          // TODO: sanitize footer
 
           // TODO: add footer
 
-          if (!result[sn]) delete result[sn];
         }
         // mem, photos, story, narrative, reels - может не быть
         // announcement
@@ -53,11 +58,15 @@ export function makeClearTextFromNotion(
 
         break;
       case SN_TYPES.site:
+        result[sn] = cleanText;
+
         break;
       // add others
       default:
         throw new Error(`Unknown sn ${sn}`);
     }
+
+    if (!result[sn]) delete result[sn];
   }
 
   return result;
