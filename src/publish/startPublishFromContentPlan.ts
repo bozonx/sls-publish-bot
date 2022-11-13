@@ -16,7 +16,7 @@ import {askPostConfirm} from '../askUser/askPostConfirm';
 import {printImage, printItemDetails, printPublishConfirmData} from './printInfo';
 import {WARN_SIGN} from '../types/constants';
 import validateContentPlanPost, {validateContentPlanPostText} from './validateContentPlanPost';
-import {makeClearTextFromNotion} from '../helpers/clearTextForSn';
+import {makeClearTextFromNotion} from '../helpers/makeClearTextFromNotion';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -39,6 +39,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       const clearTexts = makeClearTextFromNotion(
         resolvedSns,
         parsedContentItem.type,
+        true,
         tgChat.app.config.blogs[blogName].sn.telegram,
         parsedPage?.textBlocks,
         parsedContentItem.gist,
@@ -101,6 +102,7 @@ async function askMenu(
     const clearTexts = makeClearTextFromNotion(
       state.sns,
       state.pubType,
+      state.useFooter,
       tgChat.app.config.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
       state.postText,

@@ -6,6 +6,7 @@ import TgChat from '../apiTg/TgChat';
 import {AppEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
+import {BlogTelegramConfig} from '../types/ExecConfig';
 
 
 export function makeBaseState(): BaseState {
@@ -180,4 +181,47 @@ export function clearMdText(mdText = ''): string {
   return mdText
     .replace(/\\/g, '')
     .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+}
+
+export function resolveTgFooter(
+  useTgFooter: boolean,
+  pubType: PublicationTypes,
+  tgBlogConfig?: BlogTelegramConfig
+): string | undefined {
+  if (!useTgFooter) return;
+
+  let footerStr: string | undefined;
+
+  switch (pubType) {
+    case PUBLICATION_TYPES.article:
+      // TODO: свой футер !!!!
+      //footerStr = tgBlogConfig?.storyFooter;
+      //tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter,
+      // const cleanText = transformNotionToCleanText(textBlocks);
+      break;
+    case PUBLICATION_TYPES.mem:
+      footerStr = tgBlogConfig?.memFooter;
+
+      break;
+    case PUBLICATION_TYPES.story:
+      footerStr = tgBlogConfig?.storyFooter;
+
+      break;
+    case PUBLICATION_TYPES.reels:
+      footerStr = tgBlogConfig?.reelFooter;
+
+      break;
+    case PUBLICATION_TYPES.poll:
+      break;
+
+    // TODO: ??? photos, narrative - наверное свои футеры
+
+    default:
+      // post1000, post2000, announcement
+      footerStr = tgBlogConfig?.postFooter;
+
+      break;
+  }
+
+  return footerStr;
 }
