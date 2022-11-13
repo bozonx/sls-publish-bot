@@ -19,10 +19,10 @@ export default function validateCustomPost(
   }
   // if text-like post is bigger than 2048
   else if ((!state.images.length || isPost2000) && clearText.length > TELEGRAM_MAX_POST) {
-    throw tgChat.app.i18n.message.bigPost;
+    throw tgChat.app.i18n.errors.bigPost;
   }
   // if image caption too big
   else if (state.images.length && clearText.length > TELEGRAM_MAX_CAPTION) {
-    throw tgChat.app.i18n.message.bigCaption;
+    throw tgChat.app.i18n.errors.bigCaption;
   }
 }

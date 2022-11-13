@@ -1,3 +1,5 @@
+import {PUBLICATION_TYPES} from './ContentItem';
+
 export const BACK_BTN_CALLBACK = 'BACK_BTN_CALLBACK';
 export const CANCEL_BTN_CALLBACK = 'CANCEL_BTN_CALLBACK';
 export const OK_BTN_CALLBACK = 'OK';
@@ -6,7 +8,6 @@ export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 export const TELEGRAM_MAX_CAPTION = 1024;
 export const TELEGRAM_MAX_POST = 4096;
 export const WARN_SIGN = '⚠';
-
 
 export enum AppEvents {
   CALLBACK_QUERY,
