@@ -133,7 +133,6 @@ async function askMenu(
           tgChat,
           state,
           parsedContentItem.type,
-          clearTexts
         );
       }
       catch (e) {

@@ -42,31 +42,34 @@ export function validateContentPlanPostText(
   pubType: PublicationTypes,
   tgChat: TgChat
 ) {
-  // if post2000 or announcement is bigger than 2048
-  if ([
-    PUBLICATION_TYPES.post2000,
-    PUBLICATION_TYPES.announcement
-  ].includes(pubType) && clearText.length > TELEGRAM_MAX_POST) {
-    throw tgChat.app.i18n.errors.bigPost;
-  }
-  // if image caption too big
-  else if ([
-    PUBLICATION_TYPES.post1000,
-    PUBLICATION_TYPES.mem,
-    PUBLICATION_TYPES.photos,
-    PUBLICATION_TYPES.story,
-    PUBLICATION_TYPES.narrative,
-    PUBLICATION_TYPES.reels,
-  ].includes(pubType) && clearText.length > TELEGRAM_MAX_CAPTION) {
-    throw tgChat.app.i18n.errors.bigCaption;
-  }
-  // if text based post has no text
-  else if ([
-    PUBLICATION_TYPES.article,
-    PUBLICATION_TYPES.post1000,
-    PUBLICATION_TYPES.post2000,
-    PUBLICATION_TYPES.announcement,
-  ].includes(pubType) && !clearText) {
-    throw tgChat.app.i18n.errors.noText;
+  for (const sn of Object.keys(clearTexts) as SnTypes[]) {
+    const clearText = clearTexts[sn];
+    // if post2000 or announcement is bigger than 2048
+    if ([
+      PUBLICATION_TYPES.post2000,
+      PUBLICATION_TYPES.announcement
+    ].includes(pubType) && clearText.length > TELEGRAM_MAX_POST) {
+      throw tgChat.app.i18n.errors.bigPost;
+    }
+    // if image caption too big
+    else if ([
+      PUBLICATION_TYPES.post1000,
+      PUBLICATION_TYPES.mem,
+      PUBLICATION_TYPES.photos,
+      PUBLICATION_TYPES.story,
+      PUBLICATION_TYPES.narrative,
+      PUBLICATION_TYPES.reels,
+    ].includes(pubType) && clearText.length > TELEGRAM_MAX_CAPTION) {
+      throw tgChat.app.i18n.errors.bigCaption;
+    }
+    // if text based post has no text
+    else if ([
+      PUBLICATION_TYPES.article,
+      PUBLICATION_TYPES.post1000,
+      PUBLICATION_TYPES.post2000,
+      PUBLICATION_TYPES.announcement,
+    ].includes(pubType) && !clearText) {
+      throw tgChat.app.i18n.errors.noText;
+    }
   }
 }

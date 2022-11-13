@@ -23,7 +23,6 @@ export async function publishFork(
   tgChat: TgChat,
   state: PublishMenuState,
   pubType: PublicationTypes,
-  clearTexts: Record<SnTypes, string>,
   //postText: Record<SnTypes, string>,
   //articleText: Record<SnTypes, string>,
   //parsedPage?: RawPageContent,
