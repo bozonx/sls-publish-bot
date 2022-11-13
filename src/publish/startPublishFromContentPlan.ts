@@ -41,7 +41,8 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
         parsedContentItem.type,
         tgChat.app.config.blogs[blogName].sn.telegram,
         parsedPage?.textBlocks,
-        parsedContentItem.gist
+        parsedContentItem.gist,
+        parsedPage?.instaTags
       );
       let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
 
@@ -102,7 +103,8 @@ async function askMenu(
       state.pubType,
       tgChat.app.config.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
-      state.postText
+      state.postText,
+      state.instaTags
     );
 
     await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedPage);

@@ -11,6 +11,7 @@ export function makeClearTextFromNotion(
   tgBlogConfig?: BlogTelegramConfig,
   textBlocks?: NOTION_BLOCKS,
   postText?: string,
+  instaTags?: string[],
 ): Record<SnTypes, string> {
   const result = {} as Record<SnTypes, string>;
 
@@ -53,17 +54,10 @@ export function makeClearTextFromNotion(
 
         break;
       case SN_TYPES.instagram:
-        const instaTagsStr = makeTagsString(instaTags);
-        const instaLength = (cleanText + '\n\n' + instaTagsStr).length;
+        // add tags at the end of text
+        result[sn] += '\n\n' + makeTagsString(instaTags);
 
         break;
-      case SN_TYPES.site:
-        result[sn] = cleanText;
-
-        break;
-      // add others
-      default:
-        throw new Error(`Unknown sn ${sn}`);
     }
 
     if (!result[sn]) delete result[sn];
