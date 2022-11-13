@@ -2,20 +2,13 @@ import _ from 'lodash';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 import {PublishMenuState} from '../askUser/askPublishMenu';
-import {PUBLICATION_TYPES} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import {SN_SUPPORT_TYPES} from '../types/SnTypes';
 
 
-export default function validateContentPlanPost(
-  state: PublishMenuState,
-  tgChat: TgChat
-) {
-  // TODO: photos, narrative - должны иметь 1 или более картинок
-  // TODO: если не получилось распознать картинку - то нужно запретить публикацию
+export default function validateContentPlanPost(state: PublishMenuState, tgChat: TgChat) {
 
-  // TODO: результирующий текст даже с футером. Включая статью
-  // TODO: для каждой соц сети же будет свой текст !!!!!
-  const clearText = state.postText || '';
+  // TODO: photos, narrative - должны иметь 1 или более картинок
 
   // if image based post has no image
   if ([
@@ -25,36 +18,9 @@ export default function validateContentPlanPost(
   ].includes(state.pubType) && !state.mainImgUrl) {
     throw tgChat.app.i18n.errors.noImage;
   }
-  // if text based post has no text
-  else if ([
-    PUBLICATION_TYPES.article,
-    PUBLICATION_TYPES.post1000,
-    PUBLICATION_TYPES.post2000,
-    PUBLICATION_TYPES.announcement,
-  ].includes(state.pubType) && !clearText) {
-    throw tgChat.app.i18n.errors.noText;
-  }
   // if no social networks to publish
   else if (!state.sns.length) {
     throw tgChat.app.i18n.errors.noSns;
-  }
-  // if post2000 or announcement is bigger than 2048
-  else if ([
-    PUBLICATION_TYPES.post2000,
-    PUBLICATION_TYPES.announcement
-  ].includes(state.pubType) && clearText.length > TELEGRAM_MAX_POST) {
-    throw tgChat.app.i18n.errors.bigPost;
-  }
-  // if image caption too big
-  else if ([
-    PUBLICATION_TYPES.post1000,
-    PUBLICATION_TYPES.mem,
-    PUBLICATION_TYPES.photos,
-    PUBLICATION_TYPES.story,
-    PUBLICATION_TYPES.narrative,
-    PUBLICATION_TYPES.reels,
-  ].includes(state.pubType) && clearText.length > TELEGRAM_MAX_CAPTION) {
-    throw tgChat.app.i18n.errors.bigCaption;
   }
 
   // check publication type need to be supported by social network
@@ -67,5 +33,40 @@ export default function validateContentPlanPost(
         PUB_TYPE: state.pubType,
       });
     }
+  }
+}
+
+
+export function validateContentPlanPostText(
+  clearText: string,
+  pubType: PublicationTypes,
+  tgChat: TgChat
+) {
+  // if post2000 or announcement is bigger than 2048
+  if ([
+    PUBLICATION_TYPES.post2000,
+    PUBLICATION_TYPES.announcement
+  ].includes(pubType) && clearText.length > TELEGRAM_MAX_POST) {
+    throw tgChat.app.i18n.errors.bigPost;
+  }
+  // if image caption too big
+  else if ([
+    PUBLICATION_TYPES.post1000,
+    PUBLICATION_TYPES.mem,
+    PUBLICATION_TYPES.photos,
+    PUBLICATION_TYPES.story,
+    PUBLICATION_TYPES.narrative,
+    PUBLICATION_TYPES.reels,
+  ].includes(pubType) && clearText.length > TELEGRAM_MAX_CAPTION) {
+    throw tgChat.app.i18n.errors.bigCaption;
+  }
+  // if text based post has no text
+  else if ([
+    PUBLICATION_TYPES.article,
+    PUBLICATION_TYPES.post1000,
+    PUBLICATION_TYPES.post2000,
+    PUBLICATION_TYPES.announcement,
+  ].includes(pubType) && !clearText) {
+    throw tgChat.app.i18n.errors.noText;
   }
 }

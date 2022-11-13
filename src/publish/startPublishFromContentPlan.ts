@@ -98,6 +98,13 @@ async function askMenu(
       disableOk = true;
     }
 
+    // TODO: если не получилось распознать картинку - то нужно запретить публикацию
+    //       для этого убрать картинку из state
+
+    // TODO: результирующий текст даже с футером. Включая статью
+    // TODO: для каждой соц сети же будет свой текст !!!!!
+    // TODO: call validateContentPlanPostText() for each sn
+
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
 
       // TODO: распределение post1000 и post2000
@@ -109,7 +116,6 @@ async function askMenu(
       //         + картинка загружается на telegra.ph
 
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
-      // TODO: нужно обработать ошибку и написать пользователю
       // Do publish
       // await publishFork(
       //   blogName,
