@@ -1,3 +1,8 @@
+
+
+// TODO: remove
+
+
 import ContentItem from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
@@ -7,6 +12,7 @@ import {publishPostNoImageTg} from './publishHelpers';
 
 // TODO: сделать текстом + картинка предпросмотром - точку сделать ссылкой
 // TODO: превью обязательно
+
 
 export async function publishPost2000Tg(
   contentItem: ContentItem,

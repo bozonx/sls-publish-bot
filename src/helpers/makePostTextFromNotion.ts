@@ -1,11 +1,11 @@
 import {PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 import {NOTION_BLOCKS} from '../types/types';
-import {clearMdText, makeTagsString, prepareFooter, resolveTgFooter} from './helpers';
+import {makeTagsString, prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
-import {transformNotionToCleanText} from './transformNotionToCleanText';
+import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
 
 
-export function makeClearTextFromNotion(
+export function makePostTextFromNotion(
   sns: SnTypes[],
   pubType: PublicationTypes,
   useTgFooter: boolean,
@@ -19,16 +19,16 @@ export function makeClearTextFromNotion(
 
   for (const sn of sns) {
     result[sn] = (textBlocks)
-      ? transformNotionToCleanText(textBlocks)
+      ? transformNotionToTelegramPostMd(textBlocks)
       // TODO: sanitize
       : (postText || '');
 
     switch (sn) {
       case SN_TYPES.telegram:
-        result[sn] += clearMdText(prepareFooter(
+        result[sn] += prepareFooter(
           resolveTgFooter(useTgFooter, pubType, tgBlogConfig),
           tgTags
-        ));
+        );
 
         break;
       case SN_TYPES.instagram:

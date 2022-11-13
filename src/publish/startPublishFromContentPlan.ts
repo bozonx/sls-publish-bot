@@ -17,6 +17,7 @@ import {printImage, printItemDetails, printPublishConfirmData} from './printInfo
 import {WARN_SIGN} from '../types/constants';
 import validateContentPlanPost, {validateContentPlanPostText} from './validateContentPlanPost';
 import {makeClearTextFromNotion} from '../helpers/makeClearTextFromNotion';
+import {makePostTextFromNotion} from '../helpers/makePostTextFromNotion';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -43,7 +44,8 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
         tgChat.app.config.blogs[blogName].sn.telegram,
         parsedPage?.textBlocks,
         parsedContentItem.gist,
-        parsedPage?.instaTags
+        parsedPage?.instaTags,
+        parsedPage?.tgTags
       );
       let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
 
@@ -106,7 +108,8 @@ async function askMenu(
       tgChat.app.config.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
       state.postText,
-      state.instaTags
+      state.instaTags,
+      parsedPage?.tgTags,
     );
 
     await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedPage);
@@ -125,13 +128,23 @@ async function askMenu(
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       try {
+        const postTexts = makePostTextFromNotion(
+          state.sns,
+          state.pubType,
+          state.useFooter,
+          tgChat.app.config.blogs[blogName].sn.telegram,
+          parsedPage?.textBlocks,
+          state.postText,
+          state.instaTags,
+          parsedPage?.tgTags,
+        );
         // Do publish
         await publishFork(
           blogName,
           tgChat,
           state,
           parsedContentItem.type,
-          // TODO: add postTexts
+          postTexts,
           // TODO: add articleTexts
         );
       }

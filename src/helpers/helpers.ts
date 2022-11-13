@@ -148,6 +148,8 @@ export function validateTime(rawStr: string) {
 export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = true): string {
   if (!tmpl || !useFooter) return '';
 
+  // TODO: useFooter не нужнен
+
   return _.template(tmpl)({
     TAGS: mdFormat.escape(makeTagsString(tags))
   });
