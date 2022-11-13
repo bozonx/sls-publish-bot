@@ -24,33 +24,10 @@ export function makeClearTextFromNotion(
 
     switch (sn) {
       case SN_TYPES.telegram:
-        if (pubType === PUBLICATION_TYPES.article) {
-          //result[sn] =
-          //tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter,
-          // const cleanText = transformNotionToCleanText(textBlocks);
-        }
-        // post1000, post2000
-        else if (pubType !== PUBLICATION_TYPES.poll) {
-          if (textBlocks) {
-            const cleanFooter = clearMdText(tgFooter || '');
-            const tgLength = (cleanText + cleanFooter).length;
-            //throw new Error(`No text blocks`);
-            result[sn] = transformNotionToCleanText(textBlocks);
-            // TODO: add footer
-          }
-          else if (postText) {
-            // TODO: sanitize
-            result[sn] = postText
 
-          }
+        // TODO: use - useTgFooter
 
-          // TODO: sanitize footer
-
-          // TODO: add footer
-
-        }
-        // mem, photos, story, narrative, reels - может не быть
-        // announcement
+        result[sn] += clearMdText(resolveTgFooter(pubType, tgBlogConfig));
 
         break;
       case SN_TYPES.instagram:
@@ -64,4 +41,40 @@ export function makeClearTextFromNotion(
   }
 
   return result;
+}
+
+
+function resolveTgFooter(pubType: PublicationTypes, tgBlogConfig?: BlogTelegramConfig): string | undefined {
+  let footerStr: string | undefined;
+
+  switch (pubType) {
+    case PUBLICATION_TYPES.article:
+      // TODO: свой футер !!!!
+      //footerStr = tgBlogConfig?.storyFooter;
+      //tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter,
+      // const cleanText = transformNotionToCleanText(textBlocks);
+      break;
+    case PUBLICATION_TYPES.mem:
+      footerStr = tgBlogConfig?.memFooter;
+
+      break;
+    case PUBLICATION_TYPES.story:
+      footerStr = tgBlogConfig?.storyFooter;
+
+      break;
+    case PUBLICATION_TYPES.reels:
+      footerStr = tgBlogConfig?.reelFooter;
+
+      break;
+    case PUBLICATION_TYPES.poll:
+      break;
+    default:
+      // post1000, post2000, announcement
+      // ??? photos, narrative - наверное свои футеры
+      footerStr = tgBlogConfig?.postFooter;
+
+      break;
+  }
+
+  return footerStr;
 }
