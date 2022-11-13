@@ -55,6 +55,15 @@ export async function startPublishCustomPostTg(
           disableOk = true;
         }
 
+
+// TODO: распределение post1000 и post2000
+//       картинка с описанием
+//       * Если есть картинка и символов менее 1032
+//       пост без картинки
+//       * Если нет картинки и символов менее 2096
+//       * Если есть картинка и символов более 1032 и менее 2096
+//         + картинка загружается на telegra.ph
+
         await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
           if (photoIdOrUrl.length === 1) {
             if (isPost2000) {

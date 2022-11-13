@@ -27,7 +27,7 @@ export default function validateContentPlanPost(state: PublishMenuState, tgChat:
   for (const sn of state.sns) {
     const types = SN_SUPPORT_TYPES[sn];
 
-    if (!types.indexOf(state.pubType)) {
+    if (types.indexOf(state.pubType) === -1) {
       throw _.template(tgChat.app.i18n.errors.unsupportedPubType)({
         SN: sn,
         PUB_TYPE: state.pubType,

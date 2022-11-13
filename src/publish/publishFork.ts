@@ -5,14 +5,6 @@ import {PublishMenuState} from '../askUser/askPublishMenu';
 import {makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
 
 
-// TODO: распределение post1000 и post2000
-//       картинка с описанием
-//       * Если есть картинка и символов менее 1032
-//       пост без картинки
-//       * Если нет картинки и символов менее 2096
-//       * Если есть картинка и символов более 1032 и менее 2096
-//         + картинка загружается на telegra.ph
-
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
@@ -21,8 +13,6 @@ export async function publishFork(
   postTexts: Record<SnTypes, string>,
   //articleText: Record<SnTypes, string>,
 ) {
-  // const resolvedTime = (correctedTime) ? correctedTime : contentItem.time;
-
   for (const sn of state.sns) {
     switch (sn) {
       case SN_TYPES.telegram:
@@ -79,13 +69,16 @@ export async function publishFork(
           PUBLICATION_TYPES.photos,
           PUBLICATION_TYPES.narrative,
         ].includes(pubType)) {
-          // TODO: what to do ????
+          throw new Error(`Photos and narrative not supported at the moment`);
         }
         else {
           throw new Error(`Unknown or unsupported publication type "${pubType}" of sn ${sn}`);
         }
+
         break;
       case SN_TYPES.site:
+        throw new Error(`Publication to site isn't supported at the moment`);
+
         break;
       // case SN_TYPES.instagram:
       //   break;

@@ -172,7 +172,7 @@ export function makeContentLengthString(
 
   if (instaTags && instaTags.length) {
     result += `${i18n.pageInfo.contentLengthWithInstaTags}: `
-        + `${clearTexts[SN_TYPES.telegram].length}\n`
+        + `${clearTexts[SN_TYPES.instagram].length}\n`
       + `${i18n.pageInfo.instaTagsCount}: ` + (instaTags || []).length;
   }
 
