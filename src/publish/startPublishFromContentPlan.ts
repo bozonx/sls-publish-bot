@@ -15,7 +15,8 @@ import {getFirstImageFromNotionBlocks,} from './publishHelpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {printImage, printItemDetails, printPublishConfirmData} from './printInfo';
 import {WARN_SIGN} from '../types/constants';
-import validateContentPlanPost from './validateContentPlanPost';
+import validateContentPlanPost, {validateContentPlanPostText} from './validateContentPlanPost';
+import {makeClearTextFromNotion} from '../helpers/clearTextForSn';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -35,11 +36,21 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
       const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
       const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
+      const clearTexts = makeClearTextFromNotion(
+        resolvedSns,
+        parsedContentItem.type,
+        parsedPage?.textBlocks,
+        parsedContentItem.gist,
+        tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+        tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter,
+        tgChat.app.config.blogs[blogName].sn.telegram?.memFooter,
+        tgChat.app.config.blogs[blogName].sn.telegram?.reelFooter,
+      );
       let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
 
       mainImgUrl = await printImage(tgChat, mainImgUrl);
 
-      await printItemDetails(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage);
+      await printItemDetails(blogName, tgChat, clearTexts, resolvedSns, parsedContentItem, parsedPage);
       await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
     }
     catch (e) {
@@ -89,22 +100,30 @@ async function askMenu(
   await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
     state.mainImgUrl = await printImage(tgChat, mainImgUrl);
 
-    await printPublishConfirmData(blogName, tgChat, state, parsedPage);
+    const clearTexts = makeClearTextFromNotion(
+      state.sns,
+      state.pubType,
+      parsedPage?.textBlocks,
+      state.postText,
+      tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+      tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter,
+      tgChat.app.config.blogs[blogName].sn.telegram?.memFooter,
+      tgChat.app.config.blogs[blogName].sn.telegram?.reelFooter,
+    );
+
+    await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedPage);
 
     let disableOk = false;
 
     try {
       validateContentPlanPost(state, tgChat);
+      validateContentPlanPostText(clearTexts, parsedContentItem.type, tgChat);
     }
     catch (e) {
       await tgChat.reply(`${WARN_SIGN} ${e}`);
 
       disableOk = true;
     }
-
-    // TODO: результирующий текст даже с футером. Включая статью
-    // TODO: для каждой соц сети же будет свой текст !!!!!
-    // TODO: call validateContentPlanPostText() for each sn
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       try {
@@ -114,7 +133,7 @@ async function askMenu(
           tgChat,
           state,
           parsedContentItem.type,
-          parsedPage,
+          clearTexts
         );
       }
       catch (e) {

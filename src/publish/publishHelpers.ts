@@ -1,7 +1,7 @@
 import moment from 'moment';
 import {publishTgCopy, publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
-import {SN_TYPES} from '../types/ContentItem';
+import {SN_TYPES, SnTypes} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
 import {clearMdText, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
@@ -163,24 +163,18 @@ async function registerTaskTg(
 
 export function makeContentLengthString(
   i18n: typeof ru,
-  textBlocks?: NOTION_BLOCKS,
-  tgTags?: string[],
+  clearTexts: Record<SnTypes, string>,
   instaTags?: string[],
   tgFooter?: string,
 ): string {
-  if (!textBlocks) return '';
+  let result = `${i18n.pageInfo.contentLength}: ${clearTexts[SN_TYPES.site].length}\n`;
 
-  const instaTagsStr = makeTagsString(instaTags);
-  const cleanText = transformNotionToCleanText(textBlocks);
-  const cleanFooter = clearMdText(tgFooter || '');
-  const instaLength = (cleanText + '\n\n' + instaTagsStr).length;
-  const tgLength = (cleanText + cleanFooter).length;
-  let result = `${i18n.pageInfo.contentLength}: ${cleanText.length}\n`;
-
-  if (tgFooter) result += `${i18n.pageInfo.contentLengthWithTgFooter}: ${tgLength}\n`;
+  if (tgFooter) result += `${i18n.pageInfo.contentLengthWithTgFooter}: `
+   + `${clearTexts[SN_TYPES.telegram].length}\n`;
 
   if (instaTags && instaTags.length) {
-    result += `${i18n.pageInfo.contentLengthWithInstaTags}: ${instaLength}\n`
+    result += `${i18n.pageInfo.contentLengthWithInstaTags}: `
+        + `${clearTexts[SN_TYPES.telegram].length}\n`
       + `${i18n.pageInfo.instaTagsCount}: ` + (instaTags || []).length;
   }
 

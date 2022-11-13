@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 import {PublishMenuState} from '../askUser/askPublishMenu';
-import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes, SnTypes} from '../types/ContentItem';
 import {SN_SUPPORT_TYPES} from '../types/SnTypes';
 
 
@@ -38,7 +38,7 @@ export default function validateContentPlanPost(state: PublishMenuState, tgChat:
 
 
 export function validateContentPlanPostText(
-  clearText: string,
+  clearTexts: Record<SnTypes, string>,
   pubType: PublicationTypes,
   tgChat: TgChat
 ) {

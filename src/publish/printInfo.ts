@@ -4,7 +4,6 @@ import RawPageContent from '../types/PageContent';
 import {makeDateTimeStr, makeTagsString, prepareFooter} from '../helpers/helpers';
 import {makeContentPlanItemDetails} from './parseContent';
 import {makePageDetailsMsg} from './parsePage';
-import {NOTION_BLOCKS} from '../types/types';
 import {makeContentLengthString} from './publishHelpers';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost';
@@ -13,11 +12,11 @@ import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstag
 export async function printItemDetails(
   blogName: string,
   tgChat: TgChat,
+  clearTexts: Record<SnTypes, string>,
   resolvedSns: SnTypes[],
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent
 ) {
-  //await printImage(tgChat, mainImgUrl);
   const footerStr = prepareFooter(
     tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
     parsedPage?.tgTags,
@@ -52,15 +51,12 @@ export async function printItemDetails(
     );
   }
 
-  await printContent(
-    blogName,
-    tgChat,
-    parsedPage?.textBlocks,
-    parsedContentItem.gist,
-    parsedPage?.tgTags,
+  await tgChat.reply(makeContentLengthString(
+    tgChat.app.i18n,
+    clearTexts,
     parsedPage?.instaTags,
-    footerStr,
-  );
+    footerStr
+  ));
 
   if (!resolvedSns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
 }
@@ -69,6 +65,7 @@ export async function printPublishConfirmData(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
+  clearTexts: Record<SnTypes, string>,
   parsedPage?: RawPageContent
 ) {
   const footerStr = prepareFooter(
@@ -86,15 +83,12 @@ export async function printPublishConfirmData(
     );
   }
 
-  await printContent(
-    blogName,
-    tgChat,
-    parsedPage?.textBlocks,
-    state.postText,
-    parsedPage?.tgTags,
+  await tgChat.reply(makeContentLengthString(
+    tgChat.app.i18n,
+    clearTexts,
     state.instaTags,
-    footerStr,
-  );
+    footerStr
+  ));
 
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
@@ -123,31 +117,5 @@ export async function printImage(tgChat: TgChat, mainImgUrl?: string): Promise<s
     catch (e) {
       await tgChat.reply(tgChat.app.i18n.errors.cantSendImage)
     }
-  }
-}
-
-
-async function printContent(
-  blogName: string,
-  tgChat: TgChat,
-  textBlocks?: NOTION_BLOCKS,
-  postText?: string,
-  tgTags?: string[],
-  instaTags?: string[],
-  footerStr?: string,
-) {
-  if (textBlocks) {
-    await tgChat.reply(makeContentLengthString(
-      tgChat.app.i18n,
-      textBlocks,
-      tgTags,
-      instaTags,
-      footerStr
-    ));
-  }
-  else {
-    await tgChat.reply(
-      tgChat.app.i18n.menu.announcementGist + '\n' + postText
-    );
   }
 }

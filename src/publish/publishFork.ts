@@ -15,14 +15,17 @@ import {PublishMenuState} from '../askUser/askPublishMenu';
 //       * Если есть картинка и символов более 1032 и менее 2096
 //         + картинка загружается на telegra.ph
 
+// TODO: результирующий текст даже с футером. Включая статью
+// TODO: для каждой соц сети же будет свой текст !!!!!
 
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
   pubType: PublicationTypes,
-  postText: Record<SnTypes, string>,
-  articleText: Record<SnTypes, string>,
+  clearTexts: Record<SnTypes, string>,
+  //postText: Record<SnTypes, string>,
+  //articleText: Record<SnTypes, string>,
   //parsedPage?: RawPageContent,
 ) {
   for (const sn of state.sns) {
