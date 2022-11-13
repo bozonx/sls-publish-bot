@@ -5,7 +5,8 @@ import {makePost2000Text, publishImageTg, publishPostNoImageTg} from './publishH
 import {clearMdText, makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants';
+import validateCustomPost from './validateCustomPost';
 
 
 export async function startPublishCustomPostTg(
@@ -45,23 +46,13 @@ export async function startPublishCustomPostTg(
 
         await printPostPreview(blogName, tgChat, state, resultText, clearText);
 
-        if (!state.postText && !state.images.length) {
-          disableOk = true;
-
-          await tgChat.reply(tgChat.app.i18n.message.noImageNoText);
+        try {
+          validateCustomPost(state, isPost2000, clearText, tgChat);
         }
-        else if (isPost2000 && state.images.length > 1) {
-          disableOk = true;
+        catch (e) {
+          await tgChat.reply(`${WARN_SIGN} ${e}`);
 
-          await tgChat.reply(tgChat.app.i18n.message.post2000oneImg);
-        }
-        else if (
-          (!state.images.length || isPost2000)
-          && clearText.length > TELEGRAM_MAX_POST
-        ) {
           disableOk = true;
-
-          await tgChat.reply(tgChat.app.i18n.message.bigPost);
         }
 
         await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {

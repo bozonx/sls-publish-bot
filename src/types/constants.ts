@@ -5,6 +5,7 @@ export const PRINT_FULL_DATE_FORMAT = 'DD.MM.YYYY';
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 export const TELEGRAM_MAX_CAPTION = 1024;
 export const TELEGRAM_MAX_POST = 4096;
+export const WARN_SIGN = '⚠';
 
 
 export enum AppEvents {
