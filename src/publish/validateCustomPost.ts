@@ -11,7 +11,7 @@ export default function validateCustomPost(
 ) {
   // if not text and image
   if (!state.postText && !state.images.length) {
-    throw tgChat.app.i18n.message.noImageNoText;
+    throw tgChat.app.i18n.errors.noImageNoText;
   }
   // if post2000 has more than one image
   else if (isPost2000 && state.images.length > 1) {

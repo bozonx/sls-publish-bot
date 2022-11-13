@@ -14,6 +14,8 @@ import {resolveSns} from '../helpers/helpers';
 import {getFirstImageFromNotionBlocks,} from './publishHelpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {printItemDetails, printPublishConfirmData} from './printInfo';
+import {WARN_SIGN} from '../types/constants';
+import validateContentPlanPost from './validateContentPlanPost';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -82,36 +84,30 @@ async function askMenu(
     mainImgUrl,
   };
 
-  // TODO: Валидация
-  //       * при публикации post1000 если симвобов более 1032 то предложить создать post2000 в телеге. лучшее заставить поменять в контент плане
-  //       * проверка что post 1000 превышает 1032 + футер для телеги. Не давать создать
-  //       * при публикации photos если более 1032 символов то сказать что в телегу не будет опубликовано
-  //       * проверка что post2000 превышает для инсты. Не давать создать
-  //       * при публикации photos проверка на 2200 символов
-  //       * если кастомный пост превышает 1032 то делать  post2000
-  //       * валидация что для статьи должна быть страница
-
-  // TODO: распределение post1000 и post2000
-  //       картинка с описанием
-  //       * Если есть картинка и символов менее 1032
-  //       пост без картинки
-  //       * Если нет картинки и символов менее 2096
-  //       * Если есть картинка и символов более 1032 и менее 2096
-  //         + картинка загружается на telegra.ph
-
   await askPublishMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
+    await printPublishConfirmData(blogName, tgChat, state, parsedPage);
 
-    // TODO: если не получилось распознать картинку - то нужно запретить публикацию
-    // TODO: если не совпадает тип публикации с поддержкой соц сетью - то запретить публикацию
-    // TODO: если должен быть текст но его нет
-    // TODO: если нет картинки, но должна быть - то блокировать ок
-    // TODO: проверить ограничения TELEGRAM_MAX_CAPTION и TELEGRAM_MAX_POST
+    let disableOk = false;
 
-    const disableOk = !resolvedSns.length;
+    try {
+      validateContentPlanPost(state, tgChat);
+    }
+    catch (e) {
+      await tgChat.reply(`${WARN_SIGN} ${e}`);
 
-    await printPublishConfirmData(blogName, tgChat, resolvedSns, state, parsedPage);
+      disableOk = true;
+    }
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+
+      // TODO: распределение post1000 и post2000
+      //       картинка с описанием
+      //       * Если есть картинка и символов менее 1032
+      //       пост без картинки
+      //       * Если нет картинки и символов менее 2096
+      //       * Если есть картинка и символов более 1032 и менее 2096
+      //         + картинка загружается на telegra.ph
+
       // TODO: может на всё обрабатывать ошибку, написать пользвателю и сделать back()
       // TODO: нужно обработать ошибку и написать пользователю
       // Do publish

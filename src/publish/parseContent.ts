@@ -55,6 +55,8 @@ export function validateContentItem(item: ContentItem) {
   if (!item.status) throw new Error(`No status`);
   if (!item.type) throw new Error(`No type`);
 
+  // TODO: валидация что для статьи должна быть страница
+
   if (!moment(`${item.date} ${item.time}`).isValid())
     throw new Error(`Incorrect date: ${item.date}`);
   if (!Object.values(CONTENT_STATUS).includes(item.status))

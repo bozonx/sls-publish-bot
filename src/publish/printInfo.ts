@@ -69,7 +69,6 @@ export async function printItemDetails(
 export async function printPublishConfirmData(
   blogName: string,
   tgChat: TgChat,
-  resolvedSns: SnTypes[],
   state: PublishMenuState,
   parsedPage?: RawPageContent
 ) {
@@ -115,8 +114,6 @@ export async function printPublishConfirmData(
       + makeTagsString(state.instaTags)
     );
   }
-
-  if (!state.sns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
 }
 
 export async function printImage(tgChat: TgChat, mainImgUrl?: string) {
