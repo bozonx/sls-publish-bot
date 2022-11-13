@@ -3,15 +3,16 @@
 // TODO: remove
 
 
-import ContentItem from '../types/ContentItem';
-import RawPageContent from '../types/PageContent';
-import TgChat from '../apiTg/TgChat';
-import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
-import {prepareFooter} from '../helpers/helpers';
-import {publishPostNoImageTg} from './publishHelpers';
+import ContentItem from '../src/types/ContentItem';
+import RawPageContent from '../src/types/PageContent';
+import TgChat from '../src/apiTg/TgChat';
+import {transformNotionToTelegramPostMd} from '../src/helpers/transformNotionToTelegramPostMd';
+import {prepareFooter} from '../src/helpers/helpers';
+import {publishPostNoImageTg} from '../src/publish/publishHelpers';
 
 // TODO: сделать текстом + картинка предпросмотром - точку сделать ссылкой
 // TODO: превью обязательно
+
 
 
 export async function publishPost2000Tg(

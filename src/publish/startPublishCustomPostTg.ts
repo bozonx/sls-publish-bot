@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat';
 import {askPostMedia} from '../askUser/askPostMedia';
 import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
-import {makePost2000Text, publishImageTg, publishPostNoImageTg} from './publishHelpers';
+import {makePost2000Text, makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
 import {clearMdText, makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
@@ -60,7 +60,7 @@ export async function startPublishCustomPostTg(
             if (isPost2000) {
               const post2000Txt = await makePost2000Text(tgChat, resultText, state.images[0]);
 
-              await publishPostNoImageTg(
+              await makeTaskTgPostOnlyText(
                 state.selectedDate!,
                 state.selectedTime!,
                 post2000Txt,
@@ -70,7 +70,7 @@ export async function startPublishCustomPostTg(
               );
             }
             else {
-              await publishImageTg(
+              await makeTaskTgPostImage(
                 state.selectedDate!,
                 state.selectedTime!,
                 photoIdOrUrl[0],
@@ -86,7 +86,7 @@ export async function startPublishCustomPostTg(
             throw new Error(`Not supported`);
           }
           else {
-            await publishPostNoImageTg(
+            await makeTaskTgPostOnlyText(
               state.selectedDate!,
               state.selectedTime!,
               resultText,

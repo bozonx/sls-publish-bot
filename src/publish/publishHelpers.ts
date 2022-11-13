@@ -3,19 +3,17 @@ import {publishTgCopy, publishTgImage, publishTgPostNoImage} from '../apiTg/publ
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES, SnTypes} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
-import {clearMdText, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
+import {makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import {NOTION_BLOCKS} from '../types/types';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
-import {transformNotionToCleanText} from '../helpers/transformNotionToCleanText';
 import ru from '../I18n/ru';
-import RawPageContent from '../types/PageContent';
 
 
 /**
- * Post without image
+ * Post only text, without image
  */
-export async function publishPostNoImageTg(
+export async function makeTaskTgPostOnlyText(
   isoDate: string,
   resolvedTime: string,
   postStr: string,
@@ -84,7 +82,7 @@ export async function publishCopyTg(
   await registerTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat);
 }
 
-export async function publishImageTg(
+export async function makeTaskTgPostImage(
   isoDate: string,
   resolvedTime: string,
   imageUrl: string,

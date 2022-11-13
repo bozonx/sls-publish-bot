@@ -1,10 +1,8 @@
-import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
-import RawPageContent from '../types/PageContent';
-import {publishPost1000Tg} from './publishPost1000Tg';
 import TgChat from '../apiTg/TgChat';
-import {publishPost2000Tg} from './publishPost2000Tg';
+import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 import {publishArticleTg} from './publishArticleTg';
 import {PublishMenuState} from '../askUser/askPublishMenu';
+import {makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
 
 
 // TODO: распределение post1000 и post2000
@@ -15,33 +13,33 @@ import {PublishMenuState} from '../askUser/askPublishMenu';
 //       * Если есть картинка и символов более 1032 и менее 2096
 //         + картинка загружается на telegra.ph
 
-// TODO: результирующий текст даже с футером. Включая статью
-// TODO: для каждой соц сети же будет свой текст !!!!!
-
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
   pubType: PublicationTypes,
-  postText: Record<SnTypes, string>,
+  postTexts: Record<SnTypes, string>,
   //articleText: Record<SnTypes, string>,
-  //parsedPage?: RawPageContent,
 ) {
+  // const resolvedTime = (correctedTime) ? correctedTime : contentItem.time;
+
   for (const sn of state.sns) {
     switch (sn) {
       case SN_TYPES.telegram:
         // article
         if (pubType === PUBLICATION_TYPES.article) {
-          return publishArticleTg(
-            contentItem,
-            parsedPage,
-            blogName,
-            tgChat,
-            correctedTime
-          );
+          // return publishArticleTg(
+          //   contentItem,
+          //   parsedPage,
+          //   blogName,
+          //   tgChat,
+          //   correctedTime
+          // );
         }
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {
+
+          // TODO: создать опрос полностью
 
         }
         // only text
@@ -50,34 +48,14 @@ export async function publishFork(
           PUBLICATION_TYPES.post2000,
           PUBLICATION_TYPES.announcement,
         ].includes(pubType) && !state.mainImgUrl) {
-          if (parsedPage) {
-            if (pubType === PUBLICATION_TYPES.post2000) {
-              return publishPost2000Tg(
-                contentItem,
-                parsedPage,
-                blogName,
-                tgChat,
-                allowFooter,
-                correctedTime
-              );
-            }
-
-            return publishPost1000Tg(
-              contentItem,
-              parsedPage,
-              blogName,
-              tgChat,
-              allowPreview,
-              allowFooter,
-              correctedTime
-            );
-          }
-          else {
-            // TODO: тогда поидее надо делать объявление или чо ????
-            // TODO: или заранее проверить
-            // TODO: или если объявление то сразу его сделать pageContent??
-          }
-
+          return makeTaskTgPostOnlyText(
+            state.selectedDate,
+            state.selectedTime,
+            postTexts[sn],
+            blogName,
+            tgChat,
+            state.usePreview,
+          );
         }
         // one photo
         else if ([
@@ -87,14 +65,21 @@ export async function publishFork(
           PUBLICATION_TYPES.announcement,
           PUBLICATION_TYPES.reels,
         ].includes(pubType) && state.mainImgUrl) {
-
+          return makeTaskTgPostImage(
+            state.selectedDate,
+            state.selectedTime,
+            state.mainImgUrl,
+            blogName,
+            tgChat,
+            postTexts[sn]
+          );
         }
         // several photo
         else if ([
           PUBLICATION_TYPES.photos,
           PUBLICATION_TYPES.narrative,
         ].includes(pubType)) {
-
+          // TODO: what to do ????
         }
         else {
           throw new Error(`Unknown or unsupported publication type "${pubType}" of sn ${sn}`);

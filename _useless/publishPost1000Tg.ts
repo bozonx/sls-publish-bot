@@ -1,9 +1,9 @@
-import TgChat from '../apiTg/TgChat';
-import ContentItem, {SN_TYPES} from '../types/ContentItem';
-import RawPageContent from '../types/PageContent';
-import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd';
-import {prepareFooter} from '../helpers/helpers';
-import {publishImageTg, publishPostNoImageTg} from './publishHelpers';
+import TgChat from '../src/apiTg/TgChat';
+import ContentItem, {SN_TYPES} from '../src/types/ContentItem';
+import RawPageContent from '../src/types/PageContent';
+import {transformNotionToTelegramPostMd} from '../src/helpers/transformNotionToTelegramPostMd';
+import {prepareFooter} from '../src/helpers/helpers';
+import {publishImageTg, publishPostNoImageTg} from '../src/publish/publishHelpers';
 
 
 export async function publishPost1000Tg(
