@@ -9,7 +9,7 @@ import {
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import {TextMessageEvent} from '../types/MessageEvent';
-import {makeTagsString} from '../helpers/helpers';
+import {makeTagsString} from '../lib/common';
 
 
 export const CLEAR_CB = 'CLEAR_CB';

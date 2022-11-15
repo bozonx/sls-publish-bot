@@ -7,7 +7,7 @@ import {
   OK_BTN,
   OK_BTN_CALLBACK
 } from '../types/constants';
-import {addSimpleStep, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
+import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
 import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 import {askSelectTime} from './askSelectTime';
 import {askPostMedia} from './askPostMedia';

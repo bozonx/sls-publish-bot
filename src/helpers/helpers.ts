@@ -7,6 +7,7 @@ import {AppEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {BlogTelegramConfig} from '../types/ExecConfig';
+import {makeTagsString} from '../lib/common';
 
 
 export function makeBaseState(): BaseState {
@@ -16,11 +17,6 @@ export function makeBaseState(): BaseState {
   };
 }
 
-export function makeTagsString(tags?: string[]): string {
-  if (!tags || !tags.length) return '';
-
-  return tags.map((item) => `#${item}`).join(' ');
-}
 
 export function makeFullNotionLink(pageId: string): string {
   return `https://www.notion.so/${pageId}`;

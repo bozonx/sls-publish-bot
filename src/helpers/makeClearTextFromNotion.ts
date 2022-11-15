@@ -1,8 +1,9 @@
 import {PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
 import {NOTION_BLOCKS} from '../types/types';
-import {clearMdText, makeTagsString, prepareFooter, resolveTgFooter} from './helpers';
+import {clearMdText, prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {transformNotionToCleanText} from './transformNotionToCleanText';
+import {makeTagsString} from '../lib/common';
 
 
 export function makeClearTextFromNotion(

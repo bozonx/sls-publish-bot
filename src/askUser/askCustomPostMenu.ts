@@ -7,7 +7,7 @@ import {
   OK_BTN, OK_BTN_CALLBACK,
   PRINT_FULL_DATE_FORMAT,
 } from '../types/constants';
-import {addSimpleStep, makeTagsString, makeUtcOffsetStr} from '../helpers/helpers';
+import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
 import moment from 'moment';
 import {askPubDate} from './askPubDate';

@@ -4,8 +4,9 @@ import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
 import {makeTaskTgPostOnlyText} from './publishHelpers';
 import _ from 'lodash';
-import {makeTagsString, makeTelegraPhUrl} from '../helpers/helpers';
+import {makeTelegraPhUrl} from '../helpers/helpers';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
+import {makeTagsString} from '../lib/common';
 
 
 export async function publishArticleTg(

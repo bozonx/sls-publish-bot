@@ -1,12 +1,13 @@
 import TgChat from '../apiTg/TgChat';
 import ContentItem, {SN_TYPES, SnTypes} from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
-import {makeDateTimeStr, makeTagsString, prepareFooter} from '../helpers/helpers';
+import {makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {makeContentPlanItemDetails} from './parseContent';
 import {makePageDetailsMsg} from './parsePage';
 import {makeContentLengthString} from './publishHelpers';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost';
+import {makeTagsString} from '../lib/common';
 
 
 export async function printItemDetails(
