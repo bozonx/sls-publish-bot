@@ -4,7 +4,7 @@ import {askCustomPostMenu, CustomPostState} from '../askUser/askCustomPostMenu';
 import {makePost2000Text, makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
 import {clearMdText, makeDateTimeStr, prepareFooter} from '../helpers/helpers';
 import {askPostConfirm} from '../askUser/askPostConfirm';
-import {publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
+import {publishTgImage, publishTgText} from '../apiTg/publishTg';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants';
 import validateCustomPost from './validateCustomPost';
 
@@ -138,7 +138,7 @@ async function printPostPreview(
     // no image
     if (!caption) throw new Error(`No text`);
 
-    await publishTgPostNoImage(
+    await publishTgText(
       tgChat.botChatId,
       caption,
       tgChat,

@@ -128,6 +128,7 @@ export default class TgChat {
         await onStart(state);
       },
       onEnd: async (state: BaseState): Promise<void> => {
+        // TODO: почему это не делается в самом BreadCrumbs ?
         for (const item of state.handlerIndexes) {
           this.events.removeListener(item[0], item[1]);
         }
@@ -138,6 +139,7 @@ export default class TgChat {
         }
       },
       onCancel: async (state: BaseState): Promise<void> => {
+        // TODO: почему это не делается в самом BreadCrumbs ?
         for (const item of state.handlerIndexes) {
           this.events.removeListener(item[0], item[1]);
         }

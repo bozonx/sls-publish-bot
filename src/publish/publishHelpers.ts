@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {publishTgCopy, publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
+import {publishTgCopy, publishTgImage, publishTgText} from '../apiTg/publishTg';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import TgChat from '../apiTg/TgChat';
 import {makeUtcOffsetStr} from '../helpers/helpers';
@@ -24,7 +24,7 @@ export async function makeTaskTgPostOnlyText(
   let msgId: number;
   // Print to log channel
   try {
-    msgId = await publishTgPostNoImage(
+    msgId = await publishTgText(
       tgChat.app.appConfig.logChannelId,
       postStr,
       tgChat,
