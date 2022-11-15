@@ -2,8 +2,8 @@
 // TODO: refactor
 
 
-import {PublicationTypes} from '../types/ContentItem';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
+import {PublicationType} from '../types/publicationType';
 
 const dict = {
   greet: 'Добро пожаловать в бот блогов свободы.',
@@ -125,7 +125,7 @@ const dict = {
     post1000: 'Пост1000/мем',
     post2000: 'Пост2000',
     story: 'Cторис',
-  } as Record<PublicationTypes, string>,
+  } as Record<PublicationType, string>,
   dates: {
     today: 'Сегодня',
     tomorrow: 'Завтра',

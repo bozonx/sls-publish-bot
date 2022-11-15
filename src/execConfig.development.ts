@@ -1,6 +1,6 @@
 import ExecConfig from './types/ExecConfig';
-import {PUBLICATION_TYPES} from './types/ContentItem';
 import dotenv from 'dotenv';
+import {PUBLICATION_TYPES} from './types/publicationType';
 
 
 dotenv.config();

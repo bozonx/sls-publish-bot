@@ -1,16 +1,16 @@
 import TgChat from '../apiTg/TgChat';
-import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import {publishArticleTg} from './publishArticleTg';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
 import {SN_TYPES, SnType} from '../types/snTypes';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 
 
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
-  pubType: PublicationTypes,
+  pubType: PublicationType,
   postTexts: Record<SnType, string>,
   //articleText: Record<SnTypes, string>,
 ) {

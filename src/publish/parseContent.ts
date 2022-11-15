@@ -2,20 +2,19 @@ import _ from 'lodash';
 import ContentItem, {
   CONTENT_PROPS,
   CONTENT_STATUS,
-  PUBLICATION_TYPES,
-  PublicationTypes
 } from '../types/ContentItem';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import moment from 'moment';
 import {makeDateTimeStr, makeFullNotionLink} from '../helpers/helpers';
 import ru from '../I18n/ru';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 
 
 // TODO: review, refactor
 
 
 export function parseContentItem(item: PageObjectResponse): ContentItem {
-  const pubType: PublicationTypes = (item.properties[CONTENT_PROPS.type] as any)?.select.name || '';
+  const pubType: PublicationType = (item.properties[CONTENT_PROPS.type] as any)?.select.name || '';
   const link = (item.properties[CONTENT_PROPS.gist] as any)?.rich_text[0]?.href;
   const relativePageId: string | undefined = (link)
     // TODO: а если передана полная ссылка ????

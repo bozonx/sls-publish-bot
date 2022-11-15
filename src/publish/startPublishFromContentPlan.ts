@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {prepareContentItem} from './parseContent';
-import ContentItem, {PUBLICATION_TYPES} from '../types/ContentItem';
+import ContentItem from '../types/ContentItem';
 import {preparePage} from './parsePage';
 import {askPublishMenu, PublishMenuState} from '../askUser/askPublishMenu';
 import {loadNotPublished} from '../notionRequests/contentPlan';
@@ -19,6 +19,7 @@ import validateContentPlanPost, {validateContentPlanPostText} from './validateCo
 import {makeClearTextFromNotion} from '../helpers/makeClearTextFromNotion';
 import {makePostTextFromNotion} from '../helpers/makePostTextFromNotion';
 import {SnType} from '../types/snTypes';
+import {PUBLICATION_TYPES} from '../types/publicationType';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {

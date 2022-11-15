@@ -2,8 +2,8 @@ import RawPageContent, {PAGE_CONTENT_PROPS} from '../types/PageContent';
 import ru from '../I18n/ru';
 import {BlockObjectResponse, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import {NOTION_BLOCKS} from '../types/types';
-import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import {makeTagsString} from '../lib/common';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 
 
 export function parsePageContent(
@@ -31,7 +31,7 @@ export function makePageDetailsMsg(pageContent: RawPageContent, i18n: typeof ru)
 }
 
 export function validatePageItem(
-  pubType: PublicationTypes,
+  pubType: PublicationType,
   pageContent: RawPageContent,
   i18n: typeof ru
 ) {
@@ -41,7 +41,7 @@ export function validatePageItem(
 }
 
 export function preparePage(
-  pubType: PublicationTypes,
+  pubType: PublicationType,
   pageProperties: PageObjectResponse['properties'],
   pageContent: NOTION_BLOCKS,
   i18n: typeof ru

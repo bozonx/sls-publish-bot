@@ -1,15 +1,15 @@
-import {PublicationTypes} from '../types/ContentItem';
 import {NOTION_BLOCKS} from '../types/types';
 import {prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
 import {makeTagsString} from '../lib/common';
 import {SN_TYPES, SnType} from '../types/snTypes';
+import {PublicationType} from '../types/publicationType';
 
 
 export function makePostTextFromNotion(
   sns: SnType[],
-  pubType: PublicationTypes,
+  pubType: PublicationType,
   useTgFooter: boolean,
   tgBlogConfig?: BlogTelegramConfig,
   textBlocks?: NOTION_BLOCKS,

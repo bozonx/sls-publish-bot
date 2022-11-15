@@ -1,7 +1,6 @@
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import moment from 'moment';
-import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
 import {AppEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';
@@ -9,6 +8,7 @@ import {markdownv2 as mdFormat} from 'telegram-format';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {makeTagsString} from '../lib/common';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 
 
 export function makeBaseState(): BaseState {
@@ -32,7 +32,7 @@ export function makeTelegraPhUrl(tgPath: string): string {
 export function resolveSns(
   blogSns: SnType[],
   onlySns: SnType[],
-  pubType: PublicationTypes
+  pubType: PublicationType
 ): SnType[] {
   let filteredSns = [];
 
@@ -48,7 +48,7 @@ export function resolveSns(
   return _.intersection(blogSns, filteredSns);
 }
 
-export function matchSnsForType(pubType: PublicationTypes): SnType[] {
+export function matchSnsForType(pubType: PublicationType): SnType[] {
   const sns: SnType[] = [];
 
   for (const sn in Object.keys(SN_SUPPORT_TYPES)) {
@@ -123,7 +123,7 @@ export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = tr
 
 export function resolveTgFooter(
   useTgFooter: boolean,
-  pubType: PublicationTypes,
+  pubType: PublicationType,
   tgBlogConfig?: BlogTelegramConfig
 ): string | undefined {
   if (!useTgFooter) return;
