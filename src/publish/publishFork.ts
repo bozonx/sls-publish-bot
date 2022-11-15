@@ -3,7 +3,7 @@ import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import {publishArticleTg} from './publishArticleTg';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
-import {SN_TYPES} from '../types/snTypes';
+import {SN_TYPES, SnType} from '../types/snTypes';
 
 
 export async function publishFork(
@@ -11,7 +11,7 @@ export async function publishFork(
   tgChat: TgChat,
   state: PublishMenuState,
   pubType: PublicationTypes,
-  postTexts: Record<SnTypes, string>,
+  postTexts: Record<SnType, string>,
   //articleText: Record<SnTypes, string>,
 ) {
   for (const sn of state.sns) {

@@ -8,7 +8,7 @@ import TgReplyButton from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {makeTagsString} from '../lib/common';
-import {SN_SUPPORT_TYPES} from '../types/snTypes';
+import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes';
 
 
 export function makeBaseState(): BaseState {
@@ -30,10 +30,10 @@ export function makeTelegraPhUrl(tgPath: string): string {
  * Match blog sns, onlySns and sn for specific publication type
  */
 export function resolveSns(
-  blogSns: SnTypes[],
-  onlySns: SnTypes[],
+  blogSns: SnType[],
+  onlySns: SnType[],
   pubType: PublicationTypes
-): SnTypes[] {
+): SnType[] {
   let filteredSns = [];
 
   if (onlySns.length) {
@@ -48,12 +48,12 @@ export function resolveSns(
   return _.intersection(blogSns, filteredSns);
 }
 
-export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {
-  const sns: SnTypes[] = [];
+export function matchSnsForType(pubType: PublicationTypes): SnType[] {
+  const sns: SnType[] = [];
 
   for (const sn in Object.keys(SN_SUPPORT_TYPES)) {
     if (SN_SUPPORT_TYPES[sn].indexOf(pubType) >= 0) {
-      sns.push(sn as SnTypes);
+      sns.push(sn as SnType);
     }
   }
 

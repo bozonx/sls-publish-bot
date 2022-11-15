@@ -8,14 +8,14 @@ import {makeContentLengthString} from './publishHelpers';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost';
 import {makeTagsString} from '../lib/common';
-import {SN_TYPES} from '../types/snTypes';
+import {SN_TYPES, SnType} from '../types/snTypes';
 
 
 export async function printItemDetails(
   blogName: string,
   tgChat: TgChat,
-  clearTexts: Record<SnTypes, string>,
-  resolvedSns: SnTypes[],
+  clearTexts: Record<SnType, string>,
+  resolvedSns: SnType[],
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent
 ) {
@@ -67,7 +67,7 @@ export async function printPublishConfirmData(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
-  clearTexts: Record<SnTypes, string>,
+  clearTexts: Record<SnType, string>,
   parsedPage?: RawPageContent
 ) {
   const footerStr = prepareFooter(

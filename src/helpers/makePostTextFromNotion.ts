@@ -4,11 +4,11 @@ import {prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
 import {makeTagsString} from '../lib/common';
-import {SN_TYPES} from '../types/snTypes';
+import {SN_TYPES, SnType} from '../types/snTypes';
 
 
 export function makePostTextFromNotion(
-  sns: SnTypes[],
+  sns: SnType[],
   pubType: PublicationTypes,
   useTgFooter: boolean,
   tgBlogConfig?: BlogTelegramConfig,
@@ -16,8 +16,8 @@ export function makePostTextFromNotion(
   postText?: string,
   instaTags?: string[],
   tgTags?: string[],
-): Record<SnTypes, string> {
-  const result = {} as Record<SnTypes, string>;
+): Record<SnType, string> {
+  const result = {} as Record<SnType, string>;
 
   for (const sn of sns) {
     result[sn] = (textBlocks)

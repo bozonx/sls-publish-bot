@@ -7,13 +7,13 @@ import {
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
 import {breakArray, removeItemFromArray} from '../lib/arrays';
-import {SnTypes} from '../types/ContentItem';
+import {SnType} from '../types/snTypes';
 
 
 const SN_TO_REMOVE_CB = 'SN_TO_REMOVE_CB|'
 
 
-export async function askSns(prevSns: string[], tgChat: TgChat, onDone: (tags: SnTypes[]) => void) {
+export async function askSns(prevSns: string[], tgChat: TgChat, onDone: (tags: SnType[]) => void) {
   const msg = tgChat.app.i18n.menu.selectSns;
   const buttons = [
     ...breakArray(prevSns.map((el) => {

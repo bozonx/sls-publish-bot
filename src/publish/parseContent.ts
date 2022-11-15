@@ -3,8 +3,7 @@ import ContentItem, {
   CONTENT_PROPS,
   CONTENT_STATUS,
   PUBLICATION_TYPES,
-  PublicationTypes,
-  SnTypes
+  PublicationTypes
 } from '../types/ContentItem';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import moment from 'moment';

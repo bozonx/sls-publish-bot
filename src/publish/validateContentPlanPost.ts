@@ -2,8 +2,8 @@ import _ from 'lodash';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 import {PublishMenuState} from '../askUser/askPublishMenu';
-import {PUBLICATION_TYPES, PublicationTypes, SnTypes} from '../types/ContentItem';
-import {SN_SUPPORT_TYPES} from '../types/snTypes';
+import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
+import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes';
 
 
 export default function validateContentPlanPost(state: PublishMenuState, tgChat: TgChat) {
@@ -38,11 +38,11 @@ export default function validateContentPlanPost(state: PublishMenuState, tgChat:
 
 
 export function validateContentPlanPostText(
-  clearTexts: Record<SnTypes, string>,
+  clearTexts: Record<SnType, string>,
   pubType: PublicationTypes,
   tgChat: TgChat
 ) {
-  for (const sn of Object.keys(clearTexts) as SnTypes[]) {
+  for (const sn of Object.keys(clearTexts) as SnType[]) {
     const clearText = clearTexts[sn];
     // if post2000 or announcement is bigger than 2048
     if ([

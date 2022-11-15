@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import {askContentToUse} from '../askUser/askContentToUse';
 import {prepareContentItem} from './parseContent';
-import ContentItem, {PUBLICATION_TYPES, SnTypes} from '../types/ContentItem';
+import ContentItem, {PUBLICATION_TYPES} from '../types/ContentItem';
 import {preparePage} from './parsePage';
 import {askPublishMenu, PublishMenuState} from '../askUser/askPublishMenu';
 import {loadNotPublished} from '../notionRequests/contentPlan';
@@ -18,6 +18,7 @@ import {WARN_SIGN} from '../types/constants';
 import validateContentPlanPost, {validateContentPlanPostText} from './validateContentPlanPost';
 import {makeClearTextFromNotion} from '../helpers/makeClearTextFromNotion';
 import {makePostTextFromNotion} from '../helpers/makePostTextFromNotion';
+import {SnType} from '../types/snTypes';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -35,7 +36,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
         await tgChat.steps.back();
       }
 
-      const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnTypes[];
+      const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnType[];
       const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
       const clearTexts = makeClearTextFromNotion(
         resolvedSns,
@@ -82,7 +83,7 @@ async function loadAndPreparePage(
 async function askMenu(
   blogName: string,
   tgChat: TgChat,
-  resolvedSns: SnTypes[],
+  resolvedSns: SnType[],
   parsedContentItem: ContentItem,
   parsedPage?: RawPageContent,
   mainImgUrl?: string,

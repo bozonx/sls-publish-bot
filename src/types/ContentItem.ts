@@ -57,6 +57,6 @@ export default interface ContentItem {
   relativePageId?: string;
   note: string;
   status: ContentStatus,
-  onlySn: SnTypes[],
+  onlySn: SnType[],
   type: PublicationTypes,
 }

@@ -7,7 +7,7 @@ import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import {NOTION_BLOCKS} from '../types/types';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 import ru from '../I18n/ru';
-import {SN_TYPES} from '../types/snTypes';
+import {SN_TYPES, SnType} from '../types/snTypes';
 
 
 /**
@@ -151,8 +151,8 @@ async function registerTaskTg(
     startTime,
     type: TASK_TYPES.postponePost,
     chatId,
-    blogUname: blogName,
-    sn: SN_TYPES.telegram,
+    //blogUname: blogName,
+    sn: SN_TYPES.telegram as 'telegram',
     forwardMessageId: msgId,
   };
 
@@ -161,7 +161,7 @@ async function registerTaskTg(
 
 export function makeContentLengthString(
   i18n: typeof ru,
-  clearTexts: Record<SnTypes, string>,
+  clearTexts: Record<SnType, string>,
   instaTags?: string[],
   tgFooter?: string,
 ): string {

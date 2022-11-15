@@ -15,14 +15,14 @@ import {printImage} from '../publish/printInfo';
 import {askPostText} from './askPostText';
 import {askTags} from './askTags';
 import {askSns} from './askSns';
-import {SN_TYPES} from '../types/snTypes';
+import {SN_TYPES, SnType} from '../types/snTypes';
 
 
 export interface PublishMenuState {
   pubType: PublicationTypes;
   useFooter: boolean;
   usePreview: boolean;
-  sns: SnTypes[];
+  sns: SnType[];
   selectedDate: string;
   selectedTime: string;
   instaTags?: string[];
@@ -246,7 +246,7 @@ async function handleButtons(
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
-      return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: SnTypes[]) => {
+      return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: SnType[]) => {
         state.sns = newSns;
         // print menu again
         return askPublishMenu(blogName, tgChat, state, onDone);
