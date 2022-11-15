@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import {askMainMenu, MENU_MANAGE_TELEGRAPH_CB, SITE_SELECTED_RESULT, TASKS_SELECTED_RESULT} from './askMainMenu';
+import {askMainMenu, MAIN_MENU_ACTION} from './askMainMenu';
 import {askBlogMenu} from './askBlogMenu';
 import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
@@ -9,13 +9,14 @@ import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMen
 
 export async function topLevelMenuStarter(tgChat: TgChat) {
   return askMainMenu(tgChat, tgChat.asyncCb(async (blogNameOrAction: string) => {
-    if (blogNameOrAction === SITE_SELECTED_RESULT) {
+    if (blogNameOrAction === MAIN_MENU_ACTION.SITE) {
       // site selected
-      return askSiteMenu(tgChat, () => {
-        // TODO: What to do on done???
-      });
+      return askSiteMenu(tgChat, tgChat.asyncCb(async  () => {
+        await tgChat.reply('Under construction');
+        await tgChat.steps.cancel();
+      }));
     }
-    else if (blogNameOrAction === TASKS_SELECTED_RESULT) {
+    else if (blogNameOrAction === MAIN_MENU_ACTION.TASKS) {
       return askTasksListMenu(
         tgChat,
         (taskId: string) => askTaskMenu(taskId, tgChat, () => {
@@ -23,7 +24,7 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
         })
       );
     }
-    else if (blogNameOrAction === MENU_MANAGE_TELEGRAPH_CB) {
+    else if (blogNameOrAction === MAIN_MENU_ACTION.TELEGRAPH) {
       return askTelegraphMenu(tgChat, (action: TelegraphMenu) => {
         switch (action) {
           case TELEGRAPH_MENU.LOGIN:

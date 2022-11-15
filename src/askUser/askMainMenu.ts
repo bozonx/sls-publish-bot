@@ -3,11 +3,12 @@ import {ChatEvents} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 
 
-const MENU_MANAGE_SITE = 'manage_site';
-const MENU_MANAGE_TASKS = 'manage_tasks';
-export const MENU_MANAGE_TELEGRAPH_CB = 'MENU_MANAGE_TELEGRAPH_CB';
-export const SITE_SELECTED_RESULT = 'SITE_SELECTED_RESULT';
-export const TASKS_SELECTED_RESULT = 'TASKS_SELECTED_RESULT';
+export const MAIN_MENU_ACTION = {
+  SITE: 'SITE',
+  TASKS: 'TASKS',
+  TELEGRAPH: 'TELEGRAPH',
+};
+
 const BLOG_MARKER = 'blog:';
 
 
@@ -20,19 +21,12 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
       tgChat.events.addListener(
         ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
-          if (queryData === MENU_MANAGE_SITE) {
-            onDone(SITE_SELECTED_RESULT);
-          }
-          else if (queryData === MENU_MANAGE_TASKS) {
-            onDone(TASKS_SELECTED_RESULT);
-          }
-          else if (queryData === MENU_MANAGE_TELEGRAPH_CB) {
-            onDone(MENU_MANAGE_TELEGRAPH_CB);
-          }
-          else if (queryData.indexOf(BLOG_MARKER) === 0) {
+          if (queryData.indexOf(BLOG_MARKER) === 0) {
             await blogSelected(queryData, tgChat, onDone);
           }
-          // else do nothing
+          else {
+            onDone(queryData);
+          }
         }
       )),
       ChatEvents.CALLBACK_QUERY
@@ -68,17 +62,17 @@ async function printInitialMessage(tgChat: TgChat): Promise<number> {
     [
       {
         text: tgChat.app.i18n.menu.selectManageSite,
-        callback_data: MENU_MANAGE_SITE,
+        callback_data: MAIN_MENU_ACTION.SITE,
       },
     ],
     [
       {
         text: tgChat.app.i18n.menu.selectManageTelegraph,
-        callback_data: MENU_MANAGE_TELEGRAPH_CB,
+        callback_data: MAIN_MENU_ACTION.TELEGRAPH,
       },
       {
         text: tgChat.app.i18n.menu.selectManageTasks,
-        callback_data: MENU_MANAGE_TASKS,
+        callback_data: MAIN_MENU_ACTION.TASKS,
       }
     ]
   ]);
