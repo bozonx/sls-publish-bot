@@ -7,7 +7,7 @@ import {SN_TYPES, SnType} from '../types/snTypes';
 import {PublicationType} from '../types/publicationType';
 
 
-export function makePostTextFromNotion(
+export function makeTgPostTextFromNotion(
   sns: SnType[],
   pubType: PublicationType,
   useTgFooter: boolean,

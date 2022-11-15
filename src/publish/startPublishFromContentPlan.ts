@@ -17,7 +17,7 @@ import {printImage, printItemDetails, printPublishConfirmData} from './printInfo
 import {WARN_SIGN} from '../types/constants';
 import validateContentPlanPost, {validateContentPlanPostText} from './validateContentPlanPost';
 import {makeClearTextFromNotion} from '../helpers/makeClearTextFromNotion';
-import {makePostTextFromNotion} from '../helpers/makePostTextFromNotion';
+import {makeTgPostTextFromNotion} from '../helpers/makeTgPostTextFromNotion';
 import {SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES} from '../types/publicationType';
 
@@ -130,7 +130,7 @@ async function askMenu(
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       try {
-        const postTexts = makePostTextFromNotion(
+        const postTexts = makeTgPostTextFromNotion(
           state.sns,
           state.pubType,
           state.useFooter,
