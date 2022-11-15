@@ -1,20 +1,13 @@
 import ExecConfig from './types/ExecConfig';
-import dotenv from 'dotenv';
 import {PUBLICATION_TYPES} from './types/publicationType';
 
 
-dotenv.config();
-
-
 const execConf: ExecConfig = {
-  botToken: process.env.BOT_TOKEN as any,
-  notionToken: process.env.NOTION_TOKEN as any,
-  telegraPhToken: process.env.TELEGRA_PH_TOKEN as any,
-  logChannelId: process.env.LOG_CHANNEL_ID as any,
   blogs: {
     test: {
       dispname: 'Тестовый канал',
       notionContentPlanDbId: '0ce847766986402f9d221852ded2b599',
+      // TODO: наверное надо на каждую соц сеть
       supportedTypes: [
         PUBLICATION_TYPES.article,
         PUBLICATION_TYPES.post1000,

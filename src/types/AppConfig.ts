@@ -12,4 +12,9 @@ export default interface AppConfig {
   telegram: {
     parseMode: 'MarkdownV2';
   },
+
+  botToken: string;
+  notionToken: string;
+  telegraPhToken: string;
+  logChannelId: number | string;
 }

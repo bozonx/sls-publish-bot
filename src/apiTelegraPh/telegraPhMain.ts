@@ -13,7 +13,7 @@ export default class TelegraPhMain {
 
   constructor(app: App) {
     this.app = app;
-    this.api = getApi({ token: this.app.config.telegraPhToken });
+    this.api = getApi({ token: this.app.appConfig.telegraPhToken });
 
 
   }

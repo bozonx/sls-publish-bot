@@ -16,7 +16,7 @@ export default class TgMain {
 
   constructor(app: App) {
     this.app = app;
-    this.bot = new Telegraf(this.app.config.botToken);
+    this.bot = new Telegraf(this.app.appConfig.botToken);
   }
 
 

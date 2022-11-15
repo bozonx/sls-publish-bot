@@ -25,14 +25,14 @@ export async function makeTaskTgPostOnlyText(
   // Print to log channel
   try {
     msgId = await publishTgPostNoImage(
-      tgChat.app.config.logChannelId,
+      tgChat.app.appConfig.logChannelId,
       postStr,
       tgChat,
       !allowPreview
     );
 
     await tgChat.app.tg.bot.telegram.sendMessage(
-      tgChat.app.config.logChannelId,
+      tgChat.app.appConfig.logChannelId,
       makePublishInfoMessage(isoDate, resolvedTime, blogName, tgChat),
       {
         reply_to_message_id: msgId,
@@ -59,14 +59,14 @@ export async function publishCopyTg(
   // Print to log channel
   try {
     msgId = await publishTgCopy(
-      tgChat.app.config.logChannelId,
+      tgChat.app.appConfig.logChannelId,
       tgChat.botChatId,
       messageId,
       tgChat
     );
 
     await tgChat.app.tg.bot.telegram.sendMessage(
-      tgChat.app.config.logChannelId,
+      tgChat.app.appConfig.logChannelId,
       makePublishInfoMessage(isoDate, resolvedTime, blogName, tgChat),
       {
         reply_to_message_id: msgId,
@@ -97,14 +97,14 @@ export async function makeTaskTgPostImage(
     // TODO: сделать поддержку нескольких картинок
 
     msgId = await publishTgImage(
-      tgChat.app.config.logChannelId,
+      tgChat.app.appConfig.logChannelId,
       imageUrl,
       tgChat,
       captionMd
     )
 
     await tgChat.app.tg.bot.telegram.sendMessage(
-      tgChat.app.config.logChannelId,
+      tgChat.app.appConfig.logChannelId,
       makePublishInfoMessage(isoDate, resolvedTime, blogName, tgChat),
       {
         reply_to_message_id: msgId,

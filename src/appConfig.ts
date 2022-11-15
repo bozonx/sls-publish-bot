@@ -11,13 +11,17 @@ const appConfig: AppConfig = {
   channelLogLevel: process.env.CHANNEL_LOG_LEVEL as any || LOG_LEVELS.info,
   botChatLogLevel: process.env.BOT_CHAT_LOG_LEVEL as any || LOG_LEVELS.info,
   stateDirPath: process.env.STATE_DIR_PATH as any || './_testState',
-  // TODO: use env var
-  utcOffset: 3,
+  utcOffset: Number(process.env.UTC_OFFSET || 0),
   // skip tasks which should be run earlier that specified value in seconds
-  skipTasksEarlierSec: (process.env.NODE_ENV === 'production') ? 300 : 1,
+  skipTasksEarlierSec: Number(process.env.SKIP_TASKS_EARLIER_SEC || 1),
   telegram: {
     parseMode: 'MarkdownV2',
   },
+
+  botToken: process.env.BOT_TOKEN as any,
+  notionToken: process.env.NOTION_TOKEN as any,
+  telegraPhToken: process.env.TELEGRA_PH_TOKEN as any,
+  logChannelId: process.env.LOG_CHANNEL_ID as any,
 }
 
 export default appConfig;

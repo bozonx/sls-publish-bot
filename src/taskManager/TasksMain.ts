@@ -205,7 +205,7 @@ export default class TasksMain {
 
     await this.app.tg.bot.telegram.copyMessage(
       task.chatId,
-      this.app.config.logChannelId,
+      this.app.appConfig.logChannelId,
       task.forwardMessageId,
     );
   }

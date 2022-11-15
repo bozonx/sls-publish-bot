@@ -23,7 +23,7 @@ export default class ChannelLogger implements Logger {
 
   log = async (message: string) => {
     this.app.tg.bot.telegram.sendMessage(
-      this.app.config.logChannelId,
+      this.app.appConfig.logChannelId,
       message,
       //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
@@ -36,7 +36,7 @@ export default class ChannelLogger implements Logger {
     if (!this.allowDebug) return
 
     this.app.tg.bot.telegram.sendMessage(
-      this.app.config.logChannelId,
+      this.app.appConfig.logChannelId,
       `DEBUG: ${message}`,
       //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
@@ -49,7 +49,7 @@ export default class ChannelLogger implements Logger {
     if (!this.allowInfo) return
 
     await this.app.tg.bot.telegram.sendMessage(
-      this.app.config.logChannelId,
+      this.app.appConfig.logChannelId,
       `INFO: ${message}`,
       //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
@@ -63,7 +63,7 @@ export default class ChannelLogger implements Logger {
     if (!this.allowWarn) return
 
     this.app.tg.bot.telegram.sendMessage(
-      this.app.config.logChannelId,
+      this.app.appConfig.logChannelId,
       `WARNING: ${message}`,
       //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )
@@ -74,7 +74,7 @@ export default class ChannelLogger implements Logger {
 
   error = (message: string | Error) => {
     this.app.tg.bot.telegram.sendMessage(
-      this.app.config.logChannelId,
+      this.app.appConfig.logChannelId,
       `ERROR: ${message}`,
       //{ parse_mode: this.app.appConfig.telegram.parseMode }
     )

@@ -29,7 +29,7 @@ export default class App {
     this.telegraPh = new TelegraPhMain(this);
     this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
     this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
-    this.notion = new NotionApi(this.config.notionToken)
+    this.notion = new NotionApi(this.appConfig.notionToken)
   }
 
 
