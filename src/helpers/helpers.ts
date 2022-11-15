@@ -8,6 +8,7 @@ import TgReplyButton from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {makeTagsString} from '../lib/common';
+import {SN_SUPPORT_TYPES} from '../types/supportedSnTypes';
 
 
 export function makeBaseState(): BaseState {
@@ -48,47 +49,57 @@ export function resolveSns(
 }
 
 export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {
-  if ([
-    PUBLICATION_TYPES.post1000,
-    PUBLICATION_TYPES.post2000,
-    PUBLICATION_TYPES.mem,
-    PUBLICATION_TYPES.photos,
-    PUBLICATION_TYPES.narrative,
-  ].includes(pubType)) {
-    return [
-      SN_TYPES.telegram,
-      SN_TYPES.instagram,
-      SN_TYPES.zen,
-      SN_TYPES.site,
-    ];
+  const sns: SnTypes[] = [];
+
+  for (const sn in Object.keys(SN_SUPPORT_TYPES)) {
+    if (SN_SUPPORT_TYPES[sn].indexOf(pubType) >= 0) {
+      sns.push(sn as SnTypes);
+    }
   }
-  if (pubType === PUBLICATION_TYPES.article) {
-    return [SN_TYPES.telegram, SN_TYPES.zen];
-  }
-  else if (pubType === PUBLICATION_TYPES.story) {
-    return [SN_TYPES.telegram, SN_TYPES.instagram];
-  }
-  else if (pubType === PUBLICATION_TYPES.announcement) {
-    return [SN_TYPES.telegram];
-  }
-  else if (pubType === PUBLICATION_TYPES.poll) {
-    return [SN_TYPES.telegram];
-  }
-  else if (pubType === PUBLICATION_TYPES.reels) {
-    return [
-      SN_TYPES.telegram,
-      SN_TYPES.instagram,
-      SN_TYPES.zen,
-      SN_TYPES.youtube,
-      SN_TYPES.tiktok,
-    ];
-  }
-  else if (pubType === PUBLICATION_TYPES.video) {
-    return [ SN_TYPES.youtube, SN_TYPES.zen ];
-  }
-  else {
-    throw new Error(`Unsupported publication type`);
-  }
+
+  return sns;
+
+  // if ([
+  //   PUBLICATION_TYPES.post1000,
+  //   PUBLICATION_TYPES.post2000,
+  //   PUBLICATION_TYPES.mem,
+  //   PUBLICATION_TYPES.photos,
+  //   PUBLICATION_TYPES.narrative,
+  // ].includes(pubType)) {
+  //   return [
+  //     SN_TYPES.telegram,
+  //     SN_TYPES.instagram,
+  //     SN_TYPES.zen,
+  //     SN_TYPES.site,
+  //   ];
+  // }
+  // if (pubType === PUBLICATION_TYPES.article) {
+  //   return [SN_TYPES.telegram, SN_TYPES.zen];
+  // }
+  // else if (pubType === PUBLICATION_TYPES.story) {
+  //   return [SN_TYPES.telegram, SN_TYPES.instagram];
+  // }
+  // else if (pubType === PUBLICATION_TYPES.announcement) {
+  //   return [SN_TYPES.telegram];
+  // }
+  // else if (pubType === PUBLICATION_TYPES.poll) {
+  //   return [SN_TYPES.telegram];
+  // }
+  // else if (pubType === PUBLICATION_TYPES.reels) {
+  //   return [
+  //     SN_TYPES.telegram,
+  //     SN_TYPES.instagram,
+  //     SN_TYPES.zen,
+  //     SN_TYPES.youtube,
+  //     SN_TYPES.tiktok,
+  //   ];
+  // }
+  // else if (pubType === PUBLICATION_TYPES.video) {
+  //   return [ SN_TYPES.youtube, SN_TYPES.zen ];
+  // }
+  // else {
+  //   throw new Error(`Unsupported publication type`);
+  // }
 }
 
 export async function addSimpleStep(
