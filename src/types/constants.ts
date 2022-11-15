@@ -15,21 +15,25 @@ export enum AppEvents {
   POLL
 }
 
+// TODO: need translate
 export const BACK_BTN = {
   text: 'Back',
   callback_data: BACK_BTN_CALLBACK,
 }
 
+// TODO: need translate
 export const CANCEL_BTN = {
   text: 'Cancel',
   callback_data: CANCEL_BTN_CALLBACK,
 }
 
+// TODO: need translate
 export const OK_BTN = {
   text: 'OK',
   callback_data: OK_BTN_CALLBACK,
 }
 
+// TODO: may be move to config ???
 export const OFTEN_USED_TIME = [
   '7:30', '8:00', '10:00', '11:00', '12:30', '13:00',
   '15:00', '16:00', '17:00', '18:00', '18:30', '19:00'

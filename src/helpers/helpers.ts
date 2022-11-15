@@ -8,7 +8,7 @@ import TgReplyButton from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {makeTagsString} from '../lib/common';
-import {SN_SUPPORT_TYPES} from '../types/supportedSnTypes';
+import {SN_SUPPORT_TYPES} from '../types/snTypes';
 
 
 export function makeBaseState(): BaseState {
