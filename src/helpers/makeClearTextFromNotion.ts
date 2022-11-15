@@ -1,4 +1,4 @@
-import {NOTION_BLOCKS} from '../types/types';
+import {NOTION_BLOCKS} from '../types/notion';
 import {clearMdText, prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {transformNotionToCleanText} from './transformNotionToCleanText';

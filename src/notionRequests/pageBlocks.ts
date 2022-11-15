@@ -1,6 +1,6 @@
 import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import TgChat from '../apiTg/TgChat';
-import {NOTION_BLOCKS} from '../types/types';
+import {NOTION_BLOCKS} from '../types/notion';
 
 
 export const ROOT_LEVEL_BLOCKS = '0';

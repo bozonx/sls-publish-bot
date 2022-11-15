@@ -1,5 +1,6 @@
 import {PUBLICATION_TYPES} from './publicationType';
 
+
 export type SnType = 'telegram'
   | 'instagram'
   | 'zen'

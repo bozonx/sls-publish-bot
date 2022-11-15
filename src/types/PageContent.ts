@@ -1,15 +1,5 @@
-import {NOTION_BLOCKS} from './types';
+import {NOTION_BLOCKS} from './notion';
 
-
-// props of notion page
-export const PAGE_CONTENT_PROPS = {
-  title: 'title',
-  announcement: 'announcement',
-  imageDescr: 'imageDescr',
-  instaTags: 'instaTags',
-  tgTags: 'tgTags',
-  image: 'image',
-}
 
 // TODO: rename
 export default interface RawPageContent {
@@ -19,4 +9,14 @@ export default interface RawPageContent {
   instaTags: string[];
   tgTags: string[];
   textBlocks: NOTION_BLOCKS;
+}
+
+// props of notion page
+export const PAGE_CONTENT_PROPS = {
+  title: 'title',
+  announcement: 'announcement',
+  imageDescr: 'imageDescr',
+  instaTags: 'instaTags',
+  tgTags: 'tgTags',
+  image: 'image',
 }

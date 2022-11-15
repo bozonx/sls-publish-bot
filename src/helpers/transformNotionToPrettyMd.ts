@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion';
-import {NOTION_BLOCKS} from '../types/types';
+import {NOTION_BLOCKS} from '../types/notion';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers';
 

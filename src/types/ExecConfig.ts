@@ -1,5 +1,3 @@
-// Development config
-
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
 
 
