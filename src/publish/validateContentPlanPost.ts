@@ -3,7 +3,7 @@ import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {PUBLICATION_TYPES, PublicationTypes, SnTypes} from '../types/ContentItem';
-import {SN_SUPPORT_TYPES} from '../types/SnTypes';
+import {SN_SUPPORT_TYPES} from '../types/supportedSnTypes';
 
 
 export default function validateContentPlanPost(state: PublishMenuState, tgChat: TgChat) {
