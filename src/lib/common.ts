@@ -27,3 +27,8 @@ export function makeTagsString(tags?: string[]): string {
 
   return tags.map((item) => `#${_.trimStart(_.trim(item), '#')}`).join(' ');
 }
+
+// TODO: доработать
+export function isValidUrl(url: string): boolean {
+  return Boolean(String(url).match(/^(https?|ftp)\:\/\//));
+}

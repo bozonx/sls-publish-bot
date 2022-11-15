@@ -3,7 +3,7 @@ import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
 import {AppEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 import {PhotoMessageEvent, TextMessageEvent} from '../types/MessageEvent';
-import {isValidUrl} from '../helpers/helpers';
+import {isValidUrl} from '../lib/common';
 
 
 export type AskPostMediaDone = (photoIdOrUrl: string[], caption?: string) => void
