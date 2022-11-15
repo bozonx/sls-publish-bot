@@ -1,25 +1,43 @@
 export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
   postponePost: 'postponePost',
   deletePost: 'deletePost',
+  pinPost: 'pinPost',
+  unpinPost: 'unpinPost',
+  finishPoll: 'finishPoll',
 };
 
 
 export type TaskTypes = 'postponePost'
-  | 'deletePost';
+  | 'deletePost'
+  | 'pinPost'
+  | 'unpinPost'
+  | 'finishPoll';
 
 
-export interface PostponePostTask extends TaskSnBase {
+export interface PostponePostTask extends TaskTgBase {
   forwardMessageId: number;
 }
 
-export interface DeletePostTask extends TaskSnBase {
+export interface DeletePostTask extends TaskTgBase {
   messageId: number;
 }
 
-interface TaskSnBase extends TaskItemBase {
+export interface PinPostTask extends TaskTgBase {
+  messageId: number;
+}
+
+export interface UnpinPostTask extends TaskTgBase {
+  messageId: number;
+}
+
+export interface FinishPollTask extends TaskTgBase {
+  messageId: number;
+}
+
+interface TaskTgBase extends TaskItemBase {
   chatId: number | string;
-  blogUname: string;
-  sn: string;
+  sn: 'telegram';
+  //blogUname: string;
 }
 
 interface TaskItemBase {
@@ -27,4 +45,8 @@ interface TaskItemBase {
   type: TaskTypes;
 }
 
-export type TaskItem = PostponePostTask | DeletePostTask;
+export type TaskItem = PostponePostTask
+  | DeletePostTask
+  | PinPostTask
+  | UnpinPostTask
+  | FinishPollTask;
