@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import {
-  AppEvents,
+  ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
@@ -38,7 +38,7 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
           if (queryData === BACK_BTN_CALLBACK) {
             return tgChat.steps.back();
@@ -53,11 +53,11 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
           }
         })
       ),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.TEXT,
+        ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
           const trimmed = _.trim(message.text);
 
@@ -84,7 +84,7 @@ export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => vo
           onDone(trimmed);
         })
       ),
-      AppEvents.TEXT
+      ChatEvents.TEXT
     ]);
   });
 

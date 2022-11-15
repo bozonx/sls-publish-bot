@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import {
-  AppEvents,
+  ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
@@ -25,7 +25,7 @@ export async function askPoll(tgChat: TgChat, onDone: (message: PollMessageEvent
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
           if (queryData === BACK_BTN_CALLBACK) {
             return tgChat.steps.back();
@@ -35,11 +35,11 @@ export async function askPoll(tgChat: TgChat, onDone: (message: PollMessageEvent
           }
         })
       ),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.POLL,
+        ChatEvents.POLL,
         tgChat.asyncCb(async (message: PollMessageEvent) => {
           if (message.poll.isClosed) {
             await tgChat.reply(tgChat.app.i18n.errors.pollIsClosed)
@@ -52,7 +52,7 @@ export async function askPoll(tgChat: TgChat, onDone: (message: PollMessageEvent
           onDone(message);
         })
       ),
-      AppEvents.TEXT
+      ChatEvents.TEXT
     ]);
   });
 

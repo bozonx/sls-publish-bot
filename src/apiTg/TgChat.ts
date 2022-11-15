@@ -1,6 +1,6 @@
 import BreadCrumbs from '../helpers/BreadCrumbs';
 import IndexedEventEmitter from '../lib/IndexedEventEmitter';
-import {AppEvents} from '../types/constants';
+import {ChatEvents} from '../types/constants';
 import App from '../App';
 import TgReplyButton from '../types/TgReplyButton';
 import BaseState from '../types/BaseState';
@@ -72,23 +72,23 @@ export default class TgChat {
       return;
     }
 
-    this.events.emit(AppEvents.CALLBACK_QUERY, queryData);
+    this.events.emit(ChatEvents.CALLBACK_QUERY, queryData);
   }
 
   handleIncomeTextEvent(msgEvent: TextMessageEvent) {
-    this.events.emit(AppEvents.TEXT, msgEvent);
+    this.events.emit(ChatEvents.TEXT, msgEvent);
   }
 
   handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
-    this.events.emit(AppEvents.PHOTO, msgEvent);
+    this.events.emit(ChatEvents.PHOTO, msgEvent);
   }
 
   handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
-    this.events.emit(AppEvents.MEDIA_GROUP_ITEM, msgEvent);
+    this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
   }
 
   handleIncomePollEvent(msgEvent: PollMessageEvent) {
-    this.events.emit(AppEvents.POLL, msgEvent);
+    this.events.emit(ChatEvents.POLL, msgEvent);
   }
 
   async reply(

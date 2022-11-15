@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
-import {AppEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
+import {ChatEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 
 
 export const TASK_ID_PREFIX = 'task:';
@@ -13,7 +13,7 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) 
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
             if (queryData === CANCEL_BTN_CALLBACK) {
               return tgChat.steps.cancel();
@@ -26,7 +26,7 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) 
             // else do nothing
           }
         )),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
   });
 }

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import TgChat from '../apiTg/TgChat';
 import {
-  AppEvents,
+  ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
@@ -49,14 +49,14 @@ export async function askPubDate(tgChat: TgChat, onDone: (selectedDateString: st
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.TEXT,
+        ChatEvents.TEXT,
         tgChat.asyncCb( (m) => incomeText(m, tgChat, onDone))
       ),
-      AppEvents.TEXT
+      ChatEvents.TEXT
     ]);
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
           let addDays = -1;
 
@@ -84,7 +84,7 @@ export async function askPubDate(tgChat: TgChat, onDone: (selectedDateString: st
           if (addDays !== -1) await pressedBtn(addDays, tgChat, onDone);
         })
       ),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
   });
 }

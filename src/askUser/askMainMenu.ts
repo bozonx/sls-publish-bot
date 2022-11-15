@@ -1,5 +1,5 @@
 import BaseState from '../types/BaseState';
-import {AppEvents} from '../types/constants';
+import {ChatEvents} from '../types/constants';
 import TgChat from '../apiTg/TgChat';
 
 
@@ -18,7 +18,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
           if (queryData === MENU_MANAGE_SITE) {
             onDone(SITE_SELECTED_RESULT);
@@ -35,7 +35,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
           // else do nothing
         }
       )),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
   });
 }

@@ -7,7 +7,7 @@ export const TELEGRAM_MAX_CAPTION = 1024;
 export const TELEGRAM_MAX_POST = 4096;
 export const WARN_SIGN = '⚠';
 
-export enum AppEvents {
+export enum ChatEvents {
   CALLBACK_QUERY,
   TEXT,
   PHOTO,

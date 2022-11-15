@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
-import {AppEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
+import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 import {PhotoMessageEvent, TextMessageEvent} from '../types/MessageEvent';
 import {isValidUrl} from '../lib/common';
 
@@ -43,7 +43,7 @@ export async function askPostMedia(
     // listen to photo
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.PHOTO,
+        ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
 
           // TODO: если их несколько ????
@@ -51,25 +51,25 @@ export async function askPostMedia(
           return onDone([photoMsg.photo.fileId], photoMsg.caption);
         })
       ),
-      AppEvents.PHOTO
+      ChatEvents.PHOTO
     ]);
     // listen to buttons
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (cbData: string) => handleButtons(cbData, tgChat, onDone))
       ),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
     // listen to url
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.TEXT,
+        ChatEvents.TEXT,
         tgChat.asyncCb(
           async (textMsg: TextMessageEvent) => handleText(textMsg, tgChat, onDone)
         )
       ),
-      AppEvents.TEXT
+      ChatEvents.TEXT
     ]);
   });
 }

@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import {
-  AppEvents,
+  ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
@@ -40,7 +40,7 @@ export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags:
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
           if (queryData === BACK_BTN_CALLBACK) {
             return tgChat.steps.back();
@@ -55,11 +55,11 @@ export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags:
           }
         })
       ),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.TEXT,
+        ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
           const trimmed = _.trim(message.text);
           const tagsArr = trimmed.split(' ')
@@ -74,7 +74,7 @@ export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags:
           onDone(tagsArr);
         })
       ),
-      AppEvents.TEXT
+      ChatEvents.TEXT
     ]);
   });
 

@@ -1,8 +1,7 @@
+import _ from 'lodash';
 import { Context, Telegraf } from 'telegraf';
 import App from '../App';
 import TgChat from './TgChat';
-import MessageEvent, {PhotoMessageEvent, TextMessageEvent} from '../types/MessageEvent';
-import _ from 'lodash';
 import {PhotoSize} from 'typegram/message';
 import MessageEventBase from '../types/MessageEvent';
 
@@ -48,6 +47,165 @@ export default class TgMain {
 
     this.bot.stop(reason);
   }
+
+  private addListeners() {
+    this.bot.on('callback_query', (ctx) => {
+      if (!ctx.chat?.id) {
+        this.app.consoleLog.warn('No chat id in callback_query');
+
+        return;
+      }
+      else if (!this.chats[ctx.chat.id]) {
+        ctx.reply(this.app.i18n.errors.notRegisteredChat);
+        //this.app.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
+
+        return;
+      }
+
+      this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
+    });
+
+    this.bot.on('message', (ctx) => {
+
+      const message = ctx.update.message;
+
+      if (!message.chat?.id) {
+        this.app.consoleLog.warn('No chat id in message event');
+
+        return;
+      }
+      if (!this.chats[message.chat.id]) {
+        ctx.reply(this.app.i18n.errors.notRegisteredChat);
+        //this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
+
+        return;
+      }
+
+      const msgBase: MessageEventBase = {
+        messageId: message.message_id,
+        fromId: message.from.id,
+        chatId: message.chat.id,
+        date: message.date,
+      }
+
+      if ((message as any).text) {
+        this.chats[ctx.chat.id].handleIncomeTextEvent({
+          ...msgBase,
+          text: (message as any).text,
+        });
+      }
+      else if ((message as any).photo) {
+        const lastPhoto = _.last((message as any).photo) as PhotoSize;
+
+        this.chats[ctx.chat.id].handleIncomePhotoEvent({
+          ...msgBase,
+          caption: (message as any).caption,
+          photo: {
+            fileId: lastPhoto.file_id,
+            fileUniqueId: lastPhoto.file_unique_id,
+            fileSize: lastPhoto.file_size,
+            width: lastPhoto.width,
+            height: lastPhoto.height,
+          }
+        });
+      }
+      else if ((message as any).media_group_id) {
+        const lastPhoto = _.last((message as any).photo) as PhotoSize;
+
+        this.chats[ctx.chat.id].handleIncomeMediaGroupItemEvent({
+          ...msgBase,
+          caption: (message as any).caption,
+          mediaGroupId: (message as any).media_group_id,
+          photo: {
+            fileId: lastPhoto.file_id,
+            fileUniqueId: lastPhoto.file_unique_id,
+            fileSize: lastPhoto.file_size,
+            width: lastPhoto.width,
+            height: lastPhoto.height,
+          }
+        });
+      }
+      else if ((message as any).poll) {
+        this.chats[ctx.chat.id].handleIncomePollEvent({
+          ...msgBase,
+          poll: {
+            //id: (message as any).poll.id,
+            question: (message as any).poll.question,
+            options: (message as any).poll.options.map((el: {text: string}) => el.text),
+            isClosed: (message as any).poll.is_closed,
+            isAnonymous: (message as any).poll.is_anonymous,
+            type: (message as any).poll.type,
+            multipleAnswers: (message as any).poll.allows_multiple_answers,
+            correctOptionId: (message as any).poll.correct_option_id,
+          }
+        });
+      }
+    });
+  }
+
+}
+
+
+
+// this.bot.on('text', (ctx) => {
+//   const message = ctx.update.message;
+//
+//   if (!message.chat.id) {
+//     this.app.consoleLog.warn('No chat id in text event');
+//
+//     return;
+//   }
+//   if (!this.chats[message.chat.id]) {
+//     this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
+//
+//     return;
+//   }
+//
+//   const msgEvent: TextMessageEvent = {
+//     messageId: message.message_id,
+//     fromId: message.from.id,
+//     chatId: message.chat.id,
+//     date: message.date,
+//     text: message.text,
+//   };
+//
+//   this.chats[ctx.chat.id].handleIncomeTextEvent(msgEvent);
+// })
+
+// this.bot.on('photo', (ctx) => {
+//   const message = ctx.update.message;
+//
+//   if (!message.chat.id) {
+//     this.app.consoleLog.warn('No chat id in photo event');
+//
+//     return;
+//   }
+//   if (!this.chats[message.chat.id]) {
+//     this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
+//
+//     return;
+//   }
+//
+//   const lastPhoto: PhotoSize = message.photo[message.photo.length - 1];
+//   const msgEvent: PhotoMessageEvent = {
+//     messageId: message.message_id,
+//     fromId: message.from.id,
+//     chatId: message.chat.id,
+//     date: message.date,
+//     caption: message.caption,
+//     photo: {
+//       fileId: lastPhoto.file_id,
+//       fileUniqueId: lastPhoto.file_unique_id,
+//       fileSize: lastPhoto.file_size,
+//       width: lastPhoto.width,
+//       height: lastPhoto.height,
+//     }
+//   };
+//
+//   this.chats[ctx.chat.id].handleIncomePhotoEvent(msgEvent);
+//
+//   console.log(333, ctx.update.message)
+// })
 
 /*
 forwarded
@@ -248,160 +406,3 @@ poll
 
 
  */
-
-  private addListeners() {
-    this.bot.on('callback_query', (ctx) => {
-      if (!ctx.chat?.id) {
-        this.app.consoleLog.warn('No chat id in callback_query');
-
-        return;
-      }
-      else if (!this.chats[ctx.chat.id]) {
-        ctx.reply(this.app.i18n.errors.notRegisteredChat);
-        //this.app.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
-
-        return;
-      }
-
-      this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
-    });
-
-    // this.bot.on('text', (ctx) => {
-    //   const message = ctx.update.message;
-    //
-    //   if (!message.chat.id) {
-    //     this.app.consoleLog.warn('No chat id in text event');
-    //
-    //     return;
-    //   }
-    //   if (!this.chats[message.chat.id]) {
-    //     this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
-    //
-    //     return;
-    //   }
-    //
-    //   const msgEvent: TextMessageEvent = {
-    //     messageId: message.message_id,
-    //     fromId: message.from.id,
-    //     chatId: message.chat.id,
-    //     date: message.date,
-    //     text: message.text,
-    //   };
-    //
-    //   this.chats[ctx.chat.id].handleIncomeTextEvent(msgEvent);
-    // })
-
-    // this.bot.on('photo', (ctx) => {
-    //   const message = ctx.update.message;
-    //
-    //   if (!message.chat.id) {
-    //     this.app.consoleLog.warn('No chat id in photo event');
-    //
-    //     return;
-    //   }
-    //   if (!this.chats[message.chat.id]) {
-    //     this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
-    //
-    //     return;
-    //   }
-    //
-    //   const lastPhoto: PhotoSize = message.photo[message.photo.length - 1];
-    //   const msgEvent: PhotoMessageEvent = {
-    //     messageId: message.message_id,
-    //     fromId: message.from.id,
-    //     chatId: message.chat.id,
-    //     date: message.date,
-    //     caption: message.caption,
-    //     photo: {
-    //       fileId: lastPhoto.file_id,
-    //       fileUniqueId: lastPhoto.file_unique_id,
-    //       fileSize: lastPhoto.file_size,
-    //       width: lastPhoto.width,
-    //       height: lastPhoto.height,
-    //     }
-    //   };
-    //
-    //   this.chats[ctx.chat.id].handleIncomePhotoEvent(msgEvent);
-    //
-    //   console.log(333, ctx.update.message)
-    // })
-
-    this.bot.on('message', (ctx) => {
-
-      const message = ctx.update.message;
-
-      if (!message.chat?.id) {
-        this.app.consoleLog.warn('No chat id in message event');
-
-        return;
-      }
-      if (!this.chats[message.chat.id]) {
-        ctx.reply(this.app.i18n.errors.notRegisteredChat);
-        //this.app.consoleLog.error(`No chat id (${message.chat.id}) for handling income message`)
-
-        return;
-      }
-
-      const msgBase: MessageEventBase = {
-        messageId: message.message_id,
-        fromId: message.from.id,
-        chatId: message.chat.id,
-        date: message.date,
-      }
-
-      if ((message as any).text) {
-        this.chats[ctx.chat.id].handleIncomeTextEvent({
-          ...msgBase,
-          text: (message as any).text,
-        });
-      }
-      else if ((message as any).photo) {
-        const lastPhoto = _.last((message as any).photo) as PhotoSize;
-
-        this.chats[ctx.chat.id].handleIncomePhotoEvent({
-          ...msgBase,
-          caption: (message as any).caption,
-          photo: {
-            fileId: lastPhoto.file_id,
-            fileUniqueId: lastPhoto.file_unique_id,
-            fileSize: lastPhoto.file_size,
-            width: lastPhoto.width,
-            height: lastPhoto.height,
-          }
-        });
-      }
-      else if ((message as any).media_group_id) {
-        const lastPhoto = _.last((message as any).photo) as PhotoSize;
-
-        this.chats[ctx.chat.id].handleIncomeMediaGroupItemEvent({
-          ...msgBase,
-          caption: (message as any).caption,
-          mediaGroupId: (message as any).media_group_id,
-          photo: {
-            fileId: lastPhoto.file_id,
-            fileUniqueId: lastPhoto.file_unique_id,
-            fileSize: lastPhoto.file_size,
-            width: lastPhoto.width,
-            height: lastPhoto.height,
-          }
-        });
-      }
-      else if ((message as any).poll) {
-        this.chats[ctx.chat.id].handleIncomePollEvent({
-          ...msgBase,
-          poll: {
-            //id: (message as any).poll.id,
-            question: (message as any).poll.question,
-            options: (message as any).poll.options.map((el: {text: string}) => el.text),
-            isClosed: (message as any).poll.is_closed,
-            isAnonymous: (message as any).poll.is_anonymous,
-            type: (message as any).poll.type,
-            multipleAnswers: (message as any).poll.allows_multiple_answers,
-            correctOptionId: (message as any).poll.correct_option_id,
-          }
-        });
-      }
-    });
-  }
-
-}

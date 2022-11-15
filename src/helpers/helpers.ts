@@ -2,7 +2,7 @@ import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import moment from 'moment';
 import TgChat from '../apiTg/TgChat';
-import {AppEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
+import {ChatEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {BlogTelegramConfig} from '../types/ExecConfig';
@@ -72,10 +72,10 @@ export async function addSimpleStep(
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => cb(queryData))
       ),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
   });
 }

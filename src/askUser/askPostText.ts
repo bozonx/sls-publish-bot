@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import {AppEvents, BACK_BTN, CANCEL_BTN} from '../types/constants';
+import {ChatEvents, BACK_BTN, CANCEL_BTN} from '../types/constants';
 import BaseState from '../types/BaseState';
 import {TextMessageEvent} from '../types/MessageEvent';
 
@@ -31,12 +31,12 @@ export async function askPostText(
     // listen to photo
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.TEXT,
+        ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
           onDone((textMsg.text === '0') ? undefined : textMsg.text);
         })
       ),
-      AppEvents.TEXT
+      ChatEvents.TEXT
     ]);
   });
 }

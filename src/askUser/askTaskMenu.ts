@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
-import {AppEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
+import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 
 
 const DELETE_TASK_ACTION = 'delete_task';
@@ -14,7 +14,7 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
-        AppEvents.CALLBACK_QUERY,
+        ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(async (queryData: string) => {
             if (queryData === CANCEL_BTN_CALLBACK) {
               return tgChat.steps.cancel();
@@ -44,7 +44,7 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
             // else do nothing
           }
         )),
-      AppEvents.CALLBACK_QUERY
+      ChatEvents.CALLBACK_QUERY
     ]);
   });
 }
