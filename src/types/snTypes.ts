@@ -1,5 +1,21 @@
-import {PUBLICATION_TYPES, SN_TYPES} from './ContentItem';
+import {PUBLICATION_TYPES} from './ContentItem';
 
+
+export type SnTypes = 'telegram'
+  | 'instagram'
+  | 'zen'
+  | 'site'
+  | 'youtube'
+  | 'tiktok';
+
+export const SN_TYPES: Record<SnTypes, SnTypes> = {
+  telegram: 'telegram',
+  instagram: 'instagram',
+  zen: 'zen',
+  site: 'site',
+  tiktok: 'tiktok',
+  youtube: 'youtube',
+}
 
 export const SN_SUPPORT_TYPES = {
   [SN_TYPES.instagram]: [

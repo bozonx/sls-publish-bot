@@ -8,13 +8,14 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
-import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import {askSelectTime} from './askSelectTime';
 import {askPostMedia} from './askPostMedia';
 import {printImage} from '../publish/printInfo';
 import {askPostText} from './askPostText';
 import {askTags} from './askTags';
 import {askSns} from './askSns';
+import {SN_TYPES} from '../types/snTypes';
 
 
 export interface PublishMenuState {

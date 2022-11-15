@@ -1,13 +1,13 @@
 import moment from 'moment';
 import {publishTgCopy, publishTgImage, publishTgPostNoImage} from '../apiTg/publishTgPost';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
-import {SN_TYPES, SnTypes} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
 import {makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import {NOTION_BLOCKS} from '../types/types';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 import ru from '../I18n/ru';
+import {SN_TYPES} from '../types/snTypes';
 
 
 /**

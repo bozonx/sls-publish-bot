@@ -1,8 +1,9 @@
 import TgChat from '../apiTg/TgChat';
-import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import {publishArticleTg} from './publishArticleTg';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
+import {SN_TYPES} from '../types/snTypes';
 
 
 export async function publishFork(

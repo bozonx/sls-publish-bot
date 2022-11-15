@@ -22,15 +22,6 @@ export const PUBLICATION_TYPES: Record<PublicationTypes, PublicationTypes> = {
   video: 'video',
 }
 
-export const SN_TYPES: Record<SnTypes, SnTypes> = {
-  telegram: 'telegram',
-  instagram: 'instagram',
-  zen: 'zen',
-  site: 'site',
-  tiktok: 'tiktok',
-  youtube: 'youtube',
-}
-
 export const CONTENT_STATUS = {
   to_write: 'to_write',
   to_edit: 'to_edit',
@@ -56,13 +47,6 @@ export type ContentStatus = 'to_write'
   | 'to_correct'
   | 'to_publish'
   | 'published';
-
-export type SnTypes = 'telegram'
-  | 'instagram'
-  | 'zen'
-  | 'site'
-  | 'youtube'
-  | 'tiktok';
 
 export default interface ContentItem {
   // date in ISO format

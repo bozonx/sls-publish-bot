@@ -1,7 +1,7 @@
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import moment from 'moment';
-import {PUBLICATION_TYPES, PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
+import {PUBLICATION_TYPES, PublicationTypes} from '../types/ContentItem';
 import TgChat from '../apiTg/TgChat';
 import {AppEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import TgReplyButton from '../types/TgReplyButton';

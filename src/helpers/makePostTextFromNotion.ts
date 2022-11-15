@@ -1,9 +1,10 @@
-import {PublicationTypes, SN_TYPES, SnTypes} from '../types/ContentItem';
+import {PublicationTypes} from '../types/ContentItem';
 import {NOTION_BLOCKS} from '../types/types';
 import {prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
 import {makeTagsString} from '../lib/common';
+import {SN_TYPES} from '../types/snTypes';
 
 
 export function makePostTextFromNotion(
