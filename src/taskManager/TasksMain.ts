@@ -1,9 +1,9 @@
 import App from '../App';
 import {TaskItem, TASK_TYPES, PostponePostTask, DeletePostTask} from '../types/TaskItem';
-import {calcSecondsToDate} from '../helpers/helpers';
 import * as fs from 'fs/promises';
 import path from 'path';
 import {clearTimeout} from 'timers';
+import {calcSecondsToDate} from '../lib/common';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';

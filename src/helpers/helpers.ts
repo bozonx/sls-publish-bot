@@ -17,7 +17,6 @@ export function makeBaseState(): BaseState {
   };
 }
 
-
 export function makeFullNotionLink(pageId: string): string {
   return `https://www.notion.so/${pageId}`;
 }
@@ -26,32 +25,26 @@ export function makeTelegraPhUrl(tgPath: string): string {
   return `https://telegra.ph/${tgPath}`;
 }
 
-
-
-// export function makeFullNotionLink(internalLink: string): string {
-//   if (internalLink.indexOf('http') === 0) return internalLink;
-//
-//   return `https://www.notion.so/${_.trimStart(internalLink, '/')}`
-// }
-
 /**
  * Match blog sns, onlySns and sn for specific publication type
  */
 export function resolveSns(
-  channelSns: SnTypes[],
+  blogSns: SnTypes[],
   onlySns: SnTypes[],
   pubType: PublicationTypes
 ): SnTypes[] {
-  let preSns = []
+  let filteredSns = [];
 
   if (onlySns.length) {
-    preSns = onlySns;
+    // user specified only that sns - we should use only them
+    filteredSns = onlySns;
   }
   else {
-    preSns = matchSnsForType(pubType);
+    // filter that sns which is compared with publication type
+    filteredSns = matchSnsForType(pubType);
   }
-
-  return _.intersection(channelSns, preSns);
+  // compare all the blogs sns with filtered
+  return _.intersection(blogSns, filteredSns);
 }
 
 export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {
@@ -98,17 +91,6 @@ export function matchSnsForType(pubType: PublicationTypes): SnTypes[] {
   }
 }
 
-/**
- * Calculate seconds from now to specified date.
- * The number can be less than 0!
- */
-export function calcSecondsToDate(toDateStr: string, utcOffset: number): number {
-  const now = moment().utcOffset(utcOffset);
-  const toDate = moment(toDateStr).utcOffset(utcOffset);
-
-  return toDate.unix() - now.unix();
-}
-
 export async function addSimpleStep(
   tgChat: TgChat,
   msg: string,
@@ -127,15 +109,6 @@ export async function addSimpleStep(
       AppEvents.CALLBACK_QUERY
     ]);
   });
-}
-
-export function validateTime(rawStr: string) {
-  if (
-    rawStr.indexOf(':') < 0
-    || !moment(`2022-01-01T${rawStr}`).isValid()
-  ) {
-    throw new Error(`Incorrect time`);
-  }
 }
 
 // prepareFooterPost

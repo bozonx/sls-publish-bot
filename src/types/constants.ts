@@ -1,5 +1,3 @@
-import {PUBLICATION_TYPES} from './ContentItem';
-
 export const BACK_BTN_CALLBACK = 'BACK_BTN_CALLBACK';
 export const CANCEL_BTN_CALLBACK = 'CANCEL_BTN_CALLBACK';
 export const OK_BTN_CALLBACK = 'OK';
@@ -11,7 +9,6 @@ export const WARN_SIGN = '⚠';
 
 export enum AppEvents {
   CALLBACK_QUERY,
-  //MESSAGE,
   TEXT,
   PHOTO,
   MEDIA_GROUP_ITEM,

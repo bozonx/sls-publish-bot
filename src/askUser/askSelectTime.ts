@@ -8,10 +8,10 @@ import {
 } from '../types/constants';
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
-import {validateTime} from '../helpers/helpers';
 import {TextMessageEvent} from '../types/MessageEvent';
 import {breakArray} from '../lib/arrays';
 import TgReplyButton from '../types/TgReplyButton';
+import {validateTime} from '../lib/common';
 
 
 const TIME_PRESET_CB = 'TIME_PRESET_CB|'

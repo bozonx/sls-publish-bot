@@ -1,5 +1,6 @@
 import {LOG_LEVELS, LogLevel} from '../types/Logger';
 import _ from 'lodash';
+import moment from 'moment/moment';
 
 
 export function isPromise(toCheck: any): boolean {
@@ -31,4 +32,24 @@ export function makeTagsString(tags?: string[]): string {
 // TODO: доработать
 export function isValidUrl(url: string): boolean {
   return Boolean(String(url).match(/^(https?|ftp)\:\/\//));
+}
+
+/**
+ * Calculate seconds from now to specified date.
+ * The number can be less than 0!
+ */
+export function calcSecondsToDate(toDateStr: string, utcOffset: number): number {
+  const now = moment().utcOffset(utcOffset);
+  const toDate = moment(toDateStr).utcOffset(utcOffset);
+
+  return toDate.unix() - now.unix();
+}
+
+export function validateTime(rawStr: string) {
+  if (
+    rawStr.indexOf(':') < 0
+    || !moment(`2022-01-01T${rawStr}`).isValid()
+  ) {
+    throw new Error(`Incorrect time`);
+  }
 }
