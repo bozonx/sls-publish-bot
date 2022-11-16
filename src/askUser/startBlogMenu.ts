@@ -46,7 +46,7 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
           await askSelectTime(tgChat, tgChat.asyncCb(async (time: string) => {
             // TODO: ask channel to publish
             await askCost(tgChat, tgChat.asyncCb(async (cost: number, currency: CurrencyTicker) => {
-              // TODO: cost
+              console.log(1111, item, isoDate, time, cost, currency)
               // TODO: type 1/24 etc
               // TODO: register buying
             }));

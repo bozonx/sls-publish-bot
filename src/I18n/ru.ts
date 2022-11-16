@@ -54,7 +54,7 @@ const dict = {
     prevTags: 'Предыдущие тэги: ',
     prevSns: 'Предыдущие соц сети: ',
     selectCreatives: 'Выберете креатив',
-    inputCost: 'Введите стоимость',
+    inputCost: 'Введите стоимость, только цифры. Валюта - рубли.',
   },
   buttons: {
     postMediaSkip: 'Без картинки',
@@ -157,6 +157,7 @@ const dict = {
     bigCaption: `Подпись картинки превышает ${TELEGRAM_MAX_CAPTION} символа`,
     bigPost: `Пост превышает ${TELEGRAM_MAX_POST} символа`,
     noTitle: 'Нет заголовка',
+    invalidNumber: 'Не валидное число',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
