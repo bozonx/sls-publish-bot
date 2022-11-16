@@ -7,7 +7,7 @@ const execConf: ExecConfig = {
     test: {
       dispname: 'Тестовый канал',
       notionContentPlanDbId: '0ce847766986402f9d221852ded2b599',
-      notionReativedDbId: '0c83f31f420f41748752bd0628d723e4',
+      notionCreativeDbId: '0c83f31f420f41748752bd0628d723e4',
       // TODO: наверное надо на каждую соц сеть
       supportedTypes: [
         PUBLICATION_TYPES.article,
