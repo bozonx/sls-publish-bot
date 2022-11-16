@@ -12,8 +12,6 @@ import {TextMessageEvent} from '../types/MessageEvent';
 import {CURRENCY_TICKERS, CurrencyTicker} from '../types/types';
 
 
-//const TIME_PRESET_CB = 'TIME_PRESET_CB|'
-
 //export const ASK_COST_CURRENCY = 'ASK_COST_CURRENCY:';
 
 
@@ -55,6 +53,7 @@ export async function askCost(tgChat: TgChat, onDone: (cost: number, currency: C
         ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
           const num = Number(_.trim(message.text));
+          const currency = CURRENCY_TICKERS.RUB;
 
           if (Number.isNaN(num)) {
             await tgChat.reply(tgChat.app.i18n.errors.invalidNumber);
@@ -62,7 +61,9 @@ export async function askCost(tgChat: TgChat, onDone: (cost: number, currency: C
             return;
           }
 
-          onDone(num, CURRENCY_TICKERS.RUB);
+          await tgChat.reply(tgChat.app.i18n.message.costResult + num + ' ' + currency);
+
+          onDone(num, currency);
         })
       ),
       ChatEvents.TEXT
