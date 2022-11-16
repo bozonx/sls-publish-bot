@@ -43,9 +43,6 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
     }
     else if (action === BLOG_MENU_ACTIONS.BUY_AD) {
       await askCreative(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
-
-        // TODO: загрузить и показать креатив
-
         await askPubDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
           const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
 
@@ -53,17 +50,17 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
             tgChat.app.i18n.commonPhrases.selectedOnlyDate
             + `${isoDate} ${utcOffset}`
           );
-          // TODO: писать результат
+
           await askSelectTime(tgChat, tgChat.asyncCb(async (time: string) => {
             await tgChat.reply(
-              tgChat.app.i18n.commonPhrases.selectedOnlyDate
+              tgChat.app.i18n.commonPhrases.pubDate
               + `${isoDate} ${time} ${utcOffset}`
             );
 
             // TODO: ask channel to publish
             await askCost(tgChat, tgChat.asyncCb(async (cost: number, currency: CurrencyTicker) => {
               console.log(1111, item, isoDate, time, cost, currency)
-              // TODO: type 1/24 etc
+              // TODO: type 1/24 etc - если выбран custom - то указать время удаления
               // TODO: register buying - add item to creatives table
             }));
           }));
