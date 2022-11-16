@@ -3,6 +3,8 @@ import {startPublishFromContentPlan} from '../publish/startPublishFromContentPla
 import {startPublishCustomPostTg} from '../publish/startPublishCustomPostTg';
 import {startPublishPollTg} from '../publish/startPublishPollTg';
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu';
+import {startRegisterAdPlaceSell} from './startRegisterAdPlaceSell';
+import {askCreative} from './askCreative';
 
 
 export async function startBlogMenu(blogName: string, tgChat: TgChat) {
@@ -34,12 +36,13 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       await startPublishCustomPostTg(blogName, tgChat, footer);
     }
     else if (action === BLOG_MENU_ACTIONS.BUY_AD) {
-      // TODO: show creative
-      // TODO: register buying
+      await askCreative(blogName, tgChat, () => {
+        // TODO: register buying
+      });
     }
     else if (action === BLOG_MENU_ACTIONS.SELL_AD_PLACE) {
       await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
-      // TODO: register ad
+      await startRegisterAdPlaceSell(blogName, tgChat);
     }
   }));
 }
