@@ -36,6 +36,7 @@ function makeContentPlanQuery(currentDate: string): Record<string, any> {
   // TODO: фильтровать поддерживаемые типы канала
 
   return {
+    // TODO: надо выгребать вообще всё
     page_size: DB_DEFAULT_PAGE_SIZE,
     filter: {
       and: [

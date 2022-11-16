@@ -1,6 +1,5 @@
 import TgChat from '../apiTg/TgChat';
 import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
-import {compactUndefined} from '../lib/arrays';
 import {addSimpleStep, compactButtons} from '../helpers/helpers';
 
 

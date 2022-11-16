@@ -17,6 +17,7 @@ export interface BlogConfig {
   // name for displaying in menu
   dispname: string;
   notionContentPlanDbId: string;
+  notionReativedDbId: string;
   // some PUBLICATION_TYPES
   supportedTypes: string[];
   sn: {
