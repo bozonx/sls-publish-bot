@@ -9,6 +9,7 @@ import {BlogTelegramConfig} from '../types/ExecConfig';
 import {makeTagsString} from '../lib/common';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
+import {compactUndefined} from '../lib/arrays';
 
 
 export function makeBaseState(): BaseState {
@@ -119,6 +120,12 @@ export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = tr
   return _.template(tmpl)({
     TAGS: mdFormat.escape(makeTagsString(tags))
   });
+}
+
+export function compactButtons(buttons: ((TgReplyButton | undefined)[] | undefined)[]): TgReplyButton[][] {
+  return compactUndefined(buttons)
+    .map((item) => compactUndefined(item))
+    .filter((item) => Boolean(item.length));
 }
 
 export function resolveTgFooter(

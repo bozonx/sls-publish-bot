@@ -37,11 +37,12 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
     }
     else if (action === BLOG_MENU_ACTIONS.BUY_AD) {
       await askCreative(blogName, tgChat, () => {
-        // TODO: register buying
+        // TODO: register buying - ask date, time, channel, cost, type 1/24 etc
       });
     }
     else if (action === BLOG_MENU_ACTIONS.SELL_AD_PLACE) {
       await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
+      // TODO: register selling place - ask date, time, cost (или вп), type 1/24 etc (или другое время удаления)
       await startRegisterAdPlaceSell(blogName, tgChat);
     }
   }));
