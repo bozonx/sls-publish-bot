@@ -52,26 +52,23 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
     else if (queryData.indexOf(CONTENT_MARKER) === 0) {
       const splat = queryData.split(':');
       const itemIndex = Number(splat[1]);
-      const pageContent = await loadPageBlocks(items[itemIndex].id, tgChat);
+      const item = items[itemIndex];
+      const pageContent = await loadPageBlocks(item.id, tgChat);
       const image = getFirstImageFromNotionBlocks(pageContent);
+      const btnText = (item.properties?.btn_text as any).rich_text[0]?.plain_text;
+      const btnUrl = (item.properties?.btn_url as any).url;
+      const usePreview = (item.properties?.preview as any).checkbox;
       const creativeStr = transformNotionToTelegramPostMd(pageContent);
-
-      // TODO: взять проп предпросмотр ссылки
-      // TODO: взять проп btn url
+      const btnUrlResult = (btnText && btnUrl) ? {text: btnText, url: btnUrl} : undefined;
 
       if (image) {
-        await publishTgImage(
-          tgChat.botChatId,
-          image,
-          tgChat,
-          creativeStr,
-        );
+        await publishTgImage(tgChat.botChatId, image, tgChat, creativeStr, btnUrlResult);
       }
       else {
-        await tgChat.reply(creativeStr, undefined, undefined,true);
+        await tgChat.reply(creativeStr, btnUrlResult && [[btnUrlResult]], !usePreview,true);
       }
 
-      onDone(items[itemIndex]);
+      onDone(item);
     }
     else {
       throw new Error(`Unknown action`);

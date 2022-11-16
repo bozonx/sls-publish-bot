@@ -2,7 +2,7 @@ import BreadCrumbs from '../helpers/BreadCrumbs';
 import IndexedEventEmitter from '../lib/IndexedEventEmitter';
 import {ChatEvents} from '../types/constants';
 import App from '../App';
-import TgReplyButton from '../types/TgReplyButton';
+import {TgReplyButton} from '../types/TgReplyButton';
 import BaseState from '../types/BaseState';
 import {makeBaseState} from '../helpers/helpers';
 import BotChatLog from '../helpers/BotChatLog';

@@ -10,7 +10,7 @@ import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import {TextMessageEvent} from '../types/MessageEvent';
 import {breakArray} from '../lib/arrays';
-import TgReplyButton from '../types/TgReplyButton';
+import {TgReplyButton} from '../types/TgReplyButton';
 import {validateTime} from '../lib/common';
 
 
