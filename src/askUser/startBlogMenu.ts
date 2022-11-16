@@ -34,10 +34,12 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       await startPublishCustomPostTg(blogName, tgChat, footer);
     }
     else if (action === BLOG_MENU_ACTIONS.BUY_AD) {
-      await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
+      // TODO: show creative
+      // TODO: register buying
     }
     else if (action === BLOG_MENU_ACTIONS.SELL_AD_PLACE) {
-      // TODO: add
+      await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
+      // TODO: register ad
     }
   }));
 }

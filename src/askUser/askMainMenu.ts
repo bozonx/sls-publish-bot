@@ -51,7 +51,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
 
       onDone(blogName);
     }
-    else {
+    else if (Object.keys(MAIN_MENU_ACTION).includes(queryData)) {
       onDone(queryData);
     }
   }));

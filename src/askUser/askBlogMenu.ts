@@ -11,7 +11,6 @@ export const BLOG_MENU_ACTIONS = {
   REEL: 'REEL',
   POLL: 'POLL',
   POST: 'POST',
-  //ADVERT: 'ADVERT',
   BUY_AD: 'BUY_AD',
   SELL_AD_PLACE: 'SELL_AD_PLACE',
 };
@@ -81,20 +80,11 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (act
   ];
 
   await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
-    if ([
-      BLOG_MENU_ACTIONS.CONTENT_PLAN,
-      BLOG_MENU_ACTIONS.STORY,
-      BLOG_MENU_ACTIONS.MEM,
-      BLOG_MENU_ACTIONS.REEL,
-      BLOG_MENU_ACTIONS.POLL,
-      BLOG_MENU_ACTIONS.POST,
-      BLOG_MENU_ACTIONS.BUY_AD,
-      BLOG_MENU_ACTIONS.SELL_AD_PLACE,
-    ].includes(queryData)) {
-      return onDone(queryData)
-    }
-    else if (queryData === CANCEL_BTN_CALLBACK) {
+    if (queryData === CANCEL_BTN_CALLBACK) {
       return tgChat.steps.cancel();
+    }
+    else if (Object.keys(BLOG_MENU_ACTIONS).includes(queryData)) {
+      return onDone(queryData);
     }
   });
 }
