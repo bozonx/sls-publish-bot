@@ -2,23 +2,22 @@ import TgChat from '../apiTg/TgChat';
 import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 import {compactUndefined} from '../lib/arrays';
 import {addSimpleStep} from '../helpers/helpers';
-import {startPublishFromContentPlan} from '../publish/startPublishFromContentPlan';
-import {startPublishCustomPostTg} from '../publish/startPublishCustomPostTg';
-import {startPublishPollTg} from '../publish/startPublishPollTg';
 
 
-const BLOG_MENU_ACTIONS = {
+export const BLOG_MENU_ACTIONS = {
   CONTENT_PLAN: 'CONTENT_PLAN',
   STORY: 'STORY',
   MEM: 'MEM',
   REEL: 'REEL',
   POLL: 'POLL',
   POST: 'POST',
-  ADVERT: 'ADVERT',
+  //ADVERT: 'ADVERT',
+  BUY_AD: 'BUY_AD',
+  SELL_AD_PLACE: 'SELL_AD_PLACE',
 };
 
 
-export async function askBlogMenu(blogName: string, tgChat: TgChat) {
+export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (action: string) => void) {
   const blogSns = tgChat.app.config.blogs[blogName].sn;
   const msg = tgChat.app.i18n.menu.blogMenu;
   const buttons = [
@@ -41,7 +40,7 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat) {
       ])
       : [],
     (blogSns.telegram)
-      ?[
+      ? [
         {
           text: tgChat.app.i18n.menu.makeMem,
           callback_data: BLOG_MENU_ACTIONS.MEM,
@@ -53,14 +52,26 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat) {
       ]
       : [],
     (blogSns.telegram)
-      ?[
+      ? [
         {
           text: tgChat.app.i18n.menu.makePollTg,
           callback_data: BLOG_MENU_ACTIONS.POLL,
         },
+      ]
+      : [],
+    (blogSns.telegram)
+      ? [
         {
-          text: tgChat.app.i18n.menu.makeAdvertTg,
-          callback_data: BLOG_MENU_ACTIONS.ADVERT,
+          text: tgChat.app.i18n.menu.buyAdvertTg,
+          callback_data: BLOG_MENU_ACTIONS.BUY_AD,
+        }
+      ]
+      : [],
+    (blogSns.telegram)
+      ? [
+        {
+          text: tgChat.app.i18n.menu.sellAdvertTg,
+          callback_data: BLOG_MENU_ACTIONS.SELL_AD_PLACE,
         }
       ]
       : [],
@@ -77,44 +88,13 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat) {
       BLOG_MENU_ACTIONS.REEL,
       BLOG_MENU_ACTIONS.POLL,
       BLOG_MENU_ACTIONS.POST,
-      BLOG_MENU_ACTIONS.ADVERT,
+      BLOG_MENU_ACTIONS.BUY_AD,
+      BLOG_MENU_ACTIONS.SELL_AD_PLACE,
     ].includes(queryData)) {
-      return blogActionSelected(queryData, blogName, tgChat)
+      return onDone(queryData)
     }
     else if (queryData === CANCEL_BTN_CALLBACK) {
       return tgChat.steps.cancel();
     }
   });
-}
-
-async function blogActionSelected(action: string, blogName: string, tgChat: TgChat) {
-  if (action === BLOG_MENU_ACTIONS.CONTENT_PLAN) {
-    await startPublishFromContentPlan(blogName, tgChat);
-  }
-  else if (action === BLOG_MENU_ACTIONS.STORY) {
-    const footer = tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter;
-
-    await startPublishCustomPostTg(blogName, tgChat, footer, true, true);
-  }
-  else if (action === BLOG_MENU_ACTIONS.MEM) {
-    const footer = tgChat.app.config.blogs[blogName].sn.telegram?.memFooter;
-
-    await startPublishCustomPostTg(blogName, tgChat, footer, true);
-  }
-  else if (action === BLOG_MENU_ACTIONS.REEL) {
-    const footer = tgChat.app.config.blogs[blogName].sn.telegram?.reelFooter;
-
-    await startPublishCustomPostTg(blogName, tgChat, footer, true, true);
-  }
-  else if (action === BLOG_MENU_ACTIONS.POLL) {
-    await startPublishPollTg(blogName, tgChat);
-  }
-  else if (action === BLOG_MENU_ACTIONS.POST) {
-    const footer = tgChat.app.config.blogs[blogName].sn.telegram?.postFooter;
-
-    await startPublishCustomPostTg(blogName, tgChat, footer);
-  }
-  else if (action === BLOG_MENU_ACTIONS.ADVERT) {
-    await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
-  }
 }

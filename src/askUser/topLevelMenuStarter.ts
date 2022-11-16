@@ -1,10 +1,10 @@
 import TgChat from '../apiTg/TgChat';
 import {askMainMenu, MAIN_MENU_ACTION} from './askMainMenu';
-import {askBlogMenu} from './askBlogMenu';
 import {askSiteMenu} from './askSiteMenu';
 import {askTasksListMenu} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
 import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu';
+import {startBlogMenu} from './startBlogMenu';
 
 
 export async function topLevelMenuStarter(tgChat: TgChat) {
@@ -39,7 +39,7 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
       })
     }
     else {
-      return askBlogMenu(blogNameOrAction, tgChat);
+      return startBlogMenu(blogNameOrAction, tgChat);
     }
   }));
 }
