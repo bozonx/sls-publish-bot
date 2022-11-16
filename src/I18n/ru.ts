@@ -54,6 +54,7 @@ const dict = {
     prevTags: 'Предыдущие тэги: ',
     prevSns: 'Предыдущие соц сети: ',
     selectCreatives: 'Выберете креатив',
+    inputCost: 'Введите стоимость',
   },
   buttons: {
     postMediaSkip: 'Без картинки',

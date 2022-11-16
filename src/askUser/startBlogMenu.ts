@@ -5,6 +5,11 @@ import {startPublishPollTg} from '../publish/startPublishPollTg';
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu';
 import {startRegisterAdPlaceSell} from './startRegisterAdPlaceSell';
 import {askCreative} from './askCreative';
+import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
+import {askPubDate} from './askPubDate';
+import {askSelectTime} from './askSelectTime';
+import {askCost} from './askCost';
+import {CurrencyTicker} from '../types/types';
 
 
 export async function startBlogMenu(blogName: string, tgChat: TgChat) {
@@ -36,9 +41,18 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       await startPublishCustomPostTg(blogName, tgChat, footer);
     }
     else if (action === BLOG_MENU_ACTIONS.BUY_AD) {
-      await askCreative(blogName, tgChat, () => {
-        // TODO: register buying - ask date, time, channel, cost, type 1/24 etc
-      });
+      await askCreative(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
+        await askPubDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
+          await askSelectTime(tgChat, tgChat.asyncCb(async (time: string) => {
+            // TODO: ask channel to publish
+            await askCost(tgChat, tgChat.asyncCb(async (cost: number, currency: CurrencyTicker) => {
+              // TODO: cost
+              // TODO: type 1/24 etc
+              // TODO: register buying
+            }));
+          }));
+        }));
+      }));
     }
     else if (action === BLOG_MENU_ACTIONS.SELL_AD_PLACE) {
       await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);

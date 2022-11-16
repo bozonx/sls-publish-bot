@@ -9,14 +9,14 @@ const CONTENT_MARKER = 'content:';
 
 
 export async function askCreative(blogName: string, tgChat: TgChat, onDone: (item: PageObjectResponse) => void) {
-  let items: any[];
+  let items: PageObjectResponse[];
 
   try {
     items = (await tgChat.app.notion.api.databases.query({
       database_id: tgChat.app.config.blogs[blogName].notionCreativeDbId,
       // TODO: надо выгребать вообще всё
       page_size: DB_DEFAULT_PAGE_SIZE,
-    })).results;
+    })).results as any;
   }
   catch (e) {
     await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
