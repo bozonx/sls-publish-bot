@@ -8,3 +8,5 @@ export const CURRENCY_TICKERS: Record<CurrencyTicker, CurrencyTicker> = {
   USDT: 'USDT',
   BUSD: 'BUSD',
 };
+
+export type BuyAdType = 'best_articles' | 'question_solve' | 'advert' | 'recommend';

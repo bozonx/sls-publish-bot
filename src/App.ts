@@ -38,6 +38,11 @@ export default class App {
       await this.tg.init();
       await this.telegraPh.init();
       await this.tasks.init();
+
+      // const res = await this.notion.api.databases.retrieve({ database_id : this.config.blogs.test.notionBuyTgDbId })
+      // console.log(1111, (res.properties.time as any).select)
+      // console.log(1111, (res.properties.ad_type as any).select)
+
     })()
       .catch((e) => {
         this.consoleLog.error(e);

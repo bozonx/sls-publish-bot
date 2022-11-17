@@ -15,7 +15,7 @@ const FORMAT_CB = 'FORMAT_CB|'
 
 
 export async function askFormat(tgChat: TgChat, onDone: (time: string) => void) {
-  const msg = tgChat.app.i18n.menu.selectTime;
+  const msg = tgChat.app.i18n.menu.selectFormat;
   const buttons = [
     ...breakArray(FORMATS.map((el): TgReplyButton => {
       return {

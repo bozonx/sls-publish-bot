@@ -55,6 +55,7 @@ const dict = {
     prevSns: 'Предыдущие соц сети: ',
     selectCreatives: 'Выберете креатив',
     inputCost: 'Введите стоимость, только цифры. Валюта - рубли.',
+    selectFormat: 'Выберете формат рекламы [часы в топе]/[часы до удаления]'
   },
   buttons: {
     postMediaSkip: 'Без картинки',
@@ -158,6 +159,7 @@ const dict = {
     bigPost: `Пост превышает ${TELEGRAM_MAX_POST} символа`,
     noTitle: 'Нет заголовка',
     invalidNumber: 'Не валидное число',
+    cantCreatePage: 'Не удалось создать страницу: ',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
