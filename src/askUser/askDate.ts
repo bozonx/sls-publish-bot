@@ -19,7 +19,7 @@ const SELECT_PUB_DATE = {
 }
 
 
-export async function askPubDate(tgChat: TgChat, onDone: (selectedDateString: string) => void) {
+export async function askDate(tgChat: TgChat, onDone: (selectedDateString: string) => void) {
   const msg = tgChat.app.i18n.menu.selectDate
     + `. ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}.`;
   const buttons = [

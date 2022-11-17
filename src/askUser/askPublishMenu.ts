@@ -8,7 +8,7 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants';
 import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
-import {askSelectTime} from './askSelectTime';
+import {askTime} from './askTime';
 import {askPostMedia} from './askPostMedia';
 import {printImage} from '../publish/printInfo';
 import {askPostText} from './askPostText';
@@ -201,7 +201,7 @@ async function handleButtons(
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
-      return askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+      return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         state.selectedTime = newTime;
 
         const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);

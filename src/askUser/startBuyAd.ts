@@ -1,9 +1,9 @@
 import TgChat from '../apiTg/TgChat';
 import {askCreative} from './askCreative';
 import {CreatePageParameters, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import {askPubDate} from './askPubDate';
+import {askDate} from './askDate';
 import {makeUtcOffsetStr} from '../helpers/helpers';
-import {askSelectTime} from './askSelectTime';
+import {askTime} from './askTime';
 import {askCost} from './askCost';
 import {BuyAdType, CurrencyTicker} from '../types/types';
 import {askFormat} from './askFormat';
@@ -19,7 +19,7 @@ const AD_BUY_TYPE_IDS: Record<BuyAdType, string> = {
 
 export async function startBuyAd(blogName: string, tgChat: TgChat) {
   await askCreative(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
-    await askPubDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
+    await askDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
       const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
 
       await tgChat.reply(
@@ -27,7 +27,7 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
         + `${isoDate} ${utcOffset}`
       );
 
-      await askSelectTime(tgChat, tgChat.asyncCb(async (time: string) => {
+      await askTime(tgChat, tgChat.asyncCb(async (time: string) => {
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.pubDate
           + `${isoDate} ${time} ${utcOffset}`

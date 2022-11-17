@@ -17,7 +17,7 @@ import {validateTime} from '../lib/common';
 const TIME_PRESET_CB = 'TIME_PRESET_CB|'
 
 
-export async function askSelectTime(tgChat: TgChat, onDone: (time: string) => void) {
+export async function askTime(tgChat: TgChat, onDone: (time: string) => void) {
   const msg = tgChat.app.i18n.menu.selectTime;
   const buttons = [
     ...breakArray(OFTEN_USED_TIME.map((el): TgReplyButton => {

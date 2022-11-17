@@ -10,8 +10,8 @@ import {
 import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
 import moment from 'moment';
-import {askPubDate} from './askPubDate';
-import {askSelectTime} from './askSelectTime';
+import {askDate} from './askDate';
+import {askTime} from './askTime';
 import {askPostText} from './askPostText';
 import {askTags} from './askTags';
 
@@ -167,7 +167,7 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
     case CUSTOM_POST_ACTION.DATE_SELECT:
-      return await askPubDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
+      return await askDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
         state.selectedDate = newDate;
         // print result
         await tgChat.reply(makeDateTimeMsg(tgChat, state));
@@ -175,7 +175,7 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
     case CUSTOM_POST_ACTION.TIME_SELECT:
-      return await askSelectTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+      return await askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         state.selectedTime = newTime;
         // print result
         await tgChat.reply(makeDateTimeMsg(tgChat, state));
