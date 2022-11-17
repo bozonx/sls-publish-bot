@@ -3,7 +3,7 @@ import {startPublishFromContentPlan} from '../publish/startPublishFromContentPla
 import {startPublishCustomPostTg} from '../publish/startPublishCustomPostTg';
 import {startPublishPollTg} from '../publish/startPublishPollTg';
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu';
-import {startRegisterAdPlaceSell} from './startRegisterAdPlaceSell';
+import {startSellAd} from './startSellAd';
 import {startBuyAd} from './startBuyAd';
 
 
@@ -39,9 +39,7 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       await startBuyAd(blogName, tgChat);
     }
     else if (action === BLOG_MENU_ACTIONS.SELL_AD_PLACE) {
-      await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
-      // TODO: register selling place - ask date, time, cost (или вп), type 1/24 etc (или другое время удаления)
-      await startRegisterAdPlaceSell(blogName, tgChat);
+      await startSellAd(blogName, tgChat);
     }
   }));
 }
