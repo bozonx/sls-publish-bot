@@ -97,6 +97,7 @@ const dict = {
     isMultipleAnswer: 'Возможно несколько ответов: ',
     quizAnswer: 'Номер ответа quiz (отсчёт от нуля): ',
     type: 'Тип: ',
+    selectedFormat: 'Выбран формат: ',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',

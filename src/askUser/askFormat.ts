@@ -4,20 +4,20 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  FORMATS,
 } from '../types/constants';
 import {breakArray} from '../lib/arrays';
 import {TgReplyButton} from '../types/TgReplyButton';
 import {addSimpleStep} from '../helpers/helpers';
+import {AD_FORMATS, AdFormat} from '../types/types';
 
 
 const FORMAT_CB = 'FORMAT_CB|'
 
 
-export async function askFormat(tgChat: TgChat, onDone: (time: string) => void) {
+export async function askFormat(tgChat: TgChat, onDone: (format: AdFormat) => void) {
   const msg = tgChat.app.i18n.menu.selectFormat;
   const buttons = [
-    ...breakArray(FORMATS.map((el): TgReplyButton => {
+    ...breakArray(Object.keys(AD_FORMATS).map((el): TgReplyButton => {
       return {
         text: el,
         callback_data: FORMAT_CB + el,
@@ -38,8 +38,11 @@ export async function askFormat(tgChat: TgChat, onDone: (time: string) => void) 
     }
     else if (queryData.indexOf(FORMAT_CB) === 0) {
       const splat = queryData.split('|');
+      const format = splat[1] as AdFormat;
 
-      onDone(splat[1]);
+      await tgChat.reply(tgChat.app.i18n.commonPhrases.selectedFormat + format);
+
+      onDone(format);
     }
   });
 

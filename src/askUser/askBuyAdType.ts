@@ -38,8 +38,11 @@ export async function askBuyAdType(tgChat: TgChat, onDone: (adType: BuyAdType) =
     }
     else if (queryData.indexOf(BY_AD_TYPE_CB) === 0) {
       const splat = queryData.split('|');
+      const adType: BuyAdType = splat[1] as BuyAdType;
 
-      onDone(splat[1] as BuyAdType);
+      await tgChat.reply(tgChat.app.i18n.commonPhrases.type + adType);
+
+      onDone(adType);
     }
   });
 

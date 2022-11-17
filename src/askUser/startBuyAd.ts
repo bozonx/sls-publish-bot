@@ -5,7 +5,7 @@ import {askDate} from './askDate';
 import {makeUtcOffsetStr} from '../helpers/helpers';
 import {askTime} from './askTime';
 import {askCost} from './askCost';
-import {BuyAdType, CurrencyTicker} from '../types/types';
+import {AdFormat, BuyAdType, CurrencyTicker} from '../types/types';
 import {askFormat} from './askFormat';
 import {askNote} from './askNote';
 import {askBuyAdType} from './askBuyAdType';
@@ -16,6 +16,21 @@ const AD_BUY_TYPE_IDS: Record<BuyAdType, string> = {
   question_solve: 'Th{s',
   advert: '?QvM',
   recommend: 'h{Sb',
+};
+
+const AD_FORMAT_IDS: Record<AdFormat, string> = {
+  '1/24': 'CYmi',
+  '1/48': 'oR::',
+  '2/24': 'Ngws',
+  '2/48': 'N[vW',
+  '2/72': 'd?iO',
+  '3/24': 'I}Um',
+  '3/48': 'ZPsl',
+  '3/72': 'gSsX',
+  'full/24': ']?}Y',
+  'full/48': 'v?mt',
+  'full/72': 'Iov}',
+  forever: 'CX}m',
 };
 
 
@@ -35,11 +50,12 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
           + `${isoDate} ${time} ${utcOffset}`
         );
 
+        // TODO: ask channel
+
         await askCost(tgChat, tgChat.asyncCb(async (cost: number, currency: CurrencyTicker) => {
+          await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
+            const formatId: string = AD_FORMAT_IDS[format];
 
-          // TODO: разве не нужен format ????
-
-          await askFormat(tgChat, tgChat.asyncCb(async (format: string) => {
             await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: BuyAdType) => {
               const adTypeId: string = AD_BUY_TYPE_IDS[adType];
 
@@ -72,6 +88,12 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
                       type: 'select',
                       select: {
                         id: adTypeId,
+                      }
+                    },
+                    format: {
+                      type: 'select',
+                      select: {
+                        id: formatId,
                       }
                     },
                     note: {

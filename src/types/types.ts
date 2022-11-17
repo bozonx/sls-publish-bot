@@ -17,3 +17,21 @@ export const AD_BUY_TYPES: Record<BuyAdType, BuyAdType> = {
   advert: 'advert',
   recommend: 'recommend',
 };
+
+export type AdFormat = '1/24' | '1/48' | '2/24' | '2/48' | '2/72' | '3/24' | '3/48' | '3/72'
+  | 'full/24' | 'full/48' | 'full/72' | 'forever';
+
+export const AD_FORMATS: Record<AdFormat, AdFormat> = {
+  '1/24': '1/24',
+  '1/48': '1/48',
+  '2/24': '2/24',
+  '2/48': '2/48',
+  '2/72': '2/72',
+  '3/24': '3/24',
+  '3/48': '3/48',
+  '3/72': '3/72',
+  'full/24': 'full/24',
+  'full/48': 'full/48',
+  'full/72': 'full/72',
+  forever: 'forever',
+}
