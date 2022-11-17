@@ -8,6 +8,9 @@ const execConf: ExecConfig = {
       dispname: 'Тестовый канал',
       notionContentPlanDbId: '0ce847766986402f9d221852ded2b599',
       notionCreativeDbId: '0c83f31f420f41748752bd0628d723e4',
+      notionBuyTgDbId: '854449a77e5f4d11ae0c210419818a7d',
+      notionSellTgDbId: '9fe8611d02f54e1bb07c43182b7c965d',
+      notionContragentsTgDbId: 'f5a1465c85ee4bff8e560fb3f486b96f',
       // TODO: наверное надо на каждую соц сеть
       supportedTypes: [
         PUBLICATION_TYPES.article,

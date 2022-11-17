@@ -18,6 +18,9 @@ export interface BlogConfig {
   dispname: string;
   notionContentPlanDbId: string;
   notionCreativeDbId: string;
+  notionBuyTgDbId: string;
+  notionSellTgDbId: string;
+  notionContragentsTgDbId: string;
   // some PUBLICATION_TYPES
   supportedTypes: string[];
   sn: {

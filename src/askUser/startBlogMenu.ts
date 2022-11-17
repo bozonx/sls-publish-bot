@@ -11,6 +11,7 @@ import {askSelectTime} from './askSelectTime';
 import {askCost} from './askCost';
 import {CurrencyTicker} from '../types/types';
 import {makeUtcOffsetStr} from '../helpers/helpers';
+import {askFormat} from './askFormat';
 
 
 export async function startBlogMenu(blogName: string, tgChat: TgChat) {
@@ -42,35 +43,42 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       await startPublishCustomPostTg(blogName, tgChat, footer);
     }
     else if (action === BLOG_MENU_ACTIONS.BUY_AD) {
-      await askCreative(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
-        await askPubDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
-          const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
-
-          await tgChat.reply(
-            tgChat.app.i18n.commonPhrases.selectedOnlyDate
-            + `${isoDate} ${utcOffset}`
-          );
-
-          await askSelectTime(tgChat, tgChat.asyncCb(async (time: string) => {
-            await tgChat.reply(
-              tgChat.app.i18n.commonPhrases.pubDate
-              + `${isoDate} ${time} ${utcOffset}`
-            );
-
-            // TODO: ask channel to publish
-            await askCost(tgChat, tgChat.asyncCb(async (cost: number, currency: CurrencyTicker) => {
-              console.log(1111, item, isoDate, time, cost, currency)
-              // TODO: type 1/24 etc - если выбран custom - то указать время удаления
-              // TODO: register buying - add item to creatives table
-            }));
-          }));
-        }));
-      }));
+      await buyAd(blogName, tgChat);
     }
     else if (action === BLOG_MENU_ACTIONS.SELL_AD_PLACE) {
       await startPublishCustomPostTg(blogName, tgChat, undefined, undefined, undefined, true);
       // TODO: register selling place - ask date, time, cost (или вп), type 1/24 etc (или другое время удаления)
       await startRegisterAdPlaceSell(blogName, tgChat);
     }
+  }));
+}
+
+
+async function buyAd(blogName: string, tgChat: TgChat) {
+  await askCreative(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
+    await askPubDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
+      const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+
+      await tgChat.reply(
+        tgChat.app.i18n.commonPhrases.selectedOnlyDate
+        + `${isoDate} ${utcOffset}`
+      );
+
+      await askSelectTime(tgChat, tgChat.asyncCb(async (time: string) => {
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.pubDate
+          + `${isoDate} ${time} ${utcOffset}`
+        );
+
+        // TODO: ask channel to publish
+
+        await askCost(tgChat, tgChat.asyncCb(async (cost: number, currency: CurrencyTicker) => {
+          await askFormat(tgChat, tgChat.asyncCb(async (format: string) => {
+            // TODO: register buying - add item to creatives table
+            console.log(1111, item, isoDate, time, cost, currency, format)
+          }));
+        }));
+      }));
+    }));
   }));
 }
