@@ -13,12 +13,17 @@ import {CURRENCY_TICKERS, CurrencyTicker} from '../types/types';
 
 
 //export const ASK_COST_CURRENCY = 'ASK_COST_CURRENCY:';
+export const NO_COST_CURRENCY = 'NO_COST_CURRENCY:';
 
 
-export async function askCost(tgChat: TgChat, onDone: (cost: number, currency: CurrencyTicker) => void) {
+export async function askCost(tgChat: TgChat, onDone: (cost: number | undefined, currency: CurrencyTicker) => void) {
   const msg = tgChat.app.i18n.menu.inputCost;
   const buttons = [
     [
+      {
+        text: tgChat.app.i18n.commonPhrases.skip,
+        callback_data: NO_COST_CURRENCY,
+      },
       // {
       //   text: CURRENCY_TICKERS.RUB,
       //   callback_data: ASK_COST_CURRENCY + CURRENCY_TICKERS.RUB,
@@ -31,6 +36,7 @@ export async function askCost(tgChat: TgChat, onDone: (cost: number, currency: C
   ];
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
+    const currency = CURRENCY_TICKERS.RUB;
     // print main menu message
     state.messageIds.push(await tgChat.reply(msg, buttons));
     // listen to result
@@ -44,6 +50,9 @@ export async function askCost(tgChat: TgChat, onDone: (cost: number, currency: C
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel();
           }
+          else if (queryData === NO_COST_CURRENCY) {
+            onDone(undefined, currency);
+          }
         })
       ),
       ChatEvents.CALLBACK_QUERY
@@ -53,7 +62,6 @@ export async function askCost(tgChat: TgChat, onDone: (cost: number, currency: C
         ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
           const num = Number(_.trim(message.text));
-          const currency = CURRENCY_TICKERS.RUB;
 
           if (Number.isNaN(num)) {
             await tgChat.reply(tgChat.app.i18n.errors.invalidNumber);

@@ -18,6 +18,14 @@ export const AD_BUY_TYPES: Record<BuyAdType, BuyAdType> = {
   recommend: 'recommend',
 };
 
+export type SellAdType = 'publish_post' | 'recommend' | 'other';
+
+export const AD_SELL_TYPES: Record<SellAdType, SellAdType> = {
+  publish_post: 'publish_post',
+  recommend: 'recommend',
+  other: 'other',
+};
+
 export type AdFormat = '1/24' | '1/48' | '2/24' | '2/48' | '2/72' | '3/24' | '3/48' | '3/72'
   | 'full/24' | 'full/48' | 'full/72' | 'forever';
 

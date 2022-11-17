@@ -11,14 +11,14 @@ import {askNote} from './askNote';
 import {askBuyAdType} from './askBuyAdType';
 
 
-const AD_BUY_TYPE_IDS: Record<BuyAdType, string> = {
+const BUY_AD_TYPE_IDS: Record<BuyAdType, string> = {
   best_articles: 'ZpdT',
   question_solve: 'Th{s',
   advert: '?QvM',
   recommend: 'h{Sb',
 };
 
-const AD_FORMAT_IDS: Record<AdFormat, string> = {
+const BUY_AD_FORMAT_IDS: Record<AdFormat, string> = {
   '1/24': 'CYmi',
   '1/48': 'oR::',
   '2/24': 'Ngws',
@@ -52,18 +52,18 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
 
         // TODO: ask channel
 
-        await askCost(tgChat, tgChat.asyncCb(async (cost: number, currency: CurrencyTicker) => {
+        await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
           await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
-            const formatId: string = AD_FORMAT_IDS[format];
+            const formatId: string = BUY_AD_FORMAT_IDS[format];
 
             await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: BuyAdType) => {
-              const adTypeId: string = AD_BUY_TYPE_IDS[adType];
+              const adTypeId: string = BUY_AD_TYPE_IDS[adType];
 
               await tgChat.reply(tgChat.app.i18n.message.noteOrDone);
 
               await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
                 const request: CreatePageParameters = {
-                  parent: { database_id: tgChat.app.config.blogs['test'].notionBuyTgDbId },
+                  parent: { database_id: tgChat.app.config.blogs[blogName].notionBuyTgDbId },
                   properties: {
                     date: {
                       type: 'date',
@@ -71,7 +71,7 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
                         start: isoDate,
                       },
                     },
-                    time_str: {
+                    time: {
                       type: 'rich_text',
                       rich_text: [{
                         type: 'text',
@@ -79,10 +79,6 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
                           content: time
                         },
                       }],
-                    },
-                    price_rub: {
-                      type: 'number',
-                      number: cost,
                     },
                     ad_type: {
                       type: 'select',
@@ -96,14 +92,6 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
                         id: formatId,
                       }
                     },
-                    note: {
-                      type: 'title',
-                      title: [{
-                        text: {
-                          content: note,
-                        },
-                      }],
-                    },
 
                     // channel: {
                     //   type: 'rich_text',
@@ -116,6 +104,24 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
                     //   }],
                     // },
                   },
+                };
+
+                if (typeof cost !== 'undefined') {
+                  request.properties.price_rub = {
+                    type: 'number',
+                      number: cost,
+                  };
+                }
+
+                if (note) {
+                  request.properties.note = {
+                    type: 'title',
+                    title: [{
+                      text: {
+                        content: note,
+                      },
+                    }],
+                  };
                 }
 
                 try {
