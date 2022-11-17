@@ -99,6 +99,7 @@ const dict = {
     type: 'Тип: ',
     selectedFormat: 'Выбран формат: ',
     skip: 'Пропустить',
+    selectAdType: 'Выберете тип рекламы',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',

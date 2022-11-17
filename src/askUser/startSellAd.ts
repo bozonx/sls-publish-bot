@@ -1,11 +1,12 @@
 import TgChat from '../apiTg/TgChat';
 import {askCost} from './askCost';
-import {AdFormat, BuyAdType, CurrencyTicker, SellAdType} from '../types/types';
+import {AdFormat, CurrencyTicker, SellAdType} from '../types/types';
 import {askFormat} from './askFormat';
 import {askCustomPostTg} from './askCustomPostTg';
 import {CustomPostState} from './askCustomPostMenu';
 import {askNote} from './askNote';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints';
+import {askSellAdType} from './askSellAdType';
 
 
 const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {
@@ -41,84 +42,87 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
       // TODO: а как это использовать ???
       disableOk: boolean
     ) => {
-      // TODO: ask cost - добавить - ничего не выбранно
       await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
         await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
           const formatId: string = SELL_AD_FORMAT_IDS[format];
 
-          // TODO: sell ad type
-          // TODO: ask вп ???
+          await askSellAdType(tgChat, tgChat.asyncCb(async (adType: SellAdType) => {
+            const adTypeId: string = SELL_AD_TYPE_IDS[adType];
 
-          await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
+            // TODO: ask вп ???
 
-            // TODO: зарегистрировать таск
+            await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
 
-            const request: CreatePageParameters = {
-              parent: { database_id: tgChat.app.config.blogs[blogName].notionSellTgDbId },
-              properties: {
-                date: {
-                  type: 'date',
+              // TODO: зарегистрировать таск
+
+              const request: CreatePageParameters = {
+                parent: { database_id: tgChat.app.config.blogs[blogName].notionSellTgDbId },
+                properties: {
                   date: {
-                    start: state.selectedDate!
+                    type: 'date',
+                    date: {
+                      start: state.selectedDate!
+                    },
                   },
+                  time: {
+                    type: 'rich_text',
+                    rich_text: [{
+                      type: 'text',
+                      text: {
+                        content: state.selectedTime!
+                      },
+                    }],
+                  },
+                  ad_type: {
+                    type: 'select',
+                    select: {
+                      id: adTypeId,
+                    }
+                  },
+                  format: {
+                    type: 'select',
+                    select: {
+                      id: formatId,
+                    }
+                  },
+
+                  //is_collab: { id: 'jh%3Dp', name: 'is_collab', type: 'checkbox', checkbox: {} },
+
                 },
-                time: {
-                  type: 'rich_text',
-                  rich_text: [{
-                    type: 'text',
+              };
+
+              if (typeof cost !== 'undefined') {
+                request.properties.price_rub = {
+                  type: 'number',
+                  number: cost,
+                };
+              }
+
+              if (note) {
+                request.properties.note = {
+                  type: 'title',
+                  title: [{
                     text: {
-                      content: state.selectedTime!
+                      content: note,
                     },
                   }],
-                },
-                //is_collab: { id: 'jh%3Dp', name: 'is_collab', type: 'checkbox', checkbox: {} },
+                };
+              }
 
-                // ad_type: {
-                //   type: 'select',
-                //   select: {
-                //     id: adTypeId,
-                //   }
-                // },
-                format: {
-                  type: 'select',
-                  select: {
-                    id: formatId,
-                  }
-                },
-              },
-            };
+              try {
+                const result = await tgChat.app.notion.api.pages.create(request);
 
-            if (typeof cost !== 'undefined') {
-              request.properties.price_rub = {
-                type: 'number',
-                number: cost,
-              };
-            }
+                if (!result.id) throw new Error(`No result id`);
+              }
+              catch (e) {
+                await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
+              }
 
-            if (note) {
-              request.properties.note = {
-                type: 'title',
-                title: [{
-                  text: {
-                    content: note,
-                  },
-                }],
-              };
-            }
+              await tgChat.reply(tgChat.app.i18n.message.sellAdDone);
+              await tgChat.steps.cancel();
+            }));
 
-            try {
-              const result = await tgChat.app.notion.api.pages.create(request);
-
-              if (!result.id) throw new Error(`No result id`);
-            }
-            catch (e) {
-              await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
-            }
-
-            await tgChat.reply(tgChat.app.i18n.message.sellAdDone);
-            await tgChat.steps.cancel();
           }));
-
         }));
       }));
     }),

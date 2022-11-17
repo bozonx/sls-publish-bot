@@ -8,19 +8,19 @@ import {
 import {breakArray} from '../lib/arrays';
 import {TgReplyButton} from '../types/TgReplyButton';
 import {addSimpleStep} from '../helpers/helpers';
-import {AD_BUY_TYPES, BuyAdType} from '../types/types';
+import {AD_SELL_TYPES, SellAdType} from '../types/types';
 
 
-const BUY_AD_TYPE_CB = 'BUY_AD_TYPE_CB|'
+const SELL_AD_TYPE_CB = 'SELL_AD_TYPE_CB|'
 
 
-export async function askBuyAdType(tgChat: TgChat, onDone: (adType: BuyAdType) => void) {
+export async function askSellAdType(tgChat: TgChat, onDone: (adType: SellAdType) => void) {
   const msg = tgChat.app.i18n.commonPhrases.selectAdType;
   const buttons = [
-    ...breakArray(Object.keys(AD_BUY_TYPES).map((el): TgReplyButton => {
+    ...breakArray(Object.keys(AD_SELL_TYPES).map((el): TgReplyButton => {
       return {
         text: el,
-        callback_data: BUY_AD_TYPE_CB + el,
+        callback_data: SELL_AD_TYPE_CB + el,
       };
     }), 2),
     [
@@ -36,9 +36,9 @@ export async function askBuyAdType(tgChat: TgChat, onDone: (adType: BuyAdType) =
     else if (queryData === CANCEL_BTN_CALLBACK) {
       return tgChat.steps.cancel();
     }
-    else if (queryData.indexOf(BUY_AD_TYPE_CB) === 0) {
+    else if (queryData.indexOf(SELL_AD_TYPE_CB) === 0) {
       const splat = queryData.split('|');
-      const adType = splat[1] as BuyAdType;
+      const adType = splat[1] as SellAdType;
 
       await tgChat.reply(tgChat.app.i18n.commonPhrases.type + adType);
 
