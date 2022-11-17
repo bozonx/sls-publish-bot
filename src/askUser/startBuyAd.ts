@@ -7,6 +7,7 @@ import {askTime} from './askTime';
 import {askCost} from './askCost';
 import {BuyAdType, CurrencyTicker} from '../types/types';
 import {askFormat} from './askFormat';
+import {askNote} from './askNote';
 
 
 const AD_BUY_TYPE_IDS: Record<BuyAdType, string> = {
@@ -38,77 +39,73 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
 
             // TODO: ask ad type
 
-            // TODO: ask confirm - and asn note
+            await tgChat.reply(tgChat.app.i18n.message.noteOrDone);
 
-            const request: CreatePageParameters = {
-              parent: { database_id: tgChat.app.config.blogs['test'].notionBuyTgDbId },
-              properties: {
-                date: {
-                  type: 'date',
+            await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
+              const request: CreatePageParameters = {
+                parent: { database_id: tgChat.app.config.blogs['test'].notionBuyTgDbId },
+                properties: {
                   date: {
-                    start: isoDate,
-                  },
-                },
-                time_str: {
-                  type: 'rich_text',
-                  rich_text: [{
-                    type: 'text',
-                    text: {
-                      content: time
+                    type: 'date',
+                    date: {
+                      start: isoDate,
                     },
-                  }],
+                  },
+                  time_str: {
+                    type: 'rich_text',
+                    rich_text: [{
+                      type: 'text',
+                      text: {
+                        content: time
+                      },
+                    }],
+                  },
+                  price_rub: {
+                    type: 'number',
+                    number: cost,
+                  },
+                  ad_type: {
+                    type: 'select',
+                    select: {
+                      // TODO: remake
+                      id: AD_BUY_TYPE_IDS.best_articles,
+                    }
+                  },
+                  note: {
+                    type: 'title',
+                    title: [{
+                      text: {
+                        content: note,
+                      },
+                    }],
+                  },
+
+                  // channel: {
+                  //   type: 'rich_text',
+                  //   rich_text: [{
+                  //     type: 'text',
+                  //     text: {
+                  //       content: 'some channel',
+                  //       link: { url: 'https://ya.ru' },
+                  //     },
+                  //   }],
+                  // },
                 },
-                price_rub: {
-                  type: 'number',
-                  number: cost,
-                },
-                ad_type: {
-                  type: 'select',
-                  select: {
-                    id: AD_BUY_TYPE_IDS.best_articles,
-                  }
-                },
+              }
 
-                // time: {
-                //   type: 'select',
-                //   select: {
-                //     // TODO: add id
-                //     name: time,
-                //   }
-                // },
+              try {
+                const result = await tgChat.app.notion.api.pages.create(request);
 
-                // channel: {
-                //   type: 'rich_text',
-                //   rich_text: [{
-                //     type: 'text',
-                //     text: {
-                //       content: 'some channel',
-                //       link: { url: 'https://ya.ru' },
-                //     },
-                //   }],
-                // },
-                // note: {
-                //   type: 'title',
-                //   title: [{
-                //     text: {
-                //       content: 'some text',
-                //     },
-                //   }],
-                // },
-              },
-            }
+                if (!result.id) throw new Error(`No result id`);
+              }
+              catch (e) {
+                await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
+              }
 
-            try {
-              const result = await tgChat.app.notion.api.pages.create(request);
+              await tgChat.reply(tgChat.app.i18n.message.buyAdDone);
+              await tgChat.steps.cancel();
+            }));
 
-              if (!result.id) throw new Error(`No result id`);
-            }
-            catch (e) {
-              await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
-            }
-
-            await tgChat.reply(tgChat.app.i18n.message.buyAdDone);
-            await tgChat.steps.cancel();
           }));
         }));
       }));
