@@ -8,6 +8,7 @@ import {askNote} from './askNote';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints';
 import {askSellAdType} from './askSellAdType';
 import {askDateTime} from './askDateTime';
+import {registerCustomPostTg} from '../publish/startPublishCustomPostTg';
 
 
 const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {
@@ -40,8 +41,6 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
       state: CustomPostState,
       resultText: string,
       isPost2000: boolean,
-      // TODO: а как это использовать ???
-      disableOk: boolean
     ) => {
       await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
         await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
@@ -54,8 +53,16 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
               // TODO: ask вп ???
 
               await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
-
-                // TODO: зарегистрировать таск
+                await registerCustomPostTg(
+                  blogName,
+                  tgChat,
+                  isoDate,
+                  time,
+                  resultText,
+                  isPost2000,
+                  state.usePreview,
+                  state.images
+                );
 
                 const request: CreatePageParameters = {
                   parent: { database_id: tgChat.app.config.blogs[blogName].notionSellTgDbId },

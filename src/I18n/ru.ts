@@ -20,7 +20,7 @@ const dict = {
     makeMem: 'Создать МЕМ в Tg',
     makeReel: 'Создать REEL в Tg',
     makePost: 'Создать ПОСТ в Tg',
-    buyAdvertTg: 'купить РЕКЛАМУ в Tg',
+    buyAdvertTg: 'Закупить рекламу в Tg',
     sellAdvertTg: 'Продать рекламное место в Tg',
     makePollTg: 'Создать опрос в Tg',
     contentParams: 'Параметры публикации:',
