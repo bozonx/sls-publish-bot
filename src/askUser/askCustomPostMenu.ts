@@ -20,12 +20,9 @@ export interface CustomPostState {
   useFooter: boolean;
   usePreview: boolean;
   forceDisableFooter: boolean;
-  forceDisablePreview: boolean;
   disableTags: boolean;
   tags: string[],
   postText?: string;
-  selectedDate?: string;
-  selectedTime?: string;
   images: string[];
 }
 
@@ -62,7 +59,7 @@ export async function askCustomPostMenu(
           callback_data: CUSTOM_POST_ACTION.FOOTER_SWITCH,
         }]
       : [],
-    (!state.forceDisablePreview)
+    (!state.images.length)
       ? [{
         text: (state.usePreview)
           ? tgChat.app.i18n.commonPhrases.noPreview
@@ -83,25 +80,26 @@ export async function askCustomPostMenu(
         callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
       },
     ]),
-    [
-      {
-        text: (state.selectedDate)
-          ? tgChat.app.i18n.commonPhrases.pubDate
-            + moment(state.selectedDate).format(PRINT_FULL_DATE_FORMAT)
-          : tgChat.app.i18n.commonPhrases.setPubDate,
-        callback_data: CUSTOM_POST_ACTION.DATE_SELECT,
-      },
-      {
-        text: (state.selectedTime)
-          ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
-          : tgChat.app.i18n.commonPhrases.setPubTime,
-        callback_data: CUSTOM_POST_ACTION.TIME_SELECT,
-      },
-    ],
+    // [
+    //   {
+    //     text: (state.selectedDate)
+    //       ? tgChat.app.i18n.commonPhrases.pubDate
+    //         + moment(state.selectedDate).format(PRINT_FULL_DATE_FORMAT)
+    //       : tgChat.app.i18n.commonPhrases.setPubDate,
+    //     callback_data: CUSTOM_POST_ACTION.DATE_SELECT,
+    //   },
+    //   {
+    //     text: (state.selectedTime)
+    //       ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
+    //       : tgChat.app.i18n.commonPhrases.setPubTime,
+    //     callback_data: CUSTOM_POST_ACTION.TIME_SELECT,
+    //   },
+    // ],
     compactUndefined([
       BACK_BTN,
       CANCEL_BTN,
-      (state.selectedDate && state.selectedTime) ? OK_BTN : undefined,
+      OK_BTN
+      //(state.selectedDate && state.selectedTime) ? OK_BTN : undefined,
     ]),
   ];
 
@@ -166,44 +164,44 @@ async function handleButtons(
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, onDone);
       }));
-    case CUSTOM_POST_ACTION.DATE_SELECT:
-      return await askDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
-        state.selectedDate = newDate;
-        // print result
-        await tgChat.reply(makeDateTimeMsg(tgChat, state));
-        // print menu again
-        return askCustomPostMenu(blogName, tgChat, state, onDone);
-      }));
-    case CUSTOM_POST_ACTION.TIME_SELECT:
-      return await askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-        state.selectedTime = newTime;
-        // print result
-        await tgChat.reply(makeDateTimeMsg(tgChat, state));
-        // print menu again
-        return askCustomPostMenu(blogName, tgChat, state, onDone);
-      }));
+    // case CUSTOM_POST_ACTION.DATE_SELECT:
+    //   return await askDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
+    //     state.selectedDate = newDate;
+    //     // print result
+    //     await tgChat.reply(makeDateTimeMsg(tgChat, state));
+    //     // print menu again
+    //     return askCustomPostMenu(blogName, tgChat, state, onDone);
+    //   }));
+    // case CUSTOM_POST_ACTION.TIME_SELECT:
+    //   return await askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+    //     state.selectedTime = newTime;
+    //     // print result
+    //     await tgChat.reply(makeDateTimeMsg(tgChat, state));
+    //     // print menu again
+    //     return askCustomPostMenu(blogName, tgChat, state, onDone);
+    //   }));
     default:
       throw new Error(`Unknown action`);
   }
 }
 
-function makeDateTimeMsg(tgChat: TgChat, state: CustomPostState): string {
-  const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
-  const {selectedDate, selectedTime} = state;
-
-  if (selectedDate && selectedTime) {
-    return tgChat.app.i18n.commonPhrases.selectedDateAndTime
-      + `${selectedDate} ${selectedTime} ${utcOffset}`
-  }
-  else if (selectedDate && !selectedTime) {
-    return tgChat.app.i18n.commonPhrases.selectedOnlyDate
-      + `${selectedDate} ${utcOffset}`
-  }
-  else if (!selectedDate && selectedTime) {
-    return tgChat.app.i18n.commonPhrases.selectedOnlyTime
-      + `${selectedTime} ${utcOffset}`
-  }
-  else {
-    return 'None';
-  }
-}
+// function makeDateTimeMsg(tgChat: TgChat, state: CustomPostState): string {
+//   const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+//   const {selectedDate, selectedTime} = state;
+//
+//   if (selectedDate && selectedTime) {
+//     return tgChat.app.i18n.commonPhrases.selectedDateAndTime
+//       + `${selectedDate} ${selectedTime} ${utcOffset}`
+//   }
+//   else if (selectedDate && !selectedTime) {
+//     return tgChat.app.i18n.commonPhrases.selectedOnlyDate
+//       + `${selectedDate} ${utcOffset}`
+//   }
+//   else if (!selectedDate && selectedTime) {
+//     return tgChat.app.i18n.commonPhrases.selectedOnlyTime
+//       + `${selectedTime} ${utcOffset}`
+//   }
+//   else {
+//     return 'None';
+//   }
+// }

@@ -26,7 +26,6 @@ export async function askCustomPostTg(
         useFooter: true,
         usePreview: !photoIdOrUrl.length,
         forceDisableFooter: !footerTmpl,
-        forceDisablePreview: Boolean(photoIdOrUrl.length),
         disableTags,
         tags: [],
         postText: caption,
@@ -96,9 +95,9 @@ async function printPostPreview(
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.selectedNoPreview
     + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
-    + tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
-      state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
-    ) + '\n'
+    // + tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
+    //   state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
+    // ) + '\n'
     + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${clearText.length}\n`
     + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
   );

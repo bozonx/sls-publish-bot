@@ -9,6 +9,7 @@ import {AdFormat, BuyAdType, CurrencyTicker} from '../types/types';
 import {askFormat} from './askFormat';
 import {askNote} from './askNote';
 import {askBuyAdType} from './askBuyAdType';
+import {askDateTime} from './askDateTime';
 
 
 const BUY_AD_TYPE_IDS: Record<BuyAdType, string> = {
@@ -36,108 +37,95 @@ const BUY_AD_FORMAT_IDS: Record<AdFormat, string> = {
 
 export async function startBuyAd(blogName: string, tgChat: TgChat) {
   await askCreative(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
-    await askDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
-      const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+    await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
 
-      await tgChat.reply(
-        tgChat.app.i18n.commonPhrases.selectedOnlyDate
-        + `${isoDate} ${utcOffset}`
-      );
+      // TODO: ask channel
 
-      await askTime(tgChat, tgChat.asyncCb(async (time: string) => {
-        await tgChat.reply(
-          tgChat.app.i18n.commonPhrases.pubDate
-          + `${isoDate} ${time} ${utcOffset}`
-        );
+      await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
+        await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
+          const formatId: string = BUY_AD_FORMAT_IDS[format];
 
-        // TODO: ask channel
+          await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: BuyAdType) => {
+            const adTypeId: string = BUY_AD_TYPE_IDS[adType];
 
-        await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
-          await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
-            const formatId: string = BUY_AD_FORMAT_IDS[format];
+            await tgChat.reply(tgChat.app.i18n.message.noteOrDone);
 
-            await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: BuyAdType) => {
-              const adTypeId: string = BUY_AD_TYPE_IDS[adType];
-
-              await tgChat.reply(tgChat.app.i18n.message.noteOrDone);
-
-              await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
-                const request: CreatePageParameters = {
-                  parent: { database_id: tgChat.app.config.blogs[blogName].notionBuyTgDbId },
-                  properties: {
+            await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
+              const request: CreatePageParameters = {
+                parent: { database_id: tgChat.app.config.blogs[blogName].notionBuyTgDbId },
+                properties: {
+                  date: {
+                    type: 'date',
                     date: {
-                      type: 'date',
-                      date: {
-                        start: isoDate,
-                      },
+                      start: isoDate,
                     },
-                    time: {
-                      type: 'rich_text',
-                      rich_text: [{
-                        type: 'text',
-                        text: {
-                          content: time
-                        },
-                      }],
-                    },
-                    ad_type: {
-                      type: 'select',
-                      select: {
-                        id: adTypeId,
-                      }
-                    },
-                    format: {
-                      type: 'select',
-                      select: {
-                        id: formatId,
-                      }
-                    },
-
-                    // channel: {
-                    //   type: 'rich_text',
-                    //   rich_text: [{
-                    //     type: 'text',
-                    //     text: {
-                    //       content: 'some channel',
-                    //       link: { url: 'https://ya.ru' },
-                    //     },
-                    //   }],
-                    // },
                   },
-                };
-
-                if (typeof cost !== 'undefined') {
-                  request.properties.price_rub = {
-                    type: 'number',
-                      number: cost,
-                  };
-                }
-
-                if (note) {
-                  request.properties.note = {
-                    type: 'title',
-                    title: [{
+                  time: {
+                    type: 'rich_text',
+                    rich_text: [{
+                      type: 'text',
                       text: {
-                        content: note,
+                        content: time
                       },
                     }],
-                  };
-                }
+                  },
+                  ad_type: {
+                    type: 'select',
+                    select: {
+                      id: adTypeId,
+                    }
+                  },
+                  format: {
+                    type: 'select',
+                    select: {
+                      id: formatId,
+                    }
+                  },
 
-                try {
-                  const result = await tgChat.app.notion.api.pages.create(request);
+                  // channel: {
+                  //   type: 'rich_text',
+                  //   rich_text: [{
+                  //     type: 'text',
+                  //     text: {
+                  //       content: 'some channel',
+                  //       link: { url: 'https://ya.ru' },
+                  //     },
+                  //   }],
+                  // },
+                },
+              };
 
-                  if (!result.id) throw new Error(`No result id`);
-                }
-                catch (e) {
-                  await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
-                }
+              if (typeof cost !== 'undefined') {
+                request.properties.price_rub = {
+                  type: 'number',
+                    number: cost,
+                };
+              }
 
-                await tgChat.reply(tgChat.app.i18n.message.buyAdDone);
-                await tgChat.steps.cancel();
-              }));
+              if (note) {
+                request.properties.note = {
+                  type: 'title',
+                  title: [{
+                    text: {
+                      content: note,
+                    },
+                  }],
+                };
+              }
 
+              try {
+                const result = await tgChat.app.notion.api.pages.create(request);
+
+                if (!result.id) throw new Error(`No result id`);
+              }
+              catch (e) {
+                await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
+              }
+
+              await tgChat.reply(tgChat.app.i18n.message.buyAdDone);
+              await tgChat.steps.cancel();
             }));
+
           }));
         }));
       }));
