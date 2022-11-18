@@ -4,14 +4,10 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  OK_BTN, OK_BTN_CALLBACK,
-  PRINT_FULL_DATE_FORMAT,
+  OK_BTN, OK_BTN_CALLBACK, WARN_SIGN,
 } from '../types/constants';
-import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
+import {addSimpleStep} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
-import moment from 'moment';
-import {askDate} from './askDate';
-import {askTime} from './askTime';
 import {askPostText} from './askPostText';
 import {askTags} from './askTags';
 
@@ -47,8 +43,20 @@ export async function askCustomPostMenu(
   blogName: string,
   tgChat: TgChat,
   state: CustomPostState,
+  validate: (tgChat: TgChat, state: CustomPostState) => void,
   onDone: () => void,
 ) {
+  let disableOk = false;
+
+  try {
+    validate(tgChat, state, );
+  }
+  catch (e) {
+    await tgChat.reply(`${WARN_SIGN} ${e}`);
+
+    disableOk = true
+  }
+
   const msg = tgChat.app.i18n.customPost.actionMenu;
   const buttons = [
     (!state.forceDisableFooter)
@@ -80,31 +88,15 @@ export async function askCustomPostMenu(
         callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
       },
     ]),
-    // [
-    //   {
-    //     text: (state.selectedDate)
-    //       ? tgChat.app.i18n.commonPhrases.pubDate
-    //         + moment(state.selectedDate).format(PRINT_FULL_DATE_FORMAT)
-    //       : tgChat.app.i18n.commonPhrases.setPubDate,
-    //     callback_data: CUSTOM_POST_ACTION.DATE_SELECT,
-    //   },
-    //   {
-    //     text: (state.selectedTime)
-    //       ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
-    //       : tgChat.app.i18n.commonPhrases.setPubTime,
-    //     callback_data: CUSTOM_POST_ACTION.TIME_SELECT,
-    //   },
-    // ],
     compactUndefined([
       BACK_BTN,
       CANCEL_BTN,
-      OK_BTN
-      //(state.selectedDate && state.selectedTime) ? OK_BTN : undefined,
+      (disableOk) ? undefined : OK_BTN,
     ]),
   ];
 
   await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
-    return handleButtons(queryData, blogName, tgChat, state, onDone);
+    return handleButtons(queryData, blogName, tgChat, state, validate, onDone);
   });
 }
 
@@ -113,6 +105,7 @@ async function handleButtons(
   blogName: string,
   tgChat: TgChat,
   state: CustomPostState,
+  validate: (tgChat: TgChat, state: CustomPostState) => void,
   onDone: () => void,
 ) {
   switch (queryData) {
@@ -131,7 +124,7 @@ async function handleButtons(
         + tgChat.app.i18n.onOff[Number(state.useFooter)]
       );
       // print menu again
-      return askCustomPostMenu(blogName, tgChat, state, onDone);
+      return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
     case CUSTOM_POST_ACTION.PREVIEW_SWITCH:
       // switch footer value
       state.usePreview = !state.usePreview;
@@ -141,7 +134,7 @@ async function handleButtons(
         + tgChat.app.i18n.onOff[Number(state.usePreview)]
       );
       // print menu again
-      return askCustomPostMenu(blogName, tgChat, state, onDone);
+      return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
     case CUSTOM_POST_ACTION.ADD_TEXT:
       return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text?: string) => {
         state.postText = text;
@@ -156,30 +149,14 @@ async function handleButtons(
         }
 
         // print menu again
-        return askCustomPostMenu(blogName, tgChat, state, onDone);
+        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.ADD_TAGS:
       return await askTags(state.tags, tgChat, tgChat.asyncCb(async (newTags: string[]) => {
         state.tags = newTags;
         // print menu again
-        return askCustomPostMenu(blogName, tgChat, state, onDone);
+        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
-    // case CUSTOM_POST_ACTION.DATE_SELECT:
-    //   return await askDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
-    //     state.selectedDate = newDate;
-    //     // print result
-    //     await tgChat.reply(makeDateTimeMsg(tgChat, state));
-    //     // print menu again
-    //     return askCustomPostMenu(blogName, tgChat, state, onDone);
-    //   }));
-    // case CUSTOM_POST_ACTION.TIME_SELECT:
-    //   return await askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-    //     state.selectedTime = newTime;
-    //     // print result
-    //     await tgChat.reply(makeDateTimeMsg(tgChat, state));
-    //     // print menu again
-    //     return askCustomPostMenu(blogName, tgChat, state, onDone);
-    //   }));
     default:
       throw new Error(`Unknown action`);
   }
@@ -205,3 +182,38 @@ async function handleButtons(
 //     return 'None';
 //   }
 // }
+
+// [
+//   {
+//     text: (state.selectedDate)
+//       ? tgChat.app.i18n.commonPhrases.pubDate
+//         + moment(state.selectedDate).format(PRINT_FULL_DATE_FORMAT)
+//       : tgChat.app.i18n.commonPhrases.setPubDate,
+//     callback_data: CUSTOM_POST_ACTION.DATE_SELECT,
+//   },
+//   {
+//     text: (state.selectedTime)
+//       ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
+//       : tgChat.app.i18n.commonPhrases.setPubTime,
+//     callback_data: CUSTOM_POST_ACTION.TIME_SELECT,
+//   },
+// ],
+
+// case CUSTOM_POST_ACTION.DATE_SELECT:
+//   return await askDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
+//     state.selectedDate = newDate;
+//     // print result
+//     await tgChat.reply(makeDateTimeMsg(tgChat, state));
+//     // print menu again
+//     return askCustomPostMenu(blogName, tgChat, state, onDone);
+//   }));
+// case CUSTOM_POST_ACTION.TIME_SELECT:
+//   return await askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
+//     state.selectedTime = newTime;
+//     // print result
+//     await tgChat.reply(makeDateTimeMsg(tgChat, state));
+//     // print menu again
+//     return askCustomPostMenu(blogName, tgChat, state, onDone);
+//   }));
+
+//(state.selectedDate && state.selectedTime) ? OK_BTN : undefined,

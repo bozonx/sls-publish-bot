@@ -3,9 +3,6 @@ import {makePost2000Text, makeTaskTgPostImage, makeTaskTgPostOnlyText} from './p
 import {askPostConfirm} from '../askUser/askPostConfirm';
 import {askCustomPostTg} from '../askUser/askCustomPostTg';
 import {CustomPostState} from '../askUser/askCustomPostMenu';
-import {askDate} from '../askUser/askDate';
-import {makeUtcOffsetStr} from '../helpers/helpers';
-import {askTime} from '../askUser/askTime';
 import {askDateTime} from '../askUser/askDateTime';
 
 
@@ -20,8 +17,7 @@ export async function startPublishCustomPostTg(
   await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (
     state: CustomPostState,
     resultText: string,
-    isPost2000: boolean,
-    disableOk: boolean,
+    isPost2000: boolean
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
 
@@ -73,7 +69,7 @@ export async function startPublishCustomPostTg(
 
         await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
         await tgChat.steps.cancel();
-      }), disableOk);
+      }));
 
     }));
   }), footerTmpl, mediaRequired, onlyOneImage, disableTags);

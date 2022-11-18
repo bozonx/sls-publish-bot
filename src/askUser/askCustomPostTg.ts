@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import {clearMdText, makeDateTimeStr, prepareFooter} from '../helpers/helpers';
+import {clearMdText, prepareFooter} from '../helpers/helpers';
 import {publishTgImage, publishTgText} from '../apiTg/publishTg';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants';
 import {askPostMedia} from './askPostMedia';
@@ -10,7 +10,7 @@ import validateCustomPost from '../publish/validateCustomPost';
 export async function askCustomPostTg(
   blogName: string,
   tgChat: TgChat,
-  onDone: (state: CustomPostState, resultText: string, isPost2000: boolean, disableOk: boolean) => void,
+  onDone: (state: CustomPostState, resultText: string, isPost2000: boolean) => void,
   footerTmpl?: string,
   mediaRequired = false,
   onlyOneImage = false,
@@ -32,33 +32,41 @@ export async function askCustomPostTg(
         images: photoIdOrUrl,
       };
 
-      await askCustomPostMenu(blogName, tgChat, state, tgChat.asyncCb(async  () => {
-        const footerStr = prepareFooter(footerTmpl, state.tags, state.useFooter);
-        const resultText = (state.postText || '') + footerStr;
-        const clearText = clearMdText(resultText);
-        let disableOk = false;
-        const isPost2000 = clearText.length > TELEGRAM_MAX_CAPTION
-          && clearText.length < TELEGRAM_MAX_POST;
+      await askCustomPostMenu(
+        blogName,
+        tgChat,
+        state,
+        (tgChat: TgChat, state: CustomPostState) => {
+          const {clearText, isPost2000} = makeResultText(state, footerTmpl);
 
-        if (isPost2000) await tgChat.reply(tgChat.app.i18n.message.post2000using);
-
-        await printPostPreview(blogName, tgChat, state, resultText, clearText);
-
-        try {
           validateCustomPost(state, isPost2000, clearText, tgChat);
-        }
-        catch (e) {
-          await tgChat.reply(`${WARN_SIGN} ${e}`);
+        },
+        tgChat.asyncCb(async  () => {
+          const {resultText, clearText, isPost2000} = makeResultText(state, footerTmpl);
 
-          disableOk = true;
-        }
+          if (isPost2000) await tgChat.reply(tgChat.app.i18n.message.post2000using);
 
-        onDone(state, resultText, isPost2000, disableOk);
-      }));
+          await printPostPreview(blogName, tgChat, state, resultText, clearText);
+
+          onDone(state, resultText, isPost2000);
+        }
+      ));
     })
   );
 }
 
+function makeResultText(
+  state: CustomPostState,
+  footerTmpl?: string
+): {resultText: string, clearText: string, isPost2000: boolean} {
+  const footerStr = prepareFooter(footerTmpl, state.tags, state.useFooter);
+  const resultText = (state.postText || '') + footerStr;
+  const clearText = clearMdText(resultText);
+  const isPost2000 = clearText.length > TELEGRAM_MAX_CAPTION
+    && clearText.length < TELEGRAM_MAX_POST;
+
+  return {resultText, clearText, isPost2000};
+}
 
 async function printPostPreview(
   blogName: string,
