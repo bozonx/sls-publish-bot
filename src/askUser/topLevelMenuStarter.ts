@@ -5,38 +5,21 @@ import {askTasksListMenu} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
 import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu';
 import {startBlogMenu} from './startBlogMenu';
+import {startTaskMenu} from './startTaskMenu';
+import {startSiteMenu} from './startSiteMenu';
+import {startTelegraphMenu} from './startTelegraphMenu';
 
 
 export async function topLevelMenuStarter(tgChat: TgChat) {
   return askMainMenu(tgChat, tgChat.asyncCb(async (blogNameOrAction: string) => {
     if (blogNameOrAction === MAIN_MENU_ACTION.SITE) {
-      // site selected
-      return askSiteMenu(tgChat, tgChat.asyncCb(async  () => {
-        await tgChat.reply('Under construction');
-        await tgChat.steps.cancel();
-      }));
+      await startSiteMenu(tgChat);
     }
     else if (blogNameOrAction === MAIN_MENU_ACTION.TASKS) {
-      return askTasksListMenu(
-        tgChat,
-        (taskId: string) => askTaskMenu(taskId, tgChat, () => {
-          tgChat.steps.back();
-        })
-      );
+      await startTaskMenu(tgChat);
     }
     else if (blogNameOrAction === MAIN_MENU_ACTION.TELEGRAPH) {
-      return askTelegraphMenu(tgChat, (action: TelegraphMenu) => {
-        switch (action) {
-          case TELEGRAPH_MENU.LOGIN:
-            // TODO: add
-            break;
-          case TELEGRAPH_MENU.LIST:
-            // TODO: add
-            break;
-          default:
-            break;
-        }
-      })
+      await startTelegraphMenu(tgChat);
     }
     else {
       return startBlogMenu(blogNameOrAction, tgChat);
