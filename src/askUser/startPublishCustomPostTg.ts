@@ -5,6 +5,7 @@ import {askCustomPostTg} from './askCustomPostTg';
 import {CustomPostState} from './askCustomPostMenu';
 import {askDateTime} from './askDateTime';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../publish/makePublishTaskTg';
+import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
 
 
 export async function startPublishCustomPostTg(
@@ -30,8 +31,7 @@ export async function startPublishCustomPostTg(
           resultText,
           isPost2000,
           state.usePreview,
-          state.images,
-          state.video
+          state.mediaGroup,
         );
         await tgChat.steps.cancel();
       }));
@@ -47,14 +47,16 @@ export async function registerCustomPostTg(
   resultText: string,
   isPost2000: boolean,
   usePreview: boolean,
-  images: string[],
-  video?: string
+  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
 ) {
-  const hasMedia = Boolean(images.length === 1 || video);
+  if (mediaGroup.length === 1) {
+    const imgUrl: string | undefined =
+      (mediaGroup[0].type === 'photo' && mediaGroup[0].fileId)
+      || (mediaGroup[0].type === 'photoUrl' && mediaGroup[0].url)
+      || undefined;
 
-  if (hasMedia) {
     if (isPost2000) {
-      const post2000Txt = await makePost2000Text(tgChat, resultText, images[0]);
+      const post2000Txt = await makePost2000Text(tgChat, resultText, imgUrl);
 
       await makePublishTaskTgOnlyText(
         isoDate,
@@ -62,31 +64,34 @@ export async function registerCustomPostTg(
         post2000Txt,
         blogName,
         tgChat,
-        (images[0]) ? true : usePreview,
+        (imgUrl) ? true : usePreview,
       );
-    } else {
-      if (video) {
+    }
+    else {
+      if (mediaGroup[0].type === 'video') {
         await makePublishTaskTgVideo(
           isoDate,
           time,
-          video,
+          mediaGroup[0].fileId,
           blogName,
           tgChat,
           resultText
         );
       }
       else {
+        if (!imgUrl) throw new Error(`No image`);
+
         await makePublishTaskTgImage(
           isoDate,
           time,
-          images[0],
+          imgUrl,
           blogName,
           tgChat,
           resultText
         );
       }
     }
-  } else if (images.length > 1) {
+  } else if (mediaGroup.length > 1) {
     // several images
     // TODO: а если несколько картинок ???
     throw new Error(`Not supported`);

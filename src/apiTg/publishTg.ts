@@ -103,20 +103,52 @@ export async function publishTgMediaGroup(
 ): Promise<number> {
   const result = await tgChat.app.tg.bot.telegram.sendMediaGroup(
     chatId,
-    [],
+    mediaGroup.map((el, index) => {
+      const firstItemDate = (index) ? {} : {
+        caption: captionMd,
+        parse_mode: tgChat.app.appConfig.telegram.parseMode,
+      };
+
+      if (el.type === 'photo') {
+        return {
+          type: 'photo',
+          media: el.fileId,
+          ...firstItemDate,
+        };
+      }
+      else if (el.type === 'photoUrl') {
+        return {
+          type: 'photo',
+          media: el.url,
+          ...firstItemDate,
+        };
+      }
+      else if (el.type === 'video') {
+        return {
+          type: 'video',
+          media: el.fileId,
+          ...firstItemDate,
+        };
+      }
+      else {
+        throw new Error(`Unknown media`);
+      }
+    }),
     {
-      caption: captionMd,
-      parse_mode: tgChat.app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
-      reply_markup: btnUrl && {
-        inline_keyboard: [
-          [ btnUrl ]
-        ]
-      } || undefined,
+      // reply_markup: btnUrl && {
+      //   inline_keyboard: [
+      //     [ btnUrl ]
+      //   ]
+      // } || undefined,
     }
   );
 
-  return result.message_id;
+  console.log(33333, result);
+
+  return 0;
+
+  //return result.message_id;
 }
 
 /**

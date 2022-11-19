@@ -10,19 +10,23 @@ export default function validateCustomPost(
   tgChat: TgChat
 ) {
   // if not text and image
-  if (!state.postText && !state.images.length) {
+  if (!state.postText && !state.mediaGroup.length) {
     throw tgChat.app.i18n.errors.noImageNoText;
   }
   // if post2000 has more than one image
-  else if (isPost2000 && state.images.length > 1) {
+  else if (isPost2000 && state.mediaGroup.length > 1) {
     throw tgChat.app.i18n.message.post2000oneImg;
   }
+  // if post2000 has video
+  else if (isPost2000 && state.mediaGroup.length && state.mediaGroup[0].type === 'video') {
+    throw tgChat.app.i18n.message.post2000video;
+  }
   // if text-like post is bigger than 2048
-  else if ((!state.images.length || isPost2000) && clearText.length > TELEGRAM_MAX_POST) {
+  else if ((!state.mediaGroup.length || isPost2000) && clearText.length > TELEGRAM_MAX_POST) {
     throw tgChat.app.i18n.errors.bigPost;
   }
   // if image caption too big
-  else if (state.images.length && clearText.length > TELEGRAM_MAX_CAPTION) {
+  else if (state.mediaGroup.length && clearText.length > TELEGRAM_MAX_CAPTION) {
     throw tgChat.app.i18n.errors.bigCaption;
   }
 }
