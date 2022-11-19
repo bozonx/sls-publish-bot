@@ -4,6 +4,7 @@ import BaseState from '../types/BaseState';
 import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
 import {PhotoMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent';
 import {isValidUrl} from '../lib/common';
+import {transformMdToTelegramMd} from '../helpers/transformMdToTelegramMd';
 
 
 interface AskPostMediaReturn {
@@ -122,6 +123,6 @@ async function handleText(textMsg: TextMessageEvent, tgChat: TgChat, onDone: Ask
     onDone({photoIdOrUrl: urls});
   }
   else {
-    onDone({caption: text})
+    onDone({caption: transformMdToTelegramMd(text)})
   }
 }
