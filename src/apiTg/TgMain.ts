@@ -66,9 +66,6 @@ export default class TgMain {
     });
 
     this.bot.on('message', (ctx) => {
-
-      console.log(2222, ctx.update.message)
-
       const message = ctx.update.message;
 
       if (!message.chat?.id) {

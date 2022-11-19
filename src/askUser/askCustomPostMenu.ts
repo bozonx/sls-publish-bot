@@ -20,6 +20,7 @@ export interface CustomPostState {
   tags: string[],
   postText?: string;
   images: string[];
+  video?: string;
 }
 
 export type CustomPostAction = 'FOOTER_SWITCH'

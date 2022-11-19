@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import {clearMdText, prepareFooter} from '../helpers/helpers';
-import {publishTgImage, publishTgText} from '../apiTg/publishTg';
+import {publishTgImage, publishTgText, publishTgVideo} from '../apiTg/publishTg';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants';
 import {askPostMedia} from './askPostMedia';
 import {askCustomPostMenu, CustomPostState} from './askCustomPostMenu';
@@ -21,15 +21,16 @@ export async function askCustomPostTg(
     onlyOneImage,
     blogName,
     tgChat,
-    tgChat.asyncCb(async (photoIdOrUrl: string[], caption?: string) => {
+    tgChat.asyncCb(async ({photoIdOrUrl, videoId, caption}) => {
       const state: CustomPostState = {
         useFooter: true,
-        usePreview: !photoIdOrUrl.length,
+        usePreview: !photoIdOrUrl?.length,
         forceDisableFooter: !footerTmpl,
         disableTags,
         tags: [],
         postText: caption,
-        images: photoIdOrUrl,
+        images: photoIdOrUrl || [],
+        video: videoId,
       };
 
       await askCustomPostMenu(
@@ -81,12 +82,20 @@ async function printPostPreview(
       state.images[0],
       tgChat,
       caption
-    )
+    );
   }
   else if (state.images.length > 1) {
     // several images
     // TODO: а если несколько картинок ???
     throw new Error(`Not supported`);
+  }
+  else if (state.video) {
+    await publishTgVideo(
+      tgChat.botChatId,
+      state.video,
+      tgChat,
+      caption
+    );
   }
   else {
     // no image

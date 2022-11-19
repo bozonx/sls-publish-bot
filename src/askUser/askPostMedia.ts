@@ -2,11 +2,17 @@ import _ from 'lodash';
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
 import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
-import {PhotoMessageEvent, TextMessageEvent} from '../types/MessageEvent';
+import {PhotoMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent';
 import {isValidUrl} from '../lib/common';
 
 
-export type AskPostMediaDone = (photoIdOrUrl: string[], caption?: string) => void
+interface AskPostMediaReturn {
+  photoIdOrUrl?: string[],
+  videoId?: string,
+  caption?: string
+}
+
+export type AskPostMediaDone = (data: AskPostMediaReturn) => void
 
 export const POST_MEDIA_ACTION = {
   SKIP: 'SKIP',
@@ -38,7 +44,6 @@ export async function askPostMedia(
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageIds.push(await tgChat.reply(msg, buttons));
-    // TODO: add video
     // TODO: поддержка расшаренного поста с текстом
     // listen to photo
     state.handlerIndexes.push([
@@ -48,10 +53,29 @@ export async function askPostMedia(
 
           // TODO: если их несколько ????
 
-          return onDone([photoMsg.photo.fileId], photoMsg.caption);
+          return onDone({
+            photoIdOrUrl: [photoMsg.photo.fileId],
+            caption: photoMsg.caption
+          });
         })
       ),
       ChatEvents.PHOTO
+    ]);
+    // listen to video
+    state.handlerIndexes.push([
+      tgChat.events.addListener(
+        ChatEvents.VIDEO,
+        tgChat.asyncCb(async (photoMsg: VideoMessageEvent) => {
+
+          // TODO: если их несколько ????
+
+          return onDone({
+            videoId: photoMsg.video.fileId,
+            caption: photoMsg.caption,
+          });
+        })
+      ),
+      ChatEvents.VIDEO
     ]);
     // listen to buttons
     state.handlerIndexes.push([
@@ -83,7 +107,7 @@ async function handleButtons(cbData: string, tgChat: TgChat, onDone: AskPostMedi
     return tgChat.steps.back();
   }
   else if (cbData === POST_MEDIA_ACTION.SKIP) {
-    return onDone([]);
+    return onDone({});
   }
 }
 
@@ -93,7 +117,7 @@ async function handleText(textMsg: TextMessageEvent, tgChat: TgChat, onDone: Ask
   // TODO: поддержка несколько ссылок через перенос строки
 
   if (isValidUrl(url)) {
-    onDone([url]);
+    onDone({photoIdOrUrl: [url]});
   }
   else {
     await tgChat.reply(tgChat.app.i18n.errors.incorrectUrl);

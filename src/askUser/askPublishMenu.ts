@@ -212,6 +212,10 @@ async function handleButtons(
         return askPublishMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
+
+      // TODO: нельзя видео - post2000, article, narrative
+      // TODO: нельзя фото - reels
+
       return askPostMedia(
         [
           PUBLICATION_TYPES.mem,
@@ -221,9 +225,11 @@ async function handleButtons(
         true,
         blogName,
         tgChat,
-        tgChat.asyncCb(async (photoIdOrUrl: string[]) => {
-          if (photoIdOrUrl.length) {
+        tgChat.asyncCb(async ({photoIdOrUrl}) => {
+          if (photoIdOrUrl?.length) {
             state.mainImgUrl = photoIdOrUrl[0];
+
+            // TODO: поддержка видео
 
             await printImage(tgChat, state.mainImgUrl);
           }
