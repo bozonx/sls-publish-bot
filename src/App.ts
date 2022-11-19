@@ -5,7 +5,7 @@ import ru from "./I18n/ru";
 import NotionApi from './apiNotion/NotionApi';
 import TasksMain from './taskManager/TasksMain';
 import ChannelLogger from './helpers/ChannelLogger';
-import ConsoleLogger from './helpers/ConsoleLogger';
+import ConsoleLogger from './lib/ConsoleLogger';
 import TelegraPhMain from './apiTelegraPh/telegraPhMain';
 import ExecConfig from './types/ExecConfig';
 

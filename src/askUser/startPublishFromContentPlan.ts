@@ -130,7 +130,7 @@ async function askMenu(
     );
 
     await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedPage);
-
+    // TODO: может проще делать steps.back() ????
     let disableOk = false;
 
     try {
