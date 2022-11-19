@@ -10,6 +10,7 @@ import {addSimpleStep} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
 import {askPostText} from './askPostText';
 import {askTags} from './askTags';
+import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
 
 
 export interface CustomPostState {
@@ -19,8 +20,7 @@ export interface CustomPostState {
   disableTags: boolean;
   tags: string[],
   postText?: string;
-  images: string[];
-  videos: string[];
+  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[];
 }
 
 export type CustomPostAction = 'FOOTER_SWITCH'
@@ -68,7 +68,7 @@ export async function askCustomPostMenu(
           callback_data: CUSTOM_POST_ACTION.FOOTER_SWITCH,
         }]
       : [],
-    (!state.images.length)
+    (!state.mediaGroup.length)
       ? [{
         text: (state.usePreview)
           ? tgChat.app.i18n.commonPhrases.noPreview

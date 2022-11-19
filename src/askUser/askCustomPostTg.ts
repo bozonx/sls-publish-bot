@@ -21,16 +21,15 @@ export async function askCustomPostTg(
     onlyOneImage,
     blogName,
     tgChat,
-    tgChat.asyncCb(async ({photoIdOrUrl, videoId, caption}) => {
+    tgChat.asyncCb(async ({mediaGroup, caption}) => {
       const state: CustomPostState = {
         useFooter: true,
-        usePreview: !photoIdOrUrl.length,
+        usePreview: !mediaGroup.length,
         forceDisableFooter: !footerTmpl,
         disableTags,
         tags: [],
         postText: caption,
-        images: photoIdOrUrl,
-        videos: videoId,
+        mediaGroup,
       };
 
       await askCustomPostMenu(
@@ -76,31 +75,40 @@ async function printPostPreview(
   caption?: string,
   clearText = '',
 ) {
-  if ((state.images.length + state.videos.length) > 1) {
+  if (state.mediaGroup.length > 1) {
     // media group
     await publishTgMediaGroup(
       tgChat.botChatId,
-      state.images,
-      state.videos,
+      state.mediaGroup,
       tgChat,
       caption
     );
   }
-  else if (state.images.length) {
-    await publishTgImage(
-      tgChat.botChatId,
-      state.images[0],
-      tgChat,
-      caption
-    );
-  }
-  else if (state.videos.length) {
-    await publishTgVideo(
-      tgChat.botChatId,
-      state.videos[0],
-      tgChat,
-      caption
-    );
+  else if (state.mediaGroup.length) {
+    if (state.mediaGroup[0].type === 'video') {
+      await publishTgVideo(
+        tgChat.botChatId,
+        state.mediaGroup[0].fileId,
+        tgChat,
+        caption
+      );
+    }
+    else if (state.mediaGroup[0].type === 'photo') {
+      await publishTgImage(
+        tgChat.botChatId,
+        state.mediaGroup[0].fileId,
+        tgChat,
+        caption
+      );
+    }
+    else if (state.mediaGroup[0].type === 'photoUrl') {
+      await publishTgImage(
+        tgChat.botChatId,
+        state.mediaGroup[0].url,
+        tgChat,
+        caption
+      );
+    }
   }
   else {
     // no image or video

@@ -1,5 +1,6 @@
 import TgChat from './TgChat';
 import PollData from '../types/PollData';
+import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
 
 
 /**
@@ -94,8 +95,7 @@ export async function publishTgVideo(
  */
 export async function publishTgMediaGroup(
   chatId: number | string,
-  images: string[],
-  videos: string[],
+  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   tgChat: TgChat,
   captionMd?: string,
   btnUrl?: {text: string, url: string},
