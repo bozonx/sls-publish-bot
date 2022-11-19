@@ -7,7 +7,13 @@ import BaseState from '../types/BaseState';
 import {makeBaseState} from '../helpers/helpers';
 import BotChatLog from '../helpers/BotChatLog';
 import {topLevelMenuStarter} from '../askUser/topLevelMenuStarter';
-import {MediaGroupItemMessageEvent, PhotoMessageEvent, PollMessageEvent, TextMessageEvent} from '../types/MessageEvent';
+import {
+  MediaGroupItemMessageEvent,
+  PhotoMessageEvent,
+  PollMessageEvent,
+  TextMessageEvent,
+  VideoMessageEvent
+} from '../types/MessageEvent';
 
 
 export default class TgChat {
@@ -81,6 +87,10 @@ export default class TgChat {
 
   handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
     this.events.emit(ChatEvents.PHOTO, msgEvent);
+  }
+
+  handleIncomeVideoEvent(msgEvent: VideoMessageEvent) {
+    this.events.emit(ChatEvents.VIDEO, msgEvent);
   }
 
   handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {

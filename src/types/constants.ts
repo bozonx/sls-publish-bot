@@ -11,6 +11,7 @@ export enum ChatEvents {
   CALLBACK_QUERY,
   TEXT,
   PHOTO,
+  VIDEO,
   MEDIA_GROUP_ITEM,
   POLL
 }

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Context, Telegraf } from 'telegraf';
 import App from '../App';
 import TgChat from './TgChat';
-import {PhotoSize} from 'typegram/message';
+import {PhotoSize, Video} from 'typegram/message';
 import MessageEventBase from '../types/MessageEvent';
 
 
@@ -67,6 +67,8 @@ export default class TgMain {
 
     this.bot.on('message', (ctx) => {
 
+      console.log(2222, ctx.update.message)
+
       const message = ctx.update.message;
 
       if (!message.chat?.id) {
@@ -95,7 +97,7 @@ export default class TgMain {
         });
       }
       else if ((message as any).photo) {
-        const lastPhoto = _.last((message as any).photo) as PhotoSize;
+        const lastPhoto = _.last((message as any).photo) as Video;
 
         this.chats[ctx.chat.id].handleIncomePhotoEvent({
           ...msgBase,
@@ -106,6 +108,23 @@ export default class TgMain {
             fileSize: lastPhoto.file_size,
             width: lastPhoto.width,
             height: lastPhoto.height,
+          }
+        });
+      }
+      else if ((message as any).video) {
+        const video = (message as any).video as Video;
+
+        this.chats[ctx.chat.id].handleIncomeVideoEvent({
+          ...msgBase,
+          caption: (message as any).caption,
+          video: {
+            fileId: video.file_id,
+            fileUniqueId: video.file_unique_id,
+            fileSize: video.file_size,
+            width: video.width,
+            height: video.height,
+            duration: video.duration,
+            mimeType: video.mime_type,
           }
         });
       }

@@ -6,6 +6,17 @@ interface PhotoEventData {
   height: number;
 }
 
+interface VideoEventData {
+  fileId: string;
+  fileUniqueId: string;
+  fileSize?: number;
+  width: number;
+  height: number;
+  duration: number
+  // 'video/mp4'
+  mimeType?: string;
+}
+
 export default interface MessageEventBase {
   messageId: number;
   fromId: number;
@@ -19,6 +30,11 @@ export interface TextMessageEvent extends MessageEventBase {
 
 export interface PhotoMessageEvent extends MessageEventBase {
   photo: PhotoEventData;
+  caption?: string;
+}
+
+export interface VideoMessageEvent extends MessageEventBase {
+  video: VideoEventData;
   caption?: string;
 }
 
