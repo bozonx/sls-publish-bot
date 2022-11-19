@@ -112,14 +112,16 @@ async function handleButtons(cbData: string, tgChat: TgChat, onDone: AskPostMedi
 }
 
 async function handleText(textMsg: TextMessageEvent, tgChat: TgChat, onDone: AskPostMediaDone) {
-  const url = _.trim(textMsg.text);
+  const text = _.trim(textMsg.text);
 
-  // TODO: поддержка несколько ссылок через перенос строки
+  if (isValidUrl(text)) {
+    const urls = text.split('\n')
+      .map((el) => _.trim(el))
+      .filter((el) => Boolean(el));
 
-  if (isValidUrl(url)) {
-    onDone({photoIdOrUrl: [url]});
+    onDone({photoIdOrUrl: urls});
   }
   else {
-    await tgChat.reply(tgChat.app.i18n.errors.incorrectUrl);
+    onDone({caption: text})
   }
 }
