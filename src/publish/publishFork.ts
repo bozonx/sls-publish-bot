@@ -5,6 +5,7 @@ import {SN_TYPES, SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from './makePublishTaskTg';
 import {NotionBlocks} from '../types/notion';
+import {publishPollTg} from './publishPollTg';
 
 
 export async function publishFork(
@@ -37,9 +38,9 @@ export async function publishFork(
         }
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {
-
-          // TODO: создать опрос полностью
-
+          return publishPollTg(
+            tgChat,
+          );
         }
         // only text
         else if ([

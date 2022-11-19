@@ -138,6 +138,8 @@ async function askMenu(
 
     try {
       // TODO: учитывать poll
+      // TODO: валидировать textBlocks + title. Только если статья
+      // TODO: валидация анонса - норм MD, должен иметь ссылку на статью
       validateContentPlanPost(state, tgChat);
       // TODO: учитывать poll
       validateContentPlanPostText(clearTexts, parsedContentItem.type, tgChat);
@@ -169,11 +171,9 @@ async function askMenu(
           state,
           parsedContentItem.type,
           postTexts,
-          // TODO: валидировать textBlocks + title. Только если статья
           parsedPage?.textBlocks,
           parsedPage?.title,
           parsedPage?.tgTags,
-          // TODO: валидация анонса - норм MD, должен иметь ссылку на статью
           parsedPage?.announcement
 
           // TODO: add prepared poll
