@@ -23,46 +23,61 @@ import {PUBLICATION_TYPES} from '../types/publicationType';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
-  // load not published records from content plan
-  const notPublishedItems: PageObjectResponse[] = await loadNotPublished(blogName,tgChat);
+  let notPublishedItems: PageObjectResponse[];
+
+  try {
+    // load not published records from content plan
+    notPublishedItems = await loadNotPublished(blogName,tgChat);
+  }
+  catch (e) {
+    await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
+    await tgChat.steps.back();
+
+    return;
+  }
+
   // ask use select not published item
   await askContentToUse(notPublishedItems, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
+    let parsedContentItem;
+    let parsedPage;
+
     try {
-      const parsedContentItem = prepareContentItem(item, tgChat.app.i18n);
-      const parsedPage = await loadAndPreparePage(parsedContentItem, blogName, tgChat);
-
-      if (!parsedPage && parsedContentItem.type !== PUBLICATION_TYPES.announcement) {
-        // if not nested page and it isn't announcement
-        await tgChat.reply(tgChat.app.i18n.errors.noNestedPage);
-        await tgChat.steps.back();
-      }
-
-      const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnType[];
-      const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
-      const clearTexts = makeClearTextFromNotion(
-        resolvedSns,
-        parsedContentItem.type,
-        true,
-        tgChat.app.config.blogs[blogName].sn.telegram,
-        parsedPage?.textBlocks,
-        parsedContentItem.gist,
-        parsedPage?.instaTags,
-        parsedPage?.tgTags
-      );
-      let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
-
-      mainImgUrl = await printImage(tgChat, mainImgUrl);
-
-      await printItemDetails(blogName, tgChat, clearTexts, resolvedSns, parsedContentItem, parsedPage);
-      await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
+      parsedContentItem = prepareContentItem(item, tgChat.app.i18n);
+      parsedPage = await loadAndPreparePage(parsedContentItem, blogName, tgChat);
     }
     catch (e) {
       await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
-
       await tgChat.steps.back();
 
       return;
     }
+
+    if (!parsedPage && parsedContentItem.type !== PUBLICATION_TYPES.announcement) {
+      // if not nested page and it isn't announcement
+      await tgChat.reply(tgChat.app.i18n.errors.noNestedPage);
+      await tgChat.steps.back();
+
+      return;
+    }
+
+    const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnType[];
+    const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
+    const clearTexts = makeClearTextFromNotion(
+      resolvedSns,
+      parsedContentItem.type,
+      true,
+      tgChat.app.config.blogs[blogName].sn.telegram,
+      parsedPage?.textBlocks,
+      parsedContentItem.gist,
+      parsedPage?.instaTags,
+      parsedPage?.tgTags
+    );
+    let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
+
+    mainImgUrl = await printImage(tgChat, mainImgUrl);
+
+    await printItemDetails(blogName, tgChat, clearTexts, resolvedSns, parsedContentItem, parsedPage);
+    await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
   }));
 }
 

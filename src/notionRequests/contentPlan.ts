@@ -12,22 +12,12 @@ export async function loadNotPublished(blogName: string, tgChat: TgChat): Promis
     .utcOffset(tgChat.app.appConfig.utcOffset)
     .format('YYYY-MM-DD');
 
-  try {
-    const response = await tgChat.app.notion.api.databases.query({
-      database_id: tgChat.app.config.blogs[blogName].notionContentPlanDbId,
-      ...makeContentPlanQuery(currentDate),
-    });
+  const response = await tgChat.app.notion.api.databases.query({
+    database_id: tgChat.app.config.blogs[blogName].notionContentPlanDbId,
+    ...makeContentPlanQuery(currentDate),
+  });
 
-    return (response as any).results.filter((item: any) => !item.archived);
-  }
-  catch (e) {
-    tgChat.log.error(`Can't load content plan data: ${e}`);
-
-    // TODO: what to do in error case ????
-    // TODO: нужно ли ждать отправки лога ????
-
-    throw e;
-  }
+  return (response as any).results.filter((item: any) => !item.archived);
 }
 
 function makeContentPlanQuery(currentDate: string): Record<string, any> {
