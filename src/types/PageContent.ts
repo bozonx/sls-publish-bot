@@ -1,4 +1,4 @@
-import {NOTION_BLOCKS} from './notion';
+import {NotionBlocks} from './notion';
 
 
 // TODO: rename
@@ -8,7 +8,7 @@ export default interface RawPageContent {
   imageDescr: string;
   instaTags: string[];
   tgTags: string[];
-  textBlocks: NOTION_BLOCKS;
+  textBlocks: NotionBlocks;
 }
 
 // props of notion page

@@ -1,6 +1,6 @@
 import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import TgChat from '../apiTg/TgChat';
-import {NOTION_BLOCKS} from '../types/notion';
+import {NotionBlocks} from '../types/notion';
 
 
 export const ROOT_LEVEL_BLOCKS = '0';
@@ -37,8 +37,8 @@ export const ROOT_LEVEL_BLOCKS = '0';
 export async function loadPageBlocks(
   pageId: string,
   tgChat: TgChat
-): Promise<NOTION_BLOCKS> {
-  const blocks: NOTION_BLOCKS = {};
+): Promise<NotionBlocks> {
+  const blocks: NotionBlocks = {};
 
   // It needs to check children
   // const resultPageRootBlock = await this.tgChat.app.notion.api.blocks.retrieve({

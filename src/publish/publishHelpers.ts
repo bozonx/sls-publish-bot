@@ -4,14 +4,14 @@ import {makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import ru from '../I18n/ru';
 import {SN_TYPES, SnType} from '../types/snTypes';
-import {NOTION_BLOCKS} from '../types/notion';
+import {NotionBlocks} from '../types/notion';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 
 
 // TODO: review
 
 
-export function getFirstImageFromNotionBlocks(blocks?: NOTION_BLOCKS): string | undefined {
+export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {
   if (!blocks) return;
 
   for (const item of blocks[ROOT_LEVEL_BLOCKS]) {

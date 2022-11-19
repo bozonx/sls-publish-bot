@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
-import {NOTION_BLOCKS} from '../types/notion';
+import {NotionBlocks} from '../types/notion';
 import {richTextToSimpleTextList} from './transformHelpers';
 
 
-export function transformNotionToCleanText(notionBlocks: NOTION_BLOCKS): string {
+export function transformNotionToCleanText(notionBlocks: NotionBlocks): string {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;

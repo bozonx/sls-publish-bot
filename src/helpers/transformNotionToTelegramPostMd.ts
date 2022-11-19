@@ -2,11 +2,11 @@ import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {NOTION_BLOCK_TYPES} from '../types/notion';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
-import {NOTION_BLOCKS} from '../types/notion';
+import {NotionBlocks} from '../types/notion';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers';
 
 
-export function transformNotionToTelegramPostMd(notionBlocks: NOTION_BLOCKS): string {
+export function transformNotionToTelegramPostMd(notionBlocks: NotionBlocks): string {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;

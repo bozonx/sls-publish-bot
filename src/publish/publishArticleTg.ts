@@ -10,8 +10,8 @@ import {makePublishTaskTgOnlyText} from './makePublishTaskTg';
 
 
 export async function publishArticleTg(
-  contentItem: ContentItem,
-  parsedPage: RawPageContent,
+  // contentItem: ContentItem,
+  // parsedPage: RawPageContent,
   blogName: string,
   tgChat: TgChat,
   correctedTime?: string,

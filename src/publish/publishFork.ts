@@ -4,6 +4,7 @@ import {PublishMenuState} from '../askUser/askPublishMenu';
 import {SN_TYPES, SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from './makePublishTaskTg';
+import {NotionBlocks} from '../types/notion';
 
 
 export async function publishFork(
@@ -12,7 +13,7 @@ export async function publishFork(
   state: PublishMenuState,
   pubType: PublicationType,
   postTexts: Record<SnType, string>,
-  //articleText: Record<SnTypes, string>,
+  contentBlocks: NotionBlocks,
   // TODO: add prepared poll
 ) {
   for (const sn of state.sns) {
@@ -20,13 +21,7 @@ export async function publishFork(
       case SN_TYPES.telegram:
         // article
         if (pubType === PUBLICATION_TYPES.article) {
-          // return publishArticleTg(
-          //   contentItem,
-          //   parsedPage,
-          //   blogName,
-          //   tgChat,
-          //   correctedTime
-          // );
+          return publishArticleTg(blogName, tgChat);
         }
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {

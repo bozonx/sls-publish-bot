@@ -1,6 +1,6 @@
 import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
-import {NOTION_BLOCKS} from '../types/notion';
+import {NotionBlocks} from '../types/notion';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 import {
   richTextToHtml,
@@ -686,9 +686,9 @@ const test = [
 ];
 
 
-export function transformNotionToTelegraph(notionBlocks: NOTION_BLOCKS): TelegraphNode[] {
+export function transformNotionToTelegraph(notionBlocks: NotionBlocks): TelegraphNode[] {
   // TODO: remove
-  //const notionBlocks: NOTION_BLOCKS = {'0': test} as any
+  //const notionBlocks: NotionBlocks = {'0': test} as any
 
   let result: TelegraphNode[] = [];
   let ulElIndex = -1;

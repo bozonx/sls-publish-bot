@@ -1,4 +1,4 @@
-import {NOTION_BLOCKS} from '../types/notion';
+import {NotionBlocks} from '../types/notion';
 import {prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
@@ -12,7 +12,7 @@ export function makeTgPostTextFromNotion(
   pubType: PublicationType,
   useTgFooter: boolean,
   tgBlogConfig?: BlogTelegramConfig,
-  textBlocks?: NOTION_BLOCKS,
+  textBlocks?: NotionBlocks,
   postText?: string,
   instaTags?: string[],
   tgTags?: string[],

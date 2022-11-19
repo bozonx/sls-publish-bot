@@ -1,4 +1,4 @@
-import {NOTION_BLOCKS} from '../types/notion';
+import {NotionBlocks} from '../types/notion';
 import {clearMdText, prepareFooter, resolveTgFooter} from './helpers';
 import {BlogTelegramConfig} from '../types/ExecConfig';
 import {transformNotionToCleanText} from './transformNotionToCleanText';
@@ -12,7 +12,7 @@ export function makeClearTextFromNotion(
   pubType: PublicationType,
   useTgFooter: boolean,
   tgBlogConfig?: BlogTelegramConfig,
-  textBlocks?: NOTION_BLOCKS,
+  textBlocks?: NotionBlocks,
   postText?: string,
   instaTags?: string[],
   tgTags?: string[],
