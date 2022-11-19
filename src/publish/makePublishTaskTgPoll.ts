@@ -22,11 +22,7 @@ export async function makePublishTaskTgPoll(
           is_anonymous: pollData.isAnonymous,
           correct_option_id: pollData.correctOptionId,
           explanation: pollData.explanation,
-
           explanation_parse_mode: tgChat.app.appConfig.telegram.parseMode,
-
-          // close_date of open_period
-          // disable_notification
         }
       )).message_id;
     }
@@ -37,11 +33,7 @@ export async function makePublishTaskTgPoll(
         pollData.options,
         {
           is_anonymous: pollData.isAnonymous,
-
           allows_multiple_answers: pollData.multipleAnswers,
-
-          // close_date or open_period
-          // disable_notification
         }
       )).message_id;
     }

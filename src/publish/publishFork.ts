@@ -6,6 +6,7 @@ import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from './makePublishTaskTg';
 import {NotionBlocks} from '../types/notion';
 import {makePublishTaskTgPoll} from './makePublishTaskTgPoll';
+import PollData from '../types/PollData';
 
 
 export async function publishFork(
@@ -18,7 +19,7 @@ export async function publishFork(
   articleTitle?: string,
   tgTags?: string[],
   announcement?: string,
-  // TODO: add prepared poll
+  pollData?: PollData
 ) {
   for (const sn of state.sns) {
     switch (sn) {
@@ -41,7 +42,7 @@ export async function publishFork(
           return makePublishTaskTgPoll(
             state.selectedDate,
             state.selectedTime,
-            {},
+            pollData!,
             blogName,
             tgChat,
           );

@@ -20,6 +20,7 @@ import {makeClearTextFromNotion} from '../helpers/makeClearTextFromNotion';
 import {makeTgPostTextFromNotion} from '../helpers/makeTgPostTextFromNotion';
 import {SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES} from '../types/publicationType';
+import PollData from '../types/PollData';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -62,7 +63,9 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
     const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnType[];
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
+
     // TODO: не нужно если poll
+
     const clearTexts = makeClearTextFromNotion(
       resolvedSns,
       parsedContentItem.type,
@@ -164,6 +167,21 @@ async function askMenu(
           state.instaTags,
           parsedPage?.tgTags,
         );
+
+        let pollData: PollData | undefined;
+
+        if (state.pubType === PUBLICATION_TYPES.poll) {
+
+          // TODO: сформировать из notion
+
+          pollData = {
+            question: 'some question',
+            options: ['1', '2'],
+            isAnonymous: true,
+            type: 'regular',
+          };
+        }
+
         // Do publish
         await publishFork(
           blogName,
@@ -174,10 +192,8 @@ async function askMenu(
           parsedPage?.textBlocks,
           parsedPage?.title,
           parsedPage?.tgTags,
-          parsedPage?.announcement
-
-          // TODO: add prepared poll
-
+          parsedPage?.announcement,
+          pollData
         );
       }
       catch (e) {
