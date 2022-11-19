@@ -8,7 +8,7 @@ export async function publishTgText(
   chatId: number | string,
   msg: string,
   tgChat: TgChat,
-  disablePreview = false,
+  allowPreview = true,
   btnUrl?: {text: string, url: string},
   disableNotification = false
 ): Promise<number> {
@@ -17,7 +17,7 @@ export async function publishTgText(
     msg,
     {
       parse_mode: tgChat.app.appConfig.telegram.parseMode,
-      disable_web_page_preview: disablePreview,
+      disable_web_page_preview: !allowPreview,
       disable_notification: disableNotification,
       reply_markup: btnUrl && {
         inline_keyboard: [

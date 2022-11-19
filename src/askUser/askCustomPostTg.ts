@@ -96,7 +96,7 @@ async function printPostPreview(
       tgChat.botChatId,
       caption,
       tgChat,
-      !state.usePreview
+      state.usePreview
     );
   }
   // preview state

@@ -20,35 +20,6 @@ export function getFirstImageFromNotionBlocks(blocks?: NOTION_BLOCKS): string | 
   }
 }
 
-export async function registerTaskTg(
-  isoDate: string,
-  resolvedTime: string,
-  msgId: number,
-  blogName: string,
-  tgChat: TgChat,
-) {
-  // get id of channel to publish postpone post
-  const chatId = tgChat.app.config.blogs[blogName].sn.telegram?.channelId;
-  const startTime = moment(`${isoDate}T${resolvedTime}:00`)
-    .utcOffset(tgChat.app.appConfig.utcOffset).format();
-
-  if (!chatId) {
-    throw new Error(`Telegram chat id doesn't set`);
-  }
-
-  const task: PostponePostTask = {
-    //startTime: '2022-11-01T19:58:00+03:00',
-    startTime,
-    type: TASK_TYPES.postponePost,
-    chatId,
-    //blogUname: blogName,
-    sn: SN_TYPES.telegram as 'telegram',
-    forwardMessageId: msgId,
-  };
-
-  await tgChat.app.tasks.addTask(task);
-}
-
 export function makeContentLengthString(
   i18n: typeof ru,
   clearTexts: Record<SnType, string>,
