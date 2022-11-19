@@ -4,7 +4,7 @@ import {askPostConfirm} from './askPostConfirm';
 import {askCustomPostTg} from './askCustomPostTg';
 import {CustomPostState} from './askCustomPostMenu';
 import {askDateTime} from './askDateTime';
-import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from '../publish/makePublishTaskTg';
+import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../publish/makePublishTaskTg';
 
 
 export async function startPublishCustomPostTg(
@@ -30,7 +30,8 @@ export async function startPublishCustomPostTg(
           resultText,
           isPost2000,
           state.usePreview,
-          state.images
+          state.images,
+          state.video
         );
         await tgChat.steps.cancel();
       }));
@@ -46,9 +47,12 @@ export async function registerCustomPostTg(
   resultText: string,
   isPost2000: boolean,
   usePreview: boolean,
-  images: string[]
+  images: string[],
+  video?: string
 ) {
-  if (images.length === 1) {
+  const hasMedia = Boolean(images.length === 1 || video);
+
+  if (hasMedia) {
     if (isPost2000) {
       const post2000Txt = await makePost2000Text(tgChat, resultText, images[0]);
 
@@ -61,14 +65,26 @@ export async function registerCustomPostTg(
         (images[0]) ? true : usePreview,
       );
     } else {
-      await makePublishTaskTgImage(
-        isoDate,
-        time,
-        images[0],
-        blogName,
-        tgChat,
-        resultText
-      );
+      if (video) {
+        await makePublishTaskTgVideo(
+          isoDate,
+          time,
+          video,
+          blogName,
+          tgChat,
+          resultText
+        );
+      }
+      else {
+        await makePublishTaskTgImage(
+          isoDate,
+          time,
+          images[0],
+          blogName,
+          tgChat,
+          resultText
+        );
+      }
     }
   } else if (images.length > 1) {
     // several images

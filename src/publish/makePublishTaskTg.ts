@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import {publishTgCopy, publishTgImage, publishTgPoll, publishTgText} from '../apiTg/publishTg';
+import {publishTgCopy, publishTgImage, publishTgPoll, publishTgText, publishTgVideo} from '../apiTg/publishTg';
 import {makePublishInfoMessage} from './publishHelpers';
 import moment from 'moment/moment';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
@@ -57,6 +57,36 @@ export async function makePublishTaskTgImage(
       tgChat,
       captionMd
     )
+  }
+  catch (e) {
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
+
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
+  }
+
+  await registerPublishTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat);
+}
+
+/**
+ * Post image to telegram
+ */
+export async function makePublishTaskTgVideo(
+  isoDate: string,
+  resolvedTime: string,
+  videoId: string,
+  blogName: string,
+  tgChat: TgChat,
+  captionMd?: string,
+) {
+  let msgId: number;
+  // Print to log channel
+  try {
+    msgId = await publishTgVideo(
+      tgChat.app.appConfig.logChannelId,
+      videoId,
+      tgChat,
+      captionMd
+    );
   }
   catch (e) {
     await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);

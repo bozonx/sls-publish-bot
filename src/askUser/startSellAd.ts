@@ -61,7 +61,8 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
                   resultText,
                   isPost2000,
                   state.usePreview,
-                  state.images
+                  state.images,
+                  state.video
                 );
 
                 const request: CreatePageParameters = {
