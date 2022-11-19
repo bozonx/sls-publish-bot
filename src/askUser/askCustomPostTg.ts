@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat';
 import {clearMdText, prepareFooter} from '../helpers/helpers';
-import {publishTgImage, publishTgText, publishTgVideo} from '../apiTg/publishTg';
+import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants';
 import {askPostMedia} from './askPostMedia';
 import {askCustomPostMenu, CustomPostState} from './askCustomPostMenu';
@@ -24,13 +24,13 @@ export async function askCustomPostTg(
     tgChat.asyncCb(async ({photoIdOrUrl, videoId, caption}) => {
       const state: CustomPostState = {
         useFooter: true,
-        usePreview: !photoIdOrUrl?.length,
+        usePreview: !photoIdOrUrl.length,
         forceDisableFooter: !footerTmpl,
         disableTags,
         tags: [],
         postText: caption,
-        images: photoIdOrUrl || [],
-        video: videoId,
+        images: photoIdOrUrl,
+        videos: videoId,
       };
 
       await askCustomPostMenu(
@@ -76,7 +76,17 @@ async function printPostPreview(
   caption?: string,
   clearText = '',
 ) {
-  if (state.images.length === 1) {
+  if ((state.images.length + state.videos.length) > 1) {
+    // media group
+    await publishTgMediaGroup(
+      tgChat.botChatId,
+      state.images,
+      state.videos,
+      tgChat,
+      caption
+    );
+  }
+  else if (state.images.length) {
     await publishTgImage(
       tgChat.botChatId,
       state.images[0],
@@ -84,21 +94,16 @@ async function printPostPreview(
       caption
     );
   }
-  else if (state.images.length > 1) {
-    // several images
-    // TODO: а если несколько картинок ???
-    throw new Error(`Not supported`);
-  }
-  else if (state.video) {
+  else if (state.videos.length) {
     await publishTgVideo(
       tgChat.botChatId,
-      state.video,
+      state.videos[0],
       tgChat,
       caption
     );
   }
   else {
-    // no image
+    // no image or video
     if (!caption) throw new Error(`No text`);
 
     await publishTgText(

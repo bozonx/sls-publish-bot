@@ -93,9 +93,9 @@ export default class TgChat {
     this.events.emit(ChatEvents.VIDEO, msgEvent);
   }
 
-  handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
-    this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
-  }
+  // handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
+  //   this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
+  // }
 
   handleIncomePollEvent(msgEvent: PollMessageEvent) {
     this.events.emit(ChatEvents.POLL, msgEvent);

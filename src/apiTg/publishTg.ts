@@ -61,7 +61,7 @@ export async function publishTgImage(
 }
 
 /**
- * Publish one image
+ * Publish one video
  */
 export async function publishTgVideo(
   chatId: number | string,
@@ -74,6 +74,36 @@ export async function publishTgVideo(
   const result = await tgChat.app.tg.bot.telegram.sendVideo(
     chatId,
     videoUrl,
+    {
+      caption: captionMd,
+      parse_mode: tgChat.app.appConfig.telegram.parseMode,
+      disable_notification: disableNotification,
+      reply_markup: btnUrl && {
+        inline_keyboard: [
+          [ btnUrl ]
+        ]
+      } || undefined,
+    }
+  );
+
+  return result.message_id;
+}
+
+/**
+ * Publish media group
+ */
+export async function publishTgMediaGroup(
+  chatId: number | string,
+  images: string[],
+  videos: string[],
+  tgChat: TgChat,
+  captionMd?: string,
+  btnUrl?: {text: string, url: string},
+  disableNotification = false
+): Promise<number> {
+  const result = await tgChat.app.tg.bot.telegram.sendMediaGroup(
+    chatId,
+    [],
     {
       caption: captionMd,
       parse_mode: tgChat.app.appConfig.telegram.parseMode,

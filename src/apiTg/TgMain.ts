@@ -94,12 +94,13 @@ export default class TgMain {
         });
       }
       else if ((message as any).photo) {
-        const lastPhoto = _.last((message as any).photo) as Video;
+        const lastPhoto = _.last((message as any).photo) as PhotoSize;
 
         this.chats[ctx.chat.id].handleIncomePhotoEvent({
           ...msgBase,
           caption: (message as any).caption,
           photo: {
+            type: 'photo',
             fileId: lastPhoto.file_id,
             fileUniqueId: lastPhoto.file_unique_id,
             fileSize: lastPhoto.file_size,
@@ -115,6 +116,7 @@ export default class TgMain {
           ...msgBase,
           caption: (message as any).caption,
           video: {
+            type: 'video',
             fileId: video.file_id,
             fileUniqueId: video.file_unique_id,
             fileSize: video.file_size,
@@ -125,22 +127,23 @@ export default class TgMain {
           }
         });
       }
-      else if ((message as any).media_group_id) {
-        const lastPhoto = _.last((message as any).photo) as PhotoSize;
-
-        this.chats[ctx.chat.id].handleIncomeMediaGroupItemEvent({
-          ...msgBase,
-          caption: (message as any).caption,
-          mediaGroupId: (message as any).media_group_id,
-          photo: {
-            fileId: lastPhoto.file_id,
-            fileUniqueId: lastPhoto.file_unique_id,
-            fileSize: lastPhoto.file_size,
-            width: lastPhoto.width,
-            height: lastPhoto.height,
-          }
-        });
-      }
+      // else if ((message as any).media_group_id) {
+      //   const lastPhoto = _.last((message as any).photo) as PhotoSize;
+      //
+      //   this.chats[ctx.chat.id].handleIncomeMediaGroupItemEvent({
+      //     ...msgBase,
+      //     caption: (message as any).caption,
+      //     mediaGroupId: (message as any).media_group_id,
+      //     photo: {
+      //       type: 'photo',
+      //       fileId: lastPhoto.file_id,
+      //       fileUniqueId: lastPhoto.file_unique_id,
+      //       fileSize: lastPhoto.file_size,
+      //       width: lastPhoto.width,
+      //       height: lastPhoto.height,
+      //     }
+      //   });
+      // }
       else if ((message as any).poll) {
         this.chats[ctx.chat.id].handleIncomePollEvent({
           ...msgBase,

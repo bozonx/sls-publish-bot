@@ -1,15 +1,27 @@
 import _ from 'lodash';
 import TgChat from '../apiTg/TgChat';
 import BaseState from '../types/BaseState';
-import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
-import {PhotoMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent';
+import {
+  ChatEvents,
+  BACK_BTN,
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN,
+  CANCEL_BTN_CALLBACK,
+  OK_BTN,
+  OK_BTN_CALLBACK
+} from '../types/constants';
+import {
+  PhotoData,
+  PhotoMessageEvent, PhotoUrlData,
+  TextMessageEvent, VideoData,
+  VideoMessageEvent
+} from '../types/MessageEvent';
 import {isValidUrl} from '../lib/common';
 import {transformMdToTelegramMd} from '../helpers/transformMdToTelegramMd';
 
 
 interface AskPostMediaReturn {
-  photoIdOrUrl?: string[],
-  videoId?: string,
+  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   caption?: string
 }
 
@@ -39,25 +51,25 @@ export async function askPostMedia(
     [
       BACK_BTN,
       CANCEL_BTN,
+      OK_BTN,
     ]
   ];
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
+    const returnData: AskPostMediaReturn = {
+      mediaGroup: [],
+    };
+
     // print main menu message
     state.messageIds.push(await tgChat.reply(msg, buttons));
-    // TODO: поддержка расшаренного поста с текстом
     // listen to photo
     state.handlerIndexes.push([
       tgChat.events.addListener(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
+          if (photoMsg.caption) returnData.caption = photoMsg.caption;
 
-          // TODO: если их несколько ????
-
-          return onDone({
-            photoIdOrUrl: [photoMsg.photo.fileId],
-            caption: photoMsg.caption
-          });
+          returnData.mediaGroup.push(photoMsg.photo);
         })
       ),
       ChatEvents.PHOTO
@@ -67,13 +79,9 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.VIDEO,
         tgChat.asyncCb(async (photoMsg: VideoMessageEvent) => {
+          if (photoMsg.caption) returnData.caption = photoMsg.caption;
 
-          // TODO: если их несколько ????
-
-          return onDone({
-            videoId: photoMsg.video.fileId,
-            caption: photoMsg.caption,
-          });
+          returnData.mediaGroup.push(photoMsg.video);
         })
       ),
       ChatEvents.VIDEO
@@ -82,7 +90,7 @@ export async function askPostMedia(
     state.handlerIndexes.push([
       tgChat.events.addListener(
         ChatEvents.CALLBACK_QUERY,
-        tgChat.asyncCb(async (cbData: string) => handleButtons(cbData, tgChat, onDone))
+        tgChat.asyncCb(async (cbData: string) => handleButtons(cbData, returnData, tgChat, onDone))
       ),
       ChatEvents.CALLBACK_QUERY
     ]);
@@ -90,9 +98,22 @@ export async function askPostMedia(
     state.handlerIndexes.push([
       tgChat.events.addListener(
         ChatEvents.TEXT,
-        tgChat.asyncCb(
-          async (textMsg: TextMessageEvent) => handleText(textMsg, tgChat, onDone)
-        )
+        tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
+          const text = _.trim(textMsg.text);
+
+          if (isValidUrl(text)) {
+            text.split('\n')
+              .map((el) => _.trim(el))
+              .filter((el) => Boolean(el))
+              .forEach((url) => returnData.mediaGroup.push({
+                type: 'photoUrl',
+                url
+              }));
+          }
+          else {
+            returnData.caption = transformMdToTelegramMd(text);
+          }
+        })
       ),
       ChatEvents.TEXT
     ]);
@@ -100,7 +121,11 @@ export async function askPostMedia(
 }
 
 
-async function handleButtons(cbData: string, tgChat: TgChat, onDone: AskPostMediaDone) {
+async function handleButtons(
+  cbData: string,
+  returnData: AskPostMediaReturn,
+  tgChat: TgChat, onDone: AskPostMediaDone
+) {
   if (cbData === CANCEL_BTN_CALLBACK) {
     return tgChat.steps.cancel();
   }
@@ -108,21 +133,9 @@ async function handleButtons(cbData: string, tgChat: TgChat, onDone: AskPostMedi
     return tgChat.steps.back();
   }
   else if (cbData === POST_MEDIA_ACTION.SKIP) {
-    return onDone({});
+    return onDone({mediaGroup: []});
   }
-}
-
-async function handleText(textMsg: TextMessageEvent, tgChat: TgChat, onDone: AskPostMediaDone) {
-  const text = _.trim(textMsg.text);
-
-  if (isValidUrl(text)) {
-    const urls = text.split('\n')
-      .map((el) => _.trim(el))
-      .filter((el) => Boolean(el));
-
-    onDone({photoIdOrUrl: urls});
-  }
-  else {
-    onDone({caption: transformMdToTelegramMd(text)})
+  else if (cbData === OK_BTN_CALLBACK) {
+    return onDone(returnData);
   }
 }

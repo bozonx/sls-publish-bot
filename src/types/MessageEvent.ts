@@ -1,4 +1,10 @@
-interface PhotoEventData {
+export interface PhotoUrlData {
+  type: 'photoUrl',
+  url: string,
+}
+
+export interface PhotoData {
+  type: 'photo',
   fileId: string;
   fileUniqueId: string;
   fileSize?: number;
@@ -6,7 +12,8 @@ interface PhotoEventData {
   height: number;
 }
 
-interface VideoEventData {
+export interface VideoData {
+  type: 'video',
   fileId: string;
   fileUniqueId: string;
   fileSize?: number;
@@ -29,17 +36,17 @@ export interface TextMessageEvent extends MessageEventBase {
 }
 
 export interface PhotoMessageEvent extends MessageEventBase {
-  photo: PhotoEventData;
+  photo: PhotoData;
   caption?: string;
 }
 
 export interface VideoMessageEvent extends MessageEventBase {
-  video: VideoEventData;
+  video: VideoData;
   caption?: string;
 }
 
 export interface MediaGroupItemMessageEvent extends MessageEventBase {
-  photo: PhotoEventData;
+  photo: PhotoData;
   caption?: string;
   mediaGroupId: number;
 }

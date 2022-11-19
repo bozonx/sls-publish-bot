@@ -12,7 +12,7 @@ export enum ChatEvents {
   TEXT,
   PHOTO,
   VIDEO,
-  MEDIA_GROUP_ITEM,
+  //MEDIA_GROUP_ITEM,
   POLL
 }
 
