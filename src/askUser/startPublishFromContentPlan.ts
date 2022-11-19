@@ -170,8 +170,14 @@ async function askMenu(
           parsedContentItem.type,
           postTexts,
           // TODO: валидировать. Только если статья
-          parsedPage?.textBlocks!,
+          parsedPage?.textBlocks,
+          parsedPage?.title,
+          parsedPage?.tgTags,
+          // TODO: валидация анонса - норм MD, должен иметь ссылку на статью
+          parsedPage?.announcement
+
           // TODO: add prepared poll
+
         );
       }
       catch (e) {

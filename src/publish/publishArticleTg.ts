@@ -13,10 +13,10 @@ export async function publishArticleTg(
   tgChat: TgChat,
   isoDate: string,
   time: string,
-  articleTitle: string,
   articleBlocks: NotionBlocks,
+  articleTitle: string,
   tgTags: string[],
-  announce?: string,
+  announcement?: string,
 ) {
   const postTmpl = tgChat.app.config.blogs[blogName].sn.telegram?.articlePostTmpl;
   const footer = tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter;
@@ -40,8 +40,8 @@ export async function publishArticleTg(
   const articleUrl = makeTelegraPhUrl(tgPath);
   let postStr: string;
 
-  if (announce) {
-    postStr = _.template(announce)({
+  if (announcement) {
+    postStr = _.template(announcement)({
       TITLE: articleTitle,
       ARTICLE_URL: articleUrl,
     });

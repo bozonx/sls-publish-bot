@@ -13,7 +13,10 @@ export async function publishFork(
   state: PublishMenuState,
   pubType: PublicationType,
   postTexts: Record<SnType, string>,
-  articleBlocks: NotionBlocks,
+  articleBlocks?: NotionBlocks,
+  articleTitle?: string,
+  tgTags?: string[],
+  announcement?: string,
   // TODO: add prepared poll
 ) {
   for (const sn of state.sns) {
@@ -26,11 +29,10 @@ export async function publishFork(
             tgChat,
             state.selectedDate,
             state.selectedTime,
-            articleTitle,
-            articleBlocks,
-            tgTags,
-            // TODO: валидация анонса - норм MD, должен иметь ссылку на статью
-            announce
+            articleBlocks!,
+            articleTitle!,
+            tgTags!,
+            announcement
           );
         }
         // poll
