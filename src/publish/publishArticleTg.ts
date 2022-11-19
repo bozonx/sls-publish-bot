@@ -15,7 +15,7 @@ export async function publishArticleTg(
   time: string,
   articleBlocks: NotionBlocks,
   articleTitle: string,
-  tgTags: string[],
+  tgTags?: string[],
   announcement?: string,
 ) {
   const postTmpl = tgChat.app.config.blogs[blogName].sn.telegram?.articlePostTmpl;
@@ -46,7 +46,7 @@ export async function publishArticleTg(
       ARTICLE_URL: articleUrl,
     });
 
-    if (tgTags.length) {
+    if (tgTags && tgTags.length) {
       postStr += '\n\n' + mdFormat.escape(makeTagsString(tgTags));
     }
   }

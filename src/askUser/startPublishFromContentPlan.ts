@@ -169,7 +169,7 @@ async function askMenu(
           state,
           parsedContentItem.type,
           postTexts,
-          // TODO: валидировать. Только если статья
+          // TODO: валидировать textBlocks + title. Только если статья
           parsedPage?.textBlocks,
           parsedPage?.title,
           parsedPage?.tgTags,

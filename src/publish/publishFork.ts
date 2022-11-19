@@ -31,7 +31,7 @@ export async function publishFork(
             state.selectedTime,
             articleBlocks!,
             articleTitle!,
-            tgTags!,
+            tgTags,
             announcement
           );
         }
