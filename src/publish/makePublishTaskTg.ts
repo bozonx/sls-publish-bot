@@ -28,10 +28,9 @@ export async function makePublishTaskTgOnlyText(
     );
   }
   catch (e) {
-    // TODO: писать юзеру вощето
-    await tgChat.app.channelLog.error(`Can't publish prepared post to telegram to log channel`);
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
 
-    throw e;
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
   await registerPublishTaskTg(isoDate, time, postMsgId, blogName, tgChat);
@@ -51,31 +50,18 @@ export async function makePublishTaskTgImage(
   let msgId: number;
   // Print to log channel
   try {
-
-    // TODO: сделать поддержку нескольких картинок
-
     msgId = await publishTgImage(
       tgChat.app.appConfig.logChannelId,
       imageUrl,
       tgChat,
       captionMd
     )
-
-    // await tgChat.app.tg.bot.telegram.sendMessage(
-    //   tgChat.app.appConfig.logChannelId,
-    //   makePublishInfoMessage(isoDate, resolvedTime, blogName, tgChat),
-    //   {
-    //     reply_to_message_id: msgId,
-    //   }
-    // )
   }
   catch (e) {
-    // TODO: писать юзеру вощето
-    await tgChat.app.channelLog.error(`Can't publish prepared post to telegram to log channel`);
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
 
-    throw e;
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
-
 
   await registerPublishTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat);
 }
@@ -99,20 +85,11 @@ export async function makePublishTaskTgCopy(
       messageId,
       tgChat
     );
-
-    // await tgChat.app.tg.bot.telegram.sendMessage(
-    //   tgChat.app.appConfig.logChannelId,
-    //   makePublishInfoMessage(isoDate, resolvedTime, blogName, tgChat),
-    //   {
-    //     reply_to_message_id: msgId,
-    //   }
-    // )
   }
   catch (e) {
-    // TODO: писать юзеру вощето
-    await tgChat.app.channelLog.error(`Can't publish prepared post to telegram to log channel`);
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
 
-    throw e;
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
   await registerPublishTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat);
@@ -127,6 +104,7 @@ async function registerPublishTaskTg(
   tgChat: TgChat,
 ) {
   try {
+    // send info message
     await tgChat.app.tg.bot.telegram.sendMessage(
       tgChat.app.appConfig.logChannelId,
       makePublishInfoMessage(isoDate, time, blogName, tgChat),
@@ -136,25 +114,26 @@ async function registerPublishTaskTg(
     );
   }
   catch (e) {
-    // TODO: писать юзеру
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
+
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
-
-
   // get id of channel to publish postpone post
   const chatId = tgChat.app.config.blogs[blogName].sn.telegram?.channelId;
   const startTime = moment(`${isoDate}T${time}:00`)
     .utcOffset(tgChat.app.appConfig.utcOffset).format();
 
   if (!chatId) {
+    await tgChat.reply(tgChat.app.i18n.errors.noChannel);
+
     throw new Error(`Telegram chat id doesn't set`);
   }
 
   const task: PostponePostTask = {
-    //startTime: '2022-11-01T19:58:00+03:00',
+    // time like '2022-11-01T19:58:00+03:00'
     startTime,
     type: TASK_TYPES.postponePost,
     chatId,
-    //blogUname: blogName,
     sn: SN_TYPES.telegram as 'telegram',
     forwardMessageId: postMsgId,
   };

@@ -13,7 +13,8 @@ export type TaskTypes = 'postponePost'
   | 'unpinPost'
   | 'finishPoll';
 
-
+// TODO: rename - means only tg post
+// TODO: rename - добавить из какого канала брать пост
 export interface PostponePostTask extends TaskTgBase {
   forwardMessageId: number;
 }

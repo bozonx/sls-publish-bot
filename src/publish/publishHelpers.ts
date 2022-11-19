@@ -4,7 +4,6 @@ import {makeUtcOffsetStr} from '../helpers/helpers';
 import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import ru from '../I18n/ru';
 import {SN_TYPES, SnType} from '../types/snTypes';
-import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {NOTION_BLOCKS} from '../types/notion';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
 

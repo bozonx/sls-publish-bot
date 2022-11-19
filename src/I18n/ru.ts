@@ -165,6 +165,8 @@ const dict = {
     noTitle: 'Нет заголовка',
     invalidNumber: 'Не валидное число',
     cantCreatePage: 'Не удалось создать страницу: ',
+    cantPostToLogChannel: 'Не удалось записать в канал лога: ',
+    noChannel: 'Не найден канал для публикации',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
