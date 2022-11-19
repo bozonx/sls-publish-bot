@@ -30,7 +30,7 @@ const execConf: ExecConfig = {
           reelFooter:  '\n\n[СОЖ 🌴](https://t.me/+DT00UFZf3_IwYmY6) \\| \\#рилс',
           articlePostTmpl: '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }',
           articleFooter: [
-            'Автор: Козырин Иван',
+            'Автор: Козырин Иван, ',
             {
               tag: 'a',
               attrs: {href: 'https://t.me/+DT00UFZf3_IwYmY6'},

@@ -151,6 +151,7 @@ async function askMenu(
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       try {
         // TODO: не делать если poll
+        // TODO: а нужно ли это тут делать???? или всетаки уже в fork ???
         const postTexts = makeTgPostTextFromNotion(
           state.sns,
           state.pubType,
@@ -168,7 +169,8 @@ async function askMenu(
           state,
           parsedContentItem.type,
           postTexts,
-          // TODO: add articleTexts
+          // TODO: валидировать. Только если статья
+          parsedPage?.textBlocks!,
           // TODO: add prepared poll
         );
       }

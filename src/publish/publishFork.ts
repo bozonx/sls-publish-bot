@@ -13,7 +13,7 @@ export async function publishFork(
   state: PublishMenuState,
   pubType: PublicationType,
   postTexts: Record<SnType, string>,
-  contentBlocks: NotionBlocks,
+  articleBlocks: NotionBlocks,
   // TODO: add prepared poll
 ) {
   for (const sn of state.sns) {
@@ -21,7 +21,17 @@ export async function publishFork(
       case SN_TYPES.telegram:
         // article
         if (pubType === PUBLICATION_TYPES.article) {
-          return publishArticleTg(blogName, tgChat);
+          return publishArticleTg(
+            blogName,
+            tgChat,
+            state.selectedDate,
+            state.selectedTime,
+            articleTitle,
+            articleBlocks,
+            tgTags,
+            // TODO: валидация анонса - норм MD, должен иметь ссылку на статью
+            announce
+          );
         }
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {

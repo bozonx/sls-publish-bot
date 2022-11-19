@@ -1,29 +1,29 @@
-import {markdownv2 as mdFormat} from 'telegram-format';
-import ContentItem from '../types/ContentItem';
-import RawPageContent from '../types/PageContent';
-import TgChat from '../apiTg/TgChat';
 import _ from 'lodash';
+import {markdownv2 as mdFormat} from 'telegram-format';
+import TgChat from '../apiTg/TgChat';
 import {makeTelegraPhUrl} from '../helpers/helpers';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
 import {makeTagsString} from '../lib/common';
 import {makePublishTaskTgOnlyText} from './makePublishTaskTg';
+import {NotionBlocks} from '../types/notion';
 
 
 export async function publishArticleTg(
-  // contentItem: ContentItem,
-  // parsedPage: RawPageContent,
   blogName: string,
   tgChat: TgChat,
-  correctedTime?: string,
+  isoDate: string,
+  time: string,
+  articleTitle: string,
+  articleBlocks: NotionBlocks,
+  tgTags: string[],
+  announce?: string,
 ) {
-  const resolvedTime = (correctedTime) ? correctedTime : contentItem.time;
-  const tmpl = tgChat.app.config.blogs[blogName].sn.telegram?.articlePostTmpl;
+  const postTmpl = tgChat.app.config.blogs[blogName].sn.telegram?.articlePostTmpl;
   const footer = tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter;
 
-  if (!tmpl) throw new Error(`Telegram config doesn't have article post template`);
+  if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`);
 
-  const telegraPhContent = transformNotionToTelegraph(parsedPage.textBlocks);
-
+  const telegraPhContent = transformNotionToTelegraph(articleBlocks);
   // add footer
   if (footer) {
     telegraPhContent.push({
@@ -36,18 +36,31 @@ export async function publishArticleTg(
   }
 
   // create article on telegra.ph
-  const tgPath = await tgChat.app.telegraPh.create(blogName, parsedPage.title, telegraPhContent);
+  const tgPath = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraPhContent);
   const articleUrl = makeTelegraPhUrl(tgPath);
+  let postStr: string;
 
-  const postStr = _.template(tmpl)({
-    TITLE: parsedPage.title,
-    ARTICLE_URL: articleUrl,
-    TAGS: mdFormat.escape(makeTagsString(parsedPage.tgTags)),
-  });
+  if (announce) {
+    postStr = _.template(announce)({
+      TITLE: articleTitle,
+      ARTICLE_URL: articleUrl,
+    });
+
+    if (tgTags.length) {
+      postStr += '\n\n' + mdFormat.escape(makeTagsString(tgTags));
+    }
+  }
+  else {
+    postStr = _.template(postTmpl)({
+      TITLE: articleTitle,
+      ARTICLE_URL: articleUrl,
+      TAGS: mdFormat.escape(makeTagsString(tgTags)),
+    });
+  }
 
   await makePublishTaskTgOnlyText(
-    contentItem.date,
-    resolvedTime,
+    isoDate,
+    time,
     postStr,
     blogName,
     tgChat,
