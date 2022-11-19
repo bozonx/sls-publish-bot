@@ -1,9 +1,9 @@
 import TgChat from '../apiTg/TgChat';
-import {askPoll} from '../askUser/askPoll';
-import {askPostConfirm} from '../askUser/askPostConfirm';
+import {askPoll} from './askPoll';
+import {askPostConfirm} from './askPostConfirm';
 import {PollMessageEvent} from '../types/MessageEvent';
-import {publishCopyTg} from './publishHelpers';
-import {askDateTime} from '../askUser/askDateTime';
+import {publishCopyTg} from '../publish/publishHelpers';
+import {askDateTime} from './askDateTime';
 
 
 export async function startPublishPollTg(blogName: string, tgChat: TgChat) {

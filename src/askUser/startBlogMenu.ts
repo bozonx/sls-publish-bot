@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat';
-import {startPublishFromContentPlan} from '../publish/startPublishFromContentPlan';
-import {startPublishCustomPostTg} from '../publish/startPublishCustomPostTg';
-import {startPublishPollTg} from '../publish/startPublishPollTg';
+import {startPublishFromContentPlan} from './startPublishFromContentPlan';
+import {startPublishCustomPostTg} from './startPublishCustomPostTg';
+import {startPublishPollTg} from './startPublishPollTg';
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu';
 import {startSellAd} from './startSellAd';
 import {startBuyAd} from './startBuyAd';

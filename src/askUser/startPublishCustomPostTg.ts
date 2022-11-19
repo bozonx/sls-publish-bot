@@ -1,9 +1,9 @@
 import TgChat from '../apiTg/TgChat';
-import {makePost2000Text, makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
-import {askPostConfirm} from '../askUser/askPostConfirm';
-import {askCustomPostTg} from '../askUser/askCustomPostTg';
-import {CustomPostState} from '../askUser/askCustomPostMenu';
-import {askDateTime} from '../askUser/askDateTime';
+import {makePost2000Text, makeTaskTgPostImage, makeTaskTgPostOnlyText} from '../publish/publishHelpers';
+import {askPostConfirm} from './askPostConfirm';
+import {askCustomPostTg} from './askCustomPostTg';
+import {CustomPostState} from './askCustomPostMenu';
+import {askDateTime} from './askDateTime';
 
 
 export async function startPublishCustomPostTg(
