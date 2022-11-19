@@ -8,7 +8,7 @@ import {makePublishTaskTgOnlyText} from './makePublishTaskTg';
 import {NotionBlocks} from '../types/notion';
 
 
-export async function publishArticleTg(
+export async function makePublishTaskTgArticle(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,

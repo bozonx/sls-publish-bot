@@ -1,11 +1,11 @@
 import TgChat from '../apiTg/TgChat';
-import {publishArticleTg} from './publishArticleTg';
+import {makePublishTaskTgArticle} from './makePublishTaskTgArticle';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {SN_TYPES, SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from './makePublishTaskTg';
 import {NotionBlocks} from '../types/notion';
-import {publishPollTg} from './publishPollTg';
+import {makePublishTaskTgPoll} from './makePublishTaskTgPoll';
 
 
 export async function publishFork(
@@ -25,7 +25,7 @@ export async function publishFork(
       case SN_TYPES.telegram:
         // article
         if (pubType === PUBLICATION_TYPES.article) {
-          return publishArticleTg(
+          return makePublishTaskTgArticle(
             blogName,
             tgChat,
             state.selectedDate,
@@ -38,7 +38,11 @@ export async function publishFork(
         }
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {
-          return publishPollTg(
+          return makePublishTaskTgPoll(
+            state.selectedDate,
+            state.selectedTime,
+            {},
+            blogName,
             tgChat,
           );
         }

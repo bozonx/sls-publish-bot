@@ -96,7 +96,7 @@ export async function makePublishTaskTgCopy(
 }
 
 
-async function registerPublishTaskTg(
+export async function registerPublishTaskTg(
   isoDate: string,
   time: string,
   postMsgId: number,

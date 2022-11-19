@@ -30,8 +30,10 @@ export interface MediaGroupItemMessageEvent extends MessageEventBase {
 
 export interface PollMessageEvent extends MessageEventBase {
   poll: {
+    // TODO: use PollData
     // id: string,
     question: string,
+    // TODO: а чё всмысле ???
     options: string[][],
     isClosed: false,
     isAnonymous: boolean,
