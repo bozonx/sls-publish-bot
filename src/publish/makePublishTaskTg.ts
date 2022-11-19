@@ -1,9 +1,10 @@
 import TgChat from '../apiTg/TgChat';
-import {publishTgCopy, publishTgImage, publishTgText} from '../apiTg/publishTg';
+import {publishTgCopy, publishTgImage, publishTgPoll, publishTgText} from '../apiTg/publishTg';
 import {makePublishInfoMessage} from './publishHelpers';
 import moment from 'moment/moment';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES} from '../types/snTypes';
+import PollData from '../types/PollData';
 
 
 /**
@@ -95,6 +96,26 @@ export async function makePublishTaskTgCopy(
   await registerPublishTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat);
 }
 
+export async function makePublishTaskTgPoll(
+  isoDate: string,
+  time: string,
+  pollData: PollData,
+  blogName: string,
+  tgChat: TgChat,
+) {
+  let postMsgId: number;
+  // Print to log channel
+  try {
+    postMsgId = await publishTgPoll(tgChat.app.appConfig.logChannelId, pollData, tgChat);
+  }
+  catch (e) {
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
+
+    throw new Error(`Can't publish poll to telegram to log channel`);
+  }
+
+  await registerPublishTaskTg(isoDate, time, postMsgId, blogName, tgChat);
+}
 
 export async function registerPublishTaskTg(
   isoDate: string,

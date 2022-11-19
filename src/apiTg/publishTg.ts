@@ -1,4 +1,5 @@
 import TgChat from './TgChat';
+import PollData from '../types/PollData';
 
 
 /**
@@ -79,4 +80,41 @@ export async function publishTgCopy(
   );
 
   return result.message_id;
+}
+
+/**
+ * Publish poll
+ */
+export async function publishTgPoll(
+  chatId: number | string,
+  pollData: PollData,
+  tgChat: TgChat,
+  disableNotification = false
+): Promise<number> {
+  if (pollData.type === 'quiz') {
+    return (await tgChat.app.tg.bot.telegram.sendQuiz(
+      chatId,
+      pollData.question,
+      pollData.options,
+      {
+        is_anonymous: pollData.isAnonymous,
+        correct_option_id: pollData.correctOptionId,
+        explanation: pollData.explanation,
+        explanation_parse_mode: tgChat.app.appConfig.telegram.parseMode,
+        disable_notification: disableNotification,
+      }
+    )).message_id;
+  }
+  else {
+    return (await tgChat.app.tg.bot.telegram.sendPoll(
+      tgChat.app.appConfig.logChannelId,
+      pollData.question,
+      pollData.options,
+      {
+        is_anonymous: pollData.isAnonymous,
+        allows_multiple_answers: pollData.multipleAnswers,
+        disable_notification: disableNotification,
+      }
+    )).message_id;
+  }
 }

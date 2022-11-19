@@ -3,9 +3,8 @@ import {makePublishTaskTgArticle} from './makePublishTaskTgArticle';
 import {PublishMenuState} from '../askUser/askPublishMenu';
 import {SN_TYPES, SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
-import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from './makePublishTaskTg';
+import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgPoll} from './makePublishTaskTg';
 import {NotionBlocks} from '../types/notion';
-import {makePublishTaskTgPoll} from './makePublishTaskTgPoll';
 import PollData from '../types/PollData';
 
 
