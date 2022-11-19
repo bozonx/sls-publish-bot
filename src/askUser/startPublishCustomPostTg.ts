@@ -1,9 +1,10 @@
 import TgChat from '../apiTg/TgChat';
-import {makePost2000Text, makeTaskTgPostImage, makeTaskTgPostOnlyText} from '../publish/publishHelpers';
+import {makePost2000Text} from '../publish/publishHelpers';
 import {askPostConfirm} from './askPostConfirm';
 import {askCustomPostTg} from './askCustomPostTg';
 import {CustomPostState} from './askCustomPostMenu';
 import {askDateTime} from './askDateTime';
+import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from '../publish/makePublishTaskTg';
 
 
 export async function startPublishCustomPostTg(
@@ -51,7 +52,7 @@ export async function registerCustomPostTg(
     if (isPost2000) {
       const post2000Txt = await makePost2000Text(tgChat, resultText, images[0]);
 
-      await makeTaskTgPostOnlyText(
+      await makePublishTaskTgOnlyText(
         isoDate,
         time,
         post2000Txt,
@@ -60,7 +61,7 @@ export async function registerCustomPostTg(
         (images[0]) ? true : usePreview,
       );
     } else {
-      await makeTaskTgPostImage(
+      await makePublishTaskTgImage(
         isoDate,
         time,
         images[0],
@@ -74,7 +75,7 @@ export async function registerCustomPostTg(
     // TODO: а если несколько картинок ???
     throw new Error(`Not supported`);
   } else {
-    await makeTaskTgPostOnlyText(
+    await makePublishTaskTgOnlyText(
       isoDate,
       time,
       resultText,

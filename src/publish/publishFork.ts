@@ -1,9 +1,9 @@
 import TgChat from '../apiTg/TgChat';
 import {publishArticleTg} from './publishArticleTg';
 import {PublishMenuState} from '../askUser/askPublishMenu';
-import {makeTaskTgPostImage, makeTaskTgPostOnlyText} from './publishHelpers';
 import {SN_TYPES, SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
+import {makePublishTaskTgImage, makePublishTaskTgOnlyText} from './makePublishTaskTg';
 
 
 export async function publishFork(
@@ -13,6 +13,7 @@ export async function publishFork(
   pubType: PublicationType,
   postTexts: Record<SnType, string>,
   //articleText: Record<SnTypes, string>,
+  // TODO: add prepared poll
 ) {
   for (const sn of state.sns) {
     switch (sn) {
@@ -39,7 +40,7 @@ export async function publishFork(
           PUBLICATION_TYPES.post2000,
           PUBLICATION_TYPES.announcement,
         ].includes(pubType) && !state.mainImgUrl) {
-          return makeTaskTgPostOnlyText(
+          return makePublishTaskTgOnlyText(
             state.selectedDate,
             state.selectedTime,
             postTexts[sn],
@@ -56,7 +57,7 @@ export async function publishFork(
           PUBLICATION_TYPES.announcement,
           PUBLICATION_TYPES.reels,
         ].includes(pubType) && state.mainImgUrl) {
-          return makeTaskTgPostImage(
+          return makePublishTaskTgImage(
             state.selectedDate,
             state.selectedTime,
             state.mainImgUrl,

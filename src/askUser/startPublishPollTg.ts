@@ -2,8 +2,8 @@ import TgChat from '../apiTg/TgChat';
 import {askPoll} from './askPoll';
 import {askPostConfirm} from './askPostConfirm';
 import {PollMessageEvent} from '../types/MessageEvent';
-import {publishCopyTg} from '../publish/publishHelpers';
 import {askDateTime} from './askDateTime';
+import {makePublishTaskTgCopy} from '../publish/makePublishTaskTg';
 
 
 export async function startPublishPollTg(blogName: string, tgChat: TgChat) {
@@ -16,7 +16,7 @@ export async function startPublishPollTg(blogName: string, tgChat: TgChat) {
 
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
-        await publishCopyTg(
+        await makePublishTaskTgCopy(
           isoDate,
           time,
           message.messageId,

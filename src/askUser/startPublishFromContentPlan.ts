@@ -62,6 +62,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
     const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnType[];
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
+    // TODO: не нужно если poll
     const clearTexts = makeClearTextFromNotion(
       resolvedSns,
       parsedContentItem.type,
@@ -76,6 +77,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
     mainImgUrl = await printImage(tgChat, mainImgUrl);
 
+    // TODO: учитывать poll
     await printItemDetails(blogName, tgChat, clearTexts, resolvedSns, parsedContentItem, parsedPage);
     await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
   }));
@@ -129,12 +131,15 @@ async function askMenu(
       parsedPage?.tgTags,
     );
 
+    // TODO: учитывать poll
     await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedPage);
     // TODO: может проще делать steps.back() ????
     let disableOk = false;
 
     try {
+      // TODO: учитывать poll
       validateContentPlanPost(state, tgChat);
+      // TODO: учитывать poll
       validateContentPlanPostText(clearTexts, parsedContentItem.type, tgChat);
     }
     catch (e) {
@@ -145,6 +150,7 @@ async function askMenu(
 
     await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       try {
+        // TODO: не делать если poll
         const postTexts = makeTgPostTextFromNotion(
           state.sns,
           state.pubType,
@@ -163,6 +169,7 @@ async function askMenu(
           parsedContentItem.type,
           postTexts,
           // TODO: add articleTexts
+          // TODO: add prepared poll
         );
       }
       catch (e) {

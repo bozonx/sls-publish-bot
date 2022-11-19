@@ -109,15 +109,15 @@ export async function printPublishConfirmData(
   }
 }
 
-export async function printImage(tgChat: TgChat, mainImgUrl?: string): Promise<string | undefined> {
-  if (mainImgUrl) {
-    try {
-      await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, mainImgUrl);
+export async function printImage(tgChat: TgChat, imgUrl?: string): Promise<string | undefined> {
+  if (!imgUrl) return;
 
-      return mainImgUrl;
-    }
-    catch (e) {
-      await tgChat.reply(tgChat.app.i18n.errors.cantSendImage)
-    }
+  try {
+    await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, imgUrl);
+
+    return imgUrl;
+  }
+  catch (e) {
+    await tgChat.reply(tgChat.app.i18n.errors.cantSendImage);
   }
 }

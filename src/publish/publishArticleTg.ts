@@ -2,11 +2,11 @@ import {markdownv2 as mdFormat} from 'telegram-format';
 import ContentItem from '../types/ContentItem';
 import RawPageContent from '../types/PageContent';
 import TgChat from '../apiTg/TgChat';
-import {makeTaskTgPostOnlyText} from './publishHelpers';
 import _ from 'lodash';
 import {makeTelegraPhUrl} from '../helpers/helpers';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
 import {makeTagsString} from '../lib/common';
+import {makePublishTaskTgOnlyText} from './makePublishTaskTg';
 
 
 export async function publishArticleTg(
@@ -45,7 +45,7 @@ export async function publishArticleTg(
     TAGS: mdFormat.escape(makeTagsString(parsedPage.tgTags)),
   });
 
-  await makeTaskTgPostOnlyText(
+  await makePublishTaskTgOnlyText(
     contentItem.date,
     resolvedTime,
     postStr,
