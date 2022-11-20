@@ -2,6 +2,7 @@ import {askTasksListMenu, TASK_LIST_ACTIONS} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
 import TgChat from '../apiTg/TgChat';
 import {askTaskAdd} from './askTaskAdd';
+import {askTaskFinishPoll} from './askTaskFinishPoll';
 
 
 export async function startTaskMenu(tgChat: TgChat) {
@@ -60,7 +61,22 @@ export async function startTaskMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.FINISH_POLL) {
+        return askTaskFinishPoll(tgChat.app.i18n.menu.taskFinishPoll, tgChat, tgChat.asyncCb(async (
+          messageId: number,
+          chatId: number,
+          startTime: string
+        ) => {
+          await tgChat.app.tasks.addTask({
+            // TODO: нужен pollId????
+            messageId,
+            chatId,
+            sn: 'telegram',
+            startTime,
+            type: 'unpinPost',
+          });
 
+          await tgChat.steps.cancel();
+        }));
       }
       else if (taskId) {
         return askTaskMenu(taskId, tgChat, tgChat.asyncCb(async () => {
