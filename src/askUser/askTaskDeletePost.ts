@@ -3,7 +3,7 @@ import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK, ChatEvents
 import BaseState from '../types/BaseState';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent';
 import {askDateTime} from './askDateTime';
-import {makeUtcOffsetStr} from '../helpers/helpers';
+import moment from 'moment';
 
 
 type OnDoneType = (messageId: number, chatId: number, startTime: string) => void;
@@ -83,6 +83,10 @@ export async function askTaskDeletePost(tgChat: TgChat, onDone: OnDoneType) {
 async function handleIncomeMessage(messageId: number, chatId: number, tgChat: TgChat, onDone: OnDoneType) {
   await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
     await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-    onDone(messageId, chatId, `${isoDate}T${time}Z${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}`)
+    onDone(
+      messageId,
+      chatId,
+      moment(`${isoDate} ${time}`).utcOffset(tgChat.app.appConfig.utcOffset).format()
+    );
   }));
 }
