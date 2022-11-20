@@ -1,52 +1,47 @@
 import TgChat from '../apiTg/TgChat';
-import BaseState from '../types/BaseState';
-import {ChatEvents, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
+import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
+import {addSimpleStep} from '../helpers/helpers';
+import {TaskItem} from '../types/TaskItem';
+import moment from 'moment';
 
 
-export const TASK_ID_PREFIX = 'task:';
+export const TASK_ID_CB = 'TASK_ID_CB:';
 
 
 export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) => void) {
-  await tgChat.addOrdinaryStep(async (state: BaseState) => {
-    // print main menu message
-    state.messageIds.push(await printInitialMessage(tgChat));
-    // listen to result
-    state.handlerIndexes.push([
-      tgChat.events.addListener(
-        ChatEvents.CALLBACK_QUERY,
-        tgChat.asyncCb(async (queryData: string) => {
-            if (queryData === CANCEL_BTN_CALLBACK) {
-              return tgChat.steps.cancel();
-            }
-            else if (queryData.indexOf(TASK_ID_PREFIX) === 0) {
-              const splat = queryData.split(':');
-
-              onDone(splat[1]);
-            }
-            // else do nothing
-          }
-        )),
-      ChatEvents.CALLBACK_QUERY
-    ]);
-  });
-}
-
-async function printInitialMessage(tgChat: TgChat): Promise<number> {
   const taskList = tgChat.app.tasks.getTasksList();
-
-  if (!Object.keys(taskList).length) {
-    return tgChat.reply(tgChat.app.i18n.menu.emptyTaskList, [[ CANCEL_BTN ]]);
-  }
-
-  return tgChat.reply(tgChat.app.i18n.menu.taskList, [
-    Object.keys(taskList).map((taskId) => {
+  const tasksIds = Object.keys(taskList);
+  const msg = (tasksIds.length) ? tgChat.app.i18n.menu.taskList : tgChat.app.i18n.menu.emptyTaskList;
+  const buttons = [
+    tasksIds.map((taskId) => {
       return {
-        text: JSON.stringify(taskList[taskId]),
-        callback_data: TASK_ID_PREFIX + taskId,
+        text: makeTaskItmStr(taskList[taskId]),
+        callback_data: TASK_ID_CB + taskId,
       }
     }),
     [
       CANCEL_BTN,
     ]
-  ]);
+  ];
+
+  await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
+    if (queryData === CANCEL_BTN_CALLBACK) {
+      return tgChat.steps.cancel();
+    }
+    else if (queryData.indexOf(TASK_ID_CB) === 0) {
+      const splat = queryData.split(':');
+
+      onDone(splat[1]);
+    }
+  });
+}
+
+
+function makeTaskItmStr(task: TaskItem): string {
+  let result = moment(task.startTime).format('DD.MM hh:mm')
+    + ` ${task.type}`;
+
+  if (task.sn) result += ` sn: ${task.sn}`;
+
+  return result;
 }
