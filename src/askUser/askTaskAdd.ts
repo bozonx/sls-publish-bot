@@ -9,8 +9,7 @@ import moment from 'moment';
 type OnDoneType = (messageId: number, chatId: number, startTime: string) => void;
 
 
-export async function askTaskDeletePost(tgChat: TgChat, onDone: OnDoneType) {
-  const msg = tgChat.app.i18n.menu.taskDeletePost;
+export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType) {
   const buttons = [
     [
       BACK_BTN,

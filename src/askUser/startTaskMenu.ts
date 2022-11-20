@@ -1,7 +1,7 @@
 import {askTasksListMenu, TASK_LIST_ACTIONS} from './askTasksListMenu';
 import {askTaskMenu} from './askTaskMenu';
 import TgChat from '../apiTg/TgChat';
-import {askTaskDeletePost} from './askTaskDeletePost';
+import {askTaskAdd} from './askTaskAdd';
 
 
 export async function startTaskMenu(tgChat: TgChat) {
@@ -9,7 +9,7 @@ export async function startTaskMenu(tgChat: TgChat) {
     tgChat,
     tgChat.asyncCb(async (taskId?: string, action?: string) => {
       if (action === TASK_LIST_ACTIONS.DELETE_POST) {
-        return askTaskDeletePost(tgChat, tgChat.asyncCb(async (
+        return askTaskAdd(tgChat.app.i18n.menu.taskDeletePost, tgChat, tgChat.asyncCb(async (
           messageId: number,
           chatId: number,
           startTime: string
@@ -26,10 +26,38 @@ export async function startTaskMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
+        return askTaskAdd(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (
+          messageId: number,
+          chatId: number,
+          startTime: string
+        ) => {
+          await tgChat.app.tasks.addTask({
+            messageId,
+            chatId,
+            sn: 'telegram',
+            startTime,
+            type: 'pinPost',
+          });
 
+          await tgChat.steps.cancel();
+        }));
       }
       else if (action === TASK_LIST_ACTIONS.UNPIN_POST) {
+        return askTaskAdd(tgChat.app.i18n.menu.taskUnpinPost, tgChat, tgChat.asyncCb(async (
+          messageId: number,
+          chatId: number,
+          startTime: string
+        ) => {
+          await tgChat.app.tasks.addTask({
+            messageId,
+            chatId,
+            sn: 'telegram',
+            startTime,
+            type: 'unpinPost',
+          });
 
+          await tgChat.steps.cancel();
+        }));
       }
       else if (action === TASK_LIST_ACTIONS.FINISH_POLL) {
 
