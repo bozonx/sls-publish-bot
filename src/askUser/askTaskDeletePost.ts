@@ -81,7 +81,8 @@ export async function askTaskDeletePost(tgChat: TgChat, onDone: OnDoneType) {
 
 
 async function handleIncomeMessage(messageId: number, chatId: number, tgChat: TgChat, onDone: OnDoneType) {
-  await askDateTime(tgChat, (isoDate: string, time: string) => {
+  await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+    await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
     onDone(messageId, chatId, `${isoDate}T${time}Z${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}`)
-  });
+  }));
 }
