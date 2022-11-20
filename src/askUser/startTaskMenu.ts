@@ -67,7 +67,6 @@ export async function startTaskMenu(tgChat: TgChat) {
           startTime: string
         ) => {
           await tgChat.app.tasks.addTask({
-            // TODO: нужен pollId????
             messageId,
             chatId,
             sn: 'telegram',

@@ -4,6 +4,7 @@ import BaseState from '../types/BaseState';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent';
 import {askDateTime} from './askDateTime';
 import moment from 'moment';
+import {handleIncomeMessage} from './askTaskAdd';
 
 
 type OnDoneType = (messageId: number, chatId: number, startTime: string) => void;
@@ -46,16 +47,4 @@ export async function askTaskFinishPoll(msg: string, tgChat: TgChat, onDone: OnD
       ChatEvents.CALLBACK_QUERY
     ]);
   });
-}
-
-
-async function handleIncomeMessage(messageId: number, chatId: number, tgChat: TgChat, onDone: OnDoneType) {
-  await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-    await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-    onDone(
-      messageId,
-      chatId,
-      moment(`${isoDate} ${time}`).utcOffset(tgChat.app.appConfig.utcOffset).format()
-    );
-  }));
 }

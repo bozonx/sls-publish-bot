@@ -1,5 +1,13 @@
 import App from '../App';
-import {TaskItem, TASK_TYPES, PostponePostTask, DeletePostTask} from '../types/TaskItem';
+import {
+  TaskItem,
+  TASK_TYPES,
+  PostponePostTask,
+  DeletePostTask,
+  PinPostTask,
+  UnpinPostTask,
+  FinishPollTask
+} from '../types/TaskItem';
 import * as fs from 'fs/promises';
 import path from 'path';
 import {clearTimeout} from 'timers';
@@ -186,6 +194,15 @@ export default class TasksMain {
     else if (task.type === TASK_TYPES.deletePost) {
       await this.executeDeletePost(taskId);
     }
+    else if (task.type === TASK_TYPES.pinPost) {
+      await this.executePinPost(taskId);
+    }
+    else if (task.type === TASK_TYPES.unpinPost) {
+      await this.executeUnpinPost(taskId);
+    }
+    else if (task.type === TASK_TYPES.finishPoll) {
+      await this.executeFinishPoll(taskId);
+    }
     else {
       throw new Error(`Unknown task type: ${task.type}`);
     }
@@ -214,6 +231,24 @@ export default class TasksMain {
     const task = this.tasks[taskId] as DeletePostTask;
 
     await this.app.tg.bot.telegram.deleteMessage(task.chatId, task.messageId);
+  }
+
+  private async executePinPost(taskId: string) {
+    const task = this.tasks[taskId] as PinPostTask;
+
+    await this.app.tg.bot.telegram.pinChatMessage(task.chatId, task.messageId);
+  }
+
+  private async executeUnpinPost(taskId: string) {
+    const task = this.tasks[taskId] as UnpinPostTask;
+
+    await this.app.tg.bot.telegram.unpinChatMessage(task.chatId, task.messageId);
+  }
+
+  private async executeFinishPoll(taskId: string) {
+    const task = this.tasks[taskId] as FinishPollTask;
+
+    await this.app.tg.bot.telegram.stopPoll(task.chatId, task.messageId);
   }
 
   private clearTask(taskId: string) {
