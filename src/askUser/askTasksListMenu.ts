@@ -5,7 +5,14 @@ import {TaskItem} from '../types/TaskItem';
 import moment from 'moment';
 
 
-export const TASK_ID_CB = 'TASK_ID_CB:';
+const TASK_ID_CB = 'TASK_ID_CB:';
+
+const TASK_LIST_ACTIONS = {
+  DELETE_POST: 'DELETE_POST',
+  PIN_POST: 'PIN_POST',
+  UNPIN_POST: 'UNPIN_POST',
+  FINISH_POLL: 'FINISH_POLL',
+};
 
 
 export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) => void) {
@@ -19,6 +26,26 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) 
         callback_data: TASK_ID_CB + taskId,
       }
     }),
+    [
+      {
+        text: tgChat.app.i18n.buttons.deletePost,
+        callback_data: TASK_LIST_ACTIONS.DELETE_POST,
+      },
+      {
+        text: tgChat.app.i18n.buttons.finishPoll,
+        callback_data: TASK_LIST_ACTIONS.FINISH_POLL,
+      },
+    ],
+    [
+      {
+        text: tgChat.app.i18n.buttons.pinPost,
+        callback_data: TASK_LIST_ACTIONS.PIN_POST,
+      },
+      {
+        text: tgChat.app.i18n.buttons.unpinPost,
+        callback_data: TASK_LIST_ACTIONS.UNPIN_POST,
+      },
+    ],
     [
       CANCEL_BTN,
     ]

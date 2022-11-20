@@ -71,6 +71,10 @@ const dict = {
     changeInstaTags: 'Изменить тэги instagram',
     clear: 'Очистить',
     noNote: 'Без заметки',
+    deletePost: 'Удалить пост',
+    pinPost: 'Закрепить пост',
+    unpinPost: 'Открепить пост',
+    finishPoll: 'Завершить опрос',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',
