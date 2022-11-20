@@ -7,7 +7,7 @@ import moment from 'moment';
 
 const TASK_ID_CB = 'TASK_ID_CB:';
 
-const TASK_LIST_ACTIONS = {
+export const TASK_LIST_ACTIONS = {
   DELETE_POST: 'DELETE_POST',
   PIN_POST: 'PIN_POST',
   UNPIN_POST: 'UNPIN_POST',
@@ -15,7 +15,7 @@ const TASK_LIST_ACTIONS = {
 };
 
 
-export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) => void) {
+export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string, action?: string) => void) {
   const taskList = tgChat.app.tasks.getTasksList();
   const tasksIds = Object.keys(taskList);
   const msg = (tasksIds.length) ? tgChat.app.i18n.menu.taskList : tgChat.app.i18n.menu.emptyTaskList;
@@ -59,6 +59,9 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId: string) 
       const splat = queryData.split(':');
 
       onDone(splat[1]);
+    }
+    else if (Object.keys(TASK_LIST_ACTIONS).includes(queryData)) {
+      onDone(undefined, queryData);
     }
   });
 }
