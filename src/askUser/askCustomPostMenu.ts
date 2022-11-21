@@ -11,6 +11,8 @@ import {compactUndefined} from '../lib/arrays';
 import {askPostText} from './askPostText';
 import {askTags} from './askTags';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
+import {TgReplyBtnUrl} from '../types/TgReplyButton';
+import {askDateTime} from './askDateTime';
 
 
 export interface CustomPostState {
@@ -21,6 +23,8 @@ export interface CustomPostState {
   tags: string[],
   postText?: string;
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[];
+  urlBtn: TgReplyBtnUrl;
+  removeIsoDatTime: string;
 }
 
 export type CustomPostAction = 'FOOTER_SWITCH'
@@ -28,7 +32,9 @@ export type CustomPostAction = 'FOOTER_SWITCH'
   | 'DATE_SELECT'
   | 'TIME_SELECT'
   | 'ADD_TEXT'
-  | 'ADD_TAGS';
+  | 'ADD_TAGS'
+  | 'ADD_URL_BUTTON'
+  | 'SET_AUTO_REMOVE';
 
 export const CUSTOM_POST_ACTION: Record<CustomPostAction, CustomPostAction> = {
   FOOTER_SWITCH: 'FOOTER_SWITCH',
@@ -37,6 +43,8 @@ export const CUSTOM_POST_ACTION: Record<CustomPostAction, CustomPostAction> = {
   TIME_SELECT: 'TIME_SELECT',
   ADD_TEXT: 'ADD_TEXT',
   ADD_TAGS: 'ADD_TAGS',
+  ADD_URL_BUTTON: 'ADD_URL_BUTTON',
+  SET_AUTO_REMOVE: 'SET_AUTO_REMOVE',
 };
 
 
@@ -89,6 +97,22 @@ export async function askCustomPostMenu(
         callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
       },
     ]),
+    [
+      {
+        text: (state.urlBtn)
+          ? tgChat.app.i18n.buttons.addUrlButton
+          : tgChat.app.i18n.buttons.removeUrlButton,
+        callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
+      },
+    ],
+    [
+      {
+        text: (state.removeIsoDatTime)
+          ? tgChat.app.i18n.buttons.offAutoRemove
+          : tgChat.app.i18n.buttons.setAutoRemove,
+        callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
+      },
+    ],
     compactUndefined([
       BACK_BTN,
       CANCEL_BTN,
@@ -155,6 +179,21 @@ async function handleButtons(
     case CUSTOM_POST_ACTION.ADD_TAGS:
       return await askTags(state.tags, tgChat, tgChat.asyncCb(async (newTags: string[]) => {
         state.tags = newTags;
+        // print menu again
+        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
+      }));
+    case CUSTOM_POST_ACTION.ADD_URL_BUTTON:
+      // TODO: если уже есть то убрать
+      return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton: TgReplyBtnUrl) => {
+        state.urlBtn = urlButton;
+        // print menu again
+        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
+      }));
+    case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
+      // TODO: возможность убрать
+      // TODO: написать что будет именно таймер удаления и макс дата - 24 дня
+      return await askDateTime(tgChat, tgChat.asyncCb(async (removeIsoDatTime: string) => {
+        state.removeIsoDatTime = removeIsoDatTime;
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
