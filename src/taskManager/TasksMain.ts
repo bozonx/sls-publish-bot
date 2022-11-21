@@ -15,7 +15,7 @@ import {calcSecondsToDate} from '../lib/common';
 import {SnType} from '../types/snTypes';
 import TgChat from '../apiTg/TgChat';
 import moment from 'moment/moment';
-import {PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants';
+import {MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';
@@ -154,6 +154,14 @@ export default class TasksMain {
   private registerTask(task: TaskItem, specifiedTaskId?: string): string | null {
     // TODO: почему дата не предается???
     const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
+
+    // TODO: она должна прервать выполнение и написаться ошибка пользователю
+    if (secondsToPublish > MAX_TIMEOUT_SECONDS) {
+      throw new Error(
+        `Too big timeout number! ${task.startTime} is ${secondsToPublish} seconds. `
+        + `Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`
+      );
+    }
 
     //console.log(2222, secondsToPublish)
 

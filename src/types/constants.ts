@@ -7,6 +7,8 @@ export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 export const TELEGRAM_MAX_CAPTION = 1024;
 export const TELEGRAM_MAX_POST = 4096;
 export const WARN_SIGN = '⚠';
+// 24 days max
+export const MAX_TIMEOUT_SECONDS = 2147483;
 
 export enum ChatEvents {
   CALLBACK_QUERY,

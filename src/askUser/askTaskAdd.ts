@@ -80,6 +80,7 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
 
 
 export async function handleIncomeMessage(messageId: number, chatId: number, tgChat: TgChat, onDone: OnDoneType) {
+  await tgChat.reply(tgChat.app.i18n.message.maxTaskTime);
   await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
     await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
     onDone(
