@@ -138,7 +138,11 @@ export default class TasksMain {
 
     // TODO: что если не удалось записать??? тогда восстановить???
     await this.saveTasks();
-    this.app.channelLog.info(`Task ${taskId} was removed. ${JSON.stringify(removedTask)}`)
+    this.app.channelLog.info(
+      this.app.i18n.message.taskRemoved + '\n'
+      + `taskId: ${taskId}\n`
+      + this.makeTaskDetails(removedTask)
+    );
   }
 
 
