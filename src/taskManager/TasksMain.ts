@@ -222,10 +222,7 @@ export default class TasksMain {
     // TODO: проверить ошибку
     await this.saveTasks();
 
-    this.app.channelLog.log(
-      this.app.i18n.message.taskDoneSuccessful + '\n'
-      + this.makeTaskDetails(task)
-    );
+    this.app.channelLog.log(this.makeTaskDetails(task));
   }
 
   private async executePostponePost(taskId: string) {
@@ -270,8 +267,14 @@ export default class TasksMain {
   }
 
   private makeTaskDetails(task: TaskItem): string {
-    // TODO: make beautiful details
-    return `${JSON.stringify(task, null, 2)}`;
+    let result = this.app.i18n.message.taskDoneSuccessful + '\n';
+      + `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
+
+    if (task.sn) {
+      result += `${this.app.i18n.commonPhrases.sn}: ${task.sn}`;
+    }
+
+    return result;
   }
 
   private makeRegisteredTaskText(task: TaskItem): string {
