@@ -3,6 +3,10 @@ import {askTaskMenu} from './askTaskMenu';
 import TgChat from '../apiTg/TgChat';
 import {askTaskAdd} from './askTaskAdd';
 import {askTaskFinishPoll} from './askTaskFinishPoll';
+import {TaskTypes} from '../types/TaskItem';
+import {SnType} from '../types/snTypes';
+import moment from 'moment';
+import {PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants';
 
 
 export async function startTaskMenu(tgChat: TgChat) {
@@ -15,7 +19,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTask({
+          await tgChat.app.tasks.addTaskAndLog({
             messageId,
             chatId,
             sn: 'telegram',
@@ -32,7 +36,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTask({
+          await tgChat.app.tasks.addTaskAndLog({
             messageId,
             chatId,
             sn: 'telegram',
@@ -49,7 +53,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTask({
+          await tgChat.app.tasks.addTaskAndLog({
             messageId,
             chatId,
             sn: 'telegram',
@@ -66,7 +70,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTask({
+          await tgChat.app.tasks.addTaskAndLog({
             messageId,
             chatId,
             sn: 'telegram',

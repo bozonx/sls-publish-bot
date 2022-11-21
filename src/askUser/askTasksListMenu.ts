@@ -71,7 +71,7 @@ function makeTaskItmStr(task: TaskItem): string {
   let result = moment(task.startTime).format('DD.MM hh:mm')
     + ` ${task.type}`;
 
-  if (task.sn) result += ` sn: ${task.sn}`;
+  if (task.sn) result += ` in ${task.sn}`;
 
   return result;
 }

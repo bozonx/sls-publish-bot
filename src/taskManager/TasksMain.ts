@@ -6,12 +6,16 @@ import {
   DeletePostTask,
   PinPostTask,
   UnpinPostTask,
-  FinishPollTask
+  FinishPollTask, TaskTypes
 } from '../types/TaskItem';
 import * as fs from 'fs/promises';
 import path from 'path';
 import {clearTimeout} from 'timers';
 import {calcSecondsToDate} from '../lib/common';
+import {SnType} from '../types/snTypes';
+import TgChat from '../apiTg/TgChat';
+import moment from 'moment/moment';
+import {PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';
@@ -79,6 +83,13 @@ export default class TasksMain {
     }
   }
 
+  async addTaskAndLog(task: TaskItem): Promise<string | null> {
+    await this.app.channelLog.log(
+      this.makeRegisteredTaskText(task)
+    );
+
+    return this.addTask(task);
+  }
 
   async addTask(task: TaskItem): Promise<string | null> {
 
@@ -261,6 +272,18 @@ export default class TasksMain {
   private makeTaskDetails(task: TaskItem): string {
     // TODO: make beautiful details
     return `${JSON.stringify(task, null, 2)}`;
+  }
+
+  private makeRegisteredTaskText(task: TaskItem): string {
+    let result = this.app.i18n.message.taskRegistered + '\n'
+      + `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
+      + `${this.app.i18n.commonPhrases.date}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}\n`;
+
+    if (task.sn) {
+      result += `${this.app.i18n.commonPhrases.sn}: ${task.sn}`;
+    }
+
+    return result;
   }
 
 }
