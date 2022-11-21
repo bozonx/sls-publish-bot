@@ -118,6 +118,10 @@ const dict = {
     selectedFormat: 'Выбран формат: ',
     skip: 'Пропустить',
     selectAdType: 'Выберете тип рекламы',
+    removedUrlButton: 'URL кнопка была убрана',
+    addedUrlButton: 'URL кнопка была установлена',
+    removedDeleteTimer: 'Таймер авто удаления был убран',
+    addedDeleteTimer: 'Таймер авто удаления был установлен на: ',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',

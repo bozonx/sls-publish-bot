@@ -4,7 +4,7 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  OK_BTN, OK_BTN_CALLBACK, WARN_SIGN,
+  OK_BTN, OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN,
 } from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
 import {compactUndefined} from '../lib/arrays';
@@ -13,6 +13,7 @@ import {askTags} from './askTags';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
 import {TgReplyBtnUrl} from '../types/TgReplyButton';
 import {askDateTime} from './askDateTime';
+import moment from 'moment';
 
 
 export interface CustomPostState {
@@ -23,8 +24,8 @@ export interface CustomPostState {
   tags: string[],
   postText?: string;
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[];
-  urlBtn: TgReplyBtnUrl;
-  removeIsoDatTime: string;
+  urlBtn?: TgReplyBtnUrl;
+  removeIsoDatTime?: string;
 }
 
 export type CustomPostAction = 'FOOTER_SWITCH'
@@ -183,17 +184,39 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.ADD_URL_BUTTON:
-      // TODO: если уже есть то убрать
+      if (state.urlBtn) {
+        await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
+
+        delete state.urlBtn;
+
+        return;
+      }
+
       return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton: TgReplyBtnUrl) => {
         state.urlBtn = urlButton;
+
+        await tgChat.reply(tgChat.app.i18n.commonPhrases.addedUrlButton);
+
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
-      // TODO: возможность убрать
-      // TODO: написать что будет именно таймер удаления и макс дата - 24 дня
+      if (state.removeIsoDatTime) {
+        await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
+
+        delete state.removeIsoDatTime;
+
+        return;
+      }
+
       return await askDateTime(tgChat, tgChat.asyncCb(async (removeIsoDatTime: string) => {
         state.removeIsoDatTime = removeIsoDatTime;
+
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.addedDeleteTimer
+          + moment(state.removeIsoDatTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+        );
+
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
