@@ -85,7 +85,7 @@ export default class TasksMain {
 
   async addTaskAndLog(task: TaskItem): Promise<string | null> {
     await this.app.channelLog.log(
-      this.makeRegisteredTaskText(task)
+      this.app.i18n.message.taskRegistered + '\n' + this.makeTaskDetails(task)
     );
 
     return this.addTask(task);
@@ -222,7 +222,9 @@ export default class TasksMain {
     // TODO: проверить ошибку
     await this.saveTasks();
 
-    this.app.channelLog.log(this.makeTaskDetails(task));
+    this.app.channelLog.log(
+      this.app.i18n.message.taskDoneSuccessful + '\n' + this.makeTaskDetails(task)
+    );
   }
 
   private async executePostponePost(taskId: string) {
@@ -267,19 +269,7 @@ export default class TasksMain {
   }
 
   private makeTaskDetails(task: TaskItem): string {
-    let result = this.app.i18n.message.taskDoneSuccessful + '\n';
-      + `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
-
-    if (task.sn) {
-      result += `${this.app.i18n.commonPhrases.sn}: ${task.sn}`;
-    }
-
-    return result;
-  }
-
-  private makeRegisteredTaskText(task: TaskItem): string {
-    let result = this.app.i18n.message.taskRegistered + '\n'
-      + `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
+    let result = `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
       + `${this.app.i18n.commonPhrases.date}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}\n`;
 
     if (task.sn) {
