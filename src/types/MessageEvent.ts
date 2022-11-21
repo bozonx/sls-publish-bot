@@ -26,7 +26,9 @@ export interface VideoData {
 
 export default interface MessageEventBase {
   messageId: number;
-  fromId: number;
+  // It is chat where message is.
+  // * If it forwarded then chatId is original chat of message
+  // * If it isn't forwarded then it is chat id of user
   chatId: number;
   date: number;
 }

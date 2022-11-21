@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Context, Telegraf } from 'telegraf';
 import App from '../App';
 import TgChat from './TgChat';
-import {PhotoSize, Video} from 'typegram/message';
+import {Message, PhotoSize, Video} from 'typegram/message';
 import MessageEventBase from '../types/MessageEvent';
 
 
@@ -66,7 +66,7 @@ export default class TgMain {
     });
 
     this.bot.on('message', (ctx) => {
-      const message = ctx.update.message;
+      const message: Message.CommonMessage = ctx.update.message;
 
       if (!message.chat?.id) {
         this.app.consoleLog.warn('No chat id in message event');
@@ -81,9 +81,12 @@ export default class TgMain {
       }
 
       const msgBase: MessageEventBase = {
-        messageId: message.message_id,
-        fromId: message.from.id,
-        chatId: message.chat.id,
+        messageId: (typeof message.forward_from_message_id === 'undefined')
+          ? message.message_id
+          : message.forward_from_message_id,
+        chatId: (typeof message.forward_from_chat === 'undefined')
+          ? message.chat.id
+          : message.forward_from_chat.id,
         date: message.date,
       }
 

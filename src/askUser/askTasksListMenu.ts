@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat';
-import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
+import {CANCEL_BTN, CANCEL_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants';
 import {addSimpleStep} from '../helpers/helpers';
 import {TaskItem} from '../types/TaskItem';
 import moment from 'moment';
@@ -68,7 +68,7 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string,
 
 
 function makeTaskItmStr(task: TaskItem): string {
-  let result = moment(task.startTime).format('DD.MM hh:mm')
+  let result = moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
     + ` ${task.type}`;
 
   if (task.sn) result += ` in ${task.sn}`;
