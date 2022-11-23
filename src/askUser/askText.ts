@@ -11,19 +11,20 @@ import _ from 'lodash';
 import {TextMessageEvent} from '../types/MessageEvent';
 
 
-const NO_NOTE_ACTION = 'NO_NOTE_ACTION';
+const SKIP_ACTION = 'SKIP_ACTION';
 
 
-export async function askNote(tgChat: TgChat, onDone: (time: string) => void) {
-
-  // TODO: use askText
-
-  const msg = tgChat.app.i18n.menu.typeNote;
+export async function askText(
+  msg: string,
+  allowSkip: boolean = true,
+  tgChat: TgChat,
+  onDone: (text: string) => void
+) {
   const buttons = [
     [
       {
-        text: tgChat.app.i18n.buttons.noNote,
-        callback_data: NO_NOTE_ACTION,
+        text: tgChat.app.i18n.commonPhrases.skip,
+        callback_data: SKIP_ACTION,
       }
     ],
     [
@@ -46,7 +47,7 @@ export async function askNote(tgChat: TgChat, onDone: (time: string) => void) {
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel();
           }
-          else if (queryData === NO_NOTE_ACTION) {
+          else if (queryData === SKIP_ACTION) {
             onDone('');
           }
         })

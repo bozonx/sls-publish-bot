@@ -14,6 +14,7 @@ import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
 import {TgReplyBtnUrl} from '../types/TgReplyButton';
 import {askDateTime} from './askDateTime';
 import moment from 'moment';
+import {askUrlButton} from './askUrlButton';
 
 
 export interface CustomPostState {

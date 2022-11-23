@@ -122,6 +122,7 @@ const dict = {
     addedUrlButton: 'URL кнопка была установлена',
     removedDeleteTimer: 'Таймер авто удаления был убран',
     addedDeleteTimer: 'Таймер авто удаления был установлен на: ',
+    typeBtnText: 'Введите текст кнопки',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',

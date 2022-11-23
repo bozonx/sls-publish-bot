@@ -4,28 +4,22 @@ import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK, OFTEN_USED_TIME,
 } from '../types/constants';
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import {TextMessageEvent} from '../types/MessageEvent';
+import {breakArray} from '../lib/arrays';
+import {TgReplyButton} from '../types/TgReplyButton';
+import {validateTime} from '../lib/common';
 
 
-const NO_NOTE_ACTION = 'NO_NOTE_ACTION';
+//const TIME_PRESET_CB = 'TIME_PRESET_CB|'
 
 
-export async function askNote(tgChat: TgChat, onDone: (time: string) => void) {
-
-  // TODO: use askText
-
-  const msg = tgChat.app.i18n.menu.typeNote;
+export async function askUrlButton(tgChat: TgChat, onDone: (time: string) => void) {
+  const msg = tgChat.app.i18n.commonPhrases.typeBtnText;
   const buttons = [
-    [
-      {
-        text: tgChat.app.i18n.buttons.noNote,
-        callback_data: NO_NOTE_ACTION,
-      }
-    ],
     [
       BACK_BTN,
       CANCEL_BTN
@@ -46,9 +40,6 @@ export async function askNote(tgChat: TgChat, onDone: (time: string) => void) {
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel();
           }
-          else if (queryData === NO_NOTE_ACTION) {
-            onDone('');
-          }
         })
       ),
       ChatEvents.CALLBACK_QUERY
@@ -57,7 +48,29 @@ export async function askNote(tgChat: TgChat, onDone: (time: string) => void) {
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
-          onDone(_.trim(message.text));
+          const trimmed = _.trim(message.text);
+
+          if (trimmed.match(/^\d{1,2}$/)) {
+            if (Number(trimmed) < 1 || Number(trimmed) > 23) {
+              await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
+
+              return;
+            }
+
+            // only hour
+            return onDone(((trimmed.length === 1) ? `0${trimmed}` : trimmed) + ':00');
+          }
+
+          try {
+            validateTime(trimmed);
+          }
+          catch (e) {
+            await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
+
+            return;
+          }
+
+          onDone(trimmed);
         })
       ),
       ChatEvents.TEXT
