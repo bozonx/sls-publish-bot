@@ -123,6 +123,7 @@ const dict = {
     removedDeleteTimer: 'Таймер авто удаления был убран',
     addedDeleteTimer: 'Таймер авто удаления был установлен на: ',
     typeBtnText: 'Введите текст кнопки',
+    typeBtnUrl: 'Введите url кнопки',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',

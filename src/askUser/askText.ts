@@ -4,7 +4,7 @@ import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK, WARN_SIGN,
 } from '../types/constants';
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
@@ -18,15 +18,16 @@ export async function askText(
   msg: string,
   allowSkip: boolean = true,
   tgChat: TgChat,
-  onDone: (text: string) => void
+  onDone: (text: string) => void,
+  validate?: (text: string) => void
 ) {
   const buttons = [
-    [
+    (allowSkip) ? [
       {
         text: tgChat.app.i18n.commonPhrases.skip,
         callback_data: SKIP_ACTION,
       }
-    ],
+    ] : [],
     [
       BACK_BTN,
       CANCEL_BTN
@@ -58,6 +59,17 @@ export async function askText(
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
+          if (validate) {
+            try {
+              validate(message.text);
+            }
+            catch (e) {
+              await tgChat.reply(WARN_SIGN + ' ' + e);
+
+              return;
+            }
+          }
+
           onDone(_.trim(message.text));
         })
       ),
