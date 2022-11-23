@@ -6,6 +6,7 @@ import {CustomPostState} from './askCustomPostMenu';
 import {askDateTime} from './askDateTime';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../publish/makePublishTaskTg';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
+import {TgReplyBtnUrl} from '../types/TgReplyButton';
 
 
 export async function startPublishCustomPostTg(
@@ -32,6 +33,8 @@ export async function startPublishCustomPostTg(
           isPost2000,
           state.usePreview,
           state.mediaGroup,
+          state.urlBtn,
+          state.autoDeleteIsoDateTime
         );
         await tgChat.steps.cancel();
       }));
@@ -48,6 +51,8 @@ export async function registerCustomPostTg(
   isPost2000: boolean,
   usePreview: boolean,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
+  urlBtn?: TgReplyBtnUrl,
+  autoDeleteIsoDateTime?: string
 ) {
   if (mediaGroup.length === 1) {
     const imgUrl: string | undefined =
@@ -65,6 +70,7 @@ export async function registerCustomPostTg(
         blogName,
         tgChat,
         (imgUrl) ? true : usePreview,
+        urlBtn
       );
     }
     else {
@@ -75,7 +81,8 @@ export async function registerCustomPostTg(
           mediaGroup[0].fileId,
           blogName,
           tgChat,
-          resultText
+          resultText,
+          urlBtn
         );
       }
       else {
@@ -87,7 +94,8 @@ export async function registerCustomPostTg(
           imgUrl,
           blogName,
           tgChat,
-          resultText
+          resultText,
+          urlBtn
         );
       }
     }
@@ -102,7 +110,8 @@ export async function registerCustomPostTg(
       resultText,
       blogName,
       tgChat,
-      usePreview
+      usePreview,
+      urlBtn
     );
   }
 

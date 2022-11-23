@@ -26,7 +26,7 @@ export interface CustomPostState {
   postText?: string;
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[];
   urlBtn?: TgReplyBtnUrl;
-  removeIsoDatTime?: string;
+  autoDeleteIsoDateTime?: string;
 }
 
 export type CustomPostAction = 'FOOTER_SWITCH'
@@ -109,7 +109,7 @@ export async function askCustomPostMenu(
     ],
     [
       {
-        text: (state.removeIsoDatTime)
+        text: (state.autoDeleteIsoDateTime)
           ? tgChat.app.i18n.buttons.offAutoRemove
           : tgChat.app.i18n.buttons.setAutoRemove,
         callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
@@ -205,20 +205,20 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
-      if (state.removeIsoDatTime) {
+      if (state.autoDeleteIsoDateTime) {
         await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
 
-        delete state.removeIsoDatTime;
+        delete state.autoDeleteIsoDateTime;
 
         return;
       }
 
-      return await askDateTime(tgChat, tgChat.asyncCb(async (removeIsoDatTime: string) => {
-        state.removeIsoDatTime = removeIsoDatTime;
+      return await askDateTime(tgChat, tgChat.asyncCb(async (autoDeleteIsoDateTime: string) => {
+        state.autoDeleteIsoDateTime = autoDeleteIsoDateTime;
 
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.addedDeleteTimer
-          + moment(state.removeIsoDatTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+          + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
         );
 
         // print menu again

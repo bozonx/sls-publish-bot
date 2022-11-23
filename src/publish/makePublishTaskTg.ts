@@ -5,6 +5,7 @@ import moment from 'moment/moment';
 import {PostponePostTask, TASK_TYPES} from '../types/TaskItem';
 import {SN_TYPES} from '../types/snTypes';
 import PollData from '../types/PollData';
+import {TgReplyBtnUrl} from '../types/TgReplyButton';
 
 
 /**
@@ -16,7 +17,8 @@ export async function makePublishTaskTgOnlyText(
   postStr: string,
   blogName: string,
   tgChat: TgChat,
-  allowPreview: boolean
+  allowPreview: boolean,
+  urlBtn?: TgReplyBtnUrl,
 ) {
   let postMsgId: number;
   // Print to log channel
@@ -25,7 +27,8 @@ export async function makePublishTaskTgOnlyText(
       tgChat.app.appConfig.logChannelId,
       postStr,
       tgChat,
-      allowPreview
+      allowPreview,
+      urlBtn
     );
   }
   catch (e) {
@@ -47,6 +50,7 @@ export async function makePublishTaskTgImage(
   blogName: string,
   tgChat: TgChat,
   captionMd?: string,
+  urlBtn?: TgReplyBtnUrl,
 ) {
   let msgId: number;
   // Print to log channel
@@ -55,7 +59,8 @@ export async function makePublishTaskTgImage(
       tgChat.app.appConfig.logChannelId,
       imageUrl,
       tgChat,
-      captionMd
+      captionMd,
+      urlBtn
     )
   }
   catch (e) {
@@ -77,6 +82,7 @@ export async function makePublishTaskTgVideo(
   blogName: string,
   tgChat: TgChat,
   captionMd?: string,
+  urlBtn?: TgReplyBtnUrl,
 ) {
   let msgId: number;
   // Print to log channel
@@ -85,7 +91,8 @@ export async function makePublishTaskTgVideo(
       tgChat.app.appConfig.logChannelId,
       videoId,
       tgChat,
-      captionMd
+      captionMd,
+      urlBtn
     );
   }
   catch (e) {
