@@ -50,7 +50,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
             await askSellAdType(tgChat, tgChat.asyncCb(async (adType: SellAdType) => {
               const adTypeId: string = SELL_AD_TYPE_IDS[adType];
 
-              // TODO: ask вп ???
+              // TODO: ask вп если не было введено цены ???
 
               await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
                 await registerCustomPostTg(
@@ -61,7 +61,9 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
                   resultText,
                   isPost2000,
                   state.usePreview,
-                  state.mediaGroup
+                  state.mediaGroup,
+                  state.urlBtn,
+                  state.autoDeleteIsoDateTime
                 );
 
                 const request: CreatePageParameters = {
