@@ -70,7 +70,8 @@ export async function registerCustomPostTg(
         blogName,
         tgChat,
         (imgUrl) ? true : usePreview,
-        urlBtn
+        urlBtn,
+        autoDeleteIsoDateTime
       );
     }
     else {
