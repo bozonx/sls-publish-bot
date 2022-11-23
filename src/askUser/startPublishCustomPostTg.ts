@@ -83,7 +83,8 @@ export async function registerCustomPostTg(
           blogName,
           tgChat,
           resultText,
-          urlBtn
+          urlBtn,
+          autoDeleteIsoDateTime
         );
       }
       else {
@@ -96,7 +97,8 @@ export async function registerCustomPostTg(
           blogName,
           tgChat,
           resultText,
-          urlBtn
+          urlBtn,
+          autoDeleteIsoDateTime
         );
       }
     }
@@ -112,7 +114,8 @@ export async function registerCustomPostTg(
       blogName,
       tgChat,
       usePreview,
-      urlBtn
+      urlBtn,
+      autoDeleteIsoDateTime
     );
   }
 

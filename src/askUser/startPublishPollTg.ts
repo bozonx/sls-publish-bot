@@ -21,7 +21,7 @@ export async function startPublishPollTg(blogName: string, tgChat: TgChat) {
           time,
           message.messageId,
           blogName,
-          tgChat
+          tgChat,
         )
 
         await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
