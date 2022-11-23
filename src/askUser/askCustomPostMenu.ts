@@ -196,7 +196,10 @@ async function handleButtons(
       return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton: TgReplyBtnUrl) => {
         state.urlBtn = urlButton;
 
-        await tgChat.reply(tgChat.app.i18n.commonPhrases.addedUrlButton);
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.addedUrlButton + '\n'
+          + `${urlButton.text} - ${urlButton.url}`
+        );
 
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);

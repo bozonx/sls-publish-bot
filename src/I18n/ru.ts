@@ -82,7 +82,7 @@ const dict = {
     changeText: 'Изменить текст',
     changeInstaTags: 'Изменить тэги instagram',
     clear: 'Очистить',
-    noNote: 'Без заметки',
+    //noNote: 'Без заметки',
     deletePost: 'Удалить пост',
     pinPost: 'Закрепить пост',
     unpinPost: 'Открепить пост',
