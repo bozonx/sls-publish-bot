@@ -4,6 +4,7 @@ import {askPostConfirm} from './askPostConfirm';
 import {PollMessageEvent} from '../types/MessageEvent';
 import {askDateTime} from './askDateTime';
 import {makePublishTaskTgCopy} from '../publish/makePublishTaskTg';
+import {askClosePoll} from './askClosePoll';
 
 
 export async function startPublishPollTg(blogName: string, tgChat: TgChat) {
@@ -15,17 +16,19 @@ export async function startPublishPollTg(blogName: string, tgChat: TgChat) {
     );
 
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-      await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
-        await makePublishTaskTgCopy(
-          isoDate,
-          time,
-          message.messageId,
-          blogName,
-          tgChat,
-        )
+      await askClosePoll(tgChat, tgChat.asyncCb(async (closeIsoDateTime: string) => {
+        await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+          await makePublishTaskTgCopy(
+            isoDate,
+            time,
+            message.messageId,
+            blogName,
+            tgChat,
+          )
 
-        await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
-        await tgChat.steps.cancel();
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+          await tgChat.steps.cancel();
+        }));
       }));
     }));
 

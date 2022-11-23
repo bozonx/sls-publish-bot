@@ -26,6 +26,9 @@ export async function askTaskFinishPoll(msg: string, tgChat: TgChat, onDone: OnD
       tgChat.events.addListener(
         ChatEvents.POLL,
         tgChat.asyncCb(async (pollMsg: PollMessageEvent) => {
+
+          // TODO: use askClosePoll
+
           await handleIncomeMessage(pollMsg.messageId, pollMsg.chatId, tgChat, onDone);
         })
       ),
