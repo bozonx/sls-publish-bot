@@ -82,13 +82,19 @@ export async function addSimpleStep(
 }
 
 export function makeUtcOffsetStr(utcOffsetNum: number): string {
-  const timeStr = `${utcOffsetNum}:00 UTC`;
+  const isoStr = makeIsoUtcOffsetStr(utcOffsetNum);
+
+  return `${(isoStr === 'Z') ? '00:00' : isoStr} UTC`;
+}
+
+export function makeIsoUtcOffsetStr(utcOffsetNum: number): string {
+  const timeStr = `${(utcOffsetNum <= 9) ? `0${utcOffsetNum}` : utcOffsetNum}:00`;
 
   if (utcOffsetNum < 0) {
     return `-${timeStr}`;
   }
   else if (utcOffsetNum === 0) {
-    return timeStr;
+    return 'Z';
   }
   else {
     return `+${timeStr}`;
@@ -98,6 +104,11 @@ export function makeUtcOffsetStr(utcOffsetNum: number): string {
 export function makeDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
   return moment(dateStr).format(PRINT_FULL_DATE_FORMAT)
     + ` ${timeStr} ${makeUtcOffsetStr(utcOffset)}`
+}
+
+export function makeIsoDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
+  return moment(dateStr).format(PRINT_FULL_DATE_FORMAT)
+    + `T${timeStr}:00${makeIsoUtcOffsetStr(utcOffset)}`
 }
 
 /**

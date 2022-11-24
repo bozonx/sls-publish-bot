@@ -4,19 +4,22 @@ import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK, WARN_SIGN, PRINT_FULL_DATE_FORMAT,
 } from '../types/constants';
 import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import {TextMessageEvent} from '../types/MessageEvent';
 import {breakArray} from '../lib/arrays';
 import {TgReplyButton} from '../types/TgReplyButton';
-import {validateTime} from '../lib/common';
+import moment from 'moment';
+import {askDateTime} from './askDateTime';
+import {makeIsoDateTimeStr} from '../helpers/helpers';
 
 
 const POLL_CLOSE_MENU_ACTION = {
   hours: 'hours|',
   skip: 'skip',
+  setDate: 'setDate',
 };
 
 const POLL_CLOSE_MENU_PRESET = {
@@ -27,7 +30,7 @@ const POLL_CLOSE_MENU_PRESET = {
 };
 
 
-export async function askClosePoll(tgChat: TgChat, onDone: (closeIsoDateTime: string) => void) {
+export async function askClosePoll(publishIsoDateTime: string, tgChat: TgChat, onDone: (closeIsoDateTime?: string) => void) {
   const msg = tgChat.app.i18n.menu.selectPollClose;
   const buttons = [
     ...breakArray(Object.keys(POLL_CLOSE_MENU_PRESET).map((el): TgReplyButton => {
@@ -36,6 +39,12 @@ export async function askClosePoll(tgChat: TgChat, onDone: (closeIsoDateTime: st
         callback_data: POLL_CLOSE_MENU_ACTION.hours + (POLL_CLOSE_MENU_PRESET as any)[el],
       }
     }), 2),
+    [
+      {
+        text: tgChat.app.i18n.commonPhrases.skip,
+        callback_data: POLL_CLOSE_MENU_ACTION.setDate,
+      }
+    ],
     [
       BACK_BTN,
       CANCEL_BTN,
@@ -60,11 +69,19 @@ export async function askClosePoll(tgChat: TgChat, onDone: (closeIsoDateTime: st
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel();
           }
-          // else if (queryData.indexOf(TIME_PRESET_CB) === 0) {
-          //   const splat = queryData.split('|');
-          //
-          //   onDone(splat[1]);
-          // }
+          else if (queryData === POLL_CLOSE_MENU_ACTION.skip) {
+            return onDone();
+          }
+          else if (queryData === POLL_CLOSE_MENU_ACTION.setDate) {
+            await askDateTime(tgChat, (isoDate: string, time: string) => {
+              onDone(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset))
+            });
+          }
+          else if (queryData.indexOf(POLL_CLOSE_MENU_ACTION.hours) === 0) {
+            const splat = queryData.split('|');
+
+            onDone(resolveDateByHours(publishIsoDateTime, Number(splat[1])));
+          }
         })
       ),
       ChatEvents.CALLBACK_QUERY
@@ -73,33 +90,26 @@ export async function askClosePoll(tgChat: TgChat, onDone: (closeIsoDateTime: st
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
-          const trimmed = _.trim(message.text);
+          const hours = Number(_.trim(message.text));
 
-          if (trimmed.match(/^\d{1,2}$/)) {
-            if (Number(trimmed) < 1 || Number(trimmed) > 23) {
-              await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
-
-              return;
-            }
-
-            // only hour
-            return onDone(((trimmed.length === 1) ? `0${trimmed}` : trimmed) + ':00');
-          }
-
-          try {
-            validateTime(trimmed);
-          }
-          catch (e) {
-            await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
+          if (Number.isNaN(hours)) {
+            await tgChat.reply(WARN_SIGN + ' ' + tgChat.app.i18n.errors.invalidNumber)
 
             return;
           }
 
-          onDone(trimmed);
+          onDone(resolveDateByHours(publishIsoDateTime, hours));
         })
       ),
       ChatEvents.TEXT
     ]);
   });
 
+}
+
+
+function resolveDateByHours(publishIsoDateTime: string, hours: number): string {
+  return moment(publishIsoDateTime)
+    .add(hours, 'hours')
+    .format()
 }
