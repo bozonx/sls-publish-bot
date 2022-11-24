@@ -8,7 +8,7 @@ export async function askUrlButton(tgChat: TgChat, onDone: (urlButton: TgReplyBt
   const msg = tgChat.app.i18n.commonPhrases.typeBtnText;
 
   await askText(msg, false, tgChat, tgChat.asyncCb(async (text: string) => {
-    const msg = tgChat.app.i18n.commonPhrases.typeBtnText;
+    const msg = tgChat.app.i18n.commonPhrases.typeBtnUrl;
 
     await askText(msg, false, tgChat, tgChat.asyncCb(async (url: string) => {
       onDone({text, url})

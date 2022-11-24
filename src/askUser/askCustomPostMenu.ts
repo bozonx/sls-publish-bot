@@ -102,8 +102,8 @@ export async function askCustomPostMenu(
     [
       {
         text: (state.urlBtn)
-          ? tgChat.app.i18n.buttons.addUrlButton
-          : tgChat.app.i18n.buttons.removeUrlButton,
+          ? tgChat.app.i18n.buttons.removeUrlButton
+          : tgChat.app.i18n.buttons.addUrlButton,
         callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
       },
     ],
@@ -198,7 +198,9 @@ async function handleButtons(
 
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.addedUrlButton + '\n'
-          + `${urlButton.text} - ${urlButton.url}`
+          + `${urlButton.text} - ${urlButton.url}`,
+          undefined,
+          true
         );
 
         // print menu again
