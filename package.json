@@ -11,7 +11,8 @@
     "dev": "ts-node-esm ./src/index.ts",
     "prod": "yarn ts-node --esm  ./src/index.ts",
     "container": "yarn install && yarn ts-node --esm  ./src/index.ts",
-    "typecheck": "tsc --noEmit ./src/index.ts"
+    "typecheck": "tsc --noEmit ./src/index.ts",
+    "build": "docker build -f ./dockerfile/Dockerfile -t bozonx/publish_bot:0.0.1 ."
   },
   "dependencies": {
     "@notionhq/client": "^2.2.1",
