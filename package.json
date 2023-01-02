@@ -9,6 +9,7 @@
   "private": false,
   "scripts": {
     "dev": "ts-node-esm ./src/index.ts",
+    "prod": "yarn ts-node --esm  ./src/index.ts",
     "typecheck": "tsc --noEmit ./src/index.ts"
   },
   "dependencies": {
