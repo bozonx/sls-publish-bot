@@ -49,7 +49,7 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
 
             await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
               const request: CreatePageParameters = {
-                parent: { database_id: tgChat.app.blogs[blogName].notionBuyTgDbId },
+                parent: { database_id: tgChat.app.blogs[blogName].notion.buyTgDbId },
                 properties: {
                   date: {
                     type: 'date',

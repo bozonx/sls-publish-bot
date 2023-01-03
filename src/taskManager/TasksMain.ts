@@ -33,7 +33,7 @@ export default class TasksMain {
   constructor(app: App) {
     this.app = app;
     this.filePath = path.resolve(
-      this.app.appConfig.stateDirPath,
+      this.app.appConfig.dataDirPath,
       STATE_TASKS_FILENAME
     );
   }

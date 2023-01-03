@@ -1,6 +1,7 @@
 import {SnType} from './snTypes';
 import {PublicationType} from './publicationType';
 
+
 export const CONTENT_PROPS = {
   date: 'date',
   time: 'time',

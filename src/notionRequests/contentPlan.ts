@@ -13,7 +13,7 @@ export async function loadNotPublished(blogName: string, tgChat: TgChat): Promis
     .format('YYYY-MM-DD');
 
   const response = await tgChat.app.notion.api.databases.query({
-    database_id: tgChat.app.blogs[blogName].notionContentPlanDbId,
+    database_id: tgChat.app.blogs[blogName].notion.contentPlanDbId,
     ...makeContentPlanQuery(currentDate),
   });
 
