@@ -64,6 +64,8 @@ services:
     command: "yarn container"
 ```
 
+start chat in telegram with `freedom_publish_bot`
+
 ## Docker hook
 
 docker login

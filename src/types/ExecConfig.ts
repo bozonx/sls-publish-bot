@@ -1,28 +1,31 @@
-import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
 
-
-export interface BlogTelegramConfig {
-  telegraPhAuthorName: string;
-  telegraPhAuthorUrl: string;
+export interface BlogBaseConfig {
+  // some PUBLICATION_TYPES
+  supportedTypes: string[];
+}
+export interface BlogTelegramConfig extends BlogBaseConfig {
   channelId: number | string;
+  telegraPhAuthorName?: string;
+  telegraPhAuthorUrl?: string;
   postFooter?: string;
   storyFooter?: string;
   memFooter?: string;
   reelFooter?: string;
   articlePostTmpl?: string;
-  articleFooter?: (TelegraphNode | string)[];
+  articleFooter?: string;
+  //articleFooter?: (TelegraphNode | string)[];
 }
 
 export interface BlogConfig {
   // name for displaying in menu
   dispname: string;
-  notionContentPlanDbId: string;
-  notionCreativeDbId: string;
-  notionBuyTgDbId: string;
-  notionSellTgDbId: string;
-  notionContragentsTgDbId: string;
-  // some PUBLICATION_TYPES
-  supportedTypes: string[];
+  notion: {
+    contentPlanDbId: string;
+    creativeDbId: string;
+    buyTgDbId: string;
+    sellTgDbId: string;
+    contragentsTgDbId: string;
+  },
   sn: {
     telegram?: BlogTelegramConfig;
     instagram?: {

@@ -18,7 +18,7 @@ const conf = yaml.load(
 ) as ExecConfig
 const app = new App(conf)
 
-app.init();
+app.init()
 
 // Enable graceful stop
 process.once('SIGINT', () => app.destroy('SIGINT'));

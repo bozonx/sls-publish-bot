@@ -38,13 +38,6 @@ export default class App {
       await this.tg.init();
       await this.telegraPh.init();
       await this.tasks.init();
-
-      // const res = await this.notion.api.databases.retrieve({ database_id : this.config.blogs.test.notionSellTgDbId })
-      // console.log(1111, (res as any))
-      // console.log(2222, (res.properties as any))
-      // console.log(2222, (res.properties.format as any).select)
-      // console.log(2222, (res.properties.type as any).select)
-
     })()
       .catch((e) => {
         this.consoleLog.error(e);
@@ -68,10 +61,10 @@ export default class App {
   }
 
 
-  private makeExecConf(rawExecConfig: ExecConfig): ExecConfig {
+  private makeExecConf(rawBlogsConfig: ExecConfig): ExecConfig {
     // TODO: check conf
 
-    return rawExecConfig;
+    return rawBlogsConfig;
   }
 
 }
