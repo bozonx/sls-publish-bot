@@ -1,6 +1,6 @@
 import {NotionBlocks} from '../types/notion';
 import {prepareFooter, resolveTgFooter} from './helpers';
-import {BlogTelegramConfig} from '../types/ExecConfig';
+import {BlogTelegramConfig} from '../types/BlogsConfig';
 import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
 import {makeTagsString} from '../lib/common';
 import {SN_TYPES, SnType} from '../types/snTypes';

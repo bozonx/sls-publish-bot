@@ -5,7 +5,7 @@ import TgChat from '../apiTg/TgChat';
 import {ChatEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
 import {TgReplyButton} from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
-import {BlogTelegramConfig} from '../types/ExecConfig';
+import {BlogTelegramConfig} from '../types/BlogsConfig';
 import {makeTagsString} from '../lib/common';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';

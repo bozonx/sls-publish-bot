@@ -7,12 +7,12 @@ import TasksMain from './taskManager/TasksMain';
 import ChannelLogger from './helpers/ChannelLogger';
 import ConsoleLogger from './lib/ConsoleLogger';
 import TelegraPhMain from './apiTelegraPh/telegraPhMain';
-import ExecConfig from './types/ExecConfig';
+import BlogsConfig from './types/BlogsConfig';
 
 
 export default class App {
   public readonly appConfig: AppConfig = appConfig;
-  public readonly config: ExecConfig;
+  public readonly config: BlogsConfig;
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
   public readonly tasks: TasksMain;
@@ -22,7 +22,7 @@ export default class App {
   public readonly i18n = ru;
 
 
-  constructor(rawExecConfig: ExecConfig) {
+  constructor(rawExecConfig: BlogsConfig) {
     this.config = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
@@ -61,7 +61,7 @@ export default class App {
   }
 
 
-  private makeExecConf(rawBlogsConfig: ExecConfig): ExecConfig {
+  private makeExecConf(rawBlogsConfig: BlogsConfig): BlogsConfig {
     // TODO: check conf
 
     return rawBlogsConfig;

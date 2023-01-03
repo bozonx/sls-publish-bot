@@ -1,11 +1,11 @@
 
 // TODO: remove
 
-import ExecConfig from './types/ExecConfig';
+import BlogsConfig from './types/BlogsConfig';
 import {PUBLICATION_TYPES} from './types/publicationType';
 
 
-const execConf: ExecConfig = {
+const execConf: BlogsConfig = {
   blogs: {
     test: {
       dispname: 'Тестовый канал',
