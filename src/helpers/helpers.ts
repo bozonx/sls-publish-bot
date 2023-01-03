@@ -152,7 +152,7 @@ export function resolveTgFooter(
     case PUBLICATION_TYPES.article:
       // TODO: свой футер !!!!
       //footerStr = tgBlogConfig?.storyFooter;
-      //tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter,
+      //tgChat.app.blogs[blogName].sn.telegram?.articleFooter,
       // const cleanText = transformNotionToCleanText(textBlocks);
       break;
     case PUBLICATION_TYPES.mem:

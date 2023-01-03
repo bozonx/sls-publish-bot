@@ -44,8 +44,8 @@ export default class TelegraPhMain {
     const result = await this.api.createPage({
       title,
       content,
-      author_name: this.app.config.blogs[blogName].sn.telegram?.telegraPhAuthorName,
-      author_url: this.app.config.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
+      author_name: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorName,
+      author_url: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
     });
 
     return result.path;

@@ -17,7 +17,7 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
 
   try {
     items = (await tgChat.app.notion.api.databases.query({
-      database_id: tgChat.app.config.blogs[blogName].notionCreativeDbId,
+      database_id: tgChat.app.blogs[blogName].notionCreativeDbId,
       // TODO: надо выгребать вообще всё
       page_size: DB_DEFAULT_PAGE_SIZE,
     })).results as any;

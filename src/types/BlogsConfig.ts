@@ -37,8 +37,12 @@ export interface BlogConfig {
   };
 }
 
-export default interface BlogsConfig {
-  // name of blog in object is just uniq name and doesn't matter the name.
-  // But please don't change it because it is used in tasks.
-  blogs: Record<string, BlogConfig>;
-}
+type BlogsConfig = Record<string, BlogConfig>
+
+export default BlogsConfig
+
+// export default interface BlogsConfig {
+//   // name of blog in object is just uniq name and doesn't matter the name.
+//   // But please don't change it because it is used in tasks.
+//   blogs: Record<string, BlogConfig>;
+// }

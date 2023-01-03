@@ -14,9 +14,9 @@ const BLOG_MARKER = 'blog:';
 export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: string) => void) {
   const msg = tgChat.app.i18n.menu.mainMenu;
   const buttons = [
-    Object.keys(tgChat.app.config.blogs).map((blogName): any => {
+    Object.keys(tgChat.app.blogs).map((blogName): any => {
       return {
-        text: tgChat.app.config.blogs[blogName].dispname,
+        text: tgChat.app.blogs[blogName].dispname,
         callback_data: BLOG_MARKER + blogName,
       };
     }),
@@ -46,7 +46,7 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
       // print result
       await tgChat.reply(
         tgChat.app.i18n.menu.selectedBlog
-        + tgChat.app.config.blogs[blogName].dispname
+        + tgChat.app.blogs[blogName].dispname
       );
 
       onDone(blogName);

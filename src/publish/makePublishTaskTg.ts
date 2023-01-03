@@ -183,7 +183,7 @@ export async function registerPublishTaskTg(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
   // get id of channel to publish postpone post
-  const chatId = tgChat.app.config.blogs[blogName].sn.telegram?.channelId;
+  const chatId = tgChat.app.blogs[blogName].sn.telegram?.channelId;
   // TODO: а чё без часового пояса???
   // moment(`${isoDate} ${time}`).utcOffset(tgChat.app.appConfig.utcOffset).format()
   const startTime = moment(`${isoDate}T${time}:00`)

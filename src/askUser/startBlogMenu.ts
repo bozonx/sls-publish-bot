@@ -13,17 +13,17 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       await startPublishFromContentPlan(blogName, tgChat);
     }
     else if (action === BLOG_MENU_ACTIONS.STORY) {
-      const footer = tgChat.app.config.blogs[blogName].sn.telegram?.storyFooter;
+      const footer = tgChat.app.blogs[blogName].sn.telegram?.storyFooter;
 
       await startPublishCustomPostTg(blogName, tgChat, footer, true, true);
     }
     else if (action === BLOG_MENU_ACTIONS.MEM) {
-      const footer = tgChat.app.config.blogs[blogName].sn.telegram?.memFooter;
+      const footer = tgChat.app.blogs[blogName].sn.telegram?.memFooter;
 
       await startPublishCustomPostTg(blogName, tgChat, footer, true);
     }
     else if (action === BLOG_MENU_ACTIONS.REEL) {
-      const footer = tgChat.app.config.blogs[blogName].sn.telegram?.reelFooter;
+      const footer = tgChat.app.blogs[blogName].sn.telegram?.reelFooter;
 
       await startPublishCustomPostTg(blogName, tgChat, footer, true, true);
     }
@@ -31,7 +31,7 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       await startPublishPollTg(blogName, tgChat);
     }
     else if (action === BLOG_MENU_ACTIONS.POST) {
-      const footer = tgChat.app.config.blogs[blogName].sn.telegram?.postFooter;
+      const footer = tgChat.app.blogs[blogName].sn.telegram?.postFooter;
 
       await startPublishCustomPostTg(blogName, tgChat, footer);
     }

@@ -16,7 +16,7 @@ export const BLOG_MENU_ACTIONS = {
 
 
 export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (action: string) => void) {
-  const blogSns = tgChat.app.config.blogs[blogName].sn;
+  const blogSns = tgChat.app.blogs[blogName].sn;
   const msg = tgChat.app.i18n.menu.blogMenu;
   const buttons = compactButtons([
     [{

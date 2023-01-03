@@ -61,7 +61,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       return;
     }
 
-    const blogSns = Object.keys(tgChat.app.config.blogs[blogName].sn) as SnType[];
+    const blogSns = Object.keys(tgChat.app.blogs[blogName].sn) as SnType[];
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
 
     // TODO: не нужно если poll
@@ -70,7 +70,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       resolvedSns,
       parsedContentItem.type,
       true,
-      tgChat.app.config.blogs[blogName].sn.telegram,
+      tgChat.app.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
       parsedContentItem.gist,
       parsedPage?.instaTags,
@@ -127,7 +127,7 @@ async function askMenu(
       state.sns,
       state.pubType,
       state.useFooter,
-      tgChat.app.config.blogs[blogName].sn.telegram,
+      tgChat.app.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
       state.postText,
       state.instaTags,
@@ -161,7 +161,7 @@ async function askMenu(
           state.sns,
           state.pubType,
           state.useFooter,
-          tgChat.app.config.blogs[blogName].sn.telegram,
+          tgChat.app.blogs[blogName].sn.telegram,
           parsedPage?.textBlocks,
           state.postText,
           state.instaTags,

@@ -1,58 +1,58 @@
-- slsfreedom:
-    dispname: 'Система Личной Свободы'
-    notion:
-      contentPlanDbId: '0ce847766986402f9d221852ded2b599'
-      buyTgDbId: '854449a77e5f4d11ae0c210419818a7d'
-      sellTgDbId: '9fe8611d02f54e1bb07c43182b7c965d'
-      creativeDbId: '0c83f31f420f41748752bd0628d723e4'
-      contragentsTgDbId: 'f5a1465c85ee4bff8e560fb3f486b96f'
-    sn:
-      telegram:
-        #channelId: -1001664865912
-        supportedTypes:
-          - article
-          - post1000
-          - post2000
-          - mem
-          - photos
-          - announcement
-          - poll
-          - reels
-        telegraPhAuthorName: 'Козырин Иван'
-        telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6'
-        postFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| ${ TAGS }'
-        storyFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#сторис'
-        memFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#мем'
-        reelFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#рилс'
-        articlePostTmpl: '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }'
-        articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
-    zen: {}
-    site: {}
+slsfreedom:
+  dispname: 'Система Личной Свободы'
+  notion:
+    contentPlanDbId: '0ce847766986402f9d221852ded2b599'
+    buyTgDbId: '854449a77e5f4d11ae0c210419818a7d'
+    sellTgDbId: '9fe8611d02f54e1bb07c43182b7c965d'
+    creativeDbId: '0c83f31f420f41748752bd0628d723e4'
+    contragentsTgDbId: 'f5a1465c85ee4bff8e560fb3f486b96f'
+  sn:
+    telegram:
+      #channelId: -1001664865912
+      supportedTypes:
+        - article
+        - post1000
+        - post2000
+        - mem
+        - photos
+        - announcement
+        - poll
+        - reels
+      telegraPhAuthorName: 'Козырин Иван'
+      telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6'
+      postFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| ${ TAGS }'
+      storyFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#сторис'
+      memFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#мем'
+      reelFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#рилс'
+      articlePostTmpl: '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }'
+      articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
+  zen: {}
+  site: {}
 
-- svobzhi:
-    dispname: 'Свободный Образ Жизни'
-    notion:
-      contentPlanDbId: '2176dd13961a4b808a84e67c40fd3c09'
-      buyTgDbId: 'dad72ed89af547009d53a97d9b6ce1bc'
-      sellTgDbId: 'e98d41de7910449fb9cae61f45107d20'
-      creativeDbId: 'f569397146f44beb88bc1289245619b2'
-      contragentsTgDbId: '2af17ff1a9974c36a46ba585bfe07376'
-    sn:
-      telegram:
-        #channelId: -1001664865912
-        supportedTypes:
-          - post1000
-          - post2000
-          - mem
-          - photos
-          - story
-          - narrative
-          - announcement
-          - poll
-          - reels
-        postFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| ${ TAGS }'
-        storyFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#сторис'
-        memFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#мем'
-        reelFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#рилс'
-    instagram: { }
-    site: { }
+svobzhi:
+  dispname: 'Свободный Образ Жизни'
+  notion:
+    contentPlanDbId: '2176dd13961a4b808a84e67c40fd3c09'
+    buyTgDbId: 'dad72ed89af547009d53a97d9b6ce1bc'
+    sellTgDbId: 'e98d41de7910449fb9cae61f45107d20'
+    creativeDbId: 'f569397146f44beb88bc1289245619b2'
+    contragentsTgDbId: '2af17ff1a9974c36a46ba585bfe07376'
+  sn:
+    telegram:
+      #channelId: -1001664865912
+      supportedTypes:
+        - post1000
+        - post2000
+        - mem
+        - photos
+        - story
+        - narrative
+        - announcement
+        - poll
+        - reels
+      postFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| ${ TAGS }'
+      storyFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#сторис'
+      memFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#мем'
+      reelFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#рилс'
+  instagram: { }
+  site: { }

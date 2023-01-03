@@ -18,8 +18,8 @@ export async function makePublishTaskTgArticle(
   tgTags?: string[],
   announcement?: string,
 ) {
-  const postTmpl = tgChat.app.config.blogs[blogName].sn.telegram?.articlePostTmpl;
-  const footer = tgChat.app.config.blogs[blogName].sn.telegram?.articleFooter;
+  const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl;
+  const footer = tgChat.app.blogs[blogName].sn.telegram?.articleFooter;
 
   if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`);
 

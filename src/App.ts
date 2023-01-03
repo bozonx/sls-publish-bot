@@ -12,7 +12,7 @@ import BlogsConfig from './types/BlogsConfig';
 
 export default class App {
   public readonly appConfig: AppConfig = appConfig;
-  public readonly config: BlogsConfig;
+  public readonly blogs: BlogsConfig;
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
   public readonly tasks: TasksMain;
@@ -23,7 +23,7 @@ export default class App {
 
 
   constructor(rawExecConfig: BlogsConfig) {
-    this.config = this.makeExecConf(rawExecConfig);
+    this.blogs = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
     this.telegraPh = new TelegraPhMain(this);

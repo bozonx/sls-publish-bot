@@ -20,7 +20,7 @@ export async function printItemDetails(
   parsedPage?: RawPageContent
 ) {
   const footerStr = prepareFooter(
-    tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+    tgChat.app.blogs[blogName].sn.telegram?.postFooter,
     parsedPage?.tgTags,
     true
   );
@@ -71,7 +71,7 @@ export async function printPublishConfirmData(
   parsedPage?: RawPageContent
 ) {
   const footerStr = prepareFooter(
-    tgChat.app.config.blogs[blogName].sn.telegram?.postFooter,
+    tgChat.app.blogs[blogName].sn.telegram?.postFooter,
     parsedPage?.tgTags,
     true
   );

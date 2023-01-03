@@ -67,7 +67,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
                 );
 
                 const request: CreatePageParameters = {
-                  parent: { database_id: tgChat.app.config.blogs[blogName].notionSellTgDbId },
+                  parent: { database_id: tgChat.app.blogs[blogName].notionSellTgDbId },
                   properties: {
                     date: {
                       type: 'date',

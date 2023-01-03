@@ -81,7 +81,7 @@ export async function askPublishMenu(
       callback_data: PUBLISH_MENU_ACTION.PREVIEW_SWITCH,
     }] : [],
     // ask footer
-    (tgChat.app.config.blogs[blogName].sn.telegram?.postFooter && [
+    (tgChat.app.blogs[blogName].sn.telegram?.postFooter && [
       PUBLICATION_TYPES.post1000,
       PUBLICATION_TYPES.post2000,
       PUBLICATION_TYPES.mem,

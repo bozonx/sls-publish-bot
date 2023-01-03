@@ -56,7 +56,7 @@ export function makePublishInfoMessage(
 ): string {
   // TODO: отформатировать почеловечи
   return tgChat.app.i18n.message.prePublishInfo
-    + tgChat.app.config.blogs[blogName].dispname + ', '
+    + tgChat.app.blogs[blogName].dispname + ', '
     // TODO: add sn
     + moment(isoDate).format(PRINT_FULL_DATE_FORMAT) + ' ' + resolvedTime + ' ' + makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
 }
