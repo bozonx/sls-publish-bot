@@ -1,3 +1,6 @@
+
+// TODO: remove
+
 import ExecConfig from './types/ExecConfig';
 import {PUBLICATION_TYPES} from './types/publicationType';
 

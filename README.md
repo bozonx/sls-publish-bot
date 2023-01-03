@@ -11,6 +11,27 @@ See channel `sls_publish_test`
 and bot `sls_publish_test_bot
 type /start in bot chat
 
+create file ./env
+
+```
+# This is development config. Prod config in a dockerfile
+
+BOT_TOKEN=
+NOTION_TOKEN=
+TELEGRA_PH_TOKEN=
+LOG_CHANNEL_ID=
+UTC_OFFSET=3
+
+CONSOLE_LOG_LEVEL=debug
+CHANNEL_LOG_LEVEL=debug
+BOT_CHAT_LOG_LEVEL=debug
+CONFIG_PATH=
+DATA_DIR=./_testState
+# TODO: ??? WTF ????
+# 300 for prod
+SKIP_TASKS_EARLIER_SEC=1
+```
+
 ## Prod
 
 ### Docker run

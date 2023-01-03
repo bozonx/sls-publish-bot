@@ -1,0 +1,28 @@
+- sls:
+    dispname: 'Система Личной Свободы'
+    notion:
+      contentPlanDbId: '0ce847766986402f9d221852ded2b599'
+      creativeDbId: '0c83f31f420f41748752bd0628d723e4'
+      buyTgDbId: '854449a77e5f4d11ae0c210419818a7d'
+      sellTgDbId: '9fe8611d02f54e1bb07c43182b7c965d'
+      contragentsTgDbId: 'f5a1465c85ee4bff8e560fb3f486b96f'
+    sn:
+      telegram:
+        telegraPhAuthorName: 'Козырин Иван'
+        telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6'
+        channelId: -1001664865912
+        postFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| ${ TAGS }'
+        storyFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#сторис'
+        memFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#мем'
+        reelFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#рилс'
+        articlePostTmpl: '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }'
+        articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
+        supportedTypes:
+          - article
+          - post1000
+          - post2000
+          - photos
+          - story
+    instagram: {}
+    zen: {}
+    site: {}
