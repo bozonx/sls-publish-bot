@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {isValidUrl, validateTime} from '../../lib/common.js';
+import {isValidUrl} from '../../lib/common.js';
 import {askText} from './askText.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 

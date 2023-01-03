@@ -13,6 +13,8 @@ import {TextMessageEvent} from '../../types/MessageEvent.js';
 
 const SKIP_ACTION = 'SKIP_ACTION';
 
+// TODO: why not askPostText ???
+
 
 export async function askText(
   msg: string,
