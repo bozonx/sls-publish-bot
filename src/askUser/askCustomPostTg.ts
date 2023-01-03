@@ -126,7 +126,8 @@ async function printPostPreview(
     tgChat.app.i18n.commonPhrases.selectedNoPreview
     + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
     + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${clearText.length}\n`
-    + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
+    + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length,
+    state.urlBtn && [[state.urlBtn]]
   );
 }
 

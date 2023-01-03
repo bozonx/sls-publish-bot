@@ -20,11 +20,11 @@ slsfreedom:
         - reels
       telegraPhAuthorName: 'Козырин Иван'
       telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6'
-      postFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| ${ TAGS }'
-      storyFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#сторис'
-      memFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#мем'
-      reelFooter: '\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#рилс'
-      articlePostTmpl: '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }'
+      postFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| ${ TAGS }"
+      storyFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#сторис"
+      memFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#мем"
+      reelFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#рилс"
+      articlePostTmpl: "[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }"
       articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
   zen: {}
   site: {}
@@ -50,9 +50,9 @@ svobzhi:
         - announcement
         - poll
         - reels
-      postFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| ${ TAGS }'
-      storyFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#сторис'
-      memFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#мем'
-      reelFooter: '\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#рилс'
+      postFooter: "\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| ${ TAGS }"
+      storyFooter: "\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#сторис"
+      memFooter: "\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#мем"
+      reelFooter: "\n\n[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) \\| \\#рилс"
   instagram: { }
   site: { }
