@@ -64,14 +64,15 @@ export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags:
           const trimmed = _.trim(message.text);
           const tagsArr = trimmed.split(' ')
             .map((el) => _.trimStart(_.trim(el), '#'));
+          const uniqTags = _.uniq(tagsArr)
           // print result
           await tgChat.reply(
             _.template(tgChat.app.i18n.commonPhrases.selectedTags)({
-              COUNT: tagsArr.length
+              COUNT: uniqTags.length
             })
-            + makeTagsString(tagsArr)
+            + makeTagsString(uniqTags)
           );
-          onDone(tagsArr);
+          onDone(uniqTags);
         })
       ),
       ChatEvents.TEXT

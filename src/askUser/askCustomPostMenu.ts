@@ -190,7 +190,7 @@ async function handleButtons(
 
         delete state.urlBtn;
 
-        return;
+        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }
 
       return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton: TgReplyBtnUrl) => {
@@ -212,7 +212,7 @@ async function handleButtons(
 
         delete state.autoDeleteIsoDateTime;
 
-        return;
+        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }
 
       return await askDateTime(tgChat, tgChat.asyncCb(async (autoDeleteIsoDateTime: string) => {

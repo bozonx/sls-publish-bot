@@ -90,7 +90,8 @@ async function printPostPreview(
         tgChat.botChatId,
         state.mediaGroup[0].fileId,
         tgChat,
-        caption
+        caption,
+        state.urlBtn
       );
     }
     else if (state.mediaGroup[0].type === 'photo') {
@@ -98,7 +99,8 @@ async function printPostPreview(
         tgChat.botChatId,
         state.mediaGroup[0].fileId,
         tgChat,
-        caption
+        caption,
+        state.urlBtn
       );
     }
     else if (state.mediaGroup[0].type === 'photoUrl') {
@@ -106,7 +108,8 @@ async function printPostPreview(
         tgChat.botChatId,
         state.mediaGroup[0].url,
         tgChat,
-        caption
+        caption,
+        state.urlBtn
       );
     }
   }
@@ -118,7 +121,8 @@ async function printPostPreview(
       tgChat.botChatId,
       caption,
       tgChat,
-      state.usePreview
+      state.usePreview,
+      state.urlBtn
     );
   }
   // preview state
@@ -126,8 +130,7 @@ async function printPostPreview(
     tgChat.app.i18n.commonPhrases.selectedNoPreview
     + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
     + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${clearText.length}\n`
-    + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length,
-    state.urlBtn && [[state.urlBtn]]
+    + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
   );
 }
 

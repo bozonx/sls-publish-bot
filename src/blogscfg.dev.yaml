@@ -13,12 +13,17 @@ test:
         - article
         - post1000
         - post2000
+        - mem
         - photos
         - story
+        - narrative
+        - announcement
+        - poll
+        - reels
       telegraPhAuthorName: 'Козырин Иван'
       telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6'
       postFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| ${ TAGS }"
-      storyFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \#сторис"
+      storyFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#сторис"
       memFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#мем"
       reelFooter: "\n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) \\| \\#рилс"
       articlePostTmpl: "[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }"
