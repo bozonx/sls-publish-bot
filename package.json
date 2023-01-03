@@ -11,7 +11,7 @@
     "dev": "ts-node-esm ./src/index.ts",
     "prod": "yarn ts-node --esm ./src/index.ts",
     "typecheck": "tsc --noEmit ./src/index.ts",
-    "build": "docker build -f ./dockerfile/Dockerfile -t bozonx/publish_bot:latest .",
+    "build": "docker build -f ./docker/Dockerfile -t bozonx/publish_bot:latest .",
     "prod-test-run": "docker run --name sls-bot -ti --rm -e NODE_ENV=development bozonx/publish_bot:latest"
   },
   "dependencies": {

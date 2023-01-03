@@ -43,3 +43,7 @@ services:
     command: "yarn container"
 ```
 
+## Docker hook
+
+docker login
+docker push bozonx/publish_bot:latest
