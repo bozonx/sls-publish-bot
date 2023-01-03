@@ -1,7 +1,7 @@
 {
   "name": "sls-publish-bot",
   "version": "0.0.1",
-  "description": "Publish bot for SLS",
+  "description": "Publish telegram bot for freedom blogs",
   "main": "src/index.ts",
   "repository": "https://github.com/bozonx/sls-publish-bot.git",
   "author": "Kozyrin Ivan <ipkozyrin@gmail.com>",
@@ -12,6 +12,7 @@
     "prod": "yarn ts-node --esm ./src/index.ts",
     "typecheck": "tsc --noEmit ./src/index.ts",
     "build": "docker build -f ./docker/Dockerfile -t bozonx/publish_bot:latest .",
+    "push": "docker push bozonx/publish_bot:latest",
     "prod-test-run": "docker run --name sls-bot -ti --rm bozonx/publish_bot:latest"
   },
   "dependencies": {
