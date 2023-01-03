@@ -1,14 +1,14 @@
 import _ from 'lodash';
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK, WARN_SIGN,
-} from '../types/constants.js';
-import BaseState from '../types/BaseState.js';
-import {TextMessageEvent} from '../types/MessageEvent.js';
+} from '../../types/constants.js';
+import BaseState from '../../types/BaseState.js';
+import {TextMessageEvent} from '../../types/MessageEvent.js';
 
 
 const SKIP_ACTION = 'SKIP_ACTION';

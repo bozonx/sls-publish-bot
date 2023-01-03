@@ -1,6 +1,6 @@
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {askDate} from './askDate.js';
-import {makeUtcOffsetStr} from '../helpers/helpers.js';
+import {makeUtcOffsetStr} from '../../helpers/helpers.js';
 import {askTime} from './askTime.js';
 
 

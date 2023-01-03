@@ -1,13 +1,13 @@
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-} from '../types/constants.js';
-import {addSimpleStep} from '../helpers/helpers.js';
-import {breakArray, removeItemFromArray} from '../lib/arrays.js';
-import {SnType} from '../types/snTypes.js';
+} from '../../types/constants.js';
+import {addSimpleStep} from '../../helpers/helpers.js';
+import {breakArray, removeItemFromArray} from '../../lib/arrays.js';
+import {SnType} from '../../types/snTypes.js';
 
 
 const SN_TO_REMOVE_CB = 'SN_TO_REMOVE_CB|'

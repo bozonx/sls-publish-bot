@@ -8,12 +8,12 @@ import {
   OK_BTN_CALLBACK
 } from '../types/constants.js';
 import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers.js';
-import {askTime} from './askTime.js';
-import {askPostMedia} from './askPostMedia.js';
+import {askTime} from './common/askTime.js';
+import {askPostMedia} from './common/askPostMedia.js';
 import {printImage} from '../publish/printInfo.js';
-import {askPostText} from './askPostText.js';
-import {askTags} from './askTags.js';
-import {askSns} from './askSns.js';
+import {askPostText} from './common/askPostText.js';
+import {askTags} from './common/askTags.js';
+import {askSns} from './common/askSns.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 

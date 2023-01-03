@@ -1,15 +1,15 @@
 import _ from 'lodash';
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK, OFTEN_USED_TIME,
-} from '../types/constants.js';
-import BaseState from '../types/BaseState.js';
-import {TextMessageEvent} from '../types/MessageEvent.js';
-import {CURRENCY_TICKERS, CurrencyTicker} from '../types/types.js';
+} from '../../types/constants.js';
+import BaseState from '../../types/BaseState.js';
+import {TextMessageEvent} from '../../types/MessageEvent.js';
+import {CURRENCY_TICKERS, CurrencyTicker} from '../../types/types.js';
 
 
 //export const ASK_COST_CURRENCY = 'ASK_COST_CURRENCY:';

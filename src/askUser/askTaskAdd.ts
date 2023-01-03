@@ -3,7 +3,7 @@ import TgChat from '../apiTg/TgChat.js';
 import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK, ChatEvents, OK_BTN} from '../types/constants.js';
 import BaseState from '../types/BaseState.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent.js';
-import {askDateTime} from './askDateTime.js';
+import {askDateTime} from './common/askDateTime.js';
 
 
 type OnDoneType = (messageId: number, chatId: number, startTime: string) => void;

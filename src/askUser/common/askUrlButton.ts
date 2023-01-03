@@ -1,7 +1,7 @@
-import TgChat from '../apiTg/TgChat.js';
-import {isValidUrl, validateTime} from '../lib/common.js';
+import TgChat from '../../apiTg/TgChat.js';
+import {isValidUrl, validateTime} from '../../lib/common.js';
 import {askText} from './askText.js';
-import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
+import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 
 
 export async function askUrlButton(tgChat: TgChat, onDone: (urlButton: TgReplyBtnUrl) => void) {

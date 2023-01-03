@@ -1,13 +1,13 @@
 import TgChat from '../apiTg/TgChat.js';
-import {askCost} from './askCost.js';
+import {askCost} from './common/askCost.js';
 import {AdFormat, CurrencyTicker, SellAdType} from '../types/types.js';
-import {askFormat} from './askFormat.js';
+import {askFormat} from './common/askFormat.js';
 import {askCustomPostTg} from './askCustomPostTg.js';
 import {CustomPostState} from './askCustomPostMenu.js';
-import {askNote} from './askNote.js';
+import {askNote} from './common/askNote.js';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import {askSellAdType} from './askSellAdType.js';
-import {askDateTime} from './askDateTime.js';
+import {askDateTime} from './common/askDateTime.js';
 import {registerCustomPostTg} from './startPublishCustomPostTg.js';
 
 

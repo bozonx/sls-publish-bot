@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import TgChat from '../apiTg/TgChat.js';
-import BaseState from '../types/BaseState.js';
+import TgChat from '../../apiTg/TgChat.js';
+import BaseState from '../../types/BaseState.js';
 import {
   ChatEvents,
   BACK_BTN,
@@ -9,15 +9,15 @@ import {
   CANCEL_BTN_CALLBACK,
   OK_BTN,
   OK_BTN_CALLBACK
-} from '../types/constants.js';
+} from '../../types/constants.js';
 import {
   PhotoData,
   PhotoMessageEvent, PhotoUrlData,
   TextMessageEvent, VideoData,
   VideoMessageEvent
-} from '../types/MessageEvent.js';
-import {isValidUrl} from '../lib/common.js';
-import {transformMdToTelegramMd} from '../helpers/transformMdToTelegramMd.js';
+} from '../../types/MessageEvent.js';
+import {isValidUrl} from '../../lib/common.js';
+import {transformMdToTelegramMd} from '../../helpers/transformMdToTelegramMd.js';
 
 
 interface AskPostMediaReturn {

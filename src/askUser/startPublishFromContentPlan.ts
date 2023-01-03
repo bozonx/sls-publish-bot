@@ -12,7 +12,7 @@ import {loadPageProps} from '../notionRequests/pageProps.js';
 import RawPageContent from '../types/PageContent.js';
 import {resolveSns} from '../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../publish/publishHelpers.js';
-import {askPostConfirm} from './askPostConfirm.js';
+import {askPostConfirm} from './common/askPostConfirm.js';
 import {printImage, printItemDetails, printPublishConfirmData} from '../publish/printInfo.js';
 import {WARN_SIGN} from '../types/constants.js';
 import validateContentPlanPost, {validateContentPlanPostText} from '../publish/validateContentPlanPost.js';

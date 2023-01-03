@@ -1,9 +1,9 @@
 import TgChat from '../apiTg/TgChat.js';
 import {makePost2000Text} from '../publish/publishHelpers.js';
-import {askPostConfirm} from './askPostConfirm.js';
+import {askPostConfirm} from './common/askPostConfirm.js';
 import {askCustomPostTg} from './askCustomPostTg.js';
 import {CustomPostState} from './askCustomPostMenu.js';
-import {askDateTime} from './askDateTime.js';
+import {askDateTime} from './common/askDateTime.js';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../publish/makePublishTaskTg.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';

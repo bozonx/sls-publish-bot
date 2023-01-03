@@ -1,4 +1,4 @@
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {askText} from './askText.js';
 
 

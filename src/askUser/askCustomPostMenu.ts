@@ -9,12 +9,12 @@ import {
 } from '../types/constants.js';
 import {addSimpleStep} from '../helpers/helpers.js';
 import {compactUndefined} from '../lib/arrays.js';
-import {askPostText} from './askPostText.js';
-import {askTags} from './askTags.js';
+import {askPostText} from './common/askPostText.js';
+import {askTags} from './common/askTags.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
-import {askDateTime} from './askDateTime.js';
-import {askUrlButton} from './askUrlButton.js';
+import {askDateTime} from './common/askDateTime.js';
+import {askUrlButton} from './common/askUrlButton.js';
 
 
 export interface CustomPostState {

@@ -1,15 +1,15 @@
 import _ from 'lodash';
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-} from '../types/constants.js';
-import BaseState from '../types/BaseState.js';
-import {TextMessageEvent} from '../types/MessageEvent.js';
-import {makeTagsString} from '../lib/common.js';
+} from '../../types/constants.js';
+import BaseState from '../../types/BaseState.js';
+import {TextMessageEvent} from '../../types/MessageEvent.js';
+import {makeTagsString} from '../../lib/common.js';
 
 
 export const CLEAR_CB = 'CLEAR_CB';
