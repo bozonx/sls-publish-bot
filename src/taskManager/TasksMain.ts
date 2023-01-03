@@ -168,6 +168,7 @@ export default class TasksMain {
     // TODO: если слишком большое время ожидания то короче глюк - надо просто сохранить
     // TODO: сделать крон который будет поднимать отложенные задачи и регистрировать
 
+    // TODO: зачем нужно skipTasksEarlierSec ???
     if (secondsToPublish <= this.app.appConfig.skipTasksEarlierSec) {
       const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`
         + `The minimum time is ${this.app.appConfig.skipTasksEarlierSec} seconds.\n`

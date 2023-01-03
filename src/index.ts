@@ -2,7 +2,10 @@ import * as fs from 'fs';
 import yaml from 'js-yaml'
 import App from './App';
 import ExecConfig from './types/ExecConfig';
+import dotenv from 'dotenv';
 
+
+dotenv.config();
 
 if (!process.env.CONFIG_PATH) {
   console.error(`You need to set env var CONFIG_PATH`);
