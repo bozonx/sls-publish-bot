@@ -33,11 +33,16 @@ export default class TgMain {
 
     this.addListeners();
 
-    console.log(1111)
 
-    await this.bot.launch();
+    this.bot.launch().then(() => {
 
-    console.log(22222)
+      // TODO: почему-то зависает
+
+      console.log(3333)
+    });
+
+
+
     await this.app.channelLog.info('Bot launched');
     this.app.consoleLog.info('Bot launched');
   }
@@ -66,12 +71,15 @@ export default class TgMain {
         return;
       }
 
-      console.log(11111, ctx.update.callback_query)
-
-      //this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
+      this.chats[ctx.chat.id].handleCallbackQueryEvent(
+        (ctx.update.callback_query as  any).data
+      );
     });
 
     this.bot.on('message', (ctx) => {
+      // uncomment this to find channel id by forwarding a message
+      // console.log('--- forwarded', (ctx.update?.message as any)?.forward_from_chat)
+
       const message: Message.CommonMessage = ctx.update.message;
 
       if (!message.chat?.id) {

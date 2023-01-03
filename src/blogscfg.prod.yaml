@@ -8,7 +8,7 @@ slsfreedom:
     contragentsTgDbId: 'f5a1465c85ee4bff8e560fb3f486b96f'
   sn:
     telegram:
-      #channelId: -1001664865912
+      channelId: -1001661138872
       supportedTypes:
         - article
         - post1000
@@ -39,7 +39,7 @@ svobzhi:
     contragentsTgDbId: '2af17ff1a9974c36a46ba585bfe07376'
   sn:
     telegram:
-      #channelId: -1001664865912
+      channelId: -1001852303765
       supportedTypes:
         - post1000
         - post2000
