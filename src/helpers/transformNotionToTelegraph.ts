@@ -1,14 +1,14 @@
-import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion';
-import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
-import {NotionBlocks} from '../types/notion';
-import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
+import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion.js';
+import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
+import {NotionBlocks} from '../types/notion.js';
+import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
 import {
   richTextToHtml,
   richTextToHtmlCodeBlock,
   richTextToSimpleTextList,
   richTextToTelegraphNodes
-} from './transformHelpers';
-import {BlockObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
+} from './transformHelpers.js';
+//import {BlockObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'

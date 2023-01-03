@@ -1,5 +1,5 @@
-import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger';
-import {calcAllowedLogLevels} from './common';
+import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger.js';
+import {calcAllowedLogLevels} from './common.js';
 
 
 export default class ConsoleLogger implements Logger {

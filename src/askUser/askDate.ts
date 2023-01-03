@@ -1,15 +1,15 @@
 import moment from 'moment';
-import TgChat from '../apiTg/TgChat';
+import TgChat from '../apiTg/TgChat.js';
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK, ISO_DATE_FORMAT
-} from '../types/constants';
-import BaseState from '../types/BaseState';
-import {TextMessageEvent} from '../types/MessageEvent';
-import {makeUtcOffsetStr} from '../helpers/helpers';
+} from '../types/constants.js';
+import BaseState from '../types/BaseState.js';
+import {TextMessageEvent} from '../types/MessageEvent.js';
+import {makeUtcOffsetStr} from '../helpers/helpers.js';
 
 
 const SELECT_PUB_DATE = {

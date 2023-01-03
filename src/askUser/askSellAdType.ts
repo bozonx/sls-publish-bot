@@ -1,14 +1,14 @@
-import TgChat from '../apiTg/TgChat';
+import TgChat from '../apiTg/TgChat.js';
 import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-} from '../types/constants';
-import {breakArray} from '../lib/arrays';
-import {TgReplyButton} from '../types/TgReplyButton';
-import {addSimpleStep} from '../helpers/helpers';
-import {AD_SELL_TYPES, SellAdType} from '../types/types';
+} from '../types/constants.js';
+import {breakArray} from '../lib/arrays.js';
+import {TgReplyButton} from '../types/TgReplyButton.js';
+import {addSimpleStep} from '../helpers/helpers.js';
+import {AD_SELL_TYPES, SellAdType} from '../types/types.js';
 
 
 const SELL_AD_TYPE_CB = 'SELL_AD_TYPE_CB|'

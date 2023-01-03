@@ -1,6 +1,6 @@
-import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger';
-import {calcAllowedLogLevels} from '../lib/common';
-import TgChat from '../apiTg/TgChat';
+import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger.js';
+import {calcAllowedLogLevels} from '../lib/common.js';
+import TgChat from '../apiTg/TgChat.js';
 
 
 export default class BotChatLog implements Logger {

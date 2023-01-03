@@ -1,4 +1,4 @@
-import {NotionBlocks} from './notion';
+import {NotionBlocks} from './notion.js';
 
 
 // TODO: rename

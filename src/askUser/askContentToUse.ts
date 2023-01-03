@@ -1,8 +1,8 @@
-import TgChat from '../apiTg/TgChat';
-import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
-import {PageObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
 import moment from 'moment';
-import {addSimpleStep} from '../helpers/helpers';
+import TgChat from '../apiTg/TgChat.js';
+import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants.js';
+import {PageObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
+import {addSimpleStep} from '../helpers/helpers.js';
 
 
 const CONTENT_MARKER = 'content:';

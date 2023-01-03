@@ -1,13 +1,14 @@
 import _ from 'lodash';
+import moment from 'moment';
+// @ts-ignore
+import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import ContentItem, {
   CONTENT_PROPS,
   CONTENT_STATUS,
-} from '../types/ContentItem';
-import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import moment from 'moment';
-import {makeDateTimeStr, makeFullNotionLink} from '../helpers/helpers';
-import ru from '../I18n/ru';
-import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
+} from '../types/ContentItem.js';
+import {makeDateTimeStr, makeFullNotionLink} from '../helpers/helpers.js';
+import ru from '../I18n/ru.js';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 
 
 // TODO: review, refactor

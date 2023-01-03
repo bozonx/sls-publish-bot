@@ -1,15 +1,15 @@
-import BaseState from '../types/BaseState';
 import _ from 'lodash';
 import moment from 'moment';
-import TgChat from '../apiTg/TgChat';
-import {ChatEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants';
-import {TgReplyButton} from '../types/TgReplyButton';
 import {markdownv2 as mdFormat} from 'telegram-format';
-import {BlogTelegramConfig} from '../types/BlogsConfig';
-import {makeTagsString} from '../lib/common';
-import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes';
-import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
-import {compactUndefined} from '../lib/arrays';
+import BaseState from '../types/BaseState.js';
+import TgChat from '../apiTg/TgChat.js';
+import {ChatEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
+import {TgReplyButton} from '../types/TgReplyButton.js';
+import {BlogTelegramConfig} from '../types/BlogsConfig.js';
+import {makeTagsString} from '../lib/common.js';
+import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
+import {compactUndefined} from '../lib/arrays.js';
 
 
 export function makeBaseState(): BaseState {

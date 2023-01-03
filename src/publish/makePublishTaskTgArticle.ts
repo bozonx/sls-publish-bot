@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
-import TgChat from '../apiTg/TgChat';
-import {makeTelegraPhUrl} from '../helpers/helpers';
-import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph';
-import {makeTagsString} from '../lib/common';
-import {makePublishTaskTgOnlyText} from './makePublishTaskTg';
-import {NotionBlocks} from '../types/notion';
+import TgChat from '../apiTg/TgChat.js';
+import {makeTelegraPhUrl} from '../helpers/helpers.js';
+import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
+import {makeTagsString} from '../lib/common.js';
+import {makePublishTaskTgOnlyText} from './makePublishTaskTg.js';
+import {NotionBlocks} from '../types/notion.js';
 
 
 export async function makePublishTaskTgArticle(

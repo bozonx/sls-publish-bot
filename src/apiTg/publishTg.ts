@@ -1,6 +1,6 @@
-import TgChat from './TgChat';
-import PollData from '../types/PollData';
-import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
+import TgChat from './TgChat.js';
+import PollData from '../types/PollData.js';
+import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 
 
 /**

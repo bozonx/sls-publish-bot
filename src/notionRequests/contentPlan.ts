@@ -1,7 +1,7 @@
-import moment from 'moment/moment';
-import TgChat from '../apiTg/TgChat';
-import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants';
-import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
+import moment from 'moment';
+import TgChat from '../apiTg/TgChat.js';
+import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants.js';
+import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 
 
 /**

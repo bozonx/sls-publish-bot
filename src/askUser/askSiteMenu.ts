@@ -1,6 +1,6 @@
-import TgChat from '../apiTg/TgChat';
-import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
-import {addSimpleStep} from '../helpers/helpers';
+import TgChat from '../apiTg/TgChat.js';
+import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants.js';
+import {addSimpleStep} from '../helpers/helpers.js';
 
 
 export async function askSiteMenu(tgChat: TgChat, onDone: () => void) {

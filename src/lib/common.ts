@@ -1,6 +1,6 @@
-import {LOG_LEVELS, LogLevel} from '../types/Logger';
+import {LOG_LEVELS, LogLevel} from '../types/Logger.js';
 import _ from 'lodash';
-import moment from 'moment/moment';
+import moment from 'moment';
 
 
 export function isPromise(toCheck: any): boolean {

@@ -1,10 +1,10 @@
-import TgChat from '../apiTg/TgChat';
-import {startPublishFromContentPlan} from './startPublishFromContentPlan';
-import {startPublishCustomPostTg} from './startPublishCustomPostTg';
-import {startPublishPollTg} from './startPublishPollTg';
-import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu';
-import {startSellAd} from './startSellAd';
-import {startBuyAd} from './startBuyAd';
+import TgChat from '../apiTg/TgChat.js';
+import {startPublishFromContentPlan} from './startPublishFromContentPlan.js';
+import {startPublishCustomPostTg} from './startPublishCustomPostTg.js';
+import {startPublishPollTg} from './startPublishPollTg.js';
+import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu.js';
+import {startSellAd} from './startSellAd.js';
+import {startBuyAd} from './startBuyAd.js';
 
 
 export async function startBlogMenu(blogName: string, tgChat: TgChat) {

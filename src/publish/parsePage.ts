@@ -1,9 +1,9 @@
-import RawPageContent, {PAGE_CONTENT_PROPS} from '../types/PageContent';
-import ru from '../I18n/ru';
-import {BlockObjectResponse, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import {NotionBlocks} from '../types/notion';
-import {makeTagsString} from '../lib/common';
-import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
+import RawPageContent, {PAGE_CONTENT_PROPS} from '../types/PageContent.js';
+import ru from '../I18n/ru.js';
+import {BlockObjectResponse, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
+import {NotionBlocks} from '../types/notion.js';
+import {makeTagsString} from '../lib/common.js';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 
 
 export function parsePageContent(

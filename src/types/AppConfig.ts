@@ -1,4 +1,4 @@
-import {LogLevel} from './Logger';
+import {LogLevel} from './Logger.js';
 
 
 export default interface AppConfig {

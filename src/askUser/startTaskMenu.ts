@@ -1,8 +1,8 @@
-import {askTasksListMenu, TASK_LIST_ACTIONS} from './askTasksListMenu';
-import {askTaskMenu} from './askTaskMenu';
-import TgChat from '../apiTg/TgChat';
-import {askTaskAdd} from './askTaskAdd';
-import {askTaskFinishPoll} from './askTaskFinishPoll';
+import {askTasksListMenu, TASK_LIST_ACTIONS} from './askTasksListMenu.js';
+import {askTaskMenu} from './askTaskMenu.js';
+import TgChat from '../apiTg/TgChat.js';
+import {askTaskAdd} from './askTaskAdd.js';
+import {askTaskFinishPoll} from './askTaskFinishPoll.js';
 
 
 export async function startTaskMenu(tgChat: TgChat) {

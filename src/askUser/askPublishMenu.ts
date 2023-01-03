@@ -1,4 +1,4 @@
-import TgChat from '../apiTg/TgChat';
+import TgChat from '../apiTg/TgChat.js';
 import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
@@ -6,16 +6,16 @@ import {
   CANCEL_BTN_CALLBACK,
   OK_BTN,
   OK_BTN_CALLBACK
-} from '../types/constants';
-import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers';
-import {askTime} from './askTime';
-import {askPostMedia} from './askPostMedia';
-import {printImage} from '../publish/printInfo';
-import {askPostText} from './askPostText';
-import {askTags} from './askTags';
-import {askSns} from './askSns';
-import {SN_TYPES, SnType} from '../types/snTypes';
-import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
+} from '../types/constants.js';
+import {addSimpleStep, makeUtcOffsetStr} from '../helpers/helpers.js';
+import {askTime} from './askTime.js';
+import {askPostMedia} from './askPostMedia.js';
+import {printImage} from '../publish/printInfo.js';
+import {askPostText} from './askPostText.js';
+import {askTags} from './askTags.js';
+import {askSns} from './askSns.js';
+import {SN_TYPES, SnType} from '../types/snTypes.js';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 
 
 export interface PublishMenuState {

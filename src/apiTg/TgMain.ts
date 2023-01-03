@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { Context, Telegraf } from 'telegraf';
-import App from '../App';
-import TgChat from './TgChat';
 import {Message, PhotoSize, Video} from 'typegram/message';
-import MessageEventBase from '../types/MessageEvent';
+import App from '../App.js';
+import TgChat from './TgChat.js';
+import MessageEventBase from '../types/MessageEvent.js';
 
 
 export default class TgMain {
@@ -33,7 +33,11 @@ export default class TgMain {
 
     this.addListeners();
 
+    console.log(1111)
+
     await this.bot.launch();
+
+    console.log(22222)
     await this.app.channelLog.info('Bot launched');
     this.app.consoleLog.info('Bot launched');
   }
@@ -62,7 +66,9 @@ export default class TgMain {
         return;
       }
 
-      this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
+      console.log(11111, ctx.update.callback_query)
+
+      //this.chats[ctx.chat.id].handleCallbackQueryEvent(ctx.update.callback_query.data);
     });
 
     this.bot.on('message', (ctx) => {

@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
-import TgChat from '../apiTg/TgChat';
-import {PublishMenuState} from '../askUser/askPublishMenu';
-import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes';
-import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
+import TgChat from '../apiTg/TgChat.js';
+import {PublishMenuState} from '../askUser/askPublishMenu.js';
+import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 
 
 export default function validateContentPlanPost(state: PublishMenuState, tgChat: TgChat) {

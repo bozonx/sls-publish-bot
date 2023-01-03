@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import {NOTION_BLOCK_TYPES} from '../types/notion';
-import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
-import {NotionBlocks} from '../types/notion';
-import {richTextToSimpleTextList} from './transformHelpers';
+import {NOTION_BLOCK_TYPES} from '../types/notion.js';
+import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
+import {NotionBlocks} from '../types/notion.js';
+import {richTextToSimpleTextList} from './transformHelpers.js';
 
 
 export function transformNotionToCleanText(notionBlocks: NotionBlocks): string {

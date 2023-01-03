@@ -1,20 +1,20 @@
-import TgChat from '../apiTg/TgChat';
+import moment from 'moment';
+import TgChat from '../apiTg/TgChat.js';
 import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
   OK_BTN, OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN,
-} from '../types/constants';
-import {addSimpleStep} from '../helpers/helpers';
-import {compactUndefined} from '../lib/arrays';
-import {askPostText} from './askPostText';
-import {askTags} from './askTags';
-import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
-import {TgReplyBtnUrl} from '../types/TgReplyButton';
-import {askDateTime} from './askDateTime';
-import moment from 'moment';
-import {askUrlButton} from './askUrlButton';
+} from '../types/constants.js';
+import {addSimpleStep} from '../helpers/helpers.js';
+import {compactUndefined} from '../lib/arrays.js';
+import {askPostText} from './askPostText.js';
+import {askTags} from './askTags.js';
+import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
+import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
+import {askDateTime} from './askDateTime.js';
+import {askUrlButton} from './askUrlButton.js';
 
 
 export interface CustomPostState {

@@ -1,7 +1,7 @@
-import TgChat from '../apiTg/TgChat';
-import {askDate} from './askDate';
-import {makeUtcOffsetStr} from '../helpers/helpers';
-import {askTime} from './askTime';
+import TgChat from '../apiTg/TgChat.js';
+import {askDate} from './askDate.js';
+import {makeUtcOffsetStr} from '../helpers/helpers.js';
+import {askTime} from './askTime.js';
 
 
 export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time: string) => void) {

@@ -1,5 +1,5 @@
-import {SnType} from './snTypes';
-import {PublicationType} from './publicationType';
+import {SnType} from './snTypes.js';
+import {PublicationType} from './publicationType.js';
 
 
 export const CONTENT_PROPS = {

@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import yaml from 'js-yaml'
-import App from './App';
-import BlogsConfig from './types/BlogsConfig';
 import dotenv from 'dotenv';
+import App from './App.js';
+import BlogsConfig from './types/BlogsConfig.js';
 
 
 dotenv.config();
@@ -16,6 +16,7 @@ if (!process.env.CONFIG_PATH) {
 const conf = yaml.load(
   fs.readFileSync(process.env.CONFIG_PATH, 'utf8')
 ) as BlogsConfig
+
 const app = new App(conf)
 
 app.init()

@@ -1,14 +1,14 @@
-import TgChat from '../apiTg/TgChat';
-import {askCost} from './askCost';
-import {AdFormat, CurrencyTicker, SellAdType} from '../types/types';
-import {askFormat} from './askFormat';
-import {askCustomPostTg} from './askCustomPostTg';
-import {CustomPostState} from './askCustomPostMenu';
-import {askNote} from './askNote';
-import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints';
-import {askSellAdType} from './askSellAdType';
-import {askDateTime} from './askDateTime';
-import {registerCustomPostTg} from './startPublishCustomPostTg';
+import TgChat from '../apiTg/TgChat.js';
+import {askCost} from './askCost.js';
+import {AdFormat, CurrencyTicker, SellAdType} from '../types/types.js';
+import {askFormat} from './askFormat.js';
+import {askCustomPostTg} from './askCustomPostTg.js';
+import {CustomPostState} from './askCustomPostMenu.js';
+import {askNote} from './askNote.js';
+import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
+import {askSellAdType} from './askSellAdType.js';
+import {askDateTime} from './askDateTime.js';
+import {registerCustomPostTg} from './startPublishCustomPostTg.js';
 
 
 const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {

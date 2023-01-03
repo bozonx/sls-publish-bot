@@ -1,13 +1,13 @@
-import TgMain from "./apiTg/TgMain";
-import AppConfig from "./types/AppConfig";
-import appConfig from "./appConfig";
-import ru from "./I18n/ru";
-import NotionApi from './apiNotion/NotionApi';
-import TasksMain from './taskManager/TasksMain';
-import ChannelLogger from './helpers/ChannelLogger';
-import ConsoleLogger from './lib/ConsoleLogger';
-import TelegraPhMain from './apiTelegraPh/telegraPhMain';
-import BlogsConfig from './types/BlogsConfig';
+import TgMain from './apiTg/TgMain.js';
+import AppConfig from './types/AppConfig.js';
+import appConfig from './appConfig.js';
+import ru from './I18n/ru.js';
+import NotionApi from './apiNotion/NotionApi.js';
+import TasksMain from './taskManager/TasksMain.js';
+import ChannelLogger from './helpers/ChannelLogger.js';
+import ConsoleLogger from './lib/ConsoleLogger.js';
+import TelegraPhMain from './apiTelegraPh/telegraPhMain.js';
+import BlogsConfig from './types/BlogsConfig.js';
 
 
 export default class App {

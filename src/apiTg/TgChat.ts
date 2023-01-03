@@ -1,19 +1,19 @@
-import BreadCrumbs from '../helpers/BreadCrumbs';
-import IndexedEventEmitter from '../lib/IndexedEventEmitter';
-import {ChatEvents} from '../types/constants';
-import App from '../App';
-import {TgReplyButton} from '../types/TgReplyButton';
-import BaseState from '../types/BaseState';
-import {makeBaseState} from '../helpers/helpers';
-import BotChatLog from '../helpers/BotChatLog';
-import {topLevelMenuStarter} from '../askUser/topLevelMenuStarter';
+import App from '../App.js';
+import BreadCrumbs from '../helpers/BreadCrumbs.js';
+import IndexedEventEmitter from '../lib/IndexedEventEmitter.js';
+import {ChatEvents} from '../types/constants.js';
+import {TgReplyButton} from '../types/TgReplyButton.js';
+import BaseState from '../types/BaseState.js';
+import {makeBaseState} from '../helpers/helpers.js';
+import BotChatLog from '../helpers/BotChatLog.js';
+import {topLevelMenuStarter} from '../askUser/topLevelMenuStarter.js';
 import {
   MediaGroupItemMessageEvent,
   PhotoMessageEvent,
   PollMessageEvent,
   TextMessageEvent,
   VideoMessageEvent
-} from '../types/MessageEvent';
+} from '../types/MessageEvent.js';
 
 
 export default class TgChat {

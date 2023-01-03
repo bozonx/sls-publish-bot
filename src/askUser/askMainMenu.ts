@@ -1,5 +1,5 @@
-import TgChat from '../apiTg/TgChat';
-import {addSimpleStep} from '../helpers/helpers';
+import TgChat from '../apiTg/TgChat.js';
+import {addSimpleStep} from '../helpers/helpers.js';
 
 
 export const MAIN_MENU_ACTION = {

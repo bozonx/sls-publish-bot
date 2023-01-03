@@ -1,11 +1,11 @@
 import moment from 'moment';
-import TgChat from '../apiTg/TgChat';
-import {makeUtcOffsetStr} from '../helpers/helpers';
-import {PRINT_FULL_DATE_FORMAT} from '../types/constants';
-import ru from '../I18n/ru';
-import {SN_TYPES, SnType} from '../types/snTypes';
-import {NotionBlocks} from '../types/notion';
-import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks';
+import TgChat from '../apiTg/TgChat.js';
+import {makeUtcOffsetStr} from '../helpers/helpers.js';
+import {PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
+import ru from '../I18n/ru.js';
+import {SN_TYPES, SnType} from '../types/snTypes.js';
+import {NotionBlocks} from '../types/notion.js';
+import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
 
 
 // TODO: review

@@ -1,5 +1,5 @@
-import AppConfig from './types/AppConfig';
-import {LOG_LEVELS} from './types/Logger';
+import AppConfig from './types/AppConfig.js';
+import {LOG_LEVELS} from './types/Logger.js';
 import dotenv from 'dotenv';
 
 

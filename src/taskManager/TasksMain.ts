@@ -1,4 +1,4 @@
-import App from '../App';
+import App from '../App.js';
 import {
   TaskItem,
   TASK_TYPES,
@@ -7,15 +7,15 @@ import {
   PinPostTask,
   UnpinPostTask,
   FinishPollTask, TaskTypes
-} from '../types/TaskItem';
+} from '../types/TaskItem.js';
 import * as fs from 'fs/promises';
 import path from 'path';
 import {clearTimeout} from 'timers';
-import {calcSecondsToDate} from '../lib/common';
-import {SnType} from '../types/snTypes';
-import TgChat from '../apiTg/TgChat';
-import moment from 'moment/moment';
-import {MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants';
+import {calcSecondsToDate} from '../lib/common.js';
+import {SnType} from '../types/snTypes.js';
+import TgChat from '../apiTg/TgChat.js';
+import moment from 'moment';
+import {MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';

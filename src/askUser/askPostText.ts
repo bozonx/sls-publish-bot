@@ -1,7 +1,7 @@
-import TgChat from '../apiTg/TgChat';
-import {ChatEvents, BACK_BTN, CANCEL_BTN} from '../types/constants';
-import BaseState from '../types/BaseState';
-import {TextMessageEvent} from '../types/MessageEvent';
+import TgChat from '../apiTg/TgChat.js';
+import {ChatEvents, BACK_BTN, CANCEL_BTN} from '../types/constants.js';
+import BaseState from '../types/BaseState.js';
+import {TextMessageEvent} from '../types/MessageEvent.js';
 
 
 export async function askPostText(

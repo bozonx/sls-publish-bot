@@ -1,4 +1,4 @@
-import {PUBLICATION_TYPES} from './publicationType';
+import {PUBLICATION_TYPES} from './publicationType.js';
 
 
 export type SnType = 'telegram'

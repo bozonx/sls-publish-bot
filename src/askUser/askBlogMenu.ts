@@ -1,6 +1,6 @@
-import TgChat from '../apiTg/TgChat';
-import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants';
-import {addSimpleStep, compactButtons} from '../helpers/helpers';
+import TgChat from '../apiTg/TgChat.js';
+import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants.js';
+import {addSimpleStep, compactButtons} from '../helpers/helpers.js';
 
 
 export const BLOG_MENU_ACTIONS = {

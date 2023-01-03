@@ -1,9 +1,9 @@
 /*
  * Взято из https://github.com/husky-dev/telegraph-cli
  */
-import {getApi} from './telegraphCli/api';
-import App from '../App';
-import {TelegraphNode} from './telegraphCli/types';
+import App from '../App.js';
+import {getApi} from './telegraphCli/api.js';
+import {TelegraphNode} from './telegraphCli/types.js';
 
 
 export default class TelegraPhMain {

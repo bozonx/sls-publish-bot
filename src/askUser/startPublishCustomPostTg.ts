@@ -1,12 +1,12 @@
-import TgChat from '../apiTg/TgChat';
-import {makePost2000Text} from '../publish/publishHelpers';
-import {askPostConfirm} from './askPostConfirm';
-import {askCustomPostTg} from './askCustomPostTg';
-import {CustomPostState} from './askCustomPostMenu';
-import {askDateTime} from './askDateTime';
-import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../publish/makePublishTaskTg';
-import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent';
-import {TgReplyBtnUrl} from '../types/TgReplyButton';
+import TgChat from '../apiTg/TgChat.js';
+import {makePost2000Text} from '../publish/publishHelpers.js';
+import {askPostConfirm} from './askPostConfirm.js';
+import {askCustomPostTg} from './askCustomPostTg.js';
+import {CustomPostState} from './askCustomPostMenu.js';
+import {askDateTime} from './askDateTime.js';
+import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../publish/makePublishTaskTg.js';
+import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
+import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 
 
 export async function startPublishCustomPostTg(

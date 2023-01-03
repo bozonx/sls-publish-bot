@@ -1,6 +1,6 @@
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants';
-import TgChat from '../apiTg/TgChat';
-import {CustomPostState} from '../askUser/askCustomPostMenu';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
+import TgChat from '../apiTg/TgChat.js';
+import {CustomPostState} from '../askUser/askCustomPostMenu.js';
 
 
 export default function validateCustomPost(

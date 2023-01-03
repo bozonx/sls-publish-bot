@@ -1,5 +1,5 @@
-import TgChat from '../apiTg/TgChat';
-import {askSiteMenu} from './askSiteMenu';
+import TgChat from '../apiTg/TgChat.js';
+import {askSiteMenu} from './askSiteMenu.js';
 
 
 export async function startSiteMenu(tgChat: TgChat) {

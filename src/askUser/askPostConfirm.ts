@@ -1,4 +1,4 @@
-import TgChat from '../apiTg/TgChat';
+import TgChat from '../apiTg/TgChat.js';
 import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
@@ -6,9 +6,9 @@ import {
   CANCEL_BTN_CALLBACK,
   OK_BTN,
   OK_BTN_CALLBACK
-} from '../types/constants';
-import {addSimpleStep} from '../helpers/helpers';
-import {compactUndefined} from '../lib/arrays';
+} from '../types/constants.js';
+import {addSimpleStep} from '../helpers/helpers.js';
+import {compactUndefined} from '../lib/arrays.js';
 
 
 export async function askPostConfirm(

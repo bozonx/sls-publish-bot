@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { log } from './log';
-import { isUnknownDict, isStr } from './types';
+import { log } from './log.js';
+import { isUnknownDict, isStr } from './types.js';
 
-import { APIError } from './errors';
+import { APIError } from './errors.js';
 import {
   TelegraphAccount,
   TelegraphAccountField,
@@ -10,7 +10,7 @@ import {
   TelegraphPage,
   TelegraphPageList,
   TelegraphPageViews,
-} from './types';
+} from './types.js';
 
 interface ApiOpt {
   token?: string;

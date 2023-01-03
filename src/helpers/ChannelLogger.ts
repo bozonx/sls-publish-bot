@@ -1,6 +1,6 @@
-import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger';
-import App from '../App';
-import {calcAllowedLogLevels} from '../lib/common';
+import App from '../App.js';
+import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger.js';
+import {calcAllowedLogLevels} from '../lib/common.js';
 
 
 export default class ChannelLogger implements Logger {

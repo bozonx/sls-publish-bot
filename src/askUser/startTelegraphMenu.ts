@@ -1,6 +1,6 @@
-import TgChat from '../apiTg/TgChat';
-import {askSiteMenu} from './askSiteMenu';
-import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu';
+import TgChat from '../apiTg/TgChat.js';
+import {askSiteMenu} from './askSiteMenu.js';
+import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu.js';
 
 
 export async function startTelegraphMenu(tgChat: TgChat) {

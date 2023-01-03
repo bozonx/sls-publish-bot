@@ -1,8 +1,8 @@
 import {markdownv2 as mdFormat} from 'telegram-format';
-import {RichTextItemResponse, TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
-import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion';
-import {html as htmlFormat} from 'telegram-format/dist/source/html';
-import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types';
+import {RichTextItemResponse, TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
+import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
+import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
+import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {pre} from 'telegraf/format';
 
 

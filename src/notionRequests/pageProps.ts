@@ -1,5 +1,6 @@
-import TgChat from '../apiTg/TgChat';
+// @ts-ignore
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
+import TgChat from '../apiTg/TgChat.js';
 
 
 export async function loadPageProps(

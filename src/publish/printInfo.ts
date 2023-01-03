@@ -1,14 +1,14 @@
-import TgChat from '../apiTg/TgChat';
-import ContentItem from '../types/ContentItem';
-import RawPageContent from '../types/PageContent';
-import {makeDateTimeStr, prepareFooter} from '../helpers/helpers';
-import {makeContentPlanItemDetails} from './parseContent';
-import {makePageDetailsMsg} from './parsePage';
-import {makeContentLengthString} from './publishHelpers';
-import {PublishMenuState} from '../askUser/askPublishMenu';
-import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost';
-import {makeTagsString} from '../lib/common';
-import {SN_TYPES, SnType} from '../types/snTypes';
+import TgChat from '../apiTg/TgChat.js';
+import ContentItem from '../types/ContentItem.js';
+import RawPageContent from '../types/PageContent.js';
+import {makeDateTimeStr, prepareFooter} from '../helpers/helpers.js';
+import {makeContentPlanItemDetails} from './parseContent.js';
+import {makePageDetailsMsg} from './parsePage.js';
+import {makeContentLengthString} from './publishHelpers.js';
+import {PublishMenuState} from '../askUser/askPublishMenu.js';
+import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';
+import {makeTagsString} from '../lib/common.js';
+import {SN_TYPES, SnType} from '../types/snTypes.js';
 
 
 export async function printItemDetails(

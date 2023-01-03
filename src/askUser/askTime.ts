@@ -1,17 +1,17 @@
-import TgChat from '../apiTg/TgChat';
+import _ from 'lodash';
+import TgChat from '../apiTg/TgChat.js';
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK, OFTEN_USED_TIME,
-} from '../types/constants';
-import BaseState from '../types/BaseState';
-import _ from 'lodash';
-import {TextMessageEvent} from '../types/MessageEvent';
-import {breakArray} from '../lib/arrays';
-import {TgReplyButton} from '../types/TgReplyButton';
-import {validateTime} from '../lib/common';
+} from '../types/constants.js';
+import BaseState from '../types/BaseState.js';
+import {TextMessageEvent} from '../types/MessageEvent.js';
+import {breakArray} from '../lib/arrays.js';
+import {TgReplyButton} from '../types/TgReplyButton.js';
+import {validateTime} from '../lib/common.js';
 
 
 const TIME_PRESET_CB = 'TIME_PRESET_CB|'

@@ -1,5 +1,5 @@
-import TgChat from '../apiTg/TgChat';
-import {askText} from './askText';
+import TgChat from '../apiTg/TgChat.js';
+import {askText} from './askText.js';
 
 
 export async function askNote(tgChat: TgChat, onDone: (note: string) => void) {

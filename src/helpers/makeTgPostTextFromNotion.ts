@@ -1,10 +1,10 @@
-import {NotionBlocks} from '../types/notion';
-import {prepareFooter, resolveTgFooter} from './helpers';
-import {BlogTelegramConfig} from '../types/BlogsConfig';
-import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd';
-import {makeTagsString} from '../lib/common';
-import {SN_TYPES, SnType} from '../types/snTypes';
-import {PublicationType} from '../types/publicationType';
+import {NotionBlocks} from '../types/notion.js';
+import {prepareFooter, resolveTgFooter} from './helpers.js';
+import {BlogTelegramConfig} from '../types/BlogsConfig.js';
+import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd.js';
+import {makeTagsString} from '../lib/common.js';
+import {SN_TYPES, SnType} from '../types/snTypes.js';
+import {PublicationType} from '../types/publicationType.js';
 
 
 export function makeTgPostTextFromNotion(

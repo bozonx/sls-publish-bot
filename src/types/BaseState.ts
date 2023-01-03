@@ -1,4 +1,4 @@
-import {ChatEvents} from './constants';
+import {ChatEvents} from './constants.js';
 
 
 export default interface BaseState {
