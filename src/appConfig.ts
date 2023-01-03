@@ -10,8 +10,10 @@ const appConfig: AppConfig = {
   consoleLogLevel: process.env.CONSOLE_LOG_LEVEL as any || LOG_LEVELS.error,
   channelLogLevel: process.env.CHANNEL_LOG_LEVEL as any || LOG_LEVELS.info,
   botChatLogLevel: process.env.BOT_CHAT_LOG_LEVEL as any || LOG_LEVELS.info,
-  stateDirPath: process.env.STATE_DIR_PATH as any || './_testState',
+  // TODO: использовать общую папку data dir
+  stateDirPath: process.env.DATA_DIR as any || './_testState',
   utcOffset: Number(process.env.UTC_OFFSET || 0),
+  // TODO: WTF ???!!!
   // skip tasks which should be run earlier that specified value in seconds
   skipTasksEarlierSec: Number(process.env.SKIP_TASKS_EARLIER_SEC || 1),
   telegram: {

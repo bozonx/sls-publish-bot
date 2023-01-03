@@ -12,7 +12,7 @@
     "prod": "yarn ts-node --esm ./src/index.ts",
     "typecheck": "tsc --noEmit ./src/index.ts",
     "build": "docker build -f ./docker/Dockerfile -t bozonx/publish_bot:latest .",
-    "prod-test-run": "docker run --name sls-bot -ti --rm -e NODE_ENV=development bozonx/publish_bot:latest"
+    "prod-test-run": "docker run --name sls-bot -ti --rm bozonx/publish_bot:latest"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.1",

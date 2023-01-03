@@ -3,11 +3,19 @@ FROM node:18.12
 ENV NODE_ENV=production
 ENV APP_DIR=/home/node/app
 
+ENV CONSOLE_LOG_LEVEL=warn
+ENV CHANNEL_LOG_LEVEL=warn
+ENV BOT_CHAT_LOG_LEVEL=warn
+ENV SKIP_TASKS_EARLIER_SEC=300
+ENV CONFIG_PATH=/home/node/config.yaml
+ENV DATA_DIR=/home/node/data
+
 WORKDIR $APP_DIR
 
-COPY ./package.json ./tsconfig.json ./yarn.lock ./.env $APP_DIR/
+COPY ./package.json ./tsconfig.json ./yarn.lock $APP_DIR/
 COPY ./src/ $APP_DIR/src
 
+RUN mkdir -p $DATA_DIR
 RUN yarn install
 
 CMD ["yarn", "prod"]
