@@ -35,8 +35,8 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
               onDone();
             }
             else if (queryData === FLUSH_TASK_ACTION) {
-              await tgChat.app.tasks.flushTask(taskId);
-
+              await tgChat.app.tasks.flushTask(taskId)
+                //.catch((e) => this.app.consoleLog.error(e));
               // TODO: нужно ли обрабаывать ошибку????
 
               onDone();

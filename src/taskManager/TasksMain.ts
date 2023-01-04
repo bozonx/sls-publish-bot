@@ -70,7 +70,7 @@ export default class TasksMain {
     return this.tasks;
   }
 
-  getTask(taskId: string): TaskItem {
+  getTask(taskId: string): TaskItem | undefined {
     return this.tasks[taskId];
   }
 
@@ -78,20 +78,7 @@ export default class TasksMain {
    * Run task wright now
    */
   async flushTask(taskId: string) {
-    // TODO: может сразу очистить такс ???
-    clearTimeout(this.timeouts[taskId]);
-    // TODO: наверно лучше обработку засунуть обратно внутрь
-    try {
-      // TODO: review
-      await this.execute.executeFork(taskId)
-    }
-    catch(e) {
-      const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
-
-      this.clearTask(taskId);
-      this.app.channelLog.error(msg);
-      this.app.consoleLog.error(msg);
-    }
+    return this.execute.execute(taskId)
   }
 
   async removeTask(taskId: string) {
@@ -176,15 +163,7 @@ export default class TasksMain {
 
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(() => {
-      this.execute.executeFork(taskId)
-        .catch((e) => {
-          // TODO: review
-          const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
-
-          this.clearTask(taskId);
-          this.app.channelLog.error(msg);
-          this.app.consoleLog.error(msg);
-        });
+      this.execute.execute(taskId).catch((e) => this.app.consoleLog.error(e));
     },secondsToPublish * 1000);
 
     return taskId;

@@ -4,7 +4,7 @@ import {
   FinishPollTask,
   PinPostTask,
   PostponePostTask,
-  TASK_TYPES,
+  TASK_TYPES, TaskItem,
   UnpinPostTask
 } from '../types/TaskItem.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
@@ -16,77 +16,89 @@ export default class ExecuteTask {
 
   constructor(tasks: TasksMain) {
     this.tasks = tasks;
-
   }
 
-  // TODO: review
 
-  async executeFork(taskId: string) {
+  async execute(taskId: string) {
     const task = this.tasks.getTask(taskId);
 
-    if (task.type === TASK_TYPES.postponePost) {
-      await this.executePostponePost(taskId);
-    }
-    else if (task.type === TASK_TYPES.deletePost) {
-      await this.executeDeletePost(taskId);
-    }
-    else if (task.type === TASK_TYPES.pinPost) {
-      await this.executePinPost(taskId);
-    }
-    else if (task.type === TASK_TYPES.unpinPost) {
-      await this.executeUnpinPost(taskId);
-    }
-    else if (task.type === TASK_TYPES.finishPoll) {
-      await this.executeFinishPoll(taskId);
-    }
-    else {
-      throw new Error(`Unknown task type: ${task.type}`);
+    if (!task) {
+      const msg = `Can't find task ${taskId}`
+
+      this.tasks.app.channelLog.error(msg);
+      this.tasks.app.consoleLog.error(msg);
+      throw new Error(msg);
     }
 
+    // remove task anyway in success and error case
     this.tasks.clearTask(taskId);
-    // TODO: проверить ошибку
     // do noting on error
     await this.tasks.saveTasks();
 
-    this.tasks.app.channelLog.log(
-      this.tasks.app.i18n.message.taskDoneSuccessful + '\n'
-      + makeTaskDetails(task, this.tasks.app.i18n)
-    );
+    try {
+      await this.executeFork(task)
+      this.tasks.app.channelLog.log(
+        this.tasks.app.i18n.message.taskDoneSuccessful + '\n'
+        + makeTaskDetails(task, this.tasks.app.i18n)
+      );
+    }
+    catch (e) {
+      const msg = `Can't execute task "${taskId}": ${e}`;
+      this.tasks.app.channelLog.error(msg);
+      this.tasks.app.consoleLog.error(msg);
+    }
   }
 
 
-  private async executePostponePost(taskId: string) {
-    const task = this.tasks.getTask(taskId) as PostponePostTask;
+  private async executeFork(task: TaskItem) {
+    switch (task.type) {
+      case TASK_TYPES.postponePost:
+        return await this.executePostponePost(task);
+      case TASK_TYPES.deletePost:
+        return await this.executeDeletePost(task);
+      case TASK_TYPES.pinPost:
+        return await this.executePinPost(task);
+      case TASK_TYPES.unpinPost:
+        return await this.executeUnpinPost(task);
+      case TASK_TYPES.finishPoll:
+        return await this.executeFinishPoll(task);
+      default:
+        throw new Error(`Unknown task type: ${task.type}`);
+    }
+  }
+
+  private async executePostponePost(task: TaskItem) {
+    const postponeTask = task as PostponePostTask;
 
     await this.tasks.app.tg.bot.telegram.copyMessage(
-      task.chatId,
+      postponeTask.chatId,
       this.tasks.app.appConfig.logChannelId,
-      task.forwardMessageId,
+      postponeTask.forwardMessageId,
     );
   }
 
-  private async executeDeletePost(taskId: string) {
-    const task = this.tasks.getTask(taskId) as DeletePostTask;
+  private async executeDeletePost(task: TaskItem) {
+    const deleteTask = task as DeletePostTask;
 
-    await this.tasks.app.tg.bot.telegram.deleteMessage(task.chatId, task.messageId);
+    await this.tasks.app.tg.bot.telegram.deleteMessage(task.chatId, deleteTask.messageId);
   }
 
-  private async executePinPost(taskId: string) {
-    const task = this.tasks.getTask(taskId) as PinPostTask;
+  private async executePinPost(task: TaskItem) {
+    const pinTask = task as PinPostTask;
 
-    await this.tasks.app.tg.bot.telegram.pinChatMessage(task.chatId, task.messageId);
+    await this.tasks.app.tg.bot.telegram.pinChatMessage(task.chatId, pinTask.messageId);
   }
 
-  private async executeUnpinPost(taskId: string) {
-    const task = this.tasks.getTask(taskId) as UnpinPostTask;
+  private async executeUnpinPost(task: TaskItem) {
+    const unpinTask = task as UnpinPostTask;
 
-    await this.tasks.app.tg.bot.telegram.unpinChatMessage(task.chatId, task.messageId);
+    await this.tasks.app.tg.bot.telegram.unpinChatMessage(task.chatId, unpinTask.messageId);
   }
 
-  private async executeFinishPoll(taskId: string) {
-    const task = this.tasks.getTask(taskId) as FinishPollTask;
+  private async executeFinishPoll(task: TaskItem) {
+    const finishPollTask = task as FinishPollTask;
 
-    await this.tasks.app.tg.bot.telegram.stopPoll(task.chatId, task.messageId);
+    await this.tasks.app.tg.bot.telegram.stopPoll(task.chatId, finishPollTask.messageId);
   }
 
 }
