@@ -12,7 +12,7 @@ import {loadPageProps} from '../notionRequests/pageProps.js';
 import RawPageContent from '../types/PageContent.js';
 import {resolveSns} from '../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../publish/publishHelpers.js';
-import {askPostConfirm} from './common/askPostConfirm.js';
+import {askConfirm} from './common/askConfirm.js';
 import {printImage, printItemDetails, printPublishConfirmData} from '../publish/printInfo.js';
 import {WARN_SIGN} from '../types/constants.js';
 import validateContentPlanPost, {validateContentPlanPostText} from '../publish/validateContentPlanPost.js';
@@ -153,7 +153,7 @@ async function askMenu(
       disableOk = true;
     }
 
-    await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+    await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
       try {
         // TODO: не делать если poll
         // TODO: а нужно ли это тут делать???? или всетаки уже в fork ???
@@ -205,6 +205,6 @@ async function askMenu(
 
       await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
       await tgChat.steps.cancel();
-    }), disableOk);
+    }), tgChat.app.i18n.commonPhrases.publishConfirmation, disableOk);
   }));
 }

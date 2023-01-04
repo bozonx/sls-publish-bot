@@ -11,13 +11,14 @@ import {addSimpleStep} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
 
 
-export async function askPostConfirm(
+export async function askConfirm(
   blogName: string,
   tgChat: TgChat,
   onDone: () => void,
+  msgReplace?: string,
   disableOk = false,
 ) {
-  const msg = tgChat.app.i18n.commonPhrases.publishConfirmation;
+  const msg = msgReplace || tgChat.app.i18n.commonPhrases.confirmation;
   const buttons = [
     compactUndefined([
       BACK_BTN,

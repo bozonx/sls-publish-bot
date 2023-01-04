@@ -1,6 +1,6 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {makePost2000Text} from '../../publish/publishHelpers.js';
-import {askPostConfirm} from '../common/askPostConfirm.js';
+import {askConfirm} from '../common/askConfirm.js';
 import {askCustomPostTg} from './askCustomPostTg.js';
 import {CustomPostState} from './askCustomPostMenu.js';
 import {askDateTime} from '../common/askDateTime.js';
@@ -25,7 +25,7 @@ export async function startPublishCustomPostTg(
     resultText: string
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-      await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+      await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
         await registerCustomPostTg(
           blogName,
           tgChat,
@@ -39,7 +39,7 @@ export async function startPublishCustomPostTg(
           state.autoDeleteIsoDateTime
         );
         await tgChat.steps.cancel();
-      }));
+      }), tgChat.app.i18n.commonPhrases.publishConfirmation);
     }));
   }), postAsText, footerTmpl, mediaRequired, onlyOneImage, disableTags);
 }

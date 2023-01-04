@@ -117,6 +117,7 @@ const dict = {
     selectedTags: 'Выбранные тэги (${COUNT} шт): ',
     clearedTags: 'Тэги были ощичены',
     publishConfirmation: 'Опубликовать?',
+    confirmation: 'Подтверждаете?',
     sns: 'Cоц сети',
     sn: 'Cоц сеть',
     snsForPub: 'Cоц сети для публикации: ',
