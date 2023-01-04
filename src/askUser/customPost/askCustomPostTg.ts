@@ -40,9 +40,8 @@ export async function askCustomPostTg(
         state,
         (tgChat: TgChat, state: CustomPostState) => {
           const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
-          const clearText = clearMdText(resultText);
 
-          validateCustomPost(state, isPost2000, clearText, tgChat);
+          validateCustomPost(state, postAsText, resultText, tgChat);
         },
         tgChat.asyncCb(async  () => {
           const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
