@@ -69,7 +69,7 @@ export async function addSimpleStep(
 ) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
-    state.messageIds.push(await tgChat.reply(msg, buttons));
+    state.messageIds.push(await tgChat.reply(msg, buttons, true));
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(

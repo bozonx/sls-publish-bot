@@ -23,7 +23,7 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
     return;
   }
 
-  const msg = tgChat.app.i18n.menu.taskDetails + '\n'
+  const msg = tgChat.app.i18n.menu.taskDetails + '\n\n'
     + await makeTaskDetails(task, tgChat.app)
   const buttons = [
     [
