@@ -13,8 +13,7 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
           tgChat,
           false,
           tgChat.app.blogs[blogName].sn.telegram?.postFooter,
-
-          false,
+          true,
           true,
         );
       case CUSTOM_POST_MENU_ACTIONS.POST2000:
@@ -23,7 +22,6 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
           tgChat,
           true,
           tgChat.app.blogs[blogName].sn.telegram?.postFooter,
-
           false,
           true
         );
@@ -38,7 +36,6 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
           tgChat,
           false,
           tgChat.app.blogs[blogName].sn.telegram?.memFooter,
-
           true
         );
       case CUSTOM_POST_MENU_ACTIONS.STORY:
@@ -47,7 +44,6 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
           tgChat,
           false,
           tgChat.app.blogs[blogName].sn.telegram?.storyFooter,
-
           true,
           true
         );
@@ -57,7 +53,6 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
           tgChat,
           false,
           tgChat.app.blogs[blogName].sn.telegram?.reelFooter,
-
           true,
           true
         );

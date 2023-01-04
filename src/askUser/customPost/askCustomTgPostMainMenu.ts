@@ -16,7 +16,7 @@ export const CUSTOM_POST_MENU_ACTIONS = {
 
 export async function askCustomTgPostMainMenu(blogName: string, tgChat: TgChat, onDone: (action: string) => void) {
   const blogSns = tgChat.app.blogs[blogName].sn;
-  const msg = tgChat.app.i18n.menu.blogMenu;
+  const msg = tgChat.app.i18n.menu.customPostTgMenu;
   const buttons = compactButtons([
     [
       {

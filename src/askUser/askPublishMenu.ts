@@ -16,6 +16,7 @@ import {askTags} from './common/askTags.js';
 import {askSns} from './common/askSns.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
+import {MediaGroupItem} from '../types/types.js';
 
 
 export interface PublishMenuState {
@@ -225,9 +226,10 @@ async function handleButtons(
         true,
         blogName,
         tgChat,
-        tgChat.asyncCb(async ({photoIdOrUrl}) => {
-          if (photoIdOrUrl?.length) {
-            state.mainImgUrl = photoIdOrUrl[0];
+        tgChat.asyncCb(async (mediaGroup: MediaGroupItem[], caption?: string) => {
+          if (mediaGroup.length) {
+            // TODO: может быть и не url
+            //state.mainImgUrl = mediaGroup[0].url;
 
             // TODO: поддержка видео
 

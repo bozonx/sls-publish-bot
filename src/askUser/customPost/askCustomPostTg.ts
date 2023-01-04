@@ -23,7 +23,7 @@ export async function askCustomPostTg(
     onlyOneImage,
     blogName,
     tgChat,
-    tgChat.asyncCb(async ({mediaGroup, caption}) => {
+    tgChat.asyncCb(async (mediaGroup, caption) => {
       const state: CustomPostState = {
         useFooter: true,
         usePreview: !mediaGroup.length,
