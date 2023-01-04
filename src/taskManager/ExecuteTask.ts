@@ -7,6 +7,7 @@ import {
   TASK_TYPES,
   UnpinPostTask
 } from '../types/TaskItem.js';
+import {makeTaskDetails} from './makeTaskDetails.js';
 
 
 export default class ExecuteTask {
@@ -47,7 +48,8 @@ export default class ExecuteTask {
     await this.tasks.saveTasks();
 
     this.tasks.app.channelLog.log(
-      this.tasks.app.i18n.message.taskDoneSuccessful + '\n' + this.makeTaskDetails(task)
+      this.tasks.app.i18n.message.taskDoneSuccessful + '\n'
+      + makeTaskDetails(task, this.tasks.app.i18n)
     );
   }
 

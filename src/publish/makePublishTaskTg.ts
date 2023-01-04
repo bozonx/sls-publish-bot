@@ -204,5 +204,5 @@ export async function registerPublishTaskTg(
     forwardMessageId: postMsgId,
   };
 
-  await tgChat.app.tasks.addTask(task);
+  await tgChat.app.tasks.addTaskAndLog(task);
 }

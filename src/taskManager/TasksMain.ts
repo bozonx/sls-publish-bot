@@ -7,6 +7,7 @@ import {TaskItem} from '../types/TaskItem.js';
 import {calcSecondsToDate} from '../lib/common.js';
 import {FILE_ENCODING, MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
 import ExecuteTask from './ExecuteTask.js';
+import {makeTaskDetails} from './makeTaskDetails.js';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';
@@ -61,32 +62,10 @@ export default class TasksMain {
 
   async addTaskAndLog(task: TaskItem): Promise<string | null> {
     await this.app.channelLog.log(
-      this.app.i18n.message.taskRegistered + '\n' + this.makeTaskDetails(task)
+      this.app.i18n.message.taskRegistered + '\n' + makeTaskDetails(task, this.app.i18n)
     );
 
-    return this.addTask(task);
-  }
-
-  /**
-   * Add task
-   * @return if sting - taskId, if null - task haven't been added
-   */
-  async addTask(task: TaskItem): Promise<string | null> {
-    const validateResult = this.validateTask(task);
-
-    if (validateResult) {
-      this.app.channelLog.error(`Task was skipped: ` + validateResult)
-      // skip not valid tasks
-      return null;
-    }
-
-    const taskNum = this.registerTask(task);
-
-    // TODO: писать пользователю если ошибка!
-    // TODO: отменить добавление если ошибка
-    await this.saveTasks();
-
-    return taskNum;
+    return this.addTaskSilently(task);
   }
 
   getTasksList(): Record<string, TaskItem> {
@@ -124,7 +103,7 @@ export default class TasksMain {
     this.app.channelLog.info(
       this.app.i18n.message.taskRemoved + '\n'
       + `taskId: ${taskId}\n`
-      + this.makeTaskDetails(removedTask)
+      + makeTaskDetails(removedTask, this.app.i18n)
     );
   }
 
@@ -155,6 +134,28 @@ export default class TasksMain {
     }
   }
 
+
+  /**
+   * Add task
+   * @return if sting - taskId, if null - task haven't been added
+   */
+  private async addTaskSilently(task: TaskItem): Promise<string | null> {
+    const validateResult = this.validateTask(task);
+
+    if (validateResult) {
+      this.app.channelLog.error(`Task was skipped: ` + validateResult)
+      // skip not valid tasks
+      return null;
+    }
+
+    const taskNum = this.registerTask(task);
+
+    // TODO: писать пользователю если ошибка!
+    // TODO: отменить добавление если ошибка
+    await this.saveTasks();
+
+    return taskNum;
+  }
 
   /**
    * Register a new valid task - set data to runtime and make timeout.
@@ -204,7 +205,7 @@ export default class TasksMain {
       return `The task has expired time to publish - ${secondsToPublish} seconds.\n`
         + `The minimum time is ${this.app.appConfig.expiredTaskOffsetSec} seconds.\n`
         + `Task:\n`
-        + this.makeTaskDetails(task);
+        + makeTaskDetails(task, this.app.i18n);
     }
 
     // TODO: validate other params
@@ -229,17 +230,6 @@ export default class TasksMain {
         throw new Error(msg);
       }
     }
-  }
-
-  private makeTaskDetails(task: TaskItem): string {
-    let result = `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
-      + `${this.app.i18n.commonPhrases.date}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}\n`;
-
-    if (task.sn) {
-      result += `${this.app.i18n.commonPhrases.sn}: ${task.sn}`;
-    }
-
-    return result;
   }
 
 }
