@@ -11,10 +11,10 @@ import {addSimpleStep} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
 import {askPostText} from '../common/askPostText.js';
 import {askTags} from '../common/askTags.js';
-import {PhotoData, PhotoUrlData, VideoData} from '../../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {askUrlButton} from '../common/askUrlButton.js';
+import {MediaGroupItem} from '../../types/types.js';
 
 
 export interface CustomPostState {
@@ -24,7 +24,7 @@ export interface CustomPostState {
   disableTags: boolean;
   tags: string[],
   postText?: string;
-  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[];
+  mediaGroup: MediaGroupItem[];
   urlBtn?: TgReplyBtnUrl;
   autoDeleteIsoDateTime?: string;
 }

@@ -6,6 +6,9 @@ import ru from '../I18n/ru.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
+import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
+import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
+import {MediaGroupItem} from '../types/types.js';
 
 
 // TODO: review
@@ -59,4 +62,65 @@ export function makePublishInfoMessage(
     + tgChat.app.blogs[blogName].dispname + ', '
     // TODO: add sn
     + moment(isoDate).format(PRINT_FULL_DATE_FORMAT) + ' ' + resolvedTime + ' ' + makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+}
+
+export async function printPost(
+  chatId: number | string,
+  tgChat: TgChat,
+  usePreview: boolean,
+  mediaGroup: MediaGroupItem[],
+  urlBtn?: TgReplyBtnUrl,
+  resultText = '',
+) {
+  if (mediaGroup.length > 1) {
+    // media group
+    await publishTgMediaGroup(
+      chatId,
+      mediaGroup,
+      tgChat,
+      resultText
+    );
+  }
+  else if (mediaGroup.length) {
+    // one image
+    if (mediaGroup[0].type === 'video') {
+      await publishTgVideo(
+        chatId,
+        mediaGroup[0].fileId,
+        tgChat,
+        resultText,
+        urlBtn
+      );
+    }
+    else if (mediaGroup[0].type === 'photo') {
+      await publishTgImage(
+        chatId,
+        mediaGroup[0].fileId,
+        tgChat,
+        resultText,
+        urlBtn
+      );
+    }
+    else if (mediaGroup[0].type === 'photoUrl') {
+      await publishTgImage(
+        chatId,
+        mediaGroup[0].url,
+        tgChat,
+        resultText,
+        urlBtn
+      );
+    }
+  }
+  else {
+    // no image or video
+    if (!resultText) throw new Error(`No text`);
+
+    await publishTgText(
+      chatId,
+      resultText,
+      tgChat,
+      usePreview,
+      urlBtn
+    );
+  }
 }

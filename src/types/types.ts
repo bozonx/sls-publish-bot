@@ -1,4 +1,7 @@
+import {PhotoData, PhotoUrlData, VideoData} from './MessageEvent.js';
+
 export type CurrencyTicker = 'RUB' | 'TRY' | 'EUR' | 'USD' | 'USDT' | 'BUSD';
+export type MediaGroupItem = PhotoData | PhotoUrlData | VideoData
 
 export const CURRENCY_TICKERS: Record<CurrencyTicker, CurrencyTicker> = {
   RUB: 'RUB',
