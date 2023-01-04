@@ -1,8 +1,12 @@
 import TgChat from '../../apiTg/TgChat.js';
-import BaseState from '../../types/BaseState.js';
-import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
+import {
+  BACK_BTN,
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN,
+  CANCEL_BTN_CALLBACK
+} from '../../types/constants.js';
 import {makeTaskDetails} from '../../taskManager/makeTaskDetails.js';
-import {TaskItem} from '../../types/TaskItem.js';
+import {addSimpleStep} from '../../helpers/helpers.js';
 
 
 const DELETE_TASK_ACTION = 'delete_task';
@@ -19,55 +23,9 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
     return;
   }
 
-  await tgChat.addOrdinaryStep(async (state: BaseState) => {
-    // print main menu message
-    state.messageIds.push(await printInitialMessage(task, tgChat));
-    // listen to result
-    state.handlerIndexes.push([
-      tgChat.events.addListener(
-        ChatEvents.CALLBACK_QUERY,
-        tgChat.asyncCb(async (queryData: string) => {
-            if (queryData === CANCEL_BTN_CALLBACK) {
-              return tgChat.steps.cancel();
-            }
-            else if (queryData === BACK_BTN_CALLBACK) {
-              return tgChat.steps.back();
-            }
-            else if (queryData === DELETE_TASK_ACTION) {
-              try {
-                await tgChat.app.tasks.removeTask(taskId);
-              }
-              catch (e) {
-                await tgChat.reply(tgChat.app.i18n.menu.taskRemoveError + e)
-              }
-
-              await tgChat.reply(`Задание ${taskId} удалено`);
-
-              onDone();
-            }
-            else if (queryData === FLUSH_TASK_ACTION) {
-              try {
-                await tgChat.app.tasks.flushTask(taskId)
-              }
-              catch (e) {
-                await tgChat.reply('Task flush error: ' + e)
-              }
-
-              onDone();
-            }
-            // else do nothing
-          }
-        )),
-      ChatEvents.CALLBACK_QUERY
-    ]);
-  });
-}
-
-async function printInitialMessage(task: TaskItem, tgChat: TgChat): Promise<number> {
-  const taskDetails = tgChat.app.i18n.menu.taskDetails + '\n'
-    + await makeTaskDetails(task, tgChat.app);
-
-  return tgChat.reply(taskDetails, [
+  const msg = tgChat.app.i18n.menu.taskDetails + '\n'
+    + await makeTaskDetails(task, tgChat.app)
+  const buttons = [
     [
       {
         text: tgChat.app.i18n.menu.flushTask,
@@ -82,5 +40,39 @@ async function printInitialMessage(task: TaskItem, tgChat: TgChat): Promise<numb
       BACK_BTN,
       CANCEL_BTN,
     ]
-  ]);
+  ];
+
+  await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
+    if (queryData === CANCEL_BTN_CALLBACK) {
+      return tgChat.steps.cancel();
+    }
+    else if (queryData === BACK_BTN_CALLBACK) {
+      return tgChat.steps.back();
+    }
+    else if (queryData === DELETE_TASK_ACTION) {
+      try {
+        await tgChat.app.tasks.removeTask(taskId);
+      }
+      catch (e) {
+        await tgChat.reply(tgChat.app.i18n.menu.taskRemoveError + e)
+      }
+
+      await tgChat.reply(tgChat.app.i18n.message.taskRemoved);
+
+      onDone();
+    }
+    else if (queryData === FLUSH_TASK_ACTION) {
+      try {
+        await tgChat.app.tasks.flushTask(taskId)
+      }
+      catch (e) {
+        await tgChat.reply('Task flush error: ' + e)
+      }
+
+      await tgChat.reply(tgChat.app.i18n.message.taskFlushed);
+
+      onDone();
+    }
+    // else do nothing
+  });
 }

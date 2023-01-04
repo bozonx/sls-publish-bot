@@ -1,6 +1,6 @@
-import TgChat from '../../apiTg/TgChat.js';
-import {addSimpleStep} from '../../helpers/helpers.js';
-import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
+import TgChat from '../apiTg/TgChat.js';
+import {addSimpleStep} from '../helpers/helpers.js';
+import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants.js';
 
 
 export type TelegraphMenu = 'LOGIN' | 'LIST';
