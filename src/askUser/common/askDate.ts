@@ -10,6 +10,7 @@ import {
 import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
 import {makeUtcOffsetStr} from '../../helpers/helpers.js';
+import {compactUndefined} from '../../lib/arrays.js';
 
 
 const SELECT_PUB_DATE = {
@@ -19,9 +20,11 @@ const SELECT_PUB_DATE = {
 }
 
 
-export async function askDate(tgChat: TgChat, onDone: (selectedDateString: string) => void) {
-  const msg = tgChat.app.i18n.menu.selectDate
-    + `. ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}.`;
+export async function askDate(tgChat: TgChat, onDone: (selectedDateString: string) => void, additionalMsg?: string) {
+  const msg = compactUndefined([
+    tgChat.app.i18n.menu.selectDate + `. ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}.`,
+    additionalMsg,
+  ]).join('\n');
   const buttons = [
     [
       {

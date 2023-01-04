@@ -4,7 +4,7 @@ import {makeUtcOffsetStr} from '../../helpers/helpers.js';
 import {askTime} from './askTime.js';
 
 
-export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time: string) => void) {
+export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time: string) => void, additionalMsg?: string) {
   await askDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
     const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
 
@@ -15,11 +15,11 @@ export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time
 
     await askTime(tgChat, tgChat.asyncCb(async (time: string) => {
       await tgChat.reply(
-        tgChat.app.i18n.commonPhrases.pubDate
+        tgChat.app.i18n.commonPhrases.selectedDateAndTime
         + `${isoDate} ${time} ${utcOffset}`
       );
 
       onDone(isoDate, time);
     }));
-  }));
+  }), additionalMsg);
 }

@@ -25,6 +25,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           }
 
           await tgChat.app.tasks.addTaskAndLog(task);
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
           await tgChat.steps.cancel();
         }));
       }
@@ -43,6 +44,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           }
 
           await tgChat.app.tasks.addTaskAndLog(task);
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
           await tgChat.steps.cancel();
         }));
       }
@@ -61,6 +63,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           }
 
           await tgChat.app.tasks.addTaskAndLog(task);
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
           await tgChat.steps.cancel();
         }));
       }
@@ -79,6 +82,7 @@ export async function startTaskMenu(tgChat: TgChat) {
           }
 
           await tgChat.app.tasks.addTaskAndLog(task);
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
           await tgChat.steps.cancel();
         }));
       }

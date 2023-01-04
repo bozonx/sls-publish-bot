@@ -206,7 +206,7 @@ async function handleButtons(
 
         const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
         // print result
-        await tgChat.reply(tgChat.app.i18n.commonPhrases.selectedDateAndTime
+        await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDateAndTime
           + `${state.selectedDate} ${state.selectedTime} ${utcOffset}`);
         // print menu again
         return askPublishMenu(blogName, tgChat, state, onDone);
