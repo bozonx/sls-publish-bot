@@ -1,12 +1,12 @@
-import TgChat from '../apiTg/TgChat.js';
-import {askCreative} from './askCreative.js';
+import TgChat from '../../apiTg/TgChat.js';
+import {askCreative} from '../askCreative.js';
 import {CreatePageParameters, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {askCost} from './common/askCost.js';
-import {AdFormat, BuyAdType, CurrencyTicker} from '../types/types.js';
-import {askFormat} from './common/askFormat.js';
-import {askNote} from './common/askNote.js';
+import {askCost} from '../common/askCost.js';
+import {AdFormat, BuyAdType, CurrencyTicker} from '../../types/types.js';
+import {askFormat} from '../common/askFormat.js';
+import {askNote} from '../common/askNote.js';
 import {askBuyAdType} from './askBuyAdType.js';
-import {askDateTime} from './common/askDateTime.js';
+import {askDateTime} from '../common/askDateTime.js';
 
 
 const BUY_AD_TYPE_IDS: Record<BuyAdType, string> = {
