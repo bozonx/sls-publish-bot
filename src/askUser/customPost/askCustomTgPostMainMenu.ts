@@ -4,11 +4,13 @@ import {addSimpleStep, compactButtons} from '../../helpers/helpers.js';
 
 
 export const CUSTOM_POST_MENU_ACTIONS = {
-  STORY: 'STORY',
+  POST1000: 'POST1000',
+  POST2000: 'POST2000',
   MEM: 'MEM',
-  REEL: 'REEL',
+  PHOTOS: 'PHOTOS',
+  STORY: 'STORY',
   POLL: 'POLL',
-  POST: 'POST',
+  REEL: 'REEL',
 };
 
 
@@ -16,7 +18,27 @@ export async function askCustomTgPostMainMenu(blogName: string, tgChat: TgChat, 
   const blogSns = tgChat.app.blogs[blogName].sn;
   const msg = tgChat.app.i18n.menu.blogMenu;
   const buttons = compactButtons([
-    blogSns.telegram && [
+    [
+      {
+        text: tgChat.app.i18n.menu.makePost1000,
+        callback_data: CUSTOM_POST_MENU_ACTIONS.POST1000,
+      },
+      {
+        text: tgChat.app.i18n.menu.makePost2000,
+        callback_data: CUSTOM_POST_MENU_ACTIONS.POST2000,
+      }
+    ],
+    [
+      {
+        text: tgChat.app.i18n.menu.makeMem,
+        callback_data: CUSTOM_POST_MENU_ACTIONS.MEM,
+      },
+      {
+        text: tgChat.app.i18n.menu.makePollTg,
+        callback_data: CUSTOM_POST_MENU_ACTIONS.POLL,
+      },
+    ],
+    [
       blogSns.instagram && {
         text: tgChat.app.i18n.menu.makeStory,
         callback_data: CUSTOM_POST_MENU_ACTIONS.STORY,
@@ -26,20 +48,12 @@ export async function askCustomTgPostMainMenu(blogName: string, tgChat: TgChat, 
         callback_data: CUSTOM_POST_MENU_ACTIONS.REEL,
       }
     ],
-    blogSns.telegram && [
+    [
       {
-        text: tgChat.app.i18n.menu.makeMem,
-        callback_data: CUSTOM_POST_MENU_ACTIONS.MEM,
+        text: tgChat.app.i18n.menu.makePhotos,
+        callback_data: CUSTOM_POST_MENU_ACTIONS.PHOTOS,
       },
-      {
-        text: tgChat.app.i18n.menu.makePost,
-        callback_data: CUSTOM_POST_MENU_ACTIONS.POST,
-      }
     ],
-    blogSns.telegram && [{
-      text: tgChat.app.i18n.menu.makePollTg,
-      callback_data: CUSTOM_POST_MENU_ACTIONS.POLL,
-    }],
     [
       BACK_BTN,
       CANCEL_BTN,

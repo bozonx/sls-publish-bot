@@ -19,7 +19,7 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (act
       text: tgChat.app.i18n.menu.publish,
       callback_data: BLOG_MENU_ACTIONS.CONTENT_PLAN,
     }],
-    [{
+    blogSns.telegram && [{
       text: tgChat.app.i18n.menu.customTgPostMenu,
       callback_data: BLOG_MENU_ACTIONS.CUSTOM_TG_POST,
     }],
