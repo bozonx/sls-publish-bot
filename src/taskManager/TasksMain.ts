@@ -1,3 +1,7 @@
+import moment from 'moment';
+import * as fs from 'fs/promises';
+import path from 'path';
+import {clearTimeout} from 'timers';
 import App from '../App.js';
 import {
   TaskItem,
@@ -6,16 +10,10 @@ import {
   DeletePostTask,
   PinPostTask,
   UnpinPostTask,
-  FinishPollTask, TaskTypes
+  FinishPollTask
 } from '../types/TaskItem.js';
-import * as fs from 'fs/promises';
-import path from 'path';
-import {clearTimeout} from 'timers';
 import {calcSecondsToDate} from '../lib/common.js';
-import {SnType} from '../types/snTypes.js';
-import TgChat from '../apiTg/TgChat.js';
-import moment from 'moment';
-import {MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
+import {FILE_ENCODING, MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';
@@ -40,28 +38,11 @@ export default class TasksMain {
 
 
   async init() {
-    let fileContent: Buffer | undefined;
-
-    try {
-      fileContent = await fs.readFile(this.filePath);
-    }
-    catch (e: any) {
-      if (e.code === 'ENOENT') {
-        return;
-      }
-      else {
-        const msg = `Can't load tasks file: ${e}`;
-
-        this.app.channelLog.error(msg);
-
-        throw new Error(msg);
-      }
-    }
-
-    const tasks: Record<string, TaskItem> = JSON.parse(fileContent.toString('utf8'));
-    // register and start timers
-    for (const taskId in tasks) {
-      this.registerTask(tasks[taskId], taskId);
+    // load old tasks from disk
+    const oldTasks: Record<string, TaskItem> = await this.loadOldTasks() || {};
+    // register them and start timers
+    for (const taskId in oldTasks) {
+      this.registerTask(oldTasks[taskId], taskId);
 
       // TODO: не пишится что загрузилось задание если оно нормальное - надо по всем писать
 
@@ -203,12 +184,6 @@ export default class TasksMain {
     return taskId;
   }
 
-  private async saveTasks() {
-    const content = JSON.stringify(this.tasks, null, 2);
-
-    await fs.writeFile(this.filePath, Buffer.from(content, 'utf8'));
-  }
-
   private async executeFork(taskId: string) {
     const task = this.tasks[taskId];
 
@@ -290,6 +265,41 @@ export default class TasksMain {
     }
 
     return result;
+  }
+
+  private async loadOldTasks(): Promise<Record<string, TaskItem> | undefined> {
+    try {
+      const fileContent: Buffer | undefined = await fs.readFile(this.filePath);
+
+      return JSON.parse(fileContent.toString(FILE_ENCODING));
+    }
+    catch (e: any) {
+      if (e.code === 'ENOENT') {
+        // if no file then do nothing
+        return;
+      }
+      else {
+        const msg = `Can't load tasks file: ${e}`;
+
+        this.app.channelLog.error(msg);
+
+        throw new Error(msg);
+      }
+    }
+  }
+
+  private async saveTasks() {
+    const content = JSON.stringify(this.tasks, null, 2);
+
+    try {
+      await fs.writeFile(this.filePath, Buffer.from(content, FILE_ENCODING));
+    }
+    catch (e) {
+      const msg = `Can't save tasks file: ${e}`;
+
+      this.app.consoleLog.error(msg);
+      this.app.channelLog.error(msg);
+    }
   }
 
 }
