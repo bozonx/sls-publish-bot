@@ -30,6 +30,12 @@ export async function askCustomTgPostMainMenu(blogName: string, tgChat: TgChat, 
     ],
     [
       {
+        text: tgChat.app.i18n.menu.makePhotos,
+        callback_data: CUSTOM_POST_MENU_ACTIONS.PHOTOS,
+      },
+    ],
+    [
+      {
         text: tgChat.app.i18n.menu.makeMem,
         callback_data: CUSTOM_POST_MENU_ACTIONS.MEM,
       },
@@ -47,12 +53,6 @@ export async function askCustomTgPostMainMenu(blogName: string, tgChat: TgChat, 
         text: tgChat.app.i18n.menu.makeReel,
         callback_data: CUSTOM_POST_MENU_ACTIONS.REEL,
       }
-    ],
-    [
-      {
-        text: tgChat.app.i18n.menu.makePhotos,
-        callback_data: CUSTOM_POST_MENU_ACTIONS.PHOTOS,
-      },
     ],
     [
       BACK_BTN,
