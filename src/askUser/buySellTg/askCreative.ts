@@ -1,12 +1,12 @@
-import TgChat from '../apiTg/TgChat.js';
-import {addSimpleStep} from '../helpers/helpers.js';
-import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants.js';
+import TgChat from '../../apiTg/TgChat.js';
+import {addSimpleStep} from '../../helpers/helpers.js';
+import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 import {PageObjectResponse, PartialPageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants.js';
-import {loadPageBlocks} from '../notionRequests/pageBlocks.js';
-import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd.js';
-import {getFirstImageFromNotionBlocks} from '../publish/publishHelpers.js';
-import {publishTgImage} from '../apiTg/publishTg.js';
+import {DB_DEFAULT_PAGE_SIZE} from '../../apiNotion/constants.js';
+import {loadPageBlocks} from '../../notionRequests/pageBlocks.js';
+import {transformNotionToTelegramPostMd} from '../../helpers/transformNotionToTelegramPostMd.js';
+import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
+import {publishTgImage} from '../../apiTg/publishTg.js';
 
 
 const CONTENT_MARKER = 'content:';

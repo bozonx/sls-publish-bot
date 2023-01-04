@@ -1,19 +1,19 @@
 import _ from 'lodash';
 import moment from 'moment';
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK, WARN_SIGN,
-} from '../types/constants.js';
-import BaseState from '../types/BaseState.js';
-import {TextMessageEvent} from '../types/MessageEvent.js';
-import {breakArray} from '../lib/arrays.js';
-import {TgReplyButton} from '../types/TgReplyButton.js';
-import {askDateTime} from './common/askDateTime.js';
-import {makeIsoDateTimeStr} from '../helpers/helpers.js';
+} from '../../types/constants.js';
+import BaseState from '../../types/BaseState.js';
+import {TextMessageEvent} from '../../types/MessageEvent.js';
+import {breakArray} from '../../lib/arrays.js';
+import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {askDateTime} from '../common/askDateTime.js';
+import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
 
 
 const POLL_CLOSE_MENU_ACTION = {

@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {startPublishPollTg} from '../startPublishPollTg.js';
+import {startPublishPollTg} from './startPublishPollTg.js';
 import {askCustomTgPostMainMenu, CUSTOM_POST_MENU_ACTIONS} from './askCustomTgPostMainMenu.js';
 import {startPublishCustomPostTg} from './startPublishCustomPostTg.js';
 

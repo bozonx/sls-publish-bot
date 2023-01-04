@@ -1,26 +1,26 @@
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
 import {askContentToUse} from './askContentToUse.js';
-import {prepareContentItem} from '../publish/parseContent.js';
-import ContentItem from '../types/ContentItem.js';
-import {preparePage} from '../publish/parsePage.js';
+import {prepareContentItem} from '../../publish/parseContent.js';
+import ContentItem from '../../types/ContentItem.js';
+import {preparePage} from '../../publish/parsePage.js';
 import {askPublishMenu, PublishMenuState} from './askPublishMenu.js';
-import {loadNotPublished} from '../notionRequests/contentPlan.js';
-import {publishFork} from '../publish/publishFork.js';
-import {loadPageBlocks} from '../notionRequests/pageBlocks.js';
-import {loadPageProps} from '../notionRequests/pageProps.js';
-import RawPageContent from '../types/PageContent.js';
-import {resolveSns} from '../helpers/helpers.js';
-import {getFirstImageFromNotionBlocks,} from '../publish/publishHelpers.js';
-import {askConfirm} from './common/askConfirm.js';
-import {printImage, printItemDetails, printPublishConfirmData} from '../publish/printInfo.js';
-import {WARN_SIGN} from '../types/constants.js';
-import validateContentPlanPost, {validateContentPlanPostText} from '../publish/validateContentPlanPost.js';
-import {makeClearTextFromNotion} from '../helpers/makeClearTextFromNotion.js';
-import {makeTgPostTextFromNotion} from '../helpers/makeTgPostTextFromNotion.js';
-import {SnType} from '../types/snTypes.js';
-import {PUBLICATION_TYPES} from '../types/publicationType.js';
-import PollData from '../types/PollData.js';
+import {loadNotPublished} from '../../notionRequests/contentPlan.js';
+import {publishFork} from '../../publish/publishFork.js';
+import {loadPageBlocks} from '../../notionRequests/pageBlocks.js';
+import {loadPageProps} from '../../notionRequests/pageProps.js';
+import RawPageContent from '../../types/PageContent.js';
+import {resolveSns} from '../../helpers/helpers.js';
+import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
+import {askConfirm} from '../common/askConfirm.js';
+import {printImage, printItemDetails, printPublishConfirmData} from '../../publish/printInfo.js';
+import {WARN_SIGN} from '../../types/constants.js';
+import validateContentPlanPost, {validateContentPlanPostText} from '../../publish/validateContentPlanPost.js';
+import {makeClearTextFromNotion} from '../../helpers/makeClearTextFromNotion.js';
+import {makeTgPostTextFromNotion} from '../../helpers/makeTgPostTextFromNotion.js';
+import {SnType} from '../../types/snTypes.js';
+import {PUBLICATION_TYPES} from '../../types/publicationType.js';
+import PollData from '../../types/PollData.js';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {

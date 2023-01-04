@@ -5,7 +5,7 @@ import {makeDateTimeStr, prepareFooter} from '../helpers/helpers.js';
 import {makeContentPlanItemDetails} from './parseContent.js';
 import {makePageDetailsMsg} from './parsePage.js';
 import {makeContentLengthString} from './publishHelpers.js';
-import {PublishMenuState} from '../askUser/askPublishMenu.js';
+import {PublishMenuState} from '../askUser/publishContentPlan/askPublishMenu.js';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';

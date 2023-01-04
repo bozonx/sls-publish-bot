@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {askCreative} from '../askCreative.js';
+import {askCreative} from './askCreative.js';
 import {CreatePageParameters, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {askCost} from '../common/askCost.js';
 import {AdFormat, BuyAdType, CurrencyTicker} from '../../types/types.js';

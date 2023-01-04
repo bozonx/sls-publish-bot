@@ -1,13 +1,13 @@
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-} from '../types/constants.js';
-import BaseState from '../types/BaseState.js';
-import {PollMessageEvent} from '../types/MessageEvent.js';
+} from '../../types/constants.js';
+import BaseState from '../../types/BaseState.js';
+import {PollMessageEvent} from '../../types/MessageEvent.js';
 
 
 export async function askPoll(tgChat: TgChat, onDone: (message: PollMessageEvent) => void) {

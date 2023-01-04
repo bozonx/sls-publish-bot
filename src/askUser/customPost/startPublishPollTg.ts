@@ -1,11 +1,11 @@
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {askPoll} from './askPoll.js';
-import {askConfirm} from './common/askConfirm.js';
-import {PollMessageEvent} from '../types/MessageEvent.js';
-import {askDateTime} from './common/askDateTime.js';
-import {makePublishTaskTgCopy} from '../publish/makePublishTaskTg.js';
+import {askConfirm} from '../common/askConfirm.js';
+import {PollMessageEvent} from '../../types/MessageEvent.js';
+import {askDateTime} from '../common/askDateTime.js';
+import {makePublishTaskTgCopy} from '../../publish/makePublishTaskTg.js';
 import {askClosePoll} from './askClosePoll.js';
-import {makeIsoDateTimeStr} from '../helpers/helpers.js';
+import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
 
 
 export async function startPublishPollTg(blogName: string, tgChat: TgChat) {
