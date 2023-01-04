@@ -17,9 +17,8 @@ const appConfig: AppConfig = {
   botChatLogLevel: process.env.BOT_CHAT_LOG_LEVEL as any || LOG_LEVELS.info,
   dataDirPath: process.env.DATA_DIR as any,
   utcOffset: Number(process.env.UTC_OFFSET || 0),
-  // TODO: WTF ???!!!
   // skip tasks which should be run earlier that specified value in seconds
-  skipTasksEarlierSec: Number(process.env.SKIP_TASKS_EARLIER_SEC || 1),
+  expiredTaskOffsetSec: Number(process.env.EXPIRED_TASK_OFFSET_SEC || 1),
 
   telegram: {
     parseMode: 'MarkdownV2',

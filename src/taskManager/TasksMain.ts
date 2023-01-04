@@ -196,10 +196,9 @@ export default class TasksMain {
       throw new Error(msg);
     }
 
-    // TODO: зачем нужно skipTasksEarlierSec ???
-    if (secondsToPublish <= this.app.appConfig.skipTasksEarlierSec) {
+    if (secondsToPublish <= this.app.appConfig.expiredTaskOffsetSec) {
       const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`
-        + `The minimum time is ${this.app.appConfig.skipTasksEarlierSec} seconds.\n`
+        + `The minimum time is ${this.app.appConfig.expiredTaskOffsetSec} seconds.\n`
         + `Task:\n`
         + this.makeTaskDetails(task);
 

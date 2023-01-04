@@ -8,7 +8,8 @@ ENV DATA_DIR=/home/node/data
 ENV CONSOLE_LOG_LEVEL=warn
 ENV CHANNEL_LOG_LEVEL=warn
 ENV BOT_CHAT_LOG_LEVEL=warn
-ENV SKIP_TASKS_EARLIER_SEC=300
+# don't execute tasks which is going to execute in 60 seconds and less
+ENV EXPIRED_TASK_OFFSET_SEC=60
 
 WORKDIR $APP_DIR
 

@@ -12,7 +12,8 @@ export default interface AppConfig {
   channelLogLevel: LogLevel;
   botChatLogLevel: LogLevel;
   dataDirPath: string;
-  skipTasksEarlierSec: number;
+  // don't execute tasks which is going to execute in specified seconds and less
+  expiredTaskOffsetSec: number;
   telegram: {
     parseMode: 'MarkdownV2';
   },

@@ -29,7 +29,7 @@ CONFIG_PATH=
 DATA_DIR=./_testState
 # TODO: ??? WTF ????
 # 300 for prod
-SKIP_TASKS_EARLIER_SEC=1
+EXPIRED_TASK_OFFSET_SEC=1
 ```
 
 ## Prod
