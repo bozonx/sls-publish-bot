@@ -59,6 +59,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
                   isoDate,
                   time,
                   resultText,
+                  // TODO: use post as image
                   isPost2000,
                   state.usePreview,
                   state.mediaGroup,

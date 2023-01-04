@@ -12,8 +12,10 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 export async function startPublishCustomPostTg(
   blogName: string,
   tgChat: TgChat,
+  // post as image. If false then as text
+  // TODO: rename to postAsText
+  postAsImage: boolean,
   footerTmpl?: string,
-  imageType = true,
   mediaRequired = false,
   // TODO: наверное не нужно
   onlyOneImage = false,
@@ -21,8 +23,7 @@ export async function startPublishCustomPostTg(
 ) {
   await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (
     state: CustomPostState,
-    resultText: string,
-    isPost2000: boolean
+    resultText: string
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       await askPostConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
@@ -32,7 +33,7 @@ export async function startPublishCustomPostTg(
           isoDate,
           time,
           resultText,
-          isPost2000,
+          postAsImage,
           state.usePreview,
           state.mediaGroup,
           state.urlBtn,
@@ -41,16 +42,19 @@ export async function startPublishCustomPostTg(
         await tgChat.steps.cancel();
       }));
     }));
-  }), footerTmpl, mediaRequired, onlyOneImage, disableTags);
+  }), postAsImage, footerTmpl, mediaRequired, onlyOneImage, disableTags);
 }
 
+/**
+ * Register custom post creating task
+ */
 export async function registerCustomPostTg(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,
   time: string,
   resultText: string,
-  isPost2000: boolean,
+  postAsImage: boolean,
   usePreview: boolean,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   urlBtn?: TgReplyBtnUrl,
@@ -62,28 +66,17 @@ export async function registerCustomPostTg(
       || (mediaGroup[0].type === 'photoUrl' && mediaGroup[0].url)
       || undefined;
 
-    if (isPost2000) {
-      const post2000Txt = await makePost2000Text(tgChat, resultText, imgUrl);
-
-      await makePublishTaskTgOnlyText(
-        isoDate,
-        time,
-        post2000Txt,
-        blogName,
-        tgChat,
-        (imgUrl) ? true : usePreview,
-        urlBtn,
-        autoDeleteIsoDateTime
-      );
-    }
-    else {
+    if (postAsImage) {
+      // post as image or videl caption
       if (mediaGroup[0].type === 'video') {
+        if (!mediaGroup[0].fileId) throw new Error(`No video fileId`);
+
         await makePublishTaskTgVideo(
+          blogName,
+          tgChat,
           isoDate,
           time,
           mediaGroup[0].fileId,
-          blogName,
-          tgChat,
           resultText,
           urlBtn,
           autoDeleteIsoDateTime
@@ -93,16 +86,32 @@ export async function registerCustomPostTg(
         if (!imgUrl) throw new Error(`No image`);
 
         await makePublishTaskTgImage(
+          blogName,
+          tgChat,
           isoDate,
           time,
           imgUrl,
-          blogName,
-          tgChat,
           resultText,
           urlBtn,
           autoDeleteIsoDateTime
         );
       }
+    }
+    else {
+      // post as only text
+      // TODO: review
+      const post2000Txt = await makePost2000Text(tgChat, resultText, imgUrl);
+
+      await makePublishTaskTgOnlyText(
+        blogName,
+        tgChat,
+        isoDate,
+        time,
+        post2000Txt,
+        (imgUrl) ? true : usePreview,
+        urlBtn,
+        autoDeleteIsoDateTime
+      );
     }
   } else if (mediaGroup.length > 1) {
     // several images

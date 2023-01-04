@@ -10,9 +10,12 @@ import validateCustomPost from '../../publish/validateCustomPost.js';
 export async function askCustomPostTg(
   blogName: string,
   tgChat: TgChat,
-  onDone: (state: CustomPostState, resultText: string, isPost2000: boolean) => void,
+  onDone: (state: CustomPostState, resultText: string) => void,
+  // post as image. If false then as text
+  postAsImage: boolean,
   footerTmpl?: string,
   mediaRequired = false,
+  // TODO: наверное не нужно
   onlyOneImage = false,
   disableTags = false,
 ) {
@@ -58,7 +61,7 @@ export async function askCustomPostTg(
 function makeResultText(
   state: CustomPostState,
   footerTmpl?: string
-): {resultText: string, clearText: string, isPost2000: boolean} {
+): {resultText: string, clearText: string} {
   const footerStr = prepareFooter(footerTmpl, state.tags, state.useFooter);
   const resultText = (state.postText || '') + footerStr;
   const clearText = clearMdText(resultText);

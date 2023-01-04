@@ -12,11 +12,11 @@ import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
  * Post only text to telegram, without image
  */
 export async function makePublishTaskTgOnlyText(
+  blogName: string,
+  tgChat: TgChat,
   isoDate: string,
   time: string,
   postStr: string,
-  blogName: string,
-  tgChat: TgChat,
   allowPreview: boolean,
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
@@ -45,11 +45,11 @@ export async function makePublishTaskTgOnlyText(
  * Post image to telegram
  */
 export async function makePublishTaskTgImage(
-  isoDate: string,
-  resolvedTime: string,
-  imageUrl: string,
   blogName: string,
   tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  imageUrl: string,
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
@@ -71,18 +71,18 @@ export async function makePublishTaskTgImage(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(isoDate, time, msgId, blogName, tgChat, autoDeleteIsoDateTime);
 }
 
 /**
  * Post image to telegram
  */
 export async function makePublishTaskTgVideo(
-  isoDate: string,
-  resolvedTime: string,
-  videoId: string,
   blogName: string,
   tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  videoId: string,
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
@@ -104,7 +104,7 @@ export async function makePublishTaskTgVideo(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(isoDate, time, msgId, blogName, tgChat, autoDeleteIsoDateTime);
 }
 
 /**
