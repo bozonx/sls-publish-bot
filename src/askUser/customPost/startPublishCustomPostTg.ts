@@ -13,7 +13,9 @@ export async function startPublishCustomPostTg(
   blogName: string,
   tgChat: TgChat,
   footerTmpl?: string,
+  imageType = true,
   mediaRequired = false,
+  // TODO: наверное не нужно
   onlyOneImage = false,
   disableTags = false,
 ) {
