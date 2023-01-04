@@ -133,6 +133,17 @@ export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = tr
   });
 }
 
+export function makeResultPostText(
+  tags: string[],
+  useFooter: boolean,
+  postText?: string,
+  footerTmpl?: string
+): string {
+  const footerStr = prepareFooter(footerTmpl, tags, useFooter);
+
+  return (postText || '') + footerStr;
+}
+
 export function compactButtons(buttons: ((TgReplyButton | undefined)[] | undefined)[]): TgReplyButton[][] {
   return compactUndefined(buttons)
     .map((item) => compactUndefined(item))

@@ -1,7 +1,6 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {clearMdText, prepareFooter} from '../../helpers/helpers.js';
+import {clearMdText, makeResultPostText} from '../../helpers/helpers.js';
 import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../../apiTg/publishTg.js';
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../../types/constants.js';
 import {askPostMedia} from '../common/askPostMedia.js';
 import {askCustomPostMenu, CustomPostState} from './askCustomPostMenu.js';
 import validateCustomPost from '../../publish/validateCustomPost.js';
@@ -40,12 +39,14 @@ export async function askCustomPostTg(
         tgChat,
         state,
         (tgChat: TgChat, state: CustomPostState) => {
-          const {clearText, isPost2000} = makeResultText(state, footerTmpl);
+          const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
+          const clearText = clearMdText(resultText);
 
           validateCustomPost(state, isPost2000, clearText, tgChat);
         },
         tgChat.asyncCb(async  () => {
-          const {resultText, clearText, isPost2000} = makeResultText(state, footerTmpl);
+          const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
+          const clearText = clearMdText(resultText);
 
           await printPostPreview(blogName, tgChat, state, resultText, clearText);
 
@@ -56,18 +57,6 @@ export async function askCustomPostTg(
   );
 }
 
-function makeResultText(
-  state: CustomPostState,
-  footerTmpl?: string
-): {resultText: string, clearText: string} {
-  const footerStr = prepareFooter(footerTmpl, state.tags, state.useFooter);
-  const resultText = (state.postText || '') + footerStr;
-  const clearText = clearMdText(resultText);
-  const isPost2000 = clearText.length > TELEGRAM_MAX_CAPTION
-    && clearText.length < TELEGRAM_MAX_POST;
-
-  return {resultText, clearText, isPost2000};
-}
 
 async function printPostPreview(
   blogName: string,
@@ -139,3 +128,6 @@ async function printPostPreview(
 // + tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
 //   state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
 // ) + '\n'
+
+// const isPost2000 = clearText.length > TELEGRAM_MAX_CAPTION
+//   && clearText.length < TELEGRAM_MAX_POST;
