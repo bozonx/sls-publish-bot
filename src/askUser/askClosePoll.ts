@@ -6,7 +6,7 @@ import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
-  CANCEL_BTN_CALLBACK, WARN_SIGN, PRINT_FULL_DATE_FORMAT,
+  CANCEL_BTN_CALLBACK, WARN_SIGN,
 } from '../types/constants.js';
 import BaseState from '../types/BaseState.js';
 import {TextMessageEvent} from '../types/MessageEvent.js';

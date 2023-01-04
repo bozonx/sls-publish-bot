@@ -16,8 +16,8 @@ export type TaskTypes = 'postponePost'
   | 'unpinPost'
   | 'finishPoll';
 
-export interface PostponePostTask extends TaskTgBase {
-  type: 'postponePost'
+export interface PostponeTgPostTask extends TaskTgBase {
+  type: typeof TASK_TYPES['postponePost']
   forwardMessageId: number;
 }
 
@@ -44,7 +44,6 @@ export interface FinishTgPollTask extends TaskTgBase {
 interface TaskTgBase extends TaskItemBase {
   chatId: number | string;
   sn: 'telegram';
-  //blogUname: string;
 }
 
 interface TaskItemBase {
@@ -53,7 +52,7 @@ interface TaskItemBase {
   sn: SnType;
 }
 
-export type TaskItem = PostponePostTask
+export type TaskItem = PostponeTgPostTask
   | DeleteTgPostTask
   | PinTgPostTask
   | UnpinTgPostTask

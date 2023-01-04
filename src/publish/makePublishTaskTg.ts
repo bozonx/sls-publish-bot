@@ -2,7 +2,7 @@ import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
 import {publishTgCopy, publishTgImage, publishTgPoll, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {makePublishInfoMessage} from './publishHelpers.js';
-import {PostponePostTask, TASK_TYPES} from '../types/TaskItem.js';
+import {PostponeTgPostTask, TASK_TYPES} from '../types/TaskItem.js';
 import {SN_TYPES} from '../types/snTypes.js';
 import PollData from '../types/PollData.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
@@ -195,7 +195,7 @@ export async function registerPublishTaskTg(
     throw new Error(`Telegram chat id doesn't set`);
   }
 
-  const task: PostponePostTask = {
+  const task: PostponeTgPostTask = {
     // time like '2022-11-01T19:58:00+03:00'
     startTime,
     type: TASK_TYPES.postponePost,

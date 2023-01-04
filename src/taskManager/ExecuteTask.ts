@@ -3,7 +3,7 @@ import {
   DeleteTgPostTask,
   FinishTgPollTask,
   PinTgPostTask,
-  PostponePostTask,
+  PostponeTgPostTask,
   TASK_TYPES, TaskItem,
   UnpinTgPostTask
 } from '../types/TaskItem.js';
@@ -68,7 +68,7 @@ export default class ExecuteTask {
   }
 
   private async executePostponePost(task: TaskItem) {
-    const postponeTask = task as PostponePostTask;
+    const postponeTask = task as PostponeTgPostTask;
 
     await this.tasks.app.tg.bot.telegram.copyMessage(
       postponeTask.chatId,
