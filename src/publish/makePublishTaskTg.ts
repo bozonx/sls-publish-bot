@@ -138,11 +138,11 @@ export async function makePublishTaskTgCopy(
 }
 
 export async function makePublishTaskTgPoll(
+  blogName: string,
+  tgChat: TgChat,
   isoDate: string,
   time: string,
   pollData: PollData,
-  blogName: string,
-  tgChat: TgChat,
   autoDeleteIsoDateTime?: string
 ) {
   let postMsgId: number;

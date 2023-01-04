@@ -139,7 +139,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
         }));
       }));
     }),
-    undefined,
+    false,
     undefined,
     undefined,
     true,

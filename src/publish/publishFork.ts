@@ -39,11 +39,11 @@ export async function publishFork(
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {
           return makePublishTaskTgPoll(
-            state.selectedDate,
-            state.selectedTime,
-            pollData!,
             blogName,
             tgChat,
+            state.selectedDate,
+            state.selectedTime,
+            pollData!
           );
         }
         // only text
@@ -53,11 +53,11 @@ export async function publishFork(
           PUBLICATION_TYPES.announcement,
         ].includes(pubType) && !state.mainImgUrl) {
           return makePublishTaskTgOnlyText(
+            blogName,
+            tgChat,
             state.selectedDate,
             state.selectedTime,
             postTexts[sn],
-            blogName,
-            tgChat,
             state.usePreview,
           );
         }
@@ -70,11 +70,11 @@ export async function publishFork(
           PUBLICATION_TYPES.reels,
         ].includes(pubType) && state.mainImgUrl) {
           return makePublishTaskTgImage(
+            blogName,
+            tgChat,
             state.selectedDate,
             state.selectedTime,
             state.mainImgUrl,
-            blogName,
-            tgChat,
             postTexts[sn]
           );
         }

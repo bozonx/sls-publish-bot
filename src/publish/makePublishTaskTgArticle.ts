@@ -59,11 +59,11 @@ export async function makePublishTaskTgArticle(
   }
 
   await makePublishTaskTgOnlyText(
+    blogName,
+    tgChat,
     isoDate,
     time,
     postStr,
-    blogName,
-    tgChat,
     true
   );
 }
