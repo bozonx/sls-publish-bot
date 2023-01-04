@@ -39,7 +39,7 @@ export default class ExecuteTask {
       await this.executeFork(task)
       this.tasks.app.channelLog.log(
         this.tasks.app.i18n.message.taskDoneSuccessful + '\n'
-        + makeTaskDetails(task, this.tasks.app.i18n)
+        + await makeTaskDetails(task, this.tasks.app)
       );
     }
     catch (e) {

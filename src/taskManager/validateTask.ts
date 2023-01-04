@@ -5,7 +5,7 @@ import {MAX_TIMEOUT_SECONDS} from '../types/constants.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
 
 
-export function validateTask(task: TaskItem, app: App): string | undefined {
+export async function validateTask(task: TaskItem, app: App): Promise<string | undefined> {
   // seconds from now to start time
   const secondsToPublish = calcSecondsToDate(task.startTime, app.appConfig.utcOffset);
 
@@ -18,7 +18,7 @@ export function validateTask(task: TaskItem, app: App): string | undefined {
     return `The task has expired time to publish - ${secondsToPublish} seconds.\n`
       + `The minimum time is ${app.appConfig.expiredTaskOffsetSec} seconds.\n`
       + `Task:\n`
-      + makeTaskDetails(task, app.i18n);
+      + await makeTaskDetails(task, app);
   }
 
   // TODO: validate other params

@@ -36,7 +36,7 @@ export default class TasksMain {
     // register them and start timers
     for (const taskId in oldTasks) {
       const task = oldTasks[taskId];
-      const validateResult = validateTask(task, this.app);
+      const validateResult = await validateTask(task, this.app);
 
       if (validateResult) {
         this.app.channelLog.warn(`Task was skipped: ` + validateResult)
@@ -60,7 +60,7 @@ export default class TasksMain {
 
   async addTaskAndLog(task: TaskItem): Promise<string | null> {
     await this.app.channelLog.log(
-      this.app.i18n.message.taskRegistered + '\n' + makeTaskDetails(task, this.app.i18n)
+      this.app.i18n.message.taskRegistered + '\n' + await makeTaskDetails(task, this.app)
     );
 
     return this.addTaskSilently(task);
@@ -90,7 +90,7 @@ export default class TasksMain {
     this.app.channelLog.info(
       this.app.i18n.message.taskRemoved + '\n'
       + `taskId: ${taskId}\n`
-      + makeTaskDetails(removedTask, this.app.i18n)
+      + await makeTaskDetails(removedTask, this.app)
     );
   }
 
@@ -131,7 +131,7 @@ export default class TasksMain {
    * @return if sting - taskId, if null - task haven't been added
    */
   private async addTaskSilently(task: TaskItem): Promise<string | null> {
-    const validateResult = validateTask(task, this.app);
+    const validateResult = await validateTask(task, this.app);
 
     if (validateResult) {
       this.app.channelLog.error(`Task was skipped: ` + validateResult)
