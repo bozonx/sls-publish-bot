@@ -2,8 +2,8 @@ import TgChat from '../apiTg/TgChat.js';
 import {askMainMenu, MAIN_MENU_ACTION} from './askMainMenu.js';
 import {startBlogMenu} from './startBlogMenu.js';
 import {startTaskMenu} from './task/startTaskMenu.js';
-import {startSiteMenu} from './startSiteMenu.js';
-import {startTelegraphMenu} from './startTelegraphMenu.js';
+import {startSiteMenu} from './site/startSiteMenu.js';
+import {startTelegraphMenu} from './telegraph/startTelegraphMenu.js';
 
 
 export async function topLevelMenuStarter(tgChat: TgChat) {

@@ -1,5 +1,4 @@
-import TgChat from '../apiTg/TgChat.js';
-import {askSiteMenu} from './askSiteMenu.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu.js';
 
 
