@@ -18,13 +18,16 @@ export const TASK_LIST_ACTIONS = {
 export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string, action?: string) => void) {
   const taskList = tgChat.app.tasks.getTasksList();
   const tasksIds = Object.keys(taskList);
-  const msg = (tasksIds.length) ? tgChat.app.i18n.menu.taskList : tgChat.app.i18n.menu.emptyTaskList;
+  const msg = (tasksIds.length)
+    ? tgChat.app.i18n.menu.taskMenuDefinition + '\n\n' + tgChat.app.i18n.menu.taskList
+    : tgChat.app.i18n.menu.emptyTaskList + '\n\n' + tgChat.app.i18n.menu.taskMenuDefinition;
+
   const buttons = [
-    tasksIds.map((taskId) => {
-      return {
+    ...tasksIds.map((taskId) => {
+      return [{
         text: makeTaskItmStr(taskList[taskId]),
         callback_data: TASK_ID_CB + taskId,
-      }
+      }]
     }),
     [
       {
