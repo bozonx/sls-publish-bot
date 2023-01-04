@@ -1,6 +1,8 @@
 import TgChat from '../../apiTg/TgChat.js';
 import BaseState from '../../types/BaseState.js';
 import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
+import {makeTaskDetails} from '../../taskManager/makeTaskDetails.js';
+import {TaskItem} from '../../types/TaskItem.js';
 
 
 const DELETE_TASK_ACTION = 'delete_task';
@@ -8,9 +10,18 @@ const FLUSH_TASK_ACTION = 'flush_task';
 
 
 export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => void) {
+  const task = tgChat.app.tasks.getTask(taskId);
+
+  if (!task) {
+    await tgChat.reply(tgChat.app.i18n.message.noTask)
+    onDone()
+
+    return;
+  }
+
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
-    state.messageIds.push(await printInitialMessage(taskId, tgChat));
+    state.messageIds.push(await printInitialMessage(task, tgChat));
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
@@ -35,9 +46,12 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
               onDone();
             }
             else if (queryData === FLUSH_TASK_ACTION) {
-              await tgChat.app.tasks.flushTask(taskId)
-                //.catch((e) => this.app.consoleLog.error(e));
-              // TODO: нужно ли обрабаывать ошибку????
+              try {
+                await tgChat.app.tasks.flushTask(taskId)
+              }
+              catch (e) {
+                await tgChat.reply('Task flush error: ' + e)
+              }
 
               onDone();
             }
@@ -49,9 +63,9 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
   });
 }
 
-async function printInitialMessage(taskId: string, tgChat: TgChat): Promise<number> {
-  const taskDetails = tgChat.app.i18n.menu.taskDetails + taskId + '\n'
-    + JSON.stringify(tgChat.app.tasks.getTask(taskId), null, 2);
+async function printInitialMessage(task: TaskItem, tgChat: TgChat): Promise<number> {
+  const taskDetails = tgChat.app.i18n.menu.taskDetails + '\n'
+    + await makeTaskDetails(task, tgChat.app);
 
   return tgChat.reply(taskDetails, [
     [

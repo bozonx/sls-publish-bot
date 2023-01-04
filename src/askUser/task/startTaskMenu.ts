@@ -4,7 +4,6 @@ import TgChat from '../../apiTg/TgChat.js';
 import {askTaskAdd} from './askTaskAdd.js';
 import {askTaskFinishPoll} from './askTaskFinishPoll.js';
 
-// TODO: если зашел в несуществующее задание то сделать cancel
 
 export async function startTaskMenu(tgChat: TgChat) {
   await askTasksListMenu(
