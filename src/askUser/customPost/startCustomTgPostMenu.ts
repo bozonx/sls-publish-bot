@@ -4,7 +4,7 @@ import {askCustomTgPostMainMenu, CUSTOM_POST_MENU_ACTIONS} from './askCustomTgPo
 import {startPublishCustomPostTg} from './startPublishCustomPostTg.js';
 
 
-export async function startCustomTgPost(blogName: string, tgChat: TgChat) {
+export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
   await askCustomTgPostMainMenu(blogName, tgChat, tgChat.asyncCb(async (action: string) => {
     if (action === CUSTOM_POST_MENU_ACTIONS.STORY) {
       const footer = tgChat.app.blogs[blogName].sn.telegram?.storyFooter;
