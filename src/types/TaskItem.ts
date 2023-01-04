@@ -1,3 +1,6 @@
+import {SnType} from './snTypes.js';
+
+
 export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
   postponePost: 'postponePost',
   deletePost: 'deletePost',
@@ -13,25 +16,28 @@ export type TaskTypes = 'postponePost'
   | 'unpinPost'
   | 'finishPoll';
 
-// TODO: rename - means only tg post
-// TODO: rename - добавить из какого канала брать пост
 export interface PostponePostTask extends TaskTgBase {
+  type: 'postponePost'
   forwardMessageId: number;
 }
 
-export interface DeletePostTask extends TaskTgBase {
+export interface DeleteTgPostTask extends TaskTgBase {
+  type: 'deletePost'
   messageId: number;
 }
 
-export interface PinPostTask extends TaskTgBase {
+export interface PinTgPostTask extends TaskTgBase {
+  type: 'pinPost'
   messageId: number;
 }
 
-export interface UnpinPostTask extends TaskTgBase {
+export interface UnpinTgPostTask extends TaskTgBase {
+  type: 'unpinPost'
   messageId: number;
 }
 
-export interface FinishPollTask extends TaskTgBase {
+export interface FinishTgPollTask extends TaskTgBase {
+  type: 'finishPoll'
   messageId: number;
 }
 
@@ -44,10 +50,11 @@ interface TaskTgBase extends TaskItemBase {
 interface TaskItemBase {
   startTime: string;
   type: TaskTypes;
+  sn: SnType;
 }
 
 export type TaskItem = PostponePostTask
-  | DeletePostTask
-  | PinPostTask
-  | UnpinPostTask
-  | FinishPollTask;
+  | DeleteTgPostTask
+  | PinTgPostTask
+  | UnpinTgPostTask
+  | FinishTgPollTask;

@@ -1,11 +1,11 @@
 import TasksMain from './TasksMain.js';
 import {
-  DeletePostTask,
-  FinishPollTask,
-  PinPostTask,
+  DeleteTgPostTask,
+  FinishTgPollTask,
+  PinTgPostTask,
   PostponePostTask,
   TASK_TYPES, TaskItem,
-  UnpinPostTask
+  UnpinTgPostTask
 } from '../types/TaskItem.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
 
@@ -78,25 +78,25 @@ export default class ExecuteTask {
   }
 
   private async executeDeletePost(task: TaskItem) {
-    const deleteTask = task as DeletePostTask;
+    const deleteTask = task as DeleteTgPostTask;
 
     await this.tasks.app.tg.bot.telegram.deleteMessage(task.chatId, deleteTask.messageId);
   }
 
   private async executePinPost(task: TaskItem) {
-    const pinTask = task as PinPostTask;
+    const pinTask = task as PinTgPostTask;
 
     await this.tasks.app.tg.bot.telegram.pinChatMessage(task.chatId, pinTask.messageId);
   }
 
   private async executeUnpinPost(task: TaskItem) {
-    const unpinTask = task as UnpinPostTask;
+    const unpinTask = task as UnpinTgPostTask;
 
     await this.tasks.app.tg.bot.telegram.unpinChatMessage(task.chatId, unpinTask.messageId);
   }
 
   private async executeFinishPoll(task: TaskItem) {
-    const finishPollTask = task as FinishPollTask;
+    const finishPollTask = task as FinishTgPollTask;
 
     await this.tasks.app.tg.bot.telegram.stopPoll(task.chatId, finishPollTask.messageId);
   }

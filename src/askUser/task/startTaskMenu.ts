@@ -3,6 +3,7 @@ import {askTaskMenu} from './askTaskMenu.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askTaskAdd} from './askTaskAdd.js';
 import {askTaskFinishPoll} from './askTaskFinishPoll.js';
+import {DeleteTgPostTask, FinishTgPollTask, PinTgPostTask, UnpinTgPostTask} from '../../types/TaskItem.js';
 
 
 export async function startTaskMenu(tgChat: TgChat) {
@@ -15,14 +16,15 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTaskAndLog({
-            messageId,
-            chatId,
-            sn: 'telegram',
+          const task: DeleteTgPostTask = {
             startTime,
             type: 'deletePost',
-          });
+            sn: 'telegram',
+            chatId,
+            messageId,
+          }
 
+          await tgChat.app.tasks.addTaskAndLog(task);
           await tgChat.steps.cancel();
         }));
       }
@@ -32,14 +34,15 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTaskAndLog({
-            messageId,
-            chatId,
-            sn: 'telegram',
+          const task: PinTgPostTask = {
             startTime,
             type: 'pinPost',
-          });
+            sn: 'telegram',
+            chatId,
+            messageId,
+          }
 
+          await tgChat.app.tasks.addTaskAndLog(task);
           await tgChat.steps.cancel();
         }));
       }
@@ -49,14 +52,15 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTaskAndLog({
-            messageId,
-            chatId,
-            sn: 'telegram',
+          const task: UnpinTgPostTask = {
             startTime,
             type: 'unpinPost',
-          });
+            sn: 'telegram',
+            chatId,
+            messageId,
+          }
 
+          await tgChat.app.tasks.addTaskAndLog(task);
           await tgChat.steps.cancel();
         }));
       }
@@ -66,14 +70,15 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          await tgChat.app.tasks.addTaskAndLog({
-            messageId,
-            chatId,
-            sn: 'telegram',
+          const task: FinishTgPollTask = {
             startTime,
             type: 'finishPoll',
-          });
+            sn: 'telegram',
+            chatId,
+            messageId,
+          }
 
+          await tgChat.app.tasks.addTaskAndLog(task);
           await tgChat.steps.cancel();
         }));
       }
