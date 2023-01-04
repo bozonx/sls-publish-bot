@@ -37,17 +37,17 @@ export default class TasksMain {
     const oldTasks: Record<string, TaskItem> = await this.loadOldTasks() || {};
     // register them and start timers
     for (const taskId in oldTasks) {
-      this.registerTask(oldTasks[taskId], taskId);
+      const task = oldTasks[taskId];
+      const validateResult = this.validateTask(task);
 
-      // TODO: не пишится что загрузилось задание если оно нормальное - надо по всем писать
+      if (validateResult) {
+        this.app.channelLog.warn(`Task was skipped: ` + validateResult)
+        // skip not valid tasks
+        continue;
+      }
 
-      // TODO: сделать Promise run
-      // this.app.channelLog.info(
-      //   this.app.i18n.message.loadedTask + '\n'
-      //   + this.makeTaskDetails(tasks[taskId])
-      // );
+      this.registerTask(task, taskId);
     }
-
     // resave tasks. It removes expired tasks
     await this.saveTasks();
   }
@@ -67,16 +67,20 @@ export default class TasksMain {
     return this.addTask(task);
   }
 
-  // TODO: review
+  /**
+   * Add task
+   * @return if sting - taskId, if null - task haven't been added
+   */
   async addTask(task: TaskItem): Promise<string | null> {
+    const validateResult = this.validateTask(task);
 
-    // TODO: validate task
-
-    //console.log(1111, task.startTime)
+    if (validateResult) {
+      this.app.channelLog.error(`Task was skipped: ` + validateResult)
+      // skip not valid tasks
+      return null;
+    }
 
     const taskNum = this.registerTask(task);
-
-    if (taskNum === null) return null;
 
     // TODO: писать пользователю если ошибка!
     // TODO: отменить добавление если ошибка
@@ -152,14 +156,19 @@ export default class TasksMain {
   }
 
 
-  // TODO: review
   /**
-   * Register a new task - set data to runtime and make timeout.
-   * @return {string | null} taskId or null if task haven't been added.
+   * Register a new valid task - set data to runtime and make timeout.
+   * Please validate task before
+   * @return {string} taskId
    * @private
    */
-  private registerTask(task: TaskItem, specifiedTaskId?: string): string | null {
-    const secondsToPublish = this.calcSecondsToPublish(task)
+  private registerTask(task: TaskItem, specifiedTaskId?: string): string {
+    // seconds from now to start time
+    const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
+
+    // if task is expired then return null
+    if (secondsToPublish === null) return null;
+
     const taskId: string = (specifiedTaskId)
       ? specifiedTaskId
       : String(Object.keys(this.tasks).length);
@@ -167,48 +176,38 @@ export default class TasksMain {
     //console.log(2222, secondsToPublish)
 
     this.tasks[taskId] = task;
-    this.timeouts[taskId] = setTimeout(
-      () => {
-        this.execute.executeFork(taskId)
-          .catch((e) => {
-            const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
+    this.timeouts[taskId] = setTimeout(() => {
+      this.execute.executeFork(taskId)
+        .catch((e) => {
+          // TODO: review
+          const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
 
-            this.clearTask(taskId);
-            this.app.channelLog.error(msg);
-            this.app.consoleLog.error(msg);
-          });
-      },
-      secondsToPublish * 1000
-    );
+          this.clearTask(taskId);
+          this.app.channelLog.error(msg);
+          this.app.consoleLog.error(msg);
+        });
+    },secondsToPublish * 1000);
 
     return taskId;
   }
 
-  private calcSecondsToPublish(task: TaskItem): number {
+  private validateTask(task: TaskItem): string | undefined {
     // seconds from now to start time
     const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
 
     if (secondsToPublish > MAX_TIMEOUT_SECONDS) {
-      const msg = `Too big timeout number! ${task.startTime} is ${secondsToPublish} seconds. `
-        + `Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`
-      this.app.channelLog.error(msg)
-
-      throw new Error(msg);
+      return `Too big timeout number! ${task.startTime} is ${secondsToPublish} seconds. `
+        + `Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`;
     }
 
     if (secondsToPublish <= this.app.appConfig.expiredTaskOffsetSec) {
-      const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`
+      return `The task has expired time to publish - ${secondsToPublish} seconds.\n`
         + `The minimum time is ${this.app.appConfig.expiredTaskOffsetSec} seconds.\n`
         + `Task:\n`
         + this.makeTaskDetails(task);
-
-      this.app.channelLog.warn(msg);
-      console.warn(msg);
-      // means task haven't added
-      return null;
     }
 
-    return secondsToPublish;
+    // TODO: validate other params
   }
 
   private async loadOldTasks(): Promise<Record<string, TaskItem> | undefined> {
