@@ -3,24 +3,18 @@ import * as fs from 'fs/promises';
 import path from 'path';
 import {clearTimeout} from 'timers';
 import App from '../App.js';
-import {
-  TaskItem,
-  TASK_TYPES,
-  PostponePostTask,
-  DeletePostTask,
-  PinPostTask,
-  UnpinPostTask,
-  FinishPollTask
-} from '../types/TaskItem.js';
+import {TaskItem} from '../types/TaskItem.js';
 import {calcSecondsToDate} from '../lib/common.js';
 import {FILE_ENCODING, MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
+import ExecuteTask from './ExecuteTask.js';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';
 
 
 export default class TasksMain {
-  private readonly app: App;
+  readonly app: App;
+  private readonly execute: ExecuteTask;
   private readonly filePath: string;
   // Object like {taskId: TaskItem}
   private tasks: Record<string, TaskItem> = {};
@@ -30,6 +24,7 @@ export default class TasksMain {
 
   constructor(app: App) {
     this.app = app;
+    this.execute = new ExecuteTask(this);
     this.filePath = path.resolve(
       this.app.appConfig.dataDirPath,
       STATE_TASKS_FILENAME
@@ -101,7 +96,7 @@ export default class TasksMain {
     clearTimeout(this.timeouts[taskId]);
     // TODO: наверно лучше обработку засунуть обратно внутрь
     try {
-      await this.executeFork(taskId)
+      await this.execute.executeFork(taskId)
     }
     catch(e) {
       const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
@@ -124,6 +119,30 @@ export default class TasksMain {
       + `taskId: ${taskId}\n`
       + this.makeTaskDetails(removedTask)
     );
+  }
+
+
+  //////// Public but for inner use
+
+  clearTask(taskId: string) {
+    clearTimeout(this.timeouts[taskId]);
+
+    delete this.timeouts[taskId];
+    delete this.tasks[taskId];
+  }
+
+  async saveTasks() {
+    const content = JSON.stringify(this.tasks, null, 2);
+
+    try {
+      await fs.writeFile(this.filePath, Buffer.from(content, FILE_ENCODING));
+    }
+    catch (e) {
+      const msg = `Can't save tasks file: ${e}`;
+
+      this.app.consoleLog.error(msg);
+      this.app.channelLog.error(msg);
+    }
   }
 
 
@@ -169,7 +188,7 @@ export default class TasksMain {
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(
       () => {
-        this.executeFork(taskId)
+        this.execute.executeFork(taskId)
           .catch((e) => {
             const msg = `Can't execute task "${taskId}" fork in timeout: ${e}`;
 
@@ -182,78 +201,6 @@ export default class TasksMain {
     );
 
     return taskId;
-  }
-
-  private async executeFork(taskId: string) {
-    const task = this.tasks[taskId];
-
-    if (task.type === TASK_TYPES.postponePost) {
-      await this.executePostponePost(taskId);
-    }
-    else if (task.type === TASK_TYPES.deletePost) {
-      await this.executeDeletePost(taskId);
-    }
-    else if (task.type === TASK_TYPES.pinPost) {
-      await this.executePinPost(taskId);
-    }
-    else if (task.type === TASK_TYPES.unpinPost) {
-      await this.executeUnpinPost(taskId);
-    }
-    else if (task.type === TASK_TYPES.finishPoll) {
-      await this.executeFinishPoll(taskId);
-    }
-    else {
-      throw new Error(`Unknown task type: ${task.type}`);
-    }
-
-    this.clearTask(taskId);
-    // TODO: проверить ошибку
-    await this.saveTasks();
-
-    this.app.channelLog.log(
-      this.app.i18n.message.taskDoneSuccessful + '\n' + this.makeTaskDetails(task)
-    );
-  }
-
-  private async executePostponePost(taskId: string) {
-    const task = this.tasks[taskId] as PostponePostTask;
-
-    await this.app.tg.bot.telegram.copyMessage(
-      task.chatId,
-      this.app.appConfig.logChannelId,
-      task.forwardMessageId,
-    );
-  }
-
-  private async executeDeletePost(taskId: string) {
-    const task = this.tasks[taskId] as DeletePostTask;
-
-    await this.app.tg.bot.telegram.deleteMessage(task.chatId, task.messageId);
-  }
-
-  private async executePinPost(taskId: string) {
-    const task = this.tasks[taskId] as PinPostTask;
-
-    await this.app.tg.bot.telegram.pinChatMessage(task.chatId, task.messageId);
-  }
-
-  private async executeUnpinPost(taskId: string) {
-    const task = this.tasks[taskId] as UnpinPostTask;
-
-    await this.app.tg.bot.telegram.unpinChatMessage(task.chatId, task.messageId);
-  }
-
-  private async executeFinishPoll(taskId: string) {
-    const task = this.tasks[taskId] as FinishPollTask;
-
-    await this.app.tg.bot.telegram.stopPoll(task.chatId, task.messageId);
-  }
-
-  private clearTask(taskId: string) {
-    clearTimeout(this.timeouts[taskId]);
-
-    delete this.timeouts[taskId];
-    delete this.tasks[taskId];
   }
 
   private makeTaskDetails(task: TaskItem): string {
@@ -285,20 +232,6 @@ export default class TasksMain {
 
         throw new Error(msg);
       }
-    }
-  }
-
-  private async saveTasks() {
-    const content = JSON.stringify(this.tasks, null, 2);
-
-    try {
-      await fs.writeFile(this.filePath, Buffer.from(content, FILE_ENCODING));
-    }
-    catch (e) {
-      const msg = `Can't save tasks file: ${e}`;
-
-      this.app.consoleLog.error(msg);
-      this.app.channelLog.error(msg);
     }
   }
 
