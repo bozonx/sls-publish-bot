@@ -1,10 +1,10 @@
-import TgChat from '../apiTg/TgChat.js';
-import {clearMdText, prepareFooter} from '../helpers/helpers.js';
-import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants.js';
-import {askPostMedia} from './common/askPostMedia.js';
+import TgChat from '../../apiTg/TgChat.js';
+import {clearMdText, prepareFooter} from '../../helpers/helpers.js';
+import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../../apiTg/publishTg.js';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../../types/constants.js';
+import {askPostMedia} from '../common/askPostMedia.js';
 import {askCustomPostMenu, CustomPostState} from './askCustomPostMenu.js';
-import validateCustomPost from '../publish/validateCustomPost.js';
+import validateCustomPost from '../../publish/validateCustomPost.js';
 
 
 export async function askCustomPostTg(

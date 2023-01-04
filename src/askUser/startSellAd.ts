@@ -2,13 +2,13 @@ import TgChat from '../apiTg/TgChat.js';
 import {askCost} from './common/askCost.js';
 import {AdFormat, CurrencyTicker, SellAdType} from '../types/types.js';
 import {askFormat} from './common/askFormat.js';
-import {askCustomPostTg} from './askCustomPostTg.js';
-import {CustomPostState} from './askCustomPostMenu.js';
+import {askCustomPostTg} from './customPost/askCustomPostTg.js';
+import {CustomPostState} from './customPost/askCustomPostMenu.js';
 import {askNote} from './common/askNote.js';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import {askSellAdType} from './askSellAdType.js';
 import {askDateTime} from './common/askDateTime.js';
-import {registerCustomPostTg} from './startPublishCustomPostTg.js';
+import {registerCustomPostTg} from './customPost/startPublishCustomPostTg.js';
 
 
 const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {

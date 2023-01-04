@@ -1,20 +1,20 @@
 import moment from 'moment';
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
   OK_BTN, OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN,
-} from '../types/constants.js';
-import {addSimpleStep} from '../helpers/helpers.js';
-import {compactUndefined} from '../lib/arrays.js';
-import {askPostText} from './common/askPostText.js';
-import {askTags} from './common/askTags.js';
-import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
-import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
-import {askDateTime} from './common/askDateTime.js';
-import {askUrlButton} from './common/askUrlButton.js';
+} from '../../types/constants.js';
+import {addSimpleStep} from '../../helpers/helpers.js';
+import {compactUndefined} from '../../lib/arrays.js';
+import {askPostText} from '../common/askPostText.js';
+import {askTags} from '../common/askTags.js';
+import {PhotoData, PhotoUrlData, VideoData} from '../../types/MessageEvent.js';
+import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
+import {askDateTime} from '../common/askDateTime.js';
+import {askUrlButton} from '../common/askUrlButton.js';
 
 
 export interface CustomPostState {

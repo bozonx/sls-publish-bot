@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat.js';
 import {startPublishFromContentPlan} from './startPublishFromContentPlan.js';
-import {startPublishCustomPostTg} from './startPublishCustomPostTg.js';
+import {startPublishCustomPostTg} from './customPost/startPublishCustomPostTg.js';
 import {startPublishPollTg} from './startPublishPollTg.js';
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu.js';
 import {startSellAd} from './startSellAd.js';
