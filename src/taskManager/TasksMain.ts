@@ -8,6 +8,7 @@ import {calcSecondsToDate} from '../lib/common.js';
 import {FILE_ENCODING, MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
 import ExecuteTask from './ExecuteTask.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
+import {validateTask} from './validateTask.js';
 
 
 const STATE_TASKS_FILENAME = 'tasks.json';
@@ -39,7 +40,7 @@ export default class TasksMain {
     // register them and start timers
     for (const taskId in oldTasks) {
       const task = oldTasks[taskId];
-      const validateResult = this.validateTask(task);
+      const validateResult = validateTask(task, this.app);
 
       if (validateResult) {
         this.app.channelLog.warn(`Task was skipped: ` + validateResult)
@@ -140,7 +141,7 @@ export default class TasksMain {
    * @return if sting - taskId, if null - task haven't been added
    */
   private async addTaskSilently(task: TaskItem): Promise<string | null> {
-    const validateResult = this.validateTask(task);
+    const validateResult = validateTask(task, this.app);
 
     if (validateResult) {
       this.app.channelLog.error(`Task was skipped: ` + validateResult)
@@ -190,25 +191,6 @@ export default class TasksMain {
     },secondsToPublish * 1000);
 
     return taskId;
-  }
-
-  private validateTask(task: TaskItem): string | undefined {
-    // seconds from now to start time
-    const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
-
-    if (secondsToPublish > MAX_TIMEOUT_SECONDS) {
-      return `Too big timeout number! ${task.startTime} is ${secondsToPublish} seconds. `
-        + `Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`;
-    }
-
-    if (secondsToPublish <= this.app.appConfig.expiredTaskOffsetSec) {
-      return `The task has expired time to publish - ${secondsToPublish} seconds.\n`
-        + `The minimum time is ${this.app.appConfig.expiredTaskOffsetSec} seconds.\n`
-        + `Task:\n`
-        + makeTaskDetails(task, this.app.i18n);
-    }
-
-    // TODO: validate other params
   }
 
   private async loadOldTasks(): Promise<Record<string, TaskItem> | undefined> {
