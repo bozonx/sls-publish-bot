@@ -1,6 +1,6 @@
 import {askTasksListMenu, TASK_LIST_ACTIONS} from './askTasksListMenu.js';
 import {askTaskMenu} from './askTaskMenu.js';
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from '../../apiTg/TgChat.js';
 import {askTaskAdd} from './askTaskAdd.js';
 import {askTaskFinishPoll} from './askTaskFinishPoll.js';
 

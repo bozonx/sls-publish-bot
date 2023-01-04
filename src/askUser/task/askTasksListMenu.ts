@@ -1,8 +1,8 @@
 import moment from 'moment';
-import TgChat from '../apiTg/TgChat.js';
-import {CANCEL_BTN, CANCEL_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
-import {addSimpleStep} from '../helpers/helpers.js';
-import {TaskItem} from '../types/TaskItem.js';
+import TgChat from '../../apiTg/TgChat.js';
+import {CANCEL_BTN, CANCEL_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT} from '../../types/constants.js';
+import {addSimpleStep} from '../../helpers/helpers.js';
+import {TaskItem} from '../../types/TaskItem.js';
 
 
 const TASK_ID_CB = 'TASK_ID_CB:';

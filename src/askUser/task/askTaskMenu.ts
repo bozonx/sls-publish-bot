@@ -1,6 +1,6 @@
-import TgChat from '../apiTg/TgChat.js';
-import BaseState from '../types/BaseState.js';
-import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants.js';
+import TgChat from '../../apiTg/TgChat.js';
+import BaseState from '../../types/BaseState.js';
+import {ChatEvents, BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 
 
 const DELETE_TASK_ACTION = 'delete_task';
