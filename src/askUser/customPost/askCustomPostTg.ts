@@ -12,7 +12,7 @@ export async function askCustomPostTg(
   tgChat: TgChat,
   onDone: (state: CustomPostState, resultText: string) => void,
   // post as image. If false then as text
-  postAsImage: boolean,
+  postAsText: boolean,
   footerTmpl?: string,
   mediaRequired = false,
   // TODO: наверное не нужно

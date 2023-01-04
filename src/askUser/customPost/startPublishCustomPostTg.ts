@@ -12,9 +12,8 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 export async function startPublishCustomPostTg(
   blogName: string,
   tgChat: TgChat,
-  // post as image. If false then as text
-  // TODO: rename to postAsText
-  postAsImage: boolean,
+  // post as only text. If false then as image or video
+  postAsText: boolean,
   footerTmpl?: string,
   mediaRequired = false,
   // TODO: наверное не нужно
@@ -33,7 +32,7 @@ export async function startPublishCustomPostTg(
           isoDate,
           time,
           resultText,
-          postAsImage,
+          postAsText,
           state.usePreview,
           state.mediaGroup,
           state.urlBtn,
@@ -42,7 +41,7 @@ export async function startPublishCustomPostTg(
         await tgChat.steps.cancel();
       }));
     }));
-  }), postAsImage, footerTmpl, mediaRequired, onlyOneImage, disableTags);
+  }), postAsText, footerTmpl, mediaRequired, onlyOneImage, disableTags);
 }
 
 /**
@@ -54,19 +53,22 @@ export async function registerCustomPostTg(
   isoDate: string,
   time: string,
   resultText: string,
-  postAsImage: boolean,
+  postAsText: boolean,
   usePreview: boolean,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
 ) {
+
+
+
   if (mediaGroup.length === 1) {
     const imgUrl: string | undefined =
       (mediaGroup[0].type === 'photo' && mediaGroup[0].fileId)
       || (mediaGroup[0].type === 'photoUrl' && mediaGroup[0].url)
       || undefined;
 
-    if (postAsImage) {
+    if (postAsText) {
       // post as image or videl caption
       if (mediaGroup[0].type === 'video') {
         if (!mediaGroup[0].fileId) throw new Error(`No video fileId`);

@@ -11,7 +11,7 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
         return await startPublishCustomPostTg(
           blogName,
           tgChat,
-          true,
+          false,
           tgChat.app.blogs[blogName].sn.telegram?.postFooter,
 
           false,
@@ -36,7 +36,7 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
         return await startPublishCustomPostTg(
           blogName,
           tgChat,
-          true,
+          false,
           tgChat.app.blogs[blogName].sn.telegram?.memFooter,
 
           true
@@ -45,7 +45,7 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
         return await startPublishCustomPostTg(
           blogName,
           tgChat,
-          true,
+          false,
           tgChat.app.blogs[blogName].sn.telegram?.storyFooter,
 
           true,
@@ -55,7 +55,7 @@ export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
         return await startPublishCustomPostTg(
           blogName,
           tgChat,
-          true,
+          false,
           tgChat.app.blogs[blogName].sn.telegram?.reelFooter,
 
           true,
