@@ -67,6 +67,7 @@ export default class TasksMain {
     return this.addTask(task);
   }
 
+  // TODO: review
   async addTask(task: TaskItem): Promise<string | null> {
 
     // TODO: validate task
@@ -92,6 +93,7 @@ export default class TasksMain {
     return this.tasks[taskId];
   }
 
+  // TODO: review
   async flushTask(taskId: string) {
     clearTimeout(this.timeouts[taskId]);
     // TODO: наверно лучше обработку засунуть обратно внутрь
@@ -107,6 +109,7 @@ export default class TasksMain {
     }
   }
 
+  // TODO: review
   async removeTask(taskId: string) {
     const removedTask = this.tasks[taskId];
 
@@ -124,6 +127,9 @@ export default class TasksMain {
 
   //////// Public but for inner use
 
+  /**
+   * Totally remove silent task
+   */
   clearTask(taskId: string) {
     clearTimeout(this.timeouts[taskId]);
 
@@ -146,44 +152,19 @@ export default class TasksMain {
   }
 
 
+  // TODO: review
   /**
    * Register a new task - set data to runtime and make timeout.
-   * @return {string | null} taskId or null if task haven't added.
+   * @return {string | null} taskId or null if task haven't been added.
    * @private
    */
   private registerTask(task: TaskItem, specifiedTaskId?: string): string | null {
-    // TODO: почему дата не предается???
-    const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
-
-    // TODO: она должна прервать выполнение и написаться ошибка пользователю
-    if (secondsToPublish > MAX_TIMEOUT_SECONDS) {
-      throw new Error(
-        `Too big timeout number! ${task.startTime} is ${secondsToPublish} seconds. `
-        + `Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`
-      );
-    }
-
-    //console.log(2222, secondsToPublish)
-
-    // TODO: если слишком большое время ожидания то короче глюк - надо просто сохранить
-    // TODO: сделать крон который будет поднимать отложенные задачи и регистрировать
-
-    // TODO: зачем нужно skipTasksEarlierSec ???
-    if (secondsToPublish <= this.app.appConfig.skipTasksEarlierSec) {
-      const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`
-        + `The minimum time is ${this.app.appConfig.skipTasksEarlierSec} seconds.\n`
-        + `Task:\n`
-        + this.makeTaskDetails(task);
-
-      this.app.channelLog.warn(msg);
-      console.warn(msg);
-      // means task haven't added
-      return null;
-    }
-
+    const secondsToPublish = this.calcSecondsToPublish(task)
     const taskId: string = (specifiedTaskId)
       ? specifiedTaskId
       : String(Object.keys(this.tasks).length);
+
+    //console.log(2222, secondsToPublish)
 
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(
@@ -203,15 +184,32 @@ export default class TasksMain {
     return taskId;
   }
 
-  private makeTaskDetails(task: TaskItem): string {
-    let result = `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
-      + `${this.app.i18n.commonPhrases.date}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}\n`;
+  private calcSecondsToPublish(task: TaskItem): number {
+    // seconds from now to start time
+    const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
 
-    if (task.sn) {
-      result += `${this.app.i18n.commonPhrases.sn}: ${task.sn}`;
+    if (secondsToPublish > MAX_TIMEOUT_SECONDS) {
+      const msg = `Too big timeout number! ${task.startTime} is ${secondsToPublish} seconds. `
+        + `Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`
+      this.app.channelLog.error(msg)
+
+      throw new Error(msg);
     }
 
-    return result;
+    // TODO: зачем нужно skipTasksEarlierSec ???
+    if (secondsToPublish <= this.app.appConfig.skipTasksEarlierSec) {
+      const msg = `The task has expired time to publish - ${secondsToPublish} seconds.\n`
+        + `The minimum time is ${this.app.appConfig.skipTasksEarlierSec} seconds.\n`
+        + `Task:\n`
+        + this.makeTaskDetails(task);
+
+      this.app.channelLog.warn(msg);
+      console.warn(msg);
+      // means task haven't added
+      return null;
+    }
+
+    return secondsToPublish;
   }
 
   private async loadOldTasks(): Promise<Record<string, TaskItem> | undefined> {
@@ -233,6 +231,17 @@ export default class TasksMain {
         throw new Error(msg);
       }
     }
+  }
+
+  private makeTaskDetails(task: TaskItem): string {
+    let result = `${this.app.i18n.commonPhrases.type}: ${task.type}\n`
+      + `${this.app.i18n.commonPhrases.date}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}\n`;
+
+    if (task.sn) {
+      result += `${this.app.i18n.commonPhrases.sn}: ${task.sn}`;
+    }
+
+    return result;
   }
 
 }
