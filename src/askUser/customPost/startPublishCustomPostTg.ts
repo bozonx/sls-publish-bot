@@ -122,3 +122,4 @@ function resolveImageUrl(mediaGroup: (PhotoData | PhotoUrlData | VideoData)[]): 
   else if (mediaGroup[0].type === 'photo') return mediaGroup[0].fileId
   else if (mediaGroup[0].type === 'photoUrl') return mediaGroup[0].url
 }
+

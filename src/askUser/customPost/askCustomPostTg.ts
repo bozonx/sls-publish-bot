@@ -1,7 +1,7 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {clearMdText, prepareFooter} from '../../helpers/helpers.js';
 import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../../apiTg/publishTg.js';
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../../types/constants.js';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../../types/constants.js';
 import {askPostMedia} from '../common/askPostMedia.js';
 import {askCustomPostMenu, CustomPostState} from './askCustomPostMenu.js';
 import validateCustomPost from '../../publish/validateCustomPost.js';
@@ -11,7 +11,7 @@ export async function askCustomPostTg(
   blogName: string,
   tgChat: TgChat,
   onDone: (state: CustomPostState, resultText: string) => void,
-  // post as image. If false then as text
+  // post as only text. If false then as image or video
   postAsText: boolean,
   footerTmpl?: string,
   mediaRequired = false,
@@ -47,11 +47,9 @@ export async function askCustomPostTg(
         tgChat.asyncCb(async  () => {
           const {resultText, clearText, isPost2000} = makeResultText(state, footerTmpl);
 
-          if (isPost2000) await tgChat.reply(tgChat.app.i18n.message.post2000using);
-
           await printPostPreview(blogName, tgChat, state, resultText, clearText);
 
-          onDone(state, resultText, isPost2000);
+          onDone(state, resultText);
         }
       ));
     })
