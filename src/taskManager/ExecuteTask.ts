@@ -45,6 +45,7 @@ export default class ExecuteTask {
 
     this.tasks.clearTask(taskId);
     // TODO: проверить ошибку
+    // do noting on error
     await this.tasks.saveTasks();
 
     this.tasks.app.channelLog.log(

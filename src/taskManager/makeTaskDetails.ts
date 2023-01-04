@@ -12,5 +12,7 @@ export function makeTaskDetails(task: TaskItem, i18n: typeof ru): string {
     result += `${i18n.commonPhrases.sn}: ${task.sn}`;
   }
 
+  // TODO: add full task details
+
   return result;
 }

@@ -1,11 +1,10 @@
-import moment from 'moment';
 import * as fs from 'fs/promises';
 import path from 'path';
 import {clearTimeout} from 'timers';
 import App from '../App.js';
 import {TaskItem} from '../types/TaskItem.js';
 import {calcSecondsToDate} from '../lib/common.js';
-import {FILE_ENCODING, MAX_TIMEOUT_SECONDS, PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
+import {FILE_ENCODING} from '../types/constants.js';
 import ExecuteTask from './ExecuteTask.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
 import {validateTask} from './validateTask.js';
@@ -27,10 +26,7 @@ export default class TasksMain {
   constructor(app: App) {
     this.app = app;
     this.execute = new ExecuteTask(this);
-    this.filePath = path.resolve(
-      this.app.appConfig.dataDirPath,
-      STATE_TASKS_FILENAME
-    );
+    this.filePath = path.resolve(this.app.appConfig.dataDirPath, STATE_TASKS_FILENAME);
   }
 
 
@@ -51,6 +47,7 @@ export default class TasksMain {
       this.registerTask(task, taskId);
     }
     // resave tasks. It removes expired tasks
+    // do noting on error
     await this.saveTasks();
   }
 
@@ -77,11 +74,15 @@ export default class TasksMain {
     return this.tasks[taskId];
   }
 
-  // TODO: review
+  /**
+   * Run task wright now
+   */
   async flushTask(taskId: string) {
+    // TODO: может сразу очистить такс ???
     clearTimeout(this.timeouts[taskId]);
     // TODO: наверно лучше обработку засунуть обратно внутрь
     try {
+      // TODO: review
       await this.execute.executeFork(taskId)
     }
     catch(e) {
@@ -93,14 +94,12 @@ export default class TasksMain {
     }
   }
 
-  // TODO: review
   async removeTask(taskId: string) {
     const removedTask = this.tasks[taskId];
 
-    this.clearTask(taskId);
-
-    // TODO: что если не удалось записать??? тогда восстановить???
-    await this.saveTasks();
+    this.clearTask(taskId)
+    // do noting on error
+    await this.saveTasks()
     this.app.channelLog.info(
       this.app.i18n.message.taskRemoved + '\n'
       + `taskId: ${taskId}\n`
@@ -121,17 +120,21 @@ export default class TasksMain {
     delete this.tasks[taskId];
   }
 
-  async saveTasks() {
+  async saveTasks(): Promise<boolean> {
     const content = JSON.stringify(this.tasks, null, 2);
 
     try {
       await fs.writeFile(this.filePath, Buffer.from(content, FILE_ENCODING));
+
+      return true;
     }
     catch (e) {
       const msg = `Can't save tasks file: ${e}`;
 
       this.app.consoleLog.error(msg);
       this.app.channelLog.error(msg);
+
+      return false;
     }
   }
 
@@ -150,10 +153,8 @@ export default class TasksMain {
     }
 
     const taskNum = this.registerTask(task);
-
-    // TODO: писать пользователю если ошибка!
-    // TODO: отменить добавление если ошибка
-    await this.saveTasks();
+    // do noting on error
+    await this.saveTasks()
 
     return taskNum;
   }
@@ -167,10 +168,6 @@ export default class TasksMain {
   private registerTask(task: TaskItem, specifiedTaskId?: string): string {
     // seconds from now to start time
     const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
-
-    // if task is expired then return null
-    if (secondsToPublish === null) return null;
-
     const taskId: string = (specifiedTaskId)
       ? specifiedTaskId
       : String(Object.keys(this.tasks).length);
