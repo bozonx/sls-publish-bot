@@ -9,7 +9,7 @@ import {
 } from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
-import {breakArray} from '../../lib/arrays.js';
+import {breakArray, compactUndefined} from '../../lib/arrays.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {validateTime} from '../../lib/common.js';
 
@@ -17,8 +17,12 @@ import {validateTime} from '../../lib/common.js';
 const TIME_PRESET_CB = 'TIME_PRESET_CB|'
 
 
-export async function askTime(tgChat: TgChat, onDone: (time: string) => void) {
-  const msg = tgChat.app.i18n.menu.selectTime;
+export async function askTime(tgChat: TgChat, onDone: (time: string) => void, additionalMsg?: string) {
+  const msg = compactUndefined([
+    additionalMsg,
+    '',
+    tgChat.app.i18n.menu.selectTime,
+  ]).join('\n');
   const buttons = [
     ...breakArray(OFTEN_USED_TIME.map((el): TgReplyButton => {
       return {

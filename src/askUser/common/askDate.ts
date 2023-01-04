@@ -22,8 +22,9 @@ const SELECT_PUB_DATE = {
 
 export async function askDate(tgChat: TgChat, onDone: (selectedDateString: string) => void, additionalMsg?: string) {
   const msg = compactUndefined([
-    tgChat.app.i18n.menu.selectDate + `. ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}.`,
     additionalMsg,
+    '',
+    tgChat.app.i18n.menu.selectDate + `. ${makeUtcOffsetStr(tgChat.app.appConfig.utcOffset)}.`,
   ]).join('\n');
   const buttons = [
     [

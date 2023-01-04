@@ -20,17 +20,17 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
         callback_data: BLOG_MARKER + blogName,
       };
     }),
+    // [
+    //   {
+    //     text: tgChat.app.i18n.menu.selectManageSite,
+    //     callback_data: MAIN_MENU_ACTION.SITE,
+    //   },
+    // ],
     [
-      {
-        text: tgChat.app.i18n.menu.selectManageSite,
-        callback_data: MAIN_MENU_ACTION.SITE,
-      },
-    ],
-    [
-      {
-        text: tgChat.app.i18n.menu.selectManageTelegraph,
-        callback_data: MAIN_MENU_ACTION.TELEGRAPH,
-      },
+      // {
+      //   text: tgChat.app.i18n.menu.selectManageTelegraph,
+      //   callback_data: MAIN_MENU_ACTION.TELEGRAPH,
+      // },
       {
         text: tgChat.app.i18n.menu.selectManageTasks,
         callback_data: MAIN_MENU_ACTION.TASKS,

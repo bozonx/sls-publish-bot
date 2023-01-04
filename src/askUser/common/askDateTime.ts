@@ -7,11 +7,8 @@ import {askTime} from './askTime.js';
 export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time: string) => void, additionalMsg?: string) {
   await askDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
     const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
-
-    await tgChat.reply(
-      tgChat.app.i18n.commonPhrases.selectedOnlyDate
+    const additionalMsg = tgChat.app.i18n.commonPhrases.selectedOnlyDate
       + `${isoDate} ${utcOffset}`
-    );
 
     await askTime(tgChat, tgChat.asyncCb(async (time: string) => {
       await tgChat.reply(
@@ -20,6 +17,6 @@ export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time
       );
 
       onDone(isoDate, time);
-    }));
+    }), additionalMsg);
   }), additionalMsg);
 }
