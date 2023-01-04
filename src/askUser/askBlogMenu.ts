@@ -5,13 +5,9 @@ import {addSimpleStep, compactButtons} from '../helpers/helpers.js';
 
 export const BLOG_MENU_ACTIONS = {
   CONTENT_PLAN: 'CONTENT_PLAN',
-  STORY: 'STORY',
-  MEM: 'MEM',
-  REEL: 'REEL',
-  POLL: 'POLL',
-  POST: 'POST',
-  BUY_AD: 'BUY_AD',
-  SELL_AD_PLACE: 'SELL_AD_PLACE',
+  CUSTOM_TG_POST: 'CUSTOM_TG_POST',
+  BUY_TG_AD: 'BUY_TG_AD',
+  SELL_TG_AD_PLACE: 'SELL_TG_AD_PLACE',
 };
 
 
@@ -23,37 +19,17 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (act
       text: tgChat.app.i18n.menu.publish,
       callback_data: BLOG_MENU_ACTIONS.CONTENT_PLAN,
     }],
-    blogSns.telegram && [
-      blogSns.instagram && {
-        text: tgChat.app.i18n.menu.makeStory,
-        callback_data: BLOG_MENU_ACTIONS.STORY,
-      },
-      {
-        text: tgChat.app.i18n.menu.makeReel,
-        callback_data: BLOG_MENU_ACTIONS.REEL,
-      }
-    ],
-    blogSns.telegram && [
-      {
-        text: tgChat.app.i18n.menu.makeMem,
-        callback_data: BLOG_MENU_ACTIONS.MEM,
-      },
-      {
-        text: tgChat.app.i18n.menu.makePost,
-        callback_data: BLOG_MENU_ACTIONS.POST,
-      }
-    ],
-    blogSns.telegram && [{
-      text: tgChat.app.i18n.menu.makePollTg,
-      callback_data: BLOG_MENU_ACTIONS.POLL,
+    [{
+      text: tgChat.app.i18n.menu.customTgPostMenu,
+      callback_data: BLOG_MENU_ACTIONS.CUSTOM_TG_POST,
     }],
     blogSns.telegram && [{
       text: tgChat.app.i18n.menu.buyAdvertTg,
-      callback_data: BLOG_MENU_ACTIONS.BUY_AD,
+      callback_data: BLOG_MENU_ACTIONS.BUY_TG_AD,
     }],
     blogSns.telegram && [{
       text: tgChat.app.i18n.menu.sellAdvertTg,
-      callback_data: BLOG_MENU_ACTIONS.SELL_AD_PLACE,
+      callback_data: BLOG_MENU_ACTIONS.SELL_TG_AD_PLACE,
     }],
     [
       CANCEL_BTN,

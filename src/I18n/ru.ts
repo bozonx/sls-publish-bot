@@ -16,6 +16,7 @@ const dict = {
     selectManageTasks: 'Управлять заданиями',
     selectManageTelegraph: 'Управлять telegra.ph',
     publish: 'Опубликовать из контент плана',
+    customTgPostMenu: 'Создать пост в tg',
     makeStory: 'Создать STORY в tg',
     makeMem: 'Создать МЕМ в Tg',
     makeReel: 'Создать REEL в Tg',
