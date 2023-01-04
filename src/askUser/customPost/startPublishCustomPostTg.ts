@@ -59,78 +59,66 @@ export async function registerCustomPostTg(
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
 ) {
+  if (postAsText) {
+    // post as only text
+    const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
+    const post2000Txt = await makePost2000Text(tgChat, resultText, imgUrl);
 
-
-
-  if (mediaGroup.length === 1) {
-    const imgUrl: string | undefined =
-      (mediaGroup[0].type === 'photo' && mediaGroup[0].fileId)
-      || (mediaGroup[0].type === 'photoUrl' && mediaGroup[0].url)
-      || undefined;
-
-    if (postAsText) {
-      // post as image or videl caption
-      if (mediaGroup[0].type === 'video') {
-        if (!mediaGroup[0].fileId) throw new Error(`No video fileId`);
-
-        await makePublishTaskTgVideo(
-          blogName,
-          tgChat,
-          isoDate,
-          time,
-          mediaGroup[0].fileId,
-          resultText,
-          urlBtn,
-          autoDeleteIsoDateTime
-        );
-      }
-      else {
-        if (!imgUrl) throw new Error(`No image`);
-
-        await makePublishTaskTgImage(
-          blogName,
-          tgChat,
-          isoDate,
-          time,
-          imgUrl,
-          resultText,
-          urlBtn,
-          autoDeleteIsoDateTime
-        );
-      }
-    }
-    else {
-      // post as only text
-      // TODO: review
-      const post2000Txt = await makePost2000Text(tgChat, resultText, imgUrl);
-
-      await makePublishTaskTgOnlyText(
-        blogName,
-        tgChat,
-        isoDate,
-        time,
-        post2000Txt,
-        (imgUrl) ? true : usePreview,
-        urlBtn,
-        autoDeleteIsoDateTime
-      );
-    }
-  } else if (mediaGroup.length > 1) {
-    // several images
-    // TODO: а если несколько картинок ???
-    throw new Error(`Not supported`);
-  } else {
     await makePublishTaskTgOnlyText(
-      isoDate,
-      time,
-      resultText,
       blogName,
       tgChat,
-      usePreview,
+      isoDate,
+      time,
+      post2000Txt,
+      (imgUrl) ? true : usePreview,
       urlBtn,
       autoDeleteIsoDateTime
     );
   }
+  if (mediaGroup.length > 1) {
+    // post several images
+    // TODO: а если несколько картинок ???
+    throw new Error(`Not supported`);
+  }
+  else {
+    // post as image or video caption
+    if (mediaGroup[0].type === 'video') {
+      if (!mediaGroup[0].fileId) throw new Error(`No video fileId`);
+
+      await makePublishTaskTgVideo(
+        blogName,
+        tgChat,
+        isoDate,
+        time,
+        mediaGroup[0].fileId,
+        resultText,
+        urlBtn,
+        autoDeleteIsoDateTime
+      );
+    }
+    else {
+      const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
+
+      if (!imgUrl) throw new Error(`No image`);
+
+      await makePublishTaskTgImage(
+        blogName,
+        tgChat,
+        isoDate,
+        time,
+        imgUrl,
+        resultText,
+        urlBtn,
+        autoDeleteIsoDateTime
+      );
+    }
+  }
 
   await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
+}
+
+function resolveImageUrl(mediaGroup: (PhotoData | PhotoUrlData | VideoData)[]): string | undefined {
+  if (!mediaGroup.length) return
+  else if (mediaGroup[0].type === 'photo') return mediaGroup[0].fileId
+  else if (mediaGroup[0].type === 'photoUrl') return mediaGroup[0].url
 }
