@@ -9,7 +9,7 @@ import {PhotoData, PhotoUrlData, VideoData} from '../../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 
 
-export async function startPublishCustomPostTg(
+export async function startOrdinaryTgPost(
   blogName: string,
   tgChat: TgChat,
   // post as only text. If false then as image or video

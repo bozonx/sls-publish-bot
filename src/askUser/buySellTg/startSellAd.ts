@@ -8,7 +8,7 @@ import {askNote} from '../common/askNote.js';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import {askSellAdType} from './askSellAdType.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {registerCustomPostTg} from '../customTgPost/startPublishCustomPostTg.js';
+import {registerCustomPostTg} from '../customTgPost/startOrdinaryTgPost.js';
 
 
 const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {
