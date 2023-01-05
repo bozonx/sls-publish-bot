@@ -1,6 +1,6 @@
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
-import {CustomPostState} from '../askUser/customPost/askCustomPostMenu.js';
+import {CustomPostState} from '../askUser/customTgPost/askCustomPostMenu.js';
 import {clearMdText} from '../helpers/helpers.js';
 
 

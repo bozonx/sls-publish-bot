@@ -3,7 +3,7 @@ import {startPublishFromContentPlan} from './publishContentPlan/startPublishFrom
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu.js';
 import {startSellAd} from './buySellTg/startSellAd.js';
 import {startBuyAd} from './buySellTg/startBuyAd.js';
-import {startCustomTgPostMenu} from './customPost/startCustomTgPostMenu.js';
+import {startCustomTgPostMenu} from './customTgPost/startCustomTgPostMenu.js';
 
 
 export async function startBlogMenu(blogName: string, tgChat: TgChat) {
