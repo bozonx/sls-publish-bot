@@ -9,18 +9,19 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 
 
 export interface CustomPostState {
-  useFooter: boolean;
-  usePreview: boolean;
-  forceDisableFooter: boolean;
-  disableTags: boolean;
-  tags: string[],
+  useFooter: boolean
+  usePreview: boolean
+  forceDisableFooter: boolean
+  disableTags: boolean
+  tags: string[]
   // TODO: rename to postMdText
-  postText?: string;
-  mediaGroup: MediaGroupItem[];
-  urlBtn?: TgReplyBtnUrl;
-  autoDeleteIsoDateTime?: string;
-  footerTmpl?: string;
-  postAsText: boolean;
+  postText?: string
+  cleanPostText?: string
+  mediaGroup: MediaGroupItem[]
+  urlBtn?: TgReplyBtnUrl
+  autoDeleteIsoDateTime?: string
+  footerTmpl?: string
+  postAsText: boolean
   //resultText?: string;
 }
 

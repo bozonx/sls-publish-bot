@@ -10,12 +10,13 @@ import {
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, TextMessageEvent} from '../../types/MessageEvent.js';
 import {tgInputToMd} from '../../helpers/tgInputToMd.js';
+import _ from 'lodash';
 
 
 export async function askPostText(
   blogName: string,
   tgChat: TgChat,
-  onDone: (text?: string) => void,
+  onDone: (text?: string, cleanText?: string) => void,
 ) {
   const msg = tgChat.app.i18n.menu.askTypeText;
   const buttons = [
@@ -26,7 +27,6 @@ export async function askPostText(
     ]
   ];
 
-
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
     state.messageIds.push(await tgChat.reply(msg, buttons));
@@ -35,7 +35,10 @@ export async function askPostText(
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
-          onDone(tgInputToMd(textMsg.text, textMsg.entities));
+          onDone(
+            _.trim(tgInputToMd(textMsg.text, textMsg.entities)),
+            _.trim(textMsg.text)
+          );
         })
       ),
       ChatEvents.TEXT
@@ -46,7 +49,10 @@ export async function askPostText(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
           if (photoMsg.caption) {
-            onDone(tgInputToMd(photoMsg.caption, photoMsg.entities));
+            onDone(
+              _.trim(tgInputToMd(photoMsg.caption, photoMsg.entities)),
+              _.trim(photoMsg.caption)
+            );
           }
           else {
             await tgChat.reply(tgChat.app.i18n.message.noMediaCaption)
@@ -61,7 +67,10 @@ export async function askPostText(
         ChatEvents.VIDEO,
         tgChat.asyncCb(async (videoMsg: PhotoMessageEvent) => {
           if (videoMsg.caption) {
-            onDone(tgInputToMd(videoMsg.caption, videoMsg.entities));
+            onDone(
+              _.trim(tgInputToMd(videoMsg.caption, videoMsg.entities)),
+              _.trim(videoMsg.caption)
+            );
           }
           else {
             await tgChat.reply(tgChat.app.i18n.message.noMediaCaption)
