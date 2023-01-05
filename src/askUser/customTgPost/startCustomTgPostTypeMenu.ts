@@ -26,6 +26,7 @@ export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat
           true
         );
       case CUSTOM_POST_MENU_ACTIONS.PHOTOS:
+        // TODO: add
         //const footer = tgChat.app.blogs[blogName].sn.telegram?.postFooter;
 
         // await startOrdinaryTgPost(blogName, tgChat, footer);
@@ -36,6 +37,8 @@ export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat
           tgChat,
           false,
           tgChat.app.blogs[blogName].sn.telegram?.memFooter,
+          true,
+          // TODO: разрешить несколько картинок?
           true
         );
       case CUSTOM_POST_MENU_ACTIONS.STORY:

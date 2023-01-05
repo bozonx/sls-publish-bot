@@ -18,7 +18,7 @@ export async function startOrdinaryTgPost(
   mediaRequired = false,
   // TODO: наверное не нужно
   onlyOneImage = false,
-  disableTags = false,
+  disableTags = false
 ) {
   await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (
     state: CustomPostState,
