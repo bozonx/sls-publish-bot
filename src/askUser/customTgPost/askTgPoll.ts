@@ -8,7 +8,6 @@ import {
 } from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
-import {makePollInfo} from '../../publish/publishHelpers.js';
 
 
 export async function askTgPoll(tgChat: TgChat, onDone: (message: PollMessageEvent) => void) {
@@ -47,8 +46,6 @@ export async function askTgPoll(tgChat: TgChat, onDone: (message: PollMessageEve
 
             return;
           }
-
-          await tgChat.reply(makePollInfo(message, tgChat))
 
           onDone(message);
         })

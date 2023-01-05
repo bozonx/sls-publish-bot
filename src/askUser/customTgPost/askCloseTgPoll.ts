@@ -41,7 +41,7 @@ export async function askCloseTgPoll(publishIsoDateTime: string, tgChat: TgChat,
     }), 2),
     [
       {
-        text: tgChat.app.i18n.commonPhrases.skip,
+        text: tgChat.app.i18n.commonPhrases.setDate,
         callback_data: POLL_CLOSE_MENU_ACTION.setDate,
       }
     ],

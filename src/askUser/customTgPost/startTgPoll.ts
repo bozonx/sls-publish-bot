@@ -6,15 +6,21 @@ import {askDateTime} from '../common/askDateTime.js';
 import {makePublishTaskTgCopy} from '../../publish/makePublishTaskTg.js';
 import {askCloseTgPoll} from './askCloseTgPoll.js';
 import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
+import {makePollInfo} from '../../publish/publishHelpers.js';
 
 
 export async function startTgPoll(blogName: string, tgChat: TgChat) {
   await askTgPoll(tgChat, tgChat.asyncCb(async (message: PollMessageEvent) => {
-    await tgChat.app.tg.bot.telegram.copyMessage(
-      tgChat.botChatId,
-      tgChat.botChatId,
-      message.messageId,
-    );
+    await tgChat.reply(
+      tgChat.app.i18n.commonPhrases.pollParams + `\n`
+      + makePollInfo(message, tgChat)
+    )
+
+    // await tgChat.app.tg.bot.telegram.copyMessage(
+    //   tgChat.botChatId,
+    //   tgChat.botChatId,
+    //   message.messageId,
+    // );
 
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       const publishDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
