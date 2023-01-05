@@ -20,6 +20,7 @@ export interface CustomPostState {
   urlBtn?: TgReplyBtnUrl
   autoDeleteIsoDateTime?: string
   footerTmpl?: string
+  cleanFooterTmpl?: string
   postAsText: boolean
   //resultText?: string;
 }
@@ -50,7 +51,10 @@ export async function askCustomPostTg(
         tags: [],
         postMdText: caption,
         mediaGroup,
+        // TODO: преобразовать
         footerTmpl,
+        // TODO: преобразовать
+        cleanFooterTmpl: footerTmpl,
         postAsText,
       };
 
@@ -58,9 +62,7 @@ export async function askCustomPostTg(
         blogName,
         tgChat,
         state,
-        (tgChat: TgChat, state: CustomPostState) => {
-          validateCustomPost(state, tgChat);
-        },
+        validateCustomPost,
         tgChat.asyncCb(async  () => {
           // TODO: переместить ???
           const resultText = makeResultPostText(state.tags, state.useFooter, state.postMdText, state.footerTmpl);
@@ -84,8 +86,7 @@ async function printPostPreview(
     state.tags,
     state.useFooter,
     state.cleanPostText,
-    // TODO: clean footer
-    state.footerTmpl
+    state.cleanFooterTmpl
   )
 
   // print post preview

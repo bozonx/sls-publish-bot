@@ -120,17 +120,6 @@ export function isoDateToHuman(isoDate: string): string {
   return moment(isoDate).format(PRINT_FULL_DATE_FORMAT + ' HH:mm Z') + ' UTC'
 }
 
-/**
- * Remove formatting of md from text to use it for collecting symbols count.
- */
-export function clearMdText(mdText = ''): string {
-  // TODO: better to use unified
-  // TODO: remove other formatting
-  return mdText
-    .replace(/\\/g, '')
-    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
-}
-
 // prepareFooterPost
 export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = true): string {
   if (!tmpl || !useFooter) return '';

@@ -1,10 +1,11 @@
 import {NotionBlocks} from '../types/notion.js';
-import {clearMdText, prepareFooter, resolveTgFooter} from './helpers.js';
+import {prepareFooter, resolveTgFooter} from './helpers.js';
 import {BlogTelegramConfig} from '../types/BlogsConfig.js';
 import {transformNotionToCleanText} from './transformNotionToCleanText.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PublicationType} from '../types/publicationType.js';
+import {clearMd} from './clearMd.js';
 
 
 export function makeClearTextFromNotion(
@@ -27,7 +28,7 @@ export function makeClearTextFromNotion(
 
     switch (sn) {
       case SN_TYPES.telegram:
-        result[sn] += clearMdText(prepareFooter(
+        result[sn] += clearMd(prepareFooter(
           resolveTgFooter(useTgFooter, pubType, tgBlogConfig),
           tgTags
         ));

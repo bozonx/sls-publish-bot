@@ -4,13 +4,12 @@ import {makeResultPostText} from '../helpers/helpers.js';
 import {CustomPostState} from '../askUser/customTgPost/askCustomPostTg.js';
 
 
-export default function validateCustomPost(state: CustomPostState, tgChat: TgChat) {
+export default function validateCustomPost(tgChat: TgChat, state: CustomPostState) {
   const cleanFullText = makeResultPostText(
     state.tags,
     state.useFooter,
     state.cleanPostText,
-    // TODO: clean footer
-    state.footerTmpl
+    state.cleanFooterTmpl
   )
 
   // if no text and image
