@@ -4,9 +4,10 @@ export type TgEntityType = 'bold'
   | 'strikethrough'
   | 'code'
   | 'spoiler'
+  // just url as text
   | 'url'
+  // text with url
   | 'text_link'
-
 
 export interface TgEntity {
   offset: number
