@@ -101,7 +101,7 @@ export function makeIsoUtcOffsetStr(utcOffsetNum: number): string {
   }
 }
 
-export function makeDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
+export function makeHumanDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
   return moment(dateStr).format(PRINT_FULL_DATE_FORMAT)
     + ` ${timeStr} ${makeUtcOffsetStr(utcOffset)}`
 }

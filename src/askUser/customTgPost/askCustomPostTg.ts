@@ -81,7 +81,7 @@ async function printPostPreview(
 }
 
 
-// + tgChat.app.i18n.commonPhrases.pubDate + makeDateTimeStr(
+// + tgChat.app.i18n.commonPhrases.pubDate + makeHumanDateTimeStr(
 //   state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
 // ) + '\n'
 

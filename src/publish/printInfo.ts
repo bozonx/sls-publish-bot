@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat.js';
 import ContentItem from '../types/ContentItem.js';
 import RawPageContent from '../types/PageContent.js';
-import {makeDateTimeStr, prepareFooter} from '../helpers/helpers.js';
+import {makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
 import {makeContentPlanItemDetails} from './parseContent.js';
 import {makePageDetailsMsg} from './parsePage.js';
 import {makeContentLengthString} from './publishHelpers.js';
@@ -96,7 +96,7 @@ export async function printPublishConfirmData(
     tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
     + tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', ') + '\n'
     + tgChat.app.i18n.contentInfo.dateTime + ': ' + '\n'
-    + makeDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
+    + makeHumanDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
   );
 
   if (state.sns.includes(SN_TYPES.instagram)) {

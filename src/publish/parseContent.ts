@@ -6,7 +6,7 @@ import ContentItem, {
   CONTENT_PROPS,
   CONTENT_STATUS,
 } from '../types/ContentItem.js';
-import {makeDateTimeStr, makeFullNotionLink} from '../helpers/helpers.js';
+import {makeHumanDateTimeStr, makeFullNotionLink} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 
@@ -37,7 +37,7 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
 }
 
 export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru, utcOffset: number): string {
-  return `${i18n.contentInfo.dateTime}: ${makeDateTimeStr(item.date, item.time, utcOffset)}\n`
+  return `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(item.date, item.time, utcOffset)}\n`
     + `${i18n.contentInfo.onlySn}: `
       + `${(item.onlySn.length) ? item.onlySn.join(', ') : i18n.contentInfo.noRestriction}\n`
     + `${i18n.contentInfo.type}: ${item.type}\n`
