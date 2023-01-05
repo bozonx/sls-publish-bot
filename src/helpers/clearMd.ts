@@ -8,16 +8,17 @@ import {VFile} from 'vfile';
 function toTextValue(node: any): string {
   if (node.value) return node.value
   else if (node.children) {
-    return
+    return node.children.map((item: any) => toTextValue(item)).join('')
   }
+
+  return ''
 }
 
 function toTextNode(node: any) {
   node.type = 'text'
 
   if (node.children) {
-    // TODO: тут могут быть вложенные другие штуки
-    node.value = node.children.map((item: any) => toTextValue(item))
+    node.value = node.children.map((node: any) => toTextValue(node)).join('')
   }
 
   delete node.children
@@ -28,7 +29,6 @@ function toTextNode(node: any) {
 function remarkClearMd() {
   return (tree: any) => {
     visit(tree, (node) => {
-      console.log(1111, node)
       if (['emphasis', 'strong', 'inlineCode', 'link'].includes(node.type)) {
         toTextNode(node)
       }
@@ -52,26 +52,12 @@ export async function clearMd(mdText?: string): Promise<string | undefined> {
   const file = await unified()
     // read MD to syntax tree
     .use(remarkParse)
-
-
-    //.use(remarkRehype)
-    //.use(stripMarkdown)
-    //.use(rehypeSanitize)
-
     .use(remarkClearMd as any)
 
     // make string from syntax tree
     .use(remarkStringify)
     .process(new VFile(mdText))
-
-  console.log(3333, String(file))
-
-  // TODO: better to use unified
-  // TODO: remove other formatting
-  // return mdText
-  //   .replace(/\\/g, '')
-  //   .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
 }
 
-//clearMd('# Hello, *Mercury*!')
-clearMd('norm *bold _italic_* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
+
+clearMd('norm *bold _italic2_* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
