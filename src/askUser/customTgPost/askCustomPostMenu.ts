@@ -58,29 +58,24 @@ export async function askCustomPostMenu(
 
   const msg = tgChat.app.i18n.customPost.actionMenu;
   const buttons = [
-    (!state.forceDisableFooter)
-      ? [{
-          text: (state.useFooter)
-            ? tgChat.app.i18n.commonPhrases.noPostFooter
-            : tgChat.app.i18n.commonPhrases.yesPostFooter,
-          callback_data: CUSTOM_POST_ACTION.FOOTER_SWITCH,
-        }]
-      : [],
-    (!state.mediaGroup.length)
-      ? [{
-        text: (state.usePreview)
-          ? tgChat.app.i18n.commonPhrases.noPreview
-          : tgChat.app.i18n.commonPhrases.yesPreview,
-        callback_data: CUSTOM_POST_ACTION.PREVIEW_SWITCH,
-      }]
-      : [],
+    (!state.forceDisableFooter) ? [{
+      text: (state.useFooter)
+        ? tgChat.app.i18n.commonPhrases.noPostFooter
+        : tgChat.app.i18n.commonPhrases.yesPostFooter,
+      callback_data: CUSTOM_POST_ACTION.FOOTER_SWITCH,
+    }] : [],
+    (!state.mediaGroup.length) ? [{
+      text: (state.usePreview)
+        ? tgChat.app.i18n.commonPhrases.noPreview
+        : tgChat.app.i18n.commonPhrases.yesPreview,
+      callback_data: CUSTOM_POST_ACTION.PREVIEW_SWITCH,
+    }] : [],
     compactUndefined([
       {
         text: tgChat.app.i18n.buttons.addText,
         callback_data: CUSTOM_POST_ACTION.ADD_TEXT,
       },
-      (state.disableTags) ? undefined
-      : {
+      (state.disableTags || !state.useFooter) ? undefined : {
         text: (state.tags.length)
           ? tgChat.app.i18n.buttons.replaceTags
           : tgChat.app.i18n.buttons.addTags,
@@ -115,6 +110,7 @@ export async function askCustomPostMenu(
   });
 }
 
+
 async function handleButtons(
   queryData: string,
   blogName: string,
@@ -129,6 +125,7 @@ async function handleButtons(
     case CANCEL_BTN_CALLBACK:
       return tgChat.steps.cancel();
     case OK_BTN_CALLBACK:
+      // TODO: наверное лучше отдавать копию стейта
       return onDone();
     case CUSTOM_POST_ACTION.FOOTER_SWITCH:
       // switch footer value

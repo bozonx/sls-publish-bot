@@ -43,6 +43,9 @@ export async function startOrdinaryTgPost(
   }), postAsText, footerTmpl, mediaRequired, onlyOneImage, disableTags);
 }
 
+
+// TODO: почему так ???
+
 /**
  * Register custom post creating task
  */
