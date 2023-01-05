@@ -152,9 +152,8 @@ async function handleButtons(
         state.postText = text;
         // print result
         if (state.postText) {
-          await tgChat.reply(
-            tgChat.app.i18n.menu.selectedPostText + '\n' + state.postText
-          );
+          await tgChat.reply(tgChat.app.i18n.menu.selectedPostText);
+          await tgChat.reply(state.postText, undefined, true, true);
         }
         else {
           await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText);

@@ -14,6 +14,7 @@ export interface CustomPostState {
   forceDisableFooter: boolean;
   disableTags: boolean;
   tags: string[],
+  // TODO: rename to postMdText
   postText?: string;
   mediaGroup: MediaGroupItem[];
   urlBtn?: TgReplyBtnUrl;

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {TgEntity} from '../types/TgEntity.js'
 
@@ -50,7 +51,7 @@ interface NormalizedTgItem {
 export function tgInputToMd(rawText: string, entities?: TgEntity[]): string {
   const normalized = normalizeTg(rawText, entities)
 
-  return normalized.map((item) => makeMd(item)).join('')
+  return _.trim(normalized.map((item) => makeMd(item)).join(''))
 }
 
 
