@@ -9,6 +9,7 @@ import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
 import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
+import {PollMessageEvent} from '../types/MessageEvent.js';
 
 
 // TODO: review
@@ -123,4 +124,18 @@ export async function printPost(
       urlBtn
     );
   }
+}
+
+export function makePollInfo(message: PollMessageEvent, tgChat: TgChat): string {
+  let result = tgChat.app.i18n.commonPhrases.type + message.poll.type + '\n'
+    + tgChat.app.i18n.commonPhrases.isAnonymous
+    + tgChat.app.i18n.yesNo[Number(message.poll.isAnonymous)] + '\n'
+    + tgChat.app.i18n.commonPhrases.isMultipleAnswer
+    + tgChat.app.i18n.yesNo[Number(message.poll.multipleAnswers)] + '\n'
+
+  if (typeof message.poll.correctOptionId !== 'undefined') {
+    result += tgChat.app.i18n.commonPhrases.quizAnswer + message.poll.correctOptionId
+  }
+
+  return result;
 }

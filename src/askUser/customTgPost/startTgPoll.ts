@@ -4,7 +4,7 @@ import {askConfirm} from '../common/askConfirm.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {makePublishTaskTgCopy} from '../../publish/makePublishTaskTg.js';
-import {askClosePoll} from './askClosePoll.js';
+import {askCloseTgPoll} from './askCloseTgPoll.js';
 import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
 
 
@@ -19,7 +19,7 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       const publishDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
-      await askClosePoll(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime: string) => {
+      await askCloseTgPoll(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime: string) => {
         await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
           await makePublishTaskTgCopy(
             isoDate,

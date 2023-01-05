@@ -8,6 +8,7 @@ import {
 } from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
+import {makePollInfo} from '../../publish/publishHelpers.js';
 
 
 export async function askTgPoll(tgChat: TgChat, onDone: (message: PollMessageEvent) => void) {
@@ -58,16 +59,3 @@ export async function askTgPoll(tgChat: TgChat, onDone: (message: PollMessageEve
 
 }
 
-function makePollInfo(message: PollMessageEvent, tgChat: TgChat): string {
-  let result = tgChat.app.i18n.commonPhrases.type + message.poll.type + '\n'
-    + tgChat.app.i18n.commonPhrases.isAnonymous
-      + tgChat.app.i18n.yesNo[Number(message.poll.isAnonymous)] + '\n'
-    + tgChat.app.i18n.commonPhrases.isMultipleAnswer
-    + tgChat.app.i18n.yesNo[Number(message.poll.multipleAnswers)] + '\n'
-
-  if (typeof message.poll.correctOptionId !== 'undefined') {
-    result += tgChat.app.i18n.commonPhrases.quizAnswer + message.poll.correctOptionId
-  }
-
-  return result;
-}

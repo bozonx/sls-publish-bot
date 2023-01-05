@@ -30,7 +30,7 @@ const POLL_CLOSE_MENU_PRESET = {
 };
 
 
-export async function askClosePoll(publishIsoDateTime: string, tgChat: TgChat, onDone: (closeIsoDateTime?: string) => void) {
+export async function askCloseTgPoll(publishIsoDateTime: string, tgChat: TgChat, onDone: (closeIsoDateTime?: string) => void) {
   const msg = tgChat.app.i18n.menu.selectPollClose;
   const buttons = [
     ...breakArray(Object.keys(POLL_CLOSE_MENU_PRESET).map((el): TgReplyButton => {
