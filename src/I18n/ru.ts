@@ -95,6 +95,7 @@ const dict = {
     unpinPost: 'Открепить пост',
     finishPoll: 'Завершить опрос',
     setDate: 'Установить дату',
+    withoutText: 'Без текста',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',

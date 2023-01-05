@@ -3,7 +3,6 @@ import {
   ChatEvents,
   BACK_BTN,
   CANCEL_BTN,
-  SKIP_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN_CALLBACK, SKIP_BTN_CALLBACK
 } from '../../types/constants.js';
@@ -23,7 +22,10 @@ export async function askPostText(
     [
       BACK_BTN,
       CANCEL_BTN,
-      SKIP_BTN,
+      {
+        text: tgChat.app.i18n.buttons.withoutText,
+        callback_data: SKIP_BTN_CALLBACK,
+      },
     ]
   ];
 
