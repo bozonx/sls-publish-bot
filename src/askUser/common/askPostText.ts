@@ -11,25 +11,6 @@ import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
 import {tgInputToMd} from '../../helpers/tgInputToMd.js';
 
-/*
-  text: 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url',
-  entities: [
-    { offset: 5, length: 4, type: 'bold' },
-    { offset: 10, length: 6, type: 'italic' },
-    { offset: 17, length: 10, type: 'underline' },
-    { offset: 28, length: 13, type: 'strikethrough' },
-    { offset: 42, length: 9, type: 'code' },
-    { offset: 52, length: 7, type: 'spoiler' },
-    { offset: 61, length: 18, type: 'url' },
-    {
-      offset: 80,
-      length: 3,
-      type: 'text_link',
-      url: 'https://google.com/'
-    }
-
- */
-
 
 export async function askPostText(
   blogName: string,

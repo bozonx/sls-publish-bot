@@ -2,6 +2,26 @@ import {markdownv2 as mdFormat} from 'telegram-format';
 import {TgEntity} from '../types/TgEntity.js'
 
 
+/*
+  text: 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url',
+  entities: [
+    { offset: 5, length: 4, type: 'bold' },
+    { offset: 10, length: 6, type: 'italic' },
+    { offset: 17, length: 10, type: 'underline' },
+    { offset: 28, length: 13, type: 'strikethrough' },
+    { offset: 42, length: 9, type: 'code' },
+    { offset: 52, length: 7, type: 'spoiler' },
+    { offset: 61, length: 18, type: 'url' },
+    {
+      offset: 80,
+      length: 3,
+      type: 'text_link',
+      url: 'https://google.com/'
+    }
+
+ */
+
+
 export type SupportedTgEntityType = 'bold'
   | 'italic'
   | 'underline'
@@ -37,21 +57,17 @@ export function tgInputToMd(rawText: string, entities?: TgEntity[]): string {
 function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[] {
   if (!entities || !entities.length) return [{text: rawText, type: 'text'}]
 
-  console.log(1111, rawText, entities)
-
   const result: NormalizedTgItem[] = []
   // set the first text part
   if (entities[0].offset !== 0) {
     result.push({
-      // TODO: check
-      text: rawText.slice(0, entities[0].offset - 1),
+      text: rawText.slice(0, entities[0].offset),
       type: 'text',
     })
   }
 
   for (const i in entities) {
-    // TODO: check
-    const text = rawText.slice(entities[i].offset, entities[i].length)
+    const text = rawText.slice(entities[i].offset, entities[i].offset + entities[i].length)
 
     if (entities[i].type === 'spoiler') {
       result.push({ text, type: 'text' })
@@ -67,26 +83,28 @@ function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[]
     }
 
     const theNext = entities[Number(i) + 1]
+
+    if (!theNext) continue
     // add simple text after it
-    if (theNext) {
-      // TODO: check
-      if (entities[i].offset + entities[i].length < theNext.offset) {
-        result.push({
-          // TODO: check
-          text: rawText.slice(entities[i].offset + entities[i].length, theNext.offset - 1),
-          type: 'text'
-        })
-      }
+    if (entities[i].offset + entities[i].length < theNext.offset) {
+      result.push({
+        text: rawText.slice(
+          entities[i].offset + entities[i].length,
+          theNext.offset
+        ),
+        type: 'text'
+      })
     }
   }
 
   const theLast = entities[entities.length - 1]
   // add the last line
-  // TODO: check
   if (theLast.offset + theLast.length < rawText.length) {
     result.push({
-      // TODO: check
-      text: rawText.slice(theLast.offset + theLast.length, rawText.length),
+      text: rawText.slice(
+        theLast.offset + theLast.length,
+        theLast.offset + theLast.length + rawText.length
+      ),
       type: 'text'
     })
   }
