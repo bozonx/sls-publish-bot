@@ -1,12 +1,18 @@
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
-import {clearMdText, makeResultPostText} from '../helpers/helpers.js';
+import {makeResultPostText} from '../helpers/helpers.js';
 import {CustomPostState} from '../askUser/customTgPost/askCustomPostTg.js';
 
 
 export default function validateCustomPost(state: CustomPostState, tgChat: TgChat) {
-  const resultText = makeResultPostText(state.tags, state.useFooter, state.postMdText, state.footerTmpl);
-  const clearText = clearMdText(resultText);
+  const cleanFullText = makeResultPostText(
+    state.tags,
+    state.useFooter,
+    state.cleanPostText,
+    // TODO: clean footer
+    state.footerTmpl
+  )
+
   // if no text and image
   if (!state.postMdText && !state.mediaGroup.length) {
     throw tgChat.app.i18n.errors.noImageNoText;
@@ -27,11 +33,11 @@ export default function validateCustomPost(state: CustomPostState, tgChat: TgCha
     throw tgChat.app.i18n.message.post2000video;
   }
   // if text-like post is bigger than 2048
-  else if (state.postAsText && clearText.length > TELEGRAM_MAX_POST) {
+  else if (state.postAsText && cleanFullText.length > TELEGRAM_MAX_POST) {
     throw tgChat.app.i18n.errors.bigPost;
   }
   // if image caption too big
-  else if (!state.postAsText && clearText.length > TELEGRAM_MAX_CAPTION) {
+  else if (!state.postAsText && cleanFullText.length > TELEGRAM_MAX_CAPTION) {
     throw tgChat.app.i18n.errors.bigCaption;
   }
 }

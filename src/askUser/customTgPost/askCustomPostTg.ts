@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {clearMdText, makeResultPostText} from '../../helpers/helpers.js';
+import {makeResultPostText} from '../../helpers/helpers.js';
 import {askPostMedia} from '../common/askPostMedia.js';
 import {askCustomPostMenu} from './askCustomPostMenu.js';
 import validateCustomPost from '../../publish/validateCustomPost.js';
@@ -80,7 +80,14 @@ async function printPostPreview(
   state: CustomPostState,
   resultText = '',
 ) {
-  const clearText = clearMdText(resultText);
+  const cleanFullText = makeResultPostText(
+    state.tags,
+    state.useFooter,
+    state.cleanPostText,
+    // TODO: clean footer
+    state.footerTmpl
+  )
+
   // print post preview
   await printPost(
     tgChat.botChatId,
@@ -94,7 +101,7 @@ async function printPostPreview(
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.linkWebPreview
       + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
-    + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${clearText.length}\n`
+    + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${cleanFullText.length}\n`
     + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
   );
 }

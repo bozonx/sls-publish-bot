@@ -145,7 +145,9 @@ export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = tr
 export function makeResultPostText(
   tags: string[],
   useFooter: boolean,
+  // clean or full text
   postText?: string,
+  // clean or full footer
   footerTmpl?: string
 ): string {
   const footerStr = prepareFooter(footerTmpl, tags, useFooter);
