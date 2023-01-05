@@ -3,7 +3,7 @@ import {startPublishFromContentPlan} from './publishContentPlan/startPublishFrom
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu.js';
 import {startSellAd} from './buySellTg/startSellAd.js';
 import {startBuyAd} from './buySellTg/startBuyAd.js';
-import {startCustomTgPostMenu} from './customTgPost/startCustomTgPostMenu.js';
+import {startCustomTgPostTypeMenu} from './customTgPost/startCustomTgPostTypeMenu.js';
 
 
 export async function startBlogMenu(blogName: string, tgChat: TgChat) {
@@ -12,7 +12,7 @@ export async function startBlogMenu(blogName: string, tgChat: TgChat) {
       case BLOG_MENU_ACTIONS.CONTENT_PLAN:
         return await startPublishFromContentPlan(blogName, tgChat);
       case BLOG_MENU_ACTIONS.CUSTOM_TG_POST:
-        return await startCustomTgPostMenu(blogName, tgChat);
+        return await startCustomTgPostTypeMenu(blogName, tgChat);
       case BLOG_MENU_ACTIONS.BUY_TG_AD:
         return await startBuyAd(blogName, tgChat);
       case BLOG_MENU_ACTIONS.SELL_TG_AD_PLACE:

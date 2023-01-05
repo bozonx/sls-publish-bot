@@ -1,11 +1,11 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {startPublishPollTg} from './startPublishPollTg.js';
-import {askCustomTgPostMainMenu, CUSTOM_POST_MENU_ACTIONS} from './askCustomTgPostMainMenu.js';
+import {askCustomTgPostTypeMenu, CUSTOM_POST_MENU_ACTIONS} from './askCustomTgPostTypeMenu.js';
 import {startPublishCustomPostTg} from './startPublishCustomPostTg.js';
 
 
-export async function startCustomTgPostMenu(blogName: string, tgChat: TgChat) {
-  await askCustomTgPostMainMenu(blogName, tgChat, tgChat.asyncCb(async (action: string) => {
+export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat) {
+  await askCustomTgPostTypeMenu(blogName, tgChat, tgChat.asyncCb(async (action: string) => {
     switch (action) {
       case CUSTOM_POST_MENU_ACTIONS.POST1000:
         return await startPublishCustomPostTg(
