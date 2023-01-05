@@ -14,20 +14,8 @@ import {askTags} from '../common/askTags.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {askUrlButton} from '../common/askUrlButton.js';
-import {MediaGroupItem} from '../../types/types.js';
+import {CustomPostState} from './askCustomPostTg.js';
 
-
-export interface CustomPostState {
-  useFooter: boolean;
-  usePreview: boolean;
-  forceDisableFooter: boolean;
-  disableTags: boolean;
-  tags: string[],
-  postText?: string;
-  mediaGroup: MediaGroupItem[];
-  urlBtn?: TgReplyBtnUrl;
-  autoDeleteIsoDateTime?: string;
-}
 
 export type CustomPostAction = 'FOOTER_SWITCH'
   | 'PREVIEW_SWITCH'
@@ -60,7 +48,7 @@ export async function askCustomPostMenu(
   let disableOk = false;
 
   try {
-    validate(tgChat, state, );
+    validate(tgChat, state);
   }
   catch (e) {
     await tgChat.reply(`${WARN_SIGN} ${e}`);

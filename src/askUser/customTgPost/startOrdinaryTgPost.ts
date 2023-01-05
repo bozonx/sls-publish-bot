@@ -1,8 +1,7 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {makePost2000Text} from '../../publish/publishHelpers.js';
 import {askConfirm} from '../common/askConfirm.js';
-import {askCustomPostTg} from './askCustomPostTg.js';
-import {CustomPostState} from './askCustomPostMenu.js';
+import {askCustomPostTg, CustomPostState} from './askCustomPostTg.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../../publish/makePublishTaskTg.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../../types/MessageEvent.js';
@@ -20,10 +19,7 @@ export async function startOrdinaryTgPost(
   onlyOneImage = false,
   disableTags = false
 ) {
-  await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (
-    state: CustomPostState,
-    resultText: string
-  ) => {
+  await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (state: CustomPostState) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
         await registerCustomPostTg(

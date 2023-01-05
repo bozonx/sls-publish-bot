@@ -1,9 +1,25 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {clearMdText, makeResultPostText} from '../../helpers/helpers.js';
 import {askPostMedia} from '../common/askPostMedia.js';
-import {askCustomPostMenu, CustomPostState} from './askCustomPostMenu.js';
+import {askCustomPostMenu} from './askCustomPostMenu.js';
 import validateCustomPost from '../../publish/validateCustomPost.js';
 import {printPost} from '../../publish/publishHelpers.js';
+import {MediaGroupItem} from '../../types/types.js';
+import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
+
+
+export interface CustomPostState {
+  useFooter: boolean;
+  usePreview: boolean;
+  forceDisableFooter: boolean;
+  disableTags: boolean;
+  tags: string[],
+  postText?: string;
+  mediaGroup: MediaGroupItem[];
+  urlBtn?: TgReplyBtnUrl;
+  autoDeleteIsoDateTime?: string;
+  resultText?: string;
+}
 
 
 export async function askCustomPostTg(
