@@ -37,6 +37,8 @@ function remarkClearMd() {
 }
 
 
+// TODO: remove headers and so on
+
 /**
  * Remove formatting of md from text to use it for collecting symbols count.
  * ! It doesn't support of ~strikethrough~

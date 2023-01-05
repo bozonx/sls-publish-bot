@@ -52,7 +52,7 @@ export async function askCustomPostTg(
         tags: [],
         postMdText: caption,
         mediaGroup,
-        // TODO: преобразовать
+        // TODO: экранировать лишние символы
         footerTmpl,
         cleanFooterTmpl: await clearMd(footerTmpl),
         postAsText,
