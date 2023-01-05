@@ -115,7 +115,7 @@ const dict = {
     selectedOnlyTime: 'Установлено время на: ',
     selectedOnlyDate: 'Выбрана дата: ',
     selectedNoFooter: 'Footer поста: ',
-    selectedNoPreview: 'Предпросмотр ссылки: ',
+    linkWebPreview: 'Предпросмотр ссылки: ',
     selectedTags: 'Выбранные тэги (${COUNT} шт): ',
     clearedTags: 'Тэги были ощичены',
     publishConfirmation: 'Опубликовать?',

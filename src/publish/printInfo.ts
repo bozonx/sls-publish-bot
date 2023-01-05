@@ -93,7 +93,7 @@ export async function printPublishConfirmData(
   ));
 
   await tgChat.reply(
-    tgChat.app.i18n.commonPhrases.selectedNoPreview + tgChat.app.i18n.onOff[1] + '\n'
+    tgChat.app.i18n.commonPhrases.linkWebPreview + tgChat.app.i18n.onOff[1] + '\n'
     + tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', ') + '\n'
     + tgChat.app.i18n.contentInfo.dateTime + ': ' + '\n'
     + makeHumanDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)

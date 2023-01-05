@@ -145,7 +145,7 @@ async function handleButtons(
       state.usePreview = !state.usePreview;
       // print result
       await tgChat.reply(
-        tgChat.app.i18n.commonPhrases.selectedNoPreview
+        tgChat.app.i18n.commonPhrases.linkWebPreview
         + tgChat.app.i18n.onOff[Number(state.usePreview)]
       );
       // print menu again

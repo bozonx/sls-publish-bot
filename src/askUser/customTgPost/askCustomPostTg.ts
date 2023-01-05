@@ -18,7 +18,9 @@ export interface CustomPostState {
   mediaGroup: MediaGroupItem[];
   urlBtn?: TgReplyBtnUrl;
   autoDeleteIsoDateTime?: string;
-  resultText?: string;
+  footerTmpl?: string;
+  postAsText: boolean;
+  //resultText?: string;
 }
 
 
@@ -47,6 +49,8 @@ export async function askCustomPostTg(
         tags: [],
         postText: caption,
         mediaGroup,
+        footerTmpl,
+        postAsText,
       };
 
       await askCustomPostMenu(
@@ -54,14 +58,11 @@ export async function askCustomPostTg(
         tgChat,
         state,
         (tgChat: TgChat, state: CustomPostState) => {
-          // TODO: поидее надо брать из state.resultText
-          const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
-
-          validateCustomPost(state, postAsText, resultText, tgChat);
+          validateCustomPost(state, tgChat);
         },
         tgChat.asyncCb(async  () => {
-          // TODO: переместить в обработку меню
-          const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
+          // TODO: переместить ???
+          const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, state.footerTmpl);
 
           await printPostPreview(tgChat, state, resultText);
 
@@ -79,7 +80,7 @@ async function printPostPreview(
   resultText = '',
 ) {
   const clearText = clearMdText(resultText);
-
+  // print post preview
   await printPost(
     tgChat.botChatId,
     tgChat,
@@ -88,9 +89,9 @@ async function printPostPreview(
     state.urlBtn,
     resultText
   )
-  // preview state
+  // print post summary
   await tgChat.reply(
-    tgChat.app.i18n.commonPhrases.selectedNoPreview
+    tgChat.app.i18n.commonPhrases.linkWebPreview
       + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
     + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${clearText.length}\n`
     + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
