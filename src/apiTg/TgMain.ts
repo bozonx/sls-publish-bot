@@ -108,6 +108,7 @@ export default class TgMain {
         this.chats[ctx.chat.id].handleIncomeTextEvent({
           ...msgBase,
           text: (message as any).text,
+          entities: (message as any).entities,
         });
       }
       else if ((message as any).photo) {

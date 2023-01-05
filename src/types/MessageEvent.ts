@@ -1,3 +1,5 @@
+import {TgEntity} from './TgEntity.js';
+
 export interface PhotoUrlData {
   type: 'photoUrl',
   url: string,
@@ -35,6 +37,7 @@ export default interface MessageEventBase {
 
 export interface TextMessageEvent extends MessageEventBase {
   text: string;
+  entities: TgEntity[];
 }
 
 export interface PhotoMessageEvent extends MessageEventBase {

@@ -1,7 +1,34 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {ChatEvents, BACK_BTN, CANCEL_BTN} from '../../types/constants.js';
+import {
+  ChatEvents,
+  BACK_BTN,
+  CANCEL_BTN,
+  SKIP_BTN,
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK, SKIP_BTN_CALLBACK
+} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
+import {normalizeTgText} from '../../helpers/normalizeTgText.js';
+
+/*
+  text: 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url',
+  entities: [
+    { offset: 5, length: 4, type: 'bold' },
+    { offset: 10, length: 6, type: 'italic' },
+    { offset: 17, length: 10, type: 'underline' },
+    { offset: 28, length: 13, type: 'strikethrough' },
+    { offset: 42, length: 9, type: 'code' },
+    { offset: 52, length: 7, type: 'spoiler' },
+    { offset: 61, length: 18, type: 'url' },
+    {
+      offset: 80,
+      length: 3,
+      type: 'text_link',
+      url: 'https://google.com/'
+    }
+
+ */
 
 
 export async function askPostText(
@@ -14,15 +41,10 @@ export async function askPostText(
     [
       BACK_BTN,
       CANCEL_BTN,
+      SKIP_BTN,
     ]
   ];
 
-  // TODO: validate text !!! количество символов
-  // TODO: наверное экранировать лишние символы???
-  // TODO: вырезать нечитаемые символы
-  // TODO: см модуль sanitize text
-
-  // TODO: проверить поддерживается ли форвард сообщений
   // TODO: если форвардится картинка то можно взять от туда caption
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
@@ -33,10 +55,34 @@ export async function askPostText(
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
-          onDone((textMsg.text === '0') ? undefined : textMsg.text);
+
+          // TODO: validate text !!! количество символов
+
+          console.log(333, textMsg)
+
+          const text = normalizeTgText(textMsg.text)
+
+          onDone(text);
         })
       ),
       ChatEvents.TEXT
+    ]);
+    state.handlerIndexes.push([
+      tgChat.events.addListener(
+        ChatEvents.CALLBACK_QUERY,
+        tgChat.asyncCb(async (queryData: string) => {
+          if (queryData === BACK_BTN_CALLBACK) {
+            return tgChat.steps.back();
+          }
+          else if (queryData === CANCEL_BTN_CALLBACK) {
+            return tgChat.steps.cancel();
+          }
+          else if (queryData === SKIP_BTN_CALLBACK) {
+            onDone()
+          }
+        })
+      ),
+      ChatEvents.CALLBACK_QUERY
     ]);
   });
 }
