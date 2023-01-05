@@ -37,7 +37,7 @@ export default interface MessageEventBase {
 
 export interface TextMessageEvent extends MessageEventBase {
   text: string;
-  entities: TgEntity[];
+  entities?: TgEntity[];
 }
 
 export interface PhotoMessageEvent extends MessageEventBase {

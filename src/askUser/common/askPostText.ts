@@ -9,7 +9,7 @@ import {
 } from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
-import {normalizeTgText} from '../../helpers/normalizeTgText.js';
+import {tgInputToMd} from '../../helpers/tgInputToMd.js';
 
 /*
   text: 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url',
@@ -58,9 +58,7 @@ export async function askPostText(
 
           // TODO: validate text !!! количество символов
 
-          console.log(333, textMsg)
-
-          const text = normalizeTgText(textMsg.text)
+          const text = tgInputToMd(textMsg.text, textMsg.entities)
 
           onDone(text);
         })
