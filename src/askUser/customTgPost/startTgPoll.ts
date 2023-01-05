@@ -22,11 +22,11 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
       await askCloseTgPoll(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime: string) => {
         await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
           await makePublishTaskTgCopy(
+            blogName,
+            tgChat,
             isoDate,
             time,
             message.messageId,
-            blogName,
-            tgChat,
           )
 
           await tgChat.reply(tgChat.app.i18n.message.taskRegistered)

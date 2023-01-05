@@ -111,11 +111,11 @@ export async function makePublishTaskTgVideo(
  * Copy message to telegram chat. Useful for poll.
  */
 export async function makePublishTaskTgCopy(
+  blogName: string,
+  tgChat: TgChat,
   isoDate: string,
   resolvedTime: string,
   messageId: number,
-  blogName: string,
-  tgChat: TgChat,
   autoDeleteIsoDateTime?: string
 ) {
   let msgId: number;
