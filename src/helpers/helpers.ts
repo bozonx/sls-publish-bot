@@ -152,7 +152,7 @@ export function makeResultPostText(
 ): string {
   const footerStr = prepareFooter(footerTmpl, tags, useFooter);
 
-  return (postText || '') + footerStr;
+  return _.trim((_.trim(postText) || '') + footerStr);
 }
 
 export function compactButtons(buttons: ((TgReplyButton | undefined)[] | undefined)[]): TgReplyButton[][] {
