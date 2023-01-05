@@ -3,7 +3,7 @@ import moment from 'moment';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import BaseState from '../types/BaseState.js';
 import TgChat from '../apiTg/TgChat.js';
-import {ChatEvents, PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
+import {ChatEvents, ISO_DATE_FORMAT, PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import {BlogTelegramConfig} from '../types/BlogsConfig.js';
 import {makeTagsString} from '../lib/common.js';
@@ -111,14 +111,13 @@ export function makeHumanDateStr(dateStr: string, utcOffset: number): string {
 }
 
 export function makeIsoDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
-  return moment(dateStr).format(PRINT_FULL_DATE_FORMAT)
+  // TODO: сделать  всё через moment
+  return moment(dateStr).format(ISO_DATE_FORMAT)
     + `T${timeStr}:00${makeIsoUtcOffsetStr(utcOffset)}`
 }
 
 export function isoDateToHuman(isoDate: string): string {
-  return moment(isoDate).format(PRINT_FULL_DATE_FORMAT) + ' '
-    + moment(isoDate).format('HH:mm') + ' '
-    + moment(isoDate).format('Z')
+  return moment(isoDate).format(PRINT_FULL_DATE_FORMAT + ' HH:mm Z') + ' UTC'
 }
 
 /**

@@ -25,11 +25,13 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       const publishDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
-      await askCloseTgPoll(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime: string) => {
-        await tgChat.reply(
-          tgChat.app.i18n.commonPhrases.pollCloseDateAndTime + '\n'
-          + isoDateToHuman(closeIsoDateTime)
-        )
+      await askCloseTgPoll(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime?: string) => {
+        if (closeIsoDateTime) {
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.pollCloseDateAndTime + '\n'
+            + isoDateToHuman(closeIsoDateTime)
+          )
+        }
 
         await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
           await makePublishTaskTgCopy(
@@ -38,7 +40,19 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
             isoDate,
             time,
             message.messageId,
+            // TODO: надо сюда добавить дату закрытия потомучто мы не знаем конечный messageId
+            // TODO: может быть не установлена дата закрытия
           )
+
+          // const task: FinishTgPollTask = {
+          //   startTime: closeIsoDateTime,
+          //   type: 'finishPoll',
+          //   sn: 'telegram',
+          //   chatId,
+          //   messageId: message.messageId,
+          // }
+          //
+          // await tgChat.app.tasks.addTaskAndLog(task);
 
           await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
           await tgChat.steps.cancel();
