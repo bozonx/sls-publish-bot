@@ -43,11 +43,13 @@ export interface TextMessageEvent extends MessageEventBase {
 export interface PhotoMessageEvent extends MessageEventBase {
   photo: PhotoData;
   caption?: string;
+  entities?: TgEntity[];
 }
 
 export interface VideoMessageEvent extends MessageEventBase {
   video: VideoData;
   caption?: string;
+  entities?: TgEntity[];
 }
 
 export interface MediaGroupItemMessageEvent extends MessageEventBase {

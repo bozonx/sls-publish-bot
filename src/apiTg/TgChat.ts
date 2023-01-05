@@ -130,6 +130,9 @@ export default class TgChat {
     onStart: (state: BaseState) => Promise<void>,
     initialState?: BaseState
   ) {
+
+    // TODO: когда запускается onDone собития должны все отписаться
+
     const initState = initialState || makeBaseState();
 
     await this.steps.addAndRunStep({

@@ -117,6 +117,7 @@ export default class TgMain {
         this.chats[ctx.chat.id].handleIncomePhotoEvent({
           ...msgBase,
           caption: (message as any).caption,
+          entities: (message as any).caption_entities,
           photo: {
             type: 'photo',
             fileId: lastPhoto.file_id,
@@ -133,6 +134,7 @@ export default class TgMain {
         this.chats[ctx.chat.id].handleIncomeVideoEvent({
           ...msgBase,
           caption: (message as any).caption,
+          entities: (message as any).caption_entities,
           video: {
             type: 'video',
             fileId: video.file_id,
