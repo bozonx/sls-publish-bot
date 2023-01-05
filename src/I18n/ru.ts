@@ -110,6 +110,7 @@ const dict = {
     noPreview: 'Убрать предпросмотр ссылки',
     yesPreview: 'Добавить предпросмотр ссылки',
     selectedDateAndTime: 'Выбрана дата и время: ',
+    pollCloseDateAndTime: 'Дата и время закрытия поста: ',
     pubDateAndTime: 'Пост будет опубликован: ',
     selectedOnlyTime: 'Установлено время на: ',
     selectedOnlyDate: 'Выбрана дата: ',

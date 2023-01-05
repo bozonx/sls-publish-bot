@@ -106,9 +106,19 @@ export function makeHumanDateTimeStr(dateStr: string, timeStr: string, utcOffset
     + ` ${timeStr} ${makeUtcOffsetStr(utcOffset)}`
 }
 
+export function makeHumanDateStr(dateStr: string, utcOffset: number): string {
+  return moment(dateStr).format(PRINT_FULL_DATE_FORMAT) + ` ${makeUtcOffsetStr(utcOffset)}`
+}
+
 export function makeIsoDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
   return moment(dateStr).format(PRINT_FULL_DATE_FORMAT)
     + `T${timeStr}:00${makeIsoUtcOffsetStr(utcOffset)}`
+}
+
+export function isoDateToHuman(isoDate: string): string {
+  return moment(isoDate).format(PRINT_FULL_DATE_FORMAT) + ' '
+    + moment(isoDate).format('HH:mm') + ' '
+    + moment(isoDate).format('Z')
 }
 
 /**
