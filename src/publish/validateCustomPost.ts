@@ -5,10 +5,10 @@ import {CustomPostState} from '../askUser/customTgPost/askCustomPostTg.js';
 
 
 export default function validateCustomPost(state: CustomPostState, tgChat: TgChat) {
-  const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, state.footerTmpl);
+  const resultText = makeResultPostText(state.tags, state.useFooter, state.postMdText, state.footerTmpl);
   const clearText = clearMdText(resultText);
   // if no text and image
-  if (!state.postText && !state.mediaGroup.length) {
+  if (!state.postMdText && !state.mediaGroup.length) {
     throw tgChat.app.i18n.errors.noImageNoText;
   }
   // if post as image or video but there is no image or video

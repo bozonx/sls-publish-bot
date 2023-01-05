@@ -129,7 +129,7 @@ async function askMenu(
       state.useFooter,
       tgChat.app.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
-      state.postText,
+      state.postMdText,
       state.instaTags,
       parsedPage?.tgTags,
     );
@@ -163,7 +163,7 @@ async function askMenu(
           state.useFooter,
           tgChat.app.blogs[blogName].sn.telegram,
           parsedPage?.textBlocks,
-          state.postText,
+          state.postMdText,
           state.instaTags,
           parsedPage?.tgTags,
         );

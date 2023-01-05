@@ -14,8 +14,7 @@ export interface CustomPostState {
   forceDisableFooter: boolean
   disableTags: boolean
   tags: string[]
-  // TODO: rename to postMdText
-  postText?: string
+  postMdText?: string
   cleanPostText?: string
   mediaGroup: MediaGroupItem[]
   urlBtn?: TgReplyBtnUrl
@@ -49,7 +48,7 @@ export async function askCustomPostTg(
         forceDisableFooter: !footerTmpl,
         disableTags,
         tags: [],
-        postText: caption,
+        postMdText: caption,
         mediaGroup,
         footerTmpl,
         postAsText,
@@ -64,7 +63,7 @@ export async function askCustomPostTg(
         },
         tgChat.asyncCb(async  () => {
           // TODO: переместить ???
-          const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, state.footerTmpl);
+          const resultText = makeResultPostText(state.tags, state.useFooter, state.postMdText, state.footerTmpl);
 
           await printPostPreview(tgChat, state, resultText);
 

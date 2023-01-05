@@ -29,7 +29,7 @@ export interface PublishMenuState {
   instaTags?: string[];
   mainImgUrl?: string;
   // it's for announcement
-  postText?: string;
+  postMdText?: string;
 }
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -187,11 +187,11 @@ async function handleButtons(
       return askPublishMenu(blogName, tgChat, state, onDone);
     case PUBLISH_MENU_ACTION.ADD_TEXT:
       return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text?: string) => {
-        state.postText = text;
+        state.postMdText = text;
         // print result
-        if (state.postText) {
+        if (state.postMdText) {
           await tgChat.reply(
-            tgChat.app.i18n.menu.selectedPostText + '\n' + state.postText
+            tgChat.app.i18n.menu.selectedPostText + '\n' + state.postMdText
           );
         }
         else {
