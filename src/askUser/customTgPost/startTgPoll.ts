@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {askPoll} from './askPoll.js';
+import {askTgPoll} from './askTgPoll.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
@@ -8,8 +8,8 @@ import {askClosePoll} from './askClosePoll.js';
 import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
 
 
-export async function startPublishPollTg(blogName: string, tgChat: TgChat) {
-  await askPoll(tgChat, tgChat.asyncCb(async (message: PollMessageEvent) => {
+export async function startTgPoll(blogName: string, tgChat: TgChat) {
+  await askTgPoll(tgChat, tgChat.asyncCb(async (message: PollMessageEvent) => {
     await tgChat.app.tg.bot.telegram.copyMessage(
       tgChat.botChatId,
       tgChat.botChatId,

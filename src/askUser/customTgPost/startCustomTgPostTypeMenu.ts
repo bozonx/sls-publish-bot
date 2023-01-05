@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {startPublishPollTg} from './startPublishPollTg.js';
+import {startTgPoll} from './startTgPoll.js';
 import {askCustomTgPostTypeMenu, CUSTOM_POST_MENU_ACTIONS} from './askCustomTgPostTypeMenu.js';
 import {startOrdinaryTgPost} from './startOrdinaryTgPost.js';
 
@@ -60,7 +60,7 @@ export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat
           true
         );
       case CUSTOM_POST_MENU_ACTIONS.POLL:
-        return await startPublishPollTg(blogName, tgChat);
+        return await startTgPoll(blogName, tgChat);
       default:
         throw new Error(`Unknown action ${action}`)
     }

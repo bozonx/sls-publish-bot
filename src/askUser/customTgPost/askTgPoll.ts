@@ -10,7 +10,7 @@ import BaseState from '../../types/BaseState.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
 
 
-export async function askPoll(tgChat: TgChat, onDone: (message: PollMessageEvent) => void) {
+export async function askTgPoll(tgChat: TgChat, onDone: (message: PollMessageEvent) => void) {
   const msg = tgChat.app.i18n.menu.makePoll;
   const buttons = [
     [
