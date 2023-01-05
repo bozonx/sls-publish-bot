@@ -40,6 +40,7 @@ function remarkClearMd() {
 /**
  * Remove formatting of md from text to use it for collecting symbols count.
  * ! It doesn't support of ~strikethrough~
+ * ! It trims before and after line breaks and spaces
  * example:
  *   from:
  *     norm *bold* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm
@@ -49,7 +50,7 @@ function remarkClearMd() {
 export async function clearMd(mdText?: string): Promise<string | undefined> {
   if (!mdText) return
 
-  const file = await unified()
+  const vfile = await unified()
     // read MD to syntax tree
     .use(remarkParse)
     .use(remarkClearMd as any)
@@ -57,7 +58,11 @@ export async function clearMd(mdText?: string): Promise<string | undefined> {
     // make string from syntax tree
     .use(remarkStringify)
     .process(new VFile(mdText))
+
+  //console.log(111, String(vfile))
+
+  return String(vfile)
 }
 
-
-clearMd('norm *bold _italic2_* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
+//console.log(111, clearMd('norm *bold _italic2_* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'))
+//clearMd(' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd')

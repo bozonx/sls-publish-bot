@@ -54,7 +54,7 @@ export async function askCustomPostTg(
         mediaGroup,
         // TODO: преобразовать
         footerTmpl,
-        cleanFooterTmpl: clearMd(footerTmpl),
+        cleanFooterTmpl: await clearMd(footerTmpl),
         postAsText,
       };
 
