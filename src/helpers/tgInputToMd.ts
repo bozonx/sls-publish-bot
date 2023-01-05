@@ -50,19 +50,46 @@ function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[]
   }
 
   for (const i in entities) {
-    result.push({
-      // TODO: check
-      text: rawText.slice(entities[i].offset, entities[i].length),
-      type: 'text',
-    })
+    // TODO: check
+    const text = rawText.slice(entities[i].offset, entities[i].length)
 
-    // TODO: add simple text after it
+    if (entities[i].type === 'spoiler') {
+      result.push({ text, type: 'text' })
+    }
+    else if (entities[i].type === 'url') {
+      result.push({ text, type: 'url', url: text })
+    }
+    else if (entities[i].type === 'text_link') {
+      result.push({ text, type: 'url', url: entities[i].url })
+    }
+    else {
+      result.push({ text, type: entities[i].type as SupportedTgEntityType })
+    }
+
+    const theNext = entities[Number(i) + 1]
+    // add simple text after it
+    if (theNext) {
+      // TODO: check
+      if (entities[i].offset + entities[i].length < theNext.offset) {
+        result.push({
+          // TODO: check
+          text: rawText.slice(entities[i].offset + entities[i].length, theNext.offset - 1),
+          type: 'text'
+        })
+      }
+    }
   }
 
-  // TODO: add the last line
-  // if () {
-  //
-  // }
+  const theLast = entities[entities.length - 1]
+  // add the last line
+  // TODO: check
+  if (theLast.offset + theLast.length < rawText.length) {
+    result.push({
+      // TODO: check
+      text: rawText.slice(theLast.offset + theLast.length, rawText.length),
+      type: 'text'
+    })
+  }
 
   return result
 }
