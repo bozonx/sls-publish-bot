@@ -218,14 +218,13 @@ async function handleButtons(
       // TODO: нельзя фото - reels
 
       return askPostMedia(
+        tgChat,
         [
           PUBLICATION_TYPES.mem,
           PUBLICATION_TYPES.story,
           PUBLICATION_TYPES.reels,
         ].includes(state.pubType),
         true,
-        blogName,
-        tgChat,
         tgChat.asyncCb(async (mediaGroup: MediaGroupItem[], caption?: string) => {
           if (mediaGroup.length) {
             // TODO: может быть и не url

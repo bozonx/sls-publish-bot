@@ -28,10 +28,9 @@ export const POST_MEDIA_ACTION = {
 
 
 export async function askPostMedia(
+  tgChat: TgChat,
   mediaRequired: boolean,
   onlyOneImage: boolean,
-  blogName: string,
-  tgChat: TgChat,
   onDone: AskPostMediaDone,
 ) {
   const msg = (onlyOneImage)

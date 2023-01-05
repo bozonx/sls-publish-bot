@@ -19,7 +19,10 @@ export async function startOrdinaryTgPost(
   onlyOneImage = false,
   disableTags = false
 ) {
-  await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (state: CustomPostState) => {
+  await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (
+    state: CustomPostState,
+    resultText: string
+  ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
         await registerCustomPostTg(

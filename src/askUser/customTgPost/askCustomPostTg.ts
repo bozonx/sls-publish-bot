@@ -35,10 +35,9 @@ export async function askCustomPostTg(
   disableTags = false,
 ) {
   await askPostMedia(
+    tgChat,
     mediaRequired,
     onlyOneImage,
-    blogName,
-    tgChat,
     tgChat.asyncCb(async (mediaGroup, caption) => {
       const state: CustomPostState = {
         useFooter: true,
@@ -55,11 +54,13 @@ export async function askCustomPostTg(
         tgChat,
         state,
         (tgChat: TgChat, state: CustomPostState) => {
+          // TODO: поидее надо брать из state.resultText
           const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
 
           validateCustomPost(state, postAsText, resultText, tgChat);
         },
         tgChat.asyncCb(async  () => {
+          // TODO: переместить в обработку меню
           const resultText = makeResultPostText(state.tags, state.useFooter, state.postText, footerTmpl);
 
           await printPostPreview(tgChat, state, resultText);
