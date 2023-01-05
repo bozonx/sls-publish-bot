@@ -6,6 +6,7 @@ import validateCustomPost from '../../publish/validateCustomPost.js';
 import {printPost} from '../../publish/publishHelpers.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
+import {clearMd} from '../../helpers/clearMd.js';
 
 
 export interface CustomPostState {
@@ -53,8 +54,7 @@ export async function askCustomPostTg(
         mediaGroup,
         // TODO: преобразовать
         footerTmpl,
-        // TODO: преобразовать
-        cleanFooterTmpl: footerTmpl,
+        cleanFooterTmpl: clearMd(footerTmpl),
         postAsText,
       };
 
