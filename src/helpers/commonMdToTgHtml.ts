@@ -42,9 +42,9 @@ export async function commonMdToTgHtml(mdv2?: string): Promise<string | undefine
         strong(h, node) {
           return h(node, 'b', all(h, node))
         },
-        // emphasis(h, node) {
-        //   return h(node, 'b', all(h, node))
-        // },
+        emphasis(h, node) {
+          return h(node, 'i', all(h, node))
+        },
         paragraph(h, node) {
           //console.log(222, h, node)
           //return 'children' in node ? {...node, children: all(h, node)} : node

@@ -8,14 +8,14 @@ import {
 } from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, TextMessageEvent} from '../../types/MessageEvent.js';
-import {tgInputToMd} from '../../helpers/tgInputToMd.js';
+import {tgInputToHtml} from '../../helpers/tgInputToHtml.js';
 import _ from 'lodash';
 
 
 export async function askPostText(
   blogName: string,
   tgChat: TgChat,
-  onDone: (text?: string, cleanText?: string) => void,
+  onDone: (textHtml?: string, cleanText?: string) => void,
 ) {
   const msg = tgChat.app.i18n.menu.askTypeText;
   const buttons = [
@@ -38,7 +38,7 @@ export async function askPostText(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
           onDone(
-            _.trim(tgInputToMd(textMsg.text, textMsg.entities)),
+            _.trim(tgInputToHtml(textMsg.text, textMsg.entities)),
             _.trim(textMsg.text)
           );
         })
@@ -52,7 +52,7 @@ export async function askPostText(
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
           if (photoMsg.caption) {
             onDone(
-              _.trim(tgInputToMd(photoMsg.caption, photoMsg.entities)),
+              _.trim(tgInputToHtml(photoMsg.caption, photoMsg.entities)),
               _.trim(photoMsg.caption)
             );
           }
@@ -70,7 +70,7 @@ export async function askPostText(
         tgChat.asyncCb(async (videoMsg: PhotoMessageEvent) => {
           if (videoMsg.caption) {
             onDone(
-              _.trim(tgInputToMd(videoMsg.caption, videoMsg.entities)),
+              _.trim(tgInputToHtml(videoMsg.caption, videoMsg.entities)),
               _.trim(videoMsg.caption)
             );
           }

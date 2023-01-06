@@ -21,7 +21,7 @@ const appConfig: AppConfig = {
   expiredTaskOffsetSec: Number(process.env.EXPIRED_TASK_OFFSET_SEC || 1),
 
   telegram: {
-    parseMode: 'MarkdownV2',
+    parseMode: 'HTML',
   },
 }
 

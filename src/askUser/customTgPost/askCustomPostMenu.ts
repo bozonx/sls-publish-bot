@@ -148,16 +148,13 @@ async function handleButtons(
       // print menu again
       return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
     case CUSTOM_POST_ACTION.ADD_TEXT:
-      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text?: string, cleanText?: string) => {
-        state.postMdText = text;
+      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
+        state.postHtmlText = textHtml;
         state.cleanPostText = cleanText;
         // print result
-        if (state.postMdText) {
+        if (state.postHtmlText) {
           await tgChat.reply(tgChat.app.i18n.menu.selectedPostText);
-
-          // TODO: будет HTML
-
-          await tgChat.reply(state.postMdText, undefined, true, true);
+          await tgChat.reply(state.postHtmlText, undefined, true, true);
         }
         else {
           await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText);

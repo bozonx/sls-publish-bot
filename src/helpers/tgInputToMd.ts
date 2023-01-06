@@ -1,3 +1,6 @@
+
+// TODO: не используется
+
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {TgEntity} from '../types/TgEntity.js'
 
@@ -22,31 +25,6 @@ import {TgEntity} from '../types/TgEntity.js'
  */
 
 
-export type SupportedTgEntityType = 'bold'
-  | 'italic'
-  | 'underline'
-  | 'strikethrough'
-  | 'code'
-  | 'url'
-  | 'text'
-
-export const SUPPORTED_TG_ENTITY_TYPES: Record<SupportedTgEntityType, SupportedTgEntityType> = {
-  bold: 'bold',
-  italic: 'italic',
-  underline: 'underline',
-  strikethrough: 'strikethrough',
-  code: 'code',
-  url: 'url',
-  text: 'text',
-}
-
-interface NormalizedTgItem {
-  text: string
-  type: SupportedTgEntityType
-  url?: string
-}
-
-
 /**
  * Convert text from telegram input to MDv2
  * Trim it by yourself
@@ -57,64 +35,64 @@ export function tgInputToMd(rawText: string, entities?: TgEntity[]): string {
   return normalized.map((item) => makeMd(item)).join('')
 }
 
-
-function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[] {
-  if (!entities || !entities.length) return [{text: rawText, type: 'text'}]
-
-  const result: NormalizedTgItem[] = []
-  // set the first text part
-  if (entities[0].offset !== 0) {
-    result.push({
-      text: rawText.slice(0, entities[0].offset),
-      type: 'text',
-    })
-  }
-
-  for (const i in entities) {
-    const text = rawText.slice(entities[i].offset, entities[i].offset + entities[i].length)
-
-    if (entities[i].type === 'spoiler') {
-      result.push({ text, type: 'text' })
-    }
-    else if (entities[i].type === 'url') {
-      result.push({ text, type: 'url', url: text })
-    }
-    else if (entities[i].type === 'text_link') {
-      result.push({ text, type: 'url', url: entities[i].url })
-    }
-    else {
-      result.push({ text, type: entities[i].type as SupportedTgEntityType })
-    }
-
-    const theNext = entities[Number(i) + 1]
-
-    if (!theNext) continue
-    // add simple text after it
-    if (entities[i].offset + entities[i].length < theNext.offset) {
-      result.push({
-        text: rawText.slice(
-          entities[i].offset + entities[i].length,
-          theNext.offset
-        ),
-        type: 'text'
-      })
-    }
-  }
-
-  const theLast = entities[entities.length - 1]
-  // add the last line
-  if (theLast.offset + theLast.length < rawText.length) {
-    result.push({
-      text: rawText.slice(
-        theLast.offset + theLast.length,
-        theLast.offset + theLast.length + rawText.length
-      ),
-      type: 'text'
-    })
-  }
-
-  return result
-}
+//
+// function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[] {
+//   if (!entities || !entities.length) return [{text: rawText, type: 'text'}]
+//
+//   const result: NormalizedTgItem[] = []
+//   // set the first text part
+//   if (entities[0].offset !== 0) {
+//     result.push({
+//       text: rawText.slice(0, entities[0].offset),
+//       type: 'text',
+//     })
+//   }
+//
+//   for (const i in entities) {
+//     const text = rawText.slice(entities[i].offset, entities[i].offset + entities[i].length)
+//
+//     if (entities[i].type === 'spoiler') {
+//       result.push({ text, type: 'text' })
+//     }
+//     else if (entities[i].type === 'url') {
+//       result.push({ text, type: 'url', url: text })
+//     }
+//     else if (entities[i].type === 'text_link') {
+//       result.push({ text, type: 'url', url: entities[i].url })
+//     }
+//     else {
+//       result.push({ text, type: entities[i].type as SupportedTgEntityType })
+//     }
+//
+//     const theNext = entities[Number(i) + 1]
+//
+//     if (!theNext) continue
+//     // add simple text after it
+//     if (entities[i].offset + entities[i].length < theNext.offset) {
+//       result.push({
+//         text: rawText.slice(
+//           entities[i].offset + entities[i].length,
+//           theNext.offset
+//         ),
+//         type: 'text'
+//       })
+//     }
+//   }
+//
+//   const theLast = entities[entities.length - 1]
+//   // add the last line
+//   if (theLast.offset + theLast.length < rawText.length) {
+//     result.push({
+//       text: rawText.slice(
+//         theLast.offset + theLast.length,
+//         theLast.offset + theLast.length + rawText.length
+//       ),
+//       type: 'text'
+//     })
+//   }
+//
+//   return result
+// }
 
 function makeMd(item: NormalizedTgItem): string {
   switch (item.type) {
