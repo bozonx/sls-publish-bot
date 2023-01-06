@@ -106,7 +106,9 @@ async function printPostPreview(
   await tgChat.reply(
     tgChat.app.i18n.commonPhrases.linkWebPreview
       + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
-    + `${tgChat.app.i18n.pageInfo.contentLengthWithTgFooter}: ${cleanFullText.length}\n`
+    + tgChat.app.i18n.pageInfo.contentLength
+      + ((state.useFooter) ? ` + ${tgChat.app.i18n.commonPhrases.footer}` : '')
+      + `: ${cleanFullText.length}\n`
     + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
   );
 }

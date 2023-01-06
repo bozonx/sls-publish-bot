@@ -138,6 +138,7 @@ const dict = {
     typeBtnText: 'Введите текст кнопки',
     typeBtnUrl: 'Введите url кнопки',
     pollParams: 'Параметры опроса:',
+    footer: 'футер'
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',
@@ -163,7 +164,7 @@ const dict = {
     tgTags: 'Тэги Telegram',
     contentLength: 'Количество символов в тексте',
     contentLengthWithInstaTags: 'Количество символов в тексте + тэги инстаграмм',
-    contentLengthWithTgFooter: 'Количество символов в тексте + футер telegram',
+    contentLengthWithTgFooter: 'Количество символов в тексте + футер',
     instaTagsCount: 'Количество тэгов в Instagram',
     tagsCount: 'Количество тэгов',
   },
