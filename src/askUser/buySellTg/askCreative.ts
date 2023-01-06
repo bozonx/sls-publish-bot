@@ -65,6 +65,7 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
         await publishTgImage(tgChat.botChatId, image, tgChat, creativeStr, btnUrlResult);
       }
       else {
+        // TODO: будет HTML
         await tgChat.reply(creativeStr, btnUrlResult && [[btnUrlResult]], !usePreview,true);
       }
 

@@ -25,6 +25,7 @@ export async function printItemDetails(
     true
   );
   if (footerStr) {
+    // TODO: будет HTML
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
       undefined,
@@ -77,6 +78,7 @@ export async function printPublishConfirmData(
   );
 
   if (footerStr) {
+    // TODO: будет HTML
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
       undefined,

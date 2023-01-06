@@ -105,13 +105,13 @@ export default class TgChat {
     message: string,
     buttons?: TgReplyButton[][],
     disablePreview = false,
-    md = false
+    html = false
   ): Promise<number> {
     const messageResult = await this.app.tg.bot.telegram.sendMessage(
       this.botChatId,
       message,
       {
-        parse_mode: (md) ? this.app.appConfig.telegram.parseMode : undefined,
+        parse_mode: (html) ? this.app.appConfig.telegram.parseMode : undefined,
         reply_markup: buttons && {
           inline_keyboard: buttons
         },

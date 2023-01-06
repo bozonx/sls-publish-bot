@@ -15,6 +15,7 @@ export default interface AppConfig {
   // don't execute tasks which is going to execute in specified seconds and less
   expiredTaskOffsetSec: number;
   telegram: {
-    parseMode: 'MarkdownV2';
+    //parseMode: 'MarkdownV2';
+    parseMode: 'HTML';
   },
 }
