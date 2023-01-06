@@ -4,21 +4,21 @@ import {startBlogMenu} from './startBlogMenu.js';
 import {startTaskMenu} from './task/startTaskMenu.js';
 import {startSiteMenu} from './site/startSiteMenu.js';
 import {startTelegraphMenu} from './telegraph/startTelegraphMenu.js';
-import {tgMdToTgHtml} from '../helpers/tgMdToTgHtml.js';
+import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 
 
 export async function topLevelMenuStarter(tgChat: TgChat) {
   return askMainMenu(tgChat, tgChat.asyncCb(async (blogNameOrAction: string) => {
 
-    tgChat.app.tg.bot.telegram.sendMessage(
-      tgChat.botChatId,
-      await tgMdToTgHtml(
-      '\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'
-      ) || '',
-      {
-        parse_mode: 'HTML'
-      }
-    )
+    // tgChat.app.tg.bot.telegram.sendMessage(
+    //   tgChat.botChatId,
+    //   await commonMdToTgHtml(
+    //   '\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'
+    //   ) || '',
+    //   {
+    //     parse_mode: 'HTML'
+    //   }
+    // )
 
     switch (blogNameOrAction) {
       case MAIN_MENU_ACTION.SITE:
