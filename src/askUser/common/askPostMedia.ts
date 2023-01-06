@@ -20,7 +20,7 @@ import {transformMdToTelegramMd} from '../../helpers/transformMdToTelegramMd.js'
 import {MediaGroupItem} from '../../types/types.js';
 
 
-export type AskPostMediaDone = (mediaGroup: MediaGroupItem[], caption?: string) => void
+export type AskPostMediaDone = (mediaGroup: MediaGroupItem[], captionHtml?: string) => void
 
 export const POST_MEDIA_ACTION = {
   SKIP: 'SKIP',
@@ -51,7 +51,7 @@ export async function askPostMedia(
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     const mediaGroup: MediaGroupItem[] = []
-    let caption: string | undefined
+    let captionHtml: string | undefined
 
     // print main menu message
     state.messageIds.push(await tgChat.reply(msg, buttons));
@@ -60,7 +60,10 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
-          if (photoMsg.caption) caption = photoMsg.caption;
+
+          // TODO: поидее надо использовать entities и форматировать
+
+          if (photoMsg.caption) captionHtml = photoMsg.caption;
 
           mediaGroup.push(photoMsg.photo);
         })
@@ -72,7 +75,10 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.VIDEO,
         tgChat.asyncCb(async (photoMsg: VideoMessageEvent) => {
-          if (photoMsg.caption) caption = photoMsg.caption;
+
+          // TODO: поидее надо использовать entities и форматировать
+
+          if (photoMsg.caption) captionHtml = photoMsg.caption;
 
           mediaGroup.push(photoMsg.video);
         })
@@ -84,7 +90,7 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(
-          async (cbData: string) => handleButtons(cbData, tgChat, onDone, mediaGroup, caption)
+          async (cbData: string) => handleButtons(cbData, tgChat, onDone, mediaGroup, captionHtml)
         )
       ),
       ChatEvents.CALLBACK_QUERY
@@ -106,7 +112,10 @@ export async function askPostMedia(
               }));
           }
           else {
-            caption = transformMdToTelegramMd(text);
+
+            // TODO: remake
+
+            captionHtml = transformMdToTelegramMd(text);
           }
         })
       ),
@@ -121,7 +130,7 @@ async function handleButtons(
   tgChat: TgChat,
   onDone: AskPostMediaDone,
   mediaGroup: MediaGroupItem[],
-  caption?: string
+  captionHtml?: string
 ) {
   if (cbData === CANCEL_BTN_CALLBACK) {
     return tgChat.steps.cancel();
@@ -133,6 +142,6 @@ async function handleButtons(
     return onDone([]);
   }
   else if (cbData === OK_BTN_CALLBACK) {
-    return onDone(mediaGroup, caption);
+    return onDone(mediaGroup, captionHtml);
   }
 }

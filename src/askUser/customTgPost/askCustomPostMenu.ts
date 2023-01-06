@@ -154,7 +154,9 @@ async function handleButtons(
         // print result
         if (state.postMdText) {
           await tgChat.reply(tgChat.app.i18n.menu.selectedPostText);
+
           // TODO: будет HTML
+
           await tgChat.reply(state.postMdText, undefined, true, true);
         }
         else {

@@ -7,6 +7,7 @@ import {printPost} from '../../publish/publishHelpers.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {clearMd} from '../../helpers/clearMd.js';
+import {commonMdToTgHtml} from '../../helpers/commonMdToTgHtml.js';
 
 
 export interface CustomPostState {
@@ -15,12 +16,12 @@ export interface CustomPostState {
   forceDisableFooter: boolean
   disableTags: boolean
   tags: string[]
-  postMdText?: string
+  postHtmlText?: string
   cleanPostText?: string
   mediaGroup: MediaGroupItem[]
   urlBtn?: TgReplyBtnUrl
   autoDeleteIsoDateTime?: string
-  footerTmpl?: string
+  footerTmplHtml?: string
   cleanFooterTmpl?: string
   postAsText: boolean
   //resultText?: string;
@@ -43,17 +44,16 @@ export async function askCustomPostTg(
     tgChat,
     mediaRequired,
     onlyOneImage,
-    tgChat.asyncCb(async (mediaGroup, caption) => {
+    tgChat.asyncCb(async (mediaGroup, captionHtml) => {
       const state: CustomPostState = {
         useFooter: true,
         usePreview: !mediaGroup.length,
         forceDisableFooter: !footerTmpl,
         disableTags,
         tags: [],
-        postMdText: caption,
+        postHtmlText: captionHtml,
         mediaGroup,
-        // TODO: экранировать лишние символы
-        footerTmpl,
+        footerTmplHtml: await commonMdToTgHtml(footerTmpl),
         cleanFooterTmpl: await clearMd(footerTmpl),
         postAsText,
       };
@@ -65,7 +65,12 @@ export async function askCustomPostTg(
         validateCustomPost,
         tgChat.asyncCb(async  () => {
           // TODO: переместить ???
-          const resultText = makeResultPostText(state.tags, state.useFooter, state.postMdText, state.footerTmpl);
+          const resultText = makeResultPostText(
+            state.tags,
+            state.useFooter,
+            state.postHtmlText,
+            state.footerTmplHtml
+          );
 
           await printPostPreview(tgChat, state, resultText);
 
