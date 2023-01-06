@@ -124,20 +124,24 @@ export function isoDateToHuman(isoDate: string): string {
 export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = true): string {
   if (!tmpl || !useFooter) return '';
 
-  // TODO: useFooter не нужнен
+  // TODO: useFooter не нужнен ???
 
   return _.template(tmpl)({
     TAGS: mdFormat.escape(makeTagsString(tags))
   });
 }
 
+/**
+ * Make full post text with footer.
+ * It doesn't matter if it html or md
+ */
 export function makeResultPostText(
   tags: string[],
   useFooter: boolean,
   // clean or full text
-  postHtmlText?: string,
+  postText?: string,
   // clean or full footer
-  footerTmplHtml?: string
+  footerTmpl?: string
 ): string {
   const footerStr = prepareFooter(footerTmpl, tags, useFooter);
 

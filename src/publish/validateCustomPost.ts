@@ -13,7 +13,7 @@ export default function validateCustomPost(tgChat: TgChat, state: CustomPostStat
   )
 
   // if no text and image
-  if (!state.postMdText && !state.mediaGroup.length) {
+  if (!state.postHtmlText && !state.mediaGroup.length) {
     throw tgChat.app.i18n.errors.noImageNoText;
   }
   // if post as image or video but there is no image or video

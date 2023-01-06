@@ -64,7 +64,6 @@ export async function askCustomPostTg(
         state,
         validateCustomPost,
         tgChat.asyncCb(async  () => {
-          // TODO: переместить ???
           const resultText = makeResultPostText(
             state.tags,
             state.useFooter,
