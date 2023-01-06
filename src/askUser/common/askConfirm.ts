@@ -12,7 +12,6 @@ import {compactUndefined} from '../../lib/arrays.js';
 
 
 export async function askConfirm(
-  blogName: string,
   tgChat: TgChat,
   onDone: () => void,
   msgReplace?: string,

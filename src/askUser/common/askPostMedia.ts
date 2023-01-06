@@ -7,8 +7,7 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  OK_BTN,
-  OK_BTN_CALLBACK
+  SKIP_BTN_CALLBACK
 } from '../../types/constants.js';
 import {
   PhotoMessageEvent,
@@ -16,15 +15,12 @@ import {
   VideoMessageEvent
 } from '../../types/MessageEvent.js';
 import {isValidUrl} from '../../lib/common.js';
-import {transformMdToTelegramMd} from '../../helpers/transformMdToTelegramMd.js';
 import {MediaGroupItem} from '../../types/types.js';
+import {askConfirm} from './askConfirm.js';
+import {tgInputToHtml} from '../../helpers/tgInputToHtml.js';
 
 
 export type AskPostMediaDone = (mediaGroup: MediaGroupItem[], captionHtml?: string) => void
-
-export const POST_MEDIA_ACTION = {
-  SKIP: 'SKIP',
-};
 
 
 export async function askPostMedia(
@@ -40,12 +36,11 @@ export async function askPostMedia(
     (!mediaRequired)
       ? [{
         text: tgChat.app.i18n.buttons.postMediaSkip,
-        callback_data: POST_MEDIA_ACTION.SKIP,
+        callback_data: SKIP_BTN_CALLBACK,
       }] : [],
     [
       BACK_BTN,
       CANCEL_BTN,
-      OK_BTN,
     ]
   ];
 
@@ -60,12 +55,11 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
-
-          // TODO: поидее надо использовать entities и форматировать
-
-          if (photoMsg.caption) captionHtml = photoMsg.caption;
+          if (photoMsg.caption) captionHtml = tgInputToHtml(photoMsg.caption, photoMsg.entities);
 
           mediaGroup.push(photoMsg.photo);
+
+          await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
         })
       ),
       ChatEvents.PHOTO
@@ -74,26 +68,15 @@ export async function askPostMedia(
     state.handlerIndexes.push([
       tgChat.events.addListener(
         ChatEvents.VIDEO,
-        tgChat.asyncCb(async (photoMsg: VideoMessageEvent) => {
+        tgChat.asyncCb(async (videoMsg: VideoMessageEvent) => {
+          if (videoMsg.caption) captionHtml = tgInputToHtml(videoMsg.caption, videoMsg.entities);
 
-          // TODO: поидее надо использовать entities и форматировать
+          mediaGroup.push(videoMsg.video);
 
-          if (photoMsg.caption) captionHtml = photoMsg.caption;
-
-          mediaGroup.push(photoMsg.video);
+          await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
         })
       ),
       ChatEvents.VIDEO
-    ]);
-    // listen to buttons
-    state.handlerIndexes.push([
-      tgChat.events.addListener(
-        ChatEvents.CALLBACK_QUERY,
-        tgChat.asyncCb(
-          async (cbData: string) => handleButtons(cbData, tgChat, onDone, mediaGroup, captionHtml)
-        )
-      ),
-      ChatEvents.CALLBACK_QUERY
     ]);
     // listen to url
     state.handlerIndexes.push([
@@ -102,35 +85,45 @@ export async function askPostMedia(
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
           const text = _.trim(textMsg.text);
 
-          if (isValidUrl(text)) {
-            text.split('\n')
-              .map((el) => _.trim(el))
-              .filter((el) => Boolean(el))
-              .forEach((url) => mediaGroup.push({
-                type: 'photoUrl',
-                url
-              }));
-          }
-          else {
+          if (!isValidUrl(text)) {
+            await tgChat.reply(tgChat.app.i18n.errors.incorrectUrl)
 
-            // TODO: remake
-
-            captionHtml = transformMdToTelegramMd(text);
+            return
           }
+
+          // TODO: review
+
+          text.split('\n')
+            .map((el) => _.trim(el))
+            .filter((el) => Boolean(el))
+            .forEach((url) => mediaGroup.push({
+              type: 'photoUrl',
+              url
+            }));
+
+          await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
         })
       ),
       ChatEvents.TEXT
+    ]);
+    // listen to buttons
+    state.handlerIndexes.push([
+      tgChat.events.addListener(
+        ChatEvents.CALLBACK_QUERY,
+        tgChat.asyncCb(
+          async (cbData: string) => handlePrimaryButtons(cbData, tgChat, onDone)
+        )
+      ),
+      ChatEvents.CALLBACK_QUERY
     ]);
   });
 }
 
 
-async function handleButtons(
+async function handlePrimaryButtons(
   cbData: string,
   tgChat: TgChat,
   onDone: AskPostMediaDone,
-  mediaGroup: MediaGroupItem[],
-  captionHtml?: string
 ) {
   if (cbData === CANCEL_BTN_CALLBACK) {
     return tgChat.steps.cancel();
@@ -138,10 +131,18 @@ async function handleButtons(
   else if (cbData === BACK_BTN_CALLBACK) {
     return tgChat.steps.back();
   }
-  else if (cbData === POST_MEDIA_ACTION.SKIP) {
+  else if (cbData === SKIP_BTN_CALLBACK) {
     return onDone([]);
   }
-  else if (cbData === OK_BTN_CALLBACK) {
+}
+
+async function toNextStep(
+  tgChat: TgChat,
+  onDone: AskPostMediaDone,
+  mediaGroup: MediaGroupItem[],
+  captionHtml?: string,
+) {
+  await askConfirm(tgChat, tgChat.asyncCb(async () => {
     return onDone(mediaGroup, captionHtml);
-  }
+  }))
 }

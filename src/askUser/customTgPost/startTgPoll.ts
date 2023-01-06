@@ -33,7 +33,7 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
           )
         }
 
-        await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+        await askConfirm(tgChat, tgChat.asyncCb(async () => {
           await makePublishTaskTgCopy(
             blogName,
             tgChat,

@@ -24,7 +24,7 @@ export async function startOrdinaryTgPost(
     resultText: string
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-      await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+      await askConfirm(tgChat, tgChat.asyncCb(async () => {
         await registerCustomPostTg(
           blogName,
           tgChat,

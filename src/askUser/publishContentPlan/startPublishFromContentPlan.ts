@@ -153,7 +153,7 @@ async function askMenu(
       disableOk = true;
     }
 
-    await askConfirm(blogName, tgChat, tgChat.asyncCb(async () => {
+    await askConfirm(tgChat, tgChat.asyncCb(async () => {
       try {
         // TODO: не делать если poll
         // TODO: а нужно ли это тут делать???? или всетаки уже в fork ???

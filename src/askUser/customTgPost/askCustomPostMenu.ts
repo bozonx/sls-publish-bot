@@ -161,7 +161,6 @@ async function handleButtons(
         else {
           await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText);
         }
-
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
@@ -172,6 +171,9 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.ADD_URL_BUTTON:
+
+      // TODO: почему так ???? лучше же сделать кнопку очистки
+
       if (state.urlBtn) {
         await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
 
@@ -194,6 +196,9 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
+
+      // TODO: почему так ???? лучше же сделать кнопку очистки
+
       if (state.autoDeleteIsoDateTime) {
         await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
 
