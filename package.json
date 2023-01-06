@@ -28,6 +28,8 @@
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "remark-breaks": "^3.0.2",
+    "remark-html": "^15.0.1",
     "remark-parse": "^10.0.1",
     "remark-stringify": "^10.0.2",
     "telegraf": "^4.11.2",
