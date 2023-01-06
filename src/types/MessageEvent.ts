@@ -36,6 +36,7 @@ export default interface MessageEventBase {
 }
 
 export interface TextMessageEvent extends MessageEventBase {
+  // not formatted text
   text: string;
   entities?: TgEntity[];
 }

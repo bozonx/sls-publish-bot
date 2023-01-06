@@ -72,7 +72,9 @@ export async function askCustomPostMenu(
     }] : [],
     compactUndefined([
       {
-        text: tgChat.app.i18n.buttons.addText,
+        text: (state.postHtmlText)
+          ? tgChat.app.i18n.buttons.replaceText
+          : tgChat.app.i18n.buttons.addText,
         callback_data: CUSTOM_POST_ACTION.ADD_TEXT,
       },
       (state.disableTags || !state.useFooter) ? undefined : {

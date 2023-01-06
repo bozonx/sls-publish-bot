@@ -76,6 +76,7 @@ const dict = {
   buttons: {
     postMediaSkip: 'Без картинки',
     addText: 'Добавить текст',
+    replaceText: 'Заменить текст',
     addUrlButton: 'Добавить URL кнопку',
     removeUrlButton: 'Убрать URL кнопку',
     setAutoRemove: 'Установить таймер авто удаления',

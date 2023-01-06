@@ -31,6 +31,7 @@ export async function askTags(prevTags: string[], tgChat: TgChat, onDone: (tags:
   ];
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
+    // print previous tags
     if (prevTags.length) {
       state.messageIds.push(await tgChat.reply(tgChat.app.i18n.menu.prevTags));
       state.messageIds.push(await tgChat.reply(makeTagsString(prevTags)));

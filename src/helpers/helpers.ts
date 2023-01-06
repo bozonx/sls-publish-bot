@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import moment from 'moment';
-import {markdownv2 as mdFormat} from 'telegram-format';
 import BaseState from '../types/BaseState.js';
 import TgChat from '../apiTg/TgChat.js';
 import {ChatEvents, ISO_DATE_FORMAT, PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
@@ -127,7 +126,7 @@ export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = tr
   // TODO: useFooter не нужнен ???
 
   return _.template(tmpl)({
-    TAGS: mdFormat.escape(makeTagsString(tags))
+    TAGS: makeTagsString(tags)
   });
 }
 
@@ -145,7 +144,7 @@ export function makeResultPostText(
 ): string {
   const footerStr = prepareFooter(footerTmpl, tags, useFooter);
 
-  return _.trim((_.trim(postText) || '') + footerStr);
+  return _.trim((_.trim(postText) || '') + '\n\n' + footerStr);
 }
 
 export function compactButtons(buttons: ((TgReplyButton | undefined)[] | undefined)[]): TgReplyButton[][] {
