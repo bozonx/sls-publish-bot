@@ -26,18 +26,30 @@ function toTextNode(node: any) {
   delete node.title
 }
 
+function toParagraphNode(node: any) {
+  node.type = 'paragraph'
+
+  delete node.depth
+}
+
 function remarkClearMd() {
   return (tree: any) => {
     visit(tree, (node) => {
+
+      //console.log(22222, node)
+
       if (['emphasis', 'strong', 'inlineCode', 'link'].includes(node.type)) {
         toTextNode(node)
+      }
+      else if (['heading'].includes(node.type)) {
+        toParagraphNode(node)
       }
     })
   }
 }
 
 
-// TODO: remove headers and so on
+// TODO: remove quote, big code
 
 /**
  * Remove formatting of md from text to use it for collecting symbols count.
@@ -56,7 +68,6 @@ export async function clearMd(mdText?: string): Promise<string | undefined> {
     // read MD to syntax tree
     .use(remarkParse)
     .use(remarkClearMd as any)
-
     // make string from syntax tree
     .use(remarkStringify)
     .process(new VFile(mdText))
@@ -68,3 +79,4 @@ export async function clearMd(mdText?: string): Promise<string | undefined> {
 
 //console.log(111, clearMd('norm *bold _italic2_* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'))
 //clearMd(' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd')
+//clearMd('# fff\n> fff\ngggg\nkkk')
