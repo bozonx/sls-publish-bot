@@ -11,7 +11,7 @@ import {addSimpleStep, makeUtcOffsetStr} from '../../helpers/helpers.js';
 import {askTime} from '../common/askTime.js';
 import {askPostMedia} from '../common/askPostMedia.js';
 import {printImage} from '../../publish/printInfo.js';
-import {askPostText} from '../common/askPostText.js';
+import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
 import {askSns} from '../common/askSns.js';
 import {SN_TYPES, SnType} from '../../types/snTypes.js';
@@ -186,7 +186,7 @@ async function handleButtons(
       // print menu again
       return askPublishMenu(blogName, tgChat, state, onDone);
     case PUBLISH_MENU_ACTION.ADD_TEXT:
-      return await askPostText(tgChat, tgChat.asyncCb(async (text?: string) => {
+      return await askText(tgChat, tgChat.asyncCb(async (text?: string) => {
         state.postMdText = text;
         // print result
         if (state.postMdText) {

@@ -9,7 +9,7 @@ import {
 } from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
-import {askPostText} from '../common/askPostText.js';
+import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {askDateTime} from '../common/askDateTime.js';
@@ -95,7 +95,7 @@ export async function askCustomPostMenu(
     [
       {
         text: (state.autoDeleteIsoDateTime)
-          ? tgChat.app.i18n.buttons.offAutoRemove
+          ? tgChat.app.i18n.buttons.changeAutoRemove
           : tgChat.app.i18n.buttons.setAutoRemove,
         callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
       },
@@ -150,7 +150,7 @@ async function handleButtons(
       // print menu again
       return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
     case CUSTOM_POST_ACTION.ADD_TEXT:
-      return await askPostText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
+      return await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
         state.postHtmlText = textHtml;
         state.cleanPostText = cleanText;
         // print result
@@ -194,17 +194,16 @@ async function handleButtons(
       }));
     case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
 
-      // TODO: почему так ???? лучше же сделать кнопку очистки
+      // TODO: почему dateTime а не специальный ???
+      return await askDateTime(tgChat, tgChat.asyncCb(async (autoDeleteIsoDateTime?: string) => {
+        if (!autoDeleteIsoDateTime) {
+          await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
 
-      if (state.autoDeleteIsoDateTime) {
-        await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
+          delete state.autoDeleteIsoDateTime;
 
-        delete state.autoDeleteIsoDateTime;
+          return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
+        }
 
-        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
-      }
-
-      return await askDateTime(tgChat, tgChat.asyncCb(async (autoDeleteIsoDateTime: string) => {
         state.autoDeleteIsoDateTime = autoDeleteIsoDateTime;
 
         await tgChat.reply(

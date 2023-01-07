@@ -1,13 +1,13 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {isValidUrl} from '../../lib/common.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
-import {askPostText} from './askPostText.js';
+import {askText} from './askText.js';
 
 
 export async function askUrlButton(tgChat: TgChat, onDone: (urlButton?: TgReplyBtnUrl) => void) {
   const msg = tgChat.app.i18n.commonPhrases.typeBtnText;
 
-  await askPostText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
+  await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
     const msg = tgChat.app.i18n.commonPhrases.typeBtnUrl;
 
     if (!cleanText) {
@@ -16,7 +16,7 @@ export async function askUrlButton(tgChat: TgChat, onDone: (urlButton?: TgReplyB
       return
     }
 
-    await askPostText(
+    await askText(
       tgChat,
       tgChat.asyncCb(async (textHtml?: string, cleanUrl?: string) => {
         onDone({text: cleanText, url: cleanUrl!})

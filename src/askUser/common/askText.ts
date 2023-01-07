@@ -15,7 +15,7 @@ import {tgInputToHtml} from '../../helpers/tgInputToHtml.js';
 type ResultCallback = (textHtml?: string, cleanText?: string) => void
 
 
-export async function askPostText(
+export async function askText(
   tgChat: TgChat,
   onDone: ResultCallback,
   msgReplace?: string,

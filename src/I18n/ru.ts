@@ -80,7 +80,7 @@ const dict = {
     addUrlButton: 'Добавить URL кнопку',
     changeUrlButton: 'Изменить URL кнопку',
     setAutoRemove: 'Установить таймер авто удаления',
-    offAutoRemove: 'Убрать таймер авто удаления',
+    changeAutoRemove: 'Изменить таймер авто удаления',
     replaceTags: 'Заменить тэги',
     addTags: 'Добавить тэги',
     changeSns: 'Изменить соц сети',
