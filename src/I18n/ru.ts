@@ -138,6 +138,7 @@ const dict = {
     addedDeleteTimer: 'Таймер авто удаления был установлен на: ',
     typeBtnText: 'Введите текст кнопки',
     typeBtnUrl: 'Введите url кнопки',
+    removeUrlBtl: 'Убрать URL кнопку',
     pollParams: 'Параметры опроса:',
     footer: 'футер'
   },
