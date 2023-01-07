@@ -30,7 +30,9 @@ export function makeTagsString(tags?: string[]): string {
 }
 
 // TODO: доработать - см либу валидации
-export function isValidUrl(url: string): boolean {
+export function isValidUrl(url?: string): boolean {
+  if (!url) return false
+
   return Boolean(String(url).match(/^(https?|ftp)\:\/\//));
 }
 

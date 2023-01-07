@@ -186,7 +186,7 @@ async function handleButtons(
       // print menu again
       return askPublishMenu(blogName, tgChat, state, onDone);
     case PUBLISH_MENU_ACTION.ADD_TEXT:
-      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (text?: string) => {
+      return await askPostText(tgChat, tgChat.asyncCb(async (text?: string) => {
         state.postMdText = text;
         // print result
         if (state.postMdText) {

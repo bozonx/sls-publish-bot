@@ -87,7 +87,7 @@ export async function askCustomPostMenu(
     [
       {
         text: (state.urlBtn)
-          ? tgChat.app.i18n.buttons.removeUrlButton
+          ? tgChat.app.i18n.buttons.changeUrlButton
           : tgChat.app.i18n.buttons.addUrlButton,
         callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
       },
@@ -150,7 +150,7 @@ async function handleButtons(
       // print menu again
       return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
     case CUSTOM_POST_ACTION.ADD_TEXT:
-      return await askPostText(blogName, tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
+      return await askPostText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
         state.postHtmlText = textHtml;
         state.cleanPostText = cleanText;
         // print result
@@ -171,18 +171,15 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.ADD_URL_BUTTON:
+      return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton?: TgReplyBtnUrl) => {
+        if (!urlButton) {
+          await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
 
-      // TODO: почему так ???? лучше же сделать кнопку очистки
+          delete state.urlBtn;
 
-      if (state.urlBtn) {
-        await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
+          return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
+        }
 
-        delete state.urlBtn;
-
-        return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
-      }
-
-      return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton: TgReplyBtnUrl) => {
         state.urlBtn = urlButton;
 
         await tgChat.reply(

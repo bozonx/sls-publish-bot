@@ -78,7 +78,7 @@ const dict = {
     addText: 'Добавить текст',
     replaceText: 'Заменить текст',
     addUrlButton: 'Добавить URL кнопку',
-    removeUrlButton: 'Убрать URL кнопку',
+    changeUrlButton: 'Изменить URL кнопку',
     setAutoRemove: 'Установить таймер авто удаления',
     offAutoRemove: 'Убрать таймер авто удаления',
     replaceTags: 'Заменить тэги',

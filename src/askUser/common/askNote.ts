@@ -1,9 +1,9 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {askText} from './askText.js';
+import {askPostText} from './askPostText.js';
 
 
-export async function askNote(tgChat: TgChat, onDone: (note: string) => void) {
+export async function askNote(tgChat: TgChat, onDone: (note?: string) => void) {
   const msg = tgChat.app.i18n.menu.typeNote;
 
-  return askText(msg, true, tgChat, onDone);
+  return askPostText(tgChat, (textHtml?: string) => onDone(textHtml), msg);
 }
