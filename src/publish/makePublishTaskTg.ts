@@ -38,7 +38,7 @@ export async function makePublishTaskTgOnlyText(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, postMsgId, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, postMsgId, urlBtn, autoDeleteIsoDateTime);
 }
 
 /**
@@ -71,7 +71,7 @@ export async function makePublishTaskTgImage(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
 }
 
 /**
@@ -104,7 +104,7 @@ export async function makePublishTaskTgVideo(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
 }
 
 /**
@@ -116,7 +116,8 @@ export async function makePublishTaskTgCopy(
   isoDate: string,
   resolvedTime: string,
   messageId: number,
-  autoDeleteIsoDateTime?: string
+  autoDeleteIsoDateTime?: string,
+  closePollIsoDateTime?: string
 ) {
   let msgId: number;
   // Print to log channel
@@ -134,7 +135,16 @@ export async function makePublishTaskTgCopy(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, resolvedTime, msgId, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(
+    tgChat,
+    blogName,
+    isoDate,
+    resolvedTime,
+    msgId,
+    undefined,
+    autoDeleteIsoDateTime,
+    closePollIsoDateTime
+  );
 }
 
 export async function makePublishTaskTgPoll(
@@ -143,7 +153,8 @@ export async function makePublishTaskTgPoll(
   isoDate: string,
   time: string,
   pollData: PollData,
-  autoDeleteIsoDateTime?: string
+  autoDeleteIsoDateTime?: string,
+  closePollIsoDateTime?: string
 ) {
   let postMsgId: number;
   // Print to log channel
@@ -156,7 +167,16 @@ export async function makePublishTaskTgPoll(
     throw new Error(`Can't publish poll to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, postMsgId, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(
+    tgChat,
+    blogName,
+    isoDate,
+    time,
+    postMsgId,
+    undefined,
+    autoDeleteIsoDateTime,
+    closePollIsoDateTime
+  );
 }
 
 export async function registerPublishTaskTg(
@@ -165,7 +185,9 @@ export async function registerPublishTaskTg(
   isoDate: string,
   time: string,
   postMsgId: number,
-  autoDeleteIsoDateTime?: string
+  urlBtn?: TgReplyBtnUrl,
+  autoDeleteIsoDateTime?: string,
+  closePollIsoDateTime?: string
 ) {
   try {
     // send info message
@@ -202,6 +224,11 @@ export async function registerPublishTaskTg(
     chatId,
     sn: SN_TYPES.telegram as 'telegram',
     forwardMessageId: postMsgId,
+    urlBtn,
+    // time like '2022-11-01T19:58:00+03:00'
+    autoDeleteDateTime: autoDeleteIsoDateTime,
+    // time like '2022-11-01T19:58:00+03:00'
+    closePollDateTime: closePollIsoDateTime,
   };
 
   await tgChat.app.tasks.addTaskAndLog(task);

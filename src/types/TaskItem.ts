@@ -1,4 +1,5 @@
 import {SnType} from './snTypes.js';
+import {TgReplyBtnUrl} from './TgReplyButton.js';
 
 
 export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
@@ -18,7 +19,12 @@ export type TaskTypes = 'postponePost'
 
 export interface PostponeTgPostTask extends TaskTgBase {
   type: typeof TASK_TYPES['postponePost']
-  forwardMessageId: number;
+  forwardMessageId: number
+  urlBtn?: TgReplyBtnUrl
+  // in full ISO format like '2022-11-01T19:58:00+03:00'
+  autoDeleteDateTime?: string
+  // in full ISO format like '2022-11-01T19:58:00+03:00'
+  closePollDateTime?: string
 }
 
 export interface DeleteTgPostTask extends TaskTgBase {

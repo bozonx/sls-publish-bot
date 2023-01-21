@@ -74,7 +74,16 @@ export default class ExecuteTask {
       postponeTask.chatId,
       this.tasks.app.appConfig.logChannelId,
       postponeTask.forwardMessageId,
+      postponeTask.urlBtn && {
+        reply_markup: {
+          inline_keyboard: [
+            [postponeTask.urlBtn]
+          ]
+        },
+      }
     );
+
+    // TODO: add task for auto delete and close poll
   }
 
   private async executeDeletePost(task: TaskItem) {
