@@ -107,6 +107,8 @@ const dict = {
     changePubDate: 'Изменить дату публикации',
     //pubDate: 'Дата публикации ',
     date: 'Дата',
+    autoDeletePostDate: 'Дата авто-удаления поста',
+    closePollDate: 'Дата закрытия опроса',
     noPostFooter: 'Убрать footer поста',
     yesPostFooter: 'Добавить footer поста',
     noPreview: 'Убрать предпросмотр ссылки',

@@ -1,4 +1,4 @@
-import {TaskItem} from '../types/TaskItem.js';
+import {PostponeTgPostTask, TaskItem} from '../types/TaskItem.js';
 import moment from 'moment/moment.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
 import App from '../App.js';
@@ -8,8 +8,21 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
   let username: string | undefined;
   const resultArr = [
     `${app.i18n.commonPhrases.type}: ${task.type}`,
+    // TODO: сделать под каждый тип своё слово
     `${app.i18n.commonPhrases.date}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
   ];
+
+  if ((task as PostponeTgPostTask).autoDeleteDateTime) {
+    resultArr.push(
+      `${app.i18n.commonPhrases.autoDeletePostDate}: ${moment((task as PostponeTgPostTask).autoDeleteDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
+    );
+  }
+
+  if ((task as PostponeTgPostTask).closePollDateTime) {
+    resultArr.push(
+      `${app.i18n.commonPhrases.closePollDate}: ${moment((task as PostponeTgPostTask).closePollDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
+    );
+  }
 
   if (task.sn) resultArr.push(`${app.i18n.commonPhrases.sn}: ${task.sn}`);
   if (task.chatId) {
@@ -29,7 +42,7 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
     }
   }
 
-  if ((task as any).forwardMessageId) {
+  if ((task as PostponeTgPostTask).forwardMessageId) {
     resultArr.push(`forwardMessageId: ${(task as any).forwardMessageId}`);
 
     if (username) {
