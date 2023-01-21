@@ -1,7 +1,8 @@
+import {PublicationType} from './publicationType.js';
 
 export interface BlogBaseConfig {
   // some PUBLICATION_TYPES
-  supportedTypes: string[];
+  supportedTypes: PublicationType[];
 }
 export interface BlogTelegramConfig extends BlogBaseConfig {
   channelId: number | string;
