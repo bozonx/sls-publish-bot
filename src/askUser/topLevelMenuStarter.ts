@@ -2,7 +2,6 @@ import TgChat from '../apiTg/TgChat.js';
 import {askMainMenu, MAIN_MENU_ACTION} from './askMainMenu.js';
 import {startBlogMenu} from './startBlogMenu.js';
 import {startTaskMenu} from './task/startTaskMenu.js';
-import {startSiteMenu} from './site/startSiteMenu.js';
 import {startTelegraphMenu} from './telegraph/startTelegraphMenu.js';
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 
@@ -21,8 +20,6 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
     // )
 
     switch (blogNameOrAction) {
-      case MAIN_MENU_ACTION.SITE:
-        return startSiteMenu(tgChat);
       case MAIN_MENU_ACTION.TASKS:
         return startTaskMenu(tgChat);
       case MAIN_MENU_ACTION.TELEGRAPH:
