@@ -8,8 +8,7 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
   let username: string | undefined;
   const resultArr = [
     `${app.i18n.commonPhrases.type}: ${task.type}`,
-    // TODO: сделать под каждый тип своё слово
-    `${app.i18n.commonPhrases.date}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
+    `${app.i18n.commonPhrases.dateLabel[task.type]}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
   ];
 
   if ((task as PostponeTgPostTask).autoDeleteDateTime) {
@@ -20,7 +19,7 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
 
   if ((task as PostponeTgPostTask).closePollDateTime) {
     resultArr.push(
-      `${app.i18n.commonPhrases.closePollDate}: ${moment((task as PostponeTgPostTask).closePollDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
+      `${app.i18n.commonPhrases.autoClosePollDate}: ${moment((task as PostponeTgPostTask).closePollDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
     );
   }
 

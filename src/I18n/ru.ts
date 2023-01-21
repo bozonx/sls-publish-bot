@@ -108,7 +108,7 @@ const dict = {
     //pubDate: 'Дата публикации ',
     date: 'Дата',
     autoDeletePostDate: 'Дата авто-удаления поста',
-    closePollDate: 'Дата закрытия опроса',
+    autoClosePollDate: 'Дата авто-закрытия опроса',
     noPostFooter: 'Убрать footer поста',
     yesPostFooter: 'Добавить footer поста',
     noPreview: 'Убрать предпросмотр ссылки',
@@ -142,7 +142,14 @@ const dict = {
     typeBtnUrl: 'Введите url кнопки',
     removeUrlBtl: 'Убрать URL кнопку',
     pollParams: 'Параметры опроса:',
-    footer: 'футер'
+    footer: 'футер',
+    dateLabel: {
+      postponePost: 'Дата публикации поста',
+      deletePost: 'Дата удаления поста',
+      pinPost: 'Дата прикрепления поста',
+      unpinPost: 'Дата открепления поста',
+      finishPoll: 'Дата завершения опроса',
+    }
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',
