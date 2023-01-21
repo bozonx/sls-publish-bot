@@ -4,7 +4,7 @@ import {askConfirm} from '../common/askConfirm.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {makePublishTaskTgCopy} from '../../publish/makePublishTaskTg.js';
-import {askCloseTgPoll} from './askCloseTgPoll.js';
+import {askTimePeriod} from '../common/askTimePeriod.js';
 import {isoDateToHuman, makeIsoDateTimeStr} from '../../helpers/helpers.js';
 import {makePollInfo} from '../../publish/publishHelpers.js';
 
@@ -25,7 +25,7 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       const publishDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
-      await askCloseTgPoll(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime?: string) => {
+      await askTimePeriod(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime?: string) => {
         if (closeIsoDateTime) {
           await tgChat.reply(
             tgChat.app.i18n.commonPhrases.pollCloseDateAndTime + '\n'
