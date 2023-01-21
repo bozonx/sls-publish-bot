@@ -11,7 +11,7 @@ import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
 import {breakArray, compactUndefined} from '../../lib/arrays.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
-import {validateTime} from '../../lib/common.js';
+import {normalizeTime, validateTime} from '../../lib/common.js';
 
 
 const TIME_PRESET_CB = 'TIME_PRESET_CB|'
@@ -64,7 +64,7 @@ export async function askTime(tgChat: TgChat, onDone: (time: string) => void, ad
         ChatEvents.TEXT,
         tgChat.asyncCb(async (message: TextMessageEvent) => {
           const trimmed = _.trim(message.text);
-
+          // if only number of hours
           if (trimmed.match(/^\d{1,2}$/)) {
             if (Number(trimmed) < 1 || Number(trimmed) > 23) {
               await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
@@ -76,8 +76,10 @@ export async function askTime(tgChat: TgChat, onDone: (time: string) => void, ad
             return onDone(((trimmed.length === 1) ? `0${trimmed}` : trimmed) + ':00');
           }
 
+          const normalizedTime = normalizeTime(trimmed)
+
           try {
-            validateTime(trimmed);
+            validateTime(normalizedTime);
           }
           catch (e) {
             await tgChat.reply(tgChat.app.i18n.errors.incorrectTime);
@@ -85,7 +87,7 @@ export async function askTime(tgChat: TgChat, onDone: (time: string) => void, ad
             return;
           }
 
-          onDone(trimmed);
+          onDone(normalizedTime);
         })
       ),
       ChatEvents.TEXT

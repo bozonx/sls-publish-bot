@@ -55,3 +55,14 @@ export function validateTime(rawStr: string) {
     throw new Error(`Incorrect time`);
   }
 }
+
+export function normalizeTime(rawStr: string): string {
+  // do not normalize incorrect time
+  if (!rawStr.match(/^\d{1,2}[.:]\d{1,2}$/)) return rawStr
+
+  const splat = rawStr.replace('.', ':').split(':')
+
+  return _.padStart(splat[0], 2, '0')
+    + ':'
+    + _.padStart(splat[1], 2, '0')
+}
