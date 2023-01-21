@@ -95,7 +95,7 @@ export async function askCustomPostMenu(
     ],
     [
       {
-        text: (state.autoDeleteIsoDateTime)
+        text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
           ? tgChat.app.i18n.buttons.changeAutoRemove
           : tgChat.app.i18n.buttons.setAutoRemove,
         callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
@@ -209,10 +209,18 @@ async function handleButtons(
         state.autoDeleteIsoDateTime = certainIsoDateTime
         state.autoDeletePeriodHours = hoursPeriod
 
-        await tgChat.reply(
-          tgChat.app.i18n.commonPhrases.addedDeleteTimer
-          + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
-        );
+        if (state.autoDeleteIsoDateTime) {
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.addedDeleteTimer
+            + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+          )
+        }
+        else if (state.autoDeletePeriodHours) {
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.addedDeleteTimerPeriod
+            + state.autoDeletePeriodHours
+          )
+        }
 
         // print menu again
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);

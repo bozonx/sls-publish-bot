@@ -138,6 +138,7 @@ const dict = {
     addedUrlButton: 'URL кнопка была установлена',
     removedDeleteTimer: 'Таймер авто удаления был убран',
     addedDeleteTimer: 'Таймер авто удаления был установлен на: ',
+    addedDeleteTimerPeriod: 'Пост авто удалится после публикации через(часов): ',
     typeBtnText: 'Введите текст кнопки',
     typeBtnUrl: 'Введите url кнопки',
     removeUrlBtl: 'Убрать URL кнопку',

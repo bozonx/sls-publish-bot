@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {makeResultPostText} from '../../helpers/helpers.js';
+import {makeIsoDateTimeStr, makeResultPostText, replaceHorsInDate} from '../../helpers/helpers.js';
 import {askPostMedia} from '../common/askPostMedia.js';
 import {askCustomPostMenu} from './askCustomPostMenu.js';
 import validateCustomPost from '../../publish/validateCustomPost.js';
@@ -8,6 +8,8 @@ import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {clearMd} from '../../helpers/clearMd.js';
 import {commonMdToTgHtml} from '../../helpers/commonMdToTgHtml.js';
+import moment from 'moment/moment.js';
+import {PRINT_SHORT_DATE_TIME_FORMAT} from '../../types/constants.js';
 
 
 export interface CustomPostState {
@@ -93,6 +95,12 @@ async function printPostPreview(
     state.cleanPostText,
     state.cleanFooterTmpl
   )
+  let detailsStr = tgChat.app.i18n.commonPhrases.linkWebPreview
+    + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
+    + tgChat.app.i18n.pageInfo.contentLength
+    + ((state.useFooter) ? ` + ${tgChat.app.i18n.commonPhrases.footer}` : '')
+    + `: ${cleanFullText.length}\n`
+    + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length + '\n'
 
   // print post preview
   await printPost(
@@ -104,17 +112,18 @@ async function printPostPreview(
     resultText
   )
   // print post summary
-  await tgChat.reply(
-    tgChat.app.i18n.commonPhrases.linkWebPreview
-      + tgChat.app.i18n.onOff[Number(state.usePreview)] + '\n'
-    + tgChat.app.i18n.pageInfo.contentLength
-      + ((state.useFooter) ? ` + ${tgChat.app.i18n.commonPhrases.footer}` : '')
-      + `: ${cleanFullText.length}\n`
-    + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
-    // TODO: добавить автоудаление
-  );
+  await tgChat.reply(detailsStr);
 }
 
+
+// if (state.autoDeleteIsoDateTime) {
+//   detailsStr += tgChat.app.i18n.commonPhrases.addedDeleteTimer
+//     + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT) + '\n'
+// }
+// else if (state.autoDeletePeriodHours) {
+//   detailsStr += tgChat.app.i18n.commonPhrases.addedDeleteTimerPeriod
+//     + state.autoDeletePeriodHours + '\n'
+// }
 
 // + tgChat.app.i18n.commonPhrases.pubDate + makeHumanDateTimeStr(
 //   state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
