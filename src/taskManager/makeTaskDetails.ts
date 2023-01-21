@@ -7,7 +7,7 @@ import App from '../App.js';
 export async function makeTaskDetails(task: TaskItem, app: App): Promise<string> {
   let username: string | undefined;
   const resultArr = [
-    `${app.i18n.commonPhrases.type}: ${task.type}`,
+    `${app.i18n.commonPhrases.type}${task.type}`,
     `${app.i18n.commonPhrases.dateLabel[task.type]}: ${moment(task.startTime).format(PRINT_SHORT_DATE_TIME_FORMAT)}`
   ];
 

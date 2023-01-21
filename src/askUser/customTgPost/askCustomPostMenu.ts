@@ -7,7 +7,7 @@ import {
   CANCEL_BTN_CALLBACK,
   OK_BTN, OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN,
 } from '../../types/constants.js';
-import {addSimpleStep} from '../../helpers/helpers.js';
+import {addSimpleStep, makeIsoDateTimeStr} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
@@ -195,8 +195,8 @@ async function handleButtons(
     case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
 
       // TODO: почему dateTime а не специальный ???
-      return await askDateTime(tgChat, tgChat.asyncCb(async (autoDeleteIsoDateTime?: string) => {
-        if (!autoDeleteIsoDateTime) {
+      return await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+        if (!isoDate) {
           await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
 
           delete state.autoDeleteIsoDateTime;
@@ -204,7 +204,7 @@ async function handleButtons(
           return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
         }
 
-        state.autoDeleteIsoDateTime = autoDeleteIsoDateTime;
+        state.autoDeleteIsoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.addedDeleteTimer
