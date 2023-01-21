@@ -77,7 +77,7 @@ export async function registerCustomPostTg(
       autoDeleteIsoDateTime
     );
   }
-  if (mediaGroup.length > 1) {
+  else if (mediaGroup.length > 1) {
     // post several images
     // TODO: а если несколько картинок ???
     throw new Error(`Not supported`);

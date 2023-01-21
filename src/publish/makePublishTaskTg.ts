@@ -38,7 +38,7 @@ export async function makePublishTaskTgOnlyText(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(isoDate, time, postMsgId, blogName, tgChat, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, postMsgId, autoDeleteIsoDateTime);
 }
 
 /**
@@ -71,7 +71,7 @@ export async function makePublishTaskTgImage(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(isoDate, time, msgId, blogName, tgChat, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, autoDeleteIsoDateTime);
 }
 
 /**
@@ -104,7 +104,7 @@ export async function makePublishTaskTgVideo(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(isoDate, time, msgId, blogName, tgChat, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, autoDeleteIsoDateTime);
 }
 
 /**
@@ -134,7 +134,7 @@ export async function makePublishTaskTgCopy(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(isoDate, resolvedTime, msgId, blogName, tgChat, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, resolvedTime, msgId, autoDeleteIsoDateTime);
 }
 
 export async function makePublishTaskTgPoll(
@@ -156,15 +156,15 @@ export async function makePublishTaskTgPoll(
     throw new Error(`Can't publish poll to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(isoDate, time, postMsgId, blogName, tgChat, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, postMsgId, autoDeleteIsoDateTime);
 }
 
 export async function registerPublishTaskTg(
+  tgChat: TgChat,
+  blogName: string,
   isoDate: string,
   time: string,
   postMsgId: number,
-  blogName: string,
-  tgChat: TgChat,
   autoDeleteIsoDateTime?: string
 ) {
   try {

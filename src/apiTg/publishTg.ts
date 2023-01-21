@@ -1,6 +1,7 @@
 import TgChat from './TgChat.js';
 import PollData from '../types/PollData.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
+import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 
 
 /**
@@ -11,7 +12,7 @@ export async function publishTgText(
   msg: string,
   tgChat: TgChat,
   allowPreview = true,
-  btnUrl?: {text: string, url: string},
+  urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await tgChat.app.tg.bot.telegram.sendMessage(
@@ -21,9 +22,9 @@ export async function publishTgText(
       parse_mode: tgChat.app.appConfig.telegram.parseMode,
       disable_web_page_preview: !allowPreview,
       disable_notification: disableNotification,
-      reply_markup: btnUrl && {
+      reply_markup: urlBtn && {
         inline_keyboard: [
-          [ btnUrl ]
+          [ urlBtn ]
         ]
       } || undefined,
     }
@@ -40,7 +41,7 @@ export async function publishTgImage(
   imageUrl: string,
   tgChat: TgChat,
   captionMd?: string,
-  btnUrl?: {text: string, url: string},
+  urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await tgChat.app.tg.bot.telegram.sendPhoto(
@@ -50,9 +51,9 @@ export async function publishTgImage(
       caption: captionMd,
       parse_mode: tgChat.app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
-      reply_markup: btnUrl && {
+      reply_markup: urlBtn && {
         inline_keyboard: [
-          [ btnUrl ]
+          [ urlBtn ]
         ]
       } || undefined,
     }
@@ -69,7 +70,7 @@ export async function publishTgVideo(
   videoUrl: string,
   tgChat: TgChat,
   captionMd?: string,
-  btnUrl?: {text: string, url: string},
+  urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await tgChat.app.tg.bot.telegram.sendVideo(
@@ -79,9 +80,9 @@ export async function publishTgVideo(
       caption: captionMd,
       parse_mode: tgChat.app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
-      reply_markup: btnUrl && {
+      reply_markup: urlBtn && {
         inline_keyboard: [
-          [ btnUrl ]
+          [ urlBtn ]
         ]
       } || undefined,
     }
@@ -98,9 +99,12 @@ export async function publishTgMediaGroup(
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   tgChat: TgChat,
   captionMd?: string,
-  btnUrl?: {text: string, url: string},
+  urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
+
+  // TODO: почему нет urlBtn ???
+
   const result = await tgChat.app.tg.bot.telegram.sendMediaGroup(
     chatId,
     mediaGroup.map((el, index) => {
