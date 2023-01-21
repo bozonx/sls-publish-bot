@@ -6,6 +6,8 @@ import {askDateTime} from '../common/askDateTime.js';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../../publish/makePublishTaskTg.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
+import {stat} from 'fs';
+import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
 
 
 export async function startOrdinaryTgPost(
@@ -24,6 +26,15 @@ export async function startOrdinaryTgPost(
     resultText: string
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+      let resolvedAutoDeleteTime = state.autoDeleteIsoDateTime
+
+      if (state.autoDeletePeriodHours) {
+        resolvedAutoDeleteTime = replaceHorsInDate(
+          makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset),
+          state.autoDeletePeriodHours
+        )
+      }
+
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
         await registerCustomPostTg(
           blogName,
@@ -35,7 +46,7 @@ export async function startOrdinaryTgPost(
           state.usePreview,
           state.mediaGroup,
           state.urlBtn,
-          state.autoDeleteIsoDateTime
+          resolvedAutoDeleteTime
         );
         await tgChat.steps.cancel();
       }), tgChat.app.i18n.commonPhrases.publishConfirmation);

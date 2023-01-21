@@ -1,28 +1,27 @@
-import _ from 'lodash';
-import moment from 'moment';
-import TgChat from '../../apiTg/TgChat.js';
+import _ from 'lodash'
+import TgChat from '../../apiTg/TgChat.js'
 import {
   ChatEvents,
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK, WARN_SIGN,
-} from '../../types/constants.js';
-import BaseState from '../../types/BaseState.js';
-import {TextMessageEvent} from '../../types/MessageEvent.js';
-import {breakArray} from '../../lib/arrays.js';
-import {TgReplyButton} from '../../types/TgReplyButton.js';
-import {askDateTime} from './askDateTime.js';
-import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
+} from '../../types/constants.js'
+import BaseState from '../../types/BaseState.js'
+import {TextMessageEvent} from '../../types/MessageEvent.js'
+import {breakArray} from '../../lib/arrays.js'
+import {TgReplyButton} from '../../types/TgReplyButton.js'
+import {askDateTime} from './askDateTime.js'
+import {makeIsoDateTimeStr} from '../../helpers/helpers.js'
 
 
-const POLL_CLOSE_MENU_ACTION = {
+const PERIOD_MENU_ACTION = {
   hours: 'hours|',
   skip: 'skip',
   setDate: 'setDate',
 };
 
-const POLL_CLOSE_MENU_PRESET = {
+const PERIOD_MENU_PRESET = {
   '1 сутки': 24,
   '2 суток': 48,
   '3 суток': 72,
@@ -30,21 +29,23 @@ const POLL_CLOSE_MENU_PRESET = {
 };
 
 
-export async function askTimePeriod(publishIsoDateTime: string, tgChat: TgChat, onDone: (
-  closeIsoDateTime?: string
+export async function askTimePeriod(tgChat: TgChat, onDone: (
+  hoursPeriod?: number,
+  certainIsoDateTime?: string
 ) => void) {
+  // TODO: change msg
   const msg = tgChat.app.i18n.menu.selectPollClose;
   const buttons = [
-    ...breakArray(Object.keys(POLL_CLOSE_MENU_PRESET).map((el): TgReplyButton => {
+    ...breakArray(Object.keys(PERIOD_MENU_PRESET).map((el): TgReplyButton => {
       return {
         text: el,
-        callback_data: POLL_CLOSE_MENU_ACTION.hours + (POLL_CLOSE_MENU_PRESET as any)[el],
+        callback_data: PERIOD_MENU_ACTION.hours + (PERIOD_MENU_PRESET as any)[el],
       }
     }), 2),
     [
       {
         text: tgChat.app.i18n.commonPhrases.setDate,
-        callback_data: POLL_CLOSE_MENU_ACTION.setDate,
+        callback_data: PERIOD_MENU_ACTION.setDate,
       }
     ],
     [
@@ -52,7 +53,7 @@ export async function askTimePeriod(publishIsoDateTime: string, tgChat: TgChat, 
       CANCEL_BTN,
       {
         text: tgChat.app.i18n.commonPhrases.skip,
-        callback_data: POLL_CLOSE_MENU_ACTION.skip,
+        callback_data: PERIOD_MENU_ACTION.skip,
       }
     ],
   ];
@@ -71,18 +72,19 @@ export async function askTimePeriod(publishIsoDateTime: string, tgChat: TgChat, 
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel();
           }
-          else if (queryData === POLL_CLOSE_MENU_ACTION.skip) {
+          else if (queryData === PERIOD_MENU_ACTION.skip) {
             return onDone();
           }
-          else if (queryData === POLL_CLOSE_MENU_ACTION.setDate) {
+          else if (queryData === PERIOD_MENU_ACTION.setDate) {
+            // set certain date
             await askDateTime(tgChat, (isoDate: string, time: string) => {
-              onDone(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset))
+              onDone(undefined, makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset))
             });
           }
-          else if (queryData.indexOf(POLL_CLOSE_MENU_ACTION.hours) === 0) {
+          else if (queryData.indexOf(PERIOD_MENU_ACTION.hours) === 0) {
             const splat = queryData.split('|');
 
-            onDone(resolveDateByHours(publishIsoDateTime, Number(splat[1])));
+            onDone(Number(splat[1]));
           }
         })
       ),
@@ -100,18 +102,11 @@ export async function askTimePeriod(publishIsoDateTime: string, tgChat: TgChat, 
             return;
           }
 
-          onDone(resolveDateByHours(publishIsoDateTime, hours));
+          onDone(hours);
         })
       ),
       ChatEvents.TEXT
     ]);
   });
 
-}
-
-
-function resolveDateByHours(publishIsoDateTime: string, hours: number): string {
-  return moment(publishIsoDateTime)
-    .add(hours, 'hours')
-    .format()
 }

@@ -21,6 +21,7 @@ export interface CustomPostState {
   mediaGroup: MediaGroupItem[]
   urlBtn?: TgReplyBtnUrl
   autoDeleteIsoDateTime?: string
+  autoDeletePeriodHours?: number
   footerTmplHtml?: string
   cleanFooterTmpl?: string
   postAsText: boolean
@@ -110,6 +111,7 @@ async function printPostPreview(
       + ((state.useFooter) ? ` + ${tgChat.app.i18n.commonPhrases.footer}` : '')
       + `: ${cleanFullText.length}\n`
     + `${tgChat.app.i18n.pageInfo.tagsCount}: ` + state.tags.length
+    // TODO: добавить автоудаление
   );
 }
 

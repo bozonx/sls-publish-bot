@@ -7,7 +7,7 @@ import {
   CANCEL_BTN_CALLBACK,
   OK_BTN, OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN,
 } from '../../types/constants.js';
-import {addSimpleStep, makeIsoDateTimeStr} from '../../helpers/helpers.js';
+import {addSimpleStep, makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
@@ -15,6 +15,7 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {CustomPostState} from './askCustomPostTg.js';
+import {askTimePeriod} from '../common/askTimePeriod.js';
 
 
 export type CustomPostAction = 'FOOTER_SWITCH'
@@ -193,10 +194,11 @@ async function handleButtons(
         return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
       }));
     case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
-
-      // TODO: почему dateTime а не специальный ???
-      return await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-        if (!isoDate) {
+      return await askTimePeriod(tgChat, tgChat.asyncCb(async (
+        hoursPeriod?: number,
+        certainIsoDateTime?: string
+      ) => {
+        if (!hoursPeriod && !certainIsoDateTime) {
           await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
 
           delete state.autoDeleteIsoDateTime;
@@ -204,7 +206,8 @@ async function handleButtons(
           return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
         }
 
-        state.autoDeleteIsoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
+        state.autoDeleteIsoDateTime = certainIsoDateTime
+        state.autoDeletePeriodHours = hoursPeriod
 
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.addedDeleteTimer
@@ -218,6 +221,9 @@ async function handleButtons(
       throw new Error(`Unknown action`);
   }
 }
+
+
+//state.autoDeleteIsoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
 // function makeDateTimeMsg(tgChat: TgChat, state: CustomPostState): string {
 //   const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);

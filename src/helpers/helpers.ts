@@ -119,6 +119,12 @@ export function isoDateToHuman(isoDate: string): string {
   return moment(isoDate).format(PRINT_FULL_DATE_FORMAT + ' HH:mm Z') + ' UTC'
 }
 
+export function replaceHorsInDate(isoDateTime: string, hours: number): string {
+  return moment(isoDateTime)
+    .add(hours, 'hours')
+    .format()
+}
+
 // prepareFooterPost
 export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = true): string {
   if (!tmpl || !useFooter) return '';

@@ -23,15 +23,26 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
     // );
 
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-      const publishDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
+      const publishIsoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
-      await askTimePeriod(publishDateTime, tgChat, tgChat.asyncCb(async (closeIsoDateTime?: string) => {
-        if (closeIsoDateTime) {
-          await tgChat.reply(
-            tgChat.app.i18n.commonPhrases.pollCloseDateAndTime + '\n'
-            + isoDateToHuman(closeIsoDateTime)
-          )
-        }
+
+
+
+      await askTimePeriod(tgChat, tgChat.asyncCb(async (
+        hoursPeriod?: number,
+        certainIsoDateTime?: string
+      ) => {
+        // TODO: make final date
+        //onDone(replaceHorsInDate(publishIsoDateTime, Number(splat[1])));
+
+        // TODO: check publishDateTime
+
+        // if (closeIsoDateTime) {
+        //   await tgChat.reply(
+        //     tgChat.app.i18n.commonPhrases.pollCloseDateAndTime + '\n'
+        //     + isoDateToHuman(closeIsoDateTime)
+        //   )
+        // }
 
         await askConfirm(tgChat, tgChat.asyncCb(async () => {
           await makePublishTaskTgCopy(
