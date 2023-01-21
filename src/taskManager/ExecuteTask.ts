@@ -70,7 +70,7 @@ export default class ExecuteTask {
   private async executePostponePost(task: TaskItem) {
     const postponeTask = task as PostponeTgPostTask;
 
-    await this.tasks.app.tg.bot.telegram.copyMessage(
+    const createdMessage = await this.tasks.app.tg.bot.telegram.copyMessage(
       postponeTask.chatId,
       this.tasks.app.appConfig.logChannelId,
       postponeTask.forwardMessageId,
@@ -83,7 +83,29 @@ export default class ExecuteTask {
       }
     );
 
-    // TODO: add task for auto delete and close poll
+    if (postponeTask.autoDeleteDateTime) {
+      const task: DeleteTgPostTask = {
+        startTime: postponeTask.autoDeleteDateTime,
+        type: 'deletePost',
+        sn: 'telegram',
+        chatId: postponeTask.chatId,
+        messageId: createdMessage.message_id,
+      }
+
+      await this.tasks.addTaskAndLog(task);
+    }
+
+    if (postponeTask.closePollDateTime) {
+      const task: FinishTgPollTask = {
+        startTime: postponeTask.closePollDateTime,
+        type: 'finishPoll',
+        sn: 'telegram',
+        chatId: postponeTask.chatId,
+        messageId: createdMessage.message_id,
+      }
+
+      await this.tasks.addTaskAndLog(task);
+    }
   }
 
   private async executeDeletePost(task: TaskItem) {
