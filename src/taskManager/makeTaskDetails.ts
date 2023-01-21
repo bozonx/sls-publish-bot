@@ -29,8 +29,8 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
 
     username = (res as any).username
 
+    resultArr.push(`Chat username: ${username}`);
     resultArr.push(`chatId: ${task.chatId}`);
-    resultArr.push(`username: ${username}`);
   }
 
   if ((task as any).messageId) {
