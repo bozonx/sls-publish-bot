@@ -12,7 +12,8 @@ export const TASK_LIST_ACTIONS = {
   PIN_POST: 'PIN_POST',
   UNPIN_POST: 'UNPIN_POST',
   FINISH_POLL: 'FINISH_POLL',
-};
+}
+export const TASKS_MAIN_STEP = 'TASKS_MAIN_STEP'
 
 
 export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string, action?: string) => void) {
@@ -66,7 +67,7 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string,
     else if (Object.keys(TASK_LIST_ACTIONS).includes(queryData)) {
       onDone(undefined, queryData);
     }
-  });
+  }, TASKS_MAIN_STEP);
 }
 
 

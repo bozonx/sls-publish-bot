@@ -101,7 +101,7 @@ export default class BreadCrumbs {
    * Removes steps after specified and start it
    */
   private async runStepByIndex(stepIndex: number) {
-    if (this.steps.length -1 < stepIndex) {
+    if (stepIndex < this.steps.length -1) {
       // run one of the previous steps
       // cancel currently running step
       await this.justCancelStep(this.steps.length - 1)

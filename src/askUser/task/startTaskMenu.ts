@@ -1,4 +1,4 @@
-import {askTasksListMenu, TASK_LIST_ACTIONS} from './askTasksListMenu.js';
+import {askTasksListMenu, TASK_LIST_ACTIONS, TASKS_MAIN_STEP} from './askTasksListMenu.js';
 import {askTaskMenu} from './askTaskMenu.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askTaskAdd} from './askTaskAdd.js';
@@ -24,9 +24,9 @@ export async function startTaskMenu(tgChat: TgChat) {
             messageId,
           }
 
-          await tgChat.app.tasks.addTaskAndLog(task);
-          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-          await tgChat.steps.cancel();
+          await tgChat.app.tasks.addTaskAndLog(task)
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+          await tgChat.steps.to(TASKS_MAIN_STEP)
         }));
       }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
@@ -43,9 +43,9 @@ export async function startTaskMenu(tgChat: TgChat) {
             messageId,
           }
 
-          await tgChat.app.tasks.addTaskAndLog(task);
-          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-          await tgChat.steps.cancel();
+          await tgChat.app.tasks.addTaskAndLog(task)
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+          await tgChat.steps.to(TASKS_MAIN_STEP)
         }));
       }
       else if (action === TASK_LIST_ACTIONS.UNPIN_POST) {
@@ -62,9 +62,9 @@ export async function startTaskMenu(tgChat: TgChat) {
             messageId,
           }
 
-          await tgChat.app.tasks.addTaskAndLog(task);
-          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-          await tgChat.steps.cancel();
+          await tgChat.app.tasks.addTaskAndLog(task)
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+          await tgChat.steps.to(TASKS_MAIN_STEP)
         }));
       }
       else if (action === TASK_LIST_ACTIONS.FINISH_POLL) {
@@ -81,14 +81,14 @@ export async function startTaskMenu(tgChat: TgChat) {
             messageId,
           }
 
-          await tgChat.app.tasks.addTaskAndLog(task);
-          await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
-          await tgChat.steps.cancel();
+          await tgChat.app.tasks.addTaskAndLog(task)
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+          await tgChat.steps.to(TASKS_MAIN_STEP)
         }));
       }
       else if (taskId) {
         return askTaskMenu(taskId, tgChat, tgChat.asyncCb(async () => {
-          await tgChat.steps.cancel();
+          await tgChat.steps.to(TASKS_MAIN_STEP)
         }));
       }
     })
