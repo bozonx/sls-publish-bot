@@ -4,7 +4,12 @@ import {makeHumanDateStr, makeHumanDateTimeStr} from '../../helpers/helpers.js';
 import {askTime} from './askTime.js';
 
 
-export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time: string) => void, additionalMsg?: string) {
+export async function askDateTime(
+  tgChat: TgChat,
+  onDone: (isoDate: string, time: string) => void,
+  additionalMsg?: string,
+  stepName?: string
+) {
   await askDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
     const additionalMsg = tgChat.app.i18n.commonPhrases.selectedOnlyDate
       + makeHumanDateStr(isoDate, tgChat.app.appConfig.utcOffset)
@@ -17,5 +22,5 @@ export async function askDateTime(tgChat: TgChat, onDone: (isoDate: string, time
 
       onDone(isoDate, time);
     }), additionalMsg);
-  }), additionalMsg);
+  }), additionalMsg, stepName);
 }

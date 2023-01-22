@@ -218,6 +218,7 @@ const dict = {
     cantCreatePage: 'Не удалось создать страницу: ',
     cantPostToLogChannel: 'Не удалось записать в канал лога: ',
     noChannel: 'Не найден канал для публикации',
+    dateLessThenAutoDelete: 'Выбрана дата меньше чем дата авто удаления поста',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

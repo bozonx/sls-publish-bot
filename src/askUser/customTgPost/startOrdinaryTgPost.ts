@@ -1,3 +1,4 @@
+import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
 import {makePost2000Text} from '../../publish/publishHelpers.js';
 import {askConfirm} from '../common/askConfirm.js';
@@ -6,8 +7,11 @@ import {askDateTime} from '../common/askDateTime.js';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../../publish/makePublishTaskTg.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
-import {stat} from 'fs';
 import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
+import {WARN_SIGN} from '../../types/constants.js';
+
+
+const ORDINARY_POST_DATE_STEP = 'ORDINARY_POST_DATE_STEP';
 
 
 export async function startOrdinaryTgPost(
@@ -27,6 +31,15 @@ export async function startOrdinaryTgPost(
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       let resolvedAutoDeleteTime = state.autoDeleteIsoDateTime
+
+      if (
+        moment(resolvedAutoDeleteTime).unix()
+        <= moment(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)).unix()
+      ) {
+        await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
+
+        return await tgChat.steps.to(ORDINARY_POST_DATE_STEP)
+      }
 
       if (state.autoDeletePeriodHours) {
         resolvedAutoDeleteTime = replaceHorsInDate(
@@ -50,7 +63,7 @@ export async function startOrdinaryTgPost(
         );
         await tgChat.steps.cancel();
       }), tgChat.app.i18n.commonPhrases.publishConfirmation);
-    }));
+    }), undefined, ORDINARY_POST_DATE_STEP);
   }), postAsText, footerTmpl, mediaRequired, onlyOneImage, disableTags);
 }
 

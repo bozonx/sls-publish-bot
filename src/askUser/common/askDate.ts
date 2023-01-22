@@ -20,7 +20,12 @@ const SELECT_PUB_DATE = {
 }
 
 
-export async function askDate(tgChat: TgChat, onDone: (selectedDateString: string) => void, additionalMsg?: string) {
+export async function askDate(
+  tgChat: TgChat,
+  onDone: (selectedDateString: string) => void,
+  additionalMsg?: string,
+  stepName?: string
+) {
   const msg = compactUndefined([
     additionalMsg,
     '',
@@ -90,7 +95,7 @@ export async function askDate(tgChat: TgChat, onDone: (selectedDateString: strin
       ),
       ChatEvents.CALLBACK_QUERY
     ]);
-  });
+  }, undefined, stepName);
 }
 
 
