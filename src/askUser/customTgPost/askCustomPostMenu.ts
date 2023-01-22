@@ -55,7 +55,8 @@ export async function askCustomPostMenu(
         validate(tgChat, state);
       }
       catch (e) {
-        await tgChat.reply(`${WARN_SIGN} ${e}`);
+        tgChat.reply(`${WARN_SIGN} ${e}`)
+          .catch((e) => tgChat.log.error(e));
 
         disableOk = true
       }
