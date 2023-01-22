@@ -1,6 +1,7 @@
 import TgChat from '../apiTg/TgChat.js';
 import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../types/constants.js';
 import {addSimpleStep, compactButtons} from '../helpers/helpers.js';
+import {TgReplyButton} from '../types/TgReplyButton.js';
 
 
 export const BLOG_MENU_ACTIONS = {
@@ -12,36 +13,43 @@ export const BLOG_MENU_ACTIONS = {
 
 
 export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (action: string) => void) {
-  const blogSns = tgChat.app.blogs[blogName].sn;
-  const msg = tgChat.app.i18n.menu.blogMenu;
-  const buttons = compactButtons([
-    [{
-      text: tgChat.app.i18n.menu.publish,
-      callback_data: BLOG_MENU_ACTIONS.CONTENT_PLAN,
-    }],
-    blogSns.telegram && [{
-      text: tgChat.app.i18n.menu.customTgPostMenu,
-      callback_data: BLOG_MENU_ACTIONS.CUSTOM_TG_POST,
-    }],
-    blogSns.telegram && [{
-      text: tgChat.app.i18n.menu.buyAdvertTg,
-      callback_data: BLOG_MENU_ACTIONS.BUY_TG_AD,
-    }],
-    blogSns.telegram && [{
-      text: tgChat.app.i18n.menu.sellAdvertTg,
-      callback_data: BLOG_MENU_ACTIONS.SELL_TG_AD_PLACE,
-    }],
-    [
-      CANCEL_BTN,
-    ],
-  ]);
+  await addSimpleStep(
+    tgChat,
+    (): [string, TgReplyButton[][]] => {
+      const blogSns = tgChat.app.blogs[blogName].sn
 
-  await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
-    if (queryData === CANCEL_BTN_CALLBACK) {
-      return tgChat.steps.cancel();
+      return [
+        tgChat.app.i18n.menu.blogMenu,
+        compactButtons([
+          [{
+            text: tgChat.app.i18n.menu.publish,
+            callback_data: BLOG_MENU_ACTIONS.CONTENT_PLAN,
+          }],
+          blogSns.telegram && [{
+            text: tgChat.app.i18n.menu.customTgPostMenu,
+            callback_data: BLOG_MENU_ACTIONS.CUSTOM_TG_POST,
+          }],
+          blogSns.telegram && [{
+            text: tgChat.app.i18n.menu.buyAdvertTg,
+            callback_data: BLOG_MENU_ACTIONS.BUY_TG_AD,
+          }],
+          blogSns.telegram && [{
+            text: tgChat.app.i18n.menu.sellAdvertTg,
+            callback_data: BLOG_MENU_ACTIONS.SELL_TG_AD_PLACE,
+          }],
+          [
+            CANCEL_BTN,
+          ],
+        ])
+      ]
+    },
+    async (queryData: string) => {
+      if (queryData === CANCEL_BTN_CALLBACK) {
+        return tgChat.steps.cancel();
+      }
+      else if (Object.keys(BLOG_MENU_ACTIONS).includes(queryData)) {
+        return onDone(queryData);
+      }
     }
-    else if (Object.keys(BLOG_MENU_ACTIONS).includes(queryData)) {
-      return onDone(queryData);
-    }
-  });
+  );
 }

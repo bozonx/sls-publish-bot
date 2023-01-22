@@ -3,6 +3,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {CANCEL_BTN, CANCEL_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT} from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {TaskItem} from '../../types/TaskItem.js';
+import {TgReplyButton} from '../../types/TgReplyButton.js';
 
 
 const TASK_ID_CB = 'TASK_ID_CB:';
@@ -17,57 +18,63 @@ export const TASKS_MAIN_STEP = 'TASKS_MAIN_STEP'
 
 
 export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string, action?: string) => void) {
-  const taskList = tgChat.app.tasks.getTasksList();
-  const tasksIds = Object.keys(taskList);
-  const msg = (tasksIds.length)
-    ? tgChat.app.i18n.menu.taskMenuDefinition + '\n\n' + tgChat.app.i18n.menu.taskList
-    : tgChat.app.i18n.menu.emptyTaskList + '\n\n' + tgChat.app.i18n.menu.taskMenuDefinition;
+  await addSimpleStep(
+    tgChat,
+    (): [string, TgReplyButton[][]] => {
+      const taskList = tgChat.app.tasks.getTasksList()
+      const tasksIds = Object.keys(taskList)
 
-  const buttons = [
-    ...tasksIds.map((taskId) => {
-      return [{
-        text: makeTaskItmStr(taskList[taskId]),
-        callback_data: TASK_ID_CB + taskId,
-      }]
-    }),
-    [
-      {
-        text: tgChat.app.i18n.buttons.deletePost,
-        callback_data: TASK_LIST_ACTIONS.DELETE_POST,
-      },
-      {
-        text: tgChat.app.i18n.buttons.finishPoll,
-        callback_data: TASK_LIST_ACTIONS.FINISH_POLL,
-      },
-    ],
-    [
-      {
-        text: tgChat.app.i18n.buttons.pinPost,
-        callback_data: TASK_LIST_ACTIONS.PIN_POST,
-      },
-      {
-        text: tgChat.app.i18n.buttons.unpinPost,
-        callback_data: TASK_LIST_ACTIONS.UNPIN_POST,
-      },
-    ],
-    [
-      CANCEL_BTN,
-    ]
-  ];
+      return [
+        (tasksIds.length)
+          ? tgChat.app.i18n.menu.taskMenuDefinition + '\n\n' + tgChat.app.i18n.menu.taskList
+          : tgChat.app.i18n.menu.emptyTaskList + '\n\n' + tgChat.app.i18n.menu.taskMenuDefinition,
+        [
+          ...tasksIds.map((taskId) => {
+            return [{
+              text: makeTaskItmStr(taskList[taskId]),
+              callback_data: TASK_ID_CB + taskId,
+            }]
+          }),
+          [
+            {
+              text: tgChat.app.i18n.buttons.deletePost,
+              callback_data: TASK_LIST_ACTIONS.DELETE_POST,
+            },
+            {
+              text: tgChat.app.i18n.buttons.finishPoll,
+              callback_data: TASK_LIST_ACTIONS.FINISH_POLL,
+            },
+          ],
+          [
+            {
+              text: tgChat.app.i18n.buttons.pinPost,
+              callback_data: TASK_LIST_ACTIONS.PIN_POST,
+            },
+            {
+              text: tgChat.app.i18n.buttons.unpinPost,
+              callback_data: TASK_LIST_ACTIONS.UNPIN_POST,
+            },
+          ],
+          [
+            CANCEL_BTN,
+          ]
+        ]
+      ]
+    },
+    async (queryData: string) => {
+      if (queryData === CANCEL_BTN_CALLBACK) {
+        return tgChat.steps.cancel();
+      }
+      else if (queryData.indexOf(TASK_ID_CB) === 0) {
+        const splat = queryData.split(':');
 
-  await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
-    if (queryData === CANCEL_BTN_CALLBACK) {
-      return tgChat.steps.cancel();
-    }
-    else if (queryData.indexOf(TASK_ID_CB) === 0) {
-      const splat = queryData.split(':');
-
-      onDone(splat[1]);
-    }
-    else if (Object.keys(TASK_LIST_ACTIONS).includes(queryData)) {
-      onDone(undefined, queryData);
-    }
-  }, TASKS_MAIN_STEP);
+        onDone(splat[1]);
+      }
+      else if (Object.keys(TASK_LIST_ACTIONS).includes(queryData)) {
+        onDone(undefined, queryData);
+      }
+    },
+    TASKS_MAIN_STEP);
 }
 
 

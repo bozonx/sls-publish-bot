@@ -17,6 +17,7 @@ import {askSns} from '../common/askSns.js';
 import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
 import {MediaGroupItem} from '../../types/types.js';
+import {TgReplyButton} from '../../types/TgReplyButton.js';
 
 
 export interface PublishMenuState {
@@ -59,95 +60,101 @@ export async function askPublishMenu(
   state: PublishMenuState,
   onDone: () => void,
 ) {
-  const msg = tgChat.app.i18n.menu.publishFromCpMenu;
-  const buttons = [
-    // ask time
-    [
-      {
-        text: (state.selectedTime)
-          ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
-          : tgChat.app.i18n.commonPhrases.changePubTime,
-        callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
-      },
-    ],
-    // ask preview
-    (!state.mainImgUrl && [
-      PUBLICATION_TYPES.post1000,
-      PUBLICATION_TYPES.post2000,
-      PUBLICATION_TYPES.announcement
-    ].includes(state.pubType)) ? [{
-      text: (state.usePreview)
-        ? tgChat.app.i18n.commonPhrases.noPreview
-        : tgChat.app.i18n.commonPhrases.yesPreview,
-      callback_data: PUBLISH_MENU_ACTION.PREVIEW_SWITCH,
-    }] : [],
-    // ask footer
-    (tgChat.app.blogs[blogName].sn.telegram?.postFooter && [
-      PUBLICATION_TYPES.post1000,
-      PUBLICATION_TYPES.post2000,
-      PUBLICATION_TYPES.mem,
-      PUBLICATION_TYPES.photos,
-      PUBLICATION_TYPES.story,
-      PUBLICATION_TYPES.narrative,
-      PUBLICATION_TYPES.announcement,
-      PUBLICATION_TYPES.reels,
-      PUBLICATION_TYPES.video,
-    ].includes(state.pubType)) ? [{
-      text: (state.useFooter)
-        ? tgChat.app.i18n.commonPhrases.noPostFooter
-        : tgChat.app.i18n.commonPhrases.yesPostFooter,
-      callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
-    }] : [],
-    // ask to change post text only for announcement
-    (state.pubType === PUBLICATION_TYPES.announcement) ? [{
-      text: tgChat.app.i18n.buttons.changeText,
-      callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
-    }] : [],
-    // ask to change main image/video
-    ([
-      PUBLICATION_TYPES.article,
-      PUBLICATION_TYPES.post1000,
-      PUBLICATION_TYPES.post2000,
-      PUBLICATION_TYPES.mem,
-      PUBLICATION_TYPES.story,
-      PUBLICATION_TYPES.announcement,
-      PUBLICATION_TYPES.reels,
-    ].includes(state.pubType)) ? [{
-      text: (state.mainImgUrl)
-        ? tgChat.app.i18n.buttons.changeMainImage
-        : tgChat.app.i18n.buttons.uploadMainImage,
-      callback_data: PUBLISH_MENU_ACTION.CHANGE_IMAGE,
-    }] : [],
-    // ask to upload several images for photos and narrative
-    ([
-      PUBLICATION_TYPES.photos,
-      PUBLICATION_TYPES.narrative,
-    ].includes(state.pubType)) ? [{
-      text: tgChat.app.i18n.buttons.uploadMediaGroup,
-      callback_data: PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP,
-    }] : [],
-    // and to setup instagram tags
-    (state.sns.includes(SN_TYPES.instagram)) ? [{
-      text: tgChat.app.i18n.buttons.changeInstaTags,
-      callback_data: PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS,
-    }] : [],
-    // ask remove or add sn
-    [
-      {
-        text: tgChat.app.i18n.buttons.changeSns,
-        callback_data: PUBLISH_MENU_ACTION.CHANGE_SNS,
-      }
-    ],
-    [
-      BACK_BTN,
-      CANCEL_BTN,
-      OK_BTN
-    ]
-  ];
-
-  await addSimpleStep(tgChat, msg, buttons,(queryData: string) => {
-    return handleButtons(queryData, blogName, tgChat, state, onDone);
-  });
+  await addSimpleStep(
+    tgChat,
+    (): [string, TgReplyButton[][]] => {
+      return [
+        tgChat.app.i18n.menu.publishFromCpMenu,
+        [
+          // ask time
+          [
+            {
+              text: (state.selectedTime)
+                ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
+                : tgChat.app.i18n.commonPhrases.changePubTime,
+              callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
+            },
+          ],
+          // ask preview
+          (!state.mainImgUrl && [
+            PUBLICATION_TYPES.post1000,
+            PUBLICATION_TYPES.post2000,
+            PUBLICATION_TYPES.announcement
+          ].includes(state.pubType)) ? [{
+            text: (state.usePreview)
+              ? tgChat.app.i18n.commonPhrases.noPreview
+              : tgChat.app.i18n.commonPhrases.yesPreview,
+            callback_data: PUBLISH_MENU_ACTION.PREVIEW_SWITCH,
+          }] : [],
+          // ask footer
+          (tgChat.app.blogs[blogName].sn.telegram?.postFooter && [
+            PUBLICATION_TYPES.post1000,
+            PUBLICATION_TYPES.post2000,
+            PUBLICATION_TYPES.mem,
+            PUBLICATION_TYPES.photos,
+            PUBLICATION_TYPES.story,
+            PUBLICATION_TYPES.narrative,
+            PUBLICATION_TYPES.announcement,
+            PUBLICATION_TYPES.reels,
+            PUBLICATION_TYPES.video,
+          ].includes(state.pubType)) ? [{
+            text: (state.useFooter)
+              ? tgChat.app.i18n.commonPhrases.noPostFooter
+              : tgChat.app.i18n.commonPhrases.yesPostFooter,
+            callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
+          }] : [],
+          // ask to change post text only for announcement
+          (state.pubType === PUBLICATION_TYPES.announcement) ? [{
+            text: tgChat.app.i18n.buttons.changeText,
+            callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
+          }] : [],
+          // ask to change main image/video
+          ([
+            PUBLICATION_TYPES.article,
+            PUBLICATION_TYPES.post1000,
+            PUBLICATION_TYPES.post2000,
+            PUBLICATION_TYPES.mem,
+            PUBLICATION_TYPES.story,
+            PUBLICATION_TYPES.announcement,
+            PUBLICATION_TYPES.reels,
+          ].includes(state.pubType)) ? [{
+            text: (state.mainImgUrl)
+              ? tgChat.app.i18n.buttons.changeMainImage
+              : tgChat.app.i18n.buttons.uploadMainImage,
+            callback_data: PUBLISH_MENU_ACTION.CHANGE_IMAGE,
+          }] : [],
+          // ask to upload several images for photos and narrative
+          ([
+            PUBLICATION_TYPES.photos,
+            PUBLICATION_TYPES.narrative,
+          ].includes(state.pubType)) ? [{
+            text: tgChat.app.i18n.buttons.uploadMediaGroup,
+            callback_data: PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP,
+          }] : [],
+          // and to setup instagram tags
+          (state.sns.includes(SN_TYPES.instagram)) ? [{
+            text: tgChat.app.i18n.buttons.changeInstaTags,
+            callback_data: PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS,
+          }] : [],
+          // ask remove or add sn
+          [
+            {
+              text: tgChat.app.i18n.buttons.changeSns,
+              callback_data: PUBLISH_MENU_ACTION.CHANGE_SNS,
+            }
+          ],
+          [
+            BACK_BTN,
+            CANCEL_BTN,
+            OK_BTN
+          ]
+        ]
+      ]
+    },
+    (queryData: string) => {
+      return handleButtons(queryData, blogName, tgChat, state, onDone);
+    }
+  );
 }
 
 

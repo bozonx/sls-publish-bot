@@ -11,7 +11,7 @@ import {addSimpleStep, makeIsoDateTimeStr, replaceHorsInDate} from '../../helper
 import {compactUndefined} from '../../lib/arrays.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
-import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
+import {TgReplyBtnUrl, TgReplyButton} from '../../types/TgReplyButton.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {CustomPostState} from './askCustomPostTg.js';
@@ -46,71 +46,77 @@ export async function askCustomPostMenu(
   validate: (tgChat: TgChat, state: CustomPostState) => void,
   onDone: () => void,
 ) {
-  let disableOk = false;
+  await addSimpleStep(
+    tgChat,
+    (): [string, TgReplyButton[][]] => {
+      let disableOk = false;
 
-  try {
-    validate(tgChat, state);
-  }
-  catch (e) {
-    await tgChat.reply(`${WARN_SIGN} ${e}`);
+      try {
+        validate(tgChat, state);
+      }
+      catch (e) {
+        await tgChat.reply(`${WARN_SIGN} ${e}`);
 
-    disableOk = true
-  }
+        disableOk = true
+      }
 
-  const msg = tgChat.app.i18n.customPost.actionMenu;
-  const buttons = [
-    (!state.forceDisableFooter) ? [{
-      text: (state.useFooter)
-        ? tgChat.app.i18n.commonPhrases.noPostFooter
-        : tgChat.app.i18n.commonPhrases.yesPostFooter,
-      callback_data: CUSTOM_POST_ACTION.FOOTER_SWITCH,
-    }] : [],
-    (!state.mediaGroup.length) ? [{
-      text: (state.usePreview)
-        ? tgChat.app.i18n.commonPhrases.noPreview
-        : tgChat.app.i18n.commonPhrases.yesPreview,
-      callback_data: CUSTOM_POST_ACTION.PREVIEW_SWITCH,
-    }] : [],
-    compactUndefined([
-      {
-        text: (state.postHtmlText)
-          ? tgChat.app.i18n.buttons.replaceText
-          : tgChat.app.i18n.buttons.addText,
-        callback_data: CUSTOM_POST_ACTION.ADD_TEXT,
-      },
-      (state.disableTags || !state.useFooter) ? undefined : {
-        text: (state.tags.length)
-          ? tgChat.app.i18n.buttons.replaceTags
-          : tgChat.app.i18n.buttons.addTags,
-        callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
-      },
-    ]),
-    [
-      {
-        text: (state.urlBtn)
-          ? tgChat.app.i18n.buttons.changeUrlButton
-          : tgChat.app.i18n.buttons.addUrlButton,
-        callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
-      },
-    ],
-    [
-      {
-        text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
-          ? tgChat.app.i18n.buttons.changeAutoRemove
-          : tgChat.app.i18n.buttons.setAutoRemove,
-        callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
-      },
-    ],
-    compactUndefined([
-      BACK_BTN,
-      CANCEL_BTN,
-      (disableOk) ? undefined : OK_BTN,
-    ]),
-  ];
-
-  await addSimpleStep(tgChat, msg, buttons,async (queryData: string) => {
-    return handleButtons(queryData, blogName, tgChat, state, validate, onDone);
-  });
+      return [
+        tgChat.app.i18n.customPost.actionMenu,
+        [
+          (!state.forceDisableFooter) ? [{
+            text: (state.useFooter)
+              ? tgChat.app.i18n.commonPhrases.noPostFooter
+              : tgChat.app.i18n.commonPhrases.yesPostFooter,
+            callback_data: CUSTOM_POST_ACTION.FOOTER_SWITCH,
+          }] : [],
+          (!state.mediaGroup.length) ? [{
+            text: (state.usePreview)
+              ? tgChat.app.i18n.commonPhrases.noPreview
+              : tgChat.app.i18n.commonPhrases.yesPreview,
+            callback_data: CUSTOM_POST_ACTION.PREVIEW_SWITCH,
+          }] : [],
+          compactUndefined([
+            {
+              text: (state.postHtmlText)
+                ? tgChat.app.i18n.buttons.replaceText
+                : tgChat.app.i18n.buttons.addText,
+              callback_data: CUSTOM_POST_ACTION.ADD_TEXT,
+            },
+            (state.disableTags || !state.useFooter) ? undefined : {
+              text: (state.tags.length)
+                ? tgChat.app.i18n.buttons.replaceTags
+                : tgChat.app.i18n.buttons.addTags,
+              callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
+            },
+          ]),
+          [
+            {
+              text: (state.urlBtn)
+                ? tgChat.app.i18n.buttons.changeUrlButton
+                : tgChat.app.i18n.buttons.addUrlButton,
+              callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
+            },
+          ],
+          [
+            {
+              text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
+                ? tgChat.app.i18n.buttons.changeAutoRemove
+                : tgChat.app.i18n.buttons.setAutoRemove,
+              callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
+            },
+          ],
+          compactUndefined([
+            BACK_BTN,
+            CANCEL_BTN,
+            (disableOk) ? undefined : OK_BTN,
+          ]),
+        ]
+      ]
+    },
+    async (queryData: string) => {
+      return handleButtons(queryData, blogName, tgChat, state, validate, onDone);
+    }
+  );
 }
 
 

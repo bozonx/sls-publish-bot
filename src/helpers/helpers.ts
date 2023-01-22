@@ -61,21 +61,22 @@ export function matchSnsForType(pubType: PublicationType): SnType[] {
 }
 
 
-// TODO: review
 export async function addSimpleStep(
   tgChat: TgChat,
-  msg: string,
-  buttons: TgReplyButton[][],
+  init: () => [string, TgReplyButton[][]],
   cb: (queryData: string) => void,
   stepName?: string
 ) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
+    const [msg, buttons] = init()
     // print main menu message
-    state.messageIds.push(await tgChat.reply(msg, buttons, true));
+    state.messageIds.push(await tgChat.reply(msg, buttons, true))
     // listen to result
     state.handlerIndexes.push([
       tgChat.events.addListener(
         ChatEvents.CALLBACK_QUERY,
+        // This it to make it safe and put error message to the LOG
+        // TODO: сделать просто через улавливание ошибок
         tgChat.asyncCb(async (queryData: string) => cb(queryData))
       ),
       ChatEvents.CALLBACK_QUERY

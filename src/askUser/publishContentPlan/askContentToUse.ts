@@ -3,6 +3,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 import {PageObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
+import {TgReplyButton} from '../../types/TgReplyButton.js';
 
 
 const CONTENT_MARKER = 'content:';
@@ -13,37 +14,43 @@ export async function askContentToUse(
   tgChat: TgChat,
   onDone: (item: PageObjectResponse) => void
 ) {
-  const msg = tgChat.app.i18n.menu.selectContent;
-  const buttons = [
-    ...items.map((item, index) => {
-      return [{
-        text: makeButtonTitle(item),
-        callback_data: CONTENT_MARKER + index,
-      }];
-    }),
-    [
-      BACK_BTN,
-      CANCEL_BTN,
-    ],
-  ];
+  await addSimpleStep(
+    tgChat,
+    (): [string, TgReplyButton[][]] => {
+      return [
+        tgChat.app.i18n.menu.selectContent,
+        [
+          ...items.map((item, index) => {
+            return [{
+              text: makeButtonTitle(item),
+              callback_data: CONTENT_MARKER + index,
+            }];
+          }),
+          [
+            BACK_BTN,
+            CANCEL_BTN,
+          ],
+        ]
+      ]
+    },
+    (queryData: string) => {
+      if (queryData === BACK_BTN_CALLBACK) {
+        return tgChat.steps.back();
+      }
+      else if (queryData === CANCEL_BTN_CALLBACK) {
+        return tgChat.steps.cancel();
+      }
+      else if (queryData.indexOf(CONTENT_MARKER) === 0) {
+        const splat = queryData.split(':');
+        const itemIndex = Number(splat[1]);
 
-  await addSimpleStep(tgChat, msg, buttons,(queryData: string) => {
-    if (queryData === BACK_BTN_CALLBACK) {
-      return tgChat.steps.back();
+        onDone(items[itemIndex]);
+      }
+      else {
+        throw new Error(`Unknown action`);
+      }
     }
-    else if (queryData === CANCEL_BTN_CALLBACK) {
-      return tgChat.steps.cancel();
-    }
-    else if (queryData.indexOf(CONTENT_MARKER) === 0) {
-      const splat = queryData.split(':');
-      const itemIndex = Number(splat[1]);
-
-      onDone(items[itemIndex]);
-    }
-    else {
-      throw new Error(`Unknown action`);
-    }
-  });
+  );
 }
 
 

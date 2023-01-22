@@ -154,6 +154,7 @@ export default class TgChat {
         }
       },
       onCancel: async (state: BaseState): Promise<void> => {
+        // TODO: на момент вызова походу уже удален степ
         // TODO: почему это не делается в самом BreadCrumbs ?
         for (const item of state.handlerIndexes) {
           this.events.removeListener(item[0], item[1]);
