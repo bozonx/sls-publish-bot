@@ -128,7 +128,8 @@ export default class TgChat {
 
   async addOrdinaryStep(
     onStart: (state: BaseState) => Promise<void>,
-    initialState?: BaseState
+    initialState?: BaseState,
+    stepName?: string
   ) {
 
     // TODO: когда запускается onDone собития должны все отписаться
@@ -136,6 +137,7 @@ export default class TgChat {
     const initState = initialState || makeBaseState();
 
     await this.steps.addAndRunStep({
+      name: stepName,
       state: initState,
       onStart: async (state: BaseState): Promise<void> => {
         await onStart(state);

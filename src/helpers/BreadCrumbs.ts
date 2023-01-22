@@ -6,10 +6,9 @@ export interface BreadCrumbsStep {
   // It will be called on canceling step or if is going to switch to previous one
   onCancel(state: Record<string, any>): Promise<void>
   state: Record<string, any>
-  // optional step name which is used to switch to certain step
+  // optional step name which is used to switch to the certain step
   name?: string
 }
-
 
 export default class BreadCrumbs {
   private readonly steps: BreadCrumbsStep[] = []
@@ -17,8 +16,7 @@ export default class BreadCrumbs {
 
 
   constructor(initialStep: () => Promise<void>) {
-    this.initialStep = initialStep;
-    // TODO: использовать логгер
+    this.initialStep = initialStep
   }
 
   destroy() {
@@ -31,30 +29,24 @@ export default class BreadCrumbs {
   /**
    * Add a step and run it
    */
-  async addAndRunStep(step: BreadCrumbsStep): Promise<number> {
-    this.steps.push(step);
+  async addAndRunStep(step: BreadCrumbsStep) {
+    this.steps.push(step)
 
-    if (this.steps.length < 1) throw new Error(`Step didn't added`);
-
-    const stepNum = this.steps.length -1;
+    const stepIndex = this.steps.length -1
 
     try {
       // normally end prev step
-      if (stepNum > 0) {
-        await this.justEndStep(stepNum - 1);
+      if (stepIndex > 0) {
+        await this.justEndStep(stepIndex - 1)
       }
       // run current step
-      await this.justExecuteStep(stepNum);
+      await this.justExecuteStep(stepIndex)
     }
     catch (e) {
-      // TODO: review
-      // TODO: или может запустить stop. Или разрешить ошибку
-      this.deleteStepAndAfter(stepNum)
+      this.deleteStepAndAfter(stepIndex)
 
       throw e
     }
-
-    return stepNum
   }
 
   /**

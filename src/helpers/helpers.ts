@@ -60,11 +60,14 @@ export function matchSnsForType(pubType: PublicationType): SnType[] {
   return sns;
 }
 
+
+// TODO: review
 export async function addSimpleStep(
   tgChat: TgChat,
   msg: string,
   buttons: TgReplyButton[][],
-  cb: (queryData: string) => void
+  cb: (queryData: string) => void,
+  stepName?: string
 ) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
@@ -77,7 +80,7 @@ export async function addSimpleStep(
       ),
       ChatEvents.CALLBACK_QUERY
     ]);
-  });
+  }, undefined, stepName);
 }
 
 export function makeUtcOffsetStr(utcOffsetNum: number): string {
