@@ -145,6 +145,8 @@ async function handleButtons(
         tgChat.app.i18n.commonPhrases.selectedNoFooter
         + tgChat.app.i18n.onOff[Number(state.useFooter)]
       );
+
+      // TODO: вместо этого использовать steps.to() - нверное стейт тоже сохранится
       // print menu again
       return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
     case CUSTOM_POST_ACTION.PREVIEW_SWITCH:

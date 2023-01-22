@@ -131,39 +131,39 @@ export default class TgChat {
     initialState?: BaseState,
     stepName?: string
   ) {
-
-    // TODO: когда запускается onDone собития должны все отписаться
-
     const initState = initialState || makeBaseState();
 
     await this.steps.addAndRunStep({
       name: stepName,
       state: initState,
-      onStart: async (state: BaseState): Promise<void> => {
-        await onStart(state);
-      },
+      onStart: async (state: BaseState): Promise<void> => onStart(state),
+      // go to the new one step normally
       onEnd: async (state: BaseState): Promise<void> => {
-        // TODO: почему это не делается в самом BreadCrumbs ?
         for (const item of state.handlerIndexes) {
-          this.events.removeListener(item[0], item[1]);
+          this.events.removeListener(item[0], item[1])
         }
         // don't wait of removing the asking message
         for (const messageId of state.messageIds) {
           this.deleteMessage(messageId)
-            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
+            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message onEnd: ${e}`));
         }
+
+        state.handlerIndexes.splice(0)
+        state.messageIds.splice(0)
       },
+      // go back to one or more steps
       onCancel: async (state: BaseState): Promise<void> => {
-        // TODO: на момент вызова походу уже удален степ
-        // TODO: почему это не делается в самом BreadCrumbs ?
         for (const item of state.handlerIndexes) {
           this.events.removeListener(item[0], item[1]);
         }
         // don't wait of removing the asking message
         for (const messageId of state.messageIds) {
           this.deleteMessage(messageId)
-            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message: ${e}`));
+            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message onCancel: ${e}`));
         }
+
+        state.handlerIndexes.splice(0)
+        state.messageIds.splice(0)
       },
     });
   }
