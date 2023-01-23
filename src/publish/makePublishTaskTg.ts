@@ -1,11 +1,19 @@
 import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
-import {publishTgCopy, publishTgImage, publishTgPoll, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
+import {
+  publishTgCopy,
+  publishTgImage,
+  publishTgMediaGroup,
+  publishTgPoll,
+  publishTgText,
+  publishTgVideo
+} from '../apiTg/publishTg.js';
 import {makePublishInfoMessage} from './publishHelpers.js';
 import {PostponeTgPostTask, TASK_TYPES} from '../types/TaskItem.js';
 import {SN_TYPES} from '../types/snTypes.js';
 import PollData from '../types/PollData.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
+import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 
 
 /**
@@ -115,7 +123,7 @@ export async function makePublishTaskTgMediaGroup(
   tgChat: TgChat,
   isoDate: string,
   time: string,
-  imageUrls: string[],
+  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
@@ -123,9 +131,9 @@ export async function makePublishTaskTgMediaGroup(
   let msgId: number;
   // Print to log channel
   try {
-    msgId = await publishTgImage(
+    msgId = await publishTgMediaGroup(
       tgChat.app.appConfig.logChannelId,
-      imageUrl,
+      mediaGroup,
       tgChat,
       captionMd,
       urlBtn

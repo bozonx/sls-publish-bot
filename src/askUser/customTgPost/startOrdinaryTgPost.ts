@@ -107,14 +107,14 @@ export async function registerCustomPostTg(
     );
   }
   else if (mediaGroup.length > 1) {
-    const imgUrls = mediaGroup.map((el: any) => el.fileId || el.url || undefined)
+    //const imgUrls = mediaGroup.map((el: any) => el.fileId || el.url || undefined)
     // post several images
     await makePublishTaskTgMediaGroup(
       blogName,
       tgChat,
       isoDate,
       time,
-      imgUrls,
+      mediaGroup,
       resultText,
       urlBtn,
       autoDeleteIsoDateTime
