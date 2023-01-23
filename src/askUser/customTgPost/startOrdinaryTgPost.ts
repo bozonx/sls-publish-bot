@@ -116,7 +116,6 @@ export async function registerCustomPostTg(
       time,
       mediaGroup,
       resultTextHtml,
-      urlBtn,
       autoDeleteIsoDateTime
     );
   }

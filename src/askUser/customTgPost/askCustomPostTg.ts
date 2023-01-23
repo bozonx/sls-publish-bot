@@ -28,6 +28,7 @@ export interface CustomPostState {
   footerTmplHtml?: string
   cleanFooterTmpl?: string
   postAsText: boolean
+  onlyOneImage: boolean
   //resultTextHtml?: string;
 }
 
@@ -59,6 +60,7 @@ export async function askCustomPostTg(
         footerTmplHtml: await commonMdToTgHtml(footerTmpl),
         cleanFooterTmpl: await clearMd(footerTmpl),
         postAsText,
+        onlyOneImage,
       };
 
       await askCustomPostMenu(

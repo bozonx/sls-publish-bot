@@ -99,7 +99,6 @@ export async function publishTgMediaGroup(
   chatId: number | string,
   mediaGroup: (MediaGroupItem | PrimitiveMediaGroup)[],
   captionMd?: string,
-  urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number[]> {
   const result = await app.tg.bot.telegram.sendMediaGroup(
@@ -108,15 +107,6 @@ export async function publishTgMediaGroup(
       const firstItemData = (index) ? {} : {
         caption: captionMd,
         parse_mode: app.appConfig.telegram.parseMode,
-
-        // TODO: проверить
-
-        reply_markup: urlBtn && {
-          inline_keyboard: [
-            [ urlBtn ]
-          ]
-        },
-
       };
 
       if (el.type === 'photo' || el.type === 'photoUrl') {

@@ -78,7 +78,6 @@ export default class ExecuteTask {
         postponeTask.chatId,
         postponeTask.mediaGroup,
         postponeTask.mediaGroupCaptionHtml,
-        postponeTask.urlBtn,
       )
     }
     else if (typeof postponeTask.messageIdToCopy !== 'undefined') {

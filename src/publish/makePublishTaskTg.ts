@@ -126,7 +126,6 @@ export async function makePublishTaskTgMediaGroup(
   time: string,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   captionMd?: string,
-  urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
 ) {
   let msgIds: number[];
@@ -136,8 +135,7 @@ export async function makePublishTaskTgMediaGroup(
       tgChat.app,
       tgChat.app.appConfig.logChannelId,
       mediaGroup,
-      captionMd,
-      urlBtn
+      captionMd
     )
   }
   catch (e) {
@@ -152,7 +150,7 @@ export async function makePublishTaskTgMediaGroup(
     isoDate,
     time,
     msgIds[0],
-    urlBtn,
+    undefined,
     autoDeleteIsoDateTime,
     undefined,
     captionMd,

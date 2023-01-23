@@ -7,7 +7,7 @@ import {
   CANCEL_BTN_CALLBACK,
   OK_BTN, OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN,
 } from '../../types/constants.js';
-import {addSimpleStep, makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
+import {addSimpleStep} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
@@ -89,14 +89,14 @@ export async function askCustomPostMenu(
               callback_data: CUSTOM_POST_ACTION.ADD_TAGS,
             },
           ]),
-          [
-            {
+          compactUndefined([
+            (state.onlyOneImage) ? {
               text: (state.urlBtn)
                 ? tgChat.app.i18n.buttons.changeUrlButton
                 : tgChat.app.i18n.buttons.addUrlButton,
               callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
-            },
-          ],
+            } : undefined,
+          ]),
           [
             {
               text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
