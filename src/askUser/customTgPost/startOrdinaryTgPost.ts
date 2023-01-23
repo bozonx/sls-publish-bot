@@ -4,7 +4,12 @@ import {makePost2000Text} from '../../publish/publishHelpers.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {askCustomPostTg, CustomPostState} from './askCustomPostTg.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgVideo} from '../../publish/makePublishTaskTg.js';
+import {
+  makePublishTaskTgImage,
+  makePublishTaskTgMediaGroup,
+  makePublishTaskTgOnlyText,
+  makePublishTaskTgVideo
+} from '../../publish/makePublishTaskTg.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
@@ -102,9 +107,18 @@ export async function registerCustomPostTg(
     );
   }
   else if (mediaGroup.length > 1) {
+    const imgUrls = mediaGroup.map((el: any) => el.fileId || el.url || undefined)
     // post several images
-    // TODO: а если несколько картинок ???
-    throw new Error(`Not supported`);
+    await makePublishTaskTgMediaGroup(
+      blogName,
+      tgChat,
+      isoDate,
+      time,
+      imgUrls,
+      resultText,
+      urlBtn,
+      autoDeleteIsoDateTime
+    );
   }
   else {
     // post as image or video caption

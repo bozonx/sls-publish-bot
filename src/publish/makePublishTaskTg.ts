@@ -108,6 +108,39 @@ export async function makePublishTaskTgVideo(
 }
 
 /**
+ * Post media group to telegram
+ */
+export async function makePublishTaskTgMediaGroup(
+  blogName: string,
+  tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  imageUrls: string[],
+  captionMd?: string,
+  urlBtn?: TgReplyBtnUrl,
+  autoDeleteIsoDateTime?: string
+) {
+  let msgId: number;
+  // Print to log channel
+  try {
+    msgId = await publishTgImage(
+      tgChat.app.appConfig.logChannelId,
+      imageUrl,
+      tgChat,
+      captionMd,
+      urlBtn
+    )
+  }
+  catch (e) {
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
+
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
+  }
+
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
+}
+
+/**
  * Copy message to telegram chat. Useful for poll.
  */
 export async function makePublishTaskTgCopy(
