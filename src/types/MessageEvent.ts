@@ -1,5 +1,6 @@
 import {TgEntity} from './TgEntity.js';
 
+
 export interface PhotoUrlData {
   type: 'photoUrl',
   url: string,

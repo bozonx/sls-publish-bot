@@ -73,6 +73,7 @@ export default class ExecuteTask {
     let createdMessagesIds: number[] = []
 
     if (postponeTask.forwardMessageIds.length === 1) {
+      // just copy message if it isn't a mediaGroup
       createdMessagesIds[0] = await publishTgCopy(
         this.tasks.app,
         postponeTask.chatId,
@@ -81,66 +82,24 @@ export default class ExecuteTask {
         postponeTask.urlBtn
       )
     }
-    // else {
-    //   createdMessagesIds = (await this.tasks.app.tg.bot.telegram.sendMediaGroup(
-    //     postponeTask.chatId,
-    //     postponeTask.forwardMessageIds.map((forwardMsgId, index) => {
-    //       const firstItemData = (index) ? {} : {
-    //         // TODO: нужен текст
-    //         caption: 'captionMd',
-    //         parse_mode: this.tasks.app.appConfig.telegram.parseMode,
-    //
-    //         // TODO: проверить
-    //         // reply_markup: urlBtn && {
-    //         //   inline_keyboard: [
-    //         //     [ urlBtn ]
-    //         //   ]
-    //         // } || undefined,
-    //
-    //       };
-    //
-    //       return {
-    //
-    //       }
-    //
-    //       // if (el.type === 'photo') {
-    //       //   return {
-    //       //     type: 'photo',
-    //       //     media: el.fileId,
-    //       //     ...firstItemData,
-    //       //   };
-    //       // }
-    //       // else if (el.type === 'photoUrl') {
-    //       //   return {
-    //       //     type: 'photo',
-    //       //     media: el.url,
-    //       //     ...firstItemData,
-    //       //   };
-    //       // }
-    //       // else if (el.type === 'video') {
-    //       //   return {
-    //       //     type: 'video',
-    //       //     media: el.fileId,
-    //       //     ...firstItemData,
-    //       //   };
-    //       // }
-    //       // else {
-    //       //   throw new Error(`Unknown media`);
-    //       // }
-    //     }),
-    //     {
-    //       disable_notification: disableNotification,
-    //     }
-    //   )).map((e) => e.message_id);
-    // }
+    else {
+      if (!postponeTask.mediaGroup) {
+        const msg = `Empty media group`
 
-    // for (const forwardMsgId of postponeTask.forwardMessageIds) {
-    //
-    //   // await publishTgMediaGroup(
-    //   //   postponeTask.chatId,
-    //   //
-    //   // )
-    // }
+        this.tasks.app.consoleLog.error(msg)
+        this.tasks.app.channelLog.error(msg)
+
+        return
+      }
+
+      createdMessagesIds = await publishTgMediaGroup(
+        this.tasks.app,
+        postponeTask.chatId,
+        postponeTask.mediaGroup,
+        postponeTask.mediaGroupCaptionHtml,
+        postponeTask.urlBtn,
+      )
+    }
 
     if (postponeTask.autoDeleteDateTime) {
       const task: DeleteTgPostTask = {

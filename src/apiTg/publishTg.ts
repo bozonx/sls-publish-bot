@@ -1,7 +1,7 @@
 import App from '../App.js';
 import PollData from '../types/PollData.js';
-import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
+import {MediaGroupItem, PrimitiveMediaGroup} from '../types/types.js';
 
 
 /**
@@ -97,7 +97,7 @@ export async function publishTgVideo(
 export async function publishTgMediaGroup(
   app: App,
   chatId: number | string,
-  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
+  mediaGroup: (MediaGroupItem | PrimitiveMediaGroup)[],
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   disableNotification = false
@@ -122,7 +122,7 @@ export async function publishTgMediaGroup(
       if (el.type === 'photo') {
         return {
           type: 'photo',
-          media: el.fileId,
+          media: (el as any).fileId,
           ...firstItemData,
         };
       }
@@ -136,7 +136,7 @@ export async function publishTgMediaGroup(
       else if (el.type === 'video') {
         return {
           type: 'video',
-          media: el.fileId,
+          media: (el as any).fileId,
           ...firstItemData,
         };
       }

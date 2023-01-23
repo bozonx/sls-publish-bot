@@ -46,3 +46,8 @@ export const AD_FORMATS: Record<AdFormat, AdFormat> = {
   'full/72': 'full/72',
   forever: 'forever',
 }
+
+export interface PrimitiveMediaGroup {
+  type: 'photo' | 'video',
+  url: string,
+}
