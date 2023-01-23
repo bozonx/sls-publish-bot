@@ -95,9 +95,6 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
-
-          // TODO: review
-
           const text = _.trim(textMsg.text);
 
           if (!isValidUrl(text)) {
@@ -106,13 +103,17 @@ export async function askPostMedia(
             return
           }
 
-          text.split('\n')
+          const medias: MediaGroupItem[] = text.split('\n')
             .map((el) => _.trim(el))
             .filter((el) => Boolean(el))
-            .forEach((url) => mediaGroup.push({
-              type: 'photoUrl',
-              url
-            }));
+            .map((url) => ({ type: 'photoUrl', url }));
+
+          if (!onlyOneImage) {
+            for (const item of medias) mediaGroup.push(item);
+          }
+          else if (!mediaGroup.length) {
+            mediaGroup[0] = medias[0];
+          }
 
           //await toNextStep(tgChat)
         })
