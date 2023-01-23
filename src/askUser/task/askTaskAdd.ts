@@ -1,12 +1,20 @@
 import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
-import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK, ChatEvents, OK_BTN} from '../../types/constants.js';
+import {
+  BACK_BTN,
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN,
+  CANCEL_BTN_CALLBACK,
+  ChatEvents,
+  OK_BTN,
+  OK_BTN_CALLBACK
+} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
 
 
-type OnDoneType = (messageId: number, chatId: number, startTime: string) => void;
+type OnDoneType = (messageIds: number[], chatId: number, startTime: string) => void;
 
 
 export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType) {
@@ -14,8 +22,11 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
     [
       BACK_BTN,
       CANCEL_BTN,
+      OK_BTN,
     ]
   ];
+  let mediaIds: number[] = []
+  let chatId: number
 
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
     // print main menu message
@@ -25,7 +36,8 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
-          await handleIncomeMessage(textMsg.messageId, textMsg.chatId, tgChat, onDone);
+          chatId = textMsg.chatId
+          mediaIds = [textMsg.messageId]
         })
       ),
       ChatEvents.TEXT,
@@ -35,7 +47,8 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
       tgChat.events.addListener(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
-          await handleIncomeMessage(photoMsg.messageId, photoMsg.chatId, tgChat, onDone);
+          chatId = photoMsg.chatId
+          mediaIds.push(photoMsg.messageId)
         })
       ),
       ChatEvents.PHOTO,
@@ -45,7 +58,8 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
       tgChat.events.addListener(
         ChatEvents.VIDEO,
         tgChat.asyncCb(async (videoMsg: VideoMessageEvent) => {
-          await handleIncomeMessage(videoMsg.messageId, videoMsg.chatId, tgChat, onDone);
+          chatId = videoMsg.chatId
+          mediaIds.push(videoMsg.messageId)
         })
       ),
       ChatEvents.VIDEO,
@@ -55,7 +69,8 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
       tgChat.events.addListener(
         ChatEvents.POLL,
         tgChat.asyncCb(async (pollMsg: PollMessageEvent) => {
-          await handleIncomeMessage(pollMsg.messageId, pollMsg.chatId, tgChat, onDone);
+          chatId = pollMsg.chatId
+          mediaIds = [pollMsg.messageId]
         })
       ),
       ChatEvents.POLL,
@@ -71,6 +86,15 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
           else if (cbData === BACK_BTN_CALLBACK) {
             await tgChat.steps.back();
           }
+          else if (cbData === OK_BTN_CALLBACK) {
+            if (!mediaIds.length) {
+              await tgChat.reply(tgChat.app.i18n.errors.noImageNoText)
+
+              return
+            }
+
+            return await handleIncomeMessage(mediaIds, chatId, tgChat, onDone);
+          }
         })
       ),
       ChatEvents.CALLBACK_QUERY
@@ -79,10 +103,10 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
 }
 
 
-export async function handleIncomeMessage(messageId: number, chatId: number, tgChat: TgChat, onDone: OnDoneType) {
+export async function handleIncomeMessage(messageIds: number[], chatId: number, tgChat: TgChat, onDone: OnDoneType) {
   await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
     onDone(
-      messageId,
+      messageIds,
       chatId,
       moment(`${isoDate} ${time}`).utcOffset(tgChat.app.appConfig.utcOffset).format()
     );

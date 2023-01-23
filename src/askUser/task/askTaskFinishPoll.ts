@@ -30,7 +30,16 @@ export async function askTaskFinishPoll(msg: string, tgChat: TgChat, onDone: OnD
       tgChat.events.addListener(
         ChatEvents.POLL,
         tgChat.asyncCb(async (pollMsg: PollMessageEvent) => {
-          await handleIncomeMessage(pollMsg.messageId, pollMsg.chatId, tgChat, onDone);
+          await handleIncomeMessage(
+            [pollMsg.messageId],
+            pollMsg.chatId,
+            tgChat,
+            (messageIds: number[], chatId: number, startTime: string) => onDone(
+              messageIds[0],
+              chatId,
+              startTime
+            )
+          );
         })
       ),
       ChatEvents.POLL,

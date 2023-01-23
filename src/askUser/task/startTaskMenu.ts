@@ -12,7 +12,7 @@ export async function startTaskMenu(tgChat: TgChat) {
     tgChat.asyncCb(async (taskId?: string, action?: string) => {
       if (action === TASK_LIST_ACTIONS.DELETE_POST) {
         return askTaskAdd(tgChat.app.i18n.menu.taskDeletePost, tgChat, tgChat.asyncCb(async (
-          messageId: number,
+          messageIds: number[],
           chatId: number,
           startTime: string
         ) => {
@@ -21,7 +21,7 @@ export async function startTaskMenu(tgChat: TgChat) {
             type: 'deletePost',
             sn: 'telegram',
             chatId,
-            messageIds: [messageId],
+            messageIds,
           }
 
           await tgChat.app.tasks.addTaskAndLog(task)
@@ -31,7 +31,7 @@ export async function startTaskMenu(tgChat: TgChat) {
       }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
         return askTaskAdd(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (
-          messageId: number,
+          messageIds: number[],
           chatId: number,
           startTime: string
         ) => {
@@ -40,7 +40,7 @@ export async function startTaskMenu(tgChat: TgChat) {
             type: 'pinPost',
             sn: 'telegram',
             chatId,
-            messageId,
+            messageId: messageIds[0],
           }
 
           await tgChat.app.tasks.addTaskAndLog(task)
@@ -50,7 +50,7 @@ export async function startTaskMenu(tgChat: TgChat) {
       }
       else if (action === TASK_LIST_ACTIONS.UNPIN_POST) {
         return askTaskAdd(tgChat.app.i18n.menu.taskUnpinPost, tgChat, tgChat.asyncCb(async (
-          messageId: number,
+          messageIds: number[],
           chatId: number,
           startTime: string
         ) => {
@@ -59,7 +59,7 @@ export async function startTaskMenu(tgChat: TgChat) {
             type: 'unpinPost',
             sn: 'telegram',
             chatId,
-            messageId,
+            messageId: messageIds[0],
           }
 
           await tgChat.app.tasks.addTaskAndLog(task)
@@ -69,7 +69,7 @@ export async function startTaskMenu(tgChat: TgChat) {
       }
       else if (action === TASK_LIST_ACTIONS.FINISH_POLL) {
         return askTaskFinishPoll(tgChat.app.i18n.menu.taskFinishPoll, tgChat, tgChat.asyncCb(async (
-          messageId: number,
+          messageIds: number[],
           chatId: number,
           startTime: string
         ) => {
@@ -78,7 +78,7 @@ export async function startTaskMenu(tgChat: TgChat) {
             type: 'finishPoll',
             sn: 'telegram',
             chatId,
-            messageId,
+            messageId: messageIds[0],
           }
 
           await tgChat.app.tasks.addTaskAndLog(task)
