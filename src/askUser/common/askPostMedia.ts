@@ -61,7 +61,7 @@ export async function askPostMedia(
 
           mediaGroup.push(photoMsg.photo);
 
-          //await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
+          //await toNextStep(tgChat)
         })
       ),
       ChatEvents.PHOTO
@@ -75,7 +75,7 @@ export async function askPostMedia(
 
           mediaGroup.push(videoMsg.video);
 
-          //await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
+          //await toNextStep(tgChat)
         })
       ),
       ChatEvents.VIDEO
@@ -104,7 +104,7 @@ export async function askPostMedia(
               url
             }));
 
-          //await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
+          //await toNextStep(tgChat)
         })
       ),
       ChatEvents.TEXT
@@ -149,13 +149,12 @@ async function handlePrimaryButtons(
   }
 }
 
-// async function toNextStep(
-//   tgChat: TgChat,
-//   onDone: AskPostMediaDone,
-//   mediaGroup: MediaGroupItem[],
-//   captionHtml?: string,
-// ) {
-//   await askConfirm(tgChat, tgChat.asyncCb(async () => {
-//     //return onDone(mediaGroup, captionHtml);
-//   }))
-// }
+async function toNextStep(tgChat: TgChat) {
+  await tgChat.reply(
+    tgChat.app.i18n.message.waitImagesAndPressOk,
+    [[OK_BTN]]
+  )
+  // await askConfirm(tgChat, tgChat.asyncCb(async () => {
+  //   //return onDone(mediaGroup, captionHtml);
+  // }))
+}
