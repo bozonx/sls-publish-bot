@@ -101,37 +101,43 @@ export async function publishTgMediaGroup(
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   disableNotification = false
-): Promise<number> {
-
-  // TODO: почему нет urlBtn ???
-
+): Promise<number[]> {
   const result = await tgChat.app.tg.bot.telegram.sendMediaGroup(
     chatId,
     mediaGroup.map((el, index) => {
-      const firstItemDate = (index) ? {} : {
+      const firstItemData = (index) ? {} : {
         caption: captionMd,
         parse_mode: tgChat.app.appConfig.telegram.parseMode,
+
+        // TODO: проверить
+
+        reply_markup: urlBtn && {
+          inline_keyboard: [
+            [ urlBtn ]
+          ]
+        } || undefined,
+
       };
 
       if (el.type === 'photo') {
         return {
           type: 'photo',
           media: el.fileId,
-          ...firstItemDate,
+          ...firstItemData,
         };
       }
       else if (el.type === 'photoUrl') {
         return {
           type: 'photo',
           media: el.url,
-          ...firstItemDate,
+          ...firstItemData,
         };
       }
       else if (el.type === 'video') {
         return {
           type: 'video',
           media: el.fileId,
-          ...firstItemDate,
+          ...firstItemData,
         };
       }
       else {
@@ -140,19 +146,10 @@ export async function publishTgMediaGroup(
     }),
     {
       disable_notification: disableNotification,
-      // reply_markup: btnUrl && {
-      //   inline_keyboard: [
-      //     [ btnUrl ]
-      //   ]
-      // } || undefined,
     }
   );
 
-  console.log(33333, result);
-
-  return 0;
-
-  //return result.message_id;
+  return result.map((e) => e.message_id);
 }
 
 /**

@@ -128,7 +128,7 @@ export async function makePublishTaskTgMediaGroup(
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string
 ) {
-  let msgId: number;
+  let msgId: number[];
   // Print to log channel
   try {
     msgId = await publishTgMediaGroup(
@@ -145,7 +145,7 @@ export async function makePublishTaskTgMediaGroup(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId[0], urlBtn, autoDeleteIsoDateTime);
 }
 
 /**
