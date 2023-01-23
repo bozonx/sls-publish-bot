@@ -264,7 +264,7 @@ export async function registerPublishTaskTg(
     type: TASK_TYPES.postponePost,
     chatId,
     sn: SN_TYPES.telegram as 'telegram',
-    forwardMessageId: postMsgIds[0],
+    forwardMessageIds: postMsgIds,
     urlBtn,
     // time like '2022-11-01T19:58:00+03:00'
     autoDeleteDateTime: autoDeleteIsoDateTime,

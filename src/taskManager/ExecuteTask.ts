@@ -8,6 +8,7 @@ import {
   UnpinTgPostTask
 } from '../types/TaskItem.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
+import {number} from 'property-information/lib/util/types.js';
 
 
 export default class ExecuteTask {
@@ -69,19 +70,27 @@ export default class ExecuteTask {
 
   private async executePostponePost(task: TaskItem) {
     const postponeTask = task as PostponeTgPostTask;
+    const createdMessagesIds: number[] = []
 
-    const createdMessage = await this.tasks.app.tg.bot.telegram.copyMessage(
-      postponeTask.chatId,
-      this.tasks.app.appConfig.logChannelId,
-      postponeTask.forwardMessageId,
-      postponeTask.urlBtn && {
-        reply_markup: {
-          inline_keyboard: [
-            [postponeTask.urlBtn]
-          ]
-        },
-      }
-    );
+    for (const forwardMsgId of postponeTask.forwardMessageIds) {
+      createdMessagesIds.push(
+        (await this.tasks.app.tg.bot.telegram.copyMessage(
+          postponeTask.chatId,
+          this.tasks.app.appConfig.logChannelId,
+          forwardMsgId,
+
+          // TODO: это убрать если несколько картинок
+          postponeTask.urlBtn && {
+            reply_markup: {
+              inline_keyboard: [
+                [postponeTask.urlBtn]
+              ]
+            },
+          }
+
+        )).message_id
+      )
+    }
 
     if (postponeTask.autoDeleteDateTime) {
       const task: DeleteTgPostTask = {
@@ -89,7 +98,7 @@ export default class ExecuteTask {
         type: 'deletePost',
         sn: 'telegram',
         chatId: postponeTask.chatId,
-        messageId: createdMessage.message_id,
+        messageIds: createdMessagesIds,
       }
 
       await this.tasks.addTaskAndLog(task);
@@ -101,7 +110,7 @@ export default class ExecuteTask {
         type: 'finishPoll',
         sn: 'telegram',
         chatId: postponeTask.chatId,
-        messageId: createdMessage.message_id,
+        messageId: createdMessagesIds[0],
       }
 
       await this.tasks.addTaskAndLog(task);
@@ -111,7 +120,9 @@ export default class ExecuteTask {
   private async executeDeletePost(task: TaskItem) {
     const deleteTask = task as DeleteTgPostTask;
 
-    await this.tasks.app.tg.bot.telegram.deleteMessage(task.chatId, deleteTask.messageId);
+    await Promise.all(deleteTask.messageIds.map((msgId) => {
+      return this.tasks.app.tg.bot.telegram.deleteMessage(task.chatId, msgId);
+    }))
   }
 
   private async executePinPost(task: TaskItem) {

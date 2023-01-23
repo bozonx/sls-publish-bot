@@ -19,7 +19,7 @@ export type TaskTypes = 'postponePost'
 
 export interface PostponeTgPostTask extends TaskTgBase {
   type: typeof TASK_TYPES['postponePost']
-  forwardMessageId: number
+  forwardMessageIds: number[]
   urlBtn?: TgReplyBtnUrl
   // in full ISO format like '2022-11-01T19:58:00+03:00'
   autoDeleteDateTime?: string
@@ -29,7 +29,7 @@ export interface PostponeTgPostTask extends TaskTgBase {
 
 export interface DeleteTgPostTask extends TaskTgBase {
   type: 'deletePost'
-  messageId: number;
+  messageIds: number[];
 }
 
 export interface PinTgPostTask extends TaskTgBase {

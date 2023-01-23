@@ -40,12 +40,19 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
       resultArr.push(`message url: https://t.me/${username}/${(task as any).messageId}`);
     }
   }
-
-  if ((task as PostponeTgPostTask).forwardMessageId) {
-    resultArr.push(`forwardMessageId: ${(task as any).forwardMessageId}`);
+  else if ((task as any).messageIds) {
+    resultArr.push(`messageIds: ${(task as any).messageIds.join(', ')}`);
 
     if (username) {
-      resultArr.push(`forwardMessage url: https://t.me/${username}/${(task as any).forwardMessageId}`);
+      resultArr.push(`message url: https://t.me/${username}/${(task as any).messageIds[0]}`);
+    }
+  }
+
+  if ((task as PostponeTgPostTask).forwardMessageIds) {
+    resultArr.push(`forwardMessageIds: ${(task as any).forwardMessageIds.join(', ')}`);
+
+    if (username) {
+      resultArr.push(`forwardMessage url: https://t.me/${username}/${(task as any).forwardMessageIds[0]}`);
     }
   }
 

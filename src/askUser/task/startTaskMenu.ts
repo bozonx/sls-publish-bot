@@ -21,7 +21,7 @@ export async function startTaskMenu(tgChat: TgChat) {
             type: 'deletePost',
             sn: 'telegram',
             chatId,
-            messageId,
+            messageIds: [messageId],
           }
 
           await tgChat.app.tasks.addTaskAndLog(task)

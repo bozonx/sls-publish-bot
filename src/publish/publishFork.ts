@@ -83,6 +83,9 @@ export async function publishFork(
           PUBLICATION_TYPES.photos,
           PUBLICATION_TYPES.narrative,
         ].includes(pubType)) {
+
+          // TODO: чо за хз всё же поддерживается
+
           throw new Error(`Photos and narrative not supported at the moment`);
         }
         else {
