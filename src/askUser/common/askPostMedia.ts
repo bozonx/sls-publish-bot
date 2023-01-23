@@ -7,7 +7,9 @@ import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
-  SKIP_BTN_CALLBACK
+  SKIP_BTN_CALLBACK,
+  OK_BTN_CALLBACK,
+  OK_BTN
 } from '../../types/constants.js';
 import {
   PhotoMessageEvent,
@@ -16,7 +18,6 @@ import {
 } from '../../types/MessageEvent.js';
 import {isValidUrl} from '../../lib/common.js';
 import {MediaGroupItem} from '../../types/types.js';
-import {askConfirm} from './askConfirm.js';
 import {tgInputToHtml} from '../../helpers/tgInputToHtml.js';
 
 
@@ -41,6 +42,7 @@ export async function askPostMedia(
     [
       BACK_BTN,
       CANCEL_BTN,
+      OK_BTN,
     ]
   ];
 
@@ -55,11 +57,11 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
-          if (photoMsg.caption) captionHtml = tgInputToHtml(photoMsg.caption, photoMsg.entities);
+          if (photoMsg.caption && !captionHtml) captionHtml = tgInputToHtml(photoMsg.caption, photoMsg.entities);
 
           mediaGroup.push(photoMsg.photo);
 
-          await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
+          //await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
         })
       ),
       ChatEvents.PHOTO
@@ -69,11 +71,11 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.VIDEO,
         tgChat.asyncCb(async (videoMsg: VideoMessageEvent) => {
-          if (videoMsg.caption) captionHtml = tgInputToHtml(videoMsg.caption, videoMsg.entities);
+          if (videoMsg.caption && !captionHtml) captionHtml = tgInputToHtml(videoMsg.caption, videoMsg.entities);
 
           mediaGroup.push(videoMsg.video);
 
-          await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
+          //await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
         })
       ),
       ChatEvents.VIDEO
@@ -83,6 +85,9 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
+
+          // TODO: review
+
           const text = _.trim(textMsg.text);
 
           if (!isValidUrl(text)) {
@@ -90,8 +95,6 @@ export async function askPostMedia(
 
             return
           }
-
-          // TODO: review
 
           text.split('\n')
             .map((el) => _.trim(el))
@@ -101,7 +104,7 @@ export async function askPostMedia(
               url
             }));
 
-          await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
+          //await toNextStep(tgChat, onDone, mediaGroup, captionHtml)
         })
       ),
       ChatEvents.TEXT
@@ -111,7 +114,8 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.CALLBACK_QUERY,
         tgChat.asyncCb(
-          async (cbData: string) => handlePrimaryButtons(cbData, tgChat, onDone)
+          async (cbData: string) =>
+              handlePrimaryButtons(cbData, tgChat, onDone, mediaGroup, captionHtml)
         )
       ),
       ChatEvents.CALLBACK_QUERY
@@ -124,6 +128,8 @@ async function handlePrimaryButtons(
   cbData: string,
   tgChat: TgChat,
   onDone: AskPostMediaDone,
+  mediaGroup: MediaGroupItem[],
+  captionHtml?: string,
 ) {
   if (cbData === CANCEL_BTN_CALLBACK) {
     return tgChat.steps.cancel();
@@ -134,15 +140,22 @@ async function handlePrimaryButtons(
   else if (cbData === SKIP_BTN_CALLBACK) {
     return onDone([]);
   }
+  else if (cbData === OK_BTN_CALLBACK) {
+    if (!mediaGroup.length) {
+      await tgChat.reply(tgChat.app.i18n.errors.noImage)
+    }
+
+    return onDone(mediaGroup, captionHtml);
+  }
 }
 
-async function toNextStep(
-  tgChat: TgChat,
-  onDone: AskPostMediaDone,
-  mediaGroup: MediaGroupItem[],
-  captionHtml?: string,
-) {
-  await askConfirm(tgChat, tgChat.asyncCb(async () => {
-    return onDone(mediaGroup, captionHtml);
-  }))
-}
+// async function toNextStep(
+//   tgChat: TgChat,
+//   onDone: AskPostMediaDone,
+//   mediaGroup: MediaGroupItem[],
+//   captionHtml?: string,
+// ) {
+//   await askConfirm(tgChat, tgChat.asyncCb(async () => {
+//     //return onDone(mediaGroup, captionHtml);
+//   }))
+// }
