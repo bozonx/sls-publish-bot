@@ -119,17 +119,11 @@ export async function publishTgMediaGroup(
 
       };
 
-      if (el.type === 'photo') {
+      if (el.type === 'photo' || el.type === 'photoUrl') {
         return {
           type: 'photo',
-          media: (el as any).fileId,
-          ...firstItemData,
-        };
-      }
-      else if (el.type === 'photoUrl') {
-        return {
-          type: 'photo',
-          media: el.url,
+          // this is important! - do not remake
+          media: (el as any).fileId || (el as any).url,
           ...firstItemData,
         };
       }
