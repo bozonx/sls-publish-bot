@@ -12,7 +12,6 @@ import {compactUndefined} from '../../lib/arrays.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
 import {TgReplyBtnUrl, TgReplyButton} from '../../types/TgReplyButton.js';
-import {askDateTime} from '../common/askDateTime.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {CustomPostState} from './askCustomPostTg.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';

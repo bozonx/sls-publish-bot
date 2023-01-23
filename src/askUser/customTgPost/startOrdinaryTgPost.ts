@@ -21,8 +21,7 @@ export async function startOrdinaryTgPost(
   postAsText: boolean,
   footerTmpl?: string,
   mediaRequired = false,
-  // TODO: наверное не нужно
-  onlyOneImage = false,
+  onlyOneImage = true,
   disableTags = false
 ) {
   await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (

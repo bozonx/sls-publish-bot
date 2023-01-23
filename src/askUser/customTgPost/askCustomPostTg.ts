@@ -10,6 +10,7 @@ import {clearMd} from '../../helpers/clearMd.js';
 import {commonMdToTgHtml} from '../../helpers/commonMdToTgHtml.js';
 import moment from 'moment/moment.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT} from '../../types/constants.js';
+import {boolean} from 'property-information/lib/util/types.js';
 
 
 export interface CustomPostState {
@@ -37,11 +38,10 @@ export async function askCustomPostTg(
   onDone: (state: CustomPostState, resultText: string) => void,
   // post as only text. If false then as image or video
   postAsText: boolean,
-  footerTmpl?: string,
-  mediaRequired = false,
-  // TODO: наверное не нужно
-  onlyOneImage = false,
-  disableTags = false,
+  footerTmpl: string | undefined,
+  mediaRequired: boolean,
+  onlyOneImage: boolean,
+  disableTags: boolean,
 ) {
   await askPostMedia(
     tgChat,

@@ -21,7 +21,7 @@ const dict = {
     makePost1000: 'Создать post1000',
     makePost2000: 'Создать post2000',
     makeMem: 'Создать мем',
-    makePhotos: 'Создать пост с фотками',
+    makePhotos: 'Несколько фоток',
     makeStory: 'Создать story',
     makeReel: 'Создать reel',
     buyAdvertTg: 'Закупить рекламу в Tg',

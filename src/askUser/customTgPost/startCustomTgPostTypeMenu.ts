@@ -14,7 +14,6 @@ export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat
           false,
           tgChat.app.blogs[blogName].sn.telegram?.postFooter,
           true,
-          true,
         );
       case CUSTOM_POST_MENU_ACTIONS.POST2000:
         return await startOrdinaryTgPost(
@@ -22,15 +21,17 @@ export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat
           tgChat,
           true,
           tgChat.app.blogs[blogName].sn.telegram?.postFooter,
-          false,
-          true
+          false
         );
       case CUSTOM_POST_MENU_ACTIONS.PHOTOS:
-        // TODO: add
-        //const footer = tgChat.app.blogs[blogName].sn.telegram?.postFooter;
-
-        // await startOrdinaryTgPost(blogName, tgChat, footer);
-        return
+        return await startOrdinaryTgPost(
+          blogName,
+          tgChat,
+          false,
+          tgChat.app.blogs[blogName].sn.telegram?.postFooter,
+          true,
+          false
+        );
       case CUSTOM_POST_MENU_ACTIONS.MEM:
         return await startOrdinaryTgPost(
           blogName,
@@ -47,7 +48,6 @@ export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat
           tgChat,
           false,
           tgChat.app.blogs[blogName].sn.telegram?.storyFooter,
-          true,
           true
         );
       case CUSTOM_POST_MENU_ACTIONS.REEL:
@@ -56,7 +56,6 @@ export async function startCustomTgPostTypeMenu(blogName: string, tgChat: TgChat
           tgChat,
           false,
           tgChat.app.blogs[blogName].sn.telegram?.reelFooter,
-          true,
           true
         );
       case CUSTOM_POST_MENU_ACTIONS.POLL:

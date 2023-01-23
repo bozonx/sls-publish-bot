@@ -140,7 +140,8 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
     }),
     false,
     undefined,
-    undefined,
+    true,
+    true,
     true,
   );
 }
