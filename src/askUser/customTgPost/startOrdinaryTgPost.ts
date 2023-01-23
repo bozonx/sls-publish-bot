@@ -31,7 +31,7 @@ export async function startOrdinaryTgPost(
 ) {
   await askCustomPostTg(blogName, tgChat, tgChat.asyncCb(async (
     state: CustomPostState,
-    resultText: string
+    resultTextHtml: string
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       let resolvedAutoDeleteTime = state.autoDeleteIsoDateTime
@@ -59,7 +59,7 @@ export async function startOrdinaryTgPost(
           tgChat,
           isoDate,
           time,
-          resultText,
+          resultTextHtml,
           postAsText,
           state.usePreview,
           state.mediaGroup,
@@ -83,7 +83,7 @@ export async function registerCustomPostTg(
   tgChat: TgChat,
   isoDate: string,
   time: string,
-  resultText: string,
+  resultTextHtml: string,
   postAsText: boolean,
   usePreview: boolean,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
@@ -93,7 +93,7 @@ export async function registerCustomPostTg(
   if (postAsText) {
     // post as only text
     const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
-    const post2000Txt = await makePost2000Text(tgChat, resultText, imgUrl);
+    const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl);
 
     await makePublishTaskTgOnlyText(
       blogName,
@@ -115,7 +115,7 @@ export async function registerCustomPostTg(
       isoDate,
       time,
       mediaGroup,
-      resultText,
+      resultTextHtml,
       urlBtn,
       autoDeleteIsoDateTime
     );
@@ -131,7 +131,7 @@ export async function registerCustomPostTg(
         isoDate,
         time,
         mediaGroup[0].fileId,
-        resultText,
+        resultTextHtml,
         urlBtn,
         autoDeleteIsoDateTime
       );
@@ -147,7 +147,7 @@ export async function registerCustomPostTg(
         isoDate,
         time,
         imgUrl,
-        resultText,
+        resultTextHtml,
         urlBtn,
         autoDeleteIsoDateTime
       );

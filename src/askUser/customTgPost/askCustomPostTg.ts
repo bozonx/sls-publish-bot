@@ -28,14 +28,14 @@ export interface CustomPostState {
   footerTmplHtml?: string
   cleanFooterTmpl?: string
   postAsText: boolean
-  //resultText?: string;
+  //resultTextHtml?: string;
 }
 
 
 export async function askCustomPostTg(
   blogName: string,
   tgChat: TgChat,
-  onDone: (state: CustomPostState, resultText: string) => void,
+  onDone: (state: CustomPostState, resultTextHtml: string) => void,
   // post as only text. If false then as image or video
   postAsText: boolean,
   footerTmpl: string | undefined,
@@ -67,16 +67,16 @@ export async function askCustomPostTg(
         state,
         validateCustomPost,
         tgChat.asyncCb(async  () => {
-          const resultText = makeResultPostText(
+          const resultTextHtml = makeResultPostText(
             state.tags,
             state.useFooter,
             state.postHtmlText,
             state.footerTmplHtml
           );
 
-          await printPostPreview(tgChat, state, resultText);
+          await printPostPreview(tgChat, state, resultTextHtml);
 
-          onDone(state, resultText);
+          onDone(state, resultTextHtml);
         }
       ));
     })
@@ -87,7 +87,7 @@ export async function askCustomPostTg(
 async function printPostPreview(
   tgChat: TgChat,
   state: CustomPostState,
-  resultText = '',
+  resultTextHtml = '',
 ) {
   const cleanFullText = makeResultPostText(
     state.tags,
@@ -109,7 +109,7 @@ async function printPostPreview(
     state.usePreview,
     state.mediaGroup,
     state.urlBtn,
-    resultText
+    resultTextHtml
   )
   // print post summary
   await tgChat.reply(detailsStr);

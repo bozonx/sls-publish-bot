@@ -14,6 +14,7 @@ import {SN_TYPES} from '../types/snTypes.js';
 import PollData from '../types/PollData.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
+import {PrimitiveMediaGroup} from '../types/types.js';
 
 
 /**
@@ -145,7 +146,23 @@ export async function makePublishTaskTgMediaGroup(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgIds, urlBtn, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(
+    tgChat,
+    blogName,
+    isoDate,
+    time,
+    msgIds,
+    urlBtn,
+    autoDeleteIsoDateTime,
+    undefined,
+    captionMd,
+    mediaGroup.map((e) => {
+      return {
+        type: (e.type === 'video') ? 'video' : 'photo',
+        url: (e as any).fileId || (e as any).url
+      }
+    })
+  );
 }
 
 /**
@@ -228,7 +245,9 @@ export async function registerPublishTaskTg(
   postMsgIds: number[],
   urlBtn?: TgReplyBtnUrl,
   autoDeleteIsoDateTime?: string,
-  closePollIsoDateTime?: string
+  closePollIsoDateTime?: string,
+  mediaGroupCaptionHtml?: string,
+  mediaGroup?: PrimitiveMediaGroup[]
 ) {
   try {
     // send info message
@@ -270,6 +289,8 @@ export async function registerPublishTaskTg(
     autoDeleteDateTime: autoDeleteIsoDateTime,
     // time like '2022-11-01T19:58:00+03:00'
     closePollDateTime: closePollIsoDateTime,
+    mediaGroupCaptionHtml,
+    mediaGroup,
   };
 
   await tgChat.app.tasks.addTaskAndLog(task);
