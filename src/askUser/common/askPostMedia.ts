@@ -59,7 +59,12 @@ export async function askPostMedia(
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
           if (photoMsg.caption && !captionHtml) captionHtml = tgInputToHtml(photoMsg.caption, photoMsg.entities);
 
-          mediaGroup.push(photoMsg.photo);
+          if (!onlyOneImage) {
+            mediaGroup.push(photoMsg.photo);
+          }
+          else if (!mediaGroup.length) {
+            mediaGroup[0] = photoMsg.photo;
+          }
 
           //await toNextStep(tgChat)
         })
@@ -73,7 +78,12 @@ export async function askPostMedia(
         tgChat.asyncCb(async (videoMsg: VideoMessageEvent) => {
           if (videoMsg.caption && !captionHtml) captionHtml = tgInputToHtml(videoMsg.caption, videoMsg.entities);
 
-          mediaGroup.push(videoMsg.video);
+          if (!onlyOneImage) {
+            mediaGroup.push(videoMsg.video);
+          }
+          else if (!mediaGroup.length) {
+            mediaGroup[0] = videoMsg.video;
+          }
 
           //await toNextStep(tgChat)
         })
@@ -154,7 +164,4 @@ async function toNextStep(tgChat: TgChat) {
     tgChat.app.i18n.message.waitImagesAndPressOk,
     [[OK_BTN]]
   )
-  // await askConfirm(tgChat, tgChat.asyncCb(async () => {
-  //   //return onDone(mediaGroup, captionHtml);
-  // }))
 }
