@@ -33,9 +33,9 @@ export async function makePublishTaskTgOnlyText(
   // Print to log channel
   try {
     msgId = await publishTgText(
+      tgChat.app,
       tgChat.app.appConfig.logChannelId,
       postStr,
-      tgChat,
       allowPreview,
       urlBtn
     );
@@ -66,9 +66,9 @@ export async function makePublishTaskTgImage(
   // Print to log channel
   try {
     msgId = await publishTgImage(
+      tgChat.app,
       tgChat.app.appConfig.logChannelId,
       imageUrl,
-      tgChat,
       captionMd,
       urlBtn
     )
@@ -99,9 +99,9 @@ export async function makePublishTaskTgVideo(
   // Print to log channel
   try {
     msgId = await publishTgVideo(
+      tgChat.app,
       tgChat.app.appConfig.logChannelId,
       videoId,
-      tgChat,
       captionMd,
       urlBtn
     );
@@ -132,9 +132,9 @@ export async function makePublishTaskTgMediaGroup(
   // Print to log channel
   try {
     msgIds = await publishTgMediaGroup(
+      tgChat.app,
       tgChat.app.appConfig.logChannelId,
       mediaGroup,
-      tgChat,
       captionMd,
       urlBtn
     )
@@ -164,10 +164,10 @@ export async function makePublishTaskTgCopy(
   // Print to log channel
   try {
     msgId = await publishTgCopy(
+      tgChat.app,
       tgChat.app.appConfig.logChannelId,
       tgChat.botChatId,
-      messageId,
-      tgChat
+      messageId
     );
   }
   catch (e) {
@@ -200,7 +200,7 @@ export async function makePublishTaskTgPoll(
   let msgId: number;
   // Print to log channel
   try {
-    msgId = await publishTgPoll(tgChat.app.appConfig.logChannelId, pollData, tgChat);
+    msgId = await publishTgPoll(tgChat.app, tgChat.app.appConfig.logChannelId, pollData);
   }
   catch (e) {
     await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);

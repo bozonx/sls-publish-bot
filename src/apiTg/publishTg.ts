@@ -1,4 +1,4 @@
-import TgChat from './TgChat.js';
+import App from '../App.js';
 import PollData from '../types/PollData.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
@@ -8,25 +8,25 @@ import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
  * Publish only text without image
  */
 export async function publishTgText(
+  app: App,
   chatId: number | string,
   msg: string,
-  tgChat: TgChat,
   allowPreview = true,
   urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
-  const result = await tgChat.app.tg.bot.telegram.sendMessage(
+  const result = await app.tg.bot.telegram.sendMessage(
     chatId,
     msg,
     {
-      parse_mode: tgChat.app.appConfig.telegram.parseMode,
+      parse_mode: app.appConfig.telegram.parseMode,
       disable_web_page_preview: !allowPreview,
       disable_notification: disableNotification,
       reply_markup: urlBtn && {
         inline_keyboard: [
           [ urlBtn ]
         ]
-      } || undefined,
+      },
     }
   );
 
@@ -37,25 +37,25 @@ export async function publishTgText(
  * Publish one image
  */
 export async function publishTgImage(
+  app: App,
   chatId: number | string,
   imageUrl: string,
-  tgChat: TgChat,
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
-  const result = await tgChat.app.tg.bot.telegram.sendPhoto(
+  const result = await app.tg.bot.telegram.sendPhoto(
     chatId,
     imageUrl,
     {
       caption: captionMd,
-      parse_mode: tgChat.app.appConfig.telegram.parseMode,
+      parse_mode: app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
       reply_markup: urlBtn && {
         inline_keyboard: [
           [ urlBtn ]
         ]
-      } || undefined,
+      },
     }
   );
 
@@ -66,25 +66,25 @@ export async function publishTgImage(
  * Publish one video
  */
 export async function publishTgVideo(
+  app: App,
   chatId: number | string,
   videoUrl: string,
-  tgChat: TgChat,
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
-  const result = await tgChat.app.tg.bot.telegram.sendVideo(
+  const result = await app.tg.bot.telegram.sendVideo(
     chatId,
     videoUrl,
     {
       caption: captionMd,
-      parse_mode: tgChat.app.appConfig.telegram.parseMode,
+      parse_mode: app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
       reply_markup: urlBtn && {
         inline_keyboard: [
           [ urlBtn ]
         ]
-      } || undefined,
+      },
     }
   );
 
@@ -95,19 +95,19 @@ export async function publishTgVideo(
  * Publish media group
  */
 export async function publishTgMediaGroup(
+  app: App,
   chatId: number | string,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
-  tgChat: TgChat,
   captionMd?: string,
   urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number[]> {
-  const result = await tgChat.app.tg.bot.telegram.sendMediaGroup(
+  const result = await app.tg.bot.telegram.sendMediaGroup(
     chatId,
     mediaGroup.map((el, index) => {
       const firstItemData = (index) ? {} : {
         caption: captionMd,
-        parse_mode: tgChat.app.appConfig.telegram.parseMode,
+        parse_mode: app.appConfig.telegram.parseMode,
 
         // TODO: проверить
 
@@ -115,7 +115,7 @@ export async function publishTgMediaGroup(
           inline_keyboard: [
             [ urlBtn ]
           ]
-        } || undefined,
+        },
 
       };
 
@@ -156,18 +156,24 @@ export async function publishTgMediaGroup(
  * Make copy of message
  */
 export async function publishTgCopy(
+  app: App,
   chatId: number | string,
   fromChatId: number | string,
   messageId: number,
-  tgChat: TgChat,
+  urlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
-  const result = await tgChat.app.tg.bot.telegram.copyMessage(
+  const result = await app.tg.bot.telegram.copyMessage(
     chatId,
     fromChatId,
     messageId,
     {
       disable_notification: disableNotification,
+      reply_markup: urlBtn && {
+        inline_keyboard: [
+          [urlBtn]
+        ]
+      }
     }
   );
 
@@ -178,13 +184,13 @@ export async function publishTgCopy(
  * Publish poll
  */
 export async function publishTgPoll(
+  app: App,
   chatId: number | string,
   pollData: PollData,
-  tgChat: TgChat,
   disableNotification = false
 ): Promise<number> {
   if (pollData.type === 'quiz') {
-    return (await tgChat.app.tg.bot.telegram.sendQuiz(
+    return (await app.tg.bot.telegram.sendQuiz(
       chatId,
       pollData.question,
       pollData.options,
@@ -192,14 +198,14 @@ export async function publishTgPoll(
         is_anonymous: pollData.isAnonymous,
         correct_option_id: pollData.correctOptionId,
         explanation: pollData.explanation,
-        explanation_parse_mode: tgChat.app.appConfig.telegram.parseMode,
+        explanation_parse_mode: app.appConfig.telegram.parseMode,
         disable_notification: disableNotification,
       }
     )).message_id;
   }
   else {
-    return (await tgChat.app.tg.bot.telegram.sendPoll(
-      tgChat.app.appConfig.logChannelId,
+    return (await app.tg.bot.telegram.sendPoll(
+      app.appConfig.logChannelId,
       pollData.question,
       pollData.options,
       {

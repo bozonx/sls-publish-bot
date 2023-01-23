@@ -8,7 +8,7 @@ import {
   UnpinTgPostTask
 } from '../types/TaskItem.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
-import {number} from 'property-information/lib/util/types.js';
+import {publishTgCopy, publishTgMediaGroup} from '../apiTg/publishTg.js';
 
 
 export default class ExecuteTask {
@@ -70,27 +70,77 @@ export default class ExecuteTask {
 
   private async executePostponePost(task: TaskItem) {
     const postponeTask = task as PostponeTgPostTask;
-    const createdMessagesIds: number[] = []
+    let createdMessagesIds: number[] = []
 
-    for (const forwardMsgId of postponeTask.forwardMessageIds) {
-      createdMessagesIds.push(
-        (await this.tasks.app.tg.bot.telegram.copyMessage(
-          postponeTask.chatId,
-          this.tasks.app.appConfig.logChannelId,
-          forwardMsgId,
-
-          // TODO: это убрать если несколько картинок
-          postponeTask.urlBtn && {
-            reply_markup: {
-              inline_keyboard: [
-                [postponeTask.urlBtn]
-              ]
-            },
-          }
-
-        )).message_id
+    if (postponeTask.forwardMessageIds.length === 1) {
+      createdMessagesIds[0] = await publishTgCopy(
+        this.tasks.app,
+        postponeTask.chatId,
+        this.tasks.app.appConfig.logChannelId,
+        postponeTask.forwardMessageIds[0],
+        postponeTask.urlBtn
       )
     }
+    // else {
+    //   createdMessagesIds = (await this.tasks.app.tg.bot.telegram.sendMediaGroup(
+    //     postponeTask.chatId,
+    //     postponeTask.forwardMessageIds.map((forwardMsgId, index) => {
+    //       const firstItemData = (index) ? {} : {
+    //         // TODO: нужен текст
+    //         caption: 'captionMd',
+    //         parse_mode: this.tasks.app.appConfig.telegram.parseMode,
+    //
+    //         // TODO: проверить
+    //         // reply_markup: urlBtn && {
+    //         //   inline_keyboard: [
+    //         //     [ urlBtn ]
+    //         //   ]
+    //         // } || undefined,
+    //
+    //       };
+    //
+    //       return {
+    //
+    //       }
+    //
+    //       // if (el.type === 'photo') {
+    //       //   return {
+    //       //     type: 'photo',
+    //       //     media: el.fileId,
+    //       //     ...firstItemData,
+    //       //   };
+    //       // }
+    //       // else if (el.type === 'photoUrl') {
+    //       //   return {
+    //       //     type: 'photo',
+    //       //     media: el.url,
+    //       //     ...firstItemData,
+    //       //   };
+    //       // }
+    //       // else if (el.type === 'video') {
+    //       //   return {
+    //       //     type: 'video',
+    //       //     media: el.fileId,
+    //       //     ...firstItemData,
+    //       //   };
+    //       // }
+    //       // else {
+    //       //   throw new Error(`Unknown media`);
+    //       // }
+    //     }),
+    //     {
+    //       disable_notification: disableNotification,
+    //     }
+    //   )).map((e) => e.message_id);
+    // }
+
+    // for (const forwardMsgId of postponeTask.forwardMessageIds) {
+    //
+    //   // await publishTgMediaGroup(
+    //   //   postponeTask.chatId,
+    //   //
+    //   // )
+    // }
 
     if (postponeTask.autoDeleteDateTime) {
       const task: DeleteTgPostTask = {
@@ -101,7 +151,7 @@ export default class ExecuteTask {
         messageIds: createdMessagesIds,
       }
 
-      await this.tasks.addTaskAndLog(task);
+      await this.tasks.addTaskAndLog(task)
     }
 
     if (postponeTask.closePollDateTime) {

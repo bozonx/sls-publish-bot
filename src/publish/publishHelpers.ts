@@ -76,9 +76,9 @@ export async function printPost(
   if (mediaGroup.length > 1) {
     // media group
     await publishTgMediaGroup(
+      tgChat.app,
       chatId,
       mediaGroup,
-      tgChat,
       resultText
     );
   }
@@ -86,27 +86,27 @@ export async function printPost(
     // one image
     if (mediaGroup[0].type === 'video') {
       await publishTgVideo(
+        tgChat.app,
         chatId,
         mediaGroup[0].fileId,
-        tgChat,
         resultText,
         urlBtn
       );
     }
     else if (mediaGroup[0].type === 'photo') {
       await publishTgImage(
+        tgChat.app,
         chatId,
         mediaGroup[0].fileId,
-        tgChat,
         resultText,
         urlBtn
       );
     }
     else if (mediaGroup[0].type === 'photoUrl') {
       await publishTgImage(
+        tgChat.app,
         chatId,
         mediaGroup[0].url,
-        tgChat,
         resultText,
         urlBtn
       );
@@ -117,9 +117,9 @@ export async function printPost(
     if (!resultText) throw new Error(`No text`);
 
     await publishTgText(
+      tgChat.app,
       chatId,
       resultText,
-      tgChat,
       usePreview,
       urlBtn
     );

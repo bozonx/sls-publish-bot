@@ -69,7 +69,7 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
             const btnUrlResult = (btnText && btnUrl) ? {text: btnText, url: btnUrl} : undefined;
 
             if (image) {
-              await publishTgImage(tgChat.botChatId, image, tgChat, creativeStr, btnUrlResult);
+              await publishTgImage(tgChat.app, tgChat.botChatId, image, creativeStr, btnUrlResult);
             }
             else {
               // TODO: будет HTML
