@@ -72,26 +72,7 @@ export default class ExecuteTask {
     const postponeTask = task as PostponeTgPostTask;
     let createdMessagesIds: number[] = []
 
-    if (postponeTask.forwardMessageIds.length === 1) {
-      // just copy message if it isn't a mediaGroup
-      createdMessagesIds[0] = await publishTgCopy(
-        this.tasks.app,
-        postponeTask.chatId,
-        this.tasks.app.appConfig.logChannelId,
-        postponeTask.forwardMessageIds[0],
-        postponeTask.urlBtn
-      )
-    }
-    else {
-      if (!postponeTask.mediaGroup) {
-        const msg = `Empty media group`
-
-        this.tasks.app.consoleLog.error(msg)
-        this.tasks.app.channelLog.error(msg)
-
-        return
-      }
-
+    if (postponeTask.mediaGroup) {
       createdMessagesIds = await publishTgMediaGroup(
         this.tasks.app,
         postponeTask.chatId,
@@ -99,6 +80,24 @@ export default class ExecuteTask {
         postponeTask.mediaGroupCaptionHtml,
         postponeTask.urlBtn,
       )
+    }
+    else if (typeof postponeTask.messageIdToCopy !== 'undefined') {
+      // just copy message if it isn't a mediaGroup
+      createdMessagesIds[0] = await publishTgCopy(
+        this.tasks.app,
+        postponeTask.chatId,
+        this.tasks.app.appConfig.logChannelId,
+        postponeTask.messageIdToCopy,
+        postponeTask.urlBtn
+      )
+    }
+    else {
+      const msg = `Empty messageIdToCopy of mediaGroup`
+
+      this.tasks.app.consoleLog.error(msg)
+      this.tasks.app.channelLog.error(msg)
+
+      return
     }
 
     if (postponeTask.autoDeleteDateTime) {
