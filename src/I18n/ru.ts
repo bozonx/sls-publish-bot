@@ -141,7 +141,7 @@ const dict = {
     addedDeleteTimerPeriod: 'Пост авто удалится после публикации через(часов): ',
     typeBtnText: 'Введите текст кнопки',
     typeBtnUrl: 'Введите url кнопки',
-    removeUrlBtl: 'Убрать URL кнопку',
+    withoutUrlBtn: 'Без URL кнопки',
     pollParams: 'Параметры опроса:',
     footer: 'футер',
     dateLabel: {

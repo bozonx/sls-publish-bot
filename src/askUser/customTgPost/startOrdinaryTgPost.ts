@@ -32,8 +32,9 @@ export async function startOrdinaryTgPost(
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       let resolvedAutoDeleteTime = state.autoDeleteIsoDateTime
 
+      // validate that selected date is greater than auto-delete date
       if (
-        moment(resolvedAutoDeleteTime).unix()
+        resolvedAutoDeleteTime && moment(resolvedAutoDeleteTime).unix()
         <= moment(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)).unix()
       ) {
         await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)

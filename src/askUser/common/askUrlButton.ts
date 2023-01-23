@@ -28,5 +28,5 @@ export async function askUrlButton(tgChat: TgChat, onDone: (urlButton?: TgReplyB
         if (!isValidUrl(cleanUrlToValidate)) throw new Error(tgChat.app.i18n.errors.incorrectUrl);
       }
     );
-  }), msg, true, tgChat.app.i18n.commonPhrases.typeBtnUrl);
+  }), msg, true, tgChat.app.i18n.commonPhrases.withoutUrlBtn);
 }
