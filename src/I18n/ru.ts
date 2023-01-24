@@ -30,6 +30,7 @@ const dict = {
     contentParams: 'Параметры публикации:',
     pageContent: 'Содержание страницы:',
     telegraphMenu: 'Меню сервиса telegra.ph',
+    telegraphPageList: 'Всего страниц: ',
     telegraphList: 'Список страниц',
     siteMenu: 'Меню сайта slsfreedom.org',
     taskList: 'Текущие задания:',
@@ -150,7 +151,9 @@ const dict = {
       pinPost: 'Дата прикрепления поста',
       unpinPost: 'Дата открепления поста',
       finishPoll: 'Дата завершения опроса',
-    }
+    },
+    next: 'Следующие',
+    prev: 'Предыдущие',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',
