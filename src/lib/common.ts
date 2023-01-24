@@ -29,7 +29,7 @@ export function makeTagsString(tags?: string[]): string {
   return tags.map((item) => `#${_.trimStart(_.trim(item), '#')}`).join(' ');
 }
 
-// TODO: доработать - см либу валидации
+// TODO: доработать - см либу валидации - import {isUrl} from 'vfile/lib/minurl.shared.js';
 export function isValidUrl(url?: string): boolean {
   if (!url) return false
 
