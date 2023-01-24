@@ -27,11 +27,13 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
 
 
 
-
       await askTimePeriod(tgChat, tgChat.asyncCb(async (
         hoursPeriod?: number,
         certainIsoDateTime?: string
       ) => {
+
+        console.log(11111111, publishIsoDateTime, hoursPeriod, certainIsoDateTime)
+
         // TODO: make final date
         //onDone(replaceHorsInDate(publishIsoDateTime, Number(splat[1])));
 

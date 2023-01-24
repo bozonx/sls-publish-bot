@@ -18,7 +18,7 @@ function makePageDetails(page: Page): string {
   const result : string[] = []
 
   result.push(`title<a href="${page.image_url}">:</a> <a href="${page.url}">${page.title}</a>`)
-  result.push(`description: ${page.description}`)
+  //result.push(`description: ${page.description}`)
   result.push(`views: ${page.views}`)
 
   return result.join('\n')

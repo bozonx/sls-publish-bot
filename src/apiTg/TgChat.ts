@@ -78,19 +78,39 @@ export default class TgChat {
       return;
     }
 
-    this.events.emit(ChatEvents.CALLBACK_QUERY, queryData);
+    try {
+      this.events.emit(ChatEvents.CALLBACK_QUERY, queryData);
+    }
+    catch (e) {
+      this.app.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    }
   }
 
   handleIncomeTextEvent(msgEvent: TextMessageEvent) {
-    this.events.emit(ChatEvents.TEXT, msgEvent);
+    try {
+      this.events.emit(ChatEvents.TEXT, msgEvent);
+    }
+    catch (e) {
+      this.app.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    }
   }
 
   handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
-    this.events.emit(ChatEvents.PHOTO, msgEvent);
+    try {
+      this.events.emit(ChatEvents.PHOTO, msgEvent);
+    }
+    catch (e) {
+      this.app.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    }
   }
 
   handleIncomeVideoEvent(msgEvent: VideoMessageEvent) {
-    this.events.emit(ChatEvents.VIDEO, msgEvent);
+    try {
+      this.events.emit(ChatEvents.VIDEO, msgEvent);
+    }
+    catch (e) {
+      this.app.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    }
   }
 
   // handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
@@ -98,7 +118,12 @@ export default class TgChat {
   // }
 
   handleIncomePollEvent(msgEvent: PollMessageEvent) {
-    this.events.emit(ChatEvents.POLL, msgEvent);
+    try {
+      this.events.emit(ChatEvents.POLL, msgEvent);
+    }
+    catch (e) {
+      this.app.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    }
   }
 
   async reply(
