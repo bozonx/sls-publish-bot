@@ -57,6 +57,7 @@ export default class TelegraPhMain {
 
   /**
    * Just save image in telegraph
+   * @param imgUrl {string} - put here full image url in the internet
    * @return {string} image url 'some-title-10-30-3'
    */
   async justSaveImage(imgUrl: string): Promise<string> {
@@ -70,10 +71,7 @@ export default class TelegraPhMain {
     ]
     const result = await this.imageApi.createPage({ title: imgUrl, content });
 
-    console.log(1111, result)
-
-    // TODO: добавить url картинки
-    return makeTelegraPhUrl(result.path);
+    return makeTelegraPhUrl(result.title);
   }
 
 }
