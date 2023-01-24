@@ -5,14 +5,11 @@ import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMen
 export async function startTelegraphMenu(tgChat: TgChat) {
   await askTelegraphMenu(tgChat, (action: TelegraphMenu) => {
     switch (action) {
-      case TELEGRAPH_MENU.LOGIN:
-        // TODO: add
-        break;
-      case TELEGRAPH_MENU.LIST:
+      case TELEGRAPH_MENU.TELEGRAPH_LIST:
         // TODO: add
         break;
       default:
-        break;
+        throw new Error(`Unknown action`)
     }
   })
 }

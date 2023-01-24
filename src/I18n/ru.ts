@@ -30,7 +30,7 @@ const dict = {
     contentParams: 'Параметры публикации:',
     pageContent: 'Содержание страницы:',
     telegraphMenu: 'Меню сервиса telegra.ph',
-    telegraphList: 'Список статей',
+    telegraphList: 'Список страниц',
     siteMenu: 'Меню сайта slsfreedom.org',
     taskList: 'Текущие задания:',
     emptyTaskList: 'Нет текущих заданий',

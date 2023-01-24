@@ -3,9 +3,8 @@
  */
 
 import App from '../App.js';
-import {getApi} from './telegraphCli/api.js';
 import {TelegraphNode} from './telegraphCli/types.js';
-import { upload } from "better-telegraph";
+import {Account, PageList, Telegraph, upload} from "better-telegraph";
 
 
 export default class TelegraPhMain {
@@ -18,7 +17,10 @@ export default class TelegraPhMain {
     // const api = new Telegraph({
     //   accessToken: this.app.appConfig.telegraPhToken,
     // });
-    this.api = getApi({ token: this.app.appConfig.telegraPhToken });
+    //this.api = getApi({ token: this.app.appConfig.telegraPhToken });
+    this.api = new Telegraph({
+      accessToken: this.app.appConfig.telegraPhToken,
+    });
   }
 
   async init() {
@@ -39,20 +41,31 @@ export default class TelegraPhMain {
   }
 
 
+  async getAccount(): Promise<Account> {
+    return this.api.getAccount()
+  }
+
+  async getPages(limit: number, offset = 0) {
+    const res: PageList = await this.api.getPages({ limit, offset });
+
+    return res
+  }
+
   /**
    * Create a page
    * @return {string} path like 'some-title-10-30-3'
    */
   async create(blogName: string, title: string, content: TelegraphNode[]): Promise<string> {
-    const result = await this.api.createPage({
-      title,
-      content,
-      author_name: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorName,
-      author_url: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
-    });
-
-    // TODO: наверное лучше сразу вернуть готовый url
-    return result.path;
+    return ''
+    // const result = await this.api.createPage({
+    //   title,
+    //   content,
+    //   author_name: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorName,
+    //   author_url: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
+    // });
+    //
+    // // TODO: наверное лучше сразу вернуть готовый url
+    // return result.path;
   }
 
   /**

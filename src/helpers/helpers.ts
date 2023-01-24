@@ -63,7 +63,7 @@ export function matchSnsForType(pubType: PublicationType): SnType[] {
 
 export async function addSimpleStep(
   tgChat: TgChat,
-  init: () => [string, TgReplyButton[][]],
+  init: () => [string, TgReplyButton[][]] ,
   cb: (queryData: string) => void,
   stepName?: string
 ) {
