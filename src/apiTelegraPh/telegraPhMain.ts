@@ -45,7 +45,7 @@ export default class TelegraPhMain {
     return this.api.getAccount()
   }
 
-  async getPages(limit: number, offset = 0) {
+  async getPages(limit: number, offset = 0): Promise<PageList> {
     const res: PageList = await this.api.getPages({ limit, offset });
 
     return res
