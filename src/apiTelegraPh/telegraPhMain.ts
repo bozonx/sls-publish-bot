@@ -1,10 +1,11 @@
 /*
  * Взято из https://github.com/husky-dev/telegraph-cli
  */
+
 import App from '../App.js';
 import {getApi} from './telegraphCli/api.js';
 import {TelegraphNode} from './telegraphCli/types.js';
-import {makeTelegraPhUrl} from '../helpers/helpers.js';
+import { upload } from "better-telegraph";
 
 
 export default class TelegraPhMain {
@@ -16,6 +17,9 @@ export default class TelegraPhMain {
 
   constructor(app: App) {
     this.app = app;
+    // const api = new Telegraph({
+    //   accessToken: this.app.appConfig.telegraPhToken,
+    // });
     this.api = getApi({ token: this.app.appConfig.telegraPhToken });
     // TODO: make token for images
     this.imageApi = getApi({ token: this.app.appConfig.telegraPhToken });
@@ -58,20 +62,72 @@ export default class TelegraPhMain {
   /**
    * Just save image in telegraph
    * @param imgUrl {string} - put here full image url in the internet
-   * @return {string} image url 'some-title-10-30-3'
+   * @return {string} full image url
    */
-  async justSaveImage(imgUrl: string): Promise<string> {
-    const content: TelegraphNode[] = [
-      {
-        tag: 'img',
-        attrs: {
-          src: imgUrl,
-        }
-      }
-    ]
-    const result = await this.imageApi.createPage({ title: imgUrl, content });
-
-    return makeTelegraPhUrl(result.title);
+  async uploadImage(imgUrl: string): Promise<string> {
+    return await upload(imgUrl);
   }
 
 }
+
+
+
+// const re = await axios({
+//   method: 'get',
+//   url: imgUrl,
+//   headers: {
+//     'Content-Type': 'image/jpg',
+//   }
+// });
+//
+// //console.log(1111, re)
+//
+//
+// const form = new FormData();
+//
+// //form.append('photo', got.stream(imgUrl) as any);
+// form.append('file', re.data);
+// //form.append('file', fs.createReadStream(imgUrl) as any);
+// //form.append('file', imgUrl);
+//
+// const result = await axios({
+//   method: 'post',
+//   url: 'https://telegra.ph/upload',
+//   //data: form,
+//   data: re.data,
+//   //data: got.stream(imgUrl),
+//   headers: {
+//     //'Content-Type': 'image/jpg',
+//     'Content-Type': 'multipart/form-data'
+//     //...form.getHeaders()
+//   }
+//   // Authorization
+//   //headers: { 'Content-Type': 'image/jpg' }
+//   //image/png
+// })
+//
+// console.log(222, result.data)
+
+
+/*
+
+
+POST /upload HTTP/2
+Accept: application/json, text/javascript
+Content-Type: multipart/form-data;
+ */
+
+
+// const content: TelegraphNode[] = [
+//   {
+//     tag: 'img',
+//     attrs: {
+//       src: imgUrl,
+//     }
+//   }
+// ]
+// const result = await this.imageApi.createPage({ title: imgUrl, content });
+//
+// console.log(2222, result)
+//
+// return result.title;

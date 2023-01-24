@@ -1,4 +1,3 @@
-import {isUrl} from 'vfile/lib/minurl.shared.js';
 import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
 import {makeUtcOffsetStr} from '../helpers/helpers.js';
@@ -7,10 +6,10 @@ import ru from '../I18n/ru.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
-import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
+import {publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
-import {PollMessageEvent} from '../types/MessageEvent.js';
+import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/MessageEvent.js';
 import {isValidUrl} from '../lib/common.js';
 
 
@@ -45,15 +44,6 @@ export function makeContentLengthString(
   return result;
 }
 
-
-
-
-
-//https://telegra.ph/file/6a5b15e7eb4d7329ca7af.jpg
-// TODO: добавить url картинки
-// this.telegraPh.justSaveImage('https://telegra.ph/file/6a5b15e7eb4d7329ca7af.jpg')
-//   .then((d) => console.log(1111, d))
-
 export async function makePost2000Text(
   tgChat: TgChat,
   rawTextHtml: string,
@@ -67,15 +57,19 @@ export async function makePost2000Text(
     ? imgUrl
     : (await tgChat.app.tg.bot.telegram.getFileLink(imgUrl)).href
   // save image to telegraph
-  const imgTelegraphUrl = await tgChat.app.telegraPh.justSaveImage(resolvedImgUrl)
+  const imgTelegraphUrl = await tgChat.app.telegraPh.uploadImage(resolvedImgUrl)
+
   // put image to the text
-  if (rawTextHtml.match(/\./)) {
-    // put link to the first
-    return rawTextHtml.replace(
-      /\./,
-      `<a href="${imgTelegraphUrl}">.</a>`
-    )
-  }
+  return `<a href="${imgTelegraphUrl}">.</a>` + rawTextHtml;
+
+  // TODO: попробовать пробел в начале поставить
+  // if (rawTextHtml.match(/\./)) {
+  //   // put link to the first
+  //   return rawTextHtml.replace(
+  //     /\./,
+  //     `<a href="${imgTelegraphUrl}">.</a>`
+  //   )
+  // }
   // put link to the first letter
   // TODO: !!! сдеать через распарсивание html
   // return rawTextHtml.replace(
@@ -85,16 +79,6 @@ export async function makePost2000Text(
 
   return rawTextHtml
 }
-
-// (async () => {
-//   console.log(1111, await makePost2000Text(
-//     {} as any,
-//     '<p>some text,<p></p> another text,<p></p> and othe:</p>',
-//     'https://ya.ru'
-//   ))
-// })()
-
-
 
 export function makePublishInfoMessage(
   isoDate: string,
@@ -113,61 +97,49 @@ export async function printPost(
   chatId: number | string,
   tgChat: TgChat,
   usePreview: boolean,
+  postAsText: boolean,
   mediaGroup: MediaGroupItem[],
   urlBtn?: TgReplyBtnUrl,
-  resultText = '',
+  resultTextHtml = '',
 ) {
-  if (mediaGroup.length > 1) {
-    // media group
-    await publishTgMediaGroup(
-      tgChat.app,
-      chatId,
-      mediaGroup,
-      resultText
-    );
-  }
-  else if (mediaGroup.length) {
-    // one image
-    if (mediaGroup[0].type === 'video') {
-      await publishTgVideo(
-        tgChat.app,
-        chatId,
-        mediaGroup[0].fileId,
-        resultText,
-        urlBtn
-      );
-    }
-    else if (mediaGroup[0].type === 'photo') {
-      await publishTgImage(
-        tgChat.app,
-        chatId,
-        mediaGroup[0].fileId,
-        resultText,
-        urlBtn
-      );
-    }
-    else if (mediaGroup[0].type === 'photoUrl') {
-      await publishTgImage(
-        tgChat.app,
-        chatId,
-        mediaGroup[0].url,
-        resultText,
-        urlBtn
-      );
-    }
-  }
-  else {
+  if (!mediaGroup.length || postAsText) {
     // no image or video
-    if (!resultText) throw new Error(`No text`);
+    if (!resultTextHtml) throw new Error(`No text`);
+    // post as only text
+    const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
+    const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl);
 
-    await publishTgText(
+    return await publishTgText(
       tgChat.app,
       chatId,
-      resultText,
+      post2000Txt,
       usePreview,
       urlBtn
     );
   }
+  else if (mediaGroup.length > 1) {
+    // media group
+    return await publishTgMediaGroup(
+      tgChat.app,
+      chatId,
+      mediaGroup,
+      resultTextHtml
+    );
+  }
+  // else one image with type video | photo | photoUrl
+  return await publishTgVideo(
+    tgChat.app,
+    chatId,
+    (mediaGroup[0] as any).fileId || (mediaGroup[0] as any).url,
+    resultTextHtml,
+    urlBtn
+  );
+}
+
+export function resolveImageUrl(mediaGroup: (PhotoData | PhotoUrlData | VideoData)[]): string | undefined {
+  if (!mediaGroup.length) return
+  else if (mediaGroup[0].type === 'photo') return mediaGroup[0].fileId
+  else if (mediaGroup[0].type === 'photoUrl') return mediaGroup[0].url
 }
 
 export function makePollInfo(message: PollMessageEvent, tgChat: TgChat): string {
