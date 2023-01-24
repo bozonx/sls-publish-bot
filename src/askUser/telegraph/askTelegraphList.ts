@@ -4,6 +4,7 @@ import {addSimpleStep} from '../../helpers/helpers.js';
 import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {Page} from 'better-telegraph/src/types.js';
+import {compactUndefined} from '../../lib/arrays.js';
 
 
 export type TelegraphListMenu = 'TELEGRAPH_NEXT' | 'TELEGRAPH_PREV';
@@ -29,22 +30,20 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => v
         [
           ...pages.pages.map((page, index) => {
             return [{
-              text: page.title,
+              text: `(${page.views}) ${page.title}`,
               callback_data: PAGE_ITEM_CALLBACK + index,
             }]
           }),
-          [
-            // TODO: проверить конец
-            {
+          compactUndefined([
+            offset > tgChat.app.appConfig.itemsPerPage -1 && {
               text: tgChat.app.i18n.commonPhrases.prev,
               callback_data: TELEGRAPH_LIST_MENU.TELEGRAPH_PREV,
-            },
-            // TODO: проверить конец
-            {
+            } || undefined,
+            pages.pages.length === tgChat.app.appConfig.itemsPerPage && {
               text: tgChat.app.i18n.commonPhrases.next,
               callback_data: TELEGRAPH_LIST_MENU.TELEGRAPH_NEXT,
-            },
-          ],
+            } || undefined,
+          ]),
           [
             CANCEL_BTN,
             BACK_BTN,

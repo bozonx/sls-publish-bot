@@ -20,7 +20,7 @@ const appConfig: AppConfig = {
   // skip tasks which should be run earlier that specified value in seconds
   expiredTaskOffsetSec: Number(process.env.EXPIRED_TASK_OFFSET_SEC || 1),
 
-  itemsPerPage: 7,
+  itemsPerPage: 10,
 
   telegram: {
     parseMode: 'HTML',

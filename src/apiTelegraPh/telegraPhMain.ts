@@ -56,6 +56,9 @@ export default class TelegraPhMain {
    * @return {string} path like 'some-title-10-30-3'
    */
   async create(blogName: string, title: string, content: TelegraphNode[]): Promise<string> {
+
+    // see https://www.npmjs.com/package/better-telegraph#create
+
     return ''
     // const result = await this.api.createPage({
     //   title,
