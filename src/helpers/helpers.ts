@@ -5,7 +5,7 @@ import TgChat from '../apiTg/TgChat.js';
 import {ChatEvents, ISO_DATE_FORMAT, PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import {BlogTelegramConfig} from '../types/BlogsConfig.js';
-import {makeTagsString} from '../lib/common.js';
+import {isPromise, makeTagsString} from '../lib/common.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {compactUndefined} from '../lib/arrays.js';
@@ -63,12 +63,15 @@ export function matchSnsForType(pubType: PublicationType): SnType[] {
 
 export async function addSimpleStep(
   tgChat: TgChat,
-  init: () => [string, TgReplyButton[][]] ,
+  init: () => ([string, TgReplyButton[][]] | Promise<[string, TgReplyButton[][]]>),
   cb: (queryData: string) => void,
   stepName?: string
 ) {
   await tgChat.addOrdinaryStep(async (state: BaseState) => {
-    const [msg, buttons] = init()
+    const initResult = init()
+    const [msg, buttons] = (isPromise(initResult))
+      ? await initResult
+      : initResult as [string, TgReplyButton[][]]
     // print main menu message
     state.messageIds.push(await tgChat.reply(msg, buttons, true))
     // listen to result
