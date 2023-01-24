@@ -3,6 +3,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {Page} from 'better-telegraph/src/types.js';
 
 
 export type TelegraphListMenu = 'TELEGRAPH_NEXT' | 'TELEGRAPH_PREV';
@@ -15,7 +16,7 @@ export const TELEGRAPH_LIST_MENU: Record<TelegraphListMenu, TelegraphListMenu> =
 const PAGE_ITEM_CALLBACK = 'PAGE_ITEM_CALLBACK:'
 
 
-export async function askTelegraphList(tgChat: TgChat, onDone: (action: TelegraphListMenu) => void) {
+export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => void) {
   let pages: PageList;
 
   await addSimpleStep(
@@ -52,9 +53,9 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (action: Telegrap
     (queryData: string) => {
       if (queryData.indexOf(PAGE_ITEM_CALLBACK) === 0) {
         const splat: string[] = queryData.split(':');
-        const page = pages.pages[Number(splat[1])];
+        const page: Page = pages.pages[Number(splat[1])];
 
-        console.log(222222, page)
+        onDone(page)
       }
       else if (queryData === CANCEL_BTN_CALLBACK) {
         return tgChat.steps.cancel();
@@ -62,9 +63,9 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (action: Telegrap
       else if (queryData === BACK_BTN_CALLBACK) {
         return tgChat.steps.back();
       }
-      else if (Object.keys(TELEGRAPH_LIST_MENU).includes(queryData)) {
-        onDone(queryData as TelegraphListMenu);
-      }
+      // else if (Object.keys(TELEGRAPH_LIST_MENU).includes(queryData)) {
+      //   onDone(queryData as TelegraphListMenu);
+      // }
     }
   );
 }
