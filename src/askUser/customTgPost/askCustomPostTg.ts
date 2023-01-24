@@ -105,7 +105,8 @@ async function printPostPreview(
   await printPost(
     tgChat.botChatId,
     tgChat,
-    state.usePreview,
+    (state.postAsText) ? true : state.usePreview,
+    state.postAsText,
     state.mediaGroup,
     state.urlBtn,
     resultTextHtml

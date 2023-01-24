@@ -1,6 +1,6 @@
 import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
-import {makePost2000Text} from '../../publish/publishHelpers.js';
+import {makePost2000Text, resolveImageUrl} from '../../publish/publishHelpers.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {askCustomPostTg, CustomPostState} from './askCustomPostTg.js';
 import {askDateTime} from '../common/askDateTime.js';
@@ -155,10 +155,3 @@ export async function registerCustomPostTg(
 
   await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
 }
-
-function resolveImageUrl(mediaGroup: (PhotoData | PhotoUrlData | VideoData)[]): string | undefined {
-  if (!mediaGroup.length) return
-  else if (mediaGroup[0].type === 'photo') return mediaGroup[0].fileId
-  else if (mediaGroup[0].type === 'photoUrl') return mediaGroup[0].url
-}
-
