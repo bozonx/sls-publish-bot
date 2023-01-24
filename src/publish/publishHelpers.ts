@@ -58,26 +58,8 @@ export async function makePost2000Text(
     : (await tgChat.app.tg.bot.telegram.getFileLink(imgUrl)).href
   // save image to telegraph
   const imgTelegraphUrl = await tgChat.app.telegraPh.uploadImage(resolvedImgUrl)
-
-  // put image to the text
-  return `<a href="${imgTelegraphUrl}">.</a>` + rawTextHtml;
-
-  // TODO: попробовать пробел в начале поставить
-  // if (rawTextHtml.match(/\./)) {
-  //   // put link to the first
-  //   return rawTextHtml.replace(
-  //     /\./,
-  //     `<a href="${imgTelegraphUrl}">.</a>`
-  //   )
-  // }
-  // put link to the first letter
-  // TODO: !!! сдеать через распарсивание html
-  // return rawTextHtml.replace(
-  //   /^([^\w\d]*)([\w\d])/,
-  //   `$1<a href="${imgTelegraphUrl}">$2</a>`
-  // )
-
-  return rawTextHtml
+  // put image to the text as hidden url
+  return `<a href="${imgTelegraphUrl}"> </a>` + rawTextHtml;
 }
 
 export function makePublishInfoMessage(

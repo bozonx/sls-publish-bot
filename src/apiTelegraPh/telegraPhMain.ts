@@ -11,8 +11,6 @@ import { upload } from "better-telegraph";
 export default class TelegraPhMain {
   private readonly app: App;
   private readonly api;
-  // api with token for images
-  private readonly imageApi;
 
 
   constructor(app: App) {
@@ -21,8 +19,6 @@ export default class TelegraPhMain {
     //   accessToken: this.app.appConfig.telegraPhToken,
     // });
     this.api = getApi({ token: this.app.appConfig.telegraPhToken });
-    // TODO: make token for images
-    this.imageApi = getApi({ token: this.app.appConfig.telegraPhToken });
   }
 
   async init() {
