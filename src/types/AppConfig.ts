@@ -14,6 +14,7 @@ export default interface AppConfig {
   dataDirPath: string;
   // don't execute tasks which is going to execute in specified seconds and less
   expiredTaskOffsetSec: number;
+  itemsPerPage: number;
   telegram: {
     //parseMode: 'MarkdownV2';
     parseMode: 'HTML';
