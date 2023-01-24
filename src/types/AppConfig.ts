@@ -5,6 +5,7 @@ export default interface AppConfig {
   botToken: string;
   notionToken: string;
   telegraPhToken: string;
+  telegraPhImageToken: string;
   logChannelId: number | string;
   // offset of UTC in hours - 3 means Moscow or Istanbul
   utcOffset: number;

@@ -43,14 +43,42 @@ export function makeContentLengthString(
   return result;
 }
 
-export async function makePost2000Text(tgChat: TgChat, rawText: string, img?: string) {
+export async function makePost2000Text(tgChat: TgChat, rawTextHtml: string, imgUrl?: string) {
+  // if no image then return just text
+  if (!imgUrl) return rawTextHtml
+  // if there is an image then put it to text
 
+  // TODO: а как передать картинку из телеграма ????
+
+  tgChat.app.telegraPh.justSaveImage(imgUrl)
+
+  const imgTelegraphUrl = 'https://a.ru'
   // TODO: сохранить картинку в telegra.ph
   // TODO: получить ссылку на неё
-  // TODO: эту ссылку добавить в первую точку
-
-  return rawText;
+  if (rawTextHtml.match(/\./)) {
+    // put link to the first
+    return rawTextHtml.replace(
+      /\./,
+      `<a href="${imgTelegraphUrl}">.</a>`
+    )
+  }
+  // put link to the first letter
+  // TODO: !!! сдеать через распарсивание html
+  // return rawTextHtml.replace(
+  //   /^([^\w\d]*)([\w\d])/,
+  //   `$1<a href="${imgTelegraphUrl}">$2</a>`
+  // )
 }
+
+// (async () => {
+//   console.log(1111, await makePost2000Text(
+//     {} as any,
+//     '<p>some text,<p></p> another text,<p></p> and othe:</p>',
+//     'https://ya.ru'
+//   ))
+// })()
+
+
 
 export function makePublishInfoMessage(
   isoDate: string,

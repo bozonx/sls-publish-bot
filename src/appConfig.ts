@@ -10,6 +10,7 @@ const appConfig: AppConfig = {
   botToken: process.env.BOT_TOKEN as any,
   notionToken: process.env.NOTION_TOKEN as any,
   telegraPhToken: process.env.TELEGRA_PH_TOKEN as any,
+  telegraPhImageToken: process.env.TELEGRA_PH_IMAGE_TOKEN as any,
   logChannelId: process.env.LOG_CHANNEL_ID as any,
 
   consoleLogLevel: process.env.CONSOLE_LOG_LEVEL as any || LOG_LEVELS.error,

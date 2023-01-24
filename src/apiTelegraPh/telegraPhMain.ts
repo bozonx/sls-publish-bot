@@ -4,18 +4,21 @@
 import App from '../App.js';
 import {getApi} from './telegraphCli/api.js';
 import {TelegraphNode} from './telegraphCli/types.js';
+import {makeTelegraPhUrl} from '../helpers/helpers.js';
 
 
 export default class TelegraPhMain {
   private readonly app: App;
   private readonly api;
+  // api with token for images
+  private readonly imageApi;
 
 
   constructor(app: App) {
     this.app = app;
     this.api = getApi({ token: this.app.appConfig.telegraPhToken });
-
-
+    // TODO: make token for images
+    this.imageApi = getApi({ token: this.app.appConfig.telegraPhToken });
   }
 
   async init() {
@@ -48,7 +51,29 @@ export default class TelegraPhMain {
       author_url: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
     });
 
+    // TODO: наверное лучше сразу вернуть готовый url
     return result.path;
+  }
+
+  /**
+   * Just save image in telegraph
+   * @return {string} image url 'some-title-10-30-3'
+   */
+  async justSaveImage(imgUrl: string): Promise<string> {
+    const content: TelegraphNode[] = [
+      {
+        tag: 'img',
+        attrs: {
+          src: imgUrl,
+        }
+      }
+    ]
+    const result = await this.imageApi.createPage({ title: imgUrl, content });
+
+    console.log(1111, result)
+
+    // TODO: добавить url картинки
+    return makeTelegraPhUrl(result.path);
   }
 
 }
