@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {makeIsoDateTimeStr, makeResultPostText, replaceHorsInDate} from '../../helpers/helpers.js';
+import {makeResultPostText} from '../../helpers/helpers.js';
 import {askPostMedia} from '../common/askPostMedia.js';
 import {askCustomPostMenu} from './askCustomPostMenu.js';
 import validateCustomPost from '../../publish/validateCustomPost.js';
@@ -8,9 +8,6 @@ import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {clearMd} from '../../helpers/clearMd.js';
 import {commonMdToTgHtml} from '../../helpers/commonMdToTgHtml.js';
-import moment from 'moment/moment.js';
-import {PRINT_SHORT_DATE_TIME_FORMAT} from '../../types/constants.js';
-import {boolean} from 'property-information/lib/util/types.js';
 
 
 export interface CustomPostState {
