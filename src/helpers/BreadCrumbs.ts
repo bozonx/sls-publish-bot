@@ -13,6 +13,7 @@ export interface BreadCrumbsStep {
 export default class BreadCrumbs {
   private readonly steps: BreadCrumbsStep[] = []
   private readonly initialStep: () => Promise<void>
+  private initing = false
 
 
   constructor(initialStep: () => Promise<void>) {
@@ -25,6 +26,16 @@ export default class BreadCrumbs {
     //delete this.initialStep
   }
 
+
+  async init() {
+    if (this.initing) return
+
+    this.initing = true
+
+    await this.initialStep()
+
+    this.initing = false
+  }
 
   /**
    * Add a step and run it
@@ -84,14 +95,15 @@ export default class BreadCrumbs {
   }
 
   async cancel() {
-    if (this.steps.length) {
-      const currentStepIndex = this.steps.length - 1
-      // cancel current step
-      await this.justCancelStep(currentStepIndex)
-      // clear all the steps
-      this.deleteStepAndAfter(0)
-    }
+    // if it is alreasy initial step - do notging.
+    if (!this.steps.length) return
 
+    const currentStepIndex = this.steps.length - 1
+    // cancel current step
+    await this.justCancelStep(currentStepIndex)
+    // clear all the steps
+    this.deleteStepAndAfter(0)
+    // go to initial state
     await this.initialStep()
   }
 

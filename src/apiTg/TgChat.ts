@@ -8,7 +8,6 @@ import {makeBaseState} from '../helpers/helpers.js';
 import BotChatLog from '../helpers/BotChatLog.js';
 import {topLevelMenuStarter} from '../askUser/topLevelMenuStarter.js';
 import {
-  MediaGroupItemMessageEvent,
   PhotoMessageEvent,
   PollMessageEvent,
   TextMessageEvent,
@@ -28,7 +27,11 @@ export default class TgChat {
   constructor(chatId: number | string, app: App) {
     this.botChatId = chatId;
     this.app = app;
-    this.steps = new BreadCrumbs(() => topLevelMenuStarter(this));
+    this.steps = new BreadCrumbs(async () => {
+      await this.reply(this.app.i18n.greet);
+
+      await topLevelMenuStarter(this);
+    });
     this.events = new IndexedEventEmitter();
     this.log = new BotChatLog(this.app.appConfig.botChatLogLevel, this);
   }
@@ -40,9 +43,8 @@ export default class TgChat {
 
 
   async startCmd() {
-    await this.reply(this.app.i18n.greet);
     // Start from very beginning and cancel current state if need.
-    await this.steps.cancel();
+    await this.steps.init();
   }
 
   /**

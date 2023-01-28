@@ -54,11 +54,12 @@ export interface VideoMessageEvent extends MessageEventBase {
   entities?: TgEntity[];
 }
 
-export interface MediaGroupItemMessageEvent extends MessageEventBase {
-  photo: PhotoData;
-  caption?: string;
-  mediaGroupId: number;
-}
+// TODO: походу не нужно
+// export interface MediaGroupItemMessageEvent extends MessageEventBase {
+//   photo: PhotoData;
+//   caption?: string;
+//   mediaGroupId: number;
+// }
 
 export interface PollMessageEvent extends MessageEventBase {
   poll: {
