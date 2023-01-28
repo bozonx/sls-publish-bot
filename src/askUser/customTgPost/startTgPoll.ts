@@ -5,8 +5,13 @@ import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {makePublishTaskTgCopy} from '../../publish/makePublishTaskTg.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
-import {isoDateToHuman, makeIsoDateTimeStr} from '../../helpers/helpers.js';
+import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
 import {makePollInfo} from '../../publish/publishHelpers.js';
+import moment from 'moment/moment.js';
+import {PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN} from '../../types/constants.js';
+
+
+const POLL_FINISH_STEP = 'POLL_FINISH_STEP'
 
 
 export async function startTgPoll(blogName: string, tgChat: TgChat) {
@@ -25,26 +30,35 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       const publishIsoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
-
-
       await askTimePeriod(tgChat, tgChat.asyncCb(async (
-        hoursPeriod?: number,
-        certainIsoDateTime?: string
+        closeHoursPeriod?: number,
+        certainCloseIsoDateTime?: string
       ) => {
+        // validate that selected date is greater than auto-delete date
+        if (
+          certainCloseIsoDateTime && moment(certainCloseIsoDateTime).unix()
+          <= moment(publishIsoDateTime).unix()
+        ) {
+          await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
 
-        console.log(11111111, publishIsoDateTime, hoursPeriod, certainIsoDateTime)
+          return await tgChat.steps.to(POLL_FINISH_STEP)
+        }
 
-        // TODO: make final date
-        //onDone(replaceHorsInDate(publishIsoDateTime, Number(splat[1])));
+        let finalClosePollIsoDateTime: string | undefined
 
-        // TODO: check publishDateTime
+        if (certainCloseIsoDateTime) {
+          finalClosePollIsoDateTime = certainCloseIsoDateTime
+        }
+        else if (closeHoursPeriod) {
+          finalClosePollIsoDateTime = replaceHorsInDate(publishIsoDateTime, closeHoursPeriod)
+        }
 
-        // if (closeIsoDateTime) {
-        //   await tgChat.reply(
-        //     tgChat.app.i18n.commonPhrases.pollCloseDateAndTime + '\n'
-        //     + isoDateToHuman(closeIsoDateTime)
-        //   )
-        // }
+        if (finalClosePollIsoDateTime) {
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.closePollTime
+            + moment(finalClosePollIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+          )
+        }
 
         await askConfirm(tgChat, tgChat.asyncCb(async () => {
           await makePublishTaskTgCopy(
@@ -53,24 +67,14 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
             isoDate,
             time,
             message.messageId,
-            // TODO: надо сюда добавить дату закрытия потомучто мы не знаем конечный messageId
-            // TODO: может быть не установлена дата закрытия
+            undefined,
+            finalClosePollIsoDateTime
           )
-
-          // const task: FinishTgPollTask = {
-          //   startTime: closeIsoDateTime,
-          //   type: 'finishPoll',
-          //   sn: 'telegram',
-          //   chatId,
-          //   messageId: message.messageId,
-          // }
-          //
-          // await tgChat.app.tasks.addTaskAndLog(task);
 
           await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
           await tgChat.steps.cancel();
         }), tgChat.app.i18n.commonPhrases.publishConfirmation);
-      }));
+      }), POLL_FINISH_STEP);
     }));
 
   }));

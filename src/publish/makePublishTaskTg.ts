@@ -169,6 +169,7 @@ export async function makePublishTaskTgMediaGroup(
 export async function makePublishTaskTgCopy(
   blogName: string,
   tgChat: TgChat,
+  // TODO: может сразу готовую дату принимать?
   isoDate: string,
   resolvedTime: string,
   messageId: number,

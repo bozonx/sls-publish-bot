@@ -32,7 +32,7 @@ const PERIOD_MENU_PRESET = {
 export async function askTimePeriod(tgChat: TgChat, onDone: (
   hoursPeriod?: number,
   certainIsoDateTime?: string
-) => void) {
+) => void, stepName?: string) {
   // TODO: change msg
   const msg = tgChat.app.i18n.menu.selectPollClose;
   const buttons = [
@@ -107,6 +107,6 @@ export async function askTimePeriod(tgChat: TgChat, onDone: (
       ),
       ChatEvents.TEXT
     ]);
-  });
+  }, undefined, stepName);
 
 }
