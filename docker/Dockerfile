@@ -20,4 +20,5 @@ RUN mkdir -p $DATA_DIR
 RUN yarn install
 
 CMD ["yarn", "prod"]
-USER node
+
+#USER node

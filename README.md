@@ -25,43 +25,36 @@ UTC_OFFSET=3
 CONSOLE_LOG_LEVEL=debug
 CHANNEL_LOG_LEVEL=debug
 BOT_CHAT_LOG_LEVEL=debug
-CONFIG_PATH=
-DATA_DIR=./_testState
-# TODO: ??? WTF ????
-# 300 for prod
+CONFIG_PATH=./src/blogscfg.dev.yaml
+DATA_DIR=./_testData
 EXPIRED_TASK_OFFSET_SEC=1
 ```
 
 ## Prod
 
-### Docker run
+### Docker run for test
 
 ```bash
-docker run --name publish_bot -ti --rm \
-  -u "node" \
-  -w "/usr/src/app" \
-  -v "/mnt/disk2/workspace/sls-publish-bot/docker-test:/usr/src/app" \
-  -e NODE_ENV=production \
-  node:18.12 \
-  yarn "container"
+yarn prod-test-run
 ```
 
-### Docker compose
+### Docker compose for prod
 
 ```
-version: "3"
+version: '3'
+
 services:
-  node:
-    image: "node:18.12"
-    user: "node"
-    working_dir: /usr/src/app
+  app:
+    image: bozonx/publish_bot:latest
+    restart: always
     environment:
-      - NODE_ENV=production
+      - BOT_TOKEN=
+      - TELEGRA_PH_TOKEN=
+      - LOG_CHANNEL_ID=
+      - NOTION_TOKEN=
+      - UTC_OFFSET=3
     volumes:
-      - /mnt/disk2/workspace/sls-publish-bot/docker-test:/usr/src/app
-    #expose:
-    #  - "8081"
-    command: "yarn container"
+      - /home/services/data/publish-bot/data:/home/node/data
 ```
 
 start chat in telegram with `freedom_publish_bot`
@@ -70,3 +63,10 @@ start chat in telegram with `freedom_publish_bot`
 
 docker login
 docker push bozonx/publish_bot:latest
+
+## Push to prod
+
+```bash
+yarn build
+yarn push
+```
