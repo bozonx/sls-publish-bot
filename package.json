@@ -1,6 +1,6 @@
 {
   "name": "sls-publish-bot",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Publish telegram bot for freedom blogs",
   "main": "src/index.ts",
   "type": "module",
