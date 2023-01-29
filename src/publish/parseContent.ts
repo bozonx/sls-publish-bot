@@ -11,10 +11,8 @@ import ru from '../I18n/ru.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 
 
-// TODO: review, refactor
-
-
 export function parseContentItem(item: PageObjectResponse): ContentItem {
+  // TODO: review, refactor
   const pubType: PublicationType = (item.properties[CONTENT_PROPS.type] as any)?.select.name || '';
   const link = (item.properties[CONTENT_PROPS.gist] as any)?.rich_text[0]?.href;
   const relativePageId: string | undefined = (link)
@@ -44,12 +42,13 @@ export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru, u
     + `${i18n.contentInfo.status}: ${item.status}\n`
     + `${i18n.contentInfo.content}: ${item.gist}\n`
     + `${i18n.contentInfo.link}: ${(item.relativePageId) ? makeFullNotionLink(item.relativePageId) : ''}\n`
-    + `${i18n.contentInfo.note}: ${item.note}`;
+    + `${i18n.contentInfo.note}: ${item.note}`
 }
 
 export function validateContentItem(item: ContentItem) {
   if (!item.date) throw new Error(`No date`);
   else if (!item.time) throw new Error(`No time`);
+  // TODO: remove relativePageId
   else if (!item.gist && !item.relativePageId) throw new Error(`No gist and link`);
   else if (!item.status) throw new Error(`No status`);
   else if (!item.type) throw new Error(`No type`);
@@ -60,6 +59,7 @@ export function validateContentItem(item: ContentItem) {
     throw new Error(`Unknown status: ${item.status}`);
   else if (!Object.values(PUBLICATION_TYPES).includes(item.type))
     throw new Error(`Unknown type: ${item.type}`);
+  // TODO: remove relativePageId
   else if ([
     PUBLICATION_TYPES.article,
     PUBLICATION_TYPES.post1000,
@@ -73,13 +73,13 @@ export function prepareContentItem(
   rawItem: PageObjectResponse,
   i18n: typeof ru
 ): ContentItem {
-  const parsedContentItem: ContentItem = parseContentItem(rawItem);
+  const parsedContentItem: ContentItem = parseContentItem(rawItem)
 
   try {
-    validateContentItem(parsedContentItem);
+    validateContentItem(parsedContentItem)
   }
   catch (e) {
-    throw new Error(i18n.errors.invalidContent + e);
+    throw new Error(i18n.errors.invalidContent + e)
   }
 
   return parsedContentItem;

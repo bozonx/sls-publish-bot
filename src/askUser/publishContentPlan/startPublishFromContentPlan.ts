@@ -39,18 +39,18 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
   // ask use select not published item
   await askContentToUse(notPublishedItems, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
-    let parsedContentItem;
-    let parsedPage;
+    let parsedContentItem: ContentItem
+    let parsedPage: RawPageContent | undefined
 
     try {
-      parsedContentItem = prepareContentItem(item, tgChat.app.i18n);
-      parsedPage = await loadAndPreparePage(parsedContentItem, blogName, tgChat);
+      parsedContentItem = prepareContentItem(item, tgChat.app.i18n)
+      parsedPage = await loadAndPreparePage(parsedContentItem, blogName, tgChat)
     }
     catch (e) {
-      await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
-      await tgChat.steps.back();
+      await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e)
+      await tgChat.steps.back()
 
-      return;
+      return
     }
 
     if (!parsedPage && parsedContentItem.type !== PUBLICATION_TYPES.announcement) {
@@ -92,6 +92,7 @@ async function loadAndPreparePage(
   blogName: string,
   tgChat: TgChat
 ): Promise<RawPageContent | undefined> {
+  // TODO: remove relativePageId
   if (!parsedContentItem.relativePageId) return;
   // load props of page from notion
   const pageProperties = await loadPageProps(parsedContentItem.relativePageId, tgChat);

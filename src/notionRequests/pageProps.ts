@@ -9,7 +9,7 @@ export async function loadPageProps(
 ): Promise<PageObjectResponse['properties']> {
   const resultPage: PageObjectResponse = await tgChat.app.notion.api.pages.retrieve({
     page_id: pageId,
-  }) as PageObjectResponse;
+  }) as PageObjectResponse
 
-  return resultPage.properties;
+  return resultPage.properties
 }

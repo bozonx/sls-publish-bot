@@ -31,6 +31,7 @@ export default interface ContentItem {
   date: string;
   time: string;
   gist: string;
+  // TODO: remove
   // id of relative page which is in link
   relativePageId?: string;
   note: string;
