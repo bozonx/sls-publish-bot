@@ -8,14 +8,15 @@ import {PublicationType} from '../types/publicationType.js';
 import {clearMd} from './clearMd.js';
 
 
-export function makeClearTextFromNotion(
+export function makeClearTextsFromNotion(
   sns: SnType[],
   pubType: PublicationType,
   useTgFooter: boolean,
-  tgBlogConfig?: BlogTelegramConfig,
+  //tgBlogConfig?: BlogTelegramConfig,
+  cleanTgFooterTmpl?: string,
   textBlocks?: NotionBlocks,
   // TODO: а точно он html???
-  postHtmlText?: string,
+  //postHtmlText?: string,
   instaTags?: string[],
   tgTags?: string[],
 ): Record<SnType, string> {

@@ -13,19 +13,15 @@ import {clearMd} from '../helpers/clearMd.js';
 
 
 export async function printContentItemDetails(
-  blogName: string,
   tgChat: TgChat,
   resolvedSns: SnType[],
   parsedContentItem: ContentItem,
+  footerTmplHtml?: string,
   clearTexts?: Record<SnType, string>
 ) {
 
   // TODO: учитывать poll
 
-  // TODO: или чо может в state затулить???
-  const footerTmpl = tgChat.app.blogs[blogName].sn.telegram?.postFooter
-  const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
-  const cleanFooterTmpl = await clearMd(footerTmpl)
   const footerStr = prepareFooter(footerTmplHtml, parsedContentItem.tgTags,true)
 
   if (footerStr) {

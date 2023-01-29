@@ -3,7 +3,6 @@ import {SnType} from '../../types/snTypes.js';
 import ContentItem from '../../types/ContentItem.js';
 import {askPublicationMenu} from './askPublicationMenu.js';
 import {printImage, printPublishConfirmData} from '../../publish/printInfo.js';
-import {makeClearTextFromNotion} from '../../helpers/makeClearTextFromNotion.js';
 import validateContentPlanPost, {validateContentPlanPostText} from '../../publish/validateContentPlanPost.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
@@ -55,7 +54,7 @@ export async function startPublicationMenu(
     state.mainImgUrl = await printImage(tgChat, mainImgUrl)
 
     // TODO: почему здесь ???
-    // const clearTexts = makeClearTextFromNotion(
+    // const clearTexts = makeClearTextsFromNotion(
     //   state.sns,
     //   state.pubType,
     //   state.useFooter,

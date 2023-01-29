@@ -11,7 +11,6 @@ import {
   addSimpleStep,
   makeHumanDateTimeStr,
   makeIsoDateTimeStr,
-  makeUtcOffsetStr,
   replaceHorsInDate
 } from '../../helpers/helpers.js';
 import {askTime} from '../common/askTime.js';
@@ -29,7 +28,6 @@ import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
 import {PublishMenuState} from './startPublicationMenu.js';
-import {prepareContentItem} from '../../publish/parseContent.js';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
