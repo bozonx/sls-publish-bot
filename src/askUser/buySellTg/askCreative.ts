@@ -2,7 +2,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK, ChatEvents} from '../../types/constants.js';
 import {PageObjectResponse, PartialPageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {DB_DEFAULT_PAGE_SIZE} from '../../apiNotion/constants.js';
-import {loadPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
+import {requestPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
 import {transformNotionToTelegramPostMd} from '../../helpers/transformNotionToTelegramPostMd.js';
 import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
 import {publishTgImage} from '../../apiTg/publishTg.js';
@@ -60,7 +60,7 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
             const splat = queryData.split(':');
             const itemIndex = Number(splat[1]);
             const item = items[itemIndex];
-            const pageContent = await loadPageBlocks(item.id, tgChat);
+            const pageContent = await requestPageBlocks(item.id, tgChat);
             const image = getFirstImageFromNotionBlocks(pageContent);
             const btnText = (item.properties?.btn_text as any).rich_text[0]?.plain_text;
             const btnUrl = (item.properties?.btn_url as any).url;

@@ -62,8 +62,9 @@ function makeButtonTitle(item: PageObjectResponse): string {
   const dateProp = item.properties[CONTENT_PROPS.date];
   const dateText: string = (dateProp as any).date.start;
   const shortDateText: string = moment(dateText).format(PRINT_SHORT_DATE_FORMAT);
-  const gistProp = item.properties[CONTENT_PROPS.gist];
-  const gistRichText: RichTextItemResponse = (gistProp as any).rich_text[0];
+  const nameProp = item.properties[CONTENT_PROPS.name];
+
+  const gistRichText: RichTextItemResponse = (nameProp as any).title[0];
 
   return `${shortDateText} ${gistRichText.plain_text}`
 }

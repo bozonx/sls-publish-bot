@@ -22,24 +22,8 @@ import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
+import {PublishMenuState} from './startPublicationMenu.js';
 
-
-// TODO: move state to start
-export interface PublishMenuState {
-  pubType: PublicationType
-  useFooter: boolean
-  usePreview: boolean
-  sns: SnType[]
-  selectedDate: string
-  selectedTime: string
-  instaTags?: string[]
-  mainImgUrl?: string
-  // it's for announcement
-  postHtmlText?: string
-  urlBtn?: TgReplyBtnUrl
-  autoDeleteIsoDateTime?: string
-  autoDeletePeriodHours?: number
-}
 
 export type PublishMenuAction = 'CHANGE_TIME'
   | 'FOOTER_SWITCH'
@@ -114,7 +98,7 @@ export async function askPublicationMenu(
           }] : [],
           // ask to change post text only for announcement
           (state.pubType === PUBLICATION_TYPES.announcement) ? [{
-            text: (state.postHtmlText)
+            text: (state.replacedHtmlText)
               ? tgChat.app.i18n.buttons.replaceText
               : tgChat.app.i18n.buttons.addText,
             callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
@@ -226,11 +210,11 @@ async function handleButtons(
 
         // TODO: есть ещё cleanText - что с ним делать???
 
-        state.postHtmlText = textHtml
+        state.replacedHtmlText = textHtml
         // print result
-        if (state.postHtmlText) {
+        if (state.replacedHtmlText) {
           await tgChat.reply(tgChat.app.i18n.menu.selectedPostText)
-          await tgChat.reply(state.postHtmlText, undefined, true, true)
+          await tgChat.reply(state.replacedHtmlText, undefined, true, true)
         }
         else {
           await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText)

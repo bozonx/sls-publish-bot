@@ -1,14 +1,13 @@
 import TgChat from '../apiTg/TgChat.js';
 import ContentItem from '../types/ContentItem.js';
-import RawPageContent from '../types/PageContent.js';
 import {makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
 import {makeContentPlanItemDetails} from './parseContent.js';
-import {makePageDetailsMsg} from '../notionHelpers/parsePage.js';
 import {makeContentLengthString} from './publishHelpers.js';
-import {PublishMenuState} from '../askUser/publishContentPlan/askPublicationMenu.js';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
+import {NotionBlocks} from '../types/notion.js';
+import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 
 
 export async function printItemDetails(
@@ -16,15 +15,14 @@ export async function printItemDetails(
   tgChat: TgChat,
   resolvedSns: SnType[],
   parsedContentItem: ContentItem,
-  clearTexts?: Record<SnType, string>,
-  parsedPage?: RawPageContent
+  clearTexts?: Record<SnType, string>
 ) {
 
   // TODO: учитывать poll
 
   const footerStr = prepareFooter(
     tgChat.app.blogs[blogName].sn.telegram?.postFooter,
-    parsedPage?.tgTags,
+    parsedContentItem.tgTags,
     true
   );
   if (footerStr) {
@@ -48,21 +46,21 @@ export async function printItemDetails(
     tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
   );
 
-  if (parsedPage) {
-    // if has nested page
-    const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
-
-    await tgChat.reply(
-      tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
-    );
-  }
+  // if (parsedPage) {
+  //   // if has nested page
+  //   const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
+  //
+  //   await tgChat.reply(
+  //     tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
+  //   );
+  // }
 
   // TODO: review
   if (clearTexts) {
     await tgChat.reply(makeContentLengthString(
       tgChat.app.i18n,
       clearTexts,
-      parsedPage?.instaTags,
+      parsedContentItem.instaTags,
       footerStr
     ));
   }
@@ -75,13 +73,14 @@ export async function printPublishConfirmData(
   tgChat: TgChat,
   state: PublishMenuState,
   clearTexts: Record<SnType, string>,
-  parsedPage?: RawPageContent
+  tgTags?: string[],
+  pageBlocks?: NotionBlocks
 ) {
   const footerStr = prepareFooter(
     tgChat.app.blogs[blogName].sn.telegram?.postFooter,
-    parsedPage?.tgTags,
+    tgTags,
     true
-  );
+  )
 
   if (footerStr) {
     // TODO: будет HTML
@@ -90,7 +89,7 @@ export async function printPublishConfirmData(
       undefined,
       true,
       true
-    );
+    )
   }
 
   await tgChat.reply(makeContentLengthString(
@@ -107,10 +106,10 @@ export async function printPublishConfirmData(
     + makeHumanDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
   );
 
-  if (state.sns.includes(SN_TYPES.instagram)) {
+  if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
     await tgChat.reply(tgChat.app.i18n.menu.textForInstagram);
     await tgChat.reply(
-      transformNotionToInstagramPost(parsedPage!.textBlocks)
+      transformNotionToInstagramPost(pageBlocks)
       + '\n\n'
       + makeTagsString(state.instaTags)
     );

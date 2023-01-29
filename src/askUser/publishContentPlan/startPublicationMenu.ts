@@ -1,8 +1,7 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {SnType} from '../../types/snTypes.js';
 import ContentItem from '../../types/ContentItem.js';
-import RawPageContent from '../../types/PageContent.js';
-import {askPublicationMenu, PublishMenuState} from './askPublicationMenu.js';
+import {askPublicationMenu} from './askPublicationMenu.js';
 import {printImage, printPublishConfirmData} from '../../publish/printInfo.js';
 import {makeClearTextFromNotion} from '../../helpers/makeClearTextFromNotion.js';
 import validateContentPlanPost, {validateContentPlanPostText} from '../../publish/validateContentPlanPost.js';
@@ -10,8 +9,27 @@ import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {makeTgPostTextFromNotion} from '../../helpers/makeTgPostTextFromNotion.js';
 import PollData from '../../types/PollData.js';
-import {PUBLICATION_TYPES} from '../../types/publicationType.js';
+import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
 import {publishFork} from '../../publish/publishFork.js';
+import {NotionBlocks} from '../../types/notion.js';
+import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
+
+
+export interface PublishMenuState {
+  pubType: PublicationType
+  useFooter: boolean
+  usePreview: boolean
+  sns: SnType[]
+  selectedDate: string
+  selectedTime: string
+  instaTags?: string[]
+  mainImgUrl?: string
+  // it's for announcement
+  replacedHtmlText?: string
+  urlBtn?: TgReplyBtnUrl
+  autoDeleteIsoDateTime?: string
+  autoDeletePeriodHours?: number
+}
 
 
 export async function startPublicationMenu(
@@ -19,7 +37,7 @@ export async function startPublicationMenu(
   tgChat: TgChat,
   resolvedSns: SnType[],
   parsedContentItem: ContentItem,
-  parsedPage?: RawPageContent,
+  pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
 ) {
   const state: PublishMenuState = {
@@ -29,7 +47,7 @@ export async function startPublicationMenu(
     sns: resolvedSns,
     selectedDate: parsedContentItem.date,
     selectedTime: parsedContentItem.time,
-    instaTags: parsedPage?.instaTags,
+    instaTags: parsedContentItem.instaTags,
     mainImgUrl,
   };
 
@@ -42,14 +60,15 @@ export async function startPublicationMenu(
       state.pubType,
       state.useFooter,
       tgChat.app.blogs[blogName].sn.telegram,
-      parsedPage?.textBlocks,
-      state.postHtmlText,
+      pageBlocks,
+      // TODO: это только для анонса
+      state.replacedHtmlText,
       state.instaTags,
-      parsedPage?.tgTags,
+      parsedContentItem.tgTags,
     );
 
     // TODO: учитывать poll
-    await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedPage);
+    await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedContentItem.tgTags, pageBlocks)
     // TODO: может проще делать steps.back() ????
     let disableOk = false;
 
@@ -76,10 +95,11 @@ export async function startPublicationMenu(
           state.pubType,
           state.useFooter,
           tgChat.app.blogs[blogName].sn.telegram,
-          parsedPage?.textBlocks,
-          state.postHtmlText,
+          pageBlocks,
+          // TODO: это только для анонса
+          state.replacedHtmlText,
           state.instaTags,
-          parsedPage?.tgTags,
+          parsedContentItem.tgTags,
         );
 
         let pollData: PollData | undefined;
@@ -103,10 +123,13 @@ export async function startPublicationMenu(
           state,
           parsedContentItem.type,
           postTexts,
-          parsedPage?.textBlocks,
-          parsedPage?.title,
-          parsedPage?.tgTags,
-          parsedPage?.announcement,
+          pageBlocks,
+          // TODO: учитывать что не gist
+          parsedContentItem.name,
+          parsedContentItem.tgTags,
+          // TODO: чо за хуйня
+          //parsedPage?.announcement,
+          undefined,
           pollData
         );
       }

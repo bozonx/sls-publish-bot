@@ -3,7 +3,7 @@ import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import TgChat from '../apiTg/TgChat.js';
 
 
-export async function loadPageProps(
+export async function requestPageProps(
   pageId: string,
   tgChat: TgChat
 ): Promise<PageObjectResponse['properties']> {

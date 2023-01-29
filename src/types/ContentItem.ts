@@ -5,7 +5,7 @@ import {PublicationType} from './publicationType.js';
 export const CONTENT_PROPS = {
   date: 'date',
   time: 'time',
-  gist: 'gist/link',
+  name: 'name/gist',
   note: 'note',
   status: 'status',
   onlySn: 'onlySn',
@@ -30,12 +30,16 @@ export default interface ContentItem {
   // date in ISO format
   date: string;
   time: string;
-  gist: string;
-  // TODO: remove
-  // id of relative page which is in link
-  relativePageId?: string;
+  // for article and posts
+  name?: string;
+  // for announcement
+  gist?: string;
   note: string;
   status: ContentStatus,
   onlySn: SnType[],
   type: PublicationType,
+  // additional
+  imageDescr?: string
+  tgTags?: string[]
+  instaTags?: string[]
 }

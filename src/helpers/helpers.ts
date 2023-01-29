@@ -18,9 +18,9 @@ export function makeBaseState(): BaseState {
   };
 }
 
-export function makeFullNotionLink(pageId: string): string {
-  return `https://www.notion.so/${pageId}`;
-}
+// export function makeFullNotionLink(pageId: string): string {
+//   return `https://www.notion.so/${pageId}`;
+// }
 
 export function makeTelegraPhUrl(tgPath: string): string {
   return `https://telegra.ph/${tgPath}`;
@@ -44,20 +44,21 @@ export function resolveSns(
     // filter that sns which is compared with publication type
     filteredSns = matchSnsForType(pubType);
   }
+
   // compare all the blogs sns with filtered
   return _.intersection(blogSns, filteredSns);
 }
 
 export function matchSnsForType(pubType: PublicationType): SnType[] {
-  const sns: SnType[] = [];
+  const sns: SnType[] = []
 
-  for (const sn in Object.keys(SN_SUPPORT_TYPES)) {
+  for (const sn of Object.keys(SN_SUPPORT_TYPES)) {
     if (SN_SUPPORT_TYPES[sn].indexOf(pubType) >= 0) {
-      sns.push(sn as SnType);
+      sns.push(sn as SnType)
     }
   }
 
-  return sns;
+  return sns
 }
 
 

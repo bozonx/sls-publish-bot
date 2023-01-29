@@ -1,11 +1,11 @@
 import TgChat from '../apiTg/TgChat.js';
 import {makePublishTaskTgArticle} from './makePublishTaskTgArticle.js';
-import {PublishMenuState} from '../askUser/publishContentPlan/askPublicationMenu.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgPoll} from './makePublishTaskTg.js';
 import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
+import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 
 
 export async function publishFork(
