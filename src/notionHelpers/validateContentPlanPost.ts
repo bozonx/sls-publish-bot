@@ -6,8 +6,10 @@ import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 
 
-export default function validateContentPlanPost(state: PublishMenuState, tgChat: TgChat) {
+export function validateContentPlanPost(tgChat: TgChat, state: PublishMenuState) {
 
+  // TODO: review
+  // TODO: проверка длинн
   // TODO: photos, narrative - должны иметь 1 или более картинок
 
   // if image based post has no image

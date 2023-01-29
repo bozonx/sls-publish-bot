@@ -28,6 +28,7 @@ import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
 import {PublishMenuState} from './startPublicationMenu.js';
+import {compactUndefined} from '../../lib/arrays.js';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -53,14 +54,24 @@ export async function askPublicationMenu(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
-  // TODO: а тут validate не нужен чтоли?
+  validate: (tgChat: TgChat, state: PublishMenuState) => void,
   onDone: () => void,
 ) {
   await addSimpleStep(
     tgChat,
     (): [string, TgReplyButton[][]] => {
+      let disableOk = false;
 
-      // TODO: добавить validate и disableOk
+      try {
+        validate(tgChat, state);
+      }
+      catch (e) {
+        tgChat.reply(`${WARN_SIGN} ${e}`)
+          .catch((e) => tgChat.log.error(e));
+
+        disableOk = true
+      }
+
       // TODO: mainImgUrl обязательна для некоторых типов постов, но её может сразу и не быть
 
       return [
@@ -157,16 +168,16 @@ export async function askPublicationMenu(
               : tgChat.app.i18n.buttons.setAutoRemove,
             callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
           }] : [],
-          [
+          compactUndefined([
             BACK_BTN,
             CANCEL_BTN,
-            OK_BTN
-          ]
+            (disableOk) ? undefined : OK_BTN,
+          ]),
         ]
       ]
     },
     (queryData: string) => {
-      return handleButtons(queryData, blogName, tgChat, state, onDone);
+      return handleButtons(queryData, blogName, tgChat, state, validate, onDone);
     }
   );
 }
@@ -177,6 +188,7 @@ async function handleButtons(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
+  validate: (tgChat: TgChat, state: PublishMenuState) => void,
   onDone: () => void,
 ) {
   switch (queryData) {
@@ -197,7 +209,7 @@ async function handleButtons(
 
       // TODO: вместо этого использовать steps.to() - нверное стейт тоже сохранится
       // print menu again
-      return askPublicationMenu(blogName, tgChat, state, onDone)
+      return askPublicationMenu(blogName, tgChat, state, validate, onDone)
     case PUBLISH_MENU_ACTION.PREVIEW_SWITCH:
       // switch footer value
       state.usePreview = !state.usePreview
@@ -207,7 +219,7 @@ async function handleButtons(
         + tgChat.app.i18n.onOff[Number(state.usePreview)]
       )
       // print menu again
-      return askPublicationMenu(blogName, tgChat, state, onDone)
+      return askPublicationMenu(blogName, tgChat, state, validate, onDone)
     case PUBLISH_MENU_ACTION.ADD_TEXT:
       return await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
 
@@ -223,7 +235,7 @@ async function handleButtons(
           await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText)
         }
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone)
+        return askPublicationMenu(blogName, tgChat, state, validate, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
@@ -238,7 +250,7 @@ async function handleButtons(
         ) {
           await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
 
-          return askPublicationMenu(blogName, tgChat, state, onDone)
+          return askPublicationMenu(blogName, tgChat, state, validate, onDone)
         }
 
         state.selectedTime = newTime
@@ -252,7 +264,7 @@ async function handleButtons(
           )
         )
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone)
+        return askPublicationMenu(blogName, tgChat, state, validate, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
 
@@ -283,20 +295,20 @@ async function handleButtons(
             await tgChat.reply(tgChat.app.i18n.message.removedImg);
           }
 
-          return askPublicationMenu(blogName, tgChat, state, onDone);
+          return askPublicationMenu(blogName, tgChat, state, validate, onDone);
         })
       );
     case PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS:
       return await askTags(state.instaTags || [], tgChat, tgChat.asyncCb(async (newTags: string[]) => {
         state.instaTags = newTags
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone)
+        return askPublicationMenu(blogName, tgChat, state, validate, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
       return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: SnType[]) => {
         state.sns = newSns
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone)
+        return askPublicationMenu(blogName, tgChat, state, validate, onDone)
       }));
     case CUSTOM_POST_ACTION.ADD_URL_BUTTON:
       return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton?: TgReplyBtnUrl) => {
@@ -305,7 +317,7 @@ async function handleButtons(
 
           delete state.urlBtn;
 
-          return askPublicationMenu(blogName, tgChat, state, onDone)
+          return askPublicationMenu(blogName, tgChat, state, validate, onDone)
         }
 
         state.urlBtn = urlButton;
@@ -318,7 +330,7 @@ async function handleButtons(
         );
 
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone)
+        return askPublicationMenu(blogName, tgChat, state, validate, onDone)
       }));
     case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
       return await askTimePeriod(tgChat, tgChat.asyncCb(async (
@@ -330,7 +342,7 @@ async function handleButtons(
 
           delete state.autoDeleteIsoDateTime
 
-          return askPublicationMenu(blogName, tgChat, state, onDone)
+          return askPublicationMenu(blogName, tgChat, state, validate, onDone)
         }
 
         const pubIsoDate = makeIsoDateTimeStr(
@@ -346,7 +358,7 @@ async function handleButtons(
         ) {
           await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
 
-          return askPublicationMenu(blogName, tgChat, state, onDone)
+          return askPublicationMenu(blogName, tgChat, state, validate, onDone)
         }
 
         if (hoursPeriod) {
@@ -361,7 +373,7 @@ async function handleButtons(
           + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
         )
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone)
+        return askPublicationMenu(blogName, tgChat, state, validate, onDone)
       }));
     default:
       throw new Error(`Unknown action`);
