@@ -56,16 +56,14 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
     const cleanFooterTmpl = await clearMd(footerTmpl)
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
-    let cleanTexts: Record<SnType, string> | undefined
+    let cleanTexts: Partial<Record<SnType, string>> = {}
 
-    // TODO: почему вообще тут это делается???
     if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
       // make clear text if it isn't a poll
       cleanTexts = makeClearTextsFromNotion(
         resolvedSns,
         parsedContentItem.type,
         true,
-        //tgChat.app.blogs[blogName].sn.telegram,
         cleanFooterTmpl,
         pageBlocks,
         //parsedContentItem.gist,
@@ -77,7 +75,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     let mainImgUrl = getFirstImageFromNotionBlocks(pageBlocks)
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
-    await printContentItemDetails(tgChat, resolvedSns, parsedContentItem, footerTmplHtml, cleanTexts)
+    await printContentItemDetails(tgChat, resolvedSns, parsedContentItem, cleanTexts, footerTmplHtml)
     await startPublicationMenu(blogName, tgChat, resolvedSns, parsedContentItem, pageBlocks, mainImgUrl)
   }));
 }

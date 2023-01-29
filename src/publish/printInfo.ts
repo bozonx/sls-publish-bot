@@ -16,8 +16,8 @@ export async function printContentItemDetails(
   tgChat: TgChat,
   resolvedSns: SnType[],
   parsedContentItem: ContentItem,
-  footerTmplHtml?: string,
-  clearTexts?: Record<SnType, string>
+  clearTexts: Partial<Record<SnType, string>>,
+  footerTmplHtml?: string
 ) {
 
   // TODO: учитывать poll
