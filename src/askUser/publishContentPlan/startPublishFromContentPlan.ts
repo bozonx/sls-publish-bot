@@ -3,7 +3,7 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js'
 import {askContentToUse} from './askContentToUse.js';
 import {prepareContentItem} from '../../publish/parseContent.js';
 import ContentItem from '../../types/ContentItem.js';
-import {preparePage} from '../../publish/parsePage.js';
+import {preparePage} from '../../notionRequests/parsePage.js';
 import {askPublishMenu, PublishMenuState} from './askPublishMenu.js';
 import {loadNotPublished} from '../../notionRequests/contentPlan.js';
 import {publishFork} from '../../publish/publishFork.js';
