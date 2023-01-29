@@ -9,6 +9,8 @@ import ContentItem, {
 import {makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
+import {SnType} from '../types/snTypes.js';
+import {makeContentLengthString} from './publishHelpers.js';
 
 
 export function parseContentItem(item: PageObjectResponse): ContentItem {
@@ -36,7 +38,7 @@ export function makeContentPlanItemDetails(
   item: ContentItem,
   i18n: typeof ru,
   utcOffset: number,
-  cleanFooterTmpl?: string
+  cleanTexts: Partial<Record<SnType, string>>
 ): string {
   const result: string[] = [
     `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(item.date, item.time, utcOffset)}`,
@@ -66,22 +68,21 @@ export function makeContentPlanItemDetails(
     result.push(`${i18n.contentInfo.gist}: ${item.gist}`)
   }
 
-  // TODO: add footer length
-  // + ((state.useFooter) ? ` + ${tgChat.app.i18n.commonPhrases.footer}` : '')
-  // + `: ${cleanFullText.length}\n`
-
   result.push(`${i18n.contentInfo.note}: ${item.note}`)
 
-  // TODO: review
-  // if (clearTexts) {
-  //   // TODO: use cleanFooterTmpl
-  //   await tgChat.reply(makeContentLengthString(
-  //     tgChat.app.i18n,
-  //     clearTexts,
-  //     parsedContentItem.instaTags,
-  //     footerStr
-  //   ));
+  // if (cleanTexts.telegram) {
+  //   result.push(
+  //     i18n.pageInfo.contentLength
+  //     + ` + ${i18n.commonPhrases.footer}`
+  //     + `: ${cleanTexts.telegram.length}`
+  //   )
   // }
+
+  // TODO: если пусто
+  if (cleanTexts) {
+    // TODO: use cleanFooterTmpl
+    result.push(makeContentLengthString(i18n, cleanTexts, instaTags, tgFooter));
+  }
 
   return result.join('\n')
 }

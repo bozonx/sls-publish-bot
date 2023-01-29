@@ -37,6 +37,9 @@ export async function startPublicationMenu(
   parsedContentItem: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
+  // TODO: использовать их
+  footerTmplHtml?: string,
+  cleanFooterTmpl?: string,
 ) {
   const state: PublishMenuState = {
     pubType: parsedContentItem.type,

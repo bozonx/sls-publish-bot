@@ -1,29 +1,44 @@
 import TgChat from '../apiTg/TgChat.js';
 import ContentItem from '../types/ContentItem.js';
-import {isoDateToHuman, makeHumanDateStr, makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
+import {isoDateToHuman, makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
 import {makeContentPlanItemDetails} from './parseContent.js';
-import {makeContentLengthString} from './publishHelpers.js';
-import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';
-import {makeTagsString} from '../lib/common.js';
-import {SN_TYPES, SnType} from '../types/snTypes.js';
+import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 import {clearMd} from '../helpers/clearMd.js';
+import {PUBLICATION_TYPES} from '../types/publicationType.js';
+import {makeClearTextsFromNotion} from '../helpers/makeClearTextsFromNotion.js';
 
 
 export async function printContentItemDetails(
   tgChat: TgChat,
   resolvedSns: SnType[],
   parsedContentItem: ContentItem,
-  clearTexts: Partial<Record<SnType, string>>,
-  footerTmplHtml?: string
+  pageBlocks?: NotionBlocks,
+  footerTmplHtml?: string,
+  cleanFooterTmpl?: string,
 ) {
+  let cleanTexts: Partial<Record<SnType, string>> = {}
+  let footerStr: string | undefined
 
-  // TODO: учитывать poll
+  if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
+    // make clear text if it isn't a poll
+    cleanTexts = makeClearTextsFromNotion(
+      resolvedSns,
+      parsedContentItem.type,
+      true,
+      cleanFooterTmpl,
+      pageBlocks,
+      //parsedContentItem.gist,
+      parsedContentItem.instaTags,
+      parsedContentItem.tgTags
+    )
+    footerStr = prepareFooter(footerTmplHtml, parsedContentItem.tgTags,true)
+  }
+  // TODO: учитывать cleanTexts
 
-  const footerStr = prepareFooter(footerTmplHtml, parsedContentItem.tgTags,true)
-
+  // print footer if it is used
   if (footerStr) {
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
@@ -38,7 +53,7 @@ export async function printContentItemDetails(
     parsedContentItem,
     tgChat.app.i18n,
     tgChat.app.appConfig.utcOffset,
-    cleanFooterTmpl
+    cleanTexts
   );
   // send record's info from content plan
   await tgChat.reply(

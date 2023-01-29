@@ -11,7 +11,7 @@ export function makeClearTextsFromNotion(
   pubType: PublicationType,
   useTgFooter: boolean,
   cleanTgFooterTmpl?: string,
-  textBlocks?: NotionBlocks,
+  pageBlocks?: NotionBlocks,
   // TODO: а точно он html???
   //postHtmlText?: string,
   instaTags?: string[],
@@ -20,8 +20,8 @@ export function makeClearTextsFromNotion(
   const result: Partial<Record<SnType, string>> = {}
 
   for (const sn of sns) {
-    result[sn] = (textBlocks)
-      ? transformNotionToCleanText(textBlocks)
+    result[sn] = (pageBlocks)
+      ? transformNotionToCleanText(pageBlocks)
       // TODO: sanitize
       : (postHtmlText || '');
     // add footer

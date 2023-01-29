@@ -9,12 +9,10 @@ import {resolveSns, resolveTgFooter} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
 import {printImage, printContentItemDetails} from '../../publish/printInfo.js';
 import {SnType} from '../../types/snTypes.js';
-import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {startPublicationMenu} from './startPublicationMenu.js';
 import {NotionBlocks} from '../../types/notion.js';
 import {commonMdToTgHtml} from '../../helpers/commonMdToTgHtml.js';
 import {clearMd} from '../../helpers/clearMd.js';
-import {makeClearTextsFromNotion} from '../../helpers/makeClearTextsFromNotion.js';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -56,26 +54,27 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
     const cleanFooterTmpl = await clearMd(footerTmpl)
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
-    let cleanTexts: Partial<Record<SnType, string>> = {}
-
-    if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
-      // make clear text if it isn't a poll
-      cleanTexts = makeClearTextsFromNotion(
-        resolvedSns,
-        parsedContentItem.type,
-        true,
-        cleanFooterTmpl,
-        pageBlocks,
-        //parsedContentItem.gist,
-        parsedContentItem.instaTags,
-        parsedContentItem.tgTags
-      )
-    }
-
     let mainImgUrl = getFirstImageFromNotionBlocks(pageBlocks)
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
-    await printContentItemDetails(tgChat, resolvedSns, parsedContentItem, cleanTexts, footerTmplHtml)
-    await startPublicationMenu(blogName, tgChat, resolvedSns, parsedContentItem, pageBlocks, mainImgUrl)
+
+    await printContentItemDetails(
+      tgChat,
+      resolvedSns,
+      parsedContentItem,
+      pageBlocks,
+      footerTmplHtml,
+      cleanFooterTmpl
+    )
+    await startPublicationMenu(
+      blogName,
+      tgChat,
+      resolvedSns,
+      parsedContentItem,
+      pageBlocks,
+      mainImgUrl,
+      footerTmplHtml,
+      cleanFooterTmpl
+    )
   }));
 }

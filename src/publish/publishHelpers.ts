@@ -26,7 +26,7 @@ export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | u
 
 export function makeContentLengthString(
   i18n: typeof ru,
-  clearTexts: Record<SnType, string>,
+  clearTexts: Partial<Record<SnType, string>>,
   instaTags?: string[],
   tgFooter?: string,
 ): string {
