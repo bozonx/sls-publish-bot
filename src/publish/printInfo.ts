@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat.js';
 import ContentItem from '../types/ContentItem.js';
-import {makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
+import {isoDateToHuman, makeHumanDateStr, makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
 import {makeContentPlanItemDetails} from './parseContent.js';
 import {makeContentLengthString} from './publishHelpers.js';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';
@@ -27,6 +27,7 @@ export async function printContentItemDetails(
   const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
   const cleanFooterTmpl = await clearMd(footerTmpl)
   const footerStr = prepareFooter(footerTmplHtml, parsedContentItem.tgTags,true)
+
   if (footerStr) {
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
@@ -55,18 +56,16 @@ export async function printPublishConfirmData(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
-  clearTexts: Record<SnType, string>,
   tgTags?: string[],
-  pageBlocks?: NotionBlocks
+  pageBlocks?: NotionBlocks,
+  clearTexts?: Record<SnType, string>,
 ) {
-  const footerStr = prepareFooter(
-    tgChat.app.blogs[blogName].sn.telegram?.postFooter,
-    tgTags,
-    true
-  )
+  const footerTmpl = tgChat.app.blogs[blogName].sn.telegram?.postFooter
+  const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
+  const cleanFooterTmpl = await clearMd(footerTmpl)
+  const footerStr = prepareFooter(footerTmplHtml, tgTags,true)
 
   if (footerStr) {
-    // TODO: будет HTML
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
       undefined,
@@ -75,28 +74,44 @@ export async function printPublishConfirmData(
     )
   }
 
-  await tgChat.reply(makeContentLengthString(
-    tgChat.app.i18n,
-    clearTexts,
-    state.instaTags,
-    footerStr
-  ));
+  // await tgChat.reply(makeContentLengthString(
+  //   tgChat.app.i18n,
+  //   clearTexts,
+  //   state.instaTags,
+  //   footerStr
+  // ));
 
-  await tgChat.reply(
-    tgChat.app.i18n.commonPhrases.linkWebPreview + tgChat.app.i18n.onOff[1] + '\n'
-    + tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', ') + '\n'
-    + tgChat.app.i18n.contentInfo.dateTime + ': ' + '\n'
+  // TODO: add footer ???
+
+  const result: string[] = [
+    tgChat.app.i18n.commonPhrases.linkWebPreview + tgChat.app.i18n.onOff[1],
+    tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', '),
+    tgChat.app.i18n.contentInfo.dateTime + ': '
     + makeHumanDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
-  );
+  ]
 
-  if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
-    await tgChat.reply(tgChat.app.i18n.menu.textForInstagram);
-    await tgChat.reply(
-      transformNotionToInstagramPost(pageBlocks)
-      + '\n\n'
-      + makeTagsString(state.instaTags)
-    );
+  if (state.autoDeleteIsoDateTime) {
+    result.push(
+      `${tgChat.app.i18n.commonPhrases.autoDeletePostDate}: `
+      + isoDateToHuman(state.autoDeleteIsoDateTime)
+    )
   }
+
+  if (state.instaTags) {
+    result.push(`${tgChat.app.i18n.pageInfo.instaTagsCount}: ` + state.instaTags.length)
+  }
+
+  // if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
+  //   await tgChat.reply(tgChat.app.i18n.menu.textForInstagram);
+  //   await tgChat.reply(
+  //     transformNotionToInstagramPost(pageBlocks)
+  //     + '\n\n'
+  //     + makeTagsString(state.instaTags)
+  //   );
+  // }
+
+
+  await tgChat.reply(result.join('\n'))
 }
 
 /**

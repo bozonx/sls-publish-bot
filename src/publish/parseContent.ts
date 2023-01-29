@@ -63,8 +63,12 @@ export function makeContentPlanItemDetails(
   }
 
   if (item.gist) {
-    result.push(`${i18n.contentInfo.name}: ${item.gist}`)
+    result.push(`${i18n.contentInfo.gist}: ${item.gist}`)
   }
+
+  // TODO: add footer length
+  // + ((state.useFooter) ? ` + ${tgChat.app.i18n.commonPhrases.footer}` : '')
+  // + `: ${cleanFullText.length}\n`
 
   result.push(`${i18n.contentInfo.note}: ${item.note}`)
 

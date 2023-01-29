@@ -52,23 +52,25 @@ export async function startPublicationMenu(
   };
 
   await askPublicationMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
-    state.mainImgUrl = await printImage(tgChat, mainImgUrl);
+    state.mainImgUrl = await printImage(tgChat, mainImgUrl)
 
     // TODO: почему здесь ???
-    const clearTexts = makeClearTextFromNotion(
-      state.sns,
-      state.pubType,
-      state.useFooter,
-      tgChat.app.blogs[blogName].sn.telegram,
-      pageBlocks,
-      // TODO: это только для анонса
-      state.replacedHtmlText,
-      state.instaTags,
-      parsedContentItem.tgTags,
-    );
+    // const clearTexts = makeClearTextFromNotion(
+    //   state.sns,
+    //   state.pubType,
+    //   state.useFooter,
+    //   tgChat.app.blogs[blogName].sn.telegram,
+    //   pageBlocks,
+    //   // TODO: это только для анонса
+    //   state.replacedHtmlText,
+    //   state.instaTags,
+    //   parsedContentItem.tgTags,
+    // );
+
+    // TODO: add url button - к посту
 
     // TODO: учитывать poll
-    await printPublishConfirmData(blogName, tgChat, state, clearTexts, parsedContentItem.tgTags, pageBlocks)
+    await printPublishConfirmData(blogName, tgChat, state, parsedContentItem.tgTags, pageBlocks, undefined)
     // TODO: может проще делать steps.back() ????
     let disableOk = false;
 
@@ -78,7 +80,8 @@ export async function startPublicationMenu(
       // TODO: валидация анонса - норм MD, должен иметь ссылку на статью
       validateContentPlanPost(state, tgChat);
       // TODO: учитывать poll
-      validateContentPlanPostText(clearTexts, parsedContentItem.type, tgChat);
+      // TODO: сделать
+      //validateContentPlanPostText(clearTexts, parsedContentItem.type, tgChat);
     }
     catch (e) {
       await tgChat.reply(`${WARN_SIGN} ${e}`);
