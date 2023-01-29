@@ -7,7 +7,7 @@ import {loadNotPublished} from '../../notionHelpers/requestContentPlan.js';
 import {requestPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
 import {resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
-import {printImage, printItemDetails} from '../../publish/printInfo.js';
+import {printImage, printContentItemDetails} from '../../publish/printInfo.js';
 import {SnType} from '../../types/snTypes.js';
 import {makeClearTextFromNotion} from '../../helpers/makeClearTextFromNotion.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
@@ -70,7 +70,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     let mainImgUrl = getFirstImageFromNotionBlocks(pageBlocks)
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
-    await printItemDetails(blogName, tgChat, resolvedSns, parsedContentItem, undefined)
+    await printContentItemDetails(blogName, tgChat, resolvedSns, parsedContentItem, undefined)
     await startPublicationMenu(blogName, tgChat, resolvedSns, parsedContentItem, pageBlocks, mainImgUrl)
   }));
 }

@@ -8,9 +8,11 @@ import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
+import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
+import {clearMd} from '../helpers/clearMd.js';
 
 
-export async function printItemDetails(
+export async function printContentItemDetails(
   blogName: string,
   tgChat: TgChat,
   resolvedSns: SnType[],
@@ -20,50 +22,31 @@ export async function printItemDetails(
 
   // TODO: учитывать poll
 
-  const footerStr = prepareFooter(
-    tgChat.app.blogs[blogName].sn.telegram?.postFooter,
-    parsedContentItem.tgTags,
-    true
-  );
+  // TODO: или чо может в state затулить???
+  const footerTmpl = tgChat.app.blogs[blogName].sn.telegram?.postFooter
+  const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
+  const cleanFooterTmpl = await clearMd(footerTmpl)
+  const footerStr = prepareFooter(footerTmplHtml, parsedContentItem.tgTags,true)
   if (footerStr) {
-    // TODO: будет HTML
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
       undefined,
       true,
       true
-    );
+    )
   }
 
   // make content plan info details message
   const contentInfoMsg = makeContentPlanItemDetails(
     parsedContentItem,
     tgChat.app.i18n,
-    tgChat.app.appConfig.utcOffset
+    tgChat.app.appConfig.utcOffset,
+    cleanFooterTmpl
   );
   // send record's info from content plan
   await tgChat.reply(
     tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
   );
-
-  // if (parsedPage) {
-  //   // if has nested page
-  //   const pageDetailsMsg = makePageDetailsMsg(parsedPage, tgChat.app.i18n);
-  //
-  //   await tgChat.reply(
-  //     tgChat.app.i18n.menu.pageContent + '\n\n' + pageDetailsMsg
-  //   );
-  // }
-
-  // TODO: review
-  if (clearTexts) {
-    await tgChat.reply(makeContentLengthString(
-      tgChat.app.i18n,
-      clearTexts,
-      parsedContentItem.instaTags,
-      footerStr
-    ));
-  }
 
   if (!resolvedSns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
 }

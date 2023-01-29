@@ -32,14 +32,54 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
   }
 }
 
-export function makeContentPlanItemDetails(item: ContentItem, i18n: typeof ru, utcOffset: number): string {
-  return `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(item.date, item.time, utcOffset)}\n`
-    + `${i18n.contentInfo.onlySn}: `
-      + `${(item.onlySn.length) ? item.onlySn.join(', ') : i18n.contentInfo.noRestriction}\n`
-    + `${i18n.contentInfo.type}: ${item.type}\n`
-    + `${i18n.contentInfo.status}: ${item.status}\n`
-    + `${i18n.contentInfo.content}: ${item.name || item.gist}\n`
-    + `${i18n.contentInfo.note}: ${item.note}`
+export function makeContentPlanItemDetails(
+  item: ContentItem,
+  i18n: typeof ru,
+  utcOffset: number,
+  cleanFooterTmpl?: string
+): string {
+  const result: string[] = [
+    `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(item.date, item.time, utcOffset)}`,
+    `${i18n.contentInfo.onlySn}: `
+    + `${(item.onlySn.length) ? item.onlySn.join(', ') : i18n.contentInfo.noRestriction}`,
+    `${i18n.contentInfo.type}: ${item.type}`,
+    `${i18n.contentInfo.status}: ${item.status}`,
+  ]
+
+  if (item.tgTags) {
+    result.push(`${i18n.contentInfo.tgTags}: ${item.tgTags.join(', ')}`)
+  }
+
+  if (item.instaTags) {
+    result.push(`${i18n.contentInfo.instaTags}: ${item.instaTags.join(', ')}`)
+  }
+
+  if (item.imageDescr) {
+    result.push(`${i18n.contentInfo.imageDescr}: ${item.imageDescr}`)
+  }
+
+  if (item.name) {
+    result.push(`${i18n.contentInfo.name}: ${item.name}`)
+  }
+
+  if (item.gist) {
+    result.push(`${i18n.contentInfo.name}: ${item.gist}`)
+  }
+
+  result.push(`${i18n.contentInfo.note}: ${item.note}`)
+
+  // TODO: review
+  // if (clearTexts) {
+  //   // TODO: use cleanFooterTmpl
+  //   await tgChat.reply(makeContentLengthString(
+  //     tgChat.app.i18n,
+  //     clearTexts,
+  //     parsedContentItem.instaTags,
+  //     footerStr
+  //   ));
+  // }
+
+  return result.join('\n')
 }
 
 export function validateContentItem(item: ContentItem) {

@@ -34,7 +34,6 @@ export type PublishMenuAction = 'CHANGE_TIME'
   | 'CHANGE_SNS';
 
 export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> = {
-  // TODO: наверное тут не нужно???
   CHANGE_TIME: 'CHANGE_TIME',
   FOOTER_SWITCH: 'FOOTER_SWITCH',
   PREVIEW_SWITCH: 'PREVIEW_SWITCH',
@@ -63,7 +62,6 @@ export async function askPublicationMenu(
         tgChat.app.i18n.menu.publishFromCpMenu,
         // TODO: use compactButtons?
         [
-          // TODO: это лучше спрашивать после нажания на ок???
           // ask time
           [
             {
