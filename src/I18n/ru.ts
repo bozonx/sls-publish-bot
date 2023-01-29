@@ -88,7 +88,6 @@ const dict = {
     uploadMainImage: 'Загрузить главную картинку/видео',
     changeMainImage: 'Изменить главную картинку/видео',
     uploadMediaGroup: 'Загрузить медиа',
-    changeText: 'Изменить текст',
     changeInstaTags: 'Изменить тэги instagram',
     clear: 'Очистить',
     //noNote: 'Без заметки',

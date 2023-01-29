@@ -18,8 +18,10 @@ import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
 
 
+// TODO: move state to start
 export interface PublishMenuState {
   pubType: PublicationType
   useFooter: boolean
@@ -30,7 +32,7 @@ export interface PublishMenuState {
   instaTags?: string[]
   mainImgUrl?: string
   // it's for announcement
-  postMdText?: string
+  postHtmlText?: string
 }
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -43,6 +45,7 @@ export type PublishMenuAction = 'CHANGE_TIME'
   | 'CHANGE_SNS';
 
 export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> = {
+  // TODO: наверное тут не нужно???
   CHANGE_TIME: 'CHANGE_TIME',
   FOOTER_SWITCH: 'FOOTER_SWITCH',
   PREVIEW_SWITCH: 'PREVIEW_SWITCH',
@@ -58,14 +61,20 @@ export async function askPublicationMenu(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
+  // TODO: а тут validate не нужен чтоли?
   onDone: () => void,
 ) {
   await addSimpleStep(
     tgChat,
     (): [string, TgReplyButton[][]] => {
+
+      // TODO: добавить validate и disableOk
+      // TODO: mainImgUrl обязательна для некоторых типов постов, но её может сразу и не быть
+
       return [
         tgChat.app.i18n.menu.publishFromCpMenu,
         [
+          // TODO: это лучше спрашивать после нажания на ок???
           // ask time
           [
             {
@@ -75,8 +84,20 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
             },
           ],
+          // ask footer
+          (tgChat.app.blogs[blogName].sn.telegram?.postFooter && ![
+            // TODO: у article тоже же есть футер
+            PUBLICATION_TYPES.article,
+            PUBLICATION_TYPES.poll,
+          ].includes(state.pubType)) ? [{
+            text: (state.useFooter)
+              ? tgChat.app.i18n.commonPhrases.noPostFooter
+              : tgChat.app.i18n.commonPhrases.yesPostFooter,
+            callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
+          }] : [],
           // ask preview
           (!state.mainImgUrl && [
+            // TODO: а разве для post1000 картинка не обязательна?
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
             PUBLICATION_TYPES.announcement
@@ -86,43 +107,33 @@ export async function askPublicationMenu(
               : tgChat.app.i18n.commonPhrases.yesPreview,
             callback_data: PUBLISH_MENU_ACTION.PREVIEW_SWITCH,
           }] : [],
-          // ask footer
-          (tgChat.app.blogs[blogName].sn.telegram?.postFooter && [
-            PUBLICATION_TYPES.post1000,
-            PUBLICATION_TYPES.post2000,
-            PUBLICATION_TYPES.mem,
-            PUBLICATION_TYPES.photos,
-            PUBLICATION_TYPES.story,
-            PUBLICATION_TYPES.narrative,
-            PUBLICATION_TYPES.announcement,
-            PUBLICATION_TYPES.reels,
-            PUBLICATION_TYPES.video,
-          ].includes(state.pubType)) ? [{
-            text: (state.useFooter)
-              ? tgChat.app.i18n.commonPhrases.noPostFooter
-              : tgChat.app.i18n.commonPhrases.yesPostFooter,
-            callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
-          }] : [],
           // ask to change post text only for announcement
           (state.pubType === PUBLICATION_TYPES.announcement) ? [{
-            text: tgChat.app.i18n.buttons.changeText,
+            text: (state.postHtmlText)
+              ? tgChat.app.i18n.buttons.replaceText
+              : tgChat.app.i18n.buttons.addText,
             callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
           }] : [],
           // ask to change main image/video
           ([
+            // TODO: нафига в статье??? там картинка должна быть просто частью статьи
             PUBLICATION_TYPES.article,
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
+            // TODO: добавить photos, narrative
+            PUBLICATION_TYPES.announcement,
             PUBLICATION_TYPES.mem,
             PUBLICATION_TYPES.story,
-            PUBLICATION_TYPES.announcement,
             PUBLICATION_TYPES.reels,
           ].includes(state.pubType)) ? [{
             text: (state.mainImgUrl)
+              // TODO: если несколько картинок то во множественном числе
               ? tgChat.app.i18n.buttons.changeMainImage
               : tgChat.app.i18n.buttons.uploadMainImage,
             callback_data: PUBLISH_MENU_ACTION.CHANGE_IMAGE,
           }] : [],
+
+          // TODO: зачем отдельный пункт???
           // ask to upload several images for photos and narrative
           ([
             PUBLICATION_TYPES.photos,
@@ -131,6 +142,10 @@ export async function askPublicationMenu(
             text: tgChat.app.i18n.buttons.uploadMediaGroup,
             callback_data: PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP,
           }] : [],
+
+          // TODO: add url button
+          // TODO: add autoremove
+
           // and to setup instagram tags
           (state.sns.includes(SN_TYPES.instagram)) ? [{
             text: tgChat.app.i18n.buttons.changeInstaTags,
@@ -167,48 +182,54 @@ async function handleButtons(
 ) {
   switch (queryData) {
     case BACK_BTN_CALLBACK:
-      return tgChat.steps.back();
+      return tgChat.steps.back()
     case CANCEL_BTN_CALLBACK:
-      return tgChat.steps.cancel();
+      return tgChat.steps.cancel()
     case OK_BTN_CALLBACK:
-      return onDone();
+      return onDone()
     case PUBLISH_MENU_ACTION.FOOTER_SWITCH:
       // switch footer value
-      state.useFooter = !state.useFooter;
+      state.useFooter = !state.useFooter
       // print result
       await tgChat.reply(
         tgChat.app.i18n.commonPhrases.selectedNoFooter
         + tgChat.app.i18n.onOff[Number(state.useFooter)]
-      );
+      )
+
+      // TODO: вместо этого использовать steps.to() - нверное стейт тоже сохранится
       // print menu again
-      return askPublicationMenu(blogName, tgChat, state, onDone);
+      return askPublicationMenu(blogName, tgChat, state, onDone)
     case PUBLISH_MENU_ACTION.PREVIEW_SWITCH:
       // switch footer value
-      state.usePreview = !state.usePreview;
+      state.usePreview = !state.usePreview
       // print result
       await tgChat.reply(
         tgChat.app.i18n.commonPhrases.linkWebPreview
         + tgChat.app.i18n.onOff[Number(state.usePreview)]
-      );
+      )
       // print menu again
-      return askPublicationMenu(blogName, tgChat, state, onDone);
+      return askPublicationMenu(blogName, tgChat, state, onDone)
     case PUBLISH_MENU_ACTION.ADD_TEXT:
-      return await askText(tgChat, tgChat.asyncCb(async (text?: string) => {
-        state.postMdText = text;
+      return await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
+
+        // TODO: есть ещё cleanText - что с ним делать???
+
+        state.postHtmlText = textHtml
         // print result
-        if (state.postMdText) {
-          await tgChat.reply(
-            tgChat.app.i18n.menu.selectedPostText + '\n' + state.postMdText
-          );
+        if (state.postHtmlText) {
+          await tgChat.reply(tgChat.app.i18n.menu.selectedPostText)
+          await tgChat.reply(state.postHtmlText, undefined, true, true)
         }
         else {
-          await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText);
+          await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText)
         }
-
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
+
+      // TODO: review
+
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         state.selectedTime = newTime;
 
