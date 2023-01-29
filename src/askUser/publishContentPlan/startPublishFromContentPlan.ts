@@ -53,6 +53,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       return
     }
 
+    // TODO: review
     if (!parsedPage && parsedContentItem.type !== PUBLICATION_TYPES.announcement) {
       // if not nested page and it isn't announcement
       await tgChat.reply(tgChat.app.i18n.errors.noNestedPage);
@@ -63,26 +64,29 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
     const blogSns = Object.keys(tgChat.app.blogs[blogName].sn) as SnType[];
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
+    let clearTexts: Record<SnType, string> | undefined
 
-    // TODO: не нужно если poll
+    // TODO: почему вообще тут это делается???
+    if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
+      // make clear text if it isn't a poll
+      clearTexts = makeClearTextFromNotion(
+        resolvedSns,
+        parsedContentItem.type,
+        true,
+        tgChat.app.blogs[blogName].sn.telegram,
+        parsedPage?.textBlocks,
+        parsedContentItem.gist,
+        parsedPage?.instaTags,
+        parsedPage?.tgTags
+      )
+    }
 
-    const clearTexts = makeClearTextFromNotion(
-      resolvedSns,
-      parsedContentItem.type,
-      true,
-      tgChat.app.blogs[blogName].sn.telegram,
-      parsedPage?.textBlocks,
-      parsedContentItem.gist,
-      parsedPage?.instaTags,
-      parsedPage?.tgTags
-    );
     let mainImgUrl = getFirstImageFromNotionBlocks(parsedPage?.textBlocks);
-
+    // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl);
 
-    // TODO: учитывать poll
-    await printItemDetails(blogName, tgChat, clearTexts, resolvedSns, parsedContentItem, parsedPage);
-    await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl);
+    await printItemDetails(blogName, tgChat, resolvedSns, parsedContentItem, clearTexts, parsedPage)
+    await askMenu(blogName, tgChat, resolvedSns, parsedContentItem, parsedPage, mainImgUrl)
   }));
 }
 

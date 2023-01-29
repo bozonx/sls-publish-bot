@@ -14,11 +14,14 @@ import {SN_TYPES, SnType} from '../types/snTypes.js';
 export async function printItemDetails(
   blogName: string,
   tgChat: TgChat,
-  clearTexts: Record<SnType, string>,
   resolvedSns: SnType[],
   parsedContentItem: ContentItem,
+  clearTexts?: Record<SnType, string>,
   parsedPage?: RawPageContent
 ) {
+
+  // TODO: учитывать poll
+
   const footerStr = prepareFooter(
     tgChat.app.blogs[blogName].sn.telegram?.postFooter,
     parsedPage?.tgTags,
@@ -111,6 +114,9 @@ export async function printPublishConfirmData(
   }
 }
 
+/**
+ * Print image and return it's url if the image was printed successfully
+ */
 export async function printImage(tgChat: TgChat, imgUrl?: string): Promise<string | undefined> {
   if (!imgUrl) return;
 
