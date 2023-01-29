@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
-import {PublishMenuState} from '../askUser/publishContentPlan/askPublishMenu.js';
+import {PublishMenuState} from '../askUser/publishContentPlan/askPublicationMenu.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 

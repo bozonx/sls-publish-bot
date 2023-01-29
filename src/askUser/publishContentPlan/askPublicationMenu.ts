@@ -21,16 +21,16 @@ import {TgReplyButton} from '../../types/TgReplyButton.js';
 
 
 export interface PublishMenuState {
-  pubType: PublicationType;
-  useFooter: boolean;
-  usePreview: boolean;
-  sns: SnType[];
-  selectedDate: string;
-  selectedTime: string;
-  instaTags?: string[];
-  mainImgUrl?: string;
+  pubType: PublicationType
+  useFooter: boolean
+  usePreview: boolean
+  sns: SnType[]
+  selectedDate: string
+  selectedTime: string
+  instaTags?: string[]
+  mainImgUrl?: string
   // it's for announcement
-  postMdText?: string;
+  postMdText?: string
 }
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -54,7 +54,7 @@ export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> =
 };
 
 
-export async function askPublishMenu(
+export async function askPublicationMenu(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
@@ -181,7 +181,7 @@ async function handleButtons(
         + tgChat.app.i18n.onOff[Number(state.useFooter)]
       );
       // print menu again
-      return askPublishMenu(blogName, tgChat, state, onDone);
+      return askPublicationMenu(blogName, tgChat, state, onDone);
     case PUBLISH_MENU_ACTION.PREVIEW_SWITCH:
       // switch footer value
       state.usePreview = !state.usePreview;
@@ -191,7 +191,7 @@ async function handleButtons(
         + tgChat.app.i18n.onOff[Number(state.usePreview)]
       );
       // print menu again
-      return askPublishMenu(blogName, tgChat, state, onDone);
+      return askPublicationMenu(blogName, tgChat, state, onDone);
     case PUBLISH_MENU_ACTION.ADD_TEXT:
       return await askText(tgChat, tgChat.asyncCb(async (text?: string) => {
         state.postMdText = text;
@@ -206,7 +206,7 @@ async function handleButtons(
         }
 
         // print menu again
-        return askPublishMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
@@ -217,7 +217,7 @@ async function handleButtons(
         await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDateAndTime
           + `${state.selectedDate} ${state.selectedTime} ${utcOffset}`);
         // print menu again
-        return askPublishMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
 
@@ -247,7 +247,7 @@ async function handleButtons(
             await tgChat.reply(tgChat.app.i18n.message.removedImg);
           }
 
-          return askPublishMenu(blogName, tgChat, state, onDone);
+          return askPublicationMenu(blogName, tgChat, state, onDone);
         })
       );
     case PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP:
@@ -257,13 +257,13 @@ async function handleButtons(
       return await askTags(state.instaTags || [], tgChat, tgChat.asyncCb(async (newTags: string[]) => {
         state.instaTags = newTags;
         // print menu again
-        return askPublishMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone);
       }));
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
       return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: SnType[]) => {
         state.sns = newSns;
         // print menu again
-        return askPublishMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone);
       }));
     default:
       throw new Error(`Unknown action`);

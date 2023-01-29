@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat.js';
 import {makePublishTaskTgArticle} from './makePublishTaskTgArticle.js';
-import {PublishMenuState} from '../askUser/publishContentPlan/askPublishMenu.js';
+import {PublishMenuState} from '../askUser/publishContentPlan/askPublicationMenu.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgPoll} from './makePublishTaskTg.js';
