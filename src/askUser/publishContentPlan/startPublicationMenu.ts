@@ -36,13 +36,14 @@ export async function startPublicationMenu(
   await askPublicationMenu(blogName, tgChat, state, tgChat.asyncCb(async () => {
     state.mainImgUrl = await printImage(tgChat, mainImgUrl);
 
+    // TODO: почему здесь ???
     const clearTexts = makeClearTextFromNotion(
       state.sns,
       state.pubType,
       state.useFooter,
       tgChat.app.blogs[blogName].sn.telegram,
       parsedPage?.textBlocks,
-      state.postMdText,
+      state.postHtmlText,
       state.instaTags,
       parsedPage?.tgTags,
     );
@@ -76,7 +77,7 @@ export async function startPublicationMenu(
           state.useFooter,
           tgChat.app.blogs[blogName].sn.telegram,
           parsedPage?.textBlocks,
-          state.postMdText,
+          state.postHtmlText,
           state.instaTags,
           parsedPage?.tgTags,
         );

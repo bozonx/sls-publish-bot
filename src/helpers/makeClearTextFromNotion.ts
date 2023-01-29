@@ -14,7 +14,8 @@ export function makeClearTextFromNotion(
   useTgFooter: boolean,
   tgBlogConfig?: BlogTelegramConfig,
   textBlocks?: NotionBlocks,
-  postText?: string,
+  // TODO: а точно он html???
+  postHtmlText?: string,
   instaTags?: string[],
   tgTags?: string[],
 ): Record<SnType, string> {
@@ -24,7 +25,7 @@ export function makeClearTextFromNotion(
     result[sn] = (textBlocks)
       ? transformNotionToCleanText(textBlocks)
       // TODO: sanitize
-      : (postText || '');
+      : (postHtmlText || '');
 
     switch (sn) {
       case SN_TYPES.telegram:

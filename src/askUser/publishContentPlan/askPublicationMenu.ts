@@ -5,7 +5,7 @@ import {
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
   OK_BTN,
-  OK_BTN_CALLBACK
+  OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT
 } from '../../types/constants.js';
 import {addSimpleStep, makeUtcOffsetStr} from '../../helpers/helpers.js';
 import {askTime} from '../common/askTime.js';
@@ -17,8 +17,11 @@ import {askSns} from '../common/askSns.js';
 import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
 import {MediaGroupItem} from '../../types/types.js';
-import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {TgReplyBtnUrl, TgReplyButton} from '../../types/TgReplyButton.js';
 import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
+import {askUrlButton} from '../common/askUrlButton.js';
+import {askTimePeriod} from '../common/askTimePeriod.js';
+import moment from 'moment/moment.js';
 
 
 // TODO: move state to start
@@ -33,6 +36,9 @@ export interface PublishMenuState {
   mainImgUrl?: string
   // it's for announcement
   postHtmlText?: string
+  urlBtn?: TgReplyBtnUrl
+  autoDeleteIsoDateTime?: string
+  autoDeletePeriodHours?: number
 }
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -41,7 +47,6 @@ export type PublishMenuAction = 'CHANGE_TIME'
   | 'ADD_TEXT'
   | 'CHANGE_INSTA_TAGS'
   | 'CHANGE_IMAGE'
-  | 'UPLOAD_MEDIA_GROUP'
   | 'CHANGE_SNS';
 
 export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> = {
@@ -52,7 +57,6 @@ export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> =
   ADD_TEXT: 'ADD_TEXT',
   CHANGE_INSTA_TAGS: 'CHANGE_INSTA_TAGS',
   CHANGE_IMAGE: 'CHANGE_IMAGE',
-  UPLOAD_MEDIA_GROUP: 'UPLOAD_MEDIA_GROUP',
   CHANGE_SNS: 'CHANGE_SNS',
 };
 
@@ -73,6 +77,7 @@ export async function askPublicationMenu(
 
       return [
         tgChat.app.i18n.menu.publishFromCpMenu,
+        // TODO: use compactButtons?
         [
           // TODO: это лучше спрашивать после нажания на ок???
           // ask time
@@ -132,20 +137,6 @@ export async function askPublicationMenu(
               : tgChat.app.i18n.buttons.uploadMainImage,
             callback_data: PUBLISH_MENU_ACTION.CHANGE_IMAGE,
           }] : [],
-
-          // TODO: зачем отдельный пункт???
-          // ask to upload several images for photos and narrative
-          ([
-            PUBLICATION_TYPES.photos,
-            PUBLICATION_TYPES.narrative,
-          ].includes(state.pubType)) ? [{
-            text: tgChat.app.i18n.buttons.uploadMediaGroup,
-            callback_data: PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP,
-          }] : [],
-
-          // TODO: add url button
-          // TODO: add autoremove
-
           // and to setup instagram tags
           (state.sns.includes(SN_TYPES.instagram)) ? [{
             text: tgChat.app.i18n.buttons.changeInstaTags,
@@ -158,6 +149,27 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_SNS,
             }
           ],
+          ([
+            PUBLICATION_TYPES.post1000,
+            PUBLICATION_TYPES.post2000,
+            PUBLICATION_TYPES.announcement,
+          ].includes(state.pubType)) ? [{
+            text: (state.urlBtn)
+              ? tgChat.app.i18n.buttons.changeUrlButton
+              : tgChat.app.i18n.buttons.addUrlButton,
+            callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
+          }] : [],
+          ([
+            PUBLICATION_TYPES.post1000,
+            PUBLICATION_TYPES.post2000,
+            PUBLICATION_TYPES.announcement,
+            PUBLICATION_TYPES.poll,
+          ].includes(state.pubType)) ? [{
+            text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
+              ? tgChat.app.i18n.buttons.changeAutoRemove
+              : tgChat.app.i18n.buttons.setAutoRemove,
+            callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
+          }] : [],
           [
             BACK_BTN,
             CANCEL_BTN,
@@ -229,6 +241,7 @@ async function handleButtons(
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
 
       // TODO: review
+      // TODO: сделать валидацию - сравнить с временем автоудаления
 
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         state.selectedTime = newTime;
@@ -242,6 +255,7 @@ async function handleButtons(
       }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
 
+      // TODO: review
       // TODO: нельзя видео - post2000, article, narrative
       // TODO: нельзя фото - reels
 
@@ -271,20 +285,74 @@ async function handleButtons(
           return askPublicationMenu(blogName, tgChat, state, onDone);
         })
       );
-    case PUBLISH_MENU_ACTION.UPLOAD_MEDIA_GROUP:
-      // TODO: add
-      break;
     case PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS:
       return await askTags(state.instaTags || [], tgChat, tgChat.asyncCb(async (newTags: string[]) => {
-        state.instaTags = newTags;
+        state.instaTags = newTags
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_SNS:
       return await askSns(state.sns, tgChat, tgChat.asyncCb(async (newSns: SnType[]) => {
-        state.sns = newSns;
+        state.sns = newSns
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone)
+      }));
+    case CUSTOM_POST_ACTION.ADD_URL_BUTTON:
+      return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton?: TgReplyBtnUrl) => {
+        if (!urlButton) {
+          await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
+
+          delete state.urlBtn;
+
+          return askPublicationMenu(blogName, tgChat, state, onDone)
+        }
+
+        state.urlBtn = urlButton;
+
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.addedUrlButton + '\n'
+          + `${urlButton.text} - ${urlButton.url}`,
+          undefined,
+          true
+        );
+
+        // print menu again
+        return askPublicationMenu(blogName, tgChat, state, onDone)
+      }));
+    case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
+      return await askTimePeriod(tgChat, tgChat.asyncCb(async (
+        hoursPeriod?: number,
+        certainIsoDateTime?: string
+      ) => {
+        if (!hoursPeriod && !certainIsoDateTime) {
+          await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
+
+          delete state.autoDeleteIsoDateTime;
+
+          return askPublicationMenu(blogName, tgChat, state, onDone)
+        }
+
+        // TODO: сразу преобразовать период во время - время поста то сразу известно
+        // TODO: сразу сделать валидацию - время поста то сразу известно
+
+        state.autoDeleteIsoDateTime = certainIsoDateTime
+        state.autoDeletePeriodHours = hoursPeriod
+
+        if (state.autoDeleteIsoDateTime) {
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.addedDeleteTimer
+            + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+          )
+        }
+        else if (state.autoDeletePeriodHours) {
+          await tgChat.reply(
+            tgChat.app.i18n.commonPhrases.addedDeleteTimerPeriod
+            + state.autoDeletePeriodHours
+          )
+        }
+
+        // print menu again
+        return askPublicationMenu(blogName, tgChat, state, onDone)
       }));
     default:
       throw new Error(`Unknown action`);

@@ -87,7 +87,6 @@ const dict = {
     changeSns: 'Изменить соц сети',
     uploadMainImage: 'Загрузить главную картинку/видео',
     changeMainImage: 'Изменить главную картинку/видео',
-    uploadMediaGroup: 'Загрузить медиа',
     changeInstaTags: 'Изменить тэги instagram',
     clear: 'Очистить',
     //noNote: 'Без заметки',

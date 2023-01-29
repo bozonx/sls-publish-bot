@@ -57,12 +57,15 @@ export async function printItemDetails(
     );
   }
 
-  await tgChat.reply(makeContentLengthString(
-    tgChat.app.i18n,
-    clearTexts,
-    parsedPage?.instaTags,
-    footerStr
-  ));
+  // TODO: review
+  if (clearTexts) {
+    await tgChat.reply(makeContentLengthString(
+      tgChat.app.i18n,
+      clearTexts,
+      parsedPage?.instaTags,
+      footerStr
+    ));
+  }
 
   if (!resolvedSns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
 }
