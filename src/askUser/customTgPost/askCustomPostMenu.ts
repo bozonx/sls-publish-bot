@@ -264,15 +264,15 @@ async function handleButtons(
 
 // [
 //   {
-//     text: (state.selectedDate)
+//     text: (state.pubDate)
 //       ? tgChat.app.i18n.commonPhrases.pubDate
-//         + moment(state.selectedDate).format(PRINT_FULL_DATE_FORMAT)
+//         + moment(state.pubDate).format(PRINT_FULL_DATE_FORMAT)
 //       : tgChat.app.i18n.commonPhrases.setPubDate,
 //     callback_data: CUSTOM_POST_ACTION.DATE_SELECT,
 //   },
 //   {
-//     text: (state.selectedTime)
-//       ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
+//     text: (state.pubTime)
+//       ? tgChat.app.i18n.commonPhrases.changedPubTime + state.pubTime
 //       : tgChat.app.i18n.commonPhrases.setPubTime,
 //     callback_data: CUSTOM_POST_ACTION.TIME_SELECT,
 //   },
@@ -280,7 +280,7 @@ async function handleButtons(
 
 // case CUSTOM_POST_ACTION.DATE_SELECT:
 //   return await askDate(tgChat, tgChat.asyncCb(async (newDate: string) => {
-//     state.selectedDate = newDate;
+//     state.pubDate = newDate;
 //     // print result
 //     await tgChat.reply(makeDateTimeMsg(tgChat, state));
 //     // print menu again
@@ -288,11 +288,11 @@ async function handleButtons(
 //   }));
 // case CUSTOM_POST_ACTION.TIME_SELECT:
 //   return await askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-//     state.selectedTime = newTime;
+//     state.pubTime = newTime;
 //     // print result
 //     await tgChat.reply(makeDateTimeMsg(tgChat, state));
 //     // print menu again
 //     return askCustomPostMenu(blogName, tgChat, state, onDone);
 //   }));
 
-//(state.selectedDate && state.selectedTime) ? OK_BTN : undefined,
+//(state.pubDate && state.pubTime) ? OK_BTN : undefined,

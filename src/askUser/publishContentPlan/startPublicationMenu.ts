@@ -19,9 +19,8 @@ export interface PublishMenuState {
   useFooter: boolean
   usePreview: boolean
   sns: SnType[]
-  // TODO: rename to pubDate and pubTime
-  selectedDate: string
-  selectedTime: string
+  pubDate: string
+  pubTime: string
   instaTags?: string[]
   mainImgUrl?: string
   // it's for announcement
@@ -44,8 +43,8 @@ export async function startPublicationMenu(
     usePreview: true,
     useFooter: true,
     sns: resolvedSns,
-    selectedDate: parsedContentItem.date,
-    selectedTime: parsedContentItem.time,
+    pubDate: parsedContentItem.date,
+    pubTime: parsedContentItem.time,
     instaTags: parsedContentItem.instaTags,
     mainImgUrl,
   };
@@ -149,7 +148,7 @@ export async function startPublicationMenu(
 
         await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
         await tgChat.steps.cancel();
-      }), tgChat.app.i18n.commonPhrases.publishConfirmation, disableOk);
+      }), tgChat.app.i18n.commonPhrases.publishConfirmation);
     })
   );
 }

@@ -28,8 +28,8 @@ export async function publishFork(
           return makePublishTaskTgArticle(
             blogName,
             tgChat,
-            state.selectedDate,
-            state.selectedTime,
+            state.pubDate,
+            state.pubTime,
             articleBlocks!,
             articleTitle!,
             tgTags,
@@ -41,8 +41,8 @@ export async function publishFork(
           return makePublishTaskTgPoll(
             blogName,
             tgChat,
-            state.selectedDate,
-            state.selectedTime,
+            state.pubDate,
+            state.pubTime,
             pollData!
           );
         }
@@ -55,8 +55,8 @@ export async function publishFork(
           return makePublishTaskTgOnlyText(
             blogName,
             tgChat,
-            state.selectedDate,
-            state.selectedTime,
+            state.pubDate,
+            state.pubTime,
             postTexts[sn],
             state.usePreview,
           );
@@ -72,8 +72,8 @@ export async function publishFork(
           return makePublishTaskTgImage(
             blogName,
             tgChat,
-            state.selectedDate,
-            state.selectedTime,
+            state.pubDate,
+            state.pubTime,
             state.mainImgUrl,
             postTexts[sn]
           );

@@ -126,7 +126,7 @@ async function printPostPreview(
 // }
 
 // + tgChat.app.i18n.commonPhrases.pubDate + makeHumanDateTimeStr(
-//   state.selectedDate!, state.selectedTime!, tgChat.app.appConfig.utcOffset
+//   state.pubDate!, state.pubTime!, tgChat.app.appConfig.utcOffset
 // ) + '\n'
 
 // const isPost2000 = clearText.length > TELEGRAM_MAX_CAPTION

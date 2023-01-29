@@ -83,7 +83,7 @@ export async function printPublishConfirmData(
     tgChat.app.i18n.commonPhrases.linkWebPreview + tgChat.app.i18n.onOff[1],
     tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', '),
     tgChat.app.i18n.contentInfo.dateTime + ': '
-    + makeHumanDateTimeStr(state.selectedDate, state.selectedTime, tgChat.app.appConfig.utcOffset)
+    + makeHumanDateTimeStr(state.pubDate, state.pubTime, tgChat.app.appConfig.utcOffset)
   ]
 
   if (state.autoDeleteIsoDateTime) {

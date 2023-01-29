@@ -81,8 +81,8 @@ export async function askPublicationMenu(
           // ask time
           [
             {
-              text: (state.selectedTime)
-                ? tgChat.app.i18n.commonPhrases.changedPubTime + state.selectedTime
+              text: (state.pubTime)
+                ? tgChat.app.i18n.commonPhrases.changedPubTime + state.pubTime
                 : tgChat.app.i18n.commonPhrases.changePubTime,
               callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
             },
@@ -243,7 +243,7 @@ async function handleButtons(
         if (
           state.autoDeleteIsoDateTime && moment(state.autoDeleteIsoDateTime).unix()
           <= moment(makeIsoDateTimeStr(
-            state.selectedDate,
+            state.pubDate,
             newTime,
             tgChat.app.appConfig.utcOffset
           )).unix()
@@ -253,13 +253,13 @@ async function handleButtons(
           return askPublicationMenu(blogName, tgChat, state, validate, onDone)
         }
 
-        state.selectedTime = newTime
+        state.pubTime = newTime
         // print result
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.pubDateAndTime
           + makeHumanDateTimeStr(
-            state.selectedDate,
-            state.selectedTime,
+            state.pubDate,
+            state.pubTime,
             tgChat.app.appConfig.utcOffset
           )
         )
@@ -346,8 +346,8 @@ async function handleButtons(
         }
 
         const pubIsoDate = makeIsoDateTimeStr(
-          state.selectedDate,
-          state.selectedTime,
+          state.pubDate,
+          state.pubTime,
           tgChat.app.appConfig.utcOffset
         )
 
