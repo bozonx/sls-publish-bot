@@ -20,6 +20,7 @@ export interface PublishMenuState {
   useFooter: boolean
   usePreview: boolean
   sns: SnType[]
+  // TODO: rename to pubDate and pubTime
   selectedDate: string
   selectedTime: string
   instaTags?: string[]
@@ -28,7 +29,6 @@ export interface PublishMenuState {
   replacedHtmlText?: string
   urlBtn?: TgReplyBtnUrl
   autoDeleteIsoDateTime?: string
-  autoDeletePeriodHours?: number
 }
 
 

@@ -5,9 +5,15 @@ import {
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
   OK_BTN,
-  OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT
+  OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN
 } from '../../types/constants.js';
-import {addSimpleStep, makeUtcOffsetStr} from '../../helpers/helpers.js';
+import {
+  addSimpleStep,
+  makeHumanDateTimeStr,
+  makeIsoDateTimeStr,
+  makeUtcOffsetStr,
+  replaceHorsInDate
+} from '../../helpers/helpers.js';
 import {askTime} from '../common/askTime.js';
 import {askPostMedia} from '../common/askPostMedia.js';
 import {printImage} from '../../publish/printInfo.js';
@@ -23,6 +29,7 @@ import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
 import {PublishMenuState} from './startPublicationMenu.js';
+import {prepareContentItem} from '../../publish/parseContent.js';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -147,7 +154,7 @@ export async function askPublicationMenu(
             PUBLICATION_TYPES.announcement,
             PUBLICATION_TYPES.poll,
           ].includes(state.pubType)) ? [{
-            text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
+            text: (state.autoDeleteIsoDateTime)
               ? tgChat.app.i18n.buttons.changeAutoRemove
               : tgChat.app.i18n.buttons.setAutoRemove,
             callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
@@ -221,19 +228,33 @@ async function handleButtons(
         return askPublicationMenu(blogName, tgChat, state, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
-
-      // TODO: review
-      // TODO: сделать валидацию - сравнить с временем автоудаления
-
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
-        state.selectedTime = newTime;
+        // validate that selected date is greater than auto-delete date
+        if (
+          state.autoDeleteIsoDateTime && moment(state.autoDeleteIsoDateTime).unix()
+          <= moment(makeIsoDateTimeStr(
+            state.selectedDate,
+            newTime,
+            tgChat.app.appConfig.utcOffset
+          )).unix()
+        ) {
+          await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
 
-        const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+          return askPublicationMenu(blogName, tgChat, state, onDone)
+        }
+
+        state.selectedTime = newTime
         // print result
-        await tgChat.reply(tgChat.app.i18n.commonPhrases.pubDateAndTime
-          + `${state.selectedDate} ${state.selectedTime} ${utcOffset}`);
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.pubDateAndTime
+          + makeHumanDateTimeStr(
+            state.selectedDate,
+            state.selectedTime,
+            tgChat.app.appConfig.utcOffset
+          )
+        )
         // print menu again
-        return askPublicationMenu(blogName, tgChat, state, onDone);
+        return askPublicationMenu(blogName, tgChat, state, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
 
@@ -314,25 +335,33 @@ async function handleButtons(
           return askPublicationMenu(blogName, tgChat, state, onDone)
         }
 
-        // TODO: сразу преобразовать период во время - время поста то сразу известно
-        // TODO: сразу сделать валидацию - время поста то сразу известно
+        const pubIsoDate = makeIsoDateTimeStr(
+          state.selectedDate,
+          state.selectedTime,
+          tgChat.app.appConfig.utcOffset
+        )
 
-        state.autoDeleteIsoDateTime = certainIsoDateTime
-        state.autoDeletePeriodHours = hoursPeriod
+        // validate that selected date is greater than auto-delete date
+        if (
+          certainIsoDateTime && moment(certainIsoDateTime).unix()
+          <= moment(pubIsoDate).unix()
+        ) {
+          await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
 
-        if (state.autoDeleteIsoDateTime) {
-          await tgChat.reply(
-            tgChat.app.i18n.commonPhrases.addedDeleteTimer
-            + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
-          )
-        }
-        else if (state.autoDeletePeriodHours) {
-          await tgChat.reply(
-            tgChat.app.i18n.commonPhrases.addedDeleteTimerPeriod
-            + state.autoDeletePeriodHours
-          )
+          return askPublicationMenu(blogName, tgChat, state, onDone)
         }
 
+        if (hoursPeriod) {
+          state.autoDeleteIsoDateTime = replaceHorsInDate(pubIsoDate, hoursPeriod)
+        }
+        else {
+          state.autoDeleteIsoDateTime = certainIsoDateTime
+        }
+        // print the result
+        await tgChat.reply(
+          tgChat.app.i18n.commonPhrases.addedDeleteTimer
+          + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+        )
         // print menu again
         return askPublicationMenu(blogName, tgChat, state, onDone)
       }));
