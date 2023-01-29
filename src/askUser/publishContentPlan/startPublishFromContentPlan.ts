@@ -24,17 +24,17 @@ import PollData from '../../types/PollData.js';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
-  let notPublishedItems: PageObjectResponse[];
+  let notPublishedItems: PageObjectResponse[]
 
   try {
     // load not published records from content plan
-    notPublishedItems = await loadNotPublished(blogName,tgChat);
+    notPublishedItems = await loadNotPublished(blogName,tgChat)
   }
   catch (e) {
-    await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e);
-    await tgChat.steps.back();
+    await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e)
+    await tgChat.steps.back()
 
-    return;
+    return
   }
 
   // ask use select not published item

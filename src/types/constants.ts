@@ -4,6 +4,7 @@ export const OK_BTN_CALLBACK = 'OK';
 export const SKIP_BTN_CALLBACK = 'SKIP';
 export const PRINT_FULL_DATE_FORMAT = 'DD.MM.YYYY';
 export const PRINT_SHORT_DATE_TIME_FORMAT = 'DD.MM HH:mm';
+export const PRINT_SHORT_DATE_FORMAT = 'DD.MM';
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 export const TELEGRAM_MAX_CAPTION = 1024;
 export const TELEGRAM_MAX_POST = 4096;
