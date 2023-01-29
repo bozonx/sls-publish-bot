@@ -3,12 +3,12 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js'
 import {askContentToUse} from './askContentToUse.js';
 import {prepareContentItem} from '../../publish/parseContent.js';
 import ContentItem from '../../types/ContentItem.js';
-import {preparePage} from '../../notionRequests/parsePage.js';
+import {preparePage} from '../../notionHelpers/parsePage.js';
 import {askPublishMenu, PublishMenuState} from './askPublishMenu.js';
-import {loadNotPublished} from '../../notionRequests/contentPlan.js';
+import {loadNotPublished} from '../../notionHelpers/requestContentPlan.js';
 import {publishFork} from '../../publish/publishFork.js';
-import {loadPageBlocks} from '../../notionRequests/pageBlocks.js';
-import {loadPageProps} from '../../notionRequests/pageProps.js';
+import {loadPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
+import {loadPageProps} from '../../notionHelpers/requestPageProps.js';
 import RawPageContent from '../../types/PageContent.js';
 import {resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';

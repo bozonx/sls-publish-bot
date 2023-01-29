@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
+import {ROOT_LEVEL_BLOCKS} from '../notionHelpers/requestPageBlocks.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
 

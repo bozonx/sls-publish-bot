@@ -3,7 +3,7 @@ import ContentItem from '../types/ContentItem.js';
 import RawPageContent from '../types/PageContent.js';
 import {makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
 import {makeContentPlanItemDetails} from './parseContent.js';
-import {makePageDetailsMsg} from '../notionRequests/parsePage.js';
+import {makePageDetailsMsg} from '../notionHelpers/parsePage.js';
 import {makeContentLengthString} from './publishHelpers.js';
 import {PublishMenuState} from '../askUser/publishContentPlan/askPublishMenu.js';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';

@@ -5,7 +5,7 @@ import {PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
 import ru from '../I18n/ru.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../notionRequests/pageBlocks.js';
+import {ROOT_LEVEL_BLOCKS} from '../notionHelpers/requestPageBlocks.js';
 import {publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
