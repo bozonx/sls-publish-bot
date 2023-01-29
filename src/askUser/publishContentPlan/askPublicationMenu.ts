@@ -328,9 +328,9 @@ async function handleButtons(
         certainIsoDateTime?: string
       ) => {
         if (!hoursPeriod && !certainIsoDateTime) {
-          await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
+          await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer)
 
-          delete state.autoDeleteIsoDateTime;
+          delete state.autoDeleteIsoDateTime
 
           return askPublicationMenu(blogName, tgChat, state, onDone)
         }

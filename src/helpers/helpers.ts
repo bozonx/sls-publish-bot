@@ -118,9 +118,11 @@ export function makeHumanDateStr(dateStr: string, utcOffset: number): string {
 }
 
 export function makeIsoDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
-  // TODO: сделать  всё через moment
-  return moment(dateStr).format(ISO_DATE_FORMAT)
-    + `T${timeStr}:00${makeIsoUtcOffsetStr(utcOffset)}`
+  // TODO: вылазиет предупреждение что не точный ISO формат
+  return moment(
+    moment(dateStr).utcOffset(utcOffset).format(ISO_DATE_FORMAT)
+    + ' ' + timeStr
+  ).format()
 }
 
 export function isoDateToHuman(isoDate: string): string {
