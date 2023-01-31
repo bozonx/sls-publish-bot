@@ -12,7 +12,7 @@ import {addSimpleStep} from '../../helpers/helpers.js';
 import {CONTENT_PROPS} from '../../types/ContentItem.js';
 
 
-const CONTENT_MARKER = 'content:';
+const CONTENT_MARKER = 'content:'
 
 
 export async function askContentToUse(
@@ -39,19 +39,19 @@ export async function askContentToUse(
     ],
     (queryData: string) => {
       if (queryData === BACK_BTN_CALLBACK) {
-        return tgChat.steps.back();
+        return tgChat.steps.back()
       }
       else if (queryData === CANCEL_BTN_CALLBACK) {
-        return tgChat.steps.cancel();
+        return tgChat.steps.cancel()
       }
       else if (queryData.indexOf(CONTENT_MARKER) === 0) {
-        const splat = queryData.split(':');
-        const itemIndex = Number(splat[1]);
+        const splat = queryData.split(':')
+        const itemIndex = Number(splat[1])
 
-        onDone(items[itemIndex]);
+        onDone(items[itemIndex])
       }
       else {
-        throw new Error(`Unknown action`);
+        throw new Error(`Unknown action`)
       }
     }
   );
@@ -59,12 +59,12 @@ export async function askContentToUse(
 
 
 function makeButtonTitle(item: PageObjectResponse): string {
-  const dateProp = item.properties[CONTENT_PROPS.date];
-  const dateText: string = (dateProp as any).date.start;
-  const shortDateText: string = moment(dateText).format(PRINT_SHORT_DATE_FORMAT);
-  const nameProp = item.properties[CONTENT_PROPS.name];
+  const dateProp = item.properties[CONTENT_PROPS.date]
+  const dateText: string = (dateProp as any).date.start
+  const shortDateText: string = moment(dateText).format(PRINT_SHORT_DATE_FORMAT)
+  const nameProp = item.properties[CONTENT_PROPS.nameGist]
 
-  const gistRichText: RichTextItemResponse = (nameProp as any).title[0];
+  const gistRichText: RichTextItemResponse = (nameProp as any).title[0]
 
   return `${shortDateText} ${gistRichText.plain_text}`
 }

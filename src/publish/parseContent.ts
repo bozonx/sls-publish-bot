@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import moment from 'moment';
 // @ts-ignore
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
@@ -22,10 +21,7 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
     // date in iso format
     date: (item.properties[CONTENT_PROPS.date] as any)?.date.start || '',
     time: (item.properties[CONTENT_PROPS.time] as any)?.select.name || '',
-    // TODO: выбрать взависимости от типа публикации
-    name: (item.properties[CONTENT_PROPS.name] as any)?.title[0]?.plain_text || '',
-    // TODO: выбрать взависимости от типа публикации
-    gist: (item.properties[CONTENT_PROPS.name] as any)?.title[0]?.plain_text || '',
+    nameGist: (item.properties[CONTENT_PROPS.nameGist] as any)?.title[0]?.plain_text || '',
     note: (item.properties[CONTENT_PROPS.note] as any)?.rich_text[0]?.plain_text || '',
     status: (item.properties[CONTENT_PROPS.status] as any)?.select.name || '',
     onlySn: (item.properties[CONTENT_PROPS.onlySn] as any)?.multi_select
@@ -54,7 +50,8 @@ export async function makeContentPlanItemDetails(
       true,
       footerTmplMd,
       pageBlocks,
-      contentItem.gist,
+      // TODO: не передавать когда не надо
+      contentItem.nameGist,
       contentItem.instaTags,
       contentItem.tgTags
     )
@@ -107,25 +104,21 @@ export async function makeContentPlanItemDetails(
 }
 
 export function validateContentItem(item: ContentItem) {
-  if (!item.date) throw new Error(`No date`);
-  else if (!item.time) throw new Error(`No time`);
-  // TODO: проверить gist и name только для article и accoucement и может poll
-  // else if ([
-  //   PUBLICATION_TYPES.article,
-  //   PUBLICATION_TYPES.post1000,
-  //   PUBLICATION_TYPES.post2000,
-  //   PUBLICATION_TYPES.poll,
-  // ].includes(item.type) && !item.relativePageId)
-  //else if (!item.gist && !item.name) throw new Error(`No gist and link`);
-  else if (!item.status) throw new Error(`No status`);
-  else if (!item.type) throw new Error(`No type`);
+  if (!item.date) throw new Error(`No date`)
+  else if (!item.time) throw new Error(`No time`)
+  else if ([
+    PUBLICATION_TYPES.article,
+    PUBLICATION_TYPES.announcement,
+  ].includes(item.type) && !item.nameGist) throw new Error(`No name/name field`)
+  else if (!item.status) throw new Error(`No status`)
+  else if (!item.type) throw new Error(`No type`)
 
   if (!moment(`${item.date} ${item.time}`).isValid())
-    throw new Error(`Incorrect date: ${item.date}`);
+    throw new Error(`Incorrect date: ${item.date}`)
   else if (!Object.values(CONTENT_STATUS).includes(item.status))
-    throw new Error(`Unknown status: ${item.status}`);
+    throw new Error(`Unknown status: ${item.status}`)
   else if (!Object.values(PUBLICATION_TYPES).includes(item.type))
-    throw new Error(`Unknown type: ${item.type}`);
+    throw new Error(`Unknown type: ${item.type}`)
 }
 
 export function prepareContentItem(

@@ -13,16 +13,22 @@ export async function makeClearTextsFromNotion(
   useTgFooter: boolean,
   footerTmplMd?: string,
   pageBlocks?: NotionBlocks,
-  gistCleanText?: string,
+  cleanTextInsteadBlocks?: string,
   instaTags?: string[],
   tgTags?: string[],
 ): Promise<Partial<Record<SnType, string>>> {
   const result: Partial<Record<SnType, string>> = {}
 
   for (const sn of sns) {
-    result[sn] = (pageBlocks)
-      ? transformNotionToCleanText(pageBlocks)
-      : (gistCleanText || '');
+    if (cleanTextInsteadBlocks) {
+      result[sn] = cleanTextInsteadBlocks
+    }
+    else if (pageBlocks) {
+      result[sn] = transformNotionToCleanText(pageBlocks)
+    }
+    else {
+      result[sn] = ''
+    }
     // add footer
     switch (sn) {
       case SN_TYPES.telegram:

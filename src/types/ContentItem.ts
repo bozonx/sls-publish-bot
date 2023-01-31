@@ -5,7 +5,7 @@ import {PublicationType} from './publicationType.js';
 export const CONTENT_PROPS = {
   date: 'date',
   time: 'time',
-  name: 'name/gist',
+  nameGist: 'name/gist',
   note: 'note',
   status: 'status',
   onlySn: 'onlySn',
@@ -30,10 +30,7 @@ export default interface ContentItem {
   // date in ISO format
   date: string;
   time: string;
-  // for article and posts
-  name?: string;
-  // for announcement
-  gist?: string;
+  nameGist?: string;
   note: string;
   status: ContentStatus,
   onlySn: SnType[],
