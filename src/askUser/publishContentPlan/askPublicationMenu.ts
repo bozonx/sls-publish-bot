@@ -5,10 +5,12 @@ import {
   CANCEL_BTN,
   CANCEL_BTN_CALLBACK,
   OK_BTN,
-  OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN
+  OK_BTN_CALLBACK,
+  PRINT_SHORT_DATE_TIME_FORMAT,
+  WARN_SIGN
 } from '../../types/constants.js';
 import {
-  addSimpleStep,
+  addSimpleStep, compactButtons,
   makeHumanDateTimeStr,
   makeIsoDateTimeStr,
   replaceHorsInDate
@@ -20,7 +22,7 @@ import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
 import {askSns} from '../common/askSns.js';
 import {SN_TYPES, SnType} from '../../types/snTypes.js';
-import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
+import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl, TgReplyButton} from '../../types/TgReplyButton.js';
 import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
@@ -28,7 +30,6 @@ import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
 import {PublishMenuState} from './startPublicationMenu.js';
-import {compactUndefined} from '../../lib/arrays.js';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -37,7 +38,7 @@ export type PublishMenuAction = 'CHANGE_TIME'
   | 'ADD_TEXT'
   | 'CHANGE_INSTA_TAGS'
   | 'CHANGE_IMAGE'
-  | 'CHANGE_SNS';
+  | 'CHANGE_SNS'
 
 export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> = {
   CHANGE_TIME: 'CHANGE_TIME',
@@ -47,7 +48,7 @@ export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> =
   CHANGE_INSTA_TAGS: 'CHANGE_INSTA_TAGS',
   CHANGE_IMAGE: 'CHANGE_IMAGE',
   CHANGE_SNS: 'CHANGE_SNS',
-};
+}
 
 
 export async function askPublicationMenu(
@@ -60,14 +61,14 @@ export async function askPublicationMenu(
   await addSimpleStep(
     tgChat,
     (): [string, TgReplyButton[][]] => {
-      let disableOk = false;
+      let disableOk = false
 
       try {
-        validate(tgChat, state);
+        validate(tgChat, state)
       }
       catch (e) {
         tgChat.reply(`${WARN_SIGN} ${e}`)
-          .catch((e) => tgChat.log.error(e));
+          .catch((e) => tgChat.log.error(e))
 
         disableOk = true
       }
@@ -76,8 +77,7 @@ export async function askPublicationMenu(
 
       return [
         tgChat.app.i18n.menu.publishFromCpMenu,
-        // TODO: use compactButtons?
-        [
+        compactButtons([
           // ask time
           [
             {
@@ -87,12 +87,12 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
             },
           ],
+          // TODO: только для телеги??? не для инсты?
           // ask footer
-          (tgChat.app.blogs[blogName].sn.telegram?.postFooter && ![
-            // TODO: у article тоже же есть футер
-            PUBLICATION_TYPES.article,
-            PUBLICATION_TYPES.poll,
-          ].includes(state.pubType)) ? [{
+          (
+            tgChat.app.blogs[blogName].sn.telegram?.postFooter
+            && state.pubType !== PUBLICATION_TYPES.poll
+          ) ? [{
             text: (state.useFooter)
               ? tgChat.app.i18n.commonPhrases.noPostFooter
               : tgChat.app.i18n.commonPhrases.yesPostFooter,
@@ -100,8 +100,6 @@ export async function askPublicationMenu(
           }] : [],
           // ask preview
           (!state.mainImgUrl && [
-            // TODO: а разве для post1000 картинка не обязательна?
-            PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
             PUBLICATION_TYPES.announcement
           ].includes(state.pubType)) ? [{
@@ -119,23 +117,34 @@ export async function askPublicationMenu(
           }] : [],
           // ask to change main image/video
           ([
-            // TODO: нафига в статье??? там картинка должна быть просто частью статьи
-            PUBLICATION_TYPES.article,
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
-            // TODO: добавить photos, narrative
-            PUBLICATION_TYPES.announcement,
             PUBLICATION_TYPES.mem,
+            PUBLICATION_TYPES.photos,
             PUBLICATION_TYPES.story,
+            PUBLICATION_TYPES.narrative,
+            PUBLICATION_TYPES.announcement,
             PUBLICATION_TYPES.reels,
           ].includes(state.pubType)) ? [{
-            text: (state.mainImgUrl)
-              // TODO: если несколько картинок то во множественном числе
-              ? tgChat.app.i18n.buttons.changeMainImage
-              : tgChat.app.i18n.buttons.uploadMainImage,
+            text: (() => {
+              if ([
+                PUBLICATION_TYPES.photos,
+                PUBLICATION_TYPES.narrative,
+              ].includes(state.pubType)) {
+                // plural
+                return (state.mainImgUrl)
+                  ? tgChat.app.i18n.buttons.changeImages
+                  : tgChat.app.i18n.buttons.uploadImages
+              }
+              else {
+                return (state.mainImgUrl)
+                  ? tgChat.app.i18n.buttons.changeImage
+                  : tgChat.app.i18n.buttons.uploadImage
+              }
+            })(),
             callback_data: PUBLISH_MENU_ACTION.CHANGE_IMAGE,
           }] : [],
-          // and to setup instagram tags
+          // ask to setup instagram tags
           (state.sns.includes(SN_TYPES.instagram)) ? [{
             text: tgChat.app.i18n.buttons.changeInstaTags,
             callback_data: PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS,
@@ -147,6 +156,7 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_SNS,
             }
           ],
+          // ask URL button
           ([
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
@@ -157,23 +167,25 @@ export async function askPublicationMenu(
               : tgChat.app.i18n.buttons.addUrlButton,
             callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
           }] : [],
+          // ask auto remove
           ([
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
             PUBLICATION_TYPES.announcement,
             PUBLICATION_TYPES.poll,
+            PUBLICATION_TYPES.story,
           ].includes(state.pubType)) ? [{
             text: (state.autoDeleteIsoDateTime)
               ? tgChat.app.i18n.buttons.changeAutoRemove
               : tgChat.app.i18n.buttons.setAutoRemove,
             callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
           }] : [],
-          compactUndefined([
+          [
             BACK_BTN,
             CANCEL_BTN,
             (disableOk) ? undefined : OK_BTN,
-          ]),
-        ]
+          ],
+        ])
       ]
     },
     (queryData: string) => {
@@ -189,7 +201,7 @@ async function handleButtons(
   tgChat: TgChat,
   state: PublishMenuState,
   validate: (tgChat: TgChat, state: PublishMenuState) => void,
-  onDone: () => void,
+  onDone: () => void
 ) {
   switch (queryData) {
     case BACK_BTN_CALLBACK:
@@ -221,6 +233,7 @@ async function handleButtons(
       // print menu again
       return askPublicationMenu(blogName, tgChat, state, validate, onDone)
     case PUBLISH_MENU_ACTION.ADD_TEXT:
+      // it's only for annoucement
       return await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
 
         // TODO: есть ещё cleanText - что с ним делать???

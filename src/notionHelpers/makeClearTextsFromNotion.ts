@@ -3,7 +3,7 @@ import {prepareFooter} from '../helpers/helpers.js';
 import {transformNotionToCleanText} from '../helpers/transformNotionToCleanText.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
-import {PublicationType} from '../types/publicationType.js';
+import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {clearMd} from '../helpers/clearMd.js';
 
 
@@ -13,21 +13,21 @@ export async function makeClearTextsFromNotion(
   useTgFooter: boolean,
   footerTmplMd?: string,
   pageBlocks?: NotionBlocks,
-  cleanTextInsteadBlocks?: string,
+  articleHeader?: string,
   instaTags?: string[],
   tgTags?: string[],
 ): Promise<Partial<Record<SnType, string>>> {
   const result: Partial<Record<SnType, string>> = {}
 
   for (const sn of sns) {
-    if (cleanTextInsteadBlocks) {
-      result[sn] = cleanTextInsteadBlocks
-    }
-    else if (pageBlocks) {
-      result[sn] = transformNotionToCleanText(pageBlocks)
-    }
-    else {
-      result[sn] = ''
+    result[sn] = ''
+
+    if (pageBlocks) {
+      if (pubType === PUBLICATION_TYPES.article) {
+        result[sn] = articleHeader + '\n\n'
+      }
+
+      result[sn] += transformNotionToCleanText(pageBlocks)
     }
     // add footer
     switch (sn) {

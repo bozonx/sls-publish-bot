@@ -23,12 +23,12 @@ export function makeContentLengthDetails(
   i18n: typeof ru,
   clearTexts: Partial<Record<SnType, string>>,
   instaTags: string[] = [],
-  tgFooter?: string,
+  hasTgFooter: boolean
 ): string {
   const result: string[] = []
 
   if (clearTexts.telegram) {
-    if (tgFooter) {
+    if (hasTgFooter) {
       result.push(
         `Telegram. ${i18n.pageInfo.contentLength} + ${i18n.commonPhrases.footer}: `
         + clearTexts.telegram.length

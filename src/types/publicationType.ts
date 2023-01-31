@@ -8,7 +8,7 @@ export type PublicationType = 'article'
   | 'announcement'
   | 'poll'
   | 'reels'
-  | 'video';
+  | 'video'
 
 export const PUBLICATION_TYPES: Record<PublicationType, PublicationType> = {
   article: 'article',

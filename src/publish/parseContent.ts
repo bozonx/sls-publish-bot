@@ -50,7 +50,6 @@ export async function makeContentPlanItemDetails(
       true,
       footerTmplMd,
       pageBlocks,
-      // TODO: не передавать когда не надо
       contentItem.nameGist,
       contentItem.instaTags,
       contentItem.tgTags
@@ -77,28 +76,20 @@ export async function makeContentPlanItemDetails(
     result.push(`${i18n.contentInfo.imageDescr}: ${contentItem.imageDescr}`)
   }
 
-  if (contentItem.name) {
-    result.push(`${i18n.contentInfo.name}: ${contentItem.name}`)
-  }
-
-  if (contentItem.gist) {
-    result.push(`${i18n.contentInfo.gist}: ${contentItem.gist}`)
+  if (contentItem.nameGist) {
+    result.push(`${i18n.contentInfo.name}/${i18n.contentInfo.gist}: ${contentItem.nameGist}`)
   }
 
   result.push(`${i18n.contentInfo.note}: ${contentItem.note}`)
 
-  // if (cleanTexts.telegram) {
-  //   result.push(
-  //     `${i18n.pageInfo.contentLength} + ${i18n.commonPhrases.footer}: `
-  //     + cleanTexts.telegram.length
-  //   )
-  // }
+  const contentLengthDetails = makeContentLengthDetails(
+    i18n,
+    cleanTexts,
+    contentItem.instaTags,
+    Boolean(footerTmplMd)
+  )
 
-  // TODO: если пусто ???
-  if (cleanTexts.telegram || cleanTexts.instagram) {
-    // TODO: use cleanFooterTmpl
-    result.push(makeContentLengthDetails(i18n, cleanTexts, instaTags, tgFooter));
-  }
+  if (contentLengthDetails) result.push(contentLengthDetails)
 
   return result.join('\n')
 }
