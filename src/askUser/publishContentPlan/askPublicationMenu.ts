@@ -17,7 +17,6 @@ import {
 } from '../../helpers/helpers.js';
 import {askTime} from '../common/askTime.js';
 import {askPostMedia} from '../common/askPostMedia.js';
-import {printImage} from '../../publish/printContentItemInfo.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
 import {askSns} from '../common/askSns.js';
@@ -281,34 +280,47 @@ async function handleButtons(
       return askPostMedia(
         tgChat,
         [
+          PUBLICATION_TYPES.post1000,
           PUBLICATION_TYPES.mem,
+          PUBLICATION_TYPES.photos,
           PUBLICATION_TYPES.story,
+          PUBLICATION_TYPES.narrative,
           PUBLICATION_TYPES.reels,
         ].includes(state.pubType),
-        true,
+        ![
+          PUBLICATION_TYPES.photos,
+          PUBLICATION_TYPES.narrative,
+        ].includes(state.pubType),
         tgChat.asyncCb(async (mediaGroup: MediaGroupItem[]) => {
+          if (
+            [
+              PUBLICATION_TYPES.post1000,
+              PUBLICATION_TYPES.post2000,
+              PUBLICATION_TYPES.narrative,
+            ].includes(state.pubType)
+            && mediaGroup.find((el) => el.type === 'video')
+          ) {
+            // only image
+            await tgChat.reply(tgChat.app.i18n.errors.onlyImageAllowed)
 
-          // TODO: review
-          // TODO: нельзя видео - post2000, article, narrative
-          // TODO: нельзя фото - reels
+            return
+          }
+          else if (
+            state.pubType === PUBLICATION_TYPES.reels
+            && mediaGroup.find((el) => el.type !== 'video')
+          ) {
+            // only video
+            await tgChat.reply(tgChat.app.i18n.errors.onlyVideoAllowed)
 
-          if (mediaGroup.length) {
-            // TODO: может быть и не url
-            //state.mainImgUrl = mediaGroup[0].url;
+            return
+          }
 
-            // TODO: поддержка видео
-            // TODO: поддержка несколько картинок
+          state.replacedMediaGroup = mediaGroup
 
-            const resolvedImgUrl = await printImage(tgChat, state.mainImgUrl)
-
-            if (!resolvedImgUrl) {
-
-            }
-
+          if (state.replacedMediaGroup.length) {
+            await tgChat.reply(tgChat.app.i18n.message.mediaPlaced)
           }
           else {
-            delete state.mainImgUrl;
-
             await tgChat.reply(tgChat.app.i18n.message.removedImg)
           }
 

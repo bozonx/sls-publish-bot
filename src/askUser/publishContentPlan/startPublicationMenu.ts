@@ -12,6 +12,7 @@ import {publishFork} from '../../publish/publishFork.js';
 import {NotionBlocks} from '../../types/notion.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
+import {MediaGroupItem} from '../../types/types.js';
 
 
 export interface PublishMenuState {
@@ -23,6 +24,7 @@ export interface PublishMenuState {
   pubTime: string
   instaTags?: string[]
   mainImgUrl?: string
+  replacedMediaGroup?: MediaGroupItem[]
   // it's for announcement
   replacedHtmlText?: string
   replacedCleanText?: string
