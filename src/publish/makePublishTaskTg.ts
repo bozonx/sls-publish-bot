@@ -252,7 +252,7 @@ export async function registerPublishTaskTg(
     // send info message
     await tgChat.app.tg.bot.telegram.sendMessage(
       tgChat.app.appConfig.logChannelId,
-      makePublishInfoMessage(isoDate, time, blogName, tgChat),
+      makePublishInfoMessage(isoDate, time, blogName, tgChat, SN_TYPES.telegram),
       {
         reply_to_message_id: messageIdToCopy,
       }

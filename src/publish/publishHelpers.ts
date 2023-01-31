@@ -1,7 +1,5 @@
-import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
-import {makeUtcOffsetStr} from '../helpers/helpers.js';
-import {PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
+import {makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
@@ -13,35 +11,61 @@ import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/Mes
 import {isValidUrl} from '../lib/common.js';
 
 
-// TODO: review
-
-
 export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {
   if (!blocks) return;
 
   for (const item of blocks[ROOT_LEVEL_BLOCKS]) {
-    if (item.type === 'image') return (item.image as any).file.url;
+    if (item.type === 'image') return (item.image as any).file.url
   }
 }
 
-export function makeContentLengthString(
+export function makeContentLengthDetails(
   i18n: typeof ru,
   clearTexts: Partial<Record<SnType, string>>,
-  instaTags?: string[],
+  instaTags: string[] = [],
   tgFooter?: string,
 ): string {
-  let result = `${i18n.pageInfo.contentLength}: ${clearTexts[SN_TYPES.site].length}\n`;
+  const result: string[] = []
 
-  if (tgFooter) result += `${i18n.pageInfo.contentLengthWithTgFooter}: `
-   + `${clearTexts[SN_TYPES.telegram].length}\n`;
-
-  if (instaTags && instaTags.length) {
-    result += `${i18n.pageInfo.contentLengthWithInstaTags}: `
-        + `${clearTexts[SN_TYPES.instagram].length}\n`
-      + `${i18n.pageInfo.instaTagsCount}: ` + (instaTags || []).length;
+  if (clearTexts.telegram) {
+    if (tgFooter) {
+      result.push(
+        `Telegram. ${i18n.pageInfo.contentLength} + ${i18n.commonPhrases.footer}: `
+        + clearTexts.telegram.length
+      )
+    }
+    else {
+      result.push(`Telegram. ${i18n.pageInfo.contentLength}: ${clearTexts.telegram.length}`)
+    }
   }
 
-  return result;
+  if (clearTexts.instagram) {
+    if (instaTags.length) {
+      result.push(
+        `Instagram. ${i18n.pageInfo.contentLengthWithInstaTags}: ${clearTexts.instagram.length}`
+      )
+      result.push(`${i18n.pageInfo.instaTagsCount}: ` + (instaTags).length)
+    }
+    else {
+      result.push(
+        `Instagram. ${i18n.pageInfo.contentLength}: ${clearTexts.instagram.length}`
+      )
+    }
+  }
+
+  if (clearTexts.site) {
+    result.push(
+      `Site. ${i18n.pageInfo.contentLength}: ${clearTexts.site.length}`
+    )
+  }
+
+  if (clearTexts.zen) {
+    result.push(
+      `Zen. ${i18n.pageInfo.contentLength}: ${clearTexts.zen.length}`
+    )
+  }
+
+  return result.join('\n')
 }
 
 export async function makePost2000Text(
@@ -59,7 +83,7 @@ export async function makePost2000Text(
   // save image to telegraph
   const imgTelegraphUrl = await tgChat.app.telegraPh.uploadImage(resolvedImgUrl)
   // put image to the text as hidden url
-  return `<a href="${imgTelegraphUrl}"> </a>` + rawTextHtml;
+  return `<a href="${imgTelegraphUrl}"> </a>` + rawTextHtml
 }
 
 export function makePublishInfoMessage(
@@ -67,12 +91,12 @@ export function makePublishInfoMessage(
   resolvedTime: string,
   blogName: string,
   tgChat: TgChat,
+  sn: SnType
 ): string {
-  // TODO: отформатировать почеловечи
   return tgChat.app.i18n.message.prePublishInfo
     + tgChat.app.blogs[blogName].dispname + ', '
-    // TODO: add sn
-    + moment(isoDate).format(PRINT_FULL_DATE_FORMAT) + ' ' + resolvedTime + ' ' + makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);
+    + `${tgChat.app.i18n.commonPhrases.sn}: ${sn}, `
+    + makeHumanDateTimeStr(isoDate, resolvedTime, tgChat.app.appConfig.utcOffset)
 }
 
 export async function printPost(

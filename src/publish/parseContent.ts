@@ -10,7 +10,9 @@ import {makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {SnType} from '../types/snTypes.js';
-import {makeContentLengthString} from './publishHelpers.js';
+import {makeContentLengthDetails} from './publishHelpers.js';
+import {makeClearTextsFromNotion} from '../notionHelpers/makeClearTextsFromNotion.js';
+import {NotionBlocks} from '../types/notion.js';
 
 
 export function parseContentItem(item: PageObjectResponse): ContentItem {
@@ -34,57 +36,71 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
   }
 }
 
-export function makeContentPlanItemDetails(
-  item: ContentItem,
+export async function makeContentPlanItemDetails(
+  contentItem: ContentItem,
   i18n: typeof ru,
   utcOffset: number,
-  cleanTexts: Partial<Record<SnType, string>>
-): string {
+  resolvedSns: SnType[],
+  pageBlocks?: NotionBlocks,
+  footerTmplMd?: string
+): Promise<string> {
+  let cleanTexts: Partial<Record<SnType, string>> = {}
 
-  // TODO: review
+  if (contentItem.type !== PUBLICATION_TYPES.poll) {
+    // make clear text if it isn't a poll
+    cleanTexts = await makeClearTextsFromNotion(
+      resolvedSns,
+      contentItem.type,
+      true,
+      footerTmplMd,
+      pageBlocks,
+      contentItem.gist,
+      contentItem.instaTags,
+      contentItem.tgTags
+    )
+  }
 
   const result: string[] = [
-    `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(item.date, item.time, utcOffset)}`,
+    `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(contentItem.date, contentItem.time, utcOffset)}`,
     `${i18n.contentInfo.onlySn}: `
-    + `${(item.onlySn.length) ? item.onlySn.join(', ') : i18n.contentInfo.noRestriction}`,
-    `${i18n.contentInfo.type}: ${item.type}`,
-    `${i18n.contentInfo.status}: ${item.status}`,
+    + `${(contentItem.onlySn.length) ? contentItem.onlySn.join(', ') : i18n.contentInfo.noRestriction}`,
+    `${i18n.contentInfo.type}: ${contentItem.type}`,
+    `${i18n.contentInfo.status}: ${contentItem.status}`,
   ]
 
-  if (item.tgTags) {
-    result.push(`${i18n.contentInfo.tgTags}: ${item.tgTags.join(', ')}`)
+  if (contentItem.tgTags) {
+    result.push(`${i18n.contentInfo.tgTags}: ${contentItem.tgTags.join(', ')}`)
   }
 
-  if (item.instaTags) {
-    result.push(`${i18n.contentInfo.instaTags}: ${item.instaTags.join(', ')}`)
+  if (contentItem.instaTags) {
+    result.push(`${i18n.contentInfo.instaTags}: ${contentItem.instaTags.join(', ')}`)
   }
 
-  if (item.imageDescr) {
-    result.push(`${i18n.contentInfo.imageDescr}: ${item.imageDescr}`)
+  if (contentItem.imageDescr) {
+    result.push(`${i18n.contentInfo.imageDescr}: ${contentItem.imageDescr}`)
   }
 
-  if (item.name) {
-    result.push(`${i18n.contentInfo.name}: ${item.name}`)
+  if (contentItem.name) {
+    result.push(`${i18n.contentInfo.name}: ${contentItem.name}`)
   }
 
-  if (item.gist) {
-    result.push(`${i18n.contentInfo.gist}: ${item.gist}`)
+  if (contentItem.gist) {
+    result.push(`${i18n.contentInfo.gist}: ${contentItem.gist}`)
   }
 
-  result.push(`${i18n.contentInfo.note}: ${item.note}`)
+  result.push(`${i18n.contentInfo.note}: ${contentItem.note}`)
 
   // if (cleanTexts.telegram) {
   //   result.push(
-  //     i18n.pageInfo.contentLength
-  //     + ` + ${i18n.commonPhrases.footer}`
-  //     + `: ${cleanTexts.telegram.length}`
+  //     `${i18n.pageInfo.contentLength} + ${i18n.commonPhrases.footer}: `
+  //     + cleanTexts.telegram.length
   //   )
   // }
 
   // TODO: если пусто ???
-  if (cleanTexts) {
+  if (cleanTexts.telegram || cleanTexts.instagram) {
     // TODO: use cleanFooterTmpl
-    result.push(makeContentLengthString(i18n, cleanTexts, instaTags, tgFooter));
+    result.push(makeContentLengthDetails(i18n, cleanTexts, instaTags, tgFooter));
   }
 
   return result.join('\n')

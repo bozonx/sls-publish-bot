@@ -8,7 +8,6 @@ import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMe
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 import {clearMd} from '../helpers/clearMd.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
-import {makeClearTextsFromNotion} from '../notionHelpers/makeClearTextsFromNotion.js';
 import {WARN_SIGN} from '../types/constants.js';
 
 
@@ -19,20 +18,7 @@ export async function printContentItemInitialDetails(
   pageBlocks?: NotionBlocks,
   footerTmplMd?: string
 ) {
-  let cleanTexts: Partial<Record<SnType, string>> = {}
-
   if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
-    // make clear text if it isn't a poll
-    cleanTexts = await makeClearTextsFromNotion(
-      resolvedSns,
-      parsedContentItem.type,
-      true,
-      footerTmplMd,
-      pageBlocks,
-      parsedContentItem.gist,
-      parsedContentItem.instaTags,
-      parsedContentItem.tgTags
-    )
     const footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, parsedContentItem.tgTags,true))
     // print footer if it is used
     if (footerStr) {
@@ -48,11 +34,13 @@ export async function printContentItemInitialDetails(
   // send record's info from content plan
   await tgChat.reply(
     tgChat.app.i18n.menu.contentParams + '\n\n'
-    + makeContentPlanItemDetails(
+    + await makeContentPlanItemDetails(
       parsedContentItem,
       tgChat.app.i18n,
       tgChat.app.appConfig.utcOffset,
-      cleanTexts
+      resolvedSns,
+      pageBlocks,
+      footerTmplMd
     )
   )
 
@@ -83,7 +71,7 @@ export async function printPublishConfirmData(
     )
   }
 
-  // await tgChat.reply(makeContentLengthString(
+  // await tgChat.reply(makeContentLengthDetails(
   //   tgChat.app.i18n,
   //   clearTexts,
   //   state.instaTags,
