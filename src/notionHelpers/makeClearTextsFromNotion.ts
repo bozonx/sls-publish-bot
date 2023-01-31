@@ -1,10 +1,10 @@
 import {NotionBlocks} from '../types/notion.js';
-import {prepareFooter} from './helpers.js';
-import {transformNotionToCleanText} from './transformNotionToCleanText.js';
+import {prepareFooter} from '../helpers/helpers.js';
+import {transformNotionToCleanText} from '../helpers/transformNotionToCleanText.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PublicationType} from '../types/publicationType.js';
-import {clearMd} from './clearMd.js';
+import {clearMd} from '../helpers/clearMd.js';
 
 
 export async function makeClearTextsFromNotion(

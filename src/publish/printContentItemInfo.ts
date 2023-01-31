@@ -8,7 +8,7 @@ import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMe
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 import {clearMd} from '../helpers/clearMd.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
-import {makeClearTextsFromNotion} from '../helpers/makeClearTextsFromNotion.js';
+import {makeClearTextsFromNotion} from '../notionHelpers/makeClearTextsFromNotion.js';
 import {WARN_SIGN} from '../types/constants.js';
 
 
