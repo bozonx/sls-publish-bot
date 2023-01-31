@@ -4,31 +4,30 @@ import {transformNotionToCleanText} from './transformNotionToCleanText.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PublicationType} from '../types/publicationType.js';
+import {clearMd} from './clearMd.js';
 
 
-export function makeClearTextsFromNotion(
+export async function makeClearTextsFromNotion(
   sns: SnType[],
   pubType: PublicationType,
   useTgFooter: boolean,
-  cleanTgFooterTmpl?: string,
+  footerTmplMd?: string,
   pageBlocks?: NotionBlocks,
-  // TODO: а точно он html???
-  //postHtmlText?: string,
+  gistCleanText?: string,
   instaTags?: string[],
   tgTags?: string[],
-): Partial<Record<SnType, string>> {
+): Promise<Partial<Record<SnType, string>>> {
   const result: Partial<Record<SnType, string>> = {}
 
   for (const sn of sns) {
     result[sn] = (pageBlocks)
       ? transformNotionToCleanText(pageBlocks)
-      // TODO: sanitize
-      : (postHtmlText || '');
+      : (gistCleanText || '');
     // add footer
     switch (sn) {
       case SN_TYPES.telegram:
         if (useTgFooter) {
-          result[sn] += prepareFooter(cleanTgFooterTmpl, tgTags)
+          result[sn] += await clearMd(prepareFooter(footerTmplMd, tgTags)) || ''
         }
 
         break

@@ -9,33 +9,34 @@ import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 import {clearMd} from '../helpers/clearMd.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import {makeClearTextsFromNotion} from '../helpers/makeClearTextsFromNotion.js';
+import {WARN_SIGN} from '../types/constants.js';
 
 
-export async function printContentItemDetails(
+export async function printContentItemInitialDetails(
   tgChat: TgChat,
   resolvedSns: SnType[],
   parsedContentItem: ContentItem,
   pageBlocks?: NotionBlocks,
-  footerTmplHtml?: string,
-  cleanFooterTmpl?: string,
+  footerTmplMd?: string
 ) {
   let cleanTexts: Partial<Record<SnType, string>> = {}
   let footerStr: string | undefined
 
   if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
     // make clear text if it isn't a poll
-    cleanTexts = makeClearTextsFromNotion(
+    cleanTexts = await makeClearTextsFromNotion(
       resolvedSns,
       parsedContentItem.type,
       true,
-      cleanFooterTmpl,
+      footerTmplMd,
       pageBlocks,
-      //parsedContentItem.gist,
+      parsedContentItem.gist,
       parsedContentItem.instaTags,
       parsedContentItem.tgTags
     )
-    footerStr = prepareFooter(footerTmplHtml, parsedContentItem.tgTags,true)
+    footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, parsedContentItem.tgTags,true))
   }
+
   // TODO: учитывать cleanTexts
 
   // print footer if it is used
@@ -47,20 +48,20 @@ export async function printContentItemDetails(
       true
     )
   }
-
-  // make content plan info details message
-  const contentInfoMsg = makeContentPlanItemDetails(
-    parsedContentItem,
-    tgChat.app.i18n,
-    tgChat.app.appConfig.utcOffset,
-    cleanTexts
-  );
   // send record's info from content plan
   await tgChat.reply(
-    tgChat.app.i18n.menu.contentParams + '\n\n' + contentInfoMsg
-  );
+    tgChat.app.i18n.menu.contentParams + '\n\n'
+    + makeContentPlanItemDetails(
+      parsedContentItem,
+      tgChat.app.i18n,
+      tgChat.app.appConfig.utcOffset,
+      cleanTexts
+    )
+  )
 
-  if (!resolvedSns.length) await tgChat.reply(tgChat.app.i18n.errors.noSns);
+  if (!resolvedSns.length) await tgChat.reply(
+    WARN_SIGN + ' ' + tgChat.app.i18n.errors.noSns
+  )
 }
 
 export async function printPublishConfirmData(
@@ -132,11 +133,11 @@ export async function printImage(tgChat: TgChat, imgUrl?: string): Promise<strin
   if (!imgUrl) return;
 
   try {
-    await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, imgUrl);
+    await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, imgUrl)
 
     return imgUrl;
   }
   catch (e) {
-    await tgChat.reply(tgChat.app.i18n.errors.cantSendImage);
+    await tgChat.reply(tgChat.app.i18n.errors.cantSendImage)
   }
 }

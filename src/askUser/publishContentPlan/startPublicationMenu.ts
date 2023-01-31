@@ -2,7 +2,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {SnType} from '../../types/snTypes.js';
 import ContentItem from '../../types/ContentItem.js';
 import {askPublicationMenu} from './askPublicationMenu.js';
-import {printImage, printPublishConfirmData} from '../../publish/printInfo.js';
+import {printImage, printPublishConfirmData} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {makeTgPostTextFromNotion} from '../../helpers/makeTgPostTextFromNotion.js';
@@ -37,9 +37,8 @@ export async function startPublicationMenu(
   parsedContentItem: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
-  // TODO: использовать их
-  footerTmplHtml?: string,
-  cleanFooterTmpl?: string,
+  // TODO: использовать
+  footerTmplMd?: string
 ) {
   const state: PublishMenuState = {
     pubType: parsedContentItem.type,

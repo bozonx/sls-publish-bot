@@ -40,6 +40,9 @@ export function makeContentPlanItemDetails(
   utcOffset: number,
   cleanTexts: Partial<Record<SnType, string>>
 ): string {
+
+  // TODO: review
+
   const result: string[] = [
     `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(item.date, item.time, utcOffset)}`,
     `${i18n.contentInfo.onlySn}: `
@@ -78,7 +81,7 @@ export function makeContentPlanItemDetails(
   //   )
   // }
 
-  // TODO: если пусто
+  // TODO: если пусто ???
   if (cleanTexts) {
     // TODO: use cleanFooterTmpl
     result.push(makeContentLengthString(i18n, cleanTexts, instaTags, tgFooter));

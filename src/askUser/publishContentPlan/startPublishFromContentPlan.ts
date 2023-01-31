@@ -7,12 +7,10 @@ import {loadNotPublished} from '../../notionHelpers/requestContentPlan.js';
 import {requestPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
 import {resolveSns, resolveTgFooter} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
-import {printImage, printContentItemDetails} from '../../publish/printInfo.js';
+import {printImage, printContentItemInitialDetails} from '../../publish/printContentItemInfo.js';
 import {SnType} from '../../types/snTypes.js';
 import {startPublicationMenu} from './startPublicationMenu.js';
 import {NotionBlocks} from '../../types/notion.js';
-import {commonMdToTgHtml} from '../../helpers/commonMdToTgHtml.js';
-import {clearMd} from '../../helpers/clearMd.js';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -46,25 +44,22 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     }
 
     const blogSns = Object.keys(tgChat.app.blogs[blogName].sn) as SnType[];
-    const footerTmpl = resolveTgFooter(
+    const footerTmplMd = resolveTgFooter(
       true,
       parsedContentItem.type,
       tgChat.app.blogs[blogName].sn.telegram
     )
-    const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
-    const cleanFooterTmpl = await clearMd(footerTmpl)
-    const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type);
+    const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type)
     let mainImgUrl = getFirstImageFromNotionBlocks(pageBlocks)
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
 
-    await printContentItemDetails(
+    await printContentItemInitialDetails(
       tgChat,
       resolvedSns,
       parsedContentItem,
       pageBlocks,
-      footerTmplHtml,
-      cleanFooterTmpl
+      footerTmplMd
     )
     await startPublicationMenu(
       blogName,
@@ -73,8 +68,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       parsedContentItem,
       pageBlocks,
       mainImgUrl,
-      footerTmplHtml,
-      cleanFooterTmpl
+      footerTmplMd
     )
   }));
 }

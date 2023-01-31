@@ -15,7 +15,7 @@ import {
 } from '../../helpers/helpers.js';
 import {askTime} from '../common/askTime.js';
 import {askPostMedia} from '../common/askPostMedia.js';
-import {printImage} from '../../publish/printInfo.js';
+import {printImage} from '../../publish/printContentItemInfo.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
 import {askSns} from '../common/askSns.js';
