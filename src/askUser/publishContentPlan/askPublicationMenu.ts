@@ -235,10 +235,8 @@ async function handleButtons(
     case PUBLISH_MENU_ACTION.ADD_TEXT:
       // it's only for annoucement
       return await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
-
-        // TODO: есть ещё cleanText - что с ним делать???
-
         state.replacedHtmlText = textHtml
+        state.replacedCleanText = cleanText
         // print result
         if (state.replacedHtmlText) {
           await tgChat.reply(tgChat.app.i18n.menu.selectedPostText)
@@ -280,11 +278,6 @@ async function handleButtons(
         return askPublicationMenu(blogName, tgChat, state, validate, onDone)
       }));
     case PUBLISH_MENU_ACTION.CHANGE_IMAGE:
-
-      // TODO: review
-      // TODO: нельзя видео - post2000, article, narrative
-      // TODO: нельзя фото - reels
-
       return askPostMedia(
         tgChat,
         [
@@ -293,22 +286,33 @@ async function handleButtons(
           PUBLICATION_TYPES.reels,
         ].includes(state.pubType),
         true,
-        tgChat.asyncCb(async (mediaGroup: MediaGroupItem[], caption?: string) => {
+        tgChat.asyncCb(async (mediaGroup: MediaGroupItem[]) => {
+
+          // TODO: review
+          // TODO: нельзя видео - post2000, article, narrative
+          // TODO: нельзя фото - reels
+
           if (mediaGroup.length) {
             // TODO: может быть и не url
             //state.mainImgUrl = mediaGroup[0].url;
 
             // TODO: поддержка видео
+            // TODO: поддержка несколько картинок
 
-            await printImage(tgChat, state.mainImgUrl);
+            const resolvedImgUrl = await printImage(tgChat, state.mainImgUrl)
+
+            if (!resolvedImgUrl) {
+
+            }
+
           }
           else {
             delete state.mainImgUrl;
 
-            await tgChat.reply(tgChat.app.i18n.message.removedImg);
+            await tgChat.reply(tgChat.app.i18n.message.removedImg)
           }
 
-          return askPublicationMenu(blogName, tgChat, state, validate, onDone);
+          return askPublicationMenu(blogName, tgChat, state, validate, onDone)
         })
       );
     case PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS:

@@ -120,7 +120,7 @@ export async function printImage(tgChat: TgChat, imgUrl?: string): Promise<strin
   try {
     await tgChat.app.tg.bot.telegram.sendPhoto(tgChat.botChatId, imgUrl)
 
-    return imgUrl;
+    return imgUrl
   }
   catch (e) {
     await tgChat.reply(tgChat.app.i18n.errors.cantSendImage)

@@ -25,6 +25,7 @@ export interface PublishMenuState {
   mainImgUrl?: string
   // it's for announcement
   replacedHtmlText?: string
+  replacedCleanText?: string
   urlBtn?: TgReplyBtnUrl
   autoDeleteIsoDateTime?: string
 }
