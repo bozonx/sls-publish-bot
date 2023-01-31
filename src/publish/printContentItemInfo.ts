@@ -20,7 +20,6 @@ export async function printContentItemInitialDetails(
   footerTmplMd?: string
 ) {
   let cleanTexts: Partial<Record<SnType, string>> = {}
-  let footerStr: string | undefined
 
   if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
     // make clear text if it isn't a poll
@@ -34,20 +33,18 @@ export async function printContentItemInitialDetails(
       parsedContentItem.instaTags,
       parsedContentItem.tgTags
     )
-    footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, parsedContentItem.tgTags,true))
+    const footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, parsedContentItem.tgTags,true))
+    // print footer if it is used
+    if (footerStr) {
+      await tgChat.reply(
+        tgChat.app.i18n.menu.postFooter + footerStr,
+        undefined,
+        true,
+        true
+      )
+    }
   }
 
-  // TODO: учитывать cleanTexts
-
-  // print footer if it is used
-  if (footerStr) {
-    await tgChat.reply(
-      tgChat.app.i18n.menu.postFooter + footerStr,
-      undefined,
-      true,
-      true
-    )
-  }
   // send record's info from content plan
   await tgChat.reply(
     tgChat.app.i18n.menu.contentParams + '\n\n'
