@@ -23,7 +23,9 @@ export interface PublishMenuState {
   pubDate: string
   pubTime: string
   instaTags?: string[]
+  // initial image from notion
   mainImgUrl?: string
+  // replaced by user from menu
   replacedMediaGroup?: MediaGroupItem[]
   // it's for announcement
   replacedHtmlText?: string
@@ -41,7 +43,7 @@ export async function startPublicationMenu(
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
   // TODO: использовать
-  footerTmplMd?: string
+  //footerTmplMd?: string
 ) {
   const state: PublishMenuState = {
     pubType: parsedContentItem.type,
@@ -52,7 +54,7 @@ export async function startPublicationMenu(
     pubTime: parsedContentItem.time,
     instaTags: parsedContentItem.instaTags,
     mainImgUrl,
-  };
+  }
 
   await askPublicationMenu(
     blogName,
