@@ -2,7 +2,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {SnType} from '../../types/snTypes.js';
 import ContentItem from '../../types/ContentItem.js';
 import {askPublicationMenu} from './askPublicationMenu.js';
-import {printImage, printPublishConfirmData} from '../../publish/printContentItemInfo.js';
+import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {makeTgPostTextFromNotion} from '../../helpers/makeTgPostTextFromNotion.js';
@@ -17,10 +17,12 @@ import {printPost} from '../../publish/publishHelpers.js';
 
 
 export interface PublishMenuState {
+  // TODO: впринципе тут не нужно
   pubType: PublicationType
   useFooter: boolean
   usePreview: boolean
   sns: SnType[]
+  // TODO: впринципе тут не нужно
   pubDate: string
   pubTime: string
   instaTags?: string[]
@@ -63,13 +65,43 @@ export async function startPublicationMenu(
     state,
     validateContentPlanPost,
     tgChat.asyncCb(async () => {
+      // TODO: не делать если poll
+      // TODO: а нужно ли это тут делать???? или всетаки уже в fork ???
+      const postTexts = makeTgPostTextFromNotion(
+        state.sns,
+        state.pubType,
+        state.useFooter,
+        tgChat.app.blogs[blogName].sn.telegram,
+        pageBlocks,
+        // TODO: это только для анонса
+        state.replacedHtmlText,
+        state.instaTags,
+        parsedContentItem.tgTags,
+      );
+
+      let pollData: PollData | undefined;
+
+      if (state.pubType === PUBLICATION_TYPES.poll) {
+
+        // TODO: сформировать из notion
+
+        pollData = {
+          question: 'some question',
+          options: ['1', '2'],
+          isAnonymous: true,
+          type: 'regular',
+        };
+      }
 
       // TODO: если poll - то подругому делать
 
+      // TODO: сделать тексты для каждой соц сети
       const resultTextHtml = (state.replacedHtmlText)
         ? state.replacedHtmlText
         // TODO: сформировать правильный текст поста взависимости от типа
         : 'text'
+      // TODO: do it
+      const resultTextClear = 'clear text'
       const finalMediaGroup: MediaGroupItem[] = (state.replacedMediaGroup?.length)
         ? state.replacedMediaGroup
         : (
@@ -96,38 +128,15 @@ export async function startPublicationMenu(
         resultTextHtml
       )
 
-      await printPublishConfirmData(blogName, tgChat, state, parsedContentItem.tgTags, pageBlocks, undefined)
+      await tgChat.reply(makeContentPlanFinalDetails(
+        blogName,
+        tgChat,
+        state,
+        parsedContentItem,
+      ))
 
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
         try {
-          // TODO: не делать если poll
-          // TODO: а нужно ли это тут делать???? или всетаки уже в fork ???
-          const postTexts = makeTgPostTextFromNotion(
-            state.sns,
-            state.pubType,
-            state.useFooter,
-            tgChat.app.blogs[blogName].sn.telegram,
-            pageBlocks,
-            // TODO: это только для анонса
-            state.replacedHtmlText,
-            state.instaTags,
-            parsedContentItem.tgTags,
-          );
-
-          let pollData: PollData | undefined;
-
-          if (state.pubType === PUBLICATION_TYPES.poll) {
-
-            // TODO: сформировать из notion
-
-            pollData = {
-              question: 'some question',
-              options: ['1', '2'],
-              isAnonymous: true,
-              type: 'regular',
-            };
-          }
-
           // Do publish
           await publishFork(
             blogName,
@@ -135,13 +144,10 @@ export async function startPublicationMenu(
             state,
             parsedContentItem.type,
             postTexts,
+            // it's for article only
             pageBlocks,
-            // TODO: учитывать что не gist
-            parsedContentItem.name,
-            parsedContentItem.tgTags,
-            // TODO: чо за хуйня
-            //parsedPage?.announcement,
-            undefined,
+            // article title
+            parsedContentItem.nameGist,
             pollData
           );
         }

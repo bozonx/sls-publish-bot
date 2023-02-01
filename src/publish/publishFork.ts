@@ -16,8 +16,8 @@ export async function publishFork(
   postTexts: Record<SnType, string>,
   articleBlocks?: NotionBlocks,
   articleTitle?: string,
-  tgTags?: string[],
-  announcement?: string,
+  //tgTags?: string[],
+  //announcement?: string,
   pollData?: PollData
 ) {
   for (const sn of state.sns) {

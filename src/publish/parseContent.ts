@@ -32,68 +32,6 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
   }
 }
 
-export async function makeContentPlanItemDetails(
-  contentItem: ContentItem,
-  i18n: typeof ru,
-  utcOffset: number,
-  resolvedSns: SnType[],
-  pageBlocks?: NotionBlocks,
-  footerTmplMd?: string
-): Promise<string> {
-  let cleanTexts: Partial<Record<SnType, string>> = {}
-
-  if (contentItem.type !== PUBLICATION_TYPES.poll) {
-    // make clear text if it isn't a poll
-    cleanTexts = await makeClearTextsFromNotion(
-      resolvedSns,
-      contentItem.type,
-      true,
-      footerTmplMd,
-      pageBlocks,
-      contentItem.nameGist,
-      contentItem.instaTags,
-      contentItem.tgTags
-    )
-  }
-
-  const result: string[] = [
-    `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(contentItem.date, contentItem.time, utcOffset)}`,
-    `${i18n.contentInfo.onlySn}: `
-    + `${(contentItem.onlySn.length) ? contentItem.onlySn.join(', ') : i18n.contentInfo.noRestriction}`,
-    `${i18n.contentInfo.type}: ${contentItem.type}`,
-    `${i18n.contentInfo.status}: ${contentItem.status}`,
-  ]
-
-  if (contentItem.tgTags) {
-    result.push(`${i18n.contentInfo.tgTags}: ${contentItem.tgTags.join(', ')}`)
-  }
-
-  if (contentItem.instaTags) {
-    result.push(`${i18n.contentInfo.instaTags}: ${contentItem.instaTags.join(', ')}`)
-  }
-
-  if (contentItem.imageDescr) {
-    result.push(`${i18n.contentInfo.imageDescr}: ${contentItem.imageDescr}`)
-  }
-
-  if (contentItem.nameGist) {
-    result.push(`${i18n.contentInfo.name}/${i18n.contentInfo.gist}: ${contentItem.nameGist}`)
-  }
-
-  result.push(`${i18n.contentInfo.note}: ${contentItem.note}`)
-
-  const contentLengthDetails = makeContentLengthDetails(
-    i18n,
-    cleanTexts,
-    contentItem.instaTags,
-    Boolean(footerTmplMd)
-  )
-
-  if (contentLengthDetails) result.push(contentLengthDetails)
-
-  return result.join('\n')
-}
-
 export function validateContentItem(item: ContentItem) {
   if (!item.date) throw new Error(`No date`)
   else if (!item.time) throw new Error(`No time`)
