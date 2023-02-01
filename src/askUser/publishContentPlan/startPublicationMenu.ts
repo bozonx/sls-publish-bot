@@ -8,7 +8,7 @@ import {askConfirm} from '../common/askConfirm.js';
 import {makeTgPostHtmlFromContentItem} from '../../notionHelpers/makeTgPostHtmlFromContentItem.js';
 import PollData from '../../types/PollData.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
-import {publishFork} from '../../publish/publishFork.js';
+import {contentPublishFork} from '../../notionHelpers/contentPublishFork.js';
 import {NotionBlocks} from '../../types/notion.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
@@ -130,7 +130,7 @@ export async function startPublicationMenu(
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
         try {
           // Do publish
-          await publishFork(
+          await contentPublishFork(
             blogName,
             tgChat,
             item.type,
