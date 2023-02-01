@@ -17,13 +17,9 @@ import {printPost} from '../../publish/publishHelpers.js';
 
 
 export interface PublishMenuState {
-  // TODO: впринципе тут не нужно
-  pubType: PublicationType
   useFooter: boolean
   usePreview: boolean
   sns: SnType[]
-  // TODO: впринципе тут не нужно
-  pubDate: string
   pubTime: string
   instaTags?: string[]
   // initial image from notion
@@ -42,20 +38,18 @@ export async function startPublicationMenu(
   blogName: string,
   tgChat: TgChat,
   resolvedSns: SnType[],
-  parsedContentItem: ContentItem,
+  item: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
   // TODO: использовать
   //footerTmplMd?: string
 ) {
   const state: PublishMenuState = {
-    pubType: parsedContentItem.type,
     usePreview: true,
     useFooter: true,
     sns: resolvedSns,
-    pubDate: parsedContentItem.date,
-    pubTime: parsedContentItem.time,
-    instaTags: parsedContentItem.instaTags,
+    pubTime: item.time,
+    instaTags: item.instaTags,
     mainImgUrl,
   }
 
@@ -63,25 +57,26 @@ export async function startPublicationMenu(
     blogName,
     tgChat,
     state,
+    item,
     validateContentPlanPost,
     tgChat.asyncCb(async () => {
       // TODO: не делать если poll
       // TODO: а нужно ли это тут делать???? или всетаки уже в fork ???
       const postTexts = makeTgPostTextFromNotion(
         state.sns,
-        state.pubType,
+        item.type,
         state.useFooter,
         tgChat.app.blogs[blogName].sn.telegram,
         pageBlocks,
         // TODO: это только для анонса
         state.replacedHtmlText,
         state.instaTags,
-        parsedContentItem.tgTags,
+        item.tgTags,
       );
 
       let pollData: PollData | undefined;
 
-      if (state.pubType === PUBLICATION_TYPES.poll) {
+      if (item.type === PUBLICATION_TYPES.poll) {
 
         // TODO: сформировать из notion
 
@@ -113,7 +108,7 @@ export async function startPublicationMenu(
         PUBLICATION_TYPES.article,
         PUBLICATION_TYPES.post2000,
         PUBLICATION_TYPES.announcement,
-      ].includes(state.pubType))
+      ].includes(item.type))
       //announcement
       // print preview
       await printPost(
@@ -132,7 +127,7 @@ export async function startPublicationMenu(
         blogName,
         tgChat,
         state,
-        parsedContentItem,
+        item,
       ))
 
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
@@ -142,12 +137,12 @@ export async function startPublicationMenu(
             blogName,
             tgChat,
             state,
-            parsedContentItem.type,
+            item.type,
             postTexts,
             // it's for article only
             pageBlocks,
             // article title
-            parsedContentItem.nameGist,
+            item.nameGist,
             pollData
           );
         }
