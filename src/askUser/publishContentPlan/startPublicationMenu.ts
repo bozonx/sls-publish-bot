@@ -63,6 +63,9 @@ export async function startPublicationMenu(
       let pollData: PollData | undefined
       let postTexts: Partial<Record<SnType, string>> | undefined
       let cleanTexts: Partial<Record<SnType, string>> | undefined
+
+      // TODO: если статья, то очистить mediaGroup
+
       const finalMediaGroup: MediaGroupItem[] = (state.replacedMediaGroup?.length)
         ? state.replacedMediaGroup
         : (

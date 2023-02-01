@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat.js';
 import {makePublishTaskTgArticle} from '../publish/makePublishTaskTgArticle.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
-import {makePublishTaskTgPoll} from '../publish/registerTgPost.js';
+import {makePublishTaskTgPoll, registerTgPost} from '../publish/registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
 import {MediaGroupItem} from '../types/types.js';
@@ -31,7 +31,6 @@ export async function contentPublishFork(
       case SN_TYPES.telegram:
         // article
         if (pubType === PUBLICATION_TYPES.article) {
-          // TODO: зачем делать return ???
           await makePublishTaskTgArticle(
             blogName,
             tgChat,
@@ -39,8 +38,8 @@ export async function contentPublishFork(
             pubTime,
             articleBlocks!,
             articleTitle!,
-            tgTags,
-            announcement
+            //tgTags,
+            //postTexts?.telegram
           );
         }
         // poll
@@ -50,60 +49,26 @@ export async function contentPublishFork(
             tgChat,
             pubDate,
             pubTime,
-            pollData!
+            pollData!,
+            autoDeleteIsoDateTime,
             // TODO: add auto poll close
           );
         }
         else {
           // just post
-          // TODO: add url btn
-          // TODO: add auto delete
+          await registerTgPost(
+            blogName,
+            tgChat,
+            pubDate,
+            pubTime,
+            postTexts?.telegram || '',
+            postAsText,
+            usePreview,
+            finalMediaGroup,
+            urlBtn,
+            autoDeleteIsoDateTime
+          )
         }
-        // // only text
-        // else if ([
-        //   PUBLICATION_TYPES.post1000,
-        //   PUBLICATION_TYPES.post2000,
-        //   PUBLICATION_TYPES.announcement,
-        // ].includes(pubType) && !state.mainImgUrl) {
-        //   return makePublishTaskTgOnlyText(
-        //     blogName,
-        //     tgChat,
-        //     pubDate,
-        //     pubTime,
-        //     postTexts[sn],
-        //     usePreview,
-        //   );
-        // }
-        // // one photo
-        // else if ([
-        //   PUBLICATION_TYPES.post1000,
-        //   PUBLICATION_TYPES.mem,
-        //   PUBLICATION_TYPES.story,
-        //   PUBLICATION_TYPES.announcement,
-        //   PUBLICATION_TYPES.reels,
-        // ].includes(pubType) && state.mainImgUrl) {
-        //   return makePublishTaskTgImage(
-        //     blogName,
-        //     tgChat,
-        //     pubDate,
-        //     pubTime,
-        //     state.mainImgUrl,
-        //     postTexts[sn]
-        //   );
-        // }
-        // // several photo
-        // else if ([
-        //   PUBLICATION_TYPES.photos,
-        //   PUBLICATION_TYPES.narrative,
-        // ].includes(pubType)) {
-        //
-        //   // TODO: чо за хз всё же поддерживается
-        //
-        //   throw new Error(`Photos and narrative not supported at the moment`);
-        // }
-        // else {
-        //   throw new Error(`Unknown or unsupported publication type "${pubType}" of sn ${sn}`);
-        // }
 
         break;
       case SN_TYPES.site:
@@ -125,3 +90,49 @@ export async function contentPublishFork(
   }
 
 }
+
+// // only text
+// else if ([
+//   PUBLICATION_TYPES.post1000,
+//   PUBLICATION_TYPES.post2000,
+//   PUBLICATION_TYPES.announcement,
+// ].includes(pubType) && !state.mainImgUrl) {
+//   return makePublishTaskTgOnlyText(
+//     blogName,
+//     tgChat,
+//     pubDate,
+//     pubTime,
+//     postTexts[sn],
+//     usePreview,
+//   );
+// }
+// // one photo
+// else if ([
+//   PUBLICATION_TYPES.post1000,
+//   PUBLICATION_TYPES.mem,
+//   PUBLICATION_TYPES.story,
+//   PUBLICATION_TYPES.announcement,
+//   PUBLICATION_TYPES.reels,
+// ].includes(pubType) && state.mainImgUrl) {
+//   return makePublishTaskTgImage(
+//     blogName,
+//     tgChat,
+//     pubDate,
+//     pubTime,
+//     state.mainImgUrl,
+//     postTexts[sn]
+//   );
+// }
+// // several photo
+// else if ([
+//   PUBLICATION_TYPES.photos,
+//   PUBLICATION_TYPES.narrative,
+// ].includes(pubType)) {
+//
+//   // TODO: чо за хз всё же поддерживается
+//
+//   throw new Error(`Photos and narrative not supported at the moment`);
+// }
+// else {
+//   throw new Error(`Unknown or unsupported publication type "${pubType}" of sn ${sn}`);
+// }

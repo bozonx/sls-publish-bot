@@ -6,39 +6,52 @@ import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.
 import {makeTagsString} from '../lib/common.js';
 import {makePublishTaskTgOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
+import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 
 
-export async function makePublishTaskTgArticle(
+function makeTelegraphArticle(
   blogName: string,
   tgChat: TgChat,
-  isoDate: string,
-  time: string,
   articleBlocks: NotionBlocks,
-  articleTitle: string,
-  tgTags?: string[],
-  announcement?: string,
-) {
-  const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl;
-  const footer = tgChat.app.blogs[blogName].sn.telegram?.articleFooter;
+): TelegraphNode[] {
+  const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
+  const footer = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
 
-  if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`);
+  if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`)
 
-  const telegraPhContent = transformNotionToTelegraph(articleBlocks);
+  const telegraPhContent = transformNotionToTelegraph(articleBlocks)
   // add footer
   if (footer) {
     telegraPhContent.push({
       tag: 'p',
       children: [
         '\n',
-        ...footer,
+        // TODO: преобразовать ссылки
+        footer,
       ],
-    });
+    })
   }
 
+  return telegraPhContent
+}
+
+async function publishArticleToTelegraph(
+  blogName: string,
+  tgChat: TgChat,
+  articleBlocks: NotionBlocks,
+  articleTitle: string,
+): Promise<string> {
+  const telegraphNodes = makeTelegraphArticle(blogName, tgChat, articleBlocks)
+
   // create article on telegra.ph
-  const tgPath = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraPhContent);
-  const articleUrl = makeTelegraPhUrl(tgPath);
-  let postStr: string;
+  const tgPath = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
+  const articleUrl = makeTelegraPhUrl(tgPath)
+
+  return articleUrl
+}
+
+function makeArticleTgPost(): string {
+  let postStr: string
 
   if (announcement) {
     postStr = _.template(announcement)({
@@ -57,6 +70,19 @@ export async function makePublishTaskTgArticle(
       TAGS: mdFormat.escape(makeTagsString(tgTags)),
     });
   }
+}
+
+export async function makePublishTaskTgArticle(
+  blogName: string,
+  tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  articleBlocks: NotionBlocks,
+  articleTitle: string,
+  tgTags?: string[],
+  announcement?: string,
+) {
+  const articleUrl = publishArticleToTelegraph(blogName, tgChat, articleBlocks, articleTitle)
 
   await makePublishTaskTgOnlyText(
     blogName,
