@@ -15,6 +15,7 @@ import PollData from '../types/PollData.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 import {PrimitiveMediaGroup} from '../types/types.js';
+import {makeIsoDateTimeStr} from '../helpers/helpers.js';
 
 
 /**
@@ -346,10 +347,11 @@ async function registerPublishTaskTg(
   }
   // get id of channel to publish postpone post
   const chatId = tgChat.app.blogs[blogName].sn.telegram?.channelId;
-  // TODO: а чё без часового пояса???
+  // TODO: проверить
   // moment(`${isoDate} ${time}`).utcOffset(tgChat.app.appConfig.utcOffset).format()
-  const startTime = moment(`${isoDate}T${time}:00`)
-    .utcOffset(tgChat.app.appConfig.utcOffset).format();
+  // const startTime = moment(`${isoDate}T${time}:00`)
+  //   .utcOffset(tgChat.app.appConfig.utcOffset).format();
+  const startTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
 
   if (!chatId) {
     await tgChat.reply(tgChat.app.i18n.errors.noChannel);

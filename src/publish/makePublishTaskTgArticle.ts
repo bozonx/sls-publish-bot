@@ -26,7 +26,7 @@ function makeTelegraphArticle(
       tag: 'p',
       children: [
         '\n',
-        // TODO: преобразовать ссылки
+        // TODO: преобразовать ссылки в node
         footer,
       ],
     })
@@ -42,7 +42,6 @@ async function publishArticleToTelegraph(
   articleTitle: string,
 ): Promise<string> {
   const telegraphNodes = makeTelegraphArticle(blogName, tgChat, articleBlocks)
-
   // create article on telegra.ph
   const tgPath = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
   const articleUrl = makeTelegraPhUrl(tgPath)
@@ -50,17 +49,23 @@ async function publishArticleToTelegraph(
   return articleUrl
 }
 
-function makeArticleTgPost(): string {
+function makeArticleTgPost(
+  articleTitle: string,
+  articleUrl: string,
+  articleAnnouncement?: string,
+  tgTags?: string[],
+  postTmpl?: string,
+): string {
   let postStr: string
 
-  if (announcement) {
-    postStr = _.template(announcement)({
+  if (articleAnnouncement) {
+    postStr = _.template(articleAnnouncement)({
       TITLE: articleTitle,
       ARTICLE_URL: articleUrl,
-    });
+    })
 
     if (tgTags && tgTags.length) {
-      postStr += '\n\n' + mdFormat.escape(makeTagsString(tgTags));
+      postStr += '\n\n' + mdFormat.escape(makeTagsString(tgTags))
     }
   }
   else {
@@ -70,6 +75,8 @@ function makeArticleTgPost(): string {
       TAGS: mdFormat.escape(makeTagsString(tgTags)),
     });
   }
+
+  return postStr
 }
 
 export async function makePublishTaskTgArticle(
@@ -80,9 +87,16 @@ export async function makePublishTaskTgArticle(
   articleBlocks: NotionBlocks,
   articleTitle: string,
   tgTags?: string[],
-  announcement?: string,
+  articleAnnouncement?: string,
 ) {
-  const articleUrl = publishArticleToTelegraph(blogName, tgChat, articleBlocks, articleTitle)
+  const articleUrl = await publishArticleToTelegraph(blogName, tgChat, articleBlocks, articleTitle)
+  const postStr = makeArticleTgPost(
+    articleTitle,
+    articleUrl,
+    articleAnnouncement,
+    tgTags,
+    tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
+  )
 
   await registerTgTaskOnlyText(
     blogName,
@@ -91,5 +105,5 @@ export async function makePublishTaskTgArticle(
     time,
     postStr,
     true
-  );
+  )
 }

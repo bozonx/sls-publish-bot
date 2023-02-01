@@ -122,6 +122,7 @@ export async function startPublicationMenu(
         )
       }
 
+      // TODO: cleanTexts не учитывать статью
       await tgChat.reply(makeContentPlanFinalDetails(
         blogName,
         tgChat,
