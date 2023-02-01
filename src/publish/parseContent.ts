@@ -5,13 +5,8 @@ import ContentItem, {
   CONTENT_PROPS,
   CONTENT_STATUS,
 } from '../types/ContentItem.js';
-import {makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
-import {SnType} from '../types/snTypes.js';
-import {makeContentLengthDetails} from './publishHelpers.js';
-import {makeClearTextsFromNotion} from '../notionHelpers/makeClearTextsFromNotion.js';
-import {NotionBlocks} from '../types/notion.js';
 
 
 export function parseContentItem(item: PageObjectResponse): ContentItem {

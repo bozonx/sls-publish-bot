@@ -1,11 +1,11 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {SnType} from '../../types/snTypes.js';
+import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import ContentItem from '../../types/ContentItem.js';
 import {askPublicationMenu} from './askPublicationMenu.js';
 import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
-import {makeTgPostHtmlFromContentItem} from '../../notionHelpers/makeTgPostHtmlFromContentItem.js';
+import {makePostFromContentItem} from '../../notionHelpers/makePostFromContentItem.js';
 import PollData from '../../types/PollData.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {contentPublishFork} from '../../notionHelpers/contentPublishFork.js';
@@ -14,7 +14,6 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {printPost} from '../../publish/publishHelpers.js';
-import {transformHtmlToCleanText} from '../../helpers/transformHtmlToCleanText.js';
 
 
 export interface ContentItemState {
@@ -62,17 +61,6 @@ export async function startPublicationMenu(
     tgChat.asyncCb(async () => {
       let pollData: PollData | undefined
       let postTexts: Partial<Record<SnType, string>> | undefined
-      let cleanTexts: Partial<Record<SnType, string>> | undefined
-
-      // TODO: если статья, то очистить mediaGroup
-
-      const finalMediaGroup: MediaGroupItem[] = (state.replacedMediaGroup?.length)
-        ? state.replacedMediaGroup
-        : (
-          (state.mainImgUrl)
-            ? [{type: 'photoUrl', url: state.mainImgUrl}]
-            : []
-        )
       const postAsText = ([
         PUBLICATION_TYPES.article,
         PUBLICATION_TYPES.post2000,
@@ -81,6 +69,15 @@ export async function startPublicationMenu(
       const usePreview = (typeof state.usePreview === 'undefined')
         ? postAsText
         : state.usePreview
+      let finalMediaGroup: MediaGroupItem[] = []
+
+      if (![
+        PUBLICATION_TYPES.article,
+        PUBLICATION_TYPES.poll
+      ].includes(item.type)) {
+        if (state.replacedMediaGroup?.length) finalMediaGroup = state.replacedMediaGroup
+        else if (state.mainImgUrl) finalMediaGroup = [{type: 'photoUrl', url: state.mainImgUrl}]
+      }
 
       if (item.type === PUBLICATION_TYPES.poll) {
 
@@ -97,48 +94,40 @@ export async function startPublicationMenu(
 
       }
       else {
-        postTexts = makeTgPostHtmlFromContentItem(
+        postTexts = makePostFromContentItem(
           state.sns,
           item,
           state,
           pageBlocks,
           footerTgTmplMd
         )
-        cleanTexts = {}
 
-        for (const sn in postTexts) {
-          cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+        if (state.sns.includes(SN_TYPES.telegram)) {
+          // print telegram post preview
+          await printPost(
+            tgChat.botChatId,
+            tgChat,
+            usePreview,
+            postAsText,
+            finalMediaGroup,
+            state.urlBtn,
+            postTexts?.telegram
+          )
         }
-
-        // print post preview
-        await printPost(
-          tgChat.botChatId,
-          tgChat,
-          usePreview,
-          postAsText,
-          finalMediaGroup,
-          state.urlBtn,
-          postTexts?.telegram
-        )
       }
-
-      // TODO: нужно ли делать текст для инстаграм тут или лучше в логе?
-      // if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
-      //   await tgChat.reply(tgChat.app.i18n.menu.textForInstagram);
-      //   await tgChat.reply(
-      //     transformNotionToInstagramPost(pageBlocks)
-      //     + '\n\n'
-      //     + makeTagsString(state.instaTags)
-      //   );
-      // }
-
+      // make text for instagram
+      if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
+        await tgChat.reply(tgChat.app.i18n.menu.textForInstagram)
+        await tgChat.reply(postTexts?.instagram!)
+      }
+      // print details
       await tgChat.reply(makeContentPlanFinalDetails(
         blogName,
         tgChat,
         state,
         item,
         usePreview,
-        cleanTexts,
+        postTexts,
         footerTgTmplMd
       ))
 
@@ -167,15 +156,15 @@ export async function startPublicationMenu(
           );
         }
         catch (e) {
-          await tgChat.reply(`${WARN_SIGN} ${e}`);
-          await tgChat.steps.back();
+          await tgChat.reply(`${WARN_SIGN} ${e}`)
+          await tgChat.steps.back()
 
-          return;
+          return
         }
 
         await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
-        await tgChat.steps.cancel();
-      }), tgChat.app.i18n.commonPhrases.publishConfirmation);
+        await tgChat.steps.cancel()
+      }), tgChat.app.i18n.commonPhrases.publishConfirmation)
     })
   );
 }

@@ -5,12 +5,11 @@ import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
-import {clearMd} from '../helpers/clearMd.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import {WARN_SIGN} from '../types/constants.js';
 import ru from '../I18n/ru.js';
-import {makeClearTextsFromNotion} from '../notionHelpers/makeClearTextsFromNotion.js';
 import {makeContentLengthDetails} from './publishHelpers.js';
+import {transformHtmlToCleanText} from '../helpers/transformHtmlToCleanText.js';
 
 
 export async function printContentItemInitialDetails(
@@ -121,11 +120,16 @@ export function makeContentPlanFinalDetails(
   state: ContentItemState,
   contentItem: ContentItem,
   usePreview: boolean,
-  cleanTexts?: Partial<Record<SnType, string>>,
+  postTexts?: Partial<Record<SnType, string>>,
   footerTgTmplMd?: string
 ) {
   // TODO: наверное лучше готовый html превращать в чистый
+  let cleanTexts: Partial<Record<SnType, string>> | undefined
+  cleanTexts = {}
 
+  for (const sn in postTexts) {
+    cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+  }
 
   // TODO: учитывать poll
 
