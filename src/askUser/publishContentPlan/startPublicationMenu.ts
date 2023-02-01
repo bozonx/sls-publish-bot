@@ -122,13 +122,24 @@ export async function startPublicationMenu(
         )
       }
 
-      // TODO: cleanTexts не учитывать статью
+      // TODO: нужно ли делать текст для инстаграм тут или лучше в логе?
+      // if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
+      //   await tgChat.reply(tgChat.app.i18n.menu.textForInstagram);
+      //   await tgChat.reply(
+      //     transformNotionToInstagramPost(pageBlocks)
+      //     + '\n\n'
+      //     + makeTagsString(state.instaTags)
+      //   );
+      // }
+
       await tgChat.reply(makeContentPlanFinalDetails(
         blogName,
         tgChat,
         state,
         item,
-        cleanTexts || {}
+        usePreview,
+        cleanTexts,
+        footerTgTmplMd
       ))
 
       await askConfirm(tgChat, tgChat.asyncCb(async () => {

@@ -36,7 +36,7 @@ export async function printContentItemInitialDetails(
   // send record's info from content plan
   await tgChat.reply(
     tgChat.app.i18n.menu.contentParams + '\n\n'
-    + await makeContentPlanItemDetails(
+    + await makeContentPlanPreDetails(
       parsedContentItem,
       tgChat.app.i18n,
       tgChat.app.appConfig.utcOffset,
@@ -52,7 +52,7 @@ export async function printContentItemInitialDetails(
 }
 
 
-export async function makeContentPlanItemDetails(
+export async function makeContentPlanPreDetails(
   contentItem: ContentItem,
   i18n: typeof ru,
   utcOffset: number,
@@ -62,6 +62,7 @@ export async function makeContentPlanItemDetails(
 ): Promise<string> {
   let cleanTexts: Partial<Record<SnType, string>> = {}
 
+  // TODO: а если poll ???
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
     // make clear text if it isn't a poll
     cleanTexts = await makeClearTextsFromNotion(
@@ -119,11 +120,12 @@ export function makeContentPlanFinalDetails(
   tgChat: TgChat,
   state: ContentItemState,
   contentItem: ContentItem,
-  cleanTexts: Partial<Record<SnType, string>>
+  usePreview: boolean,
+  cleanTexts?: Partial<Record<SnType, string>>,
+  footerTgTmplMd?: string
 ) {
   // TODO: наверное лучше готовый html превращать в чистый
 
-  // TODO: add url button - к посту
 
   // TODO: учитывать poll
 
@@ -140,36 +142,18 @@ export function makeContentPlanFinalDetails(
   //   parsedContentItem.tgTags,
   // );
 
-  // TODO: надо брать сразу зарезолвенный футер
-  const footerTmpl = tgChat.app.blogs[blogName].sn.telegram?.postFooter
-  // TODO: преобразовывать только после вставки тэгов
-  const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
-  const cleanFooterTmpl = await clearMd(footerTmpl)
-  const footerStr = prepareFooter(footerTmplHtml, tgTags,true)
 
-  if (footerStr) {
-    await tgChat.reply(
-      tgChat.app.i18n.menu.postFooter + footerStr,
-      undefined,
-      true,
-      true
-    )
-  }
-
-  // await tgChat.reply(makeContentLengthDetails(
-  //   tgChat.app.i18n,
-  //   clearTexts,
-  //   state.instaTags,
-  //   footerStr
-  // ));
-
-  // TODO: add footer ???
+  // // TODO: преобразовывать только после вставки тэгов
+  // const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
+  // const cleanFooterTmpl = await clearMd(footerTmpl)
+  // const footerStr = prepareFooter(footerTmplHtml, tgTags,true)
 
   const result: string[] = [
-    tgChat.app.i18n.commonPhrases.linkWebPreview + tgChat.app.i18n.onOff[1],
+    tgChat.app.i18n.commonPhrases.linkWebPreview
+    + tgChat.app.i18n.onOff[Number(state.usePreview)],
     tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', '),
     tgChat.app.i18n.contentInfo.dateTime + ': '
-    + makeHumanDateTimeStr(state.pubDate, state.pubTime, tgChat.app.appConfig.utcOffset)
+    + makeHumanDateTimeStr(contentItem.date, state.pubTime, tgChat.app.appConfig.utcOffset)
   ]
 
   if (state.autoDeleteIsoDateTime) {
@@ -183,15 +167,14 @@ export function makeContentPlanFinalDetails(
     result.push(`${tgChat.app.i18n.pageInfo.instaTagsCount}: ` + state.instaTags.length)
   }
 
-  // if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
-  //   await tgChat.reply(tgChat.app.i18n.menu.textForInstagram);
-  //   await tgChat.reply(
-  //     transformNotionToInstagramPost(pageBlocks)
-  //     + '\n\n'
-  //     + makeTagsString(state.instaTags)
-  //   );
-  // }
-
+  if (contentItem.type !== PUBLICATION_TYPES.poll) {
+    result.push(makeContentLengthDetails(
+      tgChat.app.i18n,
+      cleanTexts || {},
+      state.instaTags,
+      Boolean(footerTgTmplMd)
+    ))
+  }
 
   return result.join('\n')
 }

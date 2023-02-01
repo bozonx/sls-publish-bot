@@ -25,6 +25,9 @@ export function makeContentLengthDetails(
   instaTags: string[] = [],
   hasTgFooter: boolean
 ): string {
+
+  // TODO: cleanTexts учитывать статью
+
   const result: string[] = []
 
   if (clearTexts.telegram) {
