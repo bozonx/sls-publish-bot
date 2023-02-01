@@ -105,7 +105,10 @@ async function printPostPreview(
   await printPost(
     tgChat.botChatId,
     tgChat,
-    (state.postAsText) ? true : state.usePreview,
+    // TODO: usePreview должно быть в приоритете - тоже проверить при финальной публикации
+    (typeof state.usePreview === 'undefined')
+      ? state.postAsText
+      : state.usePreview,
     state.postAsText,
     state.mediaGroup,
     state.urlBtn,

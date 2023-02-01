@@ -13,6 +13,7 @@ import {NotionBlocks} from '../../types/notion.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
 import {MediaGroupItem} from '../../types/types.js';
+import {printPost} from '../../publish/publishHelpers.js';
 
 
 export interface PublishMenuState {
@@ -62,7 +63,42 @@ export async function startPublicationMenu(
     state,
     validateContentPlanPost,
     tgChat.asyncCb(async () => {
-      state.mainImgUrl = await printImage(tgChat, mainImgUrl)
+
+      // TODO: если poll - то подругому делать
+
+      const resultTextHtml = (state.replacedHtmlText)
+        ? state.replacedHtmlText
+        // TODO: сформировать правильный текст поста взависимости от типа
+        : 'text'
+      const finalMediaGroup: MediaGroupItem[] = (state.replacedMediaGroup?.length)
+        ? state.replacedMediaGroup
+        : (
+          (state.mainImgUrl)
+            ? [{type: 'photoUrl', url: state.mainImgUrl}]
+            : []
+        )
+      const postAsText = ([
+        PUBLICATION_TYPES.article,
+        PUBLICATION_TYPES.post2000,
+        PUBLICATION_TYPES.announcement,
+      ].includes(state.pubType))
+      //announcement
+      // print preview
+      await printPost(
+        tgChat.botChatId,
+        tgChat,
+        (typeof state.usePreview === 'undefined')
+          ? postAsText
+          : state.usePreview,
+        postAsText,
+        finalMediaGroup,
+        state.urlBtn,
+        resultTextHtml
+      )
+
+      // TODO: preview должно соотноситься с типом поста
+
+      //state.mainImgUrl = await printImage(tgChat, mainImgUrl)
 
       // TODO: почему здесь ???
       // const clearTexts = makeClearTextsFromNotion(
