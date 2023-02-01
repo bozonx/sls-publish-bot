@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat.js';
 import {makePublishTaskTgArticle} from '../publish/makePublishTaskTgArticle.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
-import {makePublishTaskTgPoll, registerTgPost} from '../publish/registerTgPost.js';
+import {registerTgTaskPoll, registerTgPost} from '../publish/registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
 import {MediaGroupItem} from '../types/types.js';
@@ -24,7 +24,8 @@ export async function contentPublishFork(
   articleBlocks?: NotionBlocks,
   articleTitle?: string,
   urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string
+  autoDeleteIsoDateTime?: string,
+  tgTags?: string[],
 ) {
   for (const sn of sns) {
     switch (sn) {
@@ -38,13 +39,14 @@ export async function contentPublishFork(
             pubTime,
             articleBlocks!,
             articleTitle!,
-            //tgTags,
+            tgTags,
+            // TODO: где взять arcticleAnoucement ???
             //postTexts?.telegram
           );
         }
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {
-          await makePublishTaskTgPoll(
+          await registerTgTaskPoll(
             blogName,
             tgChat,
             pubDate,
@@ -72,8 +74,21 @@ export async function contentPublishFork(
 
         break;
       case SN_TYPES.site:
-        throw new Error(`Publication to site isn't supported at the moment`);
-        // TODO: what on site???
+        if (pubType === PUBLICATION_TYPES.article) {
+          await tgChat.reply(`Publication to site isn't supported at the moment`)
+          await tgChat.steps.back()
+        }
+        else if ([
+          PUBLICATION_TYPES.post1000,
+          PUBLICATION_TYPES.post2000,
+        ].includes(pubType)) {
+          await tgChat.reply(`Publication to site isn't supported at the moment`)
+          await tgChat.steps.back()
+        }
+        else {
+          await tgChat.reply(`Site doesn't support ${pubType}`)
+          await tgChat.steps.back()
+        }
 
         break;
       // case SN_TYPES.instagram:
@@ -97,7 +112,7 @@ export async function contentPublishFork(
 //   PUBLICATION_TYPES.post2000,
 //   PUBLICATION_TYPES.announcement,
 // ].includes(pubType) && !state.mainImgUrl) {
-//   return makePublishTaskTgOnlyText(
+//   return registerTgTaskOnlyText(
 //     blogName,
 //     tgChat,
 //     pubDate,
@@ -114,7 +129,7 @@ export async function contentPublishFork(
 //   PUBLICATION_TYPES.announcement,
 //   PUBLICATION_TYPES.reels,
 // ].includes(pubType) && state.mainImgUrl) {
-//   return makePublishTaskTgImage(
+//   return registerTgTaskImage(
 //     blogName,
 //     tgChat,
 //     pubDate,

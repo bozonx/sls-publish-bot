@@ -3,7 +3,7 @@ import {askTgPoll} from './askTgPoll.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {makePublishTaskTgCopy} from '../../publish/registerTgPost.js';
+import {registerTgTaskCopy} from '../../publish/registerTgPost.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
 import {makePollInfo} from '../../publish/publishHelpers.js';
@@ -61,7 +61,7 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
         }
 
         await askConfirm(tgChat, tgChat.asyncCb(async () => {
-          await makePublishTaskTgCopy(
+          await registerTgTaskCopy(
             blogName,
             tgChat,
             isoDate,

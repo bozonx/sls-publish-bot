@@ -150,7 +150,8 @@ export async function startPublicationMenu(
             // article title
             item.nameGist,
             state.urlBtn,
-            state.autoDeleteIsoDateTime
+            state.autoDeleteIsoDateTime,
+            item.tgTags
           );
         }
         catch (e) {

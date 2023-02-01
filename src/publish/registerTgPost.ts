@@ -37,7 +37,7 @@ export async function registerTgPost(
     const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
     const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl);
 
-    await makePublishTaskTgOnlyText(
+    await registerTgTaskOnlyText(
       blogName,
       tgChat,
       isoDate,
@@ -50,7 +50,7 @@ export async function registerTgPost(
   }
   else if (mediaGroup.length > 1) {
     // post several images
-    await makePublishTaskTgMediaGroup(
+    await registerTgTaskMediaGroup(
       blogName,
       tgChat,
       isoDate,
@@ -65,7 +65,7 @@ export async function registerTgPost(
     if (mediaGroup[0].type === 'video') {
       if (!mediaGroup[0].fileId) throw new Error(`No video fileId`);
 
-      await makePublishTaskTgVideo(
+      await registerTgTaskVideo(
         blogName,
         tgChat,
         isoDate,
@@ -81,7 +81,7 @@ export async function registerTgPost(
 
       if (!imgUrl) throw new Error(`No image`);
 
-      await makePublishTaskTgImage(
+      await registerTgTaskImage(
         blogName,
         tgChat,
         isoDate,
@@ -100,7 +100,7 @@ export async function registerTgPost(
 /**
  * Post only text to telegram, without image
  */
-export async function makePublishTaskTgOnlyText(
+export async function registerTgTaskOnlyText(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,
@@ -133,7 +133,7 @@ export async function makePublishTaskTgOnlyText(
 /**
  * Post image to telegram
  */
-export async function makePublishTaskTgImage(
+export async function registerTgTaskImage(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,
@@ -166,7 +166,7 @@ export async function makePublishTaskTgImage(
 /**
  * Copy message to telegram chat. Useful for poll.
  */
-export async function makePublishTaskTgCopy(
+export async function registerTgTaskCopy(
   blogName: string,
   tgChat: TgChat,
   // TODO: может сразу готовую дату принимать?
@@ -204,7 +204,7 @@ export async function makePublishTaskTgCopy(
   );
 }
 
-export async function makePublishTaskTgPoll(
+export async function registerTgTaskPoll(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,
@@ -240,7 +240,7 @@ export async function makePublishTaskTgPoll(
 /**
  * Post image to telegram
  */
-async function makePublishTaskTgVideo(
+async function registerTgTaskVideo(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,
@@ -273,7 +273,7 @@ async function makePublishTaskTgVideo(
 /**
  * Post media group to telegram
  */
-async function makePublishTaskTgMediaGroup(
+async function registerTgTaskMediaGroup(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,

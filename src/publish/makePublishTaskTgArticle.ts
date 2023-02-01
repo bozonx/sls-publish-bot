@@ -4,7 +4,7 @@ import TgChat from '../apiTg/TgChat.js';
 import {makeTelegraPhUrl} from '../helpers/helpers.js';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
 import {makeTagsString} from '../lib/common.js';
-import {makePublishTaskTgOnlyText} from './registerTgPost.js';
+import {registerTgTaskOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 
@@ -84,7 +84,7 @@ export async function makePublishTaskTgArticle(
 ) {
   const articleUrl = publishArticleToTelegraph(blogName, tgChat, articleBlocks, articleTitle)
 
-  await makePublishTaskTgOnlyText(
+  await registerTgTaskOnlyText(
     blogName,
     tgChat,
     isoDate,
