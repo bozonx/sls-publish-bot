@@ -49,7 +49,6 @@ export async function registerCustomPostTg(
     );
   }
   else if (mediaGroup.length > 1) {
-    //const imgUrls = mediaGroup.map((el: any) => el.fileId || el.url || undefined)
     // post several images
     await makePublishTaskTgMediaGroup(
       blogName,
@@ -165,86 +164,6 @@ export async function makePublishTaskTgImage(
 }
 
 /**
- * Post image to telegram
- */
-export async function makePublishTaskTgVideo(
-  blogName: string,
-  tgChat: TgChat,
-  isoDate: string,
-  time: string,
-  videoId: string,
-  captionMd?: string,
-  urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string
-) {
-  let msgId: number;
-  // Print to log channel
-  try {
-    msgId = await publishTgVideo(
-      tgChat.app,
-      tgChat.app.appConfig.logChannelId,
-      videoId,
-      captionMd,
-      urlBtn
-    );
-  }
-  catch (e) {
-    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
-
-    throw new Error(`Can't publish prepared post to telegram to log channel`);
-  }
-
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
-}
-
-/**
- * Post media group to telegram
- */
-export async function makePublishTaskTgMediaGroup(
-  blogName: string,
-  tgChat: TgChat,
-  isoDate: string,
-  time: string,
-  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
-  captionMd?: string,
-  autoDeleteIsoDateTime?: string
-) {
-  let msgIds: number[];
-  // Print to log channel
-  try {
-    msgIds = await publishTgMediaGroup(
-      tgChat.app,
-      tgChat.app.appConfig.logChannelId,
-      mediaGroup,
-      captionMd
-    )
-  }
-  catch (e) {
-    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
-
-    throw new Error(`Can't publish prepared post to telegram to log channel`);
-  }
-
-  await registerPublishTaskTg(
-    tgChat,
-    blogName,
-    isoDate,
-    time,
-    msgIds[0],
-    undefined,
-    autoDeleteIsoDateTime,
-    undefined,
-    captionMd,
-    mediaGroup.map((e) => {
-      return {
-        type: (e.type === 'video') ? 'video' : 'photo',
-        url: (e as any).fileId || (e as any).url
-      }
-    })
-  );
-}
-
-/**
  * Copy message to telegram chat. Useful for poll.
  */
 export async function makePublishTaskTgCopy(
@@ -317,7 +236,88 @@ export async function makePublishTaskTgPoll(
   );
 }
 
-export async function registerPublishTaskTg(
+
+/**
+ * Post image to telegram
+ */
+async function makePublishTaskTgVideo(
+  blogName: string,
+  tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  videoId: string,
+  captionMd?: string,
+  urlBtn?: TgReplyBtnUrl,
+  autoDeleteIsoDateTime?: string
+) {
+  let msgId: number;
+  // Print to log channel
+  try {
+    msgId = await publishTgVideo(
+      tgChat.app,
+      tgChat.app.appConfig.logChannelId,
+      videoId,
+      captionMd,
+      urlBtn
+    );
+  }
+  catch (e) {
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
+
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
+  }
+
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
+}
+
+/**
+ * Post media group to telegram
+ */
+async function makePublishTaskTgMediaGroup(
+  blogName: string,
+  tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
+  captionMd?: string,
+  autoDeleteIsoDateTime?: string
+) {
+  let msgIds: number[];
+  // Print to log channel
+  try {
+    msgIds = await publishTgMediaGroup(
+      tgChat.app,
+      tgChat.app.appConfig.logChannelId,
+      mediaGroup,
+      captionMd
+    )
+  }
+  catch (e) {
+    await tgChat.reply(tgChat.app.i18n.errors.cantPostToLogChannel + e);
+
+    throw new Error(`Can't publish prepared post to telegram to log channel`);
+  }
+
+  await registerPublishTaskTg(
+    tgChat,
+    blogName,
+    isoDate,
+    time,
+    msgIds[0],
+    undefined,
+    autoDeleteIsoDateTime,
+    undefined,
+    captionMd,
+    mediaGroup.map((e) => {
+      return {
+        type: (e.type === 'video') ? 'video' : 'photo',
+        url: (e as any).fileId || (e as any).url
+      }
+    })
+  );
+}
+
+async function registerPublishTaskTg(
   tgChat: TgChat,
   blogName: string,
   isoDate: string,

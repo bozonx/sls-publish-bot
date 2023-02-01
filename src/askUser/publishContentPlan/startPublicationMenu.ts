@@ -145,7 +145,9 @@ export async function startPublicationMenu(
             // it's for article only
             pageBlocks,
             // article title
-            item.nameGist
+            item.nameGist,
+            state.urlBtn,
+            state.autoDeleteIsoDateTime
           );
         }
         catch (e) {

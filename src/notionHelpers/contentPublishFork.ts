@@ -2,10 +2,11 @@ import TgChat from '../apiTg/TgChat.js';
 import {makePublishTaskTgArticle} from '../publish/makePublishTaskTgArticle.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
-import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgPoll} from '../publish/makePublishTaskTg.js';
+import {makePublishTaskTgPoll} from '../publish/makePublishTaskTg.js';
 import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
 import {MediaGroupItem} from '../types/types.js';
+import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 
 
 export async function contentPublishFork(
@@ -22,8 +23,8 @@ export async function contentPublishFork(
   postTexts?: Partial<Record<SnType, string>>,
   articleBlocks?: NotionBlocks,
   articleTitle?: string,
-  // TODO: add url btn
-  // TODO: add auto delete
+  urlBtn?: TgReplyBtnUrl,
+  autoDeleteIsoDateTime?: string
 ) {
   for (const sn of sns) {
     switch (sn) {
@@ -31,7 +32,7 @@ export async function contentPublishFork(
         // article
         if (pubType === PUBLICATION_TYPES.article) {
           // TODO: зачем делать return ???
-          return makePublishTaskTgArticle(
+          await makePublishTaskTgArticle(
             blogName,
             tgChat,
             pubDate,
@@ -44,16 +45,19 @@ export async function contentPublishFork(
         }
         // poll
         else if (pubType === PUBLICATION_TYPES.poll) {
-          return makePublishTaskTgPoll(
+          await makePublishTaskTgPoll(
             blogName,
             tgChat,
             pubDate,
             pubTime,
             pollData!
+            // TODO: add auto poll close
           );
         }
         else {
           // just post
+          // TODO: add url btn
+          // TODO: add auto delete
         }
         // // only text
         // else if ([
@@ -104,6 +108,7 @@ export async function contentPublishFork(
         break;
       case SN_TYPES.site:
         throw new Error(`Publication to site isn't supported at the moment`);
+        // TODO: what on site???
 
         break;
       // case SN_TYPES.instagram:
