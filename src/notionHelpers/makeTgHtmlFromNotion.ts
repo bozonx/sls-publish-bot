@@ -7,20 +7,21 @@ import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PublicationType} from '../types/publicationType.js';
 
 
-export function makeTgPostTextFromNotion(
+export function makeTgHtmlFromNotion(
   sns: SnType[],
   pubType: PublicationType,
   useTgFooter: boolean,
   tgBlogConfig?: BlogTelegramConfig,
   textBlocks?: NotionBlocks,
   // TODO: а точно он html???
-  postHtmlText?: string,
+  replacedHtmlText?: string,
   instaTags?: string[],
   tgTags?: string[],
-): Record<SnType, string> {
+): Partial<Record<SnType, string>> {
   const result = {} as Record<SnType, string>;
 
   // TODO: remake to HTML all
+  // TODO: сделать сразу пост для статьи
 
   for (const sn of sns) {
     result[sn] = (textBlocks)

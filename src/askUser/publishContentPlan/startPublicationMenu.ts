@@ -5,7 +5,7 @@ import {askPublicationMenu} from './askPublicationMenu.js';
 import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
-import {makeTgPostTextFromNotion} from '../../notionHelpers/makeTgPostTextFromNotion.js';
+import {makeTgHtmlFromNotion} from '../../notionHelpers/makeTgHtmlFromNotion.js';
 import PollData from '../../types/PollData.js';
 import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
 import {publishFork} from '../../publish/publishFork.js';
@@ -60,7 +60,8 @@ export async function startPublicationMenu(
     item,
     validateContentPlanPost,
     tgChat.asyncCb(async () => {
-      let pollData: PollData | undefined;
+      let pollData: PollData | undefined
+      let postTexts: Partial<Record<SnType, string>> | undefined
 
       if (item.type === PUBLICATION_TYPES.poll) {
 
@@ -74,10 +75,11 @@ export async function startPublicationMenu(
         }
       }
       else {
-        const postTexts = makeTgPostTextFromNotion(
+        postTexts = makeTgHtmlFromNotion(
           state.sns,
           item.type,
           state.useFooter,
+          // TODO: наверное передать уже готовый футер
           tgChat.app.blogs[blogName].sn.telegram,
           pageBlocks,
           // TODO: это только для анонса
