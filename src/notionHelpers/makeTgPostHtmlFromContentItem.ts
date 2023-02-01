@@ -3,19 +3,20 @@ import {prepareFooter, resolveTgFooter} from '../helpers/helpers.js';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
-import {PublicationType} from '../types/publicationType.js';
+import ContentItem from '../types/ContentItem.js';
+import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 
 
-export function makeTgHtmlFromNotion(
+/**
+ * Make full post texts for each social media.
+ * It depends on publication type
+ */
+export function makeTgPostHtmlFromContentItem(
   sns: SnType[],
-  pubType: PublicationType,
-  useTgFooter: boolean,
-  footerTmplMd?: string,
+  item: ContentItem,
+  state: ContentItemState,
   textBlocks?: NotionBlocks,
-  // replaced text for annoucement
-  replacedHtmlText?: string,
-  instaTags?: string[],
-  tgTags?: string[],
+  footerTmplMd?: string
 ): Partial<Record<SnType, string>> {
   const result = {} as Record<SnType, string>;
 

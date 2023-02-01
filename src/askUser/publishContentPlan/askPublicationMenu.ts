@@ -28,7 +28,7 @@ import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
-import {PublishMenuState} from './startPublicationMenu.js';
+import {ContentItemState} from './startPublicationMenu.js';
 import ContentItem from '../../types/ContentItem.js';
 
 
@@ -54,9 +54,9 @@ export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> =
 export async function askPublicationMenu(
   blogName: string,
   tgChat: TgChat,
-  state: PublishMenuState,
+  state: ContentItemState,
   item: ContentItem,
-  validate: (tgChat: TgChat, state: PublishMenuState) => void,
+  validate: (tgChat: TgChat, state: ContentItemState) => void,
   onDone: () => void,
 ) {
   await addSimpleStep(
@@ -200,9 +200,9 @@ async function handleButtons(
   queryData: string,
   blogName: string,
   tgChat: TgChat,
-  state: PublishMenuState,
+  state: ContentItemState,
   item: ContentItem,
-  validate: (tgChat: TgChat, state: PublishMenuState) => void,
+  validate: (tgChat: TgChat, state: ContentItemState) => void,
   onDone: () => void
 ) {
   switch (queryData) {

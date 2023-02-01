@@ -5,22 +5,26 @@ import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {makePublishTaskTgImage, makePublishTaskTgOnlyText, makePublishTaskTgPoll} from './makePublishTaskTg.js';
 import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
-import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
+import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
+import {MediaGroupItem} from '../types/types.js';
 
 
 export async function publishFork(
   blogName: string,
   tgChat: TgChat,
-  state: PublishMenuState,
   pubType: PublicationType,
-  postTexts: Partial<Record<SnType, string>>,
+  pubDate: string,
+  pubTime: string,
+  sns: SnType[],
+  finalMediaGroup: MediaGroupItem[],
+  postAsText: boolean,
+  usePreview: boolean,
+  pollData?: PollData,
+  postTexts?: Partial<Record<SnType, string>>,
   articleBlocks?: NotionBlocks,
   articleTitle?: string,
-  //tgTags?: string[],
-  //announcement?: string,
-  pollData?: PollData
 ) {
-  for (const sn of state.sns) {
+  for (const sn of sns) {
     switch (sn) {
       case SN_TYPES.telegram:
         // article
@@ -28,8 +32,8 @@ export async function publishFork(
           return makePublishTaskTgArticle(
             blogName,
             tgChat,
-            state.pubDate,
-            state.pubTime,
+            pubDate,
+            pubTime,
             articleBlocks!,
             articleTitle!,
             tgTags,
@@ -41,8 +45,8 @@ export async function publishFork(
           return makePublishTaskTgPoll(
             blogName,
             tgChat,
-            state.pubDate,
-            state.pubTime,
+            pubDate,
+            pubTime,
             pollData!
           );
         }
@@ -55,10 +59,10 @@ export async function publishFork(
           return makePublishTaskTgOnlyText(
             blogName,
             tgChat,
-            state.pubDate,
-            state.pubTime,
+            pubDate,
+            pubTime,
             postTexts[sn],
-            state.usePreview,
+            usePreview,
           );
         }
         // one photo
@@ -72,8 +76,8 @@ export async function publishFork(
           return makePublishTaskTgImage(
             blogName,
             tgChat,
-            state.pubDate,
-            state.pubTime,
+            pubDate,
+            pubTime,
             state.mainImgUrl,
             postTexts[sn]
           );

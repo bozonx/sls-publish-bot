@@ -3,7 +3,7 @@ import ContentItem from '../types/ContentItem.js';
 import {isoDateToHuman, makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
-import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
+import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 import {clearMd} from '../helpers/clearMd.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
@@ -117,7 +117,7 @@ export async function makeContentPlanItemDetails(
 export function makeContentPlanFinalDetails(
   blogName: string,
   tgChat: TgChat,
-  state: PublishMenuState,
+  state: ContentItemState,
   contentItem: ContentItem,
   cleanTexts: Partial<Record<SnType, string>>
 ) {

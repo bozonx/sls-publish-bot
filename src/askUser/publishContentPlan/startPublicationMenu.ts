@@ -5,7 +5,7 @@ import {askPublicationMenu} from './askPublicationMenu.js';
 import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
-import {makeTgHtmlFromNotion} from '../../notionHelpers/makeTgHtmlFromNotion.js';
+import {makeTgPostHtmlFromContentItem} from '../../notionHelpers/makeTgPostHtmlFromContentItem.js';
 import PollData from '../../types/PollData.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {publishFork} from '../../publish/publishFork.js';
@@ -17,7 +17,7 @@ import {printPost} from '../../publish/publishHelpers.js';
 import {transformHtmlToCleanText} from '../../helpers/transformHtmlToCleanText.js';
 
 
-export interface PublishMenuState {
+export interface ContentItemState {
   useFooter: boolean
   usePreview: boolean
   sns: SnType[]
@@ -44,7 +44,7 @@ export async function startPublicationMenu(
   mainImgUrl?: string,
   footerTgTmplMd?: string
 ) {
-  const state: PublishMenuState = {
+  const state: ContentItemState = {
     usePreview: true,
     useFooter: true,
     sns: resolvedSns,
@@ -63,37 +63,6 @@ export async function startPublicationMenu(
       let pollData: PollData | undefined
       let postTexts: Partial<Record<SnType, string>> | undefined
       let cleanTexts: Partial<Record<SnType, string>> | undefined
-
-      if (item.type === PUBLICATION_TYPES.poll) {
-
-        // TODO: сформировать из notion pageBlocks
-
-        pollData = {
-          question: 'some question',
-          options: ['1', '2'],
-          isAnonymous: true,
-          type: 'regular',
-        }
-      }
-      else {
-        postTexts = makeTgHtmlFromNotion(
-          state.sns,
-          item.type,
-          state.useFooter,
-          footerTgTmplMd,
-          pageBlocks,
-          // TODO: это только для анонса
-          state.replacedHtmlText,
-          state.instaTags,
-          item.tgTags,
-        )
-        cleanTexts = {}
-
-        for (const sn in postTexts) {
-          cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
-        }
-      }
-
       const finalMediaGroup: MediaGroupItem[] = (state.replacedMediaGroup?.length)
         ? state.replacedMediaGroup
         : (
@@ -106,19 +75,49 @@ export async function startPublicationMenu(
         PUBLICATION_TYPES.post2000,
         PUBLICATION_TYPES.announcement,
       ].includes(item.type))
-      //announcement
-      // print preview
-      await printPost(
-        tgChat.botChatId,
-        tgChat,
-        (typeof state.usePreview === 'undefined')
-          ? postAsText
-          : state.usePreview,
-        postAsText,
-        finalMediaGroup,
-        state.urlBtn,
-        postTexts?.telegram
-      )
+      const usePreview = (typeof state.usePreview === 'undefined')
+        ? postAsText
+        : state.usePreview
+
+      if (item.type === PUBLICATION_TYPES.poll) {
+
+        // TODO: сформировать из notion pageBlocks
+
+        pollData = {
+          question: 'some question',
+          options: ['1', '2'],
+          isAnonymous: true,
+          type: 'regular',
+        }
+
+        // TODO: print poll preview
+
+      }
+      else {
+        postTexts = makeTgPostHtmlFromContentItem(
+          state.sns,
+          item,
+          state,
+          pageBlocks,
+          footerTgTmplMd
+        )
+        cleanTexts = {}
+
+        for (const sn in postTexts) {
+          cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+        }
+
+        // print post preview
+        await printPost(
+          tgChat.botChatId,
+          tgChat,
+          usePreview,
+          postAsText,
+          finalMediaGroup,
+          state.urlBtn,
+          postTexts?.telegram
+        )
+      }
 
       await tgChat.reply(makeContentPlanFinalDetails(
         blogName,
@@ -134,14 +133,19 @@ export async function startPublicationMenu(
           await publishFork(
             blogName,
             tgChat,
-            state,
             item.type,
-            postTexts || {},
+            item.date,
+            state.pubTime,
+            state.sns,
+            finalMediaGroup,
+            postAsText,
+            usePreview,
+            pollData,
+            postTexts,
             // it's for article only
             pageBlocks,
             // article title
-            item.nameGist,
-            pollData
+            item.nameGist
           );
         }
         catch (e) {

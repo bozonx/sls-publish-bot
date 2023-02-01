@@ -3,10 +3,10 @@ import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
-import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMenu.js';
+import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 
 
-export function validateContentPlanPost(tgChat: TgChat, state: PublishMenuState) {
+export function validateContentPlanPost(tgChat: TgChat, state: ContentItemState) {
 
   // TODO: review
   // TODO: наверное тут же вызывать validateContentPlanPostText
