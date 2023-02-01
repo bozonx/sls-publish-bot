@@ -57,6 +57,24 @@ export async function printPublishConfirmData(
   pageBlocks?: NotionBlocks,
   clearTexts?: Record<SnType, string>,
 ) {
+
+  // TODO: add url button - к посту
+
+  // TODO: учитывать poll
+
+  // TODO: почему здесь ???
+  // const clearTexts = makeClearTextsFromNotion(
+  //   state.sns,
+  //   state.pubType,
+  //   state.useFooter,
+  //   tgChat.app.blogs[blogName].sn.telegram,
+  //   pageBlocks,
+  //   // TODO: это только для анонса
+  //   state.replacedHtmlText,
+  //   state.instaTags,
+  //   parsedContentItem.tgTags,
+  // );
+
   const footerTmpl = tgChat.app.blogs[blogName].sn.telegram?.postFooter
   const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
   const cleanFooterTmpl = await clearMd(footerTmpl)

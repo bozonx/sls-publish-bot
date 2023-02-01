@@ -9,6 +9,7 @@ import {PublishMenuState} from '../askUser/publishContentPlan/startPublicationMe
 export function validateContentPlanPost(tgChat: TgChat, state: PublishMenuState) {
 
   // TODO: review
+  // TODO: наверное тут же вызывать validateContentPlanPostText
   // TODO: проверка длинн
   // TODO: photos, narrative - должны иметь 1 или более картинок
 
