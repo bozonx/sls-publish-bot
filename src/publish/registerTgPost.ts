@@ -20,7 +20,7 @@ import {PrimitiveMediaGroup} from '../types/types.js';
 /**
  * Register custom post creating task
  */
-export async function registerCustomPostTg(
+export async function registerTgPost(
   blogName: string,
   tgChat: TgChat,
   isoDate: string,

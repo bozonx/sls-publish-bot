@@ -2,7 +2,7 @@ import TgChat from '../apiTg/TgChat.js';
 import {makePublishTaskTgArticle} from '../publish/makePublishTaskTgArticle.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
-import {makePublishTaskTgPoll} from '../publish/makePublishTaskTg.js';
+import {makePublishTaskTgPoll} from '../publish/registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
 import {MediaGroupItem} from '../types/types.js';

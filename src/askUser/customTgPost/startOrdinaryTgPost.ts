@@ -3,7 +3,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {askCustomPostTg, CustomPostState} from './askCustomPostTg.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {registerCustomPostTg} from '../../publish/makePublishTaskTg.js';
+import {registerTgPost} from '../../publish/registerTgPost.js';
 import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
 import {WARN_SIGN} from '../../types/constants.js';
 
@@ -46,7 +46,7 @@ export async function startOrdinaryTgPost(
       }
 
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
-        await registerCustomPostTg(
+        await registerTgPost(
           blogName,
           tgChat,
           isoDate,

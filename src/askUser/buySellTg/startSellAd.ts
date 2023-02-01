@@ -7,7 +7,7 @@ import {askNote} from '../common/askNote.js';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import {askSellAdType} from './askSellAdType.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {registerCustomPostTg} from '../../publish/makePublishTaskTg.js';
+import {registerTgPost} from '../../publish/registerTgPost.js';
 
 
 const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {
@@ -52,7 +52,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
               // TODO: ask вп если не было введено цены ???
 
               await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
-                await registerCustomPostTg(
+                await registerTgPost(
                   blogName,
                   tgChat,
                   isoDate,
