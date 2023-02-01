@@ -6,21 +6,21 @@ import {NotionBlocks} from '../types/notion.js';
 import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
-import {WARN_SIGN} from '../types/constants.js';
 import ru from '../I18n/ru.js';
 import {makeContentLengthDetails} from './publishHelpers.js';
 import {transformHtmlToCleanText} from '../helpers/transformHtmlToCleanText.js';
+import {makePostFromContentItem} from '../notionHelpers/makePostFromContentItem.js';
 
 
 export async function printContentItemInitialDetails(
   tgChat: TgChat,
   resolvedSns: SnType[],
-  parsedContentItem: ContentItem,
+  contentItem: ContentItem,
   pageBlocks?: NotionBlocks,
   footerTmplMd?: string
 ) {
-  if (parsedContentItem.type !== PUBLICATION_TYPES.poll) {
-    const footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, parsedContentItem.tgTags,true))
+  if (contentItem.type !== PUBLICATION_TYPES.poll) {
+    const footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, contentItem.tgTags,true))
     // print footer if it is used
     if (footerStr) {
       await tgChat.reply(
@@ -31,22 +31,24 @@ export async function printContentItemInitialDetails(
       )
     }
   }
-
+  const postTexts = await makePostFromContentItem(
+    resolvedSns,
+    contentItem,
+    pageBlocks,
+    footerTmplMd,
+  )
   // send record's info from content plan
   await tgChat.reply(
     tgChat.app.i18n.menu.contentParams + '\n\n'
     + await makeContentPlanPreDetails(
-      parsedContentItem,
+      contentItem,
       tgChat.app.i18n,
       tgChat.app.appConfig.utcOffset,
       resolvedSns,
+      postTexts,
       pageBlocks,
       footerTmplMd
     )
-  )
-
-  if (!resolvedSns.length) await tgChat.reply(
-    WARN_SIGN + ' ' + tgChat.app.i18n.errors.noSns
   )
 }
 
@@ -56,24 +58,17 @@ export async function makeContentPlanPreDetails(
   i18n: typeof ru,
   utcOffset: number,
   resolvedSns: SnType[],
+  postTexts: Partial<Record<SnType, string>>,
   pageBlocks?: NotionBlocks,
   footerTmplMd?: string
 ): Promise<string> {
   let cleanTexts: Partial<Record<SnType, string>> = {}
 
-  // TODO: а если poll ???
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
     // make clear text if it isn't a poll
-    cleanTexts = await makeClearTextsFromNotion(
-      resolvedSns,
-      contentItem.type,
-      true,
-      footerTmplMd,
-      pageBlocks,
-      contentItem.nameGist,
-      contentItem.instaTags,
-      contentItem.tgTags
-    )
+    for (const sn in postTexts) {
+      cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+    }
   }
 
   const result: string[] = [
@@ -114,7 +109,7 @@ export async function makeContentPlanPreDetails(
   return result.join('\n')
 }
 
-export function makeContentPlanFinalDetails(
+export async function makeContentPlanFinalDetails(
   blogName: string,
   tgChat: TgChat,
   state: ContentItemState,
@@ -123,34 +118,11 @@ export function makeContentPlanFinalDetails(
   postTexts?: Partial<Record<SnType, string>>,
   footerTgTmplMd?: string
 ) {
-  // TODO: наверное лучше готовый html превращать в чистый
-  let cleanTexts: Partial<Record<SnType, string>> | undefined
-  cleanTexts = {}
+  let cleanTexts: Partial<Record<SnType, string>> = {}
 
   for (const sn in postTexts) {
     cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
   }
-
-  // TODO: учитывать poll
-
-  // TODO: почему здесь ???
-  // const clearTexts = makeClearTextsFromNotion(
-  //   state.sns,
-  //   state.pubType,
-  //   state.useFooter,
-  //   tgChat.app.blogs[blogName].sn.telegram,
-  //   pageBlocks,
-  //   // TODO: это только для анонса
-  //   state.replacedHtmlText,
-  //   state.instaTags,
-  //   parsedContentItem.tgTags,
-  // );
-
-
-  // // TODO: преобразовывать только после вставки тэгов
-  // const footerTmplHtml = await commonMdToTgHtml(footerTmpl)
-  // const cleanFooterTmpl = await clearMd(footerTmpl)
-  // const footerStr = prepareFooter(footerTmplHtml, tgTags,true)
 
   const result: string[] = [
     tgChat.app.i18n.commonPhrases.linkWebPreview

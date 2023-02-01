@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
+import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
@@ -12,6 +12,10 @@ export function validateContentPlanPost(tgChat: TgChat, state: ContentItemState)
   // TODO: наверное тут же вызывать validateContentPlanPostText
   // TODO: проверка длинн
   // TODO: photos, narrative - должны иметь 1 или более картинок
+
+  if (!resolvedSns.length) await tgChat.reply(
+    WARN_SIGN + ' ' + tgChat.app.i18n.errors.noSns
+  )
 
   // if image based post has no image
   if ([

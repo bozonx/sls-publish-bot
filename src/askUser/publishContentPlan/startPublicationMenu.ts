@@ -121,7 +121,7 @@ export async function startPublicationMenu(
         await tgChat.reply(postTexts?.instagram!)
       }
       // print details
-      await tgChat.reply(makeContentPlanFinalDetails(
+      await tgChat.reply(await makeContentPlanFinalDetails(
         blogName,
         tgChat,
         state,

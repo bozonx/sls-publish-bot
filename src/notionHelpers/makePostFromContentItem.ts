@@ -61,12 +61,13 @@ export async function makeClearTextsFromNotion(
 export function makePostFromContentItem(
   sns: SnType[],
   item: ContentItem,
-  state: ContentItemState,
+  //state: ContentItemState,
   textBlocks?: NotionBlocks,
   footerTmplMd?: string
 ): Partial<Record<SnType, string>> {
   const result = {} as Record<SnType, string>;
 
+  // TODO: для poll пусто
   // TODO: сделать тексты для каждой соц сети
   const resultTextHtml = (state.replacedHtmlText)
     ? state.replacedHtmlText
