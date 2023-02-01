@@ -7,7 +7,7 @@ import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {makeTgHtmlFromNotion} from '../../notionHelpers/makeTgHtmlFromNotion.js';
 import PollData from '../../types/PollData.js';
-import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
+import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {publishFork} from '../../publish/publishFork.js';
 import {NotionBlocks} from '../../types/notion.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
@@ -42,8 +42,7 @@ export async function startPublicationMenu(
   item: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
-  // TODO: использовать
-  //footerTmplMd?: string
+  footerTgTmplMd?: string
 ) {
   const state: PublishMenuState = {
     usePreview: true,
@@ -67,7 +66,7 @@ export async function startPublicationMenu(
 
       if (item.type === PUBLICATION_TYPES.poll) {
 
-        // TODO: сформировать из notion
+        // TODO: сформировать из notion pageBlocks
 
         pollData = {
           question: 'some question',
@@ -81,8 +80,7 @@ export async function startPublicationMenu(
           state.sns,
           item.type,
           state.useFooter,
-          // TODO: наверное передать уже готовый футер
-          tgChat.app.blogs[blogName].sn.telegram,
+          footerTgTmplMd,
           pageBlocks,
           // TODO: это только для анонса
           state.replacedHtmlText,

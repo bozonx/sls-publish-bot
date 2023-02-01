@@ -1,6 +1,5 @@
 import {NotionBlocks} from '../types/notion.js';
 import {prepareFooter, resolveTgFooter} from '../helpers/helpers.js';
-import {BlogTelegramConfig} from '../types/BlogsConfig.js';
 import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
@@ -11,9 +10,9 @@ export function makeTgHtmlFromNotion(
   sns: SnType[],
   pubType: PublicationType,
   useTgFooter: boolean,
-  tgBlogConfig?: BlogTelegramConfig,
+  footerTmplMd?: string,
   textBlocks?: NotionBlocks,
-  // TODO: а точно он html???
+  // replaced text for annoucement
   replacedHtmlText?: string,
   instaTags?: string[],
   tgTags?: string[],
