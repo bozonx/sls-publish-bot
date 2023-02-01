@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat.js';
 import {makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
-import {SN_TYPES, SnType} from '../types/snTypes.js';
+import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ROOT_LEVEL_BLOCKS} from '../notionHelpers/requestPageBlocks.js';
 import {publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';

@@ -14,6 +14,7 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {printPost} from '../../publish/publishHelpers.js';
+import {transformHtmlToCleanText} from '../../helpers/transformHtmlToCleanText.js';
 
 
 export interface PublishMenuState {
@@ -62,6 +63,7 @@ export async function startPublicationMenu(
     tgChat.asyncCb(async () => {
       let pollData: PollData | undefined
       let postTexts: Partial<Record<SnType, string>> | undefined
+      let cleanTexts: Partial<Record<SnType, string>> | undefined
 
       if (item.type === PUBLICATION_TYPES.poll) {
 
@@ -87,17 +89,13 @@ export async function startPublicationMenu(
           state.instaTags,
           item.tgTags,
         )
+        cleanTexts = {}
+
+        for (const sn in postTexts) {
+          cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+        }
       }
 
-      // TODO: если poll - то подругому делать
-
-      // TODO: сделать тексты для каждой соц сети
-      const resultTextHtml = (state.replacedHtmlText)
-        ? state.replacedHtmlText
-        // TODO: сформировать правильный текст поста взависимости от типа
-        : 'text'
-      // TODO: do it
-      const resultTextClear = 'clear text'
       const finalMediaGroup: MediaGroupItem[] = (state.replacedMediaGroup?.length)
         ? state.replacedMediaGroup
         : (
@@ -121,7 +119,7 @@ export async function startPublicationMenu(
         postAsText,
         finalMediaGroup,
         state.urlBtn,
-        resultTextHtml
+        postTexts?.telegram
       )
 
       await tgChat.reply(makeContentPlanFinalDetails(
@@ -129,6 +127,7 @@ export async function startPublicationMenu(
         tgChat,
         state,
         item,
+        cleanTexts || {}
       ))
 
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
@@ -139,7 +138,7 @@ export async function startPublicationMenu(
             tgChat,
             state,
             item.type,
-            postTexts,
+            postTexts || {},
             // it's for article only
             pageBlocks,
             // article title

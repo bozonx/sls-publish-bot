@@ -13,7 +13,7 @@ export async function publishFork(
   tgChat: TgChat,
   state: PublishMenuState,
   pubType: PublicationType,
-  postTexts: Record<SnType, string>,
+  postTexts: Partial<Record<SnType, string>>,
   articleBlocks?: NotionBlocks,
   articleTitle?: string,
   //tgTags?: string[],

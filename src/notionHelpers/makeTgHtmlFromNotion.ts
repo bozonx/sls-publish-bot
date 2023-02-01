@@ -20,6 +20,11 @@ export function makeTgHtmlFromNotion(
 ): Partial<Record<SnType, string>> {
   const result = {} as Record<SnType, string>;
 
+  // TODO: сделать тексты для каждой соц сети
+  const resultTextHtml = (state.replacedHtmlText)
+    ? state.replacedHtmlText
+    // TODO: сформировать правильный текст поста взависимости от типа
+    : 'text'
   // TODO: remake to HTML all
   // TODO: сделать сразу пост для статьи
 

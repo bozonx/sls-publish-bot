@@ -118,7 +118,8 @@ export function makeContentPlanFinalDetails(
   blogName: string,
   tgChat: TgChat,
   state: PublishMenuState,
-  contentItem: ContentItem
+  contentItem: ContentItem,
+  cleanTexts: Partial<Record<SnType, string>>
 ) {
   // TODO: наверное лучше готовый html превращать в чистый
 
