@@ -8,7 +8,7 @@ import {
   publishTgText,
   publishTgVideo
 } from '../apiTg/publishTg.js';
-import {makePublishInfoMessage} from './publishHelpers.js';
+import {makePost2000Text, makePublishInfoMessage, resolveImageUrl} from './publishHelpers.js';
 import {PostponeTgPostTask, TASK_TYPES} from '../types/TaskItem.js';
 import {SN_TYPES} from '../types/snTypes.js';
 import PollData from '../types/PollData.js';
@@ -16,6 +16,87 @@ import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 import {PrimitiveMediaGroup} from '../types/types.js';
 
+
+/**
+ * Register custom post creating task
+ */
+export async function registerCustomPostTg(
+  blogName: string,
+  tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  resultTextHtml: string,
+  postAsText: boolean,
+  usePreview: boolean,
+  mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
+  urlBtn?: TgReplyBtnUrl,
+  autoDeleteIsoDateTime?: string
+) {
+  if (postAsText) {
+    // post as only text
+    const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
+    const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl);
+
+    await makePublishTaskTgOnlyText(
+      blogName,
+      tgChat,
+      isoDate,
+      time,
+      post2000Txt,
+      (imgUrl) ? true : usePreview,
+      urlBtn,
+      autoDeleteIsoDateTime
+    );
+  }
+  else if (mediaGroup.length > 1) {
+    //const imgUrls = mediaGroup.map((el: any) => el.fileId || el.url || undefined)
+    // post several images
+    await makePublishTaskTgMediaGroup(
+      blogName,
+      tgChat,
+      isoDate,
+      time,
+      mediaGroup,
+      resultTextHtml,
+      autoDeleteIsoDateTime
+    );
+  }
+  else {
+    // post as image or video caption
+    if (mediaGroup[0].type === 'video') {
+      if (!mediaGroup[0].fileId) throw new Error(`No video fileId`);
+
+      await makePublishTaskTgVideo(
+        blogName,
+        tgChat,
+        isoDate,
+        time,
+        mediaGroup[0].fileId,
+        resultTextHtml,
+        urlBtn,
+        autoDeleteIsoDateTime
+      );
+    }
+    else {
+      const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
+
+      if (!imgUrl) throw new Error(`No image`);
+
+      await makePublishTaskTgImage(
+        blogName,
+        tgChat,
+        isoDate,
+        time,
+        imgUrl,
+        resultTextHtml,
+        urlBtn,
+        autoDeleteIsoDateTime
+      );
+    }
+  }
+
+  await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
+}
 
 /**
  * Post only text to telegram, without image
