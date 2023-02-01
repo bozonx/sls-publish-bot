@@ -1,7 +1,7 @@
 import {NotionBlocks} from '../types/notion.js';
-import {prepareFooter, resolveTgFooter} from './helpers.js';
+import {prepareFooter, resolveTgFooter} from '../helpers/helpers.js';
 import {BlogTelegramConfig} from '../types/BlogsConfig.js';
-import {transformNotionToTelegramPostMd} from './transformNotionToTelegramPostMd.js';
+import {transformNotionToTelegramPostMd} from '../helpers/transformNotionToTelegramPostMd.js';
 import {makeTagsString} from '../lib/common.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PublicationType} from '../types/publicationType.js';
@@ -19,6 +19,8 @@ export function makeTgPostTextFromNotion(
   tgTags?: string[],
 ): Record<SnType, string> {
   const result = {} as Record<SnType, string>;
+
+  // TODO: remake to HTML all
 
   for (const sn of sns) {
     result[sn] = (textBlocks)

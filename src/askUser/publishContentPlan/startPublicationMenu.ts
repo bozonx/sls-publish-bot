@@ -5,7 +5,7 @@ import {askPublicationMenu} from './askPublicationMenu.js';
 import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
-import {makeTgPostTextFromNotion} from '../../helpers/makeTgPostTextFromNotion.js';
+import {makeTgPostTextFromNotion} from '../../notionHelpers/makeTgPostTextFromNotion.js';
 import PollData from '../../types/PollData.js';
 import {PUBLICATION_TYPES, PublicationType} from '../../types/publicationType.js';
 import {publishFork} from '../../publish/publishFork.js';
@@ -60,20 +60,6 @@ export async function startPublicationMenu(
     item,
     validateContentPlanPost,
     tgChat.asyncCb(async () => {
-      // TODO: не делать если poll
-      // TODO: а нужно ли это тут делать???? или всетаки уже в fork ???
-      const postTexts = makeTgPostTextFromNotion(
-        state.sns,
-        item.type,
-        state.useFooter,
-        tgChat.app.blogs[blogName].sn.telegram,
-        pageBlocks,
-        // TODO: это только для анонса
-        state.replacedHtmlText,
-        state.instaTags,
-        item.tgTags,
-      );
-
       let pollData: PollData | undefined;
 
       if (item.type === PUBLICATION_TYPES.poll) {
@@ -85,7 +71,20 @@ export async function startPublicationMenu(
           options: ['1', '2'],
           isAnonymous: true,
           type: 'regular',
-        };
+        }
+      }
+      else {
+        const postTexts = makeTgPostTextFromNotion(
+          state.sns,
+          item.type,
+          state.useFooter,
+          tgChat.app.blogs[blogName].sn.telegram,
+          pageBlocks,
+          // TODO: это только для анонса
+          state.replacedHtmlText,
+          state.instaTags,
+          item.tgTags,
+        )
       }
 
       // TODO: если poll - то подругому делать
