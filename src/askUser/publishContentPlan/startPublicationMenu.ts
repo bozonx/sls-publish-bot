@@ -97,7 +97,7 @@ export async function startPublicationMenu(
         postTexts = makePostFromContentItem(
           state.sns,
           item,
-          state,
+          //state,
           pageBlocks,
           footerTgTmplMd
         )
