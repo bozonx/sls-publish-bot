@@ -44,6 +44,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     }
 
     const blogSns = Object.keys(tgChat.app.blogs[blogName].sn) as SnType[];
+    // TODO: remake
     const footerTmplMd = resolveTgFooter(
       true,
       parsedContentItem.type,

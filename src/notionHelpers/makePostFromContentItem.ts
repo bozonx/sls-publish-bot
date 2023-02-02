@@ -19,13 +19,12 @@ export async function makePostFromContentItem(
   //state: ContentItemState,
   textBlocks?: NotionBlocks,
   footerTmplMd?: string,
-  replacedHtmlText?: string
+  replacedHtmlText?: string,
+  instaTags?: string[]
 ): Promise<Partial<Record<SnType, string>>> {
-  const result = {} as Record<SnType, string>;
+  const result = {} as Record<SnType, string>
 
-  // TODO: сделать сразу пост для статьи ???
-  //       нужно же сформировать поидее уже после опубликованной статьи
-  //       или может сюда воткнуть темплейт
+  // TODO: use makeResultPostText
 
   if (sns.includes(SN_TYPES.telegram)) {
     // it's for announcement
@@ -40,6 +39,7 @@ export async function makePostFromContentItem(
     }
 
     if (result[SN_TYPES.telegram]) {
+      // TODO: нужно взять нужный футер
       result[SN_TYPES.telegram] += await commonMdToTgHtml(
         prepareFooter(footerTmplMd, item.tgTags)
       )

@@ -4,7 +4,7 @@ import BaseState from '../types/BaseState.js';
 import TgChat from '../apiTg/TgChat.js';
 import {ChatEvents, ISO_DATE_FORMAT, PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
-import {BlogTelegramConfig} from '../types/BlogsConfig.js';
+import {BlogBaseConfig, BlogTelegramConfig} from '../types/BlogsConfig.js';
 import {isPromise, makeTagsString} from '../lib/common.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
@@ -135,15 +135,10 @@ export function replaceHorsInDate(isoDateTime: string, hours: number): string {
     .format()
 }
 
-// prepareFooterPost
-export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = true): string {
-  if (!tmpl || !useFooter) return '';
-
-  // TODO: useFooter не нужнен ???
-
-  return _.template(tmpl)({
-    TAGS: makeTagsString(tags)
-  });
+export function compactButtons(buttons: ((TgReplyButton | undefined)[] | undefined)[]): TgReplyButton[][] {
+  return compactUndefined(buttons)
+    .map((item) => compactUndefined(item))
+    .filter((item) => Boolean(item.length));
 }
 
 /**
@@ -158,56 +153,45 @@ export function makeResultPostText(
   // clean or full footer
   footerTmpl?: string
 ): string {
-  const footerStr = prepareFooter(footerTmpl, tags, useFooter);
+  const footerStr = prepareFooter(footerTmpl, tags, useFooter)
 
-  return _.trim((_.trim(postText) || '') + '\n\n' + footerStr);
+  return _.trim((_.trim(postText) || '') + '\n\n' + footerStr)
 }
 
-export function compactButtons(buttons: ((TgReplyButton | undefined)[] | undefined)[]): TgReplyButton[][] {
-  return compactUndefined(buttons)
-    .map((item) => compactUndefined(item))
-    .filter((item) => Boolean(item.length));
+// prepareFooterPost
+export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = true): string {
+  if (!tmpl || !useFooter) return '';
+
+  // TODO: useFooter не нужнен ???
+
+  return _.template(tmpl)({
+    TAGS: makeTagsString(tags)
+  });
 }
 
-export function resolveTgFooter(
-  useTgFooter: boolean,
+/**
+ * Resolve footer which is corresponding to publication type
+ */
+export function resolvePostFooter(
   pubType: PublicationType,
-  tgBlogConfig?: BlogTelegramConfig
+  blogConfig: BlogBaseConfig,
+  useFooter: boolean = true
 ): string | undefined {
-  if (!useTgFooter) return;
-
-  let footerStr: string | undefined;
+  if (!useFooter) return
 
   switch (pubType) {
     case PUBLICATION_TYPES.article:
-      // TODO: свой футер !!!!
-      //footerStr = tgBlogConfig?.storyFooter;
-      //tgChat.app.blogs[blogName].sn.telegram?.articleFooter,
-      // const cleanText = transformNotionToCleanText(textBlocks);
-      break;
-    case PUBLICATION_TYPES.mem:
-      footerStr = tgBlogConfig?.memFooter;
-
-      break;
-    case PUBLICATION_TYPES.story:
-      footerStr = tgBlogConfig?.storyFooter;
-
-      break;
-    case PUBLICATION_TYPES.reels:
-      footerStr = tgBlogConfig?.reelFooter;
-
-      break;
+      return
     case PUBLICATION_TYPES.poll:
-      break;
-
-    // TODO: ??? photos, narrative - наверное свои футеры
-
+      return
+    case PUBLICATION_TYPES.mem:
+      return (blogConfig as BlogTelegramConfig)?.memFooter
+    case PUBLICATION_TYPES.story:
+      return (blogConfig as BlogTelegramConfig)?.storyFooter
+    case PUBLICATION_TYPES.reels:
+      return (blogConfig as BlogTelegramConfig)?.reelFooter
     default:
-      // post1000, post2000, announcement
-      footerStr = tgBlogConfig?.postFooter;
-
-      break;
+      // post1000, post2000, announcement, photos, narrative
+      return (blogConfig as BlogTelegramConfig)?.postFooter;
   }
-
-  return footerStr;
 }

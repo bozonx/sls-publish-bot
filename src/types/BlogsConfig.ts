@@ -13,6 +13,8 @@ export interface BlogTelegramConfig extends BlogBaseConfig {
   storyFooter?: string;
   memFooter?: string;
   reelFooter?: string;
+  photosFooter?: string;
+  narrativeFooter?: string;
   articlePostTmpl?: string;
   articleFooter?: string;
 }
