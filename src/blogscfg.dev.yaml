@@ -32,5 +32,5 @@ test:
     postFooter:  "${ TAGS }"
   zen: {}
   site:
-    postFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
-    articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
+    postFooter:    'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'
+    articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'

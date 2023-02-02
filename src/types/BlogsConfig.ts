@@ -2,7 +2,8 @@ import {PublicationType} from './publicationType.js';
 
 export interface BlogBaseConfig {
   // some PUBLICATION_TYPES
-  supportedTypes: PublicationType[];
+  supportedTypes: PublicationType[]
+  postFooter?: string
 }
 export interface BlogTelegramConfig extends BlogBaseConfig {
   channelId: number | string;
@@ -14,7 +15,14 @@ export interface BlogTelegramConfig extends BlogBaseConfig {
   reelFooter?: string;
   articlePostTmpl?: string;
   articleFooter?: string;
-  //articleFooter?: (TelegraphNode | string)[];
+}
+export interface BlogInstagramConfig extends BlogBaseConfig {
+}
+export interface BlogSiteConfig extends BlogBaseConfig {
+  articleFooter?: string;
+}
+export interface BlogZenConfig extends BlogBaseConfig {
+  articleFooter?: string;
 }
 
 export interface BlogConfig {
@@ -28,13 +36,10 @@ export interface BlogConfig {
     contragentsTgDbId: string;
   },
   sn: {
-    telegram?: BlogTelegramConfig;
-    instagram?: {
-    };
-    zen?: {
-    };
-    site?: {
-    };
+    telegram?: BlogTelegramConfig
+    instagram?: BlogInstagramConfig
+    zen?: BlogZenConfig
+    site?: BlogSiteConfig
   };
 }
 
