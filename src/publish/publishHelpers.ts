@@ -55,18 +55,12 @@ export function makeContentLengthDetails(
       )
     }
   }
-
-  if (clearTexts.site) {
-    result.push(
-      `Site. ${i18n.pageInfo.contentLength}: ${clearTexts.site.length}`
-    )
-  }
-
   if (clearTexts.zen) {
     result.push(
       `Zen. ${i18n.pageInfo.contentLength}: ${clearTexts.zen.length}`
     )
   }
+  // Blogger doesn't have a post. It will be an article
 
   return result.join('\n')
 }

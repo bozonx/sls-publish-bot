@@ -4,7 +4,6 @@ import {TgReplyButton} from '../types/TgReplyButton.js'
 
 
 export const MAIN_MENU_ACTION = {
-  SITE: 'SITE',
   TASKS: 'TASKS',
   TELEGRAPH: 'TELEGRAPH',
 };

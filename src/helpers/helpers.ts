@@ -174,24 +174,29 @@ export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = tr
  */
 export function resolvePostFooter(
   pubType: PublicationType,
-  blogConfig: BlogBaseConfig,
-  useFooter: boolean = true
+  blogConfig: BlogBaseConfig
 ): string | undefined {
-  if (!useFooter) return
-
   switch (pubType) {
     case PUBLICATION_TYPES.article:
       return
     case PUBLICATION_TYPES.poll:
       return
     case PUBLICATION_TYPES.mem:
-      return (blogConfig as BlogTelegramConfig)?.memFooter
+      if ((blogConfig as BlogTelegramConfig)?.memFooter)
+        return (blogConfig as BlogTelegramConfig)?.memFooter
+
+      break
     case PUBLICATION_TYPES.story:
-      return (blogConfig as BlogTelegramConfig)?.storyFooter
+      if ((blogConfig as BlogTelegramConfig)?.storyFooter)
+        return (blogConfig as BlogTelegramConfig)?.storyFooter
+
+      break
     case PUBLICATION_TYPES.reels:
-      return (blogConfig as BlogTelegramConfig)?.reelFooter
-    default:
-      // post1000, post2000, announcement, photos, narrative
-      return (blogConfig as BlogTelegramConfig)?.postFooter;
+      if ((blogConfig as BlogTelegramConfig)?.reelFooter)
+        return (blogConfig as BlogTelegramConfig)?.reelFooter
+
+      break
   }
+  // post1000, post2000, announcement, photos, narrative
+  return (blogConfig as BlogTelegramConfig)?.postFooter
 }

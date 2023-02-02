@@ -1,12 +1,11 @@
 import {NotionBlocks} from '../types/notion.js';
-import {prepareFooter} from '../helpers/helpers.js';
-import {makeTagsString} from '../lib/common.js';
+import {makeResultPostText, resolvePostFooter} from '../helpers/helpers.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import ContentItem from '../types/ContentItem.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';
 import {transformNotionToTgHtml} from '../helpers/transformNotionToTgHtml.js';
-import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
+import {BlogConfig} from '../types/BlogsConfig.js';
 
 
 /**
@@ -15,69 +14,59 @@ import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
  */
 export async function makePostFromContentItem(
   sns: SnType[],
+  blogCfg: BlogConfig,
   item: ContentItem,
-  //state: ContentItemState,
+  useFooter: boolean,
   textBlocks?: NotionBlocks,
-  footerTmplMd?: string,
   replacedHtmlText?: string,
   instaTags?: string[]
 ): Promise<Partial<Record<SnType, string>>> {
   const result = {} as Record<SnType, string>
 
-  // TODO: use makeResultPostText
-
   if (sns.includes(SN_TYPES.telegram)) {
-    // it's for announcement
-    if (replacedHtmlText) {
-      result[SN_TYPES.telegram] = replacedHtmlText
-    }
-    else if (![
+    // replacedHtmlText for announcement
+    let postText = replacedHtmlText
+
+    if (![
       PUBLICATION_TYPES.article,
       PUBLICATION_TYPES.poll,
     ].includes(item.type) && textBlocks) {
-      result[SN_TYPES.telegram] = transformNotionToTgHtml(textBlocks)
+      postText = transformNotionToTgHtml(textBlocks)
     }
 
-    if (result[SN_TYPES.telegram]) {
-      // TODO: нужно взять нужный футер
-      result[SN_TYPES.telegram] += await commonMdToTgHtml(
-        prepareFooter(footerTmplMd, item.tgTags)
+    if (postText) {
+      result[SN_TYPES.telegram] = makeResultPostText(
+        item.tgTags || [],
+        useFooter,
+        postText,
+        resolvePostFooter(item.type, blogCfg.sn.telegram!)
       )
     }
   }
 
   if (sns.includes(SN_TYPES.instagram)) {
-    // it's for announcement
-    if (replacedHtmlText) result[SN_TYPES.instagram] = replacedHtmlText
-    else if (![
+    let postText = replacedHtmlText
+
+    if (![
       PUBLICATION_TYPES.article,
       PUBLICATION_TYPES.poll,
     ].includes(item.type) && textBlocks) {
       // TODO: а может лучше делать html ???
-      result[SN_TYPES.instagram] = transformNotionToInstagramPost(textBlocks)
+      postText = transformNotionToInstagramPost(textBlocks)
     }
 
     if (result[SN_TYPES.instagram]) {
-      // TODO: add footer специально для инсты
       // add tags at the end of text
-      result[SN_TYPES.instagram] +=  '\n\n' + makeTagsString(instaTags);
+      result[SN_TYPES.instagram] = makeResultPostText(
+        instaTags || [],
+        useFooter,
+        postText,
+        resolvePostFooter(item.type, blogCfg.sn.instagram!)
+      )
     }
   }
 
-  if (sns.includes(SN_TYPES.site)) {
-    // it's for announcement
-    if (replacedHtmlText) result[SN_TYPES.site] = replacedHtmlText
-    else if (![
-      PUBLICATION_TYPES.article,
-      PUBLICATION_TYPES.poll,
-    ].includes(item.type) && textBlocks) {
-      result[SN_TYPES.telegram] = transformNotionToTgHtml(textBlocks)
-    }
-
-    if (result[SN_TYPES.site]) {
-      // TODO: add footer специально для сайта
-    }
-  }
+  // in site post will be converted to article
 
   return result
 }

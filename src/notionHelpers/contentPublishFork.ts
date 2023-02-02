@@ -73,7 +73,7 @@ export async function contentPublishFork(
         }
 
         break;
-      case SN_TYPES.site:
+      case SN_TYPES.blogger:
         if (pubType === PUBLICATION_TYPES.article) {
           await tgChat.reply(`Publication to site isn't supported at the moment`)
           await tgChat.steps.back()
@@ -82,11 +82,12 @@ export async function contentPublishFork(
           PUBLICATION_TYPES.post1000,
           PUBLICATION_TYPES.post2000,
         ].includes(pubType)) {
+          // TODO: convert to article
           await tgChat.reply(`Publication to site isn't supported at the moment`)
           await tgChat.steps.back()
         }
         else {
-          await tgChat.reply(`Site doesn't support ${pubType}`)
+          await tgChat.reply(`Blogger doesn't support ${pubType}`)
           await tgChat.steps.back()
         }
 

@@ -5,7 +5,7 @@ import {prepareContentItem} from '../../publish/parseContent.js';
 import ContentItem from '../../types/ContentItem.js';
 import {loadNotPublished} from '../../notionHelpers/requestContentPlan.js';
 import {requestPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
-import {resolveSns, resolveTgFooter} from '../../helpers/helpers.js';
+import {resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
 import {printImage, printContentItemInitialDetails} from '../../publish/printContentItemInfo.js';
 import {SnType} from '../../types/snTypes.js';

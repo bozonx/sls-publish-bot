@@ -4,15 +4,15 @@ import {PUBLICATION_TYPES} from './publicationType.js';
 export type SnType = 'telegram'
   | 'instagram'
   | 'zen'
-  | 'site'
+  | 'blogger'
   | 'youtube'
-  | 'tiktok';
+  | 'tiktok'
 
 export const SN_TYPES: Record<SnType, SnType> = {
   telegram: 'telegram',
   instagram: 'instagram',
   zen: 'zen',
-  site: 'site',
+  blogger: 'blogger',
   tiktok: 'tiktok',
   youtube: 'youtube',
 }
@@ -48,7 +48,7 @@ export const SN_SUPPORT_TYPES = {
     PUBLICATION_TYPES.reels,
     PUBLICATION_TYPES.video,
   ],
-  [SN_TYPES.site]: [
+  [SN_TYPES.blogger]: [
     PUBLICATION_TYPES.article,
     PUBLICATION_TYPES.post1000,
     PUBLICATION_TYPES.post2000,
