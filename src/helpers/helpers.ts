@@ -207,6 +207,8 @@ export function resolvePostFooter(
 export async function makeCleanTexts(
   postTexts?: Partial<Record<SnType, string>>
 ): Promise<Partial<Record<SnType, string>> | undefined> {
+  if (!postTexts) return
+
   let cleanTexts: Partial<Record<SnType, string>> = {}
 
   for (const sn in postTexts) {

@@ -1,4 +1,10 @@
-import {MAX_INSTA_TAGS, TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants.js';
+import {
+  INSTAGRAM_MAX_POST,
+  MAX_INSTA_TAGS,
+  TELEGRAM_MAX_CAPTION,
+  TELEGRAM_MAX_POST,
+  WARN_SIGN
+} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
 import {SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
@@ -63,6 +69,11 @@ export async function validateContentPlanPost(
   else if ((state.instaTags?.length || 0) > MAX_INSTA_TAGS) {
     throw tgChat.app.i18n.errors.toManyInstaTags
   }
+  // TODO: add
+  // // if post2000 has video
+  // else if (state.postAsText && state.mediaGroup.length && state.mediaGroup[0].type === 'video') {
+  //   throw tgChat.app.i18n.message.post2000video;
+  // }
   // no text no image
   for (const sn of state.sns) {
     if ([
@@ -74,30 +85,39 @@ export async function validateContentPlanPost(
       PUBLICATION_TYPES.narrative,
       PUBLICATION_TYPES.announcement,
       PUBLICATION_TYPES.reels,
-    ].includes(item.type) && !postTexts?[sn as SnType] && !state.mainImgUrl && !state.replacedMediaGroup?.length) {
+    ].includes(item.type) && !postTexts?.[sn as SnType] && !state.mainImgUrl && !state.replacedMediaGroup?.length) {
       throw tgChat.app.i18n.errors.noImageNoText + ' - ' + sn
+    }
+    // if text based post has no text
+    else if ([
+      PUBLICATION_TYPES.post2000,
+      PUBLICATION_TYPES.announcement,
+    ].includes(item.type) && !postTexts?.[sn as SnType]) {
+      throw tgChat.app.i18n.errors.noText
     }
   }
 
-  validateContentLengths(tgChat, item.type, postTexts)
+  await validateContentLengths(tgChat, item.type, postTexts)
 }
 
 
-export function validateContentLengths(
+export async function validateContentLengths(
   tgChat: TgChat,
   pubType: PublicationType,
   postTexts: Partial<Record<SnType, string>> | undefined
 ) {
-  const cleanTexts = await makeCleanTexts(postTexts) || {}
+  const cleanTexts = await makeCleanTexts(postTexts)
 
-  for (const sn of Object.keys(clearTexts) as SnType[]) {
-    const clearText = clearTexts[sn];
+  if (!cleanTexts) return
+
+  if (cleanTexts?.telegram) {
+    const clearText = cleanTexts.telegram!
     // if post2000 or announcement is bigger than 2048
     if ([
       PUBLICATION_TYPES.post2000,
       PUBLICATION_TYPES.announcement
     ].includes(pubType) && clearText.length > TELEGRAM_MAX_POST) {
-      throw tgChat.app.i18n.errors.bigPost;
+      throw tgChat.app.i18n.errors.bigPost
     }
     // if image caption too big
     else if ([
@@ -108,16 +128,24 @@ export function validateContentLengths(
       PUBLICATION_TYPES.narrative,
       PUBLICATION_TYPES.reels,
     ].includes(pubType) && clearText.length > TELEGRAM_MAX_CAPTION) {
-      throw tgChat.app.i18n.errors.bigCaption;
-    }
-    // if text based post has no text
-    else if ([
-      PUBLICATION_TYPES.article,
-      PUBLICATION_TYPES.post1000,
-      PUBLICATION_TYPES.post2000,
-      PUBLICATION_TYPES.announcement,
-    ].includes(pubType) && !clearText) {
-      throw tgChat.app.i18n.errors.noText;
+      throw tgChat.app.i18n.errors.bigCaption
     }
   }
+  else if (cleanTexts?.instagram) {
+    const clearText = cleanTexts.instagram
+
+    if (clearText.length > INSTAGRAM_MAX_POST) {
+      // TODO: а пост для insta ???
+
+    }
+  }
+  else if (cleanTexts?.zen) {
+    const clearText = cleanTexts.zen
+
+    if (clearText.length > INSTAGRAM_MAX_POST) {
+      // TODO: а пост для zen ???
+
+    }
+  }
+
 }
