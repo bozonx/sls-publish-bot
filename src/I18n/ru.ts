@@ -211,6 +211,8 @@ const dict = {
     noSns: 'Нет соц сетей для публикации',
     pollIsClosed: '⚠️ Опрос уже закрыт',
     noImage: 'Нет картинки/видео',
+    noImages: 'Нет картинок/видео',
+    moreThanOneImage: 'Загружено более одной картинки',
     noText: 'Нет текста',
     noImageNoText: 'Нет ни картинки ни текста',
     unsupportedPubType: 'Соц сеть "${SN}" не поддерживает тип публикации ${PUB_TYPE}',

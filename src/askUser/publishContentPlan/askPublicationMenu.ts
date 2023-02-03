@@ -56,7 +56,7 @@ export async function askPublicationMenu(
   tgChat: TgChat,
   state: ContentItemState,
   item: ContentItem,
-  validate: (tgChat: TgChat, state: ContentItemState) => void,
+  validate: (tgChat: TgChat, item: ContentItem, state: ContentItemState) => void,
   onDone: () => void,
 ) {
   await addSimpleStep(
@@ -65,7 +65,7 @@ export async function askPublicationMenu(
       let disableOk = false
 
       try {
-        validate(tgChat, state)
+        validate(tgChat, item, state)
       }
       catch (e) {
         tgChat.reply(`${WARN_SIGN} ${e}`)
@@ -204,7 +204,7 @@ async function handleButtons(
   tgChat: TgChat,
   state: ContentItemState,
   item: ContentItem,
-  validate: (tgChat: TgChat, state: ContentItemState) => void,
+  validate: (tgChat: TgChat, item: ContentItem, state: ContentItemState) => void,
   onDone: () => void
 ) {
   switch (queryData) {
