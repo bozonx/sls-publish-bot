@@ -41,8 +41,6 @@ export async function startPublicationMenu(
   item: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
-  // TODO: зачем ???? -
-  //footerTgTmplMd?: string
 ) {
   const state: ContentItemState = {
     usePreview: true,

@@ -13,13 +13,19 @@ import {makePostFromContentItem} from '../notionHelpers/makePostFromContentItem.
 
 export async function printContentItemInitialDetails(
   tgChat: TgChat,
+  blogName: string,
   resolvedSns: SnType[],
   contentItem: ContentItem,
   pageBlocks?: NotionBlocks,
-
-  // TODO: not need
-  footerTmplMd?: string
+  instaTags?: string[]
 ) {
+  // TODO: remake - remove
+  // const footerTmplMd = resolveTgFooter(
+  //   true,
+  //   parsedContentItem.type,
+  //   tgChat.app.blogs[blogName].sn.telegram
+  // )
+
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
     const footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, contentItem.tgTags,true))
     // print footer if it is used
@@ -36,9 +42,10 @@ export async function printContentItemInitialDetails(
     resolvedSns,
     tgChat.app.blogs[blogName],
     contentItem,
+    // TODO: просто проверить есть ли он
     useFooter,
     pageBlocks,
-    replacedHtmlText,
+    undefined,
     instaTags
   )
   // send record's info from content plan
@@ -49,10 +56,8 @@ export async function printContentItemInitialDetails(
       tgChat.app.i18n,
       tgChat.app.appConfig.utcOffset,
       resolvedSns,
-      postTexts,
-      pageBlocks,
-      // TODO: футер должен быть зарезовленый, а это хуйхня
-      footerTmplMd
+      useFooter,
+      postTexts
     )
   )
 }
@@ -63,9 +68,10 @@ export async function makeContentPlanPreDetails(
   i18n: typeof ru,
   utcOffset: number,
   resolvedSns: SnType[],
+  useFooter: boolean,
   postTexts: Partial<Record<SnType, string>>,
-  pageBlocks?: NotionBlocks,
-  footerTmplMd?: string
+  //pageBlocks?: NotionBlocks,
+  //footerTmplMd?: string
 ): Promise<string> {
   const result: string[] = [
     `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(contentItem.date, contentItem.time, utcOffset)}`,
@@ -96,7 +102,7 @@ export async function makeContentPlanPreDetails(
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
     const contentLengthDetails = await makeContentLengthDetails(
       i18n,
-      Boolean(footerTmplMd),
+      useFooter,
       postTexts,
       contentItem.instaTags
     )
@@ -138,7 +144,7 @@ export async function makeContentPlanFinalDetails(
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
     const contentLengthDetails = await makeContentLengthDetails(
       tgChat.app.i18n,
-      Boolean(footerTgTmplMd),
+      useFooter,
       postTexts,
       state.instaTags,
     )

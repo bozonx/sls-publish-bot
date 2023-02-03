@@ -44,12 +44,6 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     }
 
     const blogSns = Object.keys(tgChat.app.blogs[blogName].sn) as SnType[];
-    // TODO: remake
-    const footerTmplMd = resolveTgFooter(
-      true,
-      parsedContentItem.type,
-      tgChat.app.blogs[blogName].sn.telegram
-    )
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type)
     let mainImgUrl = getFirstImageFromNotionBlocks(pageBlocks)
     // if the image wasn't printed then you can set it in page menu
@@ -57,10 +51,11 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
     await printContentItemInitialDetails(
       tgChat,
+      blogName,
       resolvedSns,
       parsedContentItem,
       pageBlocks,
-      footerTmplMd
+      parsedContentItem.instaTags
     )
     await startPublicationMenu(
       blogName,
@@ -68,8 +63,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       resolvedSns,
       parsedContentItem,
       pageBlocks,
-      mainImgUrl,
-      //footerTmplMd
+      mainImgUrl
     )
-  }));
+  }))
 }
