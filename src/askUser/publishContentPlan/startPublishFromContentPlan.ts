@@ -5,7 +5,7 @@ import {prepareContentItem} from '../../publish/parseContent.js';
 import ContentItem from '../../types/ContentItem.js';
 import {loadNotPublished} from '../../notionHelpers/requestContentPlan.js';
 import {requestPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
-import {resolveSns} from '../../helpers/helpers.js';
+import {resolvePostFooter, resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
 import {printImage, printContentItemInitialDetails} from '../../publish/printContentItemInfo.js';
 import {SnType} from '../../types/snTypes.js';
@@ -45,6 +45,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
     const blogSns = Object.keys(tgChat.app.blogs[blogName].sn) as SnType[];
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type)
+    const hasTgFooter = Boolean(resolvePostFooter(parsedContentItem.type, tgChat.app.blogs[blogName].sn.telegram))
     let mainImgUrl = getFirstImageFromNotionBlocks(pageBlocks)
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
@@ -54,6 +55,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       blogName,
       resolvedSns,
       parsedContentItem,
+      hasTgFooter,
       pageBlocks,
       parsedContentItem.instaTags
     )
@@ -61,6 +63,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       blogName,
       tgChat,
       resolvedSns,
+      hasTgFooter,
       parsedContentItem,
       pageBlocks,
       mainImgUrl

@@ -17,7 +17,7 @@ import {printPost} from '../../publish/publishHelpers.js';
 
 
 export interface ContentItemState {
-  useFooter: boolean
+  useTgFooter: boolean
   usePreview: boolean
   sns: SnType[]
   pubTime: string
@@ -28,8 +28,9 @@ export interface ContentItemState {
   replacedMediaGroup?: MediaGroupItem[]
   // it's for announcement
   replacedHtmlText?: string
-  replacedCleanText?: string
+  //replacedCleanText?: string
   urlBtn?: TgReplyBtnUrl
+  // TODO: только для телеги
   autoDeleteIsoDateTime?: string
 }
 
@@ -38,15 +39,14 @@ export async function startPublicationMenu(
   blogName: string,
   tgChat: TgChat,
   resolvedSns: SnType[],
+  hasTgFooter: boolean,
   item: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
 ) {
   const state: ContentItemState = {
     usePreview: true,
-    // TODO: если футера нет то false
-    // TODO: если футера нет не показыват даже переключалку
-    useFooter: true,
+    useTgFooter: hasTgFooter,
     sns: resolvedSns,
     pubTime: item.time,
     instaTags: item.instaTags,
@@ -99,7 +99,7 @@ export async function startPublicationMenu(
           state.sns,
           tgChat.app.blogs[blogName],
           item,
-          state.useFooter,
+          state.useTgFooter,
           pageBlocks,
           state.replacedHtmlText,
           state.instaTags
@@ -130,7 +130,7 @@ export async function startPublicationMenu(
         state,
         item,
         usePreview,
-        state.useFooter,
+        state.useTgFooter,
         postTexts,
       ))
 

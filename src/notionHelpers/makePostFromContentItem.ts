@@ -16,7 +16,7 @@ export async function makePostFromContentItem(
   sns: SnType[],
   blogCfg: BlogConfig,
   item: ContentItem,
-  useFooter: boolean,
+  useTgFooter: boolean,
   textBlocks?: NotionBlocks,
   replacedHtmlText?: string,
   instaTags?: string[]
@@ -37,7 +37,7 @@ export async function makePostFromContentItem(
     if (postText) {
       result[SN_TYPES.telegram] = makeResultPostText(
         item.tgTags || [],
-        useFooter,
+        useTgFooter,
         postText,
         resolvePostFooter(item.type, blogCfg.sn.telegram!)
       )
@@ -59,7 +59,7 @@ export async function makePostFromContentItem(
       // add tags at the end of text
       result[SN_TYPES.instagram] = makeResultPostText(
         instaTags || [],
-        useFooter,
+        true,
         postText,
         resolvePostFooter(item.type, blogCfg.sn.instagram!)
       )

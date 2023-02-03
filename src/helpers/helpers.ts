@@ -174,8 +174,10 @@ export function prepareFooter(tmpl?: string, tags: string[] = [], useFooter = tr
  */
 export function resolvePostFooter(
   pubType: PublicationType,
-  blogConfig: BlogBaseConfig
+  blogConfig?: BlogBaseConfig
 ): string | undefined {
+  if (!blogConfig) return
+
   switch (pubType) {
     case PUBLICATION_TYPES.article:
       return

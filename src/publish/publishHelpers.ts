@@ -22,7 +22,7 @@ export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | u
 
 export async function makeContentLengthDetails(
   i18n: typeof ru,
-  useFooter: boolean,
+  useTgFooter: boolean,
   postTexts: Partial<Record<SnType, string>> = {},
   instaTags: string[] = []
 ): Promise<string> {
@@ -36,7 +36,7 @@ export async function makeContentLengthDetails(
   const result: string[] = []
 
   if (cleanTexts.telegram) {
-    if (useFooter) {
+    if (useTgFooter) {
       result.push(
         `Telegram. ${i18n.pageInfo.contentLength} + ${i18n.commonPhrases.footer}: `
         + cleanTexts.telegram.length

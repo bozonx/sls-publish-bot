@@ -1,6 +1,6 @@
 import TgChat from '../apiTg/TgChat.js';
 import ContentItem from '../types/ContentItem.js';
-import {isoDateToHuman, makeHumanDateTimeStr, prepareFooter} from '../helpers/helpers.js';
+import {isoDateToHuman, makeHumanDateTimeStr, prepareFooter, resolvePostFooter} from '../helpers/helpers.js';
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
@@ -16,34 +16,26 @@ export async function printContentItemInitialDetails(
   blogName: string,
   resolvedSns: SnType[],
   contentItem: ContentItem,
+  hasTgFooter: boolean,
   pageBlocks?: NotionBlocks,
   instaTags?: string[]
 ) {
-  // TODO: remake - remove
-  // const footerTmplMd = resolveTgFooter(
-  //   true,
-  //   parsedContentItem.type,
-  //   tgChat.app.blogs[blogName].sn.telegram
-  // )
-
-  if (contentItem.type !== PUBLICATION_TYPES.poll) {
-    const footerStr = await commonMdToTgHtml(prepareFooter(footerTmplMd, contentItem.tgTags,true))
+  if (contentItem.type !== PUBLICATION_TYPES.poll && hasTgFooter) {
+    const tgFooterMd = resolvePostFooter(contentItem.type, tgChat.app.blogs[blogName].sn.telegram)
+    const footerStr = await commonMdToTgHtml(prepareFooter(tgFooterMd, contentItem.tgTags))
     // print footer if it is used
-    if (footerStr) {
-      await tgChat.reply(
-        tgChat.app.i18n.menu.postFooter + footerStr,
-        undefined,
-        true,
-        true
-      )
-    }
+    await tgChat.reply(
+      tgChat.app.i18n.menu.postFooter + footerStr,
+      undefined,
+      true,
+      true
+    )
   }
   const postTexts = await makePostFromContentItem(
     resolvedSns,
     tgChat.app.blogs[blogName],
     contentItem,
-    // TODO: просто проверить есть ли он
-    useFooter,
+    hasTgFooter,
     pageBlocks,
     undefined,
     instaTags
@@ -56,22 +48,20 @@ export async function printContentItemInitialDetails(
       tgChat.app.i18n,
       tgChat.app.appConfig.utcOffset,
       resolvedSns,
-      useFooter,
+      hasTgFooter,
       postTexts
     )
   )
 }
 
 
-export async function makeContentPlanPreDetails(
+async function makeContentPlanPreDetails(
   contentItem: ContentItem,
   i18n: typeof ru,
   utcOffset: number,
   resolvedSns: SnType[],
   useFooter: boolean,
   postTexts: Partial<Record<SnType, string>>,
-  //pageBlocks?: NotionBlocks,
-  //footerTmplMd?: string
 ): Promise<string> {
   const result: string[] = [
     `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(contentItem.date, contentItem.time, utcOffset)}`,
@@ -119,7 +109,7 @@ export async function makeContentPlanFinalDetails(
   state: ContentItemState,
   contentItem: ContentItem,
   usePreview: boolean,
-  useFooter: boolean,
+  useTgFooter: boolean,
   postTexts?: Partial<Record<SnType, string>>,
 ) {
   const result: string[] = [
@@ -144,7 +134,7 @@ export async function makeContentPlanFinalDetails(
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
     const contentLengthDetails = await makeContentLengthDetails(
       tgChat.app.i18n,
-      useFooter,
+      useTgFooter,
       postTexts,
       state.instaTags,
     )

@@ -86,10 +86,13 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
             },
           ],
-          // TODO: только для телеги??? не для инсты?
+          // TODO: только для телеги !!!!!
+          // TODO: если футера нет не показыват даже переключалку
           // ask footer
           (
+            // TODO: не правильно
             tgChat.app.blogs[blogName].sn.telegram?.postFooter
+            // TODO: article too
             && item.type !== PUBLICATION_TYPES.poll
           ) ? [{
             text: (state.useFooter)
@@ -97,6 +100,7 @@ export async function askPublicationMenu(
               : tgChat.app.i18n.commonPhrases.yesPostFooter,
             callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
           }] : [],
+          // TODO: только для телеги
           // ask preview
           (!state.mainImgUrl && [
             PUBLICATION_TYPES.post2000,
@@ -155,10 +159,12 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_SNS,
             }
           ],
+          // TODO: только для телеги
           // ask URL button
           ([
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
+            PUBLICATION_TYPES.story,
             PUBLICATION_TYPES.announcement,
           ].includes(item.type)) ? [{
             text: (state.urlBtn)
@@ -166,6 +172,7 @@ export async function askPublicationMenu(
               : tgChat.app.i18n.buttons.addUrlButton,
             callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
           }] : [],
+          // TODO: только для телеги
           // ask auto remove
           ([
             PUBLICATION_TYPES.post1000,
@@ -236,7 +243,7 @@ async function handleButtons(
       // it's only for annoucement
       return await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
         state.replacedHtmlText = textHtml
-        state.replacedCleanText = cleanText
+        //state.replacedCleanText = cleanText
         // print result
         if (state.replacedHtmlText) {
           await tgChat.reply(tgChat.app.i18n.menu.selectedPostText)
