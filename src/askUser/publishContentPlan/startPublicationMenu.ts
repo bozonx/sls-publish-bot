@@ -31,9 +31,8 @@ export interface ContentItemState {
   // it's for announcement
   replacedHtmlText?: string
   //replacedCleanText?: string
-  urlBtn?: TgReplyBtnUrl
-  // TODO: только для телеги
-  autoDeleteIsoDateTime?: string
+  tgUrlBtn?: TgReplyBtnUrl
+  autoDeleteTgIsoDateTime?: string
 }
 
 
@@ -116,7 +115,7 @@ export async function startPublicationMenu(
             usePreview,
             postAsText,
             finalMediaGroup,
-            state.urlBtn,
+            state.tgUrlBtn,
             postTexts?.telegram
           )
         }
@@ -156,8 +155,8 @@ export async function startPublicationMenu(
             pageBlocks,
             // article title
             item.nameGist,
-            state.urlBtn,
-            state.autoDeleteIsoDateTime,
+            state.tgUrlBtn,
+            state.autoDeleteTgIsoDateTime,
             item.tgTags
           );
         }

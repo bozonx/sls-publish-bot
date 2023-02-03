@@ -30,8 +30,8 @@ export async function registerTgPost(
   postAsText: boolean,
   usePreview: boolean,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
-  urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string
+  tgUrlBtn?: TgReplyBtnUrl,
+  autoDeleteTgIsoDateTime?: string
 ) {
   if (postAsText) {
     // post as only text
@@ -45,8 +45,8 @@ export async function registerTgPost(
       time,
       post2000Txt,
       (imgUrl) ? true : usePreview,
-      urlBtn,
-      autoDeleteIsoDateTime
+      tgUrlBtn,
+      autoDeleteTgIsoDateTime
     );
   }
   else if (mediaGroup.length > 1) {
@@ -58,7 +58,7 @@ export async function registerTgPost(
       time,
       mediaGroup,
       resultTextHtml,
-      autoDeleteIsoDateTime
+      autoDeleteTgIsoDateTime
     );
   }
   else {
@@ -73,8 +73,8 @@ export async function registerTgPost(
         time,
         mediaGroup[0].fileId,
         resultTextHtml,
-        urlBtn,
-        autoDeleteIsoDateTime
+        tgUrlBtn,
+        autoDeleteTgIsoDateTime
       );
     }
     else {
@@ -89,8 +89,8 @@ export async function registerTgPost(
         time,
         imgUrl,
         resultTextHtml,
-        urlBtn,
-        autoDeleteIsoDateTime
+        tgUrlBtn,
+        autoDeleteTgIsoDateTime
       );
     }
   }
@@ -108,8 +108,8 @@ export async function registerTgTaskOnlyText(
   time: string,
   postStr: string,
   allowPreview: boolean,
-  urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string
+  tgUrlBtn?: TgReplyBtnUrl,
+  autoDeleteTgIsoDateTime?: string
 ) {
   let msgId: number;
   // Print to log channel
@@ -119,7 +119,7 @@ export async function registerTgTaskOnlyText(
       tgChat.app.appConfig.logChannelId,
       postStr,
       allowPreview,
-      urlBtn
+      tgUrlBtn
     );
   }
   catch (e) {
@@ -128,7 +128,7 @@ export async function registerTgTaskOnlyText(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, tgUrlBtn, autoDeleteTgIsoDateTime);
 }
 
 /**
@@ -141,8 +141,8 @@ export async function registerTgTaskImage(
   time: string,
   imageUrl: string,
   captionMd?: string,
-  urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string
+  tgUrlBtn?: TgReplyBtnUrl,
+  autoDeleteTgIsoDateTime?: string
 ) {
   let msgId: number;
   // Print to log channel
@@ -152,7 +152,7 @@ export async function registerTgTaskImage(
       tgChat.app.appConfig.logChannelId,
       imageUrl,
       captionMd,
-      urlBtn
+      tgUrlBtn
     )
   }
   catch (e) {
@@ -161,7 +161,7 @@ export async function registerTgTaskImage(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, tgUrlBtn, autoDeleteTgIsoDateTime);
 }
 
 /**
@@ -174,7 +174,7 @@ export async function registerTgTaskCopy(
   isoDate: string,
   resolvedTime: string,
   messageId: number,
-  autoDeleteIsoDateTime?: string,
+  autoDeleteTgIsoDateTime?: string,
   closePollIsoDateTime?: string
 ) {
   let msgId: number;
@@ -200,7 +200,7 @@ export async function registerTgTaskCopy(
     resolvedTime,
     msgId,
     undefined,
-    autoDeleteIsoDateTime,
+    autoDeleteTgIsoDateTime,
     closePollIsoDateTime
   );
 }
@@ -211,7 +211,7 @@ export async function registerTgTaskPoll(
   isoDate: string,
   time: string,
   pollData: PollData,
-  autoDeleteIsoDateTime?: string,
+  autoDeleteTgIsoDateTime?: string,
   closePollIsoDateTime?: string
 ) {
   let msgId: number;
@@ -232,7 +232,7 @@ export async function registerTgTaskPoll(
     time,
     msgId,
     undefined,
-    autoDeleteIsoDateTime,
+    autoDeleteTgIsoDateTime,
     closePollIsoDateTime
   );
 }
@@ -248,8 +248,8 @@ async function registerTgTaskVideo(
   time: string,
   videoId: string,
   captionMd?: string,
-  urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string
+  tgUrlBtn?: TgReplyBtnUrl,
+  autoDeleteTgIsoDateTime?: string
 ) {
   let msgId: number;
   // Print to log channel
@@ -259,7 +259,7 @@ async function registerTgTaskVideo(
       tgChat.app.appConfig.logChannelId,
       videoId,
       captionMd,
-      urlBtn
+      tgUrlBtn
     );
   }
   catch (e) {
@@ -268,7 +268,7 @@ async function registerTgTaskVideo(
     throw new Error(`Can't publish prepared post to telegram to log channel`);
   }
 
-  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, urlBtn, autoDeleteIsoDateTime);
+  await registerPublishTaskTg(tgChat, blogName, isoDate, time, msgId, tgUrlBtn, autoDeleteTgIsoDateTime);
 }
 
 /**
@@ -281,7 +281,7 @@ async function registerTgTaskMediaGroup(
   time: string,
   mediaGroup: (PhotoData | PhotoUrlData | VideoData)[],
   captionMd?: string,
-  autoDeleteIsoDateTime?: string
+  autoDeleteTgIsoDateTime?: string
 ) {
   let msgIds: number[];
   // Print to log channel
@@ -306,7 +306,7 @@ async function registerTgTaskMediaGroup(
     time,
     msgIds[0],
     undefined,
-    autoDeleteIsoDateTime,
+    autoDeleteTgIsoDateTime,
     undefined,
     captionMd,
     mediaGroup.map((e) => {
@@ -325,7 +325,7 @@ async function registerPublishTaskTg(
   time: string,
   messageIdToCopy?: number,
   urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string,
+  autoDeleteTgIsoDateTime?: string,
   closePollIsoDateTime?: string,
   mediaGroupCaptionHtml?: string,
   mediaGroup?: PrimitiveMediaGroup[]
@@ -368,7 +368,7 @@ async function registerPublishTaskTg(
     messageIdToCopy: (mediaGroup) ? undefined : messageIdToCopy,
     urlBtn,
     // time like '2022-11-01T19:58:00+03:00'
-    autoDeleteDateTime: autoDeleteIsoDateTime,
+    autoDeleteDateTime: autoDeleteTgIsoDateTime,
     // time like '2022-11-01T19:58:00+03:00'
     closePollDateTime: closePollIsoDateTime,
     mediaGroupCaptionHtml,

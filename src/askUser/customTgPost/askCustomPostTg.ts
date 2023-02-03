@@ -19,8 +19,8 @@ export interface CustomPostState {
   postHtmlText?: string
   cleanPostText?: string
   mediaGroup: MediaGroupItem[]
-  urlBtn?: TgReplyBtnUrl
-  autoDeleteIsoDateTime?: string
+  tgUrlBtn?: TgReplyBtnUrl
+  autoDeleteTgIsoDateTime?: string
   autoDeletePeriodHours?: number
   footerTmplHtml?: string
   cleanFooterTmpl?: string
@@ -111,7 +111,7 @@ async function printPostPreview(
       : state.usePreview,
     state.postAsText,
     state.mediaGroup,
-    state.urlBtn,
+    state.tgUrlBtn,
     resultTextHtml
   )
   // print post summary
@@ -119,9 +119,9 @@ async function printPostPreview(
 }
 
 
-// if (state.autoDeleteIsoDateTime) {
+// if (state.autoDeleteTgIsoDateTime) {
 //   detailsStr += tgChat.app.i18n.commonPhrases.addedDeleteTimer
-//     + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT) + '\n'
+//     + moment(state.autoDeleteTgIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT) + '\n'
 // }
 // else if (state.autoDeletePeriodHours) {
 //   detailsStr += tgChat.app.i18n.commonPhrases.addedDeleteTimerPeriod

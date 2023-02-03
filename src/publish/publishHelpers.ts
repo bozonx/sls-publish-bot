@@ -107,7 +107,7 @@ export async function printPost(
   usePreview: boolean,
   postAsText: boolean,
   mediaGroup: MediaGroupItem[],
-  urlBtn?: TgReplyBtnUrl,
+  tgUrlBtn?: TgReplyBtnUrl,
   resultTextHtml = '',
 ) {
   if (!mediaGroup.length || postAsText) {
@@ -122,7 +122,7 @@ export async function printPost(
       chatId,
       post2000Txt,
       usePreview,
-      urlBtn
+      tgUrlBtn
     );
   }
   else if (mediaGroup.length > 1) {
@@ -140,7 +140,7 @@ export async function printPost(
     chatId,
     (mediaGroup[0] as any).fileId || (mediaGroup[0] as any).url,
     resultTextHtml,
-    urlBtn
+    tgUrlBtn
   );
 }
 

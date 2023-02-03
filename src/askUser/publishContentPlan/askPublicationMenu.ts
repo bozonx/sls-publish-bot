@@ -165,7 +165,7 @@ export async function askPublicationMenu(
             PUBLICATION_TYPES.story,
             PUBLICATION_TYPES.announcement,
           ].includes(item.type)) ? [{
-            text: (state.urlBtn)
+            text: (state.tgUrlBtn)
               ? tgChat.app.i18n.buttons.changeTgUrlButton
               : tgChat.app.i18n.buttons.addTgUrlButton,
             callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
@@ -178,7 +178,7 @@ export async function askPublicationMenu(
             PUBLICATION_TYPES.poll,
             PUBLICATION_TYPES.story,
           ].includes(item.type)) ? [{
-            text: (state.autoDeleteIsoDateTime)
+            text: (state.autoDeleteTgIsoDateTime)
               ? tgChat.app.i18n.buttons.changeTgAutoRemove
               : tgChat.app.i18n.buttons.setTgAutoRemove,
             callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
@@ -256,7 +256,7 @@ async function handleButtons(
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         // validate that selected date is greater than auto-delete date
         if (
-          state.autoDeleteIsoDateTime && moment(state.autoDeleteIsoDateTime).unix()
+          state.autoDeleteTgIsoDateTime && moment(state.autoDeleteTgIsoDateTime).unix()
           <= moment(makeIsoDateTimeStr(
             item.date,
             newTime,
@@ -349,12 +349,12 @@ async function handleButtons(
         if (!urlButton) {
           await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
 
-          delete state.urlBtn;
+          delete state.tgUrlBtn;
 
           return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
         }
 
-        state.urlBtn = urlButton;
+        state.tgUrlBtn = urlButton;
 
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.addedUrlButton + '\n'
@@ -374,7 +374,7 @@ async function handleButtons(
         if (!hoursPeriod && !certainIsoDateTime) {
           await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer)
 
-          delete state.autoDeleteIsoDateTime
+          delete state.autoDeleteTgIsoDateTime
 
           return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
         }
@@ -396,15 +396,15 @@ async function handleButtons(
         }
 
         if (hoursPeriod) {
-          state.autoDeleteIsoDateTime = replaceHorsInDate(pubIsoDate, hoursPeriod)
+          state.autoDeleteTgIsoDateTime = replaceHorsInDate(pubIsoDate, hoursPeriod)
         }
         else {
-          state.autoDeleteIsoDateTime = certainIsoDateTime
+          state.autoDeleteTgIsoDateTime = certainIsoDateTime
         }
         // print the result
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.addedDeleteTimer
-          + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+          + moment(state.autoDeleteTgIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
         )
         // print menu again
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)

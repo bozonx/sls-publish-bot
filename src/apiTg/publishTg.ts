@@ -12,7 +12,7 @@ export async function publishTgText(
   chatId: number | string,
   msg: string,
   allowPreview = true,
-  urlBtn?: TgReplyBtnUrl,
+  tgUrlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await app.tg.bot.telegram.sendMessage(
@@ -22,9 +22,9 @@ export async function publishTgText(
       parse_mode: app.appConfig.telegram.parseMode,
       disable_web_page_preview: !allowPreview,
       disable_notification: disableNotification,
-      reply_markup: urlBtn && {
+      reply_markup: tgUrlBtn && {
         inline_keyboard: [
-          [ urlBtn ]
+          [ tgUrlBtn ]
         ]
       },
     }
@@ -41,7 +41,7 @@ export async function publishTgImage(
   chatId: number | string,
   imageUrl: string,
   captionMd?: string,
-  urlBtn?: TgReplyBtnUrl,
+  tgUrlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await app.tg.bot.telegram.sendPhoto(
@@ -51,9 +51,9 @@ export async function publishTgImage(
       caption: captionMd,
       parse_mode: app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
-      reply_markup: urlBtn && {
+      reply_markup: tgUrlBtn && {
         inline_keyboard: [
-          [ urlBtn ]
+          [ tgUrlBtn ]
         ]
       },
     }
@@ -70,7 +70,7 @@ export async function publishTgVideo(
   chatId: number | string,
   videoUrl: string,
   captionMd?: string,
-  urlBtn?: TgReplyBtnUrl,
+  tgUrlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await app.tg.bot.telegram.sendVideo(
@@ -80,9 +80,9 @@ export async function publishTgVideo(
       caption: captionMd,
       parse_mode: app.appConfig.telegram.parseMode,
       disable_notification: disableNotification,
-      reply_markup: urlBtn && {
+      reply_markup: tgUrlBtn && {
         inline_keyboard: [
-          [ urlBtn ]
+          [ tgUrlBtn ]
         ]
       },
     }
@@ -144,7 +144,7 @@ export async function publishTgCopy(
   chatId: number | string,
   fromChatId: number | string,
   messageId: number,
-  urlBtn?: TgReplyBtnUrl,
+  tgUrlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await app.tg.bot.telegram.copyMessage(
@@ -153,9 +153,9 @@ export async function publishTgCopy(
     messageId,
     {
       disable_notification: disableNotification,
-      reply_markup: urlBtn && {
+      reply_markup: tgUrlBtn && {
         inline_keyboard: [
-          [urlBtn]
+          [tgUrlBtn]
         ]
       }
     }

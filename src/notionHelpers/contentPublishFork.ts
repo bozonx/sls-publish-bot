@@ -23,8 +23,8 @@ export async function contentPublishFork(
   postTexts?: Partial<Record<SnType, string>>,
   articleBlocks?: NotionBlocks,
   articleTitle?: string,
-  urlBtn?: TgReplyBtnUrl,
-  autoDeleteIsoDateTime?: string,
+  tgUrlBtn?: TgReplyBtnUrl,
+  autoDeleteTgIsoDateTime?: string,
   tgTags?: string[],
 ) {
   for (const sn of sns) {
@@ -52,7 +52,7 @@ export async function contentPublishFork(
             pubDate,
             pubTime,
             pollData!,
-            autoDeleteIsoDateTime,
+            autoDeleteTgIsoDateTime,
             // TODO: add auto poll close
           );
         }
@@ -67,8 +67,8 @@ export async function contentPublishFork(
             postAsText,
             usePreview,
             finalMediaGroup,
-            urlBtn,
-            autoDeleteIsoDateTime
+            tgUrlBtn,
+            autoDeleteTgIsoDateTime
           )
         }
 

@@ -91,7 +91,7 @@ export async function askCustomPostMenu(
           ]),
           compactUndefined([
             (state.onlyOneImage) ? {
-              text: (state.urlBtn)
+              text: (state.tgUrlBtn)
                 ? tgChat.app.i18n.buttons.changeTgUrlButton
                 : tgChat.app.i18n.buttons.addTgUrlButton,
               callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
@@ -99,7 +99,7 @@ export async function askCustomPostMenu(
           ]),
           [
             {
-              text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
+              text: (state.autoDeleteTgIsoDateTime || state.autoDeletePeriodHours)
                 ? tgChat.app.i18n.buttons.changeTgAutoRemove
                 : tgChat.app.i18n.buttons.setTgAutoRemove,
               callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
@@ -184,12 +184,12 @@ async function handleButtons(
         if (!urlButton) {
           await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
 
-          delete state.urlBtn;
+          delete state.tgUrlBtn;
 
           return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
         }
 
-        state.urlBtn = urlButton;
+        state.tgUrlBtn = urlButton;
 
         await tgChat.reply(
           tgChat.app.i18n.commonPhrases.addedUrlButton + '\n'
@@ -209,18 +209,18 @@ async function handleButtons(
         if (!hoursPeriod && !certainIsoDateTime) {
           await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer);
 
-          delete state.autoDeleteIsoDateTime;
+          delete state.autoDeleteTgIsoDateTime;
 
           return askCustomPostMenu(blogName, tgChat, state, validate, onDone);
         }
 
-        state.autoDeleteIsoDateTime = certainIsoDateTime
+        state.autoDeleteTgIsoDateTime = certainIsoDateTime
         state.autoDeletePeriodHours = hoursPeriod
 
-        if (state.autoDeleteIsoDateTime) {
+        if (state.autoDeleteTgIsoDateTime) {
           await tgChat.reply(
             tgChat.app.i18n.commonPhrases.addedDeleteTimer
-            + moment(state.autoDeleteIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
+            + moment(state.autoDeleteTgIsoDateTime).format(PRINT_SHORT_DATE_TIME_FORMAT)
           )
         }
         else if (state.autoDeletePeriodHours) {
@@ -239,7 +239,7 @@ async function handleButtons(
 }
 
 
-//state.autoDeleteIsoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
+//state.autoDeleteTgIsoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset);
 
 // function makeDateTimeMsg(tgChat: TgChat, state: CustomPostState): string {
 //   const utcOffset = makeUtcOffsetStr(tgChat.app.appConfig.utcOffset);

@@ -120,10 +120,10 @@ export async function makeContentPlanFinalDetails(
     + makeHumanDateTimeStr(contentItem.date, state.pubTime, tgChat.app.appConfig.utcOffset)
   ]
 
-  if (state.autoDeleteIsoDateTime) {
+  if (state.autoDeleteTgIsoDateTime) {
     result.push(
       `${tgChat.app.i18n.commonPhrases.autoDeletePostDate}: `
-      + isoDateToHuman(state.autoDeleteIsoDateTime)
+      + isoDateToHuman(state.autoDeleteTgIsoDateTime)
     )
   }
 

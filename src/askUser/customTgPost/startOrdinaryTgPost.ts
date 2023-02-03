@@ -26,7 +26,7 @@ export async function startOrdinaryTgPost(
     resultTextHtml: string
   ) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-      let resolvedAutoDeleteTime = state.autoDeleteIsoDateTime
+      let resolvedAutoDeleteTime = state.autoDeleteTgIsoDateTime
 
       // validate that selected date is greater than auto-delete date
       if (
@@ -55,7 +55,7 @@ export async function startOrdinaryTgPost(
           postAsText,
           state.usePreview,
           state.mediaGroup,
-          state.urlBtn,
+          state.tgUrlBtn,
           resolvedAutoDeleteTime
         );
         await tgChat.steps.cancel();
