@@ -227,6 +227,7 @@ const dict = {
     dateLessThenAutoDelete: 'Выбрана дата меньше чем дата авто удаления поста',
     onlyImageAllowed: 'Разрешено прикреплять только картинки',
     onlyVideoAllowed: 'Разрешено прикреплять только видео',
+    videoNotSuppoerted: 'Видео не поддерживается в этом формате',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

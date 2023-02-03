@@ -1,9 +1,10 @@
+import _ from 'lodash';
 import {
   INSTAGRAM_MAX_POST,
   MAX_INSTA_TAGS,
   TELEGRAM_MAX_CAPTION,
   TELEGRAM_MAX_POST,
-  WARN_SIGN, ZEN_MAX_POST
+  ZEN_MAX_POST
 } from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
@@ -13,7 +14,6 @@ import ContentItem from '../types/ContentItem.js';
 import {makePostFromContentItem} from './makePostFromContentItem.js';
 import {NotionBlocks} from '../types/notion.js';
 import {makeCleanTexts} from '../helpers/helpers.js';
-import _ from 'lodash';
 
 
 export async function validateContentPlanPost(
@@ -70,11 +70,16 @@ export async function validateContentPlanPost(
   else if ((state.instaTags?.length || 0) > MAX_INSTA_TAGS) {
     throw tgChat.app.i18n.errors.toManyInstaTags
   }
-  // TODO: add
-  // // if post2000 has video
-  // else if (state.postAsText && state.mediaGroup.length && state.mediaGroup[0].type === 'video') {
-  //   throw tgChat.app.i18n.message.post2000video;
-  // }
+  // if post2000 or announcement has video
+  else if ([
+    PUBLICATION_TYPES.post2000,
+    PUBLICATION_TYPES.announcement,
+  ].includes(item.type)
+    && state.replacedMediaGroup?.length
+    && state.replacedMediaGroup[0].type === 'video'
+  ) {
+    throw tgChat.app.i18n.errors.videoNotSuppoerted
+  }
   // no text no image
   for (const sn of state.sns) {
     if ([
