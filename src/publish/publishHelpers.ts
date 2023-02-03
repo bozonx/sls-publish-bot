@@ -9,6 +9,8 @@ import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
 import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/MessageEvent.js';
 import {isValidUrl} from '../lib/common.js';
+import {transformHtmlToCleanText} from '../helpers/transformHtmlToCleanText.js';
+import {PUBLICATION_TYPES} from '../types/publicationType.js';
 
 
 export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {
@@ -19,45 +21,51 @@ export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | u
   }
 }
 
-export function makeContentLengthDetails(
+export async function makeContentLengthDetails(
   i18n: typeof ru,
-  clearTexts: Partial<Record<SnType, string>>,
-  instaTags: string[] = [],
-  hasTgFooter: boolean
-): string {
+  hasTgFooter: boolean,
+  postTexts: Partial<Record<SnType, string>> = {},
+  instaTags: string[] = []
+): Promise<string> {
+  let cleanTexts: Partial<Record<SnType, string>> = {}
+
+  for (const sn in postTexts) {
+    // TODO: а для инсты то может не html быть???
+    cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+  }
 
   // TODO: cleanTexts учитывать статью
 
   const result: string[] = []
 
-  if (clearTexts.telegram) {
+  if (cleanTexts.telegram) {
     if (hasTgFooter) {
       result.push(
         `Telegram. ${i18n.pageInfo.contentLength} + ${i18n.commonPhrases.footer}: `
-        + clearTexts.telegram.length
+        + cleanTexts.telegram.length
       )
     }
     else {
-      result.push(`Telegram. ${i18n.pageInfo.contentLength}: ${clearTexts.telegram.length}`)
+      result.push(`Telegram. ${i18n.pageInfo.contentLength}: ${cleanTexts.telegram.length}`)
     }
   }
 
-  if (clearTexts.instagram) {
+  if (cleanTexts.instagram) {
     if (instaTags.length) {
       result.push(
-        `Instagram. ${i18n.pageInfo.contentLengthWithInstaTags}: ${clearTexts.instagram.length}`
+        `Instagram. ${i18n.pageInfo.contentLengthWithInstaTags}: ${cleanTexts.instagram.length}`
       )
       result.push(`${i18n.pageInfo.instaTagsCount}: ` + (instaTags).length)
     }
     else {
       result.push(
-        `Instagram. ${i18n.pageInfo.contentLength}: ${clearTexts.instagram.length}`
+        `Instagram. ${i18n.pageInfo.contentLength}: ${cleanTexts.instagram.length}`
       )
     }
   }
-  if (clearTexts.zen) {
+  if (cleanTexts.zen) {
     result.push(
-      `Zen. ${i18n.pageInfo.contentLength}: ${clearTexts.zen.length}`
+      `Zen. ${i18n.pageInfo.contentLength}: ${cleanTexts.zen.length}`
     )
   }
   // Blogger doesn't have a post. It will be an article

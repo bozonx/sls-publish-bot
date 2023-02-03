@@ -62,15 +62,6 @@ export async function makeContentPlanPreDetails(
   pageBlocks?: NotionBlocks,
   footerTmplMd?: string
 ): Promise<string> {
-  let cleanTexts: Partial<Record<SnType, string>> = {}
-
-  if (contentItem.type !== PUBLICATION_TYPES.poll) {
-    // make clear text if it isn't a poll
-    for (const sn in postTexts) {
-      cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
-    }
-  }
-
   const result: string[] = [
     `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(contentItem.date, contentItem.time, utcOffset)}`,
     `${i18n.contentInfo.onlySn}: `
@@ -97,14 +88,16 @@ export async function makeContentPlanPreDetails(
 
   result.push(`${i18n.contentInfo.note}: ${contentItem.note}`)
 
-  const contentLengthDetails = makeContentLengthDetails(
-    i18n,
-    cleanTexts,
-    contentItem.instaTags,
-    Boolean(footerTmplMd)
-  )
+  if (contentItem.type !== PUBLICATION_TYPES.poll) {
+    const contentLengthDetails = await makeContentLengthDetails(
+      i18n,
+      Boolean(footerTmplMd),
+      postTexts,
+      contentItem.instaTags
+    )
 
-  if (contentLengthDetails) result.push(contentLengthDetails)
+    if (contentLengthDetails) result.push(contentLengthDetails)
+  }
 
   return result.join('\n')
 }
@@ -118,12 +111,6 @@ export async function makeContentPlanFinalDetails(
   postTexts?: Partial<Record<SnType, string>>,
   footerTgTmplMd?: string
 ) {
-  let cleanTexts: Partial<Record<SnType, string>> = {}
-
-  for (const sn in postTexts) {
-    cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
-  }
-
   const result: string[] = [
     tgChat.app.i18n.commonPhrases.linkWebPreview
     + tgChat.app.i18n.onOff[Number(state.usePreview)],
@@ -144,12 +131,14 @@ export async function makeContentPlanFinalDetails(
   }
 
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
-    result.push(makeContentLengthDetails(
+    const contentLengthDetails = await makeContentLengthDetails(
       tgChat.app.i18n,
-      cleanTexts || {},
+      Boolean(footerTgTmplMd),
+      postTexts,
       state.instaTags,
-      Boolean(footerTgTmplMd)
-    ))
+    )
+
+    if (contentLengthDetails) result.push(contentLengthDetails)
   }
 
   return result.join('\n')
