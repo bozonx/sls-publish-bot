@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat.js';
-import {makeHumanDateTimeStr} from '../helpers/helpers.js';
+import {makeCleanTexts, makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
@@ -26,13 +26,7 @@ export async function makeContentLengthDetails(
   postTexts: Partial<Record<SnType, string>> = {},
   instaTags: string[] = []
 ): Promise<string> {
-  let cleanTexts: Partial<Record<SnType, string>> = {}
-
-  for (const sn in postTexts) {
-    // TODO: а для инсты то может не html быть???
-    cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
-  }
-
+  const cleanTexts = await makeCleanTexts(postTexts) || {}
   const result: string[] = []
 
   if (cleanTexts.telegram) {

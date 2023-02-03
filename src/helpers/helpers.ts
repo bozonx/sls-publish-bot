@@ -9,6 +9,7 @@ import {isPromise, makeTagsString} from '../lib/common.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {compactUndefined} from '../lib/arrays.js';
+import {transformHtmlToCleanText} from './transformHtmlToCleanText.js';
 
 
 export function makeBaseState(): BaseState {
@@ -201,4 +202,17 @@ export function resolvePostFooter(
   }
   // post1000, post2000, announcement, photos, narrative
   return (blogConfig as BlogTelegramConfig)?.postFooter
+}
+
+export async function makeCleanTexts(
+  postTexts?: Partial<Record<SnType, string>>
+): Promise<Partial<Record<SnType, string>> | undefined> {
+  let cleanTexts: Partial<Record<SnType, string>> = {}
+
+  for (const sn in postTexts) {
+    // TODO: а для инсты то может не html быть???
+    cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+  }
+
+  return cleanTexts
 }

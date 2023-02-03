@@ -6,6 +6,7 @@ import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMe
 import ContentItem from '../types/ContentItem.js';
 import {makePostFromContentItem} from './makePostFromContentItem.js';
 import {NotionBlocks} from '../types/notion.js';
+import {makeCleanTexts} from '../helpers/helpers.js';
 
 
 export async function validateContentPlanPost(
@@ -87,6 +88,8 @@ export function validateContentLengths(
   pubType: PublicationType,
   postTexts: Partial<Record<SnType, string>> | undefined
 ) {
+  const cleanTexts = await makeCleanTexts(postTexts) || {}
+
   for (const sn of Object.keys(clearTexts) as SnType[]) {
     const clearText = clearTexts[sn];
     // if post2000 or announcement is bigger than 2048
