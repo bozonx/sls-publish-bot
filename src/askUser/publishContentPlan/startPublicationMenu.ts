@@ -60,7 +60,13 @@ export async function startPublicationMenu(
     tgChat,
     state,
     item,
-    validateContentPlanPost,
+    (state: ContentItemState) => validateContentPlanPost(
+      tgChat,
+      blogName,
+      item,
+      state,
+      pageBlocks
+    ),
     tgChat.asyncCb(async () => {
       let pollData: PollData | undefined
       let postTexts: Partial<Record<SnType, string>> | undefined
@@ -97,6 +103,7 @@ export async function startPublicationMenu(
 
       }
       else {
+        // TODO: для article тоже не надо же делать
         postTexts = await makePostFromContentItem(
           state.sns,
           tgChat.app.blogs[blogName],

@@ -51,6 +51,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     mainImgUrl = await printImage(tgChat, mainImgUrl)
 
     // TODO: предупредить если blog.sn.supportedTypes нет нужного типа публикации
+    // TODO: для статьи обязателен текст
 
     // TODO: что после проверки ??? запретить или что?
     // // check publication type need to be supported by social network

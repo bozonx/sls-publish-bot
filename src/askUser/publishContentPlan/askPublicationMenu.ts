@@ -30,6 +30,8 @@ import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
 import {ContentItemState} from './startPublicationMenu.js';
 import ContentItem from '../../types/ContentItem.js';
+import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
+import {NotionBlocks} from '../../types/notion.js';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -56,16 +58,16 @@ export async function askPublicationMenu(
   tgChat: TgChat,
   state: ContentItemState,
   item: ContentItem,
-  validate: (tgChat: TgChat, item: ContentItem, state: ContentItemState) => void,
+  validate: (state: ContentItemState) => Promise<void>,
   onDone: () => void,
 ) {
   await addSimpleStep(
     tgChat,
-    (): [string, TgReplyButton[][]] => {
+    async () => {
       let disableOk = false
 
       try {
-        validate(tgChat, item, state)
+        await validate(state)
       }
       catch (e) {
         tgChat.reply(`${WARN_SIGN} ${e}`)
@@ -204,7 +206,7 @@ async function handleButtons(
   tgChat: TgChat,
   state: ContentItemState,
   item: ContentItem,
-  validate: (tgChat: TgChat, item: ContentItem, state: ContentItemState) => void,
+  validate: (state: ContentItemState) => Promise<void>,
   onDone: () => void
 ) {
   switch (queryData) {
