@@ -12,6 +12,7 @@ export const WARN_SIGN = '⚠';
 // 24 days max
 export const MAX_TIMEOUT_SECONDS = 2147483;
 export const FILE_ENCODING = 'utf8';
+export const MAX_INSTA_TAGS = 30
 
 export enum ChatEvents {
   CALLBACK_QUERY,

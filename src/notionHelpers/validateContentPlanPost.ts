@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants.js';
+import {MAX_INSTA_TAGS, TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST, WARN_SIGN} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
@@ -35,30 +35,17 @@ export function validateContentPlanPost(tgChat: TgChat, item: ContentItem, state
   else if (!state.sns.length) {
     throw tgChat.app.i18n.errors.noSns
   }
-
-  validateContentPlanPostText(tgChat, item.type, )
-
-  // TODO: наверное тут же вызывать validateContentPlanPostText
-  // TODO: проверка длинн
-  // TODO: CHANGE_INSTA_TAGS too many - 30
-  // TODO: вобще нет текста и картинки для post2000, article и annoucement???
-  // TODO: поидее ещё есть у каждого блога поддерживаемые типы публикаций
-
-  // check publication type need to be supported by social network
-  for (const sn of state.sns) {
-    const types = SN_SUPPORT_TYPES[sn]
-
-    if (types.indexOf(item.type) === -1) {
-      throw _.template(tgChat.app.i18n.errors.unsupportedPubType)({
-        SN: sn,
-        PUB_TYPE: item.type,
-      })
-    }
+  else if ((state.instaTags?.length || 0) > MAX_INSTA_TAGS) {
+    throw tgChat.app.i18n.errors.toManyInstaTags
   }
+
+  validateContentLengths(tgChat, item.type)
+
+  // TODO: вобще нет текста и картинки для post2000, article и annoucement???
 }
 
 
-export function validateContentPlanPostText(tgChat: TgChat, pubType: PublicationType) {
+export function validateContentLengths(tgChat: TgChat, pubType: PublicationType) {
   for (const sn of Object.keys(clearTexts) as SnType[]) {
     const clearText = clearTexts[sn];
     // if post2000 or announcement is bigger than 2048

@@ -50,6 +50,21 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
 
+    // TODO: предупредить если blog.sn.supportedTypes нет нужного типа публикации
+
+    // TODO: что после проверки ??? запретить или что?
+    // // check publication type need to be supported by social network
+    // for (const sn of state.sns) {
+    //   const types = SN_SUPPORT_TYPES[sn]
+    //
+    //   if (types.indexOf(item.type) === -1) {
+    //     throw _.template(tgChat.app.i18n.errors.unsupportedPubType)({
+    //       SN: sn,
+    //       PUB_TYPE: item.type,
+    //     })
+    //   }
+    // }
+
     await printContentItemInitialDetails(
       tgChat,
       blogName,
