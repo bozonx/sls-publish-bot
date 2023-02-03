@@ -18,6 +18,8 @@ import {printPost} from '../../publish/publishHelpers.js';
 
 export interface ContentItemState {
   useTgFooter: boolean
+  // is it specified in blog config
+  availableTgFooter: boolean
   usePreview: boolean
   sns: SnType[]
   pubTime: string
@@ -39,14 +41,15 @@ export async function startPublicationMenu(
   blogName: string,
   tgChat: TgChat,
   resolvedSns: SnType[],
-  hasTgFooter: boolean,
+  availableTgFooter: boolean,
   item: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
 ) {
   const state: ContentItemState = {
     usePreview: true,
-    useTgFooter: hasTgFooter,
+    useTgFooter: availableTgFooter,
+    availableTgFooter,
     sns: resolvedSns,
     pubTime: item.time,
     instaTags: item.instaTags,

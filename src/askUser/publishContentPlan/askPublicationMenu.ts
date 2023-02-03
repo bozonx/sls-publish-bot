@@ -89,8 +89,7 @@ export async function askPublicationMenu(
           // ask footer
           (
             state.sns.includes(SN_TYPES.telegram)
-            // TODO: не правильно - резолвить
-            && tgChat.app.blogs[blogName].sn.telegram?.postFooter
+            && state.availableTgFooter
             && ![
               PUBLICATION_TYPES.poll,
               PUBLICATION_TYPES.article
@@ -171,7 +170,6 @@ export async function askPublicationMenu(
               : tgChat.app.i18n.buttons.addTgUrlButton,
             callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
           }] : [],
-          // TODO: только для телеги
           // ask auto remove
           (state.sns.includes(SN_TYPES.telegram) && [
             PUBLICATION_TYPES.post1000,
@@ -218,11 +216,11 @@ async function handleButtons(
       return onDone()
     case PUBLISH_MENU_ACTION.FOOTER_SWITCH:
       // switch footer value
-      state.useFooter = !state.useFooter
+      state.useTgFooter = !state.useTgFooter
       // print result
       await tgChat.reply(
         tgChat.app.i18n.commonPhrases.selectedNoFooter
-        + tgChat.app.i18n.onOff[Number(state.useFooter)]
+        + tgChat.app.i18n.onOff[Number(state.useTgFooter)]
       )
 
       // TODO: вместо этого использовать steps.to() - нверное стейт тоже сохранится

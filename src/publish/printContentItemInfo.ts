@@ -16,11 +16,11 @@ export async function printContentItemInitialDetails(
   blogName: string,
   resolvedSns: SnType[],
   contentItem: ContentItem,
-  hasTgFooter: boolean,
+  availableTgFooter: boolean,
   pageBlocks?: NotionBlocks,
   instaTags?: string[]
 ) {
-  if (contentItem.type !== PUBLICATION_TYPES.poll && hasTgFooter) {
+  if (contentItem.type !== PUBLICATION_TYPES.poll && availableTgFooter) {
     const tgFooterMd = resolvePostFooter(contentItem.type, tgChat.app.blogs[blogName].sn.telegram)
     const footerStr = await commonMdToTgHtml(prepareFooter(tgFooterMd, contentItem.tgTags))
     // print footer if it is used
@@ -35,7 +35,7 @@ export async function printContentItemInitialDetails(
     resolvedSns,
     tgChat.app.blogs[blogName],
     contentItem,
-    hasTgFooter,
+    availableTgFooter,
     pageBlocks,
     undefined,
     instaTags
@@ -48,7 +48,7 @@ export async function printContentItemInitialDetails(
       tgChat.app.i18n,
       tgChat.app.appConfig.utcOffset,
       resolvedSns,
-      hasTgFooter,
+      availableTgFooter,
       postTexts
     )
   )
