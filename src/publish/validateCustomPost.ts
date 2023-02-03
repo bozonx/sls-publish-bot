@@ -2,6 +2,8 @@ import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
 import {makeResultPostText} from '../helpers/helpers.js';
 import {CustomPostState} from '../askUser/customTgPost/askCustomPostTg.js';
+import _ from 'lodash';
+import {SN_TYPES} from '../types/snTypes.js';
 
 
 export default function validateCustomPost(tgChat: TgChat, state: CustomPostState) {
@@ -33,10 +35,16 @@ export default function validateCustomPost(tgChat: TgChat, state: CustomPostStat
   }
   // if text-like post is bigger than 2048
   else if (state.postAsText && cleanFullText.length > TELEGRAM_MAX_POST) {
-    throw tgChat.app.i18n.errors.bigPost;
+    throw _.template(tgChat.app.i18n.errors.bigPost)({
+      SN: SN_TYPES.telegram,
+      COUNT: TELEGRAM_MAX_POST,
+    })
   }
   // if image caption too big
   else if (!state.postAsText && cleanFullText.length > TELEGRAM_MAX_CAPTION) {
-    throw tgChat.app.i18n.errors.bigCaption;
+    throw _.template(tgChat.app.i18n.errors.bigCaption)({
+      SN: SN_TYPES.telegram,
+      COUNT: TELEGRAM_MAX_CAPTION,
+    })
   }
 }

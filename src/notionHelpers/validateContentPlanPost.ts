@@ -3,16 +3,17 @@ import {
   MAX_INSTA_TAGS,
   TELEGRAM_MAX_CAPTION,
   TELEGRAM_MAX_POST,
-  WARN_SIGN
+  WARN_SIGN, ZEN_MAX_POST
 } from '../types/constants.js';
 import TgChat from '../apiTg/TgChat.js';
-import {SnType} from '../types/snTypes.js';
+import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 import ContentItem from '../types/ContentItem.js';
 import {makePostFromContentItem} from './makePostFromContentItem.js';
 import {NotionBlocks} from '../types/notion.js';
 import {makeCleanTexts} from '../helpers/helpers.js';
+import _ from 'lodash';
 
 
 export async function validateContentPlanPost(
@@ -117,7 +118,10 @@ export async function validateContentLengths(
       PUBLICATION_TYPES.post2000,
       PUBLICATION_TYPES.announcement
     ].includes(pubType) && clearText.length > TELEGRAM_MAX_POST) {
-      throw tgChat.app.i18n.errors.bigPost
+      throw _.template(tgChat.app.i18n.errors.bigPost)({
+        SN: SN_TYPES.telegram,
+        COUNT: TELEGRAM_MAX_POST,
+      })
     }
     // if image caption too big
     else if ([
@@ -128,23 +132,30 @@ export async function validateContentLengths(
       PUBLICATION_TYPES.narrative,
       PUBLICATION_TYPES.reels,
     ].includes(pubType) && clearText.length > TELEGRAM_MAX_CAPTION) {
-      throw tgChat.app.i18n.errors.bigCaption
+      throw _.template(tgChat.app.i18n.errors.bigCaption)({
+        SN: SN_TYPES.telegram,
+        COUNT: TELEGRAM_MAX_CAPTION,
+      })
     }
   }
   else if (cleanTexts?.instagram) {
     const clearText = cleanTexts.instagram
 
     if (clearText.length > INSTAGRAM_MAX_POST) {
-      // TODO: а пост для insta ???
-
+      throw _.template(tgChat.app.i18n.errors.bigPost)({
+        SN: SN_TYPES.instagram,
+        COUNT: INSTAGRAM_MAX_POST,
+      })
     }
   }
   else if (cleanTexts?.zen) {
     const clearText = cleanTexts.zen
 
-    if (clearText.length > INSTAGRAM_MAX_POST) {
-      // TODO: а пост для zen ???
-
+    if (clearText.length > ZEN_MAX_POST) {
+      throw _.template(tgChat.app.i18n.errors.bigPost)({
+        SN: SN_TYPES.zen,
+        COUNT: ZEN_MAX_POST,
+      })
     }
   }
 
