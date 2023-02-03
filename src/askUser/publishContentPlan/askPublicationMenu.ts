@@ -86,29 +86,29 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_TIME,
             },
           ],
-          // TODO: только для телеги !!!!!
-          // TODO: если футера нет не показыват даже переключалку
           // ask footer
           (
-            // TODO: не правильно
-            tgChat.app.blogs[blogName].sn.telegram?.postFooter
-            // TODO: article too
-            && item.type !== PUBLICATION_TYPES.poll
+            state.sns.includes(SN_TYPES.telegram)
+            // TODO: не правильно - резолвить
+            && tgChat.app.blogs[blogName].sn.telegram?.postFooter
+            && ![
+              PUBLICATION_TYPES.poll,
+              PUBLICATION_TYPES.article
+            ].includes(item.type)
           ) ? [{
-            text: (state.useFooter)
-              ? tgChat.app.i18n.commonPhrases.noPostFooter
-              : tgChat.app.i18n.commonPhrases.yesPostFooter,
+            text: (state.useTgFooter)
+              ? tgChat.app.i18n.commonPhrases.noTgPostFooter
+              : tgChat.app.i18n.commonPhrases.yesTgPostFooter,
             callback_data: PUBLISH_MENU_ACTION.FOOTER_SWITCH,
           }] : [],
-          // TODO: только для телеги
           // ask preview
-          (!state.mainImgUrl && [
+          (state.sns.includes(SN_TYPES.telegram) && !state.mainImgUrl && [
             PUBLICATION_TYPES.post2000,
             PUBLICATION_TYPES.announcement
           ].includes(item.type)) ? [{
             text: (state.usePreview)
-              ? tgChat.app.i18n.commonPhrases.noPreview
-              : tgChat.app.i18n.commonPhrases.yesPreview,
+              ? tgChat.app.i18n.commonPhrases.noTgPreview
+              : tgChat.app.i18n.commonPhrases.yesTgPreview,
             callback_data: PUBLISH_MENU_ACTION.PREVIEW_SWITCH,
           }] : [],
           // ask to change post text only for announcement
@@ -159,22 +159,21 @@ export async function askPublicationMenu(
               callback_data: PUBLISH_MENU_ACTION.CHANGE_SNS,
             }
           ],
-          // TODO: только для телеги
           // ask URL button
-          ([
+          (state.sns.includes(SN_TYPES.telegram) && [
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
             PUBLICATION_TYPES.story,
             PUBLICATION_TYPES.announcement,
           ].includes(item.type)) ? [{
             text: (state.urlBtn)
-              ? tgChat.app.i18n.buttons.changeUrlButton
-              : tgChat.app.i18n.buttons.addUrlButton,
+              ? tgChat.app.i18n.buttons.changeTgUrlButton
+              : tgChat.app.i18n.buttons.addTgUrlButton,
             callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
           }] : [],
           // TODO: только для телеги
           // ask auto remove
-          ([
+          (state.sns.includes(SN_TYPES.telegram) && [
             PUBLICATION_TYPES.post1000,
             PUBLICATION_TYPES.post2000,
             PUBLICATION_TYPES.announcement,
@@ -182,8 +181,8 @@ export async function askPublicationMenu(
             PUBLICATION_TYPES.story,
           ].includes(item.type)) ? [{
             text: (state.autoDeleteIsoDateTime)
-              ? tgChat.app.i18n.buttons.changeAutoRemove
-              : tgChat.app.i18n.buttons.setAutoRemove,
+              ? tgChat.app.i18n.buttons.changeTgAutoRemove
+              : tgChat.app.i18n.buttons.setTgAutoRemove,
             callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
           }] : [],
           [

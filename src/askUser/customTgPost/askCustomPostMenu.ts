@@ -65,14 +65,14 @@ export async function askCustomPostMenu(
         [
           (!state.forceDisableFooter) ? [{
             text: (state.useFooter)
-              ? tgChat.app.i18n.commonPhrases.noPostFooter
-              : tgChat.app.i18n.commonPhrases.yesPostFooter,
+              ? tgChat.app.i18n.commonPhrases.noTgPostFooter
+              : tgChat.app.i18n.commonPhrases.yesTgPostFooter,
             callback_data: CUSTOM_POST_ACTION.FOOTER_SWITCH,
           }] : [],
           (!state.mediaGroup.length) ? [{
             text: (state.usePreview)
-              ? tgChat.app.i18n.commonPhrases.noPreview
-              : tgChat.app.i18n.commonPhrases.yesPreview,
+              ? tgChat.app.i18n.commonPhrases.noTgPreview
+              : tgChat.app.i18n.commonPhrases.yesTgPreview,
             callback_data: CUSTOM_POST_ACTION.PREVIEW_SWITCH,
           }] : [],
           compactUndefined([
@@ -92,16 +92,16 @@ export async function askCustomPostMenu(
           compactUndefined([
             (state.onlyOneImage) ? {
               text: (state.urlBtn)
-                ? tgChat.app.i18n.buttons.changeUrlButton
-                : tgChat.app.i18n.buttons.addUrlButton,
+                ? tgChat.app.i18n.buttons.changeTgUrlButton
+                : tgChat.app.i18n.buttons.addTgUrlButton,
               callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
             } : undefined,
           ]),
           [
             {
               text: (state.autoDeleteIsoDateTime || state.autoDeletePeriodHours)
-                ? tgChat.app.i18n.buttons.changeAutoRemove
-                : tgChat.app.i18n.buttons.setAutoRemove,
+                ? tgChat.app.i18n.buttons.changeTgAutoRemove
+                : tgChat.app.i18n.buttons.setTgAutoRemove,
               callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
             },
           ],
