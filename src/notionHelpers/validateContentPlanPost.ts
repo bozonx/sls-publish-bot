@@ -8,6 +8,8 @@ import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMe
 
 export function validateContentPlanPost(tgChat: TgChat, state: ContentItemState) {
 
+  // TODO: mainImgUrl обязательна для некоторых типов постов, но её может сразу и не быть
+
   // TODO: review
   // TODO: наверное тут же вызывать validateContentPlanPostText
   // TODO: проверка длинн

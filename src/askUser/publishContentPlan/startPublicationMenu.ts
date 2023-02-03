@@ -94,7 +94,8 @@ export async function startPublicationMenu(
 
       }
       else {
-        postTexts = makePostFromContentItem(
+        postTexts = await makePostFromContentItem(
+          // TODO: remake
           state.sns,
           item,
           //state,

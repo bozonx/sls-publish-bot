@@ -74,8 +74,6 @@ export async function askPublicationMenu(
         disableOk = true
       }
 
-      // TODO: mainImgUrl обязательна для некоторых типов постов, но её может сразу и не быть
-
       return [
         tgChat.app.i18n.menu.publishFromCpMenu,
         compactButtons([

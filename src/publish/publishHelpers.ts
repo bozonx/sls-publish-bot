@@ -10,7 +10,6 @@ import {MediaGroupItem} from '../types/types.js';
 import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/MessageEvent.js';
 import {isValidUrl} from '../lib/common.js';
 import {transformHtmlToCleanText} from '../helpers/transformHtmlToCleanText.js';
-import {PUBLICATION_TYPES} from '../types/publicationType.js';
 
 
 export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {
@@ -33,8 +32,6 @@ export async function makeContentLengthDetails(
     // TODO: а для инсты то может не html быть???
     cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
   }
-
-  // TODO: cleanTexts учитывать статью
 
   const result: string[] = []
 

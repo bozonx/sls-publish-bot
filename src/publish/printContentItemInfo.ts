@@ -8,7 +8,6 @@ import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import ru from '../I18n/ru.js';
 import {makeContentLengthDetails} from './publishHelpers.js';
-import {transformHtmlToCleanText} from '../helpers/transformHtmlToCleanText.js';
 import {makePostFromContentItem} from '../notionHelpers/makePostFromContentItem.js';
 
 
@@ -17,6 +16,8 @@ export async function printContentItemInitialDetails(
   resolvedSns: SnType[],
   contentItem: ContentItem,
   pageBlocks?: NotionBlocks,
+
+  // TODO: not need
   footerTmplMd?: string
 ) {
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
@@ -33,9 +34,12 @@ export async function printContentItemInitialDetails(
   }
   const postTexts = await makePostFromContentItem(
     resolvedSns,
+    tgChat.app.blogs[blogName],
     contentItem,
+    useFooter,
     pageBlocks,
-    footerTmplMd,
+    replacedHtmlText,
+    instaTags
   )
   // send record's info from content plan
   await tgChat.reply(
@@ -47,6 +51,7 @@ export async function printContentItemInitialDetails(
       resolvedSns,
       postTexts,
       pageBlocks,
+      // TODO: футер должен быть зарезовленый, а это хуйхня
       footerTmplMd
     )
   )
