@@ -69,7 +69,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       parsedContentItem,
       pageBlocks,
       mainImgUrl,
-      footerTmplMd
+      //footerTmplMd
     )
   }));
 }

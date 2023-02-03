@@ -113,8 +113,8 @@ export async function makeContentPlanFinalDetails(
   state: ContentItemState,
   contentItem: ContentItem,
   usePreview: boolean,
+  useFooter: boolean,
   postTexts?: Partial<Record<SnType, string>>,
-  footerTgTmplMd?: string
 ) {
   const result: string[] = [
     tgChat.app.i18n.commonPhrases.linkWebPreview

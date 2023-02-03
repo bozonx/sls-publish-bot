@@ -41,10 +41,13 @@ export async function startPublicationMenu(
   item: ContentItem,
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string,
-  footerTgTmplMd?: string
+  // TODO: зачем ???? -
+  //footerTgTmplMd?: string
 ) {
   const state: ContentItemState = {
     usePreview: true,
+    // TODO: если футера нет то false
+    // TODO: если футера нет не показыват даже переключалку
     useFooter: true,
     sns: resolvedSns,
     pubTime: item.time,
@@ -95,12 +98,13 @@ export async function startPublicationMenu(
       }
       else {
         postTexts = await makePostFromContentItem(
-          // TODO: remake
           state.sns,
+          tgChat.app.blogs[blogName],
           item,
-          //state,
+          state.useFooter,
           pageBlocks,
-          footerTgTmplMd
+          state.replacedHtmlText,
+          state.instaTags
         )
 
         if (state.sns.includes(SN_TYPES.telegram)) {
@@ -117,9 +121,9 @@ export async function startPublicationMenu(
         }
       }
       // make text for instagram
-      if (pageBlocks && state.sns.includes(SN_TYPES.instagram)) {
+      if (pageBlocks && state.sns.includes(SN_TYPES.instagram) && postTexts?.instagram) {
         await tgChat.reply(tgChat.app.i18n.menu.textForInstagram)
-        await tgChat.reply(postTexts?.instagram!)
+        await tgChat.reply(postTexts.instagram)
       }
       // print details
       await tgChat.reply(await makeContentPlanFinalDetails(
@@ -128,8 +132,8 @@ export async function startPublicationMenu(
         state,
         item,
         usePreview,
+        state.useFooter,
         postTexts,
-        footerTgTmplMd
       ))
 
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
