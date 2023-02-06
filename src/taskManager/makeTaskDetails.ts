@@ -25,12 +25,17 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
 
   if (task.sn) resultArr.push(`${app.i18n.commonPhrases.sn}: ${task.sn}`);
   if (task.chatId) {
-    const res = await app.tg.bot.telegram.getChat(task.chatId)
+    try {
+      const res = await app.tg.bot.telegram.getChat(task.chatId)
 
-    username = (res as any).username
+      username = (res as any).username
 
-    resultArr.push(`Chat username: ${username}`);
-    resultArr.push(`chatId: ${task.chatId}`);
+      resultArr.push(`Chat username: ${username}`);
+      resultArr.push(`chatId: ${task.chatId}`);
+    }
+    catch (e) {
+      resultArr.push(`Chat username: CAN'T GET CHAT ${task.chatId}`)
+    }
   }
 
   if ((task as any).messageId) {

@@ -35,16 +35,16 @@ export default class App {
 
   init() {
     (async () => {
-      await this.tg.init();
-      await this.telegraPh.init();
-      await this.tasks.init();
+      await this.tg.init()
+      await this.telegraPh.init()
+      await this.tasks.init()
     })()
       .catch((e) => {
-        this.consoleLog.error(e);
+        this.consoleLog.error(e)
 
         // TODO: нормально задестроить
 
-        process.exit(2);
+        process.exit(2)
       });
   }
 

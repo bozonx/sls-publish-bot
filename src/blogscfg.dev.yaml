@@ -29,6 +29,14 @@ test:
       articlePostTmpl: "[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }"
       articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
   instagram:
+    supportedTypes:
+      - post1000
+      - post2000
+      - mem
+      - photos
+      - story
+      - narrative
+      - reels
     postFooter:  "${ TAGS }"
   zen: {}
   blogger:
