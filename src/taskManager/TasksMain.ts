@@ -60,8 +60,9 @@ export default class TasksMain {
 
   async addTaskAndLog(task: TaskItem): Promise<string | null> {
     await this.app.channelLog.log(
-      this.app.i18n.message.taskRegistered + '\n' + await makeTaskDetails(task, this.app)
-    );
+      this.app.i18n.message.taskRegistered
+        + '\n' + await makeTaskDetails(task, this.app)
+    )
 
     return this.addTaskSilently(task);
   }

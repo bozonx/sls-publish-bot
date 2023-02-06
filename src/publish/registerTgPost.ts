@@ -1,4 +1,3 @@
-import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
 import {
   publishTgCopy,
@@ -61,10 +60,13 @@ export async function registerTgPost(
       autoDeleteTgIsoDateTime
     );
   }
+  else if (!mediaGroup.length) {
+    throw new Error(`No media to post`)
+  }
   else {
-    // post as image or video caption
+    // post as video
     if (mediaGroup[0].type === 'video') {
-      if (!mediaGroup[0].fileId) throw new Error(`No video fileId`);
+      if (!mediaGroup[0].fileId) throw new Error(`No video fileId`)
 
       await registerTgTaskVideo(
         blogName,
@@ -80,7 +82,7 @@ export async function registerTgPost(
     else {
       const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
 
-      if (!imgUrl) throw new Error(`No image`);
+      if (!imgUrl) throw new Error(`No image`)
 
       await registerTgTaskImage(
         blogName,
@@ -91,11 +93,11 @@ export async function registerTgPost(
         resultTextHtml,
         tgUrlBtn,
         autoDeleteTgIsoDateTime
-      );
+      )
     }
   }
 
-  await tgChat.reply(tgChat.app.i18n.message.taskRegistered);
+  await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
 }
 
 /**
@@ -354,9 +356,9 @@ async function registerPublishTaskTg(
   const startTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
 
   if (!chatId) {
-    await tgChat.reply(tgChat.app.i18n.errors.noChannel);
+    await tgChat.reply(tgChat.app.i18n.errors.noChannel)
 
-    throw new Error(`Telegram chat id doesn't set`);
+    throw new Error(`Telegram chat id doesn't set`)
   }
 
   const task: PostponeTgPostTask = {
@@ -375,5 +377,5 @@ async function registerPublishTaskTg(
     mediaGroup,
   }
 
-  await tgChat.app.tasks.addTaskAndLog(task);
+  await tgChat.app.tasks.addTaskAndLog(task)
 }

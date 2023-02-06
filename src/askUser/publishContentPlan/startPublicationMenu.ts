@@ -174,7 +174,6 @@ export async function startPublicationMenu(
           return
         }
 
-        await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
         await tgChat.steps.cancel()
       }), tgChat.app.i18n.commonPhrases.publishConfirmation)
     })
