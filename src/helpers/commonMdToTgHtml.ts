@@ -39,13 +39,13 @@ export async function commonMdToTgHtml(mdv2?: string): Promise<string | undefine
       sanitize: true,
       //passThrough: ['p'],
       handlers: {
-        strong(h, node) {
+        strong(h: any, node: any) {
           return h(node, 'b', all(h, node))
         },
-        emphasis(h, node) {
+        emphasis(h: any, node: any) {
           return h(node, 'i', all(h, node))
         },
-        paragraph(h, node) {
+        paragraph(h: any, node: any) {
           //console.log(222, h, node)
           //return 'children' in node ? {...node, children: all(h, node)} : node
           return h(node, '', all(h, node))
