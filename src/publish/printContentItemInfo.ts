@@ -113,12 +113,18 @@ export async function makeContentPlanFinalDetails(
   postTexts?: Partial<Record<SnType, string>>,
 ) {
   const result: string[] = [
-    tgChat.app.i18n.commonPhrases.linkWebPreview
-    + tgChat.app.i18n.onOff[Number(state.usePreview)],
     tgChat.app.i18n.commonPhrases.sns + ': ' + state.sns.join(', '),
     tgChat.app.i18n.contentInfo.dateTime + ': '
     + makeHumanDateTimeStr(contentItem.date, state.pubTime, tgChat.app.appConfig.utcOffset)
   ]
+
+  if ([
+    PUBLICATION_TYPES.post2000,
+    PUBLICATION_TYPES.announcement,
+  ].includes(contentItem.type)) {
+    result.push(tgChat.app.i18n.commonPhrases.linkWebPreview
+      + tgChat.app.i18n.onOff[Number(state.usePreview)])
+  }
 
   if (state.autoDeleteTgIsoDateTime) {
     result.push(
