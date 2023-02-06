@@ -10,6 +10,9 @@ export const CONTENT_PROPS = {
   status: 'status',
   onlySn: 'onlySn',
   type: 'type',
+  tgTags: 'tgTags',
+  instaTags: 'instaTags',
+  imageDescr: 'imageDescr',
 }
 
 export const CONTENT_STATUS = {
@@ -24,19 +27,19 @@ export type ContentStatus = 'to_write'
   | 'to_edit'
   | 'to_correct'
   | 'to_publish'
-  | 'published';
+  | 'published'
 
 export default interface ContentItem {
   // date in ISO format
-  date: string;
-  time: string;
-  nameGist?: string;
-  note: string;
-  status: ContentStatus,
-  onlySn: SnType[],
-  type: PublicationType,
+  date: string
+  time: string
+  nameGist?: string
+  note: string
+  status: ContentStatus
+  onlySn: SnType[]
+  type: PublicationType
   // additional
-  imageDescr?: string
   tgTags?: string[]
   instaTags?: string[]
+  imageDescr?: string
 }
