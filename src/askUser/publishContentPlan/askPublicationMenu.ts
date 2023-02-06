@@ -30,8 +30,6 @@ import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
 import {ContentItemState} from './startPublicationMenu.js';
 import ContentItem from '../../types/ContentItem.js';
-import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
-import {NotionBlocks} from '../../types/notion.js';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'

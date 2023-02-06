@@ -4,12 +4,11 @@ import ru from '../I18n/ru.js';
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ROOT_LEVEL_BLOCKS} from '../notionHelpers/requestPageBlocks.js';
-import {publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
+import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
 import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/MessageEvent.js';
 import {isValidUrl} from '../lib/common.js';
-import {transformHtmlToCleanText} from '../helpers/transformHtmlToCleanText.js';
 
 
 export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {
@@ -128,8 +127,21 @@ export async function printPost(
       resultTextHtml
     );
   }
-  // else one image with type video | photo | photoUrl
-  return await publishTgVideo(
+  else if (!mediaGroup.length) {
+    throw new Error(`Nothing to post`)
+  }
+  // else print one video
+  else if ((mediaGroup[0] as any).type === 'video') {
+    return await publishTgVideo(
+      tgChat.app,
+      chatId,
+      (mediaGroup[0] as any).fileId,
+      resultTextHtml,
+      tgUrlBtn
+    );
+  }
+  // else print one image
+  return await publishTgImage(
     tgChat.app,
     chatId,
     (mediaGroup[0] as any).fileId || (mediaGroup[0] as any).url,
