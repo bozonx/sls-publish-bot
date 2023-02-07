@@ -28,16 +28,16 @@ test:
       reelFooter:  "[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | #рилс ${ TAGS }"
       articlePostTmpl: "[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }"
       articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
-  instagram:
-    supportedTypes:
-      - post1000
-      - post2000
-      - mem
-      - photos
-      - story
-      - narrative
-      - reels
-    postFooter:  "${ TAGS }"
-  zen: {}
-  blogger:
-    articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'
+    instagram:
+      supportedTypes:
+        - post1000
+        - post2000
+        - mem
+        - photos
+        - story
+        - narrative
+        - reels
+      postFooter:  "${ TAGS }"
+    zen: {}
+    blogger:
+      articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'

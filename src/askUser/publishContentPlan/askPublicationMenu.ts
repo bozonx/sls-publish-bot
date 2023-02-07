@@ -408,6 +408,6 @@ async function handleButtons(
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
       }));
     default:
-      throw new Error(`Unknown action`);
+      throw new Error(`Unknown action`)
   }
 }
