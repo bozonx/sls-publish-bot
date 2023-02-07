@@ -244,7 +244,7 @@ async function handleButtons(
           await tgChat.reply(state.replacedHtmlText, undefined, true, true)
         }
         else {
-          await tgChat.reply(tgChat.app.i18n.menu.selectedNoPostText)
+          await tgChat.reply(tgChat.app.i18n.menu.selectedInitialPostText)
         }
         // print menu again
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
