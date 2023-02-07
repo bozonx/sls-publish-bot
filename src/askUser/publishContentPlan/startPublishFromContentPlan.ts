@@ -60,18 +60,18 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
 
-    const snsForCheck: SnType[] = (parsedContentItem.onlySn?.length)
-      ? parsedContentItem.onlySn
-      : Object.keys(SN_SUPPORT_TYPES) as SnType[]
-    // warn if publication type doesn't supported by sn
-    for (const sn of snsForCheck) {
-      if (SN_SUPPORT_TYPES[sn].indexOf(parsedContentItem.type) === -1) {
-        await tgChat.reply(WARN_SIGN + ' ' + _.template(tgChat.app.i18n.errors.unsupportedPubType)({
-          SN: sn,
-          PUB_TYPE: parsedContentItem.type,
-        }))
-      }
-    }
+    // const snsForCheck: SnType[] = (parsedContentItem.onlySn?.length)
+    //   ? parsedContentItem.onlySn
+    //   : Object.keys(SN_SUPPORT_TYPES) as SnType[]
+    // // warn if publication type doesn't supported by sn
+    // for (const sn of snsForCheck) {
+    //   if (SN_SUPPORT_TYPES[sn].indexOf(parsedContentItem.type) === -1) {
+    //     await tgChat.reply(WARN_SIGN + ' ' + _.template(tgChat.app.i18n.errors.unsupportedPubType)({
+    //       SN: sn,
+    //       PUB_TYPE: parsedContentItem.type,
+    //     }))
+    //   }
+    // }
 
     await printContentItemInitialDetails(
       tgChat,
