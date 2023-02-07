@@ -52,9 +52,6 @@ export const SN_SUPPORT_TYPES = {
     PUBLICATION_TYPES.article,
     PUBLICATION_TYPES.post1000,
     PUBLICATION_TYPES.post2000,
-    PUBLICATION_TYPES.mem,
-    PUBLICATION_TYPES.photos,
-    PUBLICATION_TYPES.narrative,
   ],
   [SN_TYPES.youtube]: [
     PUBLICATION_TYPES.reels,

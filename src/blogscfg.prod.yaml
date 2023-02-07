@@ -37,10 +37,6 @@ slsfreedom:
       postFooter:    'Автор: Козырин Иван, [Система Личной Свободы](https://dzen.ru/sls_freedom)'
       articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://dzen.ru/sls_freedom)'
     blogger:
-      supportedTypes:
-        - article
-        - post1000
-        - post2000
       postFooter:    'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'
       articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'
 

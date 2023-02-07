@@ -92,8 +92,9 @@ export async function contentPublishFork(
         }
 
         break;
-      // case SN_TYPES.instagram:
-      //   break;
+      case SN_TYPES.instagram:
+        // just do nothing
+        break;
       // case SN_TYPES.zen:
       //   break;
       // case SN_TYPES.youtube:
