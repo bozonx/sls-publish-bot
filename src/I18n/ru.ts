@@ -231,6 +231,7 @@ const dict = {
     onlyImageAllowed: 'Разрешено прикреплять только картинки',
     onlyVideoAllowed: 'Разрешено прикреплять только видео',
     videoNotSuppoerted: 'Видео не поддерживается в этом формате',
+    articleNeedText: 'Для статьи необходим текст, но его нет',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',

@@ -8,9 +8,12 @@ import {requestPageBlocks} from '../../notionHelpers/requestPageBlocks.js';
 import {resolvePostFooter, resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
 import {printImage, printContentItemInitialDetails} from '../../publish/printContentItemInfo.js';
-import {SnType} from '../../types/snTypes.js';
+import {SN_SUPPORT_TYPES, SnType} from '../../types/snTypes.js';
 import {startPublicationMenu} from './startPublicationMenu.js';
 import {NotionBlocks} from '../../types/notion.js';
+import _ from 'lodash';
+import {WARN_SIGN} from '../../types/constants.js';
+import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
@@ -43,6 +46,13 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       return
     }
 
+    if (parsedContentItem.type === PUBLICATION_TYPES.article && !pageBlocks) {
+      await tgChat.reply(WARN_SIGN + ' ' + tgChat.app.i18n.errors.articleNeedText)
+      await tgChat.steps.back()
+
+      return
+    }
+
     const blogSns = Object.keys(tgChat.app.blogs[blogName].sn) as SnType[];
     const resolvedSns = resolveSns(blogSns, parsedContentItem.onlySn, parsedContentItem.type)
     const availableTgFooter = Boolean(resolvePostFooter(parsedContentItem.type, tgChat.app.blogs[blogName].sn.telegram))
@@ -50,21 +60,18 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
     // if the image wasn't printed then you can set it in page menu
     mainImgUrl = await printImage(tgChat, mainImgUrl)
 
-    // TODO: предупредить если blog.sn.supportedTypes нет нужного типа публикации
-    // TODO: для статьи обязателен текст
-
-    // TODO: что после проверки ??? запретить или что?
-    // // check publication type need to be supported by social network
-    // for (const sn of state.sns) {
-    //   const types = SN_SUPPORT_TYPES[sn]
-    //
-    //   if (types.indexOf(item.type) === -1) {
-    //     throw _.template(tgChat.app.i18n.errors.unsupportedPubType)({
-    //       SN: sn,
-    //       PUB_TYPE: item.type,
-    //     })
-    //   }
-    // }
+    const snsForCheck: SnType[] = (parsedContentItem.onlySn?.length)
+      ? parsedContentItem.onlySn
+      : Object.keys(SN_SUPPORT_TYPES) as SnType[]
+    // warn if publication type doesn't supported by sn
+    for (const sn of snsForCheck) {
+      if (SN_SUPPORT_TYPES[sn].indexOf(parsedContentItem.type) === -1) {
+        await tgChat.reply(WARN_SIGN + ' ' + _.template(tgChat.app.i18n.errors.unsupportedPubType)({
+          SN: sn,
+          PUB_TYPE: parsedContentItem.type,
+        }))
+      }
+    }
 
     await printContentItemInitialDetails(
       tgChat,

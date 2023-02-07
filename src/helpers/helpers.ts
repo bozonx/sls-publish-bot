@@ -35,19 +35,18 @@ export function resolveSns(
   onlySns: SnType[],
   pubType: PublicationType
 ): SnType[] {
-  let filteredSns = [];
+  let filteredSns = []
 
   if (onlySns.length) {
     // user specified only that sns - we should use only them
-    filteredSns = onlySns;
+    filteredSns = onlySns
   }
   else {
     // filter that sns which is compared with publication type
-    filteredSns = matchSnsForType(pubType);
+    filteredSns = matchSnsForType(pubType)
   }
-
   // compare all the blogs sns with filtered
-  return _.intersection(blogSns, filteredSns);
+  return _.intersection(blogSns, filteredSns)
 }
 
 export function matchSnsForType(pubType: PublicationType): SnType[] {
