@@ -248,7 +248,7 @@ async function handleButtons(
         }
         // print menu again
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
-      }));
+      }), undefined, undefined, tgChat.app.i18n.buttons.getInitialNotionText);
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         // validate that selected date is greater than auto-delete date

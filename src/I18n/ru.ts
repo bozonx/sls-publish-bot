@@ -97,6 +97,7 @@ const dict = {
     finishPoll: 'Завершить опрос',
     setDate: 'Установить дату',
     withoutText: 'Без текста',
+    getInitialNotionText: 'Вернуть первоначальный текст из Notion',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',

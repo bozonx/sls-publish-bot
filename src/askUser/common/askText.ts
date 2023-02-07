@@ -20,14 +20,14 @@ export async function askText(
   onDone: ResultCallback,
   msgReplace?: string,
   allowNoText = true,
-  noTextReplace?: string,
+  noTextLabel?: string,
   validate?: (textHtml?: string, cleanText?: string) => void
 ) {
   const msg = (msgReplace) ? msgReplace : tgChat.app.i18n.menu.askTypeText;
   const buttons = [
     (allowNoText) ? [
       {
-        text: (noTextReplace) ? noTextReplace : tgChat.app.i18n.buttons.withoutText,
+        text: (noTextLabel) ? noTextLabel : tgChat.app.i18n.buttons.withoutText,
         callback_data: SKIP_BTN_CALLBACK,
       },
     ] : [],
