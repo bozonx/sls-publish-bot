@@ -30,7 +30,7 @@ export async function makePostFromContentItem(
     if (![
       PUBLICATION_TYPES.article,
       PUBLICATION_TYPES.poll,
-    ].includes(item.type) && textBlocks) {
+    ].includes(item.type) && textBlocks && !replacedHtmlText) {
       postText = transformNotionToTgHtml(textBlocks)
     }
 
@@ -50,7 +50,7 @@ export async function makePostFromContentItem(
     if (![
       PUBLICATION_TYPES.article,
       PUBLICATION_TYPES.poll,
-    ].includes(item.type) && textBlocks) {
+    ].includes(item.type) && textBlocks && !replacedHtmlText) {
       // TODO: а может лучше делать html ???
       postText = transformNotionToInstagramPost(textBlocks)
     }

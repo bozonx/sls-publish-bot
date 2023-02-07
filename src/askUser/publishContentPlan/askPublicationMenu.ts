@@ -112,9 +112,7 @@ export async function askPublicationMenu(
           }] : [],
           // ask to change post text only for announcement
           (item.type === PUBLICATION_TYPES.announcement) ? [{
-            text: (state.replacedHtmlText)
-              ? tgChat.app.i18n.buttons.replaceText
-              : tgChat.app.i18n.buttons.addText,
+            text: tgChat.app.i18n.buttons.replaceText,
             callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
           }] : [],
           // ask to change main image/video
@@ -240,7 +238,6 @@ async function handleButtons(
       // it's only for annoucement
       return await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
         state.replacedHtmlText = textHtml
-        //state.replacedCleanText = cleanText
         // print result
         if (state.replacedHtmlText) {
           await tgChat.reply(tgChat.app.i18n.menu.selectedPostText)
