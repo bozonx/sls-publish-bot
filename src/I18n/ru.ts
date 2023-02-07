@@ -171,7 +171,6 @@ const dict = {
     link: 'Сылка',
     type: 'Тип',
     status: 'Статус',
-    onlySn: 'Только соц сети',
     note: 'Заметка',
     noRestriction: 'Без ограничений',
     imageDescr: 'Описание картинки',

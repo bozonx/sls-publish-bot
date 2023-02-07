@@ -65,8 +65,7 @@ async function makeContentPlanPreDetails(
 ): Promise<string> {
   const result: string[] = [
     `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(contentItem.date, contentItem.time, utcOffset)}`,
-    `${i18n.contentInfo.onlySn}: `
-    + `${(contentItem.onlySn.length) ? contentItem.onlySn.join(', ') : i18n.contentInfo.noRestriction}`,
+    `${i18n.commonPhrases.sns}: ${resolvedSns.join(', ')}`,
     `${i18n.contentInfo.type}: ${contentItem.type}`,
     `${i18n.contentInfo.status}: ${contentItem.status}`,
   ]
