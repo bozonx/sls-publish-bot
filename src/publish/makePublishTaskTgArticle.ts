@@ -1,11 +1,34 @@
 import _ from 'lodash';
+import {parseMarkdown} from 'better-telegraph'
 import TgChat from '../apiTg/TgChat.js';
 import {makeTagsString} from '../lib/common.js';
 import {registerTgTaskOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
-import {transformNotionToTelegraphNodes} from '../helpers/transformNotionToTelegraphNodes.js';
 import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
+import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
+import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
 
+
+export function makeFinalArticleNodes(
+  blogName: string,
+  tgChat: TgChat,
+  articleBlocks: NotionBlocks,
+): TelegraphNode[] {
+  const footerStr = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
+  const telegraPhContent = transformNotionToTelegraph(articleBlocks)
+  // add footer
+  if (footerStr) {
+    telegraPhContent.push({
+      tag: 'p',
+      children: [
+        '\n',
+        ...parseMarkdown(footerStr),
+      ],
+    })
+  }
+
+  return telegraPhContent
+}
 
 async function makeArticleTgPostHtml(
   articleTitle: string,
@@ -15,7 +38,6 @@ async function makeArticleTgPostHtml(
   postTmpl?: string,
 ): Promise<string> {
   let postStr: string
-  //const tags = mdFormat.escape(makeTagsString(tgTags))
   const tags = makeTagsString(tgTags)
 
   if (articleAnnouncement) {
@@ -49,7 +71,11 @@ export async function makePublishTaskTgArticle(
   tgTags?: string[],
   articleAnnouncement?: string
 ) {
-  const telegraphNodes = transformNotionToTelegraphNodes(blogName, tgChat, articleBlocks)
+  const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
+
+  if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`)
+
+  const telegraphNodes = makeFinalArticleNodes(blogName, tgChat, articleBlocks)
   // create article on telegra.ph
   const articleUrl = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
   const postHtml = await makeArticleTgPostHtml(
@@ -57,7 +83,7 @@ export async function makePublishTaskTgArticle(
     articleUrl,
     articleAnnouncement,
     tgTags,
-    tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
+    postTmpl
   )
 
   await registerTgTaskOnlyText(

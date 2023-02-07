@@ -20,7 +20,7 @@ test:
         - announcement
         - poll
         - reels
-      telegraPhAuthorName: 'Козырин Иван'
+      telegraPhAuthorName: 'Система Личной Свободы'
       telegraPhAuthorUrl: 'https://t.me/+DT00UFZf3_IwYmY6'
       postFooter:  "[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS }"
       storyFooter: "[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | #сторис ${ TAGS }"
