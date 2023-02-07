@@ -82,16 +82,19 @@ export async function validateContentPlanPost(
   }
   // no text no image
   for (const sn of state.sns) {
-    if ([
-      PUBLICATION_TYPES.post1000,
-      PUBLICATION_TYPES.post2000,
-      PUBLICATION_TYPES.mem,
-      PUBLICATION_TYPES.photos,
-      PUBLICATION_TYPES.story,
-      PUBLICATION_TYPES.narrative,
-      PUBLICATION_TYPES.announcement,
-      PUBLICATION_TYPES.reels,
-    ].includes(item.type) && !postTexts?.[sn as SnType] && !state.mainImgUrl && !state.replacedMediaGroup?.length) {
+    if (
+      [
+        PUBLICATION_TYPES.post1000,
+        PUBLICATION_TYPES.post2000,
+        PUBLICATION_TYPES.mem,
+        PUBLICATION_TYPES.photos,
+        PUBLICATION_TYPES.story,
+        PUBLICATION_TYPES.narrative,
+        PUBLICATION_TYPES.announcement,
+        PUBLICATION_TYPES.reels,
+      ].includes(item.type)
+      && !postTexts?.[sn as SnType] && !state.mainImgUrl && !state.replacedMediaGroup?.length
+    ) {
       throw tgChat.app.i18n.errors.noImageNoText + ' - ' + sn
     }
     // if text based post has no text
@@ -99,7 +102,7 @@ export async function validateContentPlanPost(
       PUBLICATION_TYPES.post2000,
       PUBLICATION_TYPES.announcement,
     ].includes(item.type) && !postTexts?.[sn as SnType]) {
-      throw tgChat.app.i18n.errors.noText
+      throw tgChat.app.i18n.errors.noText + ' - ' + sn
     }
   }
 

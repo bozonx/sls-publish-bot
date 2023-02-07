@@ -55,7 +55,7 @@ export async function makePostFromContentItem(
       postText = transformNotionToInstagramPost(textBlocks)
     }
 
-    if (result[SN_TYPES.instagram]) {
+    if (postText) {
       // add tags at the end of text
       result[SN_TYPES.instagram] = makeResultPostText(
         instaTags || [],
