@@ -29,14 +29,15 @@ export async function askPostMedia(
   mediaRequired: boolean,
   onlyOneImage: boolean,
   onDone: AskPostMediaDone,
+  skipBtnLabel?: string
 ) {
   const msg = (onlyOneImage)
     ? tgChat.app.i18n.menu.uploadOne
-    : tgChat.app.i18n.menu.uploadSeveral;
+    : tgChat.app.i18n.menu.uploadSeveral
   const buttons = [
     (!mediaRequired)
       ? [{
-        text: tgChat.app.i18n.buttons.postMediaSkip,
+        text: (skipBtnLabel) ? skipBtnLabel : tgChat.app.i18n.buttons.postMediaSkip,
         callback_data: SKIP_BTN_CALLBACK,
       }] : [],
     [

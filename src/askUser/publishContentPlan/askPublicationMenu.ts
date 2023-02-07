@@ -327,7 +327,8 @@ async function handleButtons(
           }
 
           return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
-        })
+        }),
+        (state.mainImgUrl) ? tgChat.app.i18n.buttons.getInitialNotionImage : undefined,
       );
     case PUBLISH_MENU_ACTION.CHANGE_INSTA_TAGS:
       return await askTags(state.instaTags || [], tgChat, tgChat.asyncCb(async (newTags: string[]) => {

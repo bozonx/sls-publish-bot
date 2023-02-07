@@ -98,6 +98,7 @@ const dict = {
     setDate: 'Установить дату',
     withoutText: 'Без текста',
     getInitialNotionText: 'Вернуть первоначальный текст из Notion',
+    getInitialNotionImage: 'Вернуть первоначальную картинку из Notion',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',
