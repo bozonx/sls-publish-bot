@@ -27,8 +27,8 @@ import {all} from 'mdast-util-to-hast';
  * ! It trims line breaks and spaces from start and end
  * @param mdv2
  */
-export async function commonMdToTgHtml(mdv2?: string): Promise<string | undefined> {
-  if (!mdv2) return
+export async function commonMdToTgHtml(mdStr?: string): Promise<string | undefined> {
+  if (!mdStr) return
 
   const vfile = await unified()
     .use(remarkParse)
@@ -53,7 +53,7 @@ export async function commonMdToTgHtml(mdv2?: string): Promise<string | undefine
         },
       },
     })
-    .process(mdv2)
+    .process(mdStr)
   //console.log(1111, String(vfile))
 
   return String(vfile)

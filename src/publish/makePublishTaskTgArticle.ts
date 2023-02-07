@@ -4,16 +4,16 @@ import {makeTagsString} from '../lib/common.js';
 import {registerTgTaskOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import {transformNotionToTelegraphNodes} from '../helpers/transformNotionToTelegraphNodes.js';
+import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
 
 
-// TODO: в итоге то должен быть html !!!
-function makeArticleTgPostHtml(
+async function makeArticleTgPostHtml(
   articleTitle: string,
   articleUrl: string,
   articleAnnouncement?: string,
   tgTags?: string[],
   postTmpl?: string,
-): string {
+): Promise<string> {
   let postStr: string
   //const tags = mdFormat.escape(makeTagsString(tgTags))
   const tags = makeTagsString(tgTags)
@@ -36,8 +36,7 @@ function makeArticleTgPostHtml(
     });
   }
 
-  // TODO: convert common md to html
-  return postStr
+  return await commonMdToTgHtml(postStr) || ''
 }
 
 export async function makePublishTaskTgArticle(
@@ -53,7 +52,7 @@ export async function makePublishTaskTgArticle(
   const telegraphNodes = transformNotionToTelegraphNodes(blogName, tgChat, articleBlocks)
   // create article on telegra.ph
   const articleUrl = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
-  const postHtml = makeArticleTgPostHtml(
+  const postHtml = await makeArticleTgPostHtml(
     articleTitle,
     articleUrl,
     articleAnnouncement,
