@@ -9,13 +9,13 @@ import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
 
 
-export function makeFinalArticleNodes(
+export async function makeFinalArticleNodes(
   blogName: string,
   tgChat: TgChat,
   articleBlocks: NotionBlocks,
-): TelegraphNode[] {
+): Promise<TelegraphNode[]> {
   const footerStr = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
-  const telegraPhContent = transformNotionToTelegraph(articleBlocks)
+  const telegraPhContent = await transformNotionToTelegraph(tgChat, articleBlocks)
   // add footer
   if (footerStr) {
     telegraPhContent.push({
@@ -75,7 +75,12 @@ export async function makePublishTaskTgArticle(
 
   if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`)
 
-  const telegraphNodes = makeFinalArticleNodes(blogName, tgChat, articleBlocks)
+  const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, articleBlocks)
+
+  console.log(111111, telegraphNodes)
+
+  //return
+
   // create article on telegra.ph
   const articleUrl = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
   const postHtml = await makeArticleTgPostHtml(
