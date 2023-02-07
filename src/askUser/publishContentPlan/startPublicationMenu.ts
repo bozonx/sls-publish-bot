@@ -102,8 +102,10 @@ export async function startPublicationMenu(
         // TODO: print poll preview
 
       }
+      else if (item.type === PUBLICATION_TYPES.article) {
+        // do nothing on article case
+      }
       else {
-        // TODO: для article тоже не надо же делать
         postTexts = await makePostFromContentItem(
           state.sns,
           tgChat.app.blogs[blogName],

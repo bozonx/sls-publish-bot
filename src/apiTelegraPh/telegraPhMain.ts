@@ -5,6 +5,7 @@
 import App from '../App.js';
 import {TelegraphNode} from './telegraphCli/types.js';
 import {Account, PageList, Telegraph, upload} from "better-telegraph";
+import {makeTelegraPhUrl} from '../helpers/helpers.js';
 
 
 export default class TelegraPhMain {
@@ -53,22 +54,19 @@ export default class TelegraPhMain {
 
   /**
    * Create a page
+   * see https://www.npmjs.com/package/better-telegraph#create
    * @return {string} path like 'some-title-10-30-3'
    */
   async create(blogName: string, title: string, content: TelegraphNode[]): Promise<string> {
+    const res = await this.api.create({
+      title,
+      content,
+      author_name: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorName,
+      author_url: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
+      //return_content: true, // Optional. Defaults to `false`.
+    });
 
-    // see https://www.npmjs.com/package/better-telegraph#create
-
-    return ''
-    // const result = await this.api.createPage({
-    //   title,
-    //   content,
-    //   author_name: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorName,
-    //   author_url: this.app.blogs[blogName].sn.telegram?.telegraPhAuthorUrl,
-    // });
-    //
-    // // TODO: наверное лучше сразу вернуть готовый url
-    // return result.path;
+    return makeTelegraPhUrl(res.path)
   }
 
   /**

@@ -1,55 +1,13 @@
 import _ from 'lodash';
-import {markdownv2 as mdFormat} from 'telegram-format';
 import TgChat from '../apiTg/TgChat.js';
-import {makeTelegraPhUrl} from '../helpers/helpers.js';
-import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
 import {makeTagsString} from '../lib/common.js';
 import {registerTgTaskOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
-import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
+import {transformNotionToTelegraphNodes} from '../helpers/transformNotionToTelegraphNodes.js';
 
 
-function makeTelegraphArticle(
-  blogName: string,
-  tgChat: TgChat,
-  articleBlocks: NotionBlocks,
-): TelegraphNode[] {
-  const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
-  const footer = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
-
-  if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`)
-
-  const telegraPhContent = transformNotionToTelegraph(articleBlocks)
-  // add footer
-  if (footer) {
-    telegraPhContent.push({
-      tag: 'p',
-      children: [
-        '\n',
-        // TODO: преобразовать ссылки в node
-        footer,
-      ],
-    })
-  }
-
-  return telegraPhContent
-}
-
-async function publishArticleToTelegraph(
-  blogName: string,
-  tgChat: TgChat,
-  articleBlocks: NotionBlocks,
-  articleTitle: string,
-): Promise<string> {
-  const telegraphNodes = makeTelegraphArticle(blogName, tgChat, articleBlocks)
-  // create article on telegra.ph
-  const tgPath = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
-  const articleUrl = makeTelegraPhUrl(tgPath)
-
-  return articleUrl
-}
-
-function makeArticleTgPost(
+// TODO: в итоге то должен быть html !!!
+function makeArticleTgPostHtml(
   articleTitle: string,
   articleUrl: string,
   articleAnnouncement?: string,
@@ -57,6 +15,8 @@ function makeArticleTgPost(
   postTmpl?: string,
 ): string {
   let postStr: string
+  //const tags = mdFormat.escape(makeTagsString(tgTags))
+  const tags = makeTagsString(tgTags)
 
   if (articleAnnouncement) {
     postStr = _.template(articleAnnouncement)({
@@ -65,17 +25,18 @@ function makeArticleTgPost(
     })
 
     if (tgTags && tgTags.length) {
-      postStr += '\n\n' + mdFormat.escape(makeTagsString(tgTags))
+      postStr += '\n\n' + tags
     }
   }
   else {
     postStr = _.template(postTmpl)({
       TITLE: articleTitle,
       ARTICLE_URL: articleUrl,
-      TAGS: mdFormat.escape(makeTagsString(tgTags)),
+      TAGS: tags,
     });
   }
 
+  // TODO: convert common md to html
   return postStr
 }
 
@@ -87,10 +48,12 @@ export async function makePublishTaskTgArticle(
   articleBlocks: NotionBlocks,
   articleTitle: string,
   tgTags?: string[],
-  articleAnnouncement?: string,
+  articleAnnouncement?: string
 ) {
-  const articleUrl = await publishArticleToTelegraph(blogName, tgChat, articleBlocks, articleTitle)
-  const postStr = makeArticleTgPost(
+  const telegraphNodes = transformNotionToTelegraphNodes(blogName, tgChat, articleBlocks)
+  // create article on telegra.ph
+  const articleUrl = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
+  const postHtml = makeArticleTgPostHtml(
     articleTitle,
     articleUrl,
     articleAnnouncement,
@@ -103,7 +66,7 @@ export async function makePublishTaskTgArticle(
     tgChat,
     isoDate,
     time,
-    postStr,
+    postHtml,
     true
   )
 }

@@ -10,14 +10,14 @@ import {MediaGroupItem, PrimitiveMediaGroup} from '../types/types.js';
 export async function publishTgText(
   app: App,
   chatId: number | string,
-  msg: string,
+  msgHtml: string,
   allowPreview = true,
   tgUrlBtn?: TgReplyBtnUrl,
   disableNotification = false
 ): Promise<number> {
   const result = await app.tg.bot.telegram.sendMessage(
     chatId,
-    msg,
+    msgHtml,
     {
       parse_mode: app.appConfig.telegram.parseMode,
       disable_web_page_preview: !allowPreview,

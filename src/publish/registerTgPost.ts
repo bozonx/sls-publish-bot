@@ -108,7 +108,7 @@ export async function registerTgTaskOnlyText(
   tgChat: TgChat,
   isoDate: string,
   time: string,
-  postStr: string,
+  postHtml: string,
   allowPreview: boolean,
   tgUrlBtn?: TgReplyBtnUrl,
   autoDeleteTgIsoDateTime?: string
@@ -119,7 +119,7 @@ export async function registerTgTaskOnlyText(
     msgId = await publishTgText(
       tgChat.app,
       tgChat.app.appConfig.logChannelId,
-      postStr,
+      postHtml,
       allowPreview,
       tgUrlBtn
     );
