@@ -7,7 +7,7 @@ import {printPost} from '../../publish/publishHelpers.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {clearMd} from '../../helpers/clearMd.js';
-import {commonMdToTgHtml} from '../../helpers/commonMdToTgHtml.js';
+import {transformCommonMdToTgHtml} from '../../helpers/transformCommonMdToTgHtml.js';
 
 
 export interface CustomPostState {
@@ -54,7 +54,7 @@ export async function askCustomPostTg(
         tags: [],
         postHtmlText: captionHtml,
         mediaGroup,
-        footerTmplHtml: await commonMdToTgHtml(footerTmpl),
+        footerTmplHtml: await transformCommonMdToTgHtml(footerTmpl),
         cleanFooterTmpl: await clearMd(footerTmpl),
         postAsText,
         onlyOneImage,

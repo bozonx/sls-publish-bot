@@ -10,7 +10,7 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
 
     // tgChat.app.tg.bot.telegram.sendMessage(
     //   tgChat.botChatId,
-    //   await commonMdToTgHtml(
+    //   await transformCommonMdToTgHtml(
     //   '\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'
     //   ) || '',
     //   {

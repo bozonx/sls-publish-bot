@@ -690,9 +690,9 @@ export function transformNotionToTelegraph(notionBlocks: NotionBlocks): Telegrap
   // TODO: remove
   //const notionBlocks: NotionBlocks = {'0': test} as any
 
-  let result: TelegraphNode[] = [];
-  let ulElIndex = -1;
-  let olElIndex = -1;
+  let result: TelegraphNode[] = []
+  let ulElIndex = -1
+  let olElIndex = -1
 
   for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
     // TODO: не пропускать картинки а вставлять

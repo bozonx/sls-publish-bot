@@ -27,7 +27,7 @@ import {all} from 'mdast-util-to-hast';
  * ! It trims line breaks and spaces from start and end
  * @param mdv2
  */
-export async function commonMdToTgHtml(mdStr?: string): Promise<string | undefined> {
+export async function transformCommonMdToTgHtml(mdStr?: string): Promise<string | undefined> {
   if (!mdStr) return
 
   const vfile = await unified()
@@ -59,6 +59,6 @@ export async function commonMdToTgHtml(mdStr?: string): Promise<string | undefin
   return String(vfile)
 }
 
-//commonMdToTgHtml('\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
-//commonMdToTgHtml('\n\nnorm **bold _italic2_**\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
-//commonMdToTgHtml('\n\n# h1\n## h2\n### h3\n#### h4\nppp\n\n* li1\n* li2\n\n1. n1\n2. n2\n\n> q1\n> q2\n\n-------\n\n```bash\nls\n```')
+//transformCommonMdToTgHtml('\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
+//transformCommonMdToTgHtml('\n\nnorm **bold _italic2_**\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
+//transformCommonMdToTgHtml('\n\n# h1\n## h2\n### h3\n#### h4\nppp\n\n* li1\n* li2\n\n1. n1\n2. n2\n\n> q1\n> q2\n\n-------\n\n```bash\nls\n```')

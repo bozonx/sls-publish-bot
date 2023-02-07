@@ -4,7 +4,7 @@ import {isoDateToHuman, makeHumanDateTimeStr, prepareFooter, resolvePostFooter} 
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
-import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
+import {transformCommonMdToTgHtml} from '../helpers/transformCommonMdToTgHtml.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import ru from '../I18n/ru.js';
 import {makeContentLengthDetails} from './publishHelpers.js';
@@ -22,7 +22,7 @@ export async function printContentItemInitialDetails(
 ) {
   if (contentItem.type !== PUBLICATION_TYPES.poll && availableTgFooter) {
     const tgFooterMd = resolvePostFooter(contentItem.type, tgChat.app.blogs[blogName].sn.telegram)
-    const footerStr = await commonMdToTgHtml(prepareFooter(tgFooterMd, contentItem.tgTags))
+    const footerStr = await transformCommonMdToTgHtml(prepareFooter(tgFooterMd, contentItem.tgTags))
     // print footer if it is used
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,

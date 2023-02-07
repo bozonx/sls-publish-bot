@@ -4,7 +4,7 @@ import TgChat from '../apiTg/TgChat.js';
 import {makeTagsString} from '../lib/common.js';
 import {registerTgTaskOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
-import {commonMdToTgHtml} from '../helpers/commonMdToTgHtml.js';
+import {transformCommonMdToTgHtml} from '../helpers/transformCommonMdToTgHtml.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
 
@@ -58,7 +58,7 @@ async function makeArticleTgPostHtml(
     });
   }
 
-  return await commonMdToTgHtml(postStr) || ''
+  return await transformCommonMdToTgHtml(postStr) || ''
 }
 
 export async function makePublishTaskTgArticle(
