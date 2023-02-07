@@ -3,7 +3,7 @@ import {
   BACK_BTN,
   BACK_BTN_CALLBACK,
   CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK, WARN_SIGN,
 } from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {breakArray, removeItemFromArray} from '../../lib/arrays.js';
@@ -36,19 +36,26 @@ export async function askSns(prevSns: string[], tgChat: TgChat, onDone: (tags: S
     },
     async (queryData: string) => {
       if (queryData === BACK_BTN_CALLBACK) {
-        return tgChat.steps.back();
+        return tgChat.steps.back()
       }
       else if (queryData === CANCEL_BTN_CALLBACK) {
-        return tgChat.steps.cancel();
+        return tgChat.steps.cancel()
       }
       else if (queryData.indexOf(SN_TO_REMOVE_CB) === 0) {
-        const splat = queryData.split('|');
-        const newSns = removeItemFromArray(prevSns, splat[1]);
+        const splat = queryData.split('|')
+        const newSns = removeItemFromArray(prevSns, splat[1])
+
+        if (!newSns.length) {
+          await tgChat.reply(WARN_SIGN + ' ' + tgChat.app.i18n.errors.needAlmostOneSn)
+
+          return
+        }
+
         // print result
         await tgChat.reply(tgChat.app.i18n.commonPhrases.snsForPub + newSns.join(', '));
         onDone(newSns);
       }
     }
-  );
+  )
 
 }
