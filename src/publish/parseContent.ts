@@ -16,8 +16,8 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
     // date in iso format
     date: (item.properties[CONTENT_PROPS.date] as any)?.date.start || '',
     time: (item.properties[CONTENT_PROPS.time] as any)?.select.name || '',
-    nameGist: (item.properties[CONTENT_PROPS.nameGist] as any)?.title?.[0].plain_text || '',
-    note: (item.properties[CONTENT_PROPS.note] as any)?.rich_text?.[0].plain_text || '',
+    nameGist: (item.properties[CONTENT_PROPS.nameGist] as any)?.title?.[0]?.plain_text || '',
+    note: (item.properties[CONTENT_PROPS.note] as any)?.rich_text?.[0]?.plain_text || '',
     status: (item.properties[CONTENT_PROPS.status] as any)?.select.name || '',
     onlySn: (item.properties[CONTENT_PROPS.onlySn] as any)?.multi_select
       .map((el: any) => el.name) || [],
@@ -26,7 +26,7 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
       .map((el: any) => el.name) || [],
     instaTags: (item.properties[CONTENT_PROPS.instaTags] as any)?.multi_select
       .map((el: any) => el.name) || [],
-    imageDescr: (item.properties[CONTENT_PROPS.imageDescr] as any)?.rich_text?.[0].plain_text,
+    imageDescr: (item.properties[CONTENT_PROPS.imageDescr] as any)?.rich_text?.[0]?.plain_text,
   }
 }
 
