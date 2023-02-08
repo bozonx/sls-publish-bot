@@ -203,8 +203,11 @@ function toTelegraPh(
 }
 
 export function trimPageBlocks(notionBlocks: NotionBlocks): NotionBlocks {
+  const result: NotionBlocks = [...notionBlocks]
+
+
   // TODO: add
   // TODO: убрать пустые строки в начале и в конце
 
-  return notionBlocks
+  return result
 }
