@@ -15,8 +15,7 @@ export async function convertNotionToTelegraph(
   tgChat: TgChat,
   blocks: NotionBlocks
 ): Promise<TelegraphNode[]> {
-
-  let result: TelegraphNode[] = []
+  const result: TelegraphNode[] = []
   let ulElIndex = -1
   let olElIndex = -1
 
@@ -74,7 +73,7 @@ export async function convertNotionToTelegraph(
           children: [richTextToSimpleTextList((block as any)?.heading_1?.rich_text)],
         })
 
-        break;
+        break
       case NOTION_BLOCK_TYPES.heading_2:
         result.push({
           tag: 'h3',
@@ -138,7 +137,7 @@ export async function convertNotionToTelegraph(
         };
 
         if (olElIndex === -1) {
-          // create new UL
+          // create new OL
           result.push({
             tag: 'ol',
             children: [liItemNum],
