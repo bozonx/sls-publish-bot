@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../notionHelpers/requestPageBlocks.js';
+import {ROOT_LEVEL_BLOCKS} from '../apiNotion/requestPageBlocks.js';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
 
 

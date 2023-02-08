@@ -3,7 +3,7 @@ import {makeCleanTexts, makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../notionHelpers/requestPageBlocks.js';
+import {ROOT_LEVEL_BLOCKS} from '../apiNotion/requestPageBlocks.js';
 import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';

@@ -2,6 +2,7 @@
 import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import TgChat from '../apiTg/TgChat.js';
 import {NotionBlocks} from '../types/notion.js';
+import NotionApi from './NotionApi.js';
 
 
 export const ROOT_LEVEL_BLOCKS = '0';
@@ -37,7 +38,7 @@ export const ROOT_LEVEL_BLOCKS = '0';
 
 export async function requestPageBlocks(
   pageId: string,
-  tgChat: TgChat
+  notionApi: NotionApi
 ): Promise<NotionBlocks> {
   const blocks: NotionBlocks = {};
 
@@ -47,7 +48,7 @@ export async function requestPageBlocks(
   // });
 
   // Loads children of page
-  const topChildren = await tgChat.app.notion.api.blocks.children.list({
+  const topChildren = await notionApi.api.blocks.children.list({
     block_id: pageId,
   });
 
