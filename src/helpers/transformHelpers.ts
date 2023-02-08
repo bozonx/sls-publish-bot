@@ -1,6 +1,6 @@
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
+import {NOTION_RICH_TEXT_TYPES, NotionAnnotation, NotionBlocks} from '../types/notion.js';
 import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 
@@ -200,4 +200,11 @@ function toTelegraPh(
     // no formatting
     return preparedText;
   }
+}
+
+export function trimPageBlocks(notionBlocks: NotionBlocks): NotionBlocks {
+  // TODO: add
+  // TODO: убрать пустые строки в начале и в конце
+
+  return notionBlocks
 }

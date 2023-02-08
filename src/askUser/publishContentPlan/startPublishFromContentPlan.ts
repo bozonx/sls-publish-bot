@@ -8,7 +8,7 @@ import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
 import {resolvePostFooter, resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
 import {printImage, printContentItemInitialDetails} from '../../publish/printContentItemInfo.js';
-import {SN_SUPPORT_TYPES, SnType} from '../../types/snTypes.js';
+import {SnType} from '../../types/snTypes.js';
 import {startPublicationMenu} from './startPublicationMenu.js';
 import {NotionBlocks} from '../../types/notion.js';
 import _ from 'lodash';

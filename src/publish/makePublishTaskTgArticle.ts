@@ -7,6 +7,7 @@ import {NotionBlocks} from '../types/notion.js';
 import {transformCommonMdToTgHtml} from '../helpers/transformCommonMdToTgHtml.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
+import {trimPageBlocks} from '../helpers/transformHelpers.js';
 
 
 export async function makeFinalArticleNodes(
@@ -15,7 +16,8 @@ export async function makeFinalArticleNodes(
   articleBlocks: NotionBlocks,
 ): Promise<TelegraphNode[]> {
   const footerStr = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
-  const telegraPhContent = await transformNotionToTelegraph(tgChat, articleBlocks)
+  const trimmedArticle = trimPageBlocks(articleBlocks)
+  const telegraPhContent = await transformNotionToTelegraph(tgChat, trimmedArticle)
   // add footer
   if (footerStr) {
     telegraPhContent.push({
@@ -77,7 +79,7 @@ export async function makePublishTaskTgArticle(
 
   const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, articleBlocks)
 
-  console.log(111111, telegraphNodes)
+  console.log(111111, JSON.stringify(telegraphNodes))
 
   //return
 
