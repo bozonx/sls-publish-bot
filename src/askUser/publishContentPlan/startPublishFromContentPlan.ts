@@ -1,7 +1,7 @@
 import TgChat from '../../apiTg/TgChat.js';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
 import {askContentToUse} from './askContentToUse.js';
-import {prepareContentItem} from '../../publish/parseContent.js';
+import {prepareContentItem} from '../../contentPlan/parseContent.js';
 import ContentItem from '../../types/ContentItem.js';
 import {loadNotPublished} from '../../contentPlan/requestContentPlan.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
