@@ -1,11 +1,10 @@
 // @ts-ignore
 import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import TgChat from '../apiTg/TgChat.js';
 import {NotionBlocks} from '../types/notion.js';
 import NotionApi from './NotionApi.js';
+import {ROOT_LEVEL_BLOCKS} from './constants.js';
 
 
-export const ROOT_LEVEL_BLOCKS = '0';
 
 
 

@@ -1,7 +1,7 @@
 import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {NotionBlocks} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../apiNotion/requestPageBlocks.js';
+import {ROOT_LEVEL_BLOCKS} from '../apiNotion/constants.js';
 import {
   richTextToHtml,
   richTextToHtmlCodeBlock,
