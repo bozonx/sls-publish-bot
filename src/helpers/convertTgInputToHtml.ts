@@ -65,7 +65,7 @@ import {NormalizedTgItem, SUPPORTED_TG_ENTITY_TYPES, SupportedTgEntityType, TgEn
 
 
 /**
- * Convert text from telegram input to MDv2
+ * Convert text from telegram input to HTML
  * Trim it by yourself
  */
 export function convertTgInputToHtml(rawText: string, entities?: TgEntity[]): string {

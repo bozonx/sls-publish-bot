@@ -6,6 +6,8 @@ import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import {convertNotionToInstagramPost} from '../helpers/convertNotionToInstagramPost.js';
 import {convertNotionToTgHtml} from '../helpers/convertNotionToTgHtml.js';
 import {BlogConfig} from '../types/BlogsConfig.js';
+import {trimPageBlocks} from '../helpers/convertHelpers.js';
+import {convertCommonMdToTgHtml} from '../helpers/convertCommonMdToTgHtml.js';
 
 
 /**
@@ -31,7 +33,9 @@ export async function makePostFromContentItem(
       PUBLICATION_TYPES.article,
       PUBLICATION_TYPES.poll,
     ].includes(item.type) && textBlocks && !replacedHtmlText) {
-      postText = convertNotionToTgHtml(textBlocks)
+      const trimmedPost = trimPageBlocks(textBlocks)
+
+      postText = convertNotionToTgHtml(trimmedPost)
     }
 
     if (postText) {
@@ -39,7 +43,7 @@ export async function makePostFromContentItem(
         item.tgTags || [],
         useTgFooter,
         postText,
-        resolvePostFooter(item.type, blogCfg.sn.telegram!)
+        await convertCommonMdToTgHtml(resolvePostFooter(item.type, blogCfg.sn.telegram!))
       )
     }
   }
@@ -51,11 +55,13 @@ export async function makePostFromContentItem(
       PUBLICATION_TYPES.article,
       PUBLICATION_TYPES.poll,
     ].includes(item.type) && textBlocks && !replacedHtmlText) {
+      const trimmedPost = trimPageBlocks(textBlocks)
       // TODO: а может лучше делать html ???
-      postText = convertNotionToInstagramPost(textBlocks)
+      postText = convertNotionToInstagramPost(trimmedPost)
     }
 
     if (postText) {
+      // TODO: футер надо преобразовать
       // add tags at the end of text
       result[SN_TYPES.instagram] = makeResultPostText(
         instaTags || [],
