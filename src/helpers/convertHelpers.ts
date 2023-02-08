@@ -141,12 +141,15 @@ function toHtml(
     return htmlFormat.italic(preparedText);
   }
   else if (annotations.strikethrough) {
+    // TODO: должно быть s, strike, del
     return htmlFormat.strikethrough(preparedText);
   }
   else if (annotations.underline) {
+    // TODO: u, ins
     return htmlFormat.underline(preparedText);
   }
   else if (annotations.code) {
+    // TODO: должно быть code
     return htmlFormat.monospace(preparedText);
   }
   else {
@@ -191,6 +194,12 @@ function toTelegraPh(
       children: [preparedText],
     };
   }
+  else if (annotations.underline) {
+    return {
+      tag: 'u',
+      children: [preparedText],
+    };
+  }
   else if (annotations.code) {
     return {
       tag: 'code',
@@ -198,7 +207,7 @@ function toTelegraPh(
     };
   }
   else {
-    // no formatting for underline
+    // no formatting for other case
     return preparedText;
   }
 }
