@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../apiNotion/constants.js';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
 
 
@@ -10,7 +9,7 @@ export function transformNotionToPrettyMd(notionBlocks: NotionBlocks): string {
   let numberListCounter = 0;
   let bulletedListCounter = 0;
 
-  for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
+  for (const block of notionBlocks) {
     // TODO: не пропускать картинки а вставлять
     // skip images
     if (block.type === NOTION_BLOCK_TYPES.image) continue;

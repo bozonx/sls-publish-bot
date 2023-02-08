@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../apiNotion/constants.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
 
@@ -13,7 +12,7 @@ export function transformNotionToTgHtml(notionBlocks: NotionBlocks): string {
   let numberListCounter = 0;
   let bulletedListCounter = 0;
 
-  for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
+  for (const block of notionBlocks) {
     // skip images
     if (block.type === NOTION_BLOCK_TYPES.image) continue;
 

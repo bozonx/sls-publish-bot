@@ -3,7 +3,6 @@ import {makeCleanTexts, makeHumanDateTimeStr} from '../helpers/helpers.js';
 import ru from '../I18n/ru.js';
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../apiNotion/constants.js';
 import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
@@ -14,7 +13,7 @@ import {isValidUrl} from '../lib/common.js';
 export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {
   if (!blocks) return;
 
-  for (const item of blocks[ROOT_LEVEL_BLOCKS]) {
+  for (const item of blocks) {
     if (item.type === 'image') return (item.image as any).file.url
   }
 }

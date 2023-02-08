@@ -11,7 +11,6 @@ import {printImage, printContentItemInitialDetails} from '../../publish/printCon
 import {SnType} from '../../types/snTypes.js';
 import {startPublicationMenu} from './startPublicationMenu.js';
 import {NotionBlocks} from '../../types/notion.js';
-import _ from 'lodash';
 import {WARN_SIGN} from '../../types/constants.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 
@@ -33,11 +32,13 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
   // ask use select not published item
   await askContentToUse(notPublishedItems, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
     let parsedContentItem: ContentItem
-    let pageBlocks: NotionBlocks
+    let pageBlocks: NotionBlocks | undefined
 
     try {
       parsedContentItem = prepareContentItem(item, tgChat.app.i18n)
       pageBlocks = await requestPageBlocks(item.id, tgChat.app.notion)
+
+      if (!pageBlocks.length) pageBlocks = undefined
     }
     catch (e) {
       await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e)

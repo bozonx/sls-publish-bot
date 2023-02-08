@@ -1,13 +1,11 @@
-import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion.js';
+import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {NotionBlocks} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../apiNotion/constants.js';
 import {
   richTextToSimpleTextList,
   richTextToTelegraphNodes
 } from './transformHelpers.js';
 import TgChat from '../apiTg/TgChat.js';
-import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
@@ -15,16 +13,7 @@ import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 
 export async function transformNotionToTelegraph(
   tgChat: TgChat,
-  notionBlocks: NotionBlocks
-): Promise<TelegraphNode[]> {
-
-  return await recursiveTransform(tgChat, notionBlocks[ROOT_LEVEL_BLOCKS]);
-}
-
-
-async function recursiveTransform(
-  tgChat: TgChat,
-  blocks: BlockObjectResponse[]
+  blocks: NotionBlocks
 ): Promise<TelegraphNode[]> {
 
   let result: TelegraphNode[] = []
@@ -35,7 +24,7 @@ async function recursiveTransform(
     let children: TelegraphNode[] = []
 
     if ((block as any).children) {
-      children = await recursiveTransform(tgChat, (block as any).children)
+      children = await transformNotionToTelegraph(tgChat, (block as any).children)
     }
 
     if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {

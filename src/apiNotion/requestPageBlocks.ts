@@ -1,8 +1,5 @@
-// @ts-ignore
-import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints';
 import {NotionBlocks} from '../types/notion.js';
 import NotionApi from './NotionApi.js';
-import {ROOT_LEVEL_BLOCKS} from './constants.js';
 
 
 export async function requestPageBlocks(
@@ -14,9 +11,9 @@ export async function requestPageBlocks(
     block_id: pageId,
   });
 
-  const blocks: BlockObjectResponse[] = await recursiveLoadBlocks(
+  const blocks: NotionBlocks = await recursiveLoadBlocks(
     notionApi,
-    topChildren.results as BlockObjectResponse[]
+    topChildren.results as NotionBlocks
   )
 
   // console.log(22222, blocks)
@@ -24,15 +21,15 @@ export async function requestPageBlocks(
 
   // TODO: почему это объект ??? {'0': [...]}
 
-  return {[ROOT_LEVEL_BLOCKS]: blocks}
+  return blocks
 }
 
 
 async function recursiveLoadBlocks(
   notionApi: NotionApi,
-  blocks: BlockObjectResponse[]
-): Promise<BlockObjectResponse[]> {
-  const result: BlockObjectResponse[] = []
+  blocks: NotionBlocks
+): Promise<NotionBlocks> {
+  const result: NotionBlocks = []
 
   for (const block of blocks) {
     if (!block.has_children) {
@@ -43,12 +40,12 @@ async function recursiveLoadBlocks(
 
     const children = (await notionApi.api.blocks.children.list({
       block_id: block.id,
-    })).results
+    })).results as NotionBlocks
 
     result.push({
       ...block,
       children: await recursiveLoadBlocks(notionApi, children),
-    })
+    } as any)
   }
 
   return result

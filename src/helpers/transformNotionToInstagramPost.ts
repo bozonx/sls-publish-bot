@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import {NOTION_BLOCK_TYPES, NOTION_RICH_TEXT_TYPES} from '../types/notion.js';
-import {ROOT_LEVEL_BLOCKS} from '../apiNotion/constants.js';
+import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToSimpleTextList} from './transformHelpers.js';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
@@ -11,7 +10,7 @@ export function transformNotionToInstagramPost(notionBlocks: NotionBlocks): stri
   let numberListCounter = 0;
   let bulletedListCounter = 0;
 
-  for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
+  for (const block of notionBlocks) {
     // skip images
     if (block.type === NOTION_BLOCK_TYPES.image) continue;
 
