@@ -9,55 +9,55 @@ import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
  * Make simple text without formatting from Rich text items
  */
 export function richTextToSimpleTextList(richText?: TextRichTextItemResponse[]): string {
-  if (!richText) return '';
-  else if (!richText.length) return '';
+  if (!richText) return ''
+  else if (!richText.length) return ''
 
-  return richText.map((item) => item.plain_text).join('');
+  return richText.map((item) => item.plain_text).join('')
 }
 
 /**
  * Convert rich text to markdown v2
  */
 export function richTextToMd(richText?: TextRichTextItemResponse[]): string {
-  if (!richText) return '';
-  else if (!richText.length) return '';
+  if (!richText) return ''
+  else if (!richText.length) return ''
 
   return richText.map((item: TextRichTextItemResponse) => {
     switch (item.type) {
       case NOTION_RICH_TEXT_TYPES.text:
-        return toMarkDown(item.text.content, item.annotations, item.href);
+        return toMarkDown(item.text.content, item.annotations, item.href)
       default:
-        return item.plain_text;
+        return item.plain_text
     }
-  }).join('');
+  }).join('')
 }
 
 export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {
-  if (!richText) return '';
-  else if (!richText.length) return '';
+  if (!richText) return ''
+  else if (!richText.length) return ''
 
   return richText.map((item: TextRichTextItemResponse) => {
     switch (item.type) {
       case NOTION_RICH_TEXT_TYPES.text:
-        return toHtml(item.text.content, item.annotations, item.href);
+        return toHtml(item.text.content, item.annotations, item.href)
       default:
-        return item.plain_text;
+        return item.plain_text
     }
-  }).join('');
+  }).join('')
 }
 
 export function richTextToTelegraphNodes(
   richText?: TextRichTextItemResponse[]
 ): (TelegraphNode | string)[] {
-  if (!richText) return [];
-  else if (!richText.length) return [];
+  if (!richText) return []
+  else if (!richText.length) return []
 
   return richText.map((item: TextRichTextItemResponse) => {
     switch (item.type) {
       case NOTION_RICH_TEXT_TYPES.text:
-        return toTelegraPh(item.text.content, item.annotations, item.href);
+        return toTelegraPh(item.text.content, item.annotations, item.href)
       default:
-        return item.plain_text;
+        return item.plain_text
     }
   });
 }
@@ -204,10 +204,24 @@ function toTelegraPh(
 
 export function trimPageBlocks(notionBlocks: NotionBlocks): NotionBlocks {
   const result: NotionBlocks = [...notionBlocks]
-
-
-  // TODO: add
-  // TODO: убрать пустые строки в начале и в конце
+  // remove the first empty lines
+  for (let i = 0; i < notionBlocks.length; i++) {
+    if ((notionBlocks[i] as any)?.paragraph?.rich_text?.length === 0) {
+      result.shift()
+    }
+    else {
+      break
+    }
+  }
+  // remove the last empty lines
+  for (let i = notionBlocks.length - 1; i >= 0; i--) {
+    if ((notionBlocks[i] as any)?.paragraph?.rich_text?.length === 0) {
+      result.pop()
+    }
+    else {
+      break
+    }
+  }
 
   return result
 }
