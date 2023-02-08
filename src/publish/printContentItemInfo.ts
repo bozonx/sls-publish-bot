@@ -78,10 +78,6 @@ async function makeContentPlanPreDetails(
     result.push(`${i18n.contentInfo.instaTags}: ${contentItem.instaTags.join(', ')}`)
   }
 
-  if (contentItem.imageDescr) {
-    result.push(`${i18n.contentInfo.imageDescr}: ${contentItem.imageDescr}`)
-  }
-
   if (contentItem.nameGist) {
     result.push(`${i18n.contentInfo.name}/${i18n.contentInfo.gist}: ${contentItem.nameGist}`)
   }

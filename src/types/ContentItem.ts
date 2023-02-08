@@ -12,7 +12,6 @@ export const CONTENT_PROPS = {
   type: 'type',
   tgTags: 'tgTags',
   instaTags: 'instaTags',
-  imageDescr: 'imageDescr',
 }
 
 export const CONTENT_STATUS = {
@@ -41,5 +40,4 @@ export default interface ContentItem {
   // additional
   tgTags?: string[]
   instaTags?: string[]
-  imageDescr?: string
 }

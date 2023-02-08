@@ -173,7 +173,6 @@ const dict = {
     status: 'Статус',
     note: 'Заметка',
     noRestriction: 'Без ограничений',
-    imageDescr: 'Описание картинки',
     instaTags: 'Тэги Instagram',
     tgTags: 'Тэги Telegram',
   },
