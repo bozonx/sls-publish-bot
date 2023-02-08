@@ -9,6 +9,7 @@ import {
   richTextToTelegraphNodes
 } from './transformHelpers.js';
 import TgChat from '../apiTg/TgChat.js';
+import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 //import {BlockObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints';
 
 
@@ -687,6 +688,104 @@ import TgChat from '../apiTg/TgChat.js';
 // ];
 
 
+// const test2 = [{
+//   "object": "block",
+//   "id": "e0cda824-4a62-4016-9b24-846a72bfbf82",
+//   "parent": {"type": "page_id", "page_id": "51b6d7d8-59ec-41af-acb4-13258742f791"},
+//   "created_time": "2023-02-07T07:24:00.000Z",
+//   "last_edited_time": "2023-02-07T14:22:00.000Z",
+//   "created_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//   "last_edited_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//   "has_children": false,
+//   "archived": false,
+//   "type": "paragraph",
+//   "paragraph": {
+//     "rich_text": [{
+//       "type": "text",
+//       "text": {"content": "текст", "link": null},
+//       "annotations": {
+//         "bold": false,
+//         "italic": false,
+//         "strikethrough": false,
+//         "underline": false,
+//         "code": false,
+//         "color": "default"
+//       },
+//       "plain_text": "текст",
+//       "href": null
+//     }], "color": "default"
+//   }
+// }, {
+//   "object": "block",
+//   "id": "978c395d-c409-489b-bf5a-f0d4415cdfb0",
+//   "parent": {"type": "page_id", "page_id": "51b6d7d8-59ec-41af-acb4-13258742f791"},
+//   "created_time": "2023-02-08T06:45:00.000Z",
+//   "last_edited_time": "2023-02-08T06:45:00.000Z",
+//   "created_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//   "last_edited_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//   "has_children": true,
+//   "archived": false,
+//   "type": "bulleted_list_item",
+//   "bulleted_list_item": {
+//     "rich_text": [{
+//       "type": "text",
+//       "text": {"content": "list item 1", "link": null},
+//       "annotations": {
+//         "bold": false,
+//         "italic": false,
+//         "strikethrough": false,
+//         "underline": false,
+//         "code": false,
+//         "color": "default"
+//       },
+//       "plain_text": "list item 1",
+//       "href": null
+//     }], "color": "default"
+//   },
+//   "children": [{
+//     "object": "block",
+//     "id": "e1ddc67e-a782-4491-992c-44db3bece770",
+//     "parent": {"type": "block_id", "block_id": "978c395d-c409-489b-bf5a-f0d4415cdfb0"},
+//     "created_time": "2023-02-08T06:45:00.000Z",
+//     "last_edited_time": "2023-02-08T06:45:00.000Z",
+//     "created_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//     "last_edited_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//     "has_children": false,
+//     "archived": false,
+//     "type": "bulleted_list_item",
+//     "bulleted_list_item": {
+//       "rich_text": [{
+//         "type": "text",
+//         "text": {"content": "list item 1.1", "link": null},
+//         "annotations": {
+//           "bold": false,
+//           "italic": false,
+//           "strikethrough": false,
+//           "underline": false,
+//           "code": false,
+//           "color": "default"
+//         },
+//         "plain_text": "list item 1.1",
+//         "href": null
+//       }], "color": "default"
+//     }
+//   }]
+// }, {
+//   "object": "block",
+//   "id": "d72fafb8-17fd-4ebe-8574-7d4afb95c5dc",
+//   "parent": {"type": "page_id", "page_id": "51b6d7d8-59ec-41af-acb4-13258742f791"},
+//   "created_time": "2023-02-08T06:45:00.000Z",
+//   "last_edited_time": "2023-02-08T06:45:00.000Z",
+//   "created_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//   "last_edited_by": {"object": "user", "id": "dd4d9b08-24f5-4a24-9b36-19a42b496f44"},
+//   "has_children": false,
+//   "archived": false,
+//   "type": "paragraph",
+//   "paragraph": {"rich_text": [], "color": "default"}
+// }]
+
+
+
 export async function transformNotionToTelegraph(
   tgChat: TgChat,
   notionBlocks: NotionBlocks
@@ -694,13 +793,27 @@ export async function transformNotionToTelegraph(
   // TODO: remove
   //const notionBlocks: NotionBlocks = {'0': test} as any
 
+
+  // TODO: убрать пустые строки в начале и в конце
+
+  return await recursiveTransform(tgChat, notionBlocks[ROOT_LEVEL_BLOCKS]);
+}
+
+
+async function recursiveTransform(
+  tgChat: TgChat,
+  blocks: BlockObjectResponse[]
+): Promise<TelegraphNode[]> {
+
   let result: TelegraphNode[] = []
   let ulElIndex = -1
   let olElIndex = -1
 
-  for (const block of notionBlocks[ROOT_LEVEL_BLOCKS]) {
-    if (block.has_children) {
-      // TODO: recurse
+  for (const block of blocks) {
+    let children: TelegraphNode[] = []
+
+    if ((block as any).children) {
+      children = await recursiveTransform(tgChat, (block as any).children)
     }
 
     if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
@@ -770,7 +883,10 @@ export async function transformNotionToTelegraph(
         if ((block as any)?.paragraph?.rich_text.length) {
           result.push({
             tag: 'p',
-            children: richTextToTelegraphNodes((block as any)?.paragraph?.rich_text)
+            children: [
+              ...richTextToTelegraphNodes((block as any)?.paragraph?.rich_text),
+              ...children,
+            ]
           });
         }
         else {
@@ -784,7 +900,10 @@ export async function transformNotionToTelegraph(
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         const liItem: TelegraphNode = {
           tag: 'li',
-          children: richTextToTelegraphNodes((block as any)?.bulleted_list_item?.rich_text),
+          children: [
+            ...richTextToTelegraphNodes((block as any)?.bulleted_list_item?.rich_text),
+            ...children,
+          ],
         };
 
         if (ulElIndex === -1) {
@@ -804,7 +923,10 @@ export async function transformNotionToTelegraph(
       case NOTION_BLOCK_TYPES.numbered_list_item:
         const liItemNum: TelegraphNode = {
           tag: 'li',
-          children: richTextToTelegraphNodes((block as any)?.numbered_list_item?.rich_text),
+          children: [
+            ...richTextToTelegraphNodes((block as any)?.numbered_list_item?.rich_text),
+            ...children,
+          ],
         };
 
         if (olElIndex === -1) {
@@ -824,7 +946,10 @@ export async function transformNotionToTelegraph(
       case NOTION_BLOCK_TYPES.quote:
         result.push({
           tag: 'blockquote',
-          children: richTextToTelegraphNodes((block as any)?.quote?.rich_text),
+          children: [
+            ...richTextToTelegraphNodes((block as any)?.quote?.rich_text),
+            ...children,
+          ],
         })
 
         break;
@@ -832,7 +957,10 @@ export async function transformNotionToTelegraph(
         result.push({
           tag: 'pre',
           attrs: {lang: (block as any)?.code?.language},
-          children: [richTextToSimpleTextList((block as any)?.code?.rich_text)]
+          children: [
+            richTextToSimpleTextList((block as any)?.code?.rich_text),
+            ...children,
+          ],
         });
 
         break;
@@ -847,7 +975,5 @@ export async function transformNotionToTelegraph(
     }
   }
 
-  // TODO: убрать пустые строки в начале и в конце
-
-  return result;
+  return result
 }

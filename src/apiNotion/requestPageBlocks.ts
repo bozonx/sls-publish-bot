@@ -5,82 +5,51 @@ import NotionApi from './NotionApi.js';
 import {ROOT_LEVEL_BLOCKS} from './constants.js';
 
 
-
-
-
-// type PageContentResult = [
-//   // Result of top objects
-//   BlockObjectResponse[],
-//   // results of children by parent id
-//   Record<string, BlockObjectResponse[]>
-// ]
-
-
-/*
-  {
-    object: 'block',
-    id: '2465ac4b-72d5-4032-927d-5664bb2ee592',
-    parent: {
-      type: 'database_id',
-      database_id: 'f03e1717-ca62-4cd5-81c6-674551d53749'
-    },
-    created_time: '2022-10-29T09:57:00.000Z',
-    last_edited_time: '2022-10-29T18:03:00.000Z',
-    created_by: { object: 'user', id: 'dd4d9b08-24f5-4a24-9b36-19a42b496f44' },
-    last_edited_by: { object: 'user', id: 'dd4d9b08-24f5-4a24-9b36-19a42b496f44' },
-    has_children: true,
-    archived: false,
-    type: 'child_page',
-    child_page: { title: 'заголовокккк' }
-  }
- */
-
 export async function requestPageBlocks(
   pageId: string,
   notionApi: NotionApi
 ): Promise<NotionBlocks> {
-  const blocks: NotionBlocks = {};
-
-  // It needs to check children
-  // const resultPageRootBlock = await this.tgChat.app.notion.api.blocks.retrieve({
-  //   block_id: pageId,
-  // });
-
-  // Loads children of page
+  // Loads children blocks of page
   const topChildren = await notionApi.api.blocks.children.list({
     block_id: pageId,
   });
 
-  //console.log(1111111, topChildren)
+  const blocks: BlockObjectResponse[] = await recursiveLoadBlocks(
+    notionApi,
+    topChildren.results as BlockObjectResponse[]
+  )
 
-  // TODO: load children
+  // console.log(22222, blocks)
+  // console.log(33333, JSON.stringify(blocks))
 
-  blocks[ROOT_LEVEL_BLOCKS] = topChildren.results as BlockObjectResponse[];
+  // TODO: почему это объект ??? {'0': [...]}
 
-
-  return blocks;
-
-  /*
-    next_cursor: null,
-    has_more: false,
-    type: 'block',
-
-   */
-  //console.log(222222, JSON.stringify(resultCh.results))
+  return {[ROOT_LEVEL_BLOCKS]: blocks}
+}
 
 
-  //throw new Error(`111`)
+async function recursiveLoadBlocks(
+  notionApi: NotionApi,
+  blocks: BlockObjectResponse[]
+): Promise<BlockObjectResponse[]> {
+  const result: BlockObjectResponse[] = []
 
+  for (const block of blocks) {
+    if (!block.has_children) {
+      result.push(block)
 
-  // try {
-  //   return [(resultPage as any).properties, resultCh.results as any];
-  // }
-  // catch (e) {
-  //   this.tgChat.log.error(`Can't load page (${pageId}) data: ${e}`);
-  //
-  //   // TODO: what to do in error case ????
-  //   // TODO: нужно ли ждать отправки лога ????
-  //
-  //   throw e;
-  // }
+      continue
+    }
+
+    const children = (await notionApi.api.blocks.children.list({
+      block_id: block.id,
+    })).results
+
+    result.push({
+      ...block,
+      children: await recursiveLoadBlocks(notionApi, children),
+    })
+  }
+
+  return result
 }
