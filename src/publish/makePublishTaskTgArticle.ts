@@ -20,11 +20,17 @@ export async function makeFinalArticleNodes(
   const telegraPhContent = await transformNotionToTelegraph(tgChat, trimmedArticle)
   // add footer
   if (footerStr) {
+    const convertedFooter = parseMarkdown(footerStr) as any[]
+
+    if (convertedFooter[convertedFooter.length - 1] === '\n') {
+      convertedFooter?.pop()
+    }
+
     telegraPhContent.push({
       tag: 'p',
       children: [
         '\n',
-        ...parseMarkdown(footerStr),
+        ...convertedFooter,
       ],
     })
   }
@@ -79,7 +85,7 @@ export async function makePublishTaskTgArticle(
 
   const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, articleBlocks)
 
-  //console.log(111111, JSON.stringify(telegraphNodes))
+  //console.log(22222, JSON.stringify(telegraphNodes))
   //return
 
   // create article on telegra.ph
