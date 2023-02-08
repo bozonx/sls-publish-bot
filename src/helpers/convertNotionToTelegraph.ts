@@ -4,7 +4,7 @@ import {NotionBlocks} from '../types/notion.js';
 import {
   richTextToSimpleTextList,
   richTextToTelegraphNodes
-} from './transformHelpers.js';
+} from './convertHelpers.js';
 import TgChat from '../apiTg/TgChat.js';
 
 

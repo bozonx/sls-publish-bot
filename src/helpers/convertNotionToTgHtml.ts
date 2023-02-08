@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
+import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './convertHelpers.js';
 
 
 // TODO: do it !!!!

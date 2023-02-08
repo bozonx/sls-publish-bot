@@ -7,7 +7,7 @@ import {NotionBlocks} from '../types/notion.js';
 import {transformCommonMdToTgHtml} from '../helpers/transformCommonMdToTgHtml.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {convertNotionToTelegraph} from '../helpers/convertNotionToTelegraph.js';
-import {trimPageBlocks} from '../helpers/transformHelpers.js';
+import {trimPageBlocks} from '../helpers/convertHelpers.js';
 
 
 export async function makeFinalArticleNodes(

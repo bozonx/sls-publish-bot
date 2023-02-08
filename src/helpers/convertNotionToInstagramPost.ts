@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {richTextToSimpleTextList} from './transformHelpers.js';
+import {richTextToSimpleTextList} from './convertHelpers.js';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
 
 

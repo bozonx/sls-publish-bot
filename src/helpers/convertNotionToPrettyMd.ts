@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
+import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './convertHelpers.js';
 
 
 export function convertNotionToPrettyMd(notionBlocks: NotionBlocks): string {
