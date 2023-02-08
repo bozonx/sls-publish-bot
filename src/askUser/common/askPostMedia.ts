@@ -18,7 +18,7 @@ import {
 } from '../../types/MessageEvent.js';
 import {isValidUrl} from '../../lib/common.js';
 import {MediaGroupItem} from '../../types/types.js';
-import {tgInputToHtml} from '../../helpers/tgInputToHtml.js';
+import {convertTgInputToHtml} from '../../helpers/convertTgInputToHtml.js';
 
 
 export type AskPostMediaDone = (mediaGroup: MediaGroupItem[], captionHtml?: string) => void
@@ -58,7 +58,7 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
-          if (photoMsg.caption && !captionHtml) captionHtml = tgInputToHtml(photoMsg.caption, photoMsg.entities);
+          if (photoMsg.caption && !captionHtml) captionHtml = convertTgInputToHtml(photoMsg.caption, photoMsg.entities);
 
           if (!onlyOneImage) {
             mediaGroup.push(photoMsg.photo);
@@ -77,7 +77,7 @@ export async function askPostMedia(
       tgChat.events.addListener(
         ChatEvents.VIDEO,
         tgChat.asyncCb(async (videoMsg: VideoMessageEvent) => {
-          if (videoMsg.caption && !captionHtml) captionHtml = tgInputToHtml(videoMsg.caption, videoMsg.entities);
+          if (videoMsg.caption && !captionHtml) captionHtml = convertTgInputToHtml(videoMsg.caption, videoMsg.entities);
 
           if (!onlyOneImage) {
             mediaGroup.push(videoMsg.video);

@@ -40,10 +40,10 @@ import {NormalizedTgItem, SUPPORTED_TG_ENTITY_TYPES, SupportedTgEntityType, TgEn
  */
 
 // TODO: не поддерживается вложенный i в b
-// yarn ts-node --esm ./src/helpers/tgInputToHtml.ts
+// yarn ts-node --esm ./src/helpers/convertTgInputToHtml.ts
 
 // console.log(111,
-//   tgInputToHtml(
+//   convertTgInputToHtml(
 //     'norm bold it italic underiline striketrough code url',
 //       [
 //       { offset: 5, length: 5, type: 'bold' },
@@ -68,7 +68,7 @@ import {NormalizedTgItem, SUPPORTED_TG_ENTITY_TYPES, SupportedTgEntityType, TgEn
  * Convert text from telegram input to MDv2
  * Trim it by yourself
  */
-export function tgInputToHtml(rawText: string, entities?: TgEntity[]): string {
+export function convertTgInputToHtml(rawText: string, entities?: TgEntity[]): string {
   const normalized = normalizeTg(rawText, entities)
 
   return normalized.map((item) => makeHtml(item)).join('')

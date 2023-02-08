@@ -2,7 +2,7 @@
 // TODO: не используется
 
 import {markdownv2 as mdFormat} from 'telegram-format';
-import {TgEntity} from '../types/TgEntity.js'
+import {TgEntity} from '../src/types/TgEntity'
 
 
 /*

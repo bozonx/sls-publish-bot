@@ -9,7 +9,7 @@ import {
 } from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, TextMessageEvent} from '../../types/MessageEvent.js';
-import {tgInputToHtml} from '../../helpers/tgInputToHtml.js';
+import {convertTgInputToHtml} from '../../helpers/convertTgInputToHtml.js';
 
 
 type ResultCallback = (textHtml?: string, cleanText?: string) => void
@@ -84,7 +84,7 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       ChatEvents.TEXT,
       tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
         handleResult(
-          _.trim(tgInputToHtml(textMsg.text, textMsg.entities)),
+          _.trim(convertTgInputToHtml(textMsg.text, textMsg.entities)),
           _.trim(textMsg.text)
         );
       })
@@ -98,7 +98,7 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
         if (photoMsg.caption) {
           handleResult(
-            _.trim(tgInputToHtml(photoMsg.caption, photoMsg.entities)),
+            _.trim(convertTgInputToHtml(photoMsg.caption, photoMsg.entities)),
             _.trim(photoMsg.caption)
           );
         }
@@ -116,7 +116,7 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       tgChat.asyncCb(async (videoMsg: PhotoMessageEvent) => {
         if (videoMsg.caption) {
           handleResult(
-            _.trim(tgInputToHtml(videoMsg.caption, videoMsg.entities)),
+            _.trim(convertTgInputToHtml(videoMsg.caption, videoMsg.entities)),
             _.trim(videoMsg.caption)
           );
         }
