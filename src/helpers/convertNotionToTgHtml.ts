@@ -15,18 +15,19 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
   let bulletedListCounter = 0;
 
   for (const block of notionBlocks) {
+    let children: string = ''
     // skip images
     if (block.type === NOTION_BLOCK_TYPES.image) continue;
 
-    if (block.has_children) {
-      // TODO: recurse
+    if ((block as any).children) {
+      children = convertNotionToTgHtml((block as any).children)
     }
 
     if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
       // if the end of ul block - put line break
-      if (bulletedListCounter > 0) result += '\n';
+      if (bulletedListCounter > 0) result += '\n'
 
-      bulletedListCounter = 0;
+      bulletedListCounter = 0
     }
 
     if (block.type !== NOTION_BLOCK_TYPES.numbered_list_item) {
@@ -55,7 +56,9 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
         break;
       case NOTION_BLOCK_TYPES.paragraph:
         if ((block as any)?.paragraph?.rich_text.length) {
-          result += richTextToHtml((block as any)?.paragraph?.rich_text) + '\n\n';
+          result += richTextToHtml((block as any)?.paragraph?.rich_text)
+            + children
+            + '\n\n';
         }
         else {
           // empty row
@@ -65,34 +68,37 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
         break;
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         bulletedListCounter++;
-        result += `\\* `
+        result += `* `
           + richTextToHtml((block as any)?.bulleted_list_item?.rich_text)
+          + ((children) ? '\n  ' + children : '')
           + '\n'
 
         break;
       case NOTION_BLOCK_TYPES.numbered_list_item:
-        numberListCounter++;
-        result += `${numberListCounter}\\. `
+        numberListCounter++
+        result += `${numberListCounter}. `
           + richTextToHtml((block as any)?.numbered_list_item?.rich_text)
+          + ((children) ? '\n  ' + children : '')
           + '\n'
 
         break;
       case NOTION_BLOCK_TYPES.quote:
-        result += `\\| `
+        result += `| `
           + richTextToHtml((block as any)?.quote?.rich_text)
-          // TODO: проверить переносы строк
-            //.replace(/\n/g, '\n\\| ')
+            .replace(/\n/g, '\n| ')
+          + children
           + '\n\n';
 
         break
       case NOTION_BLOCK_TYPES.code:
         result += '\n'
           + richTextToHtmlCodeBlock((block as any)?.code?.rich_text, (block as any)?.code?.language)
+          + children
           + '\n\n'
 
         break
       case NOTION_BLOCK_TYPES.divider:
-        result += '\\-\\-\\-\n\n'
+        result += '---\n\n'
 
         break
       default:
