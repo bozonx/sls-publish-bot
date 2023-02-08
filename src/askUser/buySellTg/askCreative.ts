@@ -3,10 +3,10 @@ import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK, ChatEvents
 import {PageObjectResponse, PartialPageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {DB_DEFAULT_PAGE_SIZE} from '../../apiNotion/constants.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
-import {transformNotionToTelegramPostMd} from '../../../_useless/transformNotionToTelegramPostMd.js';
 import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
 import {publishTgImage} from '../../apiTg/publishTg.js';
 import BaseState from '../../types/BaseState.js';
+import {convertNotionToTgHtml} from '../../helpers/convertNotionToTgHtml.js';
 
 
 const CONTENT_MARKER = 'content:';
@@ -65,7 +65,9 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
             const btnText = (item.properties?.btn_text as any).rich_text[0]?.plain_text;
             const btnUrl = (item.properties?.btn_url as any).url;
             const usePreview = (item.properties?.preview as any).checkbox;
-            const creativeStr = transformNotionToTelegramPostMd(pageContent);
+            //const creativeStr = transformNotionToTelegramPostMd(pageContent);
+            // TODO: будет html
+            const creativeStr = convertNotionToTgHtml(pageContent);
             const btnUrlResult = (btnText && btnUrl) ? {text: btnText, url: btnUrl} : undefined;
 
             if (image) {
