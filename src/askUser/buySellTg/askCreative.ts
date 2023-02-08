@@ -3,7 +3,7 @@ import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK, ChatEvents
 import {PageObjectResponse, PartialPageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {DB_DEFAULT_PAGE_SIZE} from '../../apiNotion/constants.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
-import {transformNotionToTelegramPostMd} from '../../helpers/transformNotionToTelegramPostMd.js';
+import {transformNotionToTelegramPostMd} from '../../../_useless/transformNotionToTelegramPostMd.js';
 import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
 import {publishTgImage} from '../../apiTg/publishTg.js';
 import BaseState from '../../types/BaseState.js';

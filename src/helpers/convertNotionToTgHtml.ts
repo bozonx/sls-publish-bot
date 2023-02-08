@@ -5,7 +5,9 @@ import {NotionBlocks} from '../types/notion.js';
 import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
 
 
-export function transformNotionToTelegramPostMd(notionBlocks: NotionBlocks): string {
+// TODO: do it !!!!
+
+export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;

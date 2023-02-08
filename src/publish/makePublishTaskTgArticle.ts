@@ -6,7 +6,7 @@ import {registerTgTaskOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import {transformCommonMdToTgHtml} from '../helpers/transformCommonMdToTgHtml.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
-import {transformNotionToTelegraph} from '../helpers/transformNotionToTelegraph.js';
+import {convertNotionToTelegraph} from '../helpers/convertNotionToTelegraph.js';
 import {trimPageBlocks} from '../helpers/transformHelpers.js';
 
 
@@ -17,7 +17,7 @@ export async function makeFinalArticleNodes(
 ): Promise<TelegraphNode[]> {
   const footerStr = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
   const trimmedArticle = trimPageBlocks(articleBlocks)
-  const telegraPhContent = await transformNotionToTelegraph(tgChat, trimmedArticle)
+  const telegraPhContent = await convertNotionToTelegraph(tgChat, trimmedArticle)
   // add footer
   if (footerStr) {
     const convertedFooter = parseMarkdown(footerStr) as any[]

@@ -1,13 +1,11 @@
 import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
-import {NOTION_BLOCK_TYPES} from '../types/notion.js';
-import {NotionBlocks} from '../types/notion.js';
-import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
+import {NOTION_BLOCK_TYPES} from '../src/types/notion';
+import {NotionBlocks} from '../src/types/notion';
+import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from '../src/helpers/transformHelpers';
 
 
-// TODO: do it !!!!
-
-export function transformNotionToTgHtml(notionBlocks: NotionBlocks): string {
+export function transformNotionToTelegramPostMd(notionBlocks: NotionBlocks): string {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;

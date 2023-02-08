@@ -11,7 +11,7 @@ import TgChat from '../apiTg/TgChat.js';
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'
 
 
-export async function transformNotionToTelegraph(
+export async function convertNotionToTelegraph(
   tgChat: TgChat,
   blocks: NotionBlocks
 ): Promise<TelegraphNode[]> {
@@ -24,7 +24,7 @@ export async function transformNotionToTelegraph(
     let children: TelegraphNode[] = []
 
     if ((block as any).children) {
-      children = await transformNotionToTelegraph(tgChat, (block as any).children)
+      children = await convertNotionToTelegraph(tgChat, (block as any).children)
     }
 
     if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
