@@ -2,7 +2,13 @@ import _ from 'lodash';
 import {markdownv2 as mdFormat} from 'telegram-format';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './convertHelpers.js';
+import {
+  richTextToHtml,
+  richTextToHtmlCodeBlock,
+  richTextToMd,
+  richTextToMdCodeBlock,
+  richTextToSimpleTextList
+} from './convertHelpers.js';
 
 
 // TODO: do it !!!!
@@ -53,15 +59,16 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
         break;
       case NOTION_BLOCK_TYPES.paragraph:
         if ((block as any)?.paragraph?.rich_text.length) {
-          result += richTextToMd((block as any)?.paragraph?.rich_text) + '\n\n';
+          result += '<p>' + richTextToHtml((block as any)?.paragraph?.rich_text) + '</p>'
         }
         else {
           // empty row
-          result += '\n';
+          result += '<p>\n</p>'
         }
 
         break;
       case NOTION_BLOCK_TYPES.bulleted_list_item:
+        // TODO: review
         bulletedListCounter++;
         result += `\\* `
           + richTextToMd((block as any)?.bulleted_list_item?.rich_text)
@@ -69,6 +76,7 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
 
         break;
       case NOTION_BLOCK_TYPES.numbered_list_item:
+        // TODO: review
         numberListCounter++;
         result += `${numberListCounter}\\. `
           + richTextToMd((block as any)?.numbered_list_item?.rich_text)
@@ -76,27 +84,28 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
 
         break;
       case NOTION_BLOCK_TYPES.quote:
-        result += `\\| `
-          + richTextToMd((block as any)?.quote?.rich_text)
-            .replace(/\n/g, '\n\\| ')
-          + '\n\n';
+        result += `<blockquote>`
+          // TODO: проверит переносы строк
+          + richTextToHtml((block as any)?.quote?.rich_text)
+            //.replace(/\n/g, '\n\\| ')
+          + '</blockquote>';
 
         break;
       case NOTION_BLOCK_TYPES.code:
-        result += '\n'
-          + richTextToMdCodeBlock((block as any)?.code?.rich_text, (block as any)?.code?.language)
-          + '\n\n';
+        result += '<pre>'
+          + richTextToHtmlCodeBlock((block as any)?.code?.rich_text, (block as any)?.code?.language)
+          + '</pre>';
 
         break;
       case NOTION_BLOCK_TYPES.divider:
-        result += '\\-\\-\\-\n\n';
+        result += '<hr />'
 
         break;
       default:
-        throw new Error(`Unknown block type: ${block.type}`);
+        throw new Error(`Unknown block type: ${block.type}`)
     }
 
   }
 
-  return _.trim(result);
+  return _.trim(result)
 }

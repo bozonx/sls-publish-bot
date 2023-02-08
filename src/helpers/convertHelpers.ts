@@ -1,7 +1,7 @@
 import {markdownv2 as mdFormat} from 'telegram-format';
+import {html as htmlFormat} from 'telegram-format';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {NOTION_RICH_TEXT_TYPES, NotionAnnotation, NotionBlocks} from '../types/notion.js';
-import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 
 
@@ -33,6 +33,7 @@ export function richTextToMd(richText?: TextRichTextItemResponse[]): string {
 }
 
 export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {
+  // TODO: review
   if (!richText) return ''
   else if (!richText.length) return ''
 
@@ -81,7 +82,7 @@ export function richTextToHtmlCodeBlock(
   // TODO: как передать язык программирования???
   // TODO: проверить требования по экранированию
   // TODO: что если пусто
-  return richTextToSimpleTextList(richText), language;
+  return htmlFormat.monospaceBlock(richTextToSimpleTextList(richText), language)
 }
 
 
