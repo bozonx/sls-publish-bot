@@ -1,13 +1,13 @@
 // @ts-ignore
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import TgChat from '../apiTg/TgChat.js';
+import NotionApi from './NotionApi.js';
 
 
 export async function requestPageProps(
   pageId: string,
-  tgChat: TgChat
+  notionApi: NotionApi
 ): Promise<PageObjectResponse['properties']> {
-  const resultPage: PageObjectResponse = await tgChat.app.notion.api.pages.retrieve({
+  const resultPage: PageObjectResponse = await notionApi.api.pages.retrieve({
     page_id: pageId,
   }) as PageObjectResponse
 
