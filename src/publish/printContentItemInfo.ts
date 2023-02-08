@@ -8,7 +8,7 @@ import {transformCommonMdToTgHtml} from '../helpers/transformCommonMdToTgHtml.js
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import ru from '../I18n/ru.js';
 import {makeContentLengthDetails} from './publishHelpers.js';
-import {makePostFromContentItem} from '../notionHelpers/makePostFromContentItem.js';
+import {makePostFromContentItem} from '../contentPlan/makePostFromContentItem.js';
 
 
 export async function printContentItemInitialDetails(

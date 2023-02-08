@@ -5,13 +5,13 @@ import {askPublicationMenu} from './askPublicationMenu.js';
 import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
-import {makePostFromContentItem} from '../../notionHelpers/makePostFromContentItem.js';
+import {makePostFromContentItem} from '../../contentPlan/makePostFromContentItem.js';
 import PollData from '../../types/PollData.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
-import {contentPublishFork} from '../../notionHelpers/contentPublishFork.js';
+import {contentPublishFork} from '../../contentPlan/contentPublishFork.js';
 import {NotionBlocks} from '../../types/notion.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
-import {validateContentPlanPost} from '../../notionHelpers/validateContentPlanPost.js';
+import {validateContentPlanPost} from '../../contentPlan/validateContentPlanPost.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {printPost} from '../../publish/publishHelpers.js';
 
