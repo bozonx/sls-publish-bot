@@ -184,12 +184,12 @@ function toTelegraPh(
       children: [preparedText],
     };
   }
-  // else if (annotations.underline) {
-  //   return {
-  //     tag: 'em',
-  //     children: [preparedText],
-  //   };
-  // }
+  else if (annotations.strikethrough) {
+    return {
+      tag: 's',
+      children: [preparedText],
+    };
+  }
   else if (annotations.code) {
     return {
       tag: 'code',
@@ -197,7 +197,7 @@ function toTelegraPh(
     };
   }
   else {
-    // no formatting
+    // no formatting for underline
     return preparedText;
   }
 }

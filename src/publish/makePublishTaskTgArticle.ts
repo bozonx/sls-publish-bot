@@ -85,9 +85,6 @@ export async function makePublishTaskTgArticle(
 
   const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, articleBlocks)
 
-  //console.log(22222, JSON.stringify(telegraphNodes))
-  //return
-
   // create article on telegra.ph
   const articleUrl = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
   const postHtml = await makeArticleTgPostHtml(

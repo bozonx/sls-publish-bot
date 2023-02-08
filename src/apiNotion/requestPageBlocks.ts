@@ -16,11 +16,6 @@ export async function requestPageBlocks(
     topChildren.results as NotionBlocks
   )
 
-  // console.log(22222, blocks)
-  // console.log(33333, JSON.stringify(blocks))
-
-  // TODO: почему это объект ??? {'0': [...]}
-
   return blocks
 }
 
