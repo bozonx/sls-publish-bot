@@ -5,7 +5,7 @@ import {richTextToSimpleTextList} from './transformHelpers.js';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
 
 
-export function transformNotionToInstagramPost(notionBlocks: NotionBlocks): string {
+export function convertNotionToInstagramPost(notionBlocks: NotionBlocks): string {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;

@@ -3,7 +3,7 @@ import {makeResultPostText, resolvePostFooter} from '../helpers/helpers.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import ContentItem from '../types/ContentItem.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
-import {transformNotionToInstagramPost} from '../helpers/transformNotionToInstagramPost.js';
+import {convertNotionToInstagramPost} from '../helpers/convertNotionToInstagramPost.js';
 import {convertNotionToTgHtml} from '../helpers/convertNotionToTgHtml.js';
 import {BlogConfig} from '../types/BlogsConfig.js';
 
@@ -52,7 +52,7 @@ export async function makePostFromContentItem(
       PUBLICATION_TYPES.poll,
     ].includes(item.type) && textBlocks && !replacedHtmlText) {
       // TODO: а может лучше делать html ???
-      postText = transformNotionToInstagramPost(textBlocks)
+      postText = convertNotionToInstagramPost(textBlocks)
     }
 
     if (postText) {

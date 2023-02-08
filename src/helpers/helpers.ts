@@ -9,7 +9,7 @@ import {isPromise, makeTagsString} from '../lib/common.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {compactUndefined} from '../lib/arrays.js';
-import {transformHtmlToCleanText} from './transformHtmlToCleanText.js';
+import {convertHtmlToCleanText} from './convertHtmlToCleanText.js';
 
 
 export function makeBaseState(): BaseState {
@@ -212,7 +212,7 @@ export async function makeCleanTexts(
 
   for (const sn in postTexts) {
     // TODO: а для инсты то может не html быть???
-    cleanTexts[sn as SnType] = await transformHtmlToCleanText(postTexts[sn as SnType]!)
+    cleanTexts[sn as SnType] = await convertHtmlToCleanText(postTexts[sn as SnType]!)
   }
 
   return cleanTexts

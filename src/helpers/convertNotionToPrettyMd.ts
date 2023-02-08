@@ -1,17 +1,16 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {richTextToSimpleTextList} from './transformHelpers.js';
-
-// TODO: поидее не нужно
+import {richTextToMd, richTextToMdCodeBlock, richTextToSimpleTextList} from './transformHelpers.js';
 
 
-export function transformNotionToCleanText(notionBlocks: NotionBlocks): string {
+export function convertNotionToPrettyMd(notionBlocks: NotionBlocks): string {
   let result = '';
   let numberListCounter = 0;
   let bulletedListCounter = 0;
 
   for (const block of notionBlocks) {
+    // TODO: не пропускать картинки а вставлять
     // skip images
     if (block.type === NOTION_BLOCK_TYPES.image) continue;
 
@@ -35,17 +34,23 @@ export function transformNotionToCleanText(notionBlocks: NotionBlocks): string {
 
     switch (block.type) {
       case NOTION_BLOCK_TYPES.heading_1:
-        result += richTextToSimpleTextList((block as any)?.heading_1?.rich_text) + '\n\n';
+        result += '# '
+          + richTextToSimpleTextList((block as any)?.heading_1?.rich_text)
+          + '\n\n';
         break;
       case NOTION_BLOCK_TYPES.heading_2:
-        result += richTextToSimpleTextList((block as any)?.heading_2?.rich_text) + '\n\n';
+        result += '## '
+          + richTextToSimpleTextList((block as any)?.heading_2?.rich_text)
+          + '\n\n';
         break;
       case NOTION_BLOCK_TYPES.heading_3:
-        result += richTextToSimpleTextList((block as any)?.heading_3?.rich_text) + '\n\n';
+        result += '### '
+          + richTextToSimpleTextList((block as any)?.heading_3?.rich_text)
+          + '\n\n';
         break;
       case NOTION_BLOCK_TYPES.paragraph:
         if ((block as any)?.paragraph?.rich_text.length) {
-          result += richTextToSimpleTextList((block as any)?.paragraph?.rich_text) + '\n\n';
+          result += richTextToMd((block as any)?.paragraph?.rich_text) + '\n\n';
         }
         else {
           // empty row
@@ -56,26 +61,27 @@ export function transformNotionToCleanText(notionBlocks: NotionBlocks): string {
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         bulletedListCounter++;
         result += `* `
-          + richTextToSimpleTextList((block as any)?.bulleted_list_item?.rich_text)
+          + richTextToMd((block as any)?.bulleted_list_item?.rich_text)
           + '\n';
 
         break;
       case NOTION_BLOCK_TYPES.numbered_list_item:
         numberListCounter++;
         result += `${numberListCounter}. `
-          + richTextToSimpleTextList((block as any)?.numbered_list_item?.rich_text)
+          + richTextToMd((block as any)?.numbered_list_item?.rich_text)
           + '\n';
 
         break;
       case NOTION_BLOCK_TYPES.quote:
-        result += `| `
-          + richTextToSimpleTextList((block as any)?.quote?.rich_text)
-            .replace(/\n/g, '\n| ')
+        result += `> `
+          + richTextToMd((block as any)?.quote?.rich_text)
+            .replace(/\n/g, '\n> ')
           + '\n\n';
 
         break;
       case NOTION_BLOCK_TYPES.code:
-        result += richTextToSimpleTextList((block as any)?.code?.rich_text)
+        result += '\n'
+          + richTextToMdCodeBlock((block as any)?.code?.rich_text, (block as any)?.code?.language)
           + '\n\n';
 
         break;
@@ -86,7 +92,6 @@ export function transformNotionToCleanText(notionBlocks: NotionBlocks): string {
       default:
         throw new Error(`Unknown block type: ${block.type}`);
     }
-
   }
 
   return _.trim(result);
