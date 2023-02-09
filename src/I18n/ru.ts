@@ -102,6 +102,7 @@ const dict = {
     back: 'Назад',
     cancel: 'Отмена',
     ok: 'Ок',
+    toMainMenu: 'В главное меню',
     //skip: 'Пропустить',
   },
   commonPhrases: {

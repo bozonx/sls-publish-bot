@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat.js';
 import {addSimpleStep, compactButtons} from '../helpers/helpers.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
-import {CANCEL_BTN_CALLBACK, makeCancelBtn} from '../helpers/buttons.js';
+import {CANCEL_BTN_CALLBACK} from '../helpers/buttons.js';
 
 
 export const BLOG_MENU_ACTIONS = {
@@ -38,7 +38,10 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (act
           //   callback_data: BLOG_MENU_ACTIONS.SELL_TG_AD_PLACE,
           // }],
           [
-            makeCancelBtn(tgChat.app.i18n),
+            {
+              text: tgChat.app.i18n.buttons.toMainMenu,
+              callback_data: CANCEL_BTN_CALLBACK,
+            }
           ],
         ])
       ]
