@@ -14,6 +14,11 @@ function makeInlineString(nodes: (Element | Text)[]): string {
       result.push(makeInlineString(node.children as (Element | Text)[]))
     }
     else if (node.type === 'text') {
+
+      console.log(1111, node.value)
+
+      if (node.value.match('^\s*$')) continue
+
       result.push(node.value)
     }
     // else do nothing
@@ -75,18 +80,29 @@ function recursiveMakeOl(liElements: (Element)[]) {
 
 function remarkToText() {
   return (tree: any, file: any) => {
-    visit(tree, 'element', (node) => {
-      // block elements
+    visit(tree, (node) => {
       if ([
+        'html', 'body'
+      ].includes(node.tagName)) {
+        // node.type = 'text'
+        // node.value = makeInlineString(node.children)
+        // delete node.tagName
+        // delete node.properties
+        // delete node.children
+        // delete node.position
+      }
+      // block elements
+      else if ([
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         'p', 'blockquote', 'aside', 'pre', 'abbr', 'address', 'article', 'cite',
         'details', 'div', 'footer', 'header', 'main', 'section', 'summary', 'nav',
       ].includes(node.tagName)) {
         node.type = 'text'
-        node.value = makeInlineString(node.children) + '\n'
+        node.value = _.trim(makeInlineString(node.children), '\n') + '\n'
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
       }
       // inline elements
       else if ([
@@ -98,19 +114,22 @@ function remarkToText() {
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
       }
       // media and so on - have to be hidden
       else if ([
         'img', 'video', 'audio', 'data', 'canvas', 'datalist', 'button',
         'dialog', 'embed', 'form', 'iframe', 'input', 'kbd', 'label', 'link', 'map',
         'meter', 'noscript', 'object', 'option', 'output', 'picture', 'progress',
-        'ruby', 'script', 'select', 'svg', 'table', 'template', 'textarea', 'var', 'wbr'
+        'ruby', 'script', 'select', 'svg', 'table', 'template', 'textarea', 'var', 'wbr',
+        'head'
       ].includes(node.tagName)) {
         node.type = 'text'
         node.value = ''
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
       }
       else if (['ul'].includes(node.tagName)) {
         node.type = 'text'
@@ -118,6 +137,7 @@ function remarkToText() {
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
       }
       else if (['ol'].includes(node.tagName)) {
         node.type = 'text'
@@ -125,6 +145,7 @@ function remarkToText() {
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
       }
       else if (['br'].includes(node.tagName)) {
         node.type = 'text'
@@ -132,6 +153,7 @@ function remarkToText() {
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
       }
       else if (['hr'].includes(node.tagName)) {
         node.type = 'text'
@@ -139,6 +161,7 @@ function remarkToText() {
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
       }
       else if (['a'].includes(node.tagName)) {
         node.type = 'text'
@@ -146,6 +169,21 @@ function remarkToText() {
         delete node.tagName
         delete node.properties
         delete node.children
+        delete node.position
+      }
+      else if (node.type === 'text') {
+        if (node.value.match(/^\n\n$/)) {
+          //node.value = '\n'
+        }
+        else {
+
+        }
+
+
+        //console.log(2222, node.value)
+      }
+      else {
+        console.log(3333, node)
       }
     })
   }
@@ -167,6 +205,7 @@ export async function convertHtmlToCleanText(htmlStr?: string): Promise<string |
   if (!htmlStr) return
 
   // TODO: li, ol, ul, dl, dt, figure, figcaption
+  // TODO: удалить <html><head></head><body>    </body></html>
 
 
   const vfile = await unified()
@@ -218,7 +257,6 @@ inline <b>bold <i>bold-italic</i><s> bold-strike</s></b>
   </ul>
 </li>
 </ul>
-
 <ol>
 <li>item 1</li>
 <li>item 2</li>
