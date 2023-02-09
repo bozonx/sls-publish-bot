@@ -29,9 +29,9 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
 
     if (block.type !== NOTION_BLOCK_TYPES.numbered_list_item) {
       // if the end of ol block - put line break
-      if (numberListCounter > 0) result += '\n';
+      if (numberListCounter > 0) result += '\n'
 
-      numberListCounter = 0;
+      numberListCounter = 0
     }
 
 
@@ -39,30 +39,30 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
       case NOTION_BLOCK_TYPES.heading_1:
         result += htmlFormat.bold(
           richTextToSimpleTextList((block as any)?.heading_1?.rich_text
-          )) + '\n\n';
-        break;
+          )) + '\n\n'
+        break
       case NOTION_BLOCK_TYPES.heading_2:
         result += htmlFormat.bold(
           richTextToSimpleTextList((block as any)?.heading_2?.rich_text
-          )) + '\n\n';
-        break;
+          )) + '\n\n'
+        break
       case NOTION_BLOCK_TYPES.heading_3:
         result += htmlFormat.bold(
           richTextToSimpleTextList((block as any)?.heading_3?.rich_text
-          )) + '\n\n';
-        break;
+          )) + '\n\n'
+        break
       case NOTION_BLOCK_TYPES.paragraph:
         if ((block as any)?.paragraph?.rich_text.length) {
           result += richTextToHtml((block as any)?.paragraph?.rich_text)
             + children
-            + '\n\n';
+            + '\n\n'
         }
         else {
           // empty row
           result += '\n'
         }
 
-        break;
+        break
       case NOTION_BLOCK_TYPES.bulleted_list_item:
         bulletedListCounter++;
         result += `* `
@@ -72,7 +72,7 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
             : '')
           + '\n'
 
-        break;
+        break
       case NOTION_BLOCK_TYPES.numbered_list_item:
         numberListCounter++
         result += `${numberListCounter}. `
@@ -82,7 +82,7 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
             : '')
           + '\n'
 
-        break;
+        break
       case NOTION_BLOCK_TYPES.quote:
         result += `| `
           + richTextToHtml((block as any)?.quote?.rich_text)
