@@ -11,6 +11,7 @@ const TASK_ID_CB = 'TASK_ID_CB:';
 
 export const TASK_LIST_ACTIONS = {
   DELETE_POST: 'DELETE_POST',
+  CLONE_POST: 'CLONE_POST',
   PIN_POST: 'PIN_POST',
   UNPIN_POST: 'UNPIN_POST',
   FINISH_POLL: 'FINISH_POLL',
@@ -42,8 +43,8 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string,
               callback_data: TASK_LIST_ACTIONS.DELETE_POST,
             },
             {
-              text: tgChat.app.i18n.buttons.finishPoll,
-              callback_data: TASK_LIST_ACTIONS.FINISH_POLL,
+              text: tgChat.app.i18n.buttons.clonePost,
+              callback_data: TASK_LIST_ACTIONS.CLONE_POST,
             },
           ],
           [
@@ -54,6 +55,12 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string,
             {
               text: tgChat.app.i18n.buttons.unpinPost,
               callback_data: TASK_LIST_ACTIONS.UNPIN_POST,
+            },
+          ],
+          [
+            {
+              text: tgChat.app.i18n.buttons.finishPoll,
+              callback_data: TASK_LIST_ACTIONS.FINISH_POLL,
             },
           ],
           [

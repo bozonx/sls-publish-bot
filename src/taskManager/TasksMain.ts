@@ -99,6 +99,26 @@ export default class TasksMain {
   //////// Public but for inner use
 
   /**
+   * Add task
+   * @return if sting - taskId, if null - task haven't been added
+   */
+  async addTaskSilently(task: TaskItem): Promise<string | null> {
+    const validateResult = await validateTask(task, this.app);
+
+    if (validateResult) {
+      this.app.channelLog.error(`Task was skipped: ` + validateResult)
+      // skip not valid tasks
+      return null;
+    }
+
+    const taskNum = this.registerTask(task);
+    // do noting on error
+    await this.saveTasks()
+
+    return taskNum;
+  }
+
+  /**
    * Totally remove silent task
    */
   clearTask(taskId: string) {
@@ -124,27 +144,6 @@ export default class TasksMain {
 
       return false;
     }
-  }
-
-
-  /**
-   * Add task
-   * @return if sting - taskId, if null - task haven't been added
-   */
-  private async addTaskSilently(task: TaskItem): Promise<string | null> {
-    const validateResult = await validateTask(task, this.app);
-
-    if (validateResult) {
-      this.app.channelLog.error(`Task was skipped: ` + validateResult)
-      // skip not valid tasks
-      return null;
-    }
-
-    const taskNum = this.registerTask(task);
-    // do noting on error
-    await this.saveTasks()
-
-    return taskNum;
   }
 
   /**

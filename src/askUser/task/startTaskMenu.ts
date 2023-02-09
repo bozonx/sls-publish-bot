@@ -29,6 +29,9 @@ export async function startTaskMenu(tgChat: TgChat) {
           await tgChat.steps.to(TASKS_MAIN_STEP)
         }));
       }
+      else if (action === TASK_LIST_ACTIONS.CLONE_POST) {
+        // TODO: add
+      }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
         return askTaskAdd(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],

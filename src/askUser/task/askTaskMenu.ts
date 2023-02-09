@@ -3,10 +3,17 @@ import {ChatEvents} from '../../types/constants.js';
 import {makeTaskDetails} from '../../taskManager/makeTaskDetails.js';
 import BaseState from '../../types/BaseState.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
+import {PostponeTgPostTask} from '../../types/TaskItem.js';
+import {askDateTime} from '../common/askDateTime.js';
+import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
 
 
-const DELETE_TASK_ACTION = 'delete_task';
-const FLUSH_TASK_ACTION = 'flush_task';
+const TASK_ACTIONS = {
+  DELETE: 'DELETE',
+  FLUSH: 'FLUSH',
+  CHANGE_EXEC_DATE: 'CHANGE_EXEC_DATE',
+  CHANGE_AUTO_DELETE_DATE: 'CHANGE_AUTO_DELETE_DATE',
+}
 
 
 export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => void) {
@@ -17,7 +24,7 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
       await tgChat.reply(tgChat.app.i18n.message.noTask)
       onDone()
 
-      return;
+      return
     }
 
     const msg = tgChat.app.i18n.menu.taskDetails + '\n\n'
@@ -26,13 +33,25 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
       [
         {
           text: tgChat.app.i18n.menu.flushTask,
-          callback_data: FLUSH_TASK_ACTION,
+          callback_data: TASK_ACTIONS.FLUSH,
         },
         {
           text: tgChat.app.i18n.menu.deleteTask,
-          callback_data: DELETE_TASK_ACTION,
+          callback_data: TASK_ACTIONS.DELETE,
         }
       ],
+      [
+        {
+          text: tgChat.app.i18n.menu.changeTaskExecDate,
+          callback_data: TASK_ACTIONS.CHANGE_EXEC_DATE,
+        },
+      ],
+      ((task as PostponeTgPostTask).autoDeleteDateTime) ? [
+        {
+          text: tgChat.app.i18n.menu.changeTaskAutoDeleteDate,
+          callback_data: TASK_ACTIONS.CHANGE_AUTO_DELETE_DATE,
+        }
+      ]: [],
       [
         makeBackBtn(tgChat.app.i18n),
         makeCancelBtn(tgChat.app.i18n),
@@ -51,19 +70,19 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
           else if (queryData === BACK_BTN_CALLBACK) {
             return tgChat.steps.back();
           }
-          else if (queryData === DELETE_TASK_ACTION) {
+          else if (queryData === TASK_ACTIONS.DELETE) {
             try {
-              await tgChat.app.tasks.removeTask(taskId);
+              await tgChat.app.tasks.removeTask(taskId)
             }
             catch (e) {
               await tgChat.reply(tgChat.app.i18n.menu.taskRemoveError + e)
             }
 
-            await tgChat.reply(tgChat.app.i18n.message.taskRemoved);
+            await tgChat.reply(tgChat.app.i18n.message.taskRemoved)
 
-            onDone();
+            onDone()
           }
-          else if (queryData === FLUSH_TASK_ACTION) {
+          else if (queryData === TASK_ACTIONS.FLUSH) {
             try {
               await tgChat.app.tasks.flushTask(taskId)
             }
@@ -74,6 +93,42 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
             await tgChat.reply(tgChat.app.i18n.message.taskFlushed);
 
             onDone();
+          }
+          else if (queryData === TASK_ACTIONS.CHANGE_EXEC_DATE) {
+            await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+              try {
+                await tgChat.app.tasks.removeTask(taskId)
+                await tgChat.app.tasks.addTaskSilently({
+                  ...task,
+                  startTime: makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
+                })
+              }
+              catch (e) {
+                await tgChat.reply(tgChat.app.i18n.menu.taskEditError + e)
+              }
+
+              await tgChat.reply(tgChat.app.i18n.message.taskTimeWasChanged)
+
+              onDone()
+            }))
+          }
+          else if (queryData === TASK_ACTIONS.CHANGE_AUTO_DELETE_DATE) {
+            await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+              try {
+                await tgChat.app.tasks.removeTask(taskId)
+                await tgChat.app.tasks.addTaskSilently({
+                  ...task,
+                  autoDeleteDateTime: makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
+                })
+              }
+              catch (e) {
+                await tgChat.reply(tgChat.app.i18n.menu.taskEditError + e)
+              }
+
+              await tgChat.reply(tgChat.app.i18n.message.taskAutoDeleteTimeWasChanged)
+
+              onDone()
+            }))
           }
           // else do nothing
         })
