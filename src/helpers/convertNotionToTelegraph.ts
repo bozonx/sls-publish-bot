@@ -1,11 +1,9 @@
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
 import {NotionBlocks} from '../types/notion.js';
-import {
-  richTextToSimpleTextList,
-  richTextToTelegraphNodes
-} from './convertHelpers.js';
+import {richTextToSimpleTextList} from './convertHelpers.js';
 import TgChat from '../apiTg/TgChat.js';
+import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'

@@ -2,11 +2,8 @@ import _ from 'lodash'
 import {html as htmlFormat} from 'telegram-format'
 import {NOTION_BLOCK_TYPES} from '../types/notion.js'
 import {NotionBlocks} from '../types/notion.js'
-import {
-  richTextToHtml,
-  richTextToHtmlCodeBlock,
-  richTextToSimpleTextList
-} from './convertHelpers.js'
+import {richTextToSimpleTextList} from './convertHelpers.js'
+import {richTextToHtml, richTextToHtmlCodeBlock} from './convertHelpersHtml.js';
 
 
 export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {

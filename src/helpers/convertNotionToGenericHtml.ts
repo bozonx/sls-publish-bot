@@ -1,11 +1,9 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {
-  richTextToHtml,
-  richTextToHtmlCodeBlock,
-  richTextToSimpleTextList, richTextToTelegraphNodes
-} from './convertHelpers.js';
+import {richTextToSimpleTextList} from './convertHelpers.js';
+import {richTextToHtml, richTextToHtmlCodeBlock} from './convertHelpersHtml.js';
+import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
 
 
 export function convertNotionToGenericHtml(blocks: NotionBlocks): string {
