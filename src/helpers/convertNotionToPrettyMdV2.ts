@@ -1,20 +1,19 @@
 import _ from 'lodash';
+import {markdownv2 as mdFormat} from 'telegram-format/dist/source/markdownv2.js';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToSimpleTextList} from './convertHelpers.js';
 import {richTextToMdV2, richTextToMdV2CodeBlock} from './convertHelpersMdV2.js';
+import {makeMdImageString} from './convertHelpersCommonMd.js';
 
 
-export function convertNotionToPrettyMdV2(notionBlocks: NotionBlocks): string {
+export function convertNotionToPrettyMdV2(notionBlocks: NotionBlocks, skipImage = false): string {
   let result = ''
   let numberListCounter = 0
   let bulletedListCounter = 0
 
   for (const block of notionBlocks) {
     let children: string = ''
-    // TODO: не пропускать картинки а вставлять
-    // skip images
-    if (block.type === NOTION_BLOCK_TYPES.image) continue;
 
     if ((block as any).children) {
       children = convertNotionToPrettyMdV2((block as any).children)
@@ -35,6 +34,16 @@ export function convertNotionToPrettyMdV2(notionBlocks: NotionBlocks): string {
     }
 
     switch (block.type) {
+      case NOTION_BLOCK_TYPES.image:
+        if (skipImage) continue
+
+        result += makeMdImageString(
+          // TODO: поидее надо загрузить на telegraph, а то может быть expire
+          (block as any)?.image?.file.url,
+          (block as any)?.image?.caption?.[0]?.plain_text,
+        )
+
+        break
       case NOTION_BLOCK_TYPES.heading_1:
         result += '# '
           + richTextToSimpleTextList((block as any)?.heading_1?.rich_text)
