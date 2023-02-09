@@ -3,6 +3,7 @@ import {visit} from 'unist-util-visit';
 import rehypeStringify from 'rehype-stringify';
 import rehypeParse from 'rehype-parse';
 import {Element, Text} from 'hast-util-to-html/lib/types.js';
+import _ from 'lodash';
 
 
 function makeInlineString(nodes: (Element | Text)[]): string {
@@ -21,6 +22,56 @@ function makeInlineString(nodes: (Element | Text)[]): string {
   return result.join('')
 }
 
+function recursiveMakeUl(liElements: (Element)[]) {
+  const result: string[] = []
+
+  for (const child of liElements) {
+    if ((child as any).type === 'text') {
+      const trimmed = _.trim((child as any).value)
+
+      if (trimmed) result.push(trimmed + '\n')
+    }
+    else if (child.tagName === 'li') {
+      result.push('* ' + recursiveMakeUl(child.children as Element[]))
+    }
+    else if (child.tagName === 'ul') {
+      result.push(
+        '  '
+        + recursiveMakeUl(child.children as Element[])
+          .replace(/\n/g, '\n  ')
+      )
+    }
+    else {
+      result.push(makeInlineString(child.children as Element[]))
+    }
+  }
+
+  return result.join('')
+}
+
+function recursiveMakeOl(liElements: (Element)[]) {
+  const result: string[] = []
+  let counter = 1
+
+  for (const child of liElements) {
+    if ((child as any).type === 'text') {
+      const trimmed = _.trim((child as any).value)
+
+      if (trimmed) result.push(trimmed + '\n')
+    }
+    else if (child.tagName === 'li') {
+      result.push(`${counter}. ${recursiveMakeUl(child.children as Element[])}`)
+
+      counter++
+    }
+    else {
+      result.push(makeInlineString(child.children as Element[]))
+    }
+  }
+
+  return result.join('')
+}
+
 
 function remarkToText() {
   return (tree: any, file: any) => {
@@ -29,7 +80,7 @@ function remarkToText() {
       if ([
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         'p', 'blockquote', 'aside', 'pre', 'abbr', 'address', 'article', 'cite',
-        'details', 'div', 'footer', 'header', 'main', 'section', 'summary', 'nav'
+        'details', 'div', 'footer', 'header', 'main', 'section', 'summary', 'nav',
       ].includes(node.tagName)) {
         node.type = 'text'
         node.value = makeInlineString(node.children) + '\n'
@@ -61,6 +112,20 @@ function remarkToText() {
         delete node.properties
         delete node.children
       }
+      else if (['ul'].includes(node.tagName)) {
+        node.type = 'text'
+        node.value = recursiveMakeUl(node.children)
+        delete node.tagName
+        delete node.properties
+        delete node.children
+      }
+      else if (['ol'].includes(node.tagName)) {
+        node.type = 'text'
+        node.value = recursiveMakeOl(node.children)
+        delete node.tagName
+        delete node.properties
+        delete node.children
+      }
       else if (['br'].includes(node.tagName)) {
         node.type = 'text'
         node.value = '\n'
@@ -76,7 +141,6 @@ function remarkToText() {
         delete node.children
       }
       else if (['a'].includes(node.tagName)) {
-        console.log(111, node)
         node.type = 'text'
         node.value = makeInlineString(node.children)
         delete node.tagName
@@ -150,7 +214,7 @@ inline <b>bold <i>bold-italic</i><s> bold-strike</s></b>
   item 2
   <ul>
     <li>item 2.1</li>
-    <li>item 2.2</li>
+    <li><b>bbb </b>item 2.2</li>
   </ul>
 </li>
 </ul>
