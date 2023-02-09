@@ -1,17 +1,17 @@
 import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  ChatEvents,
-  OK_BTN,
-  OK_BTN_CALLBACK
-} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
+import {
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK,
+  makeBackBtn,
+  makeCancelBtn,
+  makeOkBtn,
+  OK_BTN_CALLBACK
+} from '../../helpers/buttons.js';
+import {ChatEvents} from '../../types/constants.js';
 
 
 type OnDoneType = (messageIds: number[], chatId: number, startTime: string) => void;
@@ -20,9 +20,9 @@ type OnDoneType = (messageIds: number[], chatId: number, startTime: string) => v
 export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType) {
   const buttons = [
     [
-      BACK_BTN,
-      CANCEL_BTN,
-      OK_BTN,
+      makeBackBtn(tgChat.app.i18n),
+      makeCancelBtn(tgChat.app.i18n),
+      makeOkBtn(tgChat.app.i18n),
     ]
   ];
   let mediaIds: number[] = []

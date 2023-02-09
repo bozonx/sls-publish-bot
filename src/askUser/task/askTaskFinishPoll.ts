@@ -1,14 +1,9 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  ChatEvents
-} from '../../types/constants.js';
+import {ChatEvents} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {handleIncomeMessage} from './askTaskAdd.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 type OnDoneType = (messageId: number, chatId: number, startTime: string) => void;
@@ -17,8 +12,8 @@ type OnDoneType = (messageId: number, chatId: number, startTime: string) => void
 export async function askTaskFinishPoll(msg: string, tgChat: TgChat, onDone: OnDoneType) {
   const buttons = [
     [
-      BACK_BTN,
-      CANCEL_BTN,
+      makeBackBtn(tgChat.app.i18n),
+      makeCancelBtn(tgChat.app.i18n),
     ]
   ];
 

@@ -1,5 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK, ChatEvents} from '../../types/constants.js';
+import {ChatEvents} from '../../types/constants.js';
 import {PageObjectResponse, PartialPageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {DB_DEFAULT_PAGE_SIZE} from '../../apiNotion/constants.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
@@ -7,6 +7,7 @@ import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
 import {publishTgImage} from '../../apiTg/publishTg.js';
 import BaseState from '../../types/BaseState.js';
 import {convertNotionToTgHtml} from '../../helpers/convertNotionToTgHtml.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const CONTENT_MARKER = 'content:';
@@ -38,8 +39,8 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
         }]
       }),
       [
-        BACK_BTN,
-        CANCEL_BTN,
+        makeBackBtn(tgChat.app.i18n),
+        makeCancelBtn(tgChat.app.i18n),
       ],
     ]
 

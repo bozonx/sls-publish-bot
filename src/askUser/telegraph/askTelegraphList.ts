@@ -1,10 +1,10 @@
 import {PageList} from 'better-telegraph';
 import TgChat from '../../apiTg/TgChat.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
-import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {Page} from 'better-telegraph/src/types.js';
 import {compactUndefined} from '../../lib/arrays.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 export type TelegraphListMenu = 'TELEGRAPH_NEXT' | 'TELEGRAPH_PREV';
@@ -45,8 +45,8 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => v
             } || undefined,
           ]),
           [
-            CANCEL_BTN,
-            BACK_BTN,
+            makeBackBtn(tgChat.app.i18n),
+            makeCancelBtn(tgChat.app.i18n),
           ]
         ],
       ]

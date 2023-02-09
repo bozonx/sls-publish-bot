@@ -1,12 +1,6 @@
 import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  OK_BTN, OK_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN,
-} from '../../types/constants.js';
+import {PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN} from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
 import {askText} from '../common/askText.js';
@@ -15,6 +9,13 @@ import {TgReplyBtnUrl, TgReplyButton} from '../../types/TgReplyButton.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {CustomPostState} from './askCustomPostTg.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
+import {
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK,
+  makeBackBtn,
+  makeCancelBtn, makeOkBtn,
+  OK_BTN_CALLBACK
+} from '../../helpers/buttons.js';
 
 
 export type CustomPostAction = 'FOOTER_SWITCH'
@@ -106,9 +107,9 @@ export async function askCustomPostMenu(
             },
           ],
           compactUndefined([
-            BACK_BTN,
-            CANCEL_BTN,
-            (disableOk) ? undefined : OK_BTN,
+            makeBackBtn(tgChat.app.i18n),
+            makeCancelBtn(tgChat.app.i18n),
+            (disableOk) ? undefined : makeOkBtn(tgChat.app.i18n),
           ]),
         ]
       ]

@@ -1,9 +1,9 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {BACK_BTN, BACK_BTN_CALLBACK, CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 import {addSimpleStep, compactButtons} from '../../helpers/helpers.js';
 import {breakArray, compactUndefined} from '../../lib/arrays.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 export const CUSTOM_POST_MENU_ACTIONS = {
@@ -58,8 +58,8 @@ export async function askCustomTgPostTypeMenu(blogName: string, tgChat: TgChat, 
             } || undefined,
           ]), 2),
           [
-            BACK_BTN,
-            CANCEL_BTN,
+            makeBackBtn(tgChat.app.i18n),
+            makeCancelBtn(tgChat.app.i18n),
           ],
         ])
       ]

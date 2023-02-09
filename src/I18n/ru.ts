@@ -99,6 +99,10 @@ const dict = {
     withoutText: 'Без текста',
     getInitialNotionText: 'Вернуть первоначальный текст из Notion',
     getInitialNotionImage: 'Вернуть первоначальную картинку из Notion',
+    back: 'Назад',
+    cancel: 'Отмена',
+    ok: 'Ок',
+    //skip: 'Пропустить',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',

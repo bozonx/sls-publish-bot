@@ -1,14 +1,9 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-} from '../../types/constants.js';
 import {breakArray} from '../../lib/arrays.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {AD_SELL_TYPES, SellAdType} from '../../types/types.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const SELL_AD_TYPE_CB = 'SELL_AD_TYPE_CB|'
@@ -28,8 +23,8 @@ export async function askSellAdType(tgChat: TgChat, onDone: (adType: SellAdType)
             };
           }), 2),
           [
-            BACK_BTN,
-            CANCEL_BTN
+            makeBackBtn(tgChat.app.i18n),
+            makeCancelBtn(tgChat.app.i18n)
           ],
         ]
       ]

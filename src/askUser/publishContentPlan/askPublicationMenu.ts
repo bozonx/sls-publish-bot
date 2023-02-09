@@ -1,11 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  OK_BTN,
-  OK_BTN_CALLBACK,
   PRINT_SHORT_DATE_TIME_FORMAT,
   WARN_SIGN
 } from '../../types/constants.js';
@@ -30,6 +24,14 @@ import {askTimePeriod} from '../common/askTimePeriod.js';
 import moment from 'moment/moment.js';
 import {ContentItemState} from './startPublicationMenu.js';
 import ContentItem from '../../types/ContentItem.js';
+import {
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK,
+  makeBackBtn,
+  makeCancelBtn,
+  makeOkBtn,
+  OK_BTN_CALLBACK
+} from '../../helpers/buttons.js';
 
 
 export type PublishMenuAction = 'CHANGE_TIME'
@@ -182,9 +184,9 @@ export async function askPublicationMenu(
             callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
           }] : [],
           [
-            BACK_BTN,
-            CANCEL_BTN,
-            (disableOk) ? undefined : OK_BTN,
+            makeBackBtn(tgChat.app.i18n),
+            makeCancelBtn(tgChat.app.i18n),
+            (disableOk) ? undefined : makeOkBtn(tgChat.app.i18n),
           ],
         ])
       ]

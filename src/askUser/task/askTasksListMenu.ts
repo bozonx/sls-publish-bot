@@ -1,9 +1,10 @@
 import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
-import {CANCEL_BTN, CANCEL_BTN_CALLBACK, PRINT_SHORT_DATE_TIME_FORMAT} from '../../types/constants.js';
+import {PRINT_SHORT_DATE_TIME_FORMAT} from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {TaskItem} from '../../types/TaskItem.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {CANCEL_BTN_CALLBACK, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const TASK_ID_CB = 'TASK_ID_CB:';
@@ -56,7 +57,7 @@ export async function askTasksListMenu(tgChat: TgChat, onDone: (taskId?: string,
             },
           ],
           [
-            CANCEL_BTN,
+            makeCancelBtn(tgChat.app.i18n),
           ]
         ]
       ]

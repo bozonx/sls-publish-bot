@@ -1,15 +1,16 @@
 import _ from 'lodash';
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  ChatEvents,
-  BACK_BTN,
-  CANCEL_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN_CALLBACK, SKIP_BTN_CALLBACK, WARN_SIGN
-} from '../../types/constants.js';
+import {ChatEvents, WARN_SIGN} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, TextMessageEvent} from '../../types/MessageEvent.js';
 import {convertTgInputToHtml} from '../../helpers/convertTgInputToHtml.js';
+import {
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK,
+  makeBackBtn,
+  makeCancelBtn,
+  SKIP_BTN_CALLBACK
+} from '../../helpers/buttons.js';
 
 
 type ResultCallback = (textHtml?: string, cleanText?: string) => void
@@ -32,8 +33,8 @@ export async function askText(
       },
     ] : [],
     [
-      BACK_BTN,
-      CANCEL_BTN,
+      makeBackBtn(tgChat.app.i18n),
+      makeCancelBtn(tgChat.app.i18n),
     ]
   ];
 

@@ -1,12 +1,8 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK, ChatEvents
-} from '../../types/constants.js';
+import {ChatEvents} from '../../types/constants.js';
 import {makeTaskDetails} from '../../taskManager/makeTaskDetails.js';
 import BaseState from '../../types/BaseState.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const DELETE_TASK_ACTION = 'delete_task';
@@ -38,8 +34,8 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
         }
       ],
       [
-        BACK_BTN,
-        CANCEL_BTN,
+        makeBackBtn(tgChat.app.i18n),
+        makeCancelBtn(tgChat.app.i18n),
       ]
     ]
     // print main menu message

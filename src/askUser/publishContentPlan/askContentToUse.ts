@@ -1,15 +1,10 @@
 import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  PRINT_SHORT_DATE_FORMAT
-} from '../../types/constants.js';
+import {PRINT_SHORT_DATE_FORMAT} from '../../types/constants.js';
 import {PageObjectResponse, RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {CONTENT_PROPS} from '../../types/ContentItem.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const CONTENT_MARKER = 'content:'
@@ -32,8 +27,8 @@ export async function askContentToUse(
           }];
         }),
         [
-          BACK_BTN,
-          CANCEL_BTN,
+          makeBackBtn(tgChat.app.i18n),
+          makeCancelBtn(tgChat.app.i18n),
         ],
       ]
     ],

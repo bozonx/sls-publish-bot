@@ -1,14 +1,10 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK, WARN_SIGN,
-} from '../../types/constants.js';
+import {WARN_SIGN} from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {breakArray, removeItemFromArray} from '../../lib/arrays.js';
 import {SnType} from '../../types/snTypes.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const SN_TO_REMOVE_CB = 'SN_TO_REMOVE_CB|'
@@ -28,8 +24,8 @@ export async function askSns(prevSns: string[], tgChat: TgChat, onDone: (tags: S
             }
           }), 3),
           [
-            BACK_BTN,
-            CANCEL_BTN
+            makeBackBtn(tgChat.app.i18n),
+            makeCancelBtn(tgChat.app.i18n)
           ],
         ]
       ]

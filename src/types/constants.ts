@@ -1,7 +1,3 @@
-export const BACK_BTN_CALLBACK = 'BACK_BTN_CALLBACK';
-export const CANCEL_BTN_CALLBACK = 'CANCEL_BTN_CALLBACK';
-export const OK_BTN_CALLBACK = 'OK';
-export const SKIP_BTN_CALLBACK = 'SKIP';
 export const PRINT_FULL_DATE_FORMAT = 'DD.MM.YYYY';
 export const PRINT_SHORT_DATE_TIME_FORMAT = 'DD.MM HH:mm';
 export const PRINT_SHORT_DATE_FORMAT = 'DD.MM';
@@ -26,31 +22,6 @@ export enum ChatEvents {
   //MEDIA_GROUP_ITEM,
   POLL
 }
-
-// TODO: need translate
-export const BACK_BTN = {
-  text: 'Back',
-  callback_data: BACK_BTN_CALLBACK,
-}
-
-// TODO: need translate
-export const CANCEL_BTN = {
-  text: 'Cancel',
-  callback_data: CANCEL_BTN_CALLBACK,
-}
-
-// TODO: need translate
-export const OK_BTN = {
-  text: 'OK',
-  callback_data: OK_BTN_CALLBACK,
-}
-
-// TODO: need translate
-export const SKIP_BTN = {
-  text: 'SKIP',
-  callback_data: SKIP_BTN_CALLBACK,
-}
-
 
 // TODO: may be move to config ???
 export const OFTEN_USED_TIME = [

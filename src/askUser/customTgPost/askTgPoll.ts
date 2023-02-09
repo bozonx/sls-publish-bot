@@ -1,21 +1,16 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  ChatEvents,
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-} from '../../types/constants.js';
+import {ChatEvents} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 export async function askTgPoll(tgChat: TgChat, onDone: (message: PollMessageEvent) => void) {
   const msg = tgChat.app.i18n.menu.makePoll;
   const buttons = [
     [
-      BACK_BTN,
-      CANCEL_BTN
+      makeBackBtn(tgChat.app.i18n),
+      makeCancelBtn(tgChat.app.i18n)
     ],
   ];
 

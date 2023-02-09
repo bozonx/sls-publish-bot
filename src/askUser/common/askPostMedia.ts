@@ -1,16 +1,7 @@
 import _ from 'lodash';
 import TgChat from '../../apiTg/TgChat.js';
 import BaseState from '../../types/BaseState.js';
-import {
-  ChatEvents,
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  SKIP_BTN_CALLBACK,
-  OK_BTN_CALLBACK,
-  OK_BTN
-} from '../../types/constants.js';
+import {ChatEvents} from '../../types/constants.js';
 import {
   PhotoMessageEvent,
   TextMessageEvent,
@@ -19,6 +10,14 @@ import {
 import {isValidUrl} from '../../lib/common.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {convertTgInputToHtml} from '../../helpers/convertTgInputToHtml.js';
+import {
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK,
+  makeBackBtn,
+  makeCancelBtn,
+  makeOkBtn, OK_BTN_CALLBACK,
+  SKIP_BTN_CALLBACK
+} from '../../helpers/buttons.js';
 
 
 export type AskPostMediaDone = (mediaGroup: MediaGroupItem[], captionHtml?: string) => void
@@ -41,9 +40,9 @@ export async function askPostMedia(
         callback_data: SKIP_BTN_CALLBACK,
       }] : [],
     [
-      BACK_BTN,
-      CANCEL_BTN,
-      OK_BTN,
+      makeBackBtn(tgChat.app.i18n),
+      makeCancelBtn(tgChat.app.i18n),
+      makeOkBtn(tgChat.app.i18n),
     ]
   ];
 
@@ -164,6 +163,6 @@ async function handlePrimaryButtons(
 async function toNextStep(tgChat: TgChat) {
   await tgChat.reply(
     tgChat.app.i18n.message.waitImagesAndPressOk,
-    [[OK_BTN]]
+    [[makeOkBtn(tgChat.app.i18n)]]
   )
 }

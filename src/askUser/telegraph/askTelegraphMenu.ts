@@ -1,7 +1,7 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
-import {CANCEL_BTN, CANCEL_BTN_CALLBACK} from '../../types/constants.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {CANCEL_BTN_CALLBACK, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 export type TelegraphMenu = 'TELEGRAPH_LIST';
@@ -31,7 +31,7 @@ export async function askTelegraphMenu(tgChat: TgChat, onDone: (action: Telegrap
             },
           ],
           [
-            CANCEL_BTN,
+            makeCancelBtn(tgChat.app.i18n),
           ]
         ]
       ]

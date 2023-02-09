@@ -1,15 +1,15 @@
 import TgChat from '../../apiTg/TgChat.js';
-import {
-  BACK_BTN,
-  BACK_BTN_CALLBACK,
-  CANCEL_BTN,
-  CANCEL_BTN_CALLBACK,
-  OK_BTN,
-  OK_BTN_CALLBACK
-} from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {compactUndefined} from '../../lib/arrays.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
+import {
+  BACK_BTN_CALLBACK,
+  CANCEL_BTN_CALLBACK,
+  makeBackBtn,
+  makeCancelBtn,
+  makeOkBtn,
+  OK_BTN_CALLBACK
+} from '../../helpers/buttons.js';
 
 
 export async function askConfirm(
@@ -25,9 +25,9 @@ export async function askConfirm(
         msgReplace || tgChat.app.i18n.commonPhrases.confirmation,
         [
           compactUndefined([
-            BACK_BTN,
-            CANCEL_BTN,
-            (disableOk) ? undefined : OK_BTN,
+            makeBackBtn(tgChat.app.i18n),
+            makeCancelBtn(tgChat.app.i18n),
+            (disableOk) ? undefined : makeOkBtn(tgChat.app.i18n),
           ])
         ]
       ]
