@@ -30,6 +30,8 @@
     "lodash": "^4.17.21",
     "mdast-util-to-hast": "^12.3.0",
     "moment": "^2.29.4",
+    "rehype-parse": "^8.0.4",
+    "rehype-stringify": "^9.0.3",
     "remark-breaks": "^3.0.2",
     "remark-html": "^15.0.1",
     "remark-parse": "^10.0.1",
