@@ -17,6 +17,7 @@ import {all} from 'mdast-util-to-hast';
 // }
 
 // TODO: remove blocks - headers, quotes, lists
+// TODO: см makeArticleTgPostHtml - убираются переносы строк
 
 /**
  * Converts common MD to Telegram html
@@ -25,10 +26,14 @@ import {all} from 'mdast-util-to-hast';
  * ! It doesn't support ~strikethrough~ - <s>strikethrough</s>, <strike>strikethrough</strike>, <del>strikethrough</del>
  * ! It doesn't support __underiline__ - <u>underline</u>, <ins>underline</ins>
  * ! It trims line breaks and spaces from start and end
- * @param mdv2
+ * @param mdStr
  */
 export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | undefined> {
   if (!mdStr) return
+
+  // TODO: проверить вложенность i в b
+  // TODO: проверить подчеркнутый, перечеркнутый и тд
+  // TODO: пропадают \n
 
   const vfile = await unified()
     .use(remarkParse)

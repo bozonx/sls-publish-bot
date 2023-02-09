@@ -15,23 +15,6 @@ export function richTextToSimpleTextList(richText?: TextRichTextItemResponse[]):
   return richText.map((item) => item.plain_text).join('')
 }
 
-/**
- * Convert rich text to markdown v2
- */
-export function richTextToMd(richText?: TextRichTextItemResponse[]): string {
-  if (!richText) return ''
-  else if (!richText.length) return ''
-
-  return richText.map((item: TextRichTextItemResponse) => {
-    switch (item.type) {
-      case NOTION_RICH_TEXT_TYPES.text:
-        return toMarkDown(item.text.content, item.annotations, item.href)
-      default:
-        return item.plain_text
-    }
-  }).join('')
-}
-
 export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {
   // TODO: review
   if (!richText) return ''
@@ -63,16 +46,6 @@ export function richTextToTelegraphNodes(
   });
 }
 
-
-export function richTextToMdCodeBlock(
-  richText: TextRichTextItemResponse[],
-  language: string
-): string {
-  // TODO: проверить требования по экранированию
-  // TODO: что если пусто
-  return mdFormat.monospaceBlock(richTextToSimpleTextList(richText), language);
-}
-
 export function richTextToHtmlCodeBlock(
   richText: TextRichTextItemResponse[],
   language: string
@@ -80,42 +53,6 @@ export function richTextToHtmlCodeBlock(
   if (!richText.length) return ''
 
   return htmlFormat.monospaceBlock(richTextToSimpleTextList(richText), language)
-}
-
-
-function toMarkDown(
-  text: string,
-  annotations: NotionAnnotation,
-  link?: string | null
-): string {
-  // escape text for telegram requirements
-  let preparedText = mdFormat.escape(text);
-
-  if (link) {
-    preparedText = mdFormat.url(preparedText, link);
-  }
-
-  // TODO: а если несколько сразу ???
-
-  if (annotations.bold) {
-    return mdFormat.bold(preparedText);
-  }
-  else if (annotations.italic) {
-    return mdFormat.italic(preparedText);
-  }
-  else if (annotations.strikethrough) {
-    return mdFormat.strikethrough(preparedText);
-  }
-  else if (annotations.underline) {
-    return mdFormat.underline(preparedText);
-  }
-  else if (annotations.code) {
-    return mdFormat.monospace(preparedText);
-  }
-  else {
-    // no formatting
-    return preparedText;
-  }
 }
 
 function toHtml(
