@@ -10,14 +10,14 @@ import {
 
 
 export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
-  let result = '';
-  let numberListCounter = 0;
-  let bulletedListCounter = 0;
+  let result = ''
+  let numberListCounter = 0
+  let bulletedListCounter = 0
 
   for (const block of notionBlocks) {
     let children: string = ''
     // skip images
-    if (block.type === NOTION_BLOCK_TYPES.image) continue;
+    if (block.type === NOTION_BLOCK_TYPES.image) continue
 
     if ((block as any).children) {
       children = convertNotionToTgHtml((block as any).children)
@@ -70,7 +70,9 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
         bulletedListCounter++;
         result += `* `
           + richTextToHtml((block as any)?.bulleted_list_item?.rich_text)
-          + ((children) ? '\n  ' + children : '')
+          + ((children)
+            ? '\n  ' + children.replace(/\n/g, '\n  ')
+            : '')
           + '\n'
 
         break;
@@ -78,7 +80,9 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
         numberListCounter++
         result += `${numberListCounter}. `
           + richTextToHtml((block as any)?.numbered_list_item?.rich_text)
-          + ((children) ? '\n  ' + children : '')
+          + ((children)
+            ? '\n  ' + children.replace(/\n/g, '\n  ')
+            : '')
           + '\n'
 
         break;

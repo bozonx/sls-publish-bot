@@ -77,11 +77,8 @@ export function richTextToHtmlCodeBlock(
   richText: TextRichTextItemResponse[],
   language: string
 ): string {
-  // TODO: проверить требования по экранированию
-  // TODO: review - может надо использовать pre
-  // TODO: как передать язык программирования???
-  // TODO: проверить требования по экранированию
-  // TODO: что если пусто
+  if (!richText.length) return ''
+
   return htmlFormat.monospaceBlock(richTextToSimpleTextList(richText), language)
 }
 
