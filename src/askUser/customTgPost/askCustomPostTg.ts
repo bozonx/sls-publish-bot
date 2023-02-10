@@ -54,7 +54,7 @@ export async function askCustomPostTg(
         tags: [],
         postHtmlText: captionHtml,
         mediaGroup,
-        footerTmplHtml: await convertCommonMdToTgHtml(footerTmpl),
+        footerTmplHtml: convertCommonMdToTgHtml(footerTmpl),
         cleanFooterTmpl: await convertCommonMdToCleanText(footerTmpl),
         postAsText,
         onlyOneImage,

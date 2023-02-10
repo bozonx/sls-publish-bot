@@ -43,7 +43,7 @@ export async function makePostFromContentItem(
         item.tgTags || [],
         useTgFooter,
         postText,
-        await convertCommonMdToTgHtml(resolvePostFooter(item.type, blogCfg.sn.telegram!))
+        convertCommonMdToTgHtml(resolvePostFooter(item.type, blogCfg.sn.telegram!))
       )
     }
   }

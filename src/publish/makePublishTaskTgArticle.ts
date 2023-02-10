@@ -70,9 +70,9 @@ async function makeArticleTgPostHtml(
 
   console.log(1111,'|' + postTmpl + '|')
   console.log(2222,'|' + postStr + '|')
-  console.log(3333,'|' + await convertCommonMdToTgHtml(postStr) + '|')
+  console.log(3333,'|' + convertCommonMdToTgHtml(postStr) + '|')
 
-  return await convertCommonMdToTgHtml(postStr) || ''
+  return convertCommonMdToTgHtml(postStr) || ''
 }
 
 export async function makePublishTaskTgArticle(

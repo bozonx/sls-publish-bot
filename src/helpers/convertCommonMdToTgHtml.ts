@@ -8,7 +8,7 @@ import {fromMarkdown} from 'mdast-util-from-markdown'
  * ! It doesn't support ~strikethrough~ - use <s>strikethrough</s>, <del>strikethrough</del>
  * ! It doesn't support __underiline__ - use <u>underline</u>, <ins>underline</ins>
  */
-export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | undefined> {
+export function convertCommonMdToTgHtml(mdStr?: string): string | undefined {
   if (!mdStr) return
 
   let preSpaces = ''
@@ -166,6 +166,6 @@ function convertNodeToString(node: any): string {
 //
 //   const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
 //
-//   console.log(111, await convertCommonMdToTgHtml(text))
-//   //console.log(111, await convertCommonMdToTgHtml(test2))
+//   console.log(111, convertCommonMdToTgHtml(text))
+//   //console.log(111, convertCommonMdToTgHtml(test2))
 // })()

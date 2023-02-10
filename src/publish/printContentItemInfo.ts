@@ -22,7 +22,7 @@ export async function printContentItemInitialDetails(
 ) {
   if (contentItem.type !== PUBLICATION_TYPES.poll && availableTgFooter) {
     const tgFooterMd = resolvePostFooter(contentItem.type, tgChat.app.blogs[blogName].sn.telegram)
-    const footerStr = await convertCommonMdToTgHtml(prepareFooter(tgFooterMd, contentItem.tgTags))
+    const footerStr = convertCommonMdToTgHtml(prepareFooter(tgFooterMd, contentItem.tgTags))
     // print footer if it is used
     await tgChat.reply(
       tgChat.app.i18n.menu.postFooter + footerStr,
