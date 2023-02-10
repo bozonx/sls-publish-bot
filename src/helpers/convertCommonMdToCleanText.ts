@@ -2,7 +2,7 @@ import {unified} from 'unified'
 import remarkParse from 'remark-parse'
 import remarkStringify from 'remark-stringify'
 import {visit} from 'unist-util-visit'
-import {VFile} from 'vfile';
+import {VFile} from 'vfile'
 
 
 function toTextValue(node: any): string {
@@ -77,11 +77,11 @@ function remarkClearMd() {
  *   to:
  *     norm bold italic underiline monospace  https://google.com url norm
  */
-export async function convertCommonMdToCleanText(mdText?: string): Promise<string | undefined> {
-  if (!mdText) return
+export async function convertCommonMdToCleanText(mdStr?: string): Promise<string | undefined> {
+  if (!mdStr) return
 
   let preSpaces = ''
-  const preSpacesMatch = mdText.match(/^(\s*)/)
+  const preSpacesMatch = mdStr.match(/^(\s*)/)
 
   if (preSpacesMatch?.[1]) preSpaces = preSpacesMatch[1]
 
@@ -94,7 +94,7 @@ export async function convertCommonMdToCleanText(mdText?: string): Promise<strin
       listItemIndent: 'one',
       rule: '-',
     })
-    .process(new VFile(mdText))
+    .process(new VFile(mdStr))
 
   return preSpaces + String(vfile)
 }

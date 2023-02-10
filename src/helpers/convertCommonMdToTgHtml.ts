@@ -31,6 +31,11 @@ import {all} from 'mdast-util-to-hast';
 export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | undefined> {
   if (!mdStr) return
 
+  let preSpaces = ''
+  const preSpacesMatch = mdStr.match(/^(\s*)/)
+
+  if (preSpacesMatch?.[1]) preSpaces = preSpacesMatch[1]
+
   // TODO: проверить вложенность i в b
   // TODO: проверить подчеркнутый, перечеркнутый и тд
   // TODO: пропадают \n
@@ -61,8 +66,61 @@ export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | 
     .process(mdStr)
   //console.log(1111, String(vfile))
 
-  return String(vfile)
+  return preSpaces + String(vfile)
 }
+
+
+(async () => {
+  const text = `
+
+norm *bold _italic2_* _italic_ __underiline__ \`monospace\`
+[https://google.com](https://google.com) [url](https://google.com/) norm
+![img](https://google.com)
+***bold and italic***
+
+# h1
+
+## h2
+
+### h3
+
+#### h4
+
+##### h5
+
+###### h6
+
+> block quotes
+>
+> block quotes 2
+> ### h3
+> *qqq*
+
+1. item1
+2. item2
+  1. item 2.1
+  2. item 2.2
+
+* item 1
+* item 2
+  * item 2.1
+  * item 2.2
+
+\`\`\`html
+<script>console.log(111)</script>
+\`\`\`
+
+---
+
+`
+
+  const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
+
+  console.log(111, await convertCommonMdToTgHtml(text))
+  //console.log(111, await convertCommonMdToCleanText(test2))
+})()
+
+
 
 //convertCommonMdToTgHtml('\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
 //convertCommonMdToTgHtml('\n\nnorm **bold _italic2_**\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm')
