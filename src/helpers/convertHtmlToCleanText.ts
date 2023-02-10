@@ -1,9 +1,9 @@
+import _ from 'lodash';
 import {unified} from 'unified';
 import {visit} from 'unist-util-visit';
 import rehypeStringify from 'rehype-stringify';
 import rehypeParse from 'rehype-parse';
 import {Element, Text} from 'hast-util-to-html/lib/types.js';
-import _ from 'lodash';
 
 
 function makeInlineString(nodes: (Element | Text)[]): string {
@@ -14,11 +14,6 @@ function makeInlineString(nodes: (Element | Text)[]): string {
       result.push(makeInlineString(node.children as (Element | Text)[]))
     }
     else if (node.type === 'text') {
-
-      console.log(1111, node.value)
-
-      if (node.value.match('^\s*$')) continue
-
       result.push(node.value)
     }
     // else do nothing
@@ -27,7 +22,7 @@ function makeInlineString(nodes: (Element | Text)[]): string {
   return result.join('')
 }
 
-function recursiveMakeUl(liElements: (Element)[]) {
+function recursiveMakeUl(liElements: (Element)[]): string {
   const result: string[] = []
 
   for (const child of liElements) {
@@ -54,7 +49,7 @@ function recursiveMakeUl(liElements: (Element)[]) {
   return result.join('')
 }
 
-function recursiveMakeOl(liElements: (Element)[]) {
+function recursiveMakeOl(liElements: (Element)[]): string {
   const result: string[] = []
   let counter = 1
 
@@ -77,136 +72,92 @@ function recursiveMakeOl(liElements: (Element)[]) {
   return result.join('')
 }
 
+function makeStringOfNode(node: any): string {
+  // block elements
+  if ([
+    'body',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'p', 'blockquote', 'aside', 'pre', 'abbr', 'address', 'article', 'cite',
+    'details', 'div', 'footer', 'header', 'main', 'section', 'summary', 'nav',
+    'dl', 'dt',
+  ].includes(node.tagName)) {
+    return _.trim(
+      node.children.map((child: any) => makeStringOfNode(child)
+    ).join('')) + '\n\n'
+  }
+  // inline elements
+  else if ([
+    'b', 'strong', 'i', 'em', 's', 'u', 'code', 'mark', 'span', 'q', 'samp',
+    'small', 'sub', 'sup', 'time', 'ins', 'del'
+  ].includes(node.tagName)) {
+    return makeInlineString(node.children)
+  }
+  // text
+  else if (node.type === 'text') {
+    if (node.value.match(/^\n\n\s*$/)) {
+      return '\n'
+    }
+    else if (node.value.match(/^\n\s*$/)) {
+      return ''
+    }
+    else {
+      return node.value
+    }
+  }
+  // media and so on - have to be hidden
+  else if ([
+    'img', 'figure', 'video', 'audio', 'data', 'canvas', 'datalist', 'button',
+    'dialog', 'embed', 'form', 'iframe', 'input', 'kbd', 'label', 'link', 'map',
+    'meter', 'noscript', 'object', 'option', 'output', 'picture', 'progress',
+    'ruby', 'script', 'select', 'svg', 'table', 'template', 'textarea', 'var', 'wbr',
+    'head'
+  ].includes(node.tagName)) {
+    return ''
+  }
+  else if (['ul'].includes(node.tagName)) {
+    return _.trim(recursiveMakeUl(node.children)) + '\n\n'
+  }
+  else if (['ol'].includes(node.tagName)) {
+    return _.trim(recursiveMakeOl(node.children)) + '\n\n'
+  }
+  else if (['br'].includes(node.tagName)) {
+    return '\n'
+  }
+  else if (['hr'].includes(node.tagName)) {
+    return '---\n\n'
+  }
+  else if (['a'].includes(node.tagName)) {
+    return makeInlineString(node.children)
+  }
+
+  return ''
+}
+
 
 function remarkToText() {
   return (tree: any, file: any) => {
     visit(tree, (node) => {
       if ([
-        'html', 'body'
-      ].includes(node.tagName)) {
-        // node.type = 'text'
-        // node.value = makeInlineString(node.children)
-        // delete node.tagName
-        // delete node.properties
-        // delete node.children
-        // delete node.position
-      }
-      // block elements
-      else if ([
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'p', 'blockquote', 'aside', 'pre', 'abbr', 'address', 'article', 'cite',
-        'details', 'div', 'footer', 'header', 'main', 'section', 'summary', 'nav',
+        'html'
       ].includes(node.tagName)) {
         node.type = 'text'
-        node.value = _.trim(makeInlineString(node.children), '\n') + '\n'
+        node.value = _.trim(
+          node.children.map((child: any) => makeStringOfNode(child)).join('')
+        )
+          .replace(/\n\n\n/g, '\n\n')
+          .replace(/\ \ /g, ' ')
         delete node.tagName
         delete node.properties
         delete node.children
         delete node.position
-      }
-      // inline elements
-      else if ([
-        'b', 'strong', 'i', 'em', 's', 'u', 'code', 'mark', 'span', 'q', 'samp',
-        'small', 'sub', 'sup', 'time', 'ins', 'del'
-      ].includes(node.tagName)) {
-        node.type = 'text'
-        node.value = makeInlineString(node.children)
-        delete node.tagName
-        delete node.properties
-        delete node.children
-        delete node.position
-      }
-      // media and so on - have to be hidden
-      else if ([
-        'img', 'video', 'audio', 'data', 'canvas', 'datalist', 'button',
-        'dialog', 'embed', 'form', 'iframe', 'input', 'kbd', 'label', 'link', 'map',
-        'meter', 'noscript', 'object', 'option', 'output', 'picture', 'progress',
-        'ruby', 'script', 'select', 'svg', 'table', 'template', 'textarea', 'var', 'wbr',
-        'head'
-      ].includes(node.tagName)) {
-        node.type = 'text'
-        node.value = ''
-        delete node.tagName
-        delete node.properties
-        delete node.children
-        delete node.position
-      }
-      else if (['ul'].includes(node.tagName)) {
-        node.type = 'text'
-        node.value = recursiveMakeUl(node.children)
-        delete node.tagName
-        delete node.properties
-        delete node.children
-        delete node.position
-      }
-      else if (['ol'].includes(node.tagName)) {
-        node.type = 'text'
-        node.value = recursiveMakeOl(node.children)
-        delete node.tagName
-        delete node.properties
-        delete node.children
-        delete node.position
-      }
-      else if (['br'].includes(node.tagName)) {
-        node.type = 'text'
-        node.value = '\n'
-        delete node.tagName
-        delete node.properties
-        delete node.children
-        delete node.position
-      }
-      else if (['hr'].includes(node.tagName)) {
-        node.type = 'text'
-        node.value = '---\n'
-        delete node.tagName
-        delete node.properties
-        delete node.children
-        delete node.position
-      }
-      else if (['a'].includes(node.tagName)) {
-        node.type = 'text'
-        node.value = makeInlineString(node.children)
-        delete node.tagName
-        delete node.properties
-        delete node.children
-        delete node.position
-      }
-      else if (node.type === 'text') {
-        if (node.value.match(/^\n\n$/)) {
-          //node.value = '\n'
-        }
-        else {
-
-        }
-
-
-        //console.log(2222, node.value)
-      }
-      else {
-        console.log(3333, node)
       }
     })
   }
 }
-
-function seeIt() {
-  return (tree: any) => {
-    visit(tree, (node) => {
-
-      console.log(22222, node)
-
-    })
-  }
-}
-
 
 
 export async function convertHtmlToCleanText(htmlStr?: string): Promise<string | undefined> {
   if (!htmlStr) return
-
-  // TODO: li, ol, ul, dl, dt, figure, figcaption
-  // TODO: удалить <html><head></head><body>    </body></html>
-
 
   const vfile = await unified()
     .use(rehypeParse)
@@ -215,58 +166,168 @@ export async function convertHtmlToCleanText(htmlStr?: string): Promise<string |
     .use(rehypeStringify)
     .process(htmlStr)
 
-
-  // TODO: можно удалить проблелы более одного подряд
-
   return String(vfile)
 }
 
 
 
+//
+// (async () => {
+//   const test = `
+//
+// text
+// <h1>h1</h1>
+// <h2>h2</h2>
+// <h3>h3</h3>
+// <h4>h4</h4>
+// <h5>h4</h5>
+// <h6>h6</h6>
+// <p>
+// some paragraph <b>bold </b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
+// </p>
+//
+// inline elements <b>bold</b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
+// inline <b>bold <i>bold-italic</i><s> bold-strike</s></b>
+//
+// <p>
+// <b>bold <i>bold-italic</i><s> bold-strike</s></b>
+// <br />
+// <i>italic <s>italic-strike</s><b> italic-bold</b></i>
+// </p>
+// <br />
+// <a href="https://ya.ru">link</a>
+//
+// <ul>
+// <li>item 1</li>
+// <li>
+//   item 2
+//   <ul>
+//     <li>item 2.1</li>
+//     <li><b>bbb </b>item 2.2</li>
+//   </ul>
+// </li>
+// </ul>
+// <ol>
+// <li>item 1</li>
+// <li>item 2</li>
+// </ol>
+//
+// <hr />
+//
+// <blockquote>quote some</blockquote>
+//
+// `
+//
+//   console.log(await convertHtmlToCleanText(test))
+// })()
 
-(async () => {
-  const test = `text
-<h1>h1</h1>
-<h2>h2</h2>
-<h3>h3</h3>
-<h4>h4</h4>
-<h5>h4</h5>
-<h6>h6</h6>
-<p>
-some paragraph <b>bold</b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
-</p>
 
-inline elements <b>bold</b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
-inline <b>bold <i>bold-italic</i><s> bold-strike</s></b>
 
-<p>
-<b>bold <i>bold-italic</i><s> bold-strike</s></b>
-<br />
-<i>italic <s>italic-strike</s><b> italic-bold</b></i>
-</p>
-<br />
-<a href="https://ya.ru">link</a>
 
-<ul>
-<li>item 1</li>
-<li>
-  item 2
-  <ul>
-    <li>item 2.1</li>
-    <li><b>bbb </b>item 2.2</li>
-  </ul>
-</li>
-</ul>
-<ol>
-<li>item 1</li>
-<li>item 2</li>
-</ol>
+// function seeIt() {
+//   return (tree: any) => {
+//     visit(tree, (node) => {
+//
+//       console.log(22222, node)
+//
+//     })
+//   }
+// }
 
-<hr />
-
-<blockquote>quote some</blockquote>
-
-`
-
-  console.log(await convertHtmlToCleanText(test))
-})()
+// function convertNode(node: any) {
+//   // block elements
+//   if ([
+//     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+//     'p', 'blockquote', 'aside', 'pre', 'abbr', 'address', 'article', 'cite',
+//     'details', 'div', 'footer', 'header', 'main', 'section', 'summary', 'nav',
+//   ].includes(node.tagName)) {
+//     node.type = 'text'
+//     //node.value = _.trim(makeInlineString(node.children), '\n') + '\n'
+//     node.value = node.children.map((child: any) => convertNode(child)).join('')
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   // inline elements
+//   else if ([
+//     'b', 'strong', 'i', 'em', 's', 'u', 'code', 'mark', 'span', 'q', 'samp',
+//     'small', 'sub', 'sup', 'time', 'ins', 'del'
+//   ].includes(node.tagName)) {
+//     node.type = 'text'
+//     node.value = makeInlineString(node.children)
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   // media and so on - have to be hidden
+//   else if ([
+//     'img', 'video', 'audio', 'data', 'canvas', 'datalist', 'button',
+//     'dialog', 'embed', 'form', 'iframe', 'input', 'kbd', 'label', 'link', 'map',
+//     'meter', 'noscript', 'object', 'option', 'output', 'picture', 'progress',
+//     'ruby', 'script', 'select', 'svg', 'table', 'template', 'textarea', 'var', 'wbr',
+//     'head'
+//   ].includes(node.tagName)) {
+//     node.type = 'text'
+//     node.value = ''
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   else if (['ul'].includes(node.tagName)) {
+//     node.type = 'text'
+//     node.value = recursiveMakeUl(node.children)
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   else if (['ol'].includes(node.tagName)) {
+//     node.type = 'text'
+//     node.value = recursiveMakeOl(node.children)
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   else if (['br'].includes(node.tagName)) {
+//     node.type = 'text'
+//     node.value = '\n'
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   else if (['hr'].includes(node.tagName)) {
+//     node.type = 'text'
+//     node.value = '---\n'
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   else if (['a'].includes(node.tagName)) {
+//     node.type = 'text'
+//     node.value = makeInlineString(node.children)
+//     delete node.tagName
+//     delete node.properties
+//     delete node.children
+//     delete node.position
+//   }
+//   else if (node.type === 'text') {
+//     if (node.value.match(/^\n\n$/)) {
+//       //node.value = '\n'
+//     }
+//     else {
+//
+//     }
+//
+//
+//     //console.log(2222, node.value)
+//   }
+//   else {
+//     //console.log(3333, node)
+//   }
+// }
