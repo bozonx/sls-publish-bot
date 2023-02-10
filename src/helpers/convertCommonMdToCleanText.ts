@@ -61,7 +61,7 @@ function remarkClearMd() {
  *   to:
  *     norm bold italic underiline monospace  https://google.com url norm
  */
-export async function clearMd(mdText?: string): Promise<string | undefined> {
+export async function convertCommonMdToCleanText(mdText?: string): Promise<string | undefined> {
   if (!mdText) return
 
   const vfile = await unified()
@@ -77,6 +77,6 @@ export async function clearMd(mdText?: string): Promise<string | undefined> {
   return String(vfile)
 }
 
-//console.log(111, clearMd('norm *bold _italic2_* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'))
-//clearMd(' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd')
-//clearMd('# fff\n> fff\ngggg\nkkk')
+//console.log(111, convertCommonMdToCleanText('norm *bold _italic2_* _italic_ __underiline__ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'))
+//convertCommonMdToCleanText(' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd')
+//convertCommonMdToCleanText('# fff\n> fff\ngggg\nkkk')

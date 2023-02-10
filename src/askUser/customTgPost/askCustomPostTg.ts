@@ -6,7 +6,7 @@ import validateCustomPost from '../../publish/validateCustomPost.js';
 import {printPost} from '../../publish/publishHelpers.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
-import {clearMd} from '../../helpers/clearMd.js';
+import {convertCommonMdToCleanText} from '../../helpers/convertCommonMdToCleanText.js';
 import {convertCommonMdToTgHtml} from '../../helpers/convertCommonMdToTgHtml.js';
 
 
@@ -55,7 +55,7 @@ export async function askCustomPostTg(
         postHtmlText: captionHtml,
         mediaGroup,
         footerTmplHtml: await convertCommonMdToTgHtml(footerTmpl),
-        cleanFooterTmpl: await clearMd(footerTmpl),
+        cleanFooterTmpl: await convertCommonMdToCleanText(footerTmpl),
         postAsText,
         onlyOneImage,
       };
