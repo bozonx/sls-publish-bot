@@ -54,6 +54,9 @@ function makeUlList(ulNode: any): string {
 }
 
 function convertNodeToString(node: any): string {
+
+  console.log(111, node)
+
   if (node.type === 'root') {
     return node.children.map((el: any) => convertNodeToString(el)).join('')
   }
@@ -109,7 +112,6 @@ function convertNodeToString(node: any): string {
   }
   // text and other if exist
   else if (node.value) {
-    //console.log(3333, node)
     return node.value
   }
   // others if exist
@@ -122,50 +124,51 @@ function convertNodeToString(node: any): string {
 
 
 
-// (async () => {
-//   const text = `
-//
-// norm **bold _italic2_** _italic_ <u>underiline</u> <s>strikethrough</s> \`monospace\`
-// [https://google.com](https://google.com) [url](https://google.com/) norm
-// ![img](https://google.com)
-// ***bold and italic***
-//
-// # h1
-//
-// ## h2
-//
-// ### h3
-//
-// #### h4
-//
-// ##### h5
-//
-// ###### h6
-//
-// > block quotes
-// > block quotes 2
-// > *qqq*
-//
-// 1. item1
-// 2. item2
-//   1. item 2.1
-//   2. item 2.2
-//
-// * item 1
-// * item 2
-//   * item 2.1
-//   * item 2.2
-//
-// \`\`\`html
-// <script>console.log(111)</script>
-// \`\`\`
-//
-// ---
-//
-// `
-//
-//   const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
-//
-//   console.log(111, convertCommonMdToTgHtml(text))
-//   //console.log(111, convertCommonMdToTgHtml(test2))
-// })()
+(async () => {
+  const text = `
+
+norm **bold _italic2_** _italic_ <u>underiline</u> <s>strikethrough</s> \`monospace\`
+[https://google.com](https://google.com) [url](https://google.com/) norm
+![img](https://google.com)
+***bold and italic***
+
+# h1
+
+## h2
+
+### h3
+
+#### h4
+
+##### h5
+
+###### h6
+
+> block quotes
+> block quotes 2
+> *qqq*
+
+1. item1
+2. item2
+  1. item 2.1
+  2. item 2.2
+
+* item 1
+* item 2
+  * item 2.1
+  * item 2.2
+
+\`\`\`html
+<script>console.log(111)</script>
+\`\`\`
+
+---
+
+`
+
+  const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
+  const test3 = '[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }'
+
+  //console.log(111, convertCommonMdToTgHtml(text))
+  console.log(111, convertCommonMdToTgHtml(test3))
+})()
