@@ -1,20 +1,96 @@
-import {unified} from 'unified';
-import remarkParse from 'remark-parse'
-import remarkHtml from 'remark-html'
-import remarkBreaks from 'remark-breaks'
-import {visit} from 'unist-util-visit';
-import {all} from 'mdast-util-to-hast';
+import _ from 'lodash';
+import {fromMarkdown} from 'mdast-util-from-markdown'
 
 
-// function seeIt() {
-//   return (tree: any) => {
-//     visit(tree, (node) => {
-//
-//       console.log(22222, node)
-//
-//     })
-//   }
-// }
+function makeOlList(ulNode: any): string {
+  return ulNode.children.map((el: any, index: number) => {
+    return `${index + 1}. ` + el.children.map((child: any) => {
+      if (child.type === 'list') {
+        return '  ' + makeOlList(child)
+          .replace(/\n/, '\n  ')
+      }
+      else {
+        return convertNodeToString(child)
+      }
+    }).join('')
+  }).join('')
+}
+
+function makeUlList(ulNode: any): string {
+  return ulNode.children.map((el: any) => {
+    return '* ' + el.children.map((child: any) => {
+      if (child.type === 'list') {
+        return '  ' + makeUlList(child)
+          .replace(/\n/, '\n  ')
+      }
+      else {
+        return convertNodeToString(child)
+      }
+    }).join('')
+  }).join('')
+}
+
+function convertNodeToString(node: any): string {
+
+  if (node.type === 'root') {
+    return node.children.map((el: any) => convertNodeToString(el)).join('')
+  }
+  else if (node.type === 'paragraph') {
+    return node.children.map((el: any) => convertNodeToString(el)).join('') + '\n'
+  }
+  else if (node.type === 'heading') {
+    return `<h${node.depth}>`
+      + node.children.map((el: any) => convertNodeToString(el)).join('')
+      + `</h${node.depth}>\n\n`
+  }
+  else if (node.type === 'blockquote') {
+    // TODO: оно поддерживается вообще ???
+    return '> ' + _.trim(
+      node.children.map((el: any) => convertNodeToString(el)).join('')
+    )
+      .replace(/\n$/, '\n> ')
+      + '\n\n'
+  }
+  else if (node.type === 'list') {
+    if (node.ordered) {
+      return makeOlList(node) + '\n'
+    }
+    else {
+      return makeUlList(node) + '\n'
+    }
+  }
+  else if (node.type === 'code') {
+    return `<pre><code class="language-${node.lang}">`
+      // TODO: экранировать
+      + node.value
+      + `</code></pre>\n\n`
+  }
+  else if (node.type === 'thematicBreak') {
+    // TODO: оно поддерживается вообще ???
+    return '---\n\n'
+  }
+  else if (node.type === 'emphasis') {
+    return `<i>${node.children.map((el: any) => convertNodeToString(el)).join('')}</i>`
+  }
+  else if (node.type === 'strong') {
+    return `<b>${node.children.map((el: any) => convertNodeToString(el)).join('')}</b>`
+  }
+  else if (node.type === 'link') {
+    return `<a href="${node.url}">${node.children.map((el: any) => convertNodeToString(el)).join('')}</a>`
+  }
+  else if (node.type === 'inlineCode') {
+    return `<code>${node.value}</code>`
+  }
+  else if (node.type === 'text') {
+    return node.value
+  }
+  else if (node.type === 'image') {
+    return ''
+  }
+
+  return ''
+}
+
 
 /**
  * Converts common MD to Telegram html
@@ -37,33 +113,40 @@ export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | 
   // TODO: проверить подчеркнутый, перечеркнутый и тд
   // TODO: пропадают \n
 
-  const vfile = await unified()
-    .use(remarkParse)
-    //.use(remarkBreaks)
-    //.use(seeIt as any)
-    //// @ts-ignore
-    .use(remarkHtml, {
-      sanitize: true,
-      //passThrough: ['ul'],
-      handlers: {
-        strong(h: any, node: any) {
-          return h(node, 'b', all(h, node))
-        },
-        emphasis(h: any, node: any) {
-          return h(node, 'i', all(h, node))
-        },
-        paragraph(h: any, node: any) {
-          //console.log(222, h, node)
-          //return 'children' in node ? {...node, children: all(h, node)} : node
-          return h(node, '', all(h, node))
-          //return h(node, 'span', all(h, node))
-        },
-      },
-    } as any)
-    .process(mdStr)
-  //console.log(1111, String(vfile))
+  const tree = fromMarkdown(mdStr)
 
-  return preSpaces + String(vfile)
+  return convertNodeToString(tree)
+
+  // const vfile = await unified()
+  //   .use(remarkParse)
+  //   //.use(remarkBreaks)
+  //   //.use(seeIt as any)
+  //   //// @ts-ignore
+  //   // .use(remarkHtml, {
+  //   //   sanitize: true,
+  //   //   //passThrough: ['ul'],
+  //   //   handlers: {
+  //   //     strong(h: any, node: any) {
+  //   //       return h(node, 'b', all(h, node))
+  //   //     },
+  //   //     emphasis(h: any, node: any) {
+  //   //       return h(node, 'i', all(h, node))
+  //   //     },
+  //   //     paragraph(h: any, node: any) {
+  //   //       //console.log(222, h, node)
+  //   //       //return 'children' in node ? {...node, children: all(h, node)} : node
+  //   //       return h(node, '', all(h, node))
+  //   //       //return h(node, 'span', all(h, node))
+  //   //     },
+  //   //   },
+  //   // } as any)
+  //   .use(remarkToHtml as any)
+  //   //.use(rehypeStringify)
+  //   .use(rehypeStringify)
+  //   .process(mdStr)
+  // //console.log(1111, String(vfile))
+  //
+  // return preSpaces + String(vfile)
 }
 
 // TODO: bold почему-то сатало i
@@ -77,13 +160,14 @@ export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | 
 // TODO: см makeArticleTgPostHtml - убираются переносы строк
 // TODO: все не поддерживаемые тэги должны преобразовываться в текст
 // TODO: не должно быть p
+// TODO: __underiline__ - превращается в b
 
 
 
 (async () => {
   const text = `
 
-norm *bold _italic2_* _italic_ __underiline__ \`monospace\`
+norm **bold _italic2_** _italic_ __underiline__ \`monospace\`
 [https://google.com](https://google.com) [url](https://google.com/) norm
 ![img](https://google.com)
 ***bold and italic***
@@ -127,6 +211,7 @@ norm *bold _italic2_* _italic_ __underiline__ \`monospace\`
   const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
 
   console.log(111, await convertCommonMdToTgHtml(text))
+  //console.log(111, await convertCommonMdToTgHtml('sdfsdf'))
   //console.log(111, await convertCommonMdToCleanText(test2))
 })()
 

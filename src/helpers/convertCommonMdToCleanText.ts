@@ -102,7 +102,7 @@ export async function convertCommonMdToCleanText(mdStr?: string): Promise<string
 // (async () => {
 //   const text = `
 //
-// norm *bold _italic2_* _italic_ __underiline__ \`monospace\`
+// norm **bold _italic2_** _italic_ __underiline__ \`monospace\`
 // [https://google.com](https://google.com) [url](https://google.com/) norm
 // ![img](https://google.com)
 // ***bold and italic***
