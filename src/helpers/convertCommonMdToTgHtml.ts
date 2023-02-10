@@ -16,9 +16,6 @@ import {all} from 'mdast-util-to-hast';
 //   }
 // }
 
-// TODO: remove blocks - headers, quotes, lists
-// TODO: см makeArticleTgPostHtml - убираются переносы строк
-
 /**
  * Converts common MD to Telegram html
  * ! Do not use and blocks like headers, quotes, lists etc
@@ -47,7 +44,7 @@ export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | 
     //// @ts-ignore
     .use(remarkHtml, {
       sanitize: true,
-      //passThrough: ['p'],
+      //passThrough: ['ul'],
       handlers: {
         strong(h: any, node: any) {
           return h(node, 'b', all(h, node))
@@ -62,12 +59,25 @@ export async function convertCommonMdToTgHtml(mdStr?: string): Promise<string | 
           //return h(node, 'span', all(h, node))
         },
       },
-    })
+    } as any)
     .process(mdStr)
   //console.log(1111, String(vfile))
 
   return preSpaces + String(vfile)
 }
+
+// TODO: bold почему-то сатало i
+// TODO: underiline почему-то сатало b
+// TODO: пустые строки оставить как есть
+// TODO: h1-h6 не преобразовывать
+// TODO: blockquote - вроде не поддерживается, тогда сделать типа md
+// TODO: вложенные нумерованный списки не сделалис влженными
+
+// TODO: remove blocks - headers, quotes, lists
+// TODO: см makeArticleTgPostHtml - убираются переносы строк
+// TODO: все не поддерживаемые тэги должны преобразовываться в текст
+// TODO: не должно быть p
+
 
 
 (async () => {
