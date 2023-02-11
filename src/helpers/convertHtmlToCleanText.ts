@@ -1,7 +1,7 @@
 import {fromHtml} from 'hast-util-from-html'
 import {toMdast} from 'hast-util-to-mdast'
-import {makeCleanText} from './convertCommonMdToCleanText.js';
 import {MdastNode} from 'hast-util-to-mdast/lib';
+import {convertMdastToCleanText} from './convertMdastToCleanText.js';
 
 
 export function convertHtmlToCleanText(htmlStr?: string): string | undefined {
@@ -27,7 +27,7 @@ export function convertHtmlToCleanText(htmlStr?: string): string | undefined {
     }
   })
 
-  return preSpaces + makeCleanText(mdastTree).replace(/\n$/, '')
+  return preSpaces + convertMdastToCleanText(mdastTree).replace(/\n$/, '')
 }
 
 
