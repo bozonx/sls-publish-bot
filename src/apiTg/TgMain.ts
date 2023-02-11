@@ -82,6 +82,8 @@ export default class TgMain {
 
       const message: Message.CommonMessage = ctx.update.message;
 
+      //console.log(1111, JSON.stringify(message, null, 2))
+
       if (!message.chat?.id) {
         this.app.consoleLog.warn('No chat id in message event');
 

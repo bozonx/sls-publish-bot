@@ -3,6 +3,13 @@ import {MdastNode, MdastRoot} from 'hast-util-to-mdast/lib';
 import {convertMdastToHtml} from './convertCommonMdToTgHtml.js';
 
 
+// TODO: размножилисб - <i>bold </i><b>bold</b> <i>strikethrough </i><s>strikethrough</s>
+// TODO: underline
+// TODO: strikethrough - стал только i но не b
+// TODO: ещё есть большой code
+
+
+
 /**
  * Convert text from telegram input to Mdast tree
  * Trim it by yourself
@@ -23,8 +30,6 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
     })
   }
 
-  // TODO: ещё есть большой code
-
   for (const i in compactedEntities) {
     const current = compactedEntities[i]
     // skip the empty
@@ -37,18 +42,19 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
     if (current.type === 'spoiler') {
       result.push({ type: 'text', value })
     }
+    // link texts can't be stylized
     else if (current.type === 'url') {
       result.push({
         type: 'link',
         url: value,
-        children: [wrapText(value, current.types) as any]
+        children: [{ type: 'text', value }]
       })
     }
     else if (current.type === 'text_link') {
       result.push({
         type: 'link',
         url: current.url || '',
-        children: [wrapText(value, current.types) as any]
+        children: [{ type: 'text', value }]
       })
     }
     else if (['bold', 'italic', 'strikethrough'].includes(current.type)) {
@@ -154,7 +160,13 @@ function convertTgTypeToMdast(tgType: TgEntityType): string {
 }
 
 
-//const test1 = '\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'
+
+
+
+// \n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm
+// *bold _it_ ~strikethrough~ [url](https://google.com/)* _ *bold* _i_ ~strikethrough~ [url](https://google.com/)* _ nn
+// bold it strikethrough under url (https://google.com/) - it bold strikethrough url (https://google.com/) nn
+
 const test1 = 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url'
 const entities1 = [
   { offset: 5, length: 4, type: 'bold' },
@@ -195,9 +207,92 @@ const entities3 = [
   { offset: 13, length: 6, type: 'italic' },
 ] as any
 
-const mdast = convertTgInputToMdast(test1, entities1 as any)
 
-// console.log(111, mdast)
-console.log(222, convertMdastToHtml(mdast))
 
-//console.log(333, compactEntities(entities3))
+const test4 =  "bold it strikethrough under url - it bold strikethrough url nn"
+const entities4 =  [
+    {
+      "offset": 0,
+      "length": 5,
+      "type": "bold"
+    },
+    {
+      "offset": 5,
+      "length": 3,
+      "type": "bold"
+    },
+    {
+      "offset": 5,
+      "length": 3,
+      "type": "italic"
+    },
+    // TODO: разные length
+    {
+      "offset": 8,
+      "length": 14,
+      "type": "bold"
+    },
+    {
+      "offset": 8,
+      "length": 13,
+      "type": "italic"
+    },
+    {
+      "offset": 8,
+      "length": 13,
+      "type": "strikethrough"
+    },
+    {
+      "offset": 22,
+      "length": 5,
+      "type": "bold"
+    },
+    {
+      "offset": 22,
+      "length": 5,
+      "type": "underline"
+    },
+    {
+      "offset": 28,
+      "length": 3,
+      "type": "text_link",
+      "url": "https://google.com/"
+    },
+    {
+      "offset": 34,
+      "length": 2,
+      "type": "italic"
+    },
+    {
+      "offset": 37,
+      "length": 5,
+      "type": "italic"
+    },
+    {
+      "offset": 37,
+      "length": 4,
+      "type": "bold"
+    },
+    {
+      "offset": 42,
+      "length": 14,
+      "type": "italic"
+    },
+    {
+      "offset": 42,
+      "length": 13,
+      "type": "strikethrough"
+    },
+    {
+      "offset": 56,
+      "length": 3,
+      "type": "text_link",
+      "url": "https://google.com/"
+    }
+  ]
+
+
+// const mdast = convertTgInputToMdast(test4, entities4 as any)
+//
+// // console.log(111, mdast)
+// console.log(222, convertMdastToHtml(mdast))

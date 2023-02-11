@@ -102,8 +102,8 @@ export function convertMdastToHtml(tree: Node): string {
 
 
 
-// (async () => {
-//   const text = `
+
+// const text = `
 //
 // norm **bold _italic2_** _italic_ <u>underiline</u> <s>strikethrough</s> \`monospace\`
 // [https://google.com](https://google.com) [url](https://google.com/) norm
@@ -128,13 +128,13 @@ export function convertMdastToHtml(tree: Node): string {
 //
 // 1. item1
 // 2. item2
-//   1. item 2.1
-//   2. item 2.2
+// 1. item 2.1
+// 2. item 2.2
 //
 // * item 1
 // * item 2
-//   * item 2.1
-//   * item 2.2
+// * item 2.1
+// * item 2.2
 //
 // \`\`\`html
 // <script>console.log(111)</script>
@@ -144,12 +144,11 @@ export function convertMdastToHtml(tree: Node): string {
 //
 // `
 //
-//   const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
-//   const test3 = '[${ TITLE }](${ ARTICLE_URL })\n\n#tgTag1 #tg_tag3'
+// const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
+// const test3 = '[${ TITLE }](${ ARTICLE_URL })\n\n#tgTag1 #tg_tag3'
 //
-//   //console.log(111, convertCommonMdToTgHtml(text))
-//   console.log(111, convertCommonMdToTgHtml(test3))
-// })()
+// console.log(111, convertCommonMdToTgHtml(text))
+// //console.log(111, convertCommonMdToTgHtml(test3))
 
 
 
