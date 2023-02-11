@@ -1,4 +1,4 @@
-import {TgEntity} from '../types/TgEntity.js'
+import {SupportedTgEntityType, TgEntity} from '../types/TgEntity.js'
 import {MdastNode, MdastRoot} from 'hast-util-to-mdast/lib';
 import {convertMdastToHtml} from './convertCommonMdToTgHtml.js';
 
@@ -25,47 +25,62 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
   // TODO: ещё есть большой code
 
   for (const i in entities) {
-    const value = rawText.slice(entities[i].offset, entities[i].offset + entities[i].length)
+    const current = entities[i]
+    // skip the empty
+    if (!current) continue
 
-    if (entities[i].type === 'spoiler') {
+    const theNext = entities[Number(i) + 1]
+    //let theNextType: SupportedTgEntityType | undefined
+    const value = rawText.slice(current.offset, current.offset + current.length)
+
+    // // Remove the next if it has the same position
+    // if (current.offset === theNext?.offset && current.length === theNext?.length) {
+    //   // @ts-ignore
+    //   entities[Number(i) + 1] = undefined
+    //   theNextType = theNext.type as any
+    // }
+
+    // TODO: use theNextType
+
+    if (current.type === 'spoiler') {
       result.push({ type: 'text', value })
     }
-    else if (entities[i].type === 'url') {
+    else if (current.type === 'url') {
       result.push({ type: 'link', url: value, children: [{ type: 'text', value }] })
     }
-    else if (entities[i].type === 'text_link') {
+    else if (current.type === 'text_link') {
       result.push({
         type: 'link',
-        url: entities[i].url || '',
+        url: current.url || '',
         children: [{ type: 'text', value }]
       })
     }
-    else if (entities[i].type === 'bold') {
+    else if (current.type === 'bold') {
       result.push({
         type: 'strong',
         children: [{ type: 'text', value }]
       })
     }
-    else if (entities[i].type === 'italic') {
+    else if (current.type === 'italic') {
       result.push({
         type: 'emphasis',
         children: [{ type: 'text', value }]
       })
     }
-    else if (entities[i].type === 'strikethrough') {
+    else if (current.type === 'strikethrough') {
       result.push({
         type: 'delete',
         children: [{ type: 'text', value }]
       })
     }
-    else if (entities[i].type === 'underline') {
+    else if (current.type === 'underline') {
       // TODO: не поддерживается почему-то
       result.push({
         type: 'text',
         value
       })
     }
-    else if (entities[i].type === 'code') {
+    else if (current.type === 'code') {
       result.push({
         type: 'inlineCode',
         value,
@@ -75,15 +90,13 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
       result.push({ type: 'text', value })
     }
 
-    const theNext = entities[Number(i) + 1]
-
     if (!theNext) continue
     // add simple text after it
-    if (entities[i].offset + entities[i].length < theNext.offset) {
+    if (current.offset + current.length < theNext.offset) {
       result.push({
         type: 'text',
         value: rawText.slice(
-          entities[i].offset + entities[i].length,
+          current.offset + current.length,
           theNext.offset
         ),
       })
@@ -108,6 +121,9 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
   }
 }
 
+// function makeInlineEl() {
+//
+// }
 
 // TODO: проверить вложенность b в i
 
@@ -128,72 +144,40 @@ const entities1 = [
     url: 'https://google.com/'
   }
 ]
+const test2 = 'norm bold it italic underiline striketrough code url'
+const entities2 = [
+  { offset: 5, length: 5, type: 'bold' },
+  { offset: 10, length: 2, type: 'bold' },
+  { offset: 10, length: 2, type: 'italic' },
+  { offset: 13, length: 6, type: 'italic' },
+  { offset: 20, length: 10, type: 'underline' },
+  { offset: 31, length: 12, type: 'strikethrough' },
+  { offset: 44, length: 4, type: 'code' },
+  {
+    offset: 49,
+    length: 3,
+    type: 'text_link',
+    url: 'https://google.com/'
+  }
+]
+const test3 = 'norm bold it italic underiline striketrough code url'
+const entities3 = [
+  { offset: 5, length: 5, type: 'bold' },
+  { offset: 10, length: 2, type: 'bold' },
+  { offset: 10, length: 2, type: 'italic' },
+  { offset: 13, length: 6, type: 'italic' },
+  { offset: 20, length: 10, type: 'underline' },
+  { offset: 31, length: 12, type: 'strikethrough' },
+  { offset: 44, length: 4, type: 'code' },
+  {
+    offset: 49,
+    length: 3,
+    type: 'text_link',
+    url: 'https://google.com/'
+  }
+]
 
-const mdast = convertTgInputToMdast(test1, entities1 as any)
+const mdast = convertTgInputToMdast(test3, entities3 as any)
 
 console.log(111, mdast)
 console.log(222, convertMdastToHtml(mdast))
-
-
-
-
-/*
-  text: 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url',
-  entities: [
-    { offset: 5, length: 4, type: 'bold' },
-    { offset: 10, length: 6, type: 'italic' },
-    { offset: 17, length: 10, type: 'underline' },
-    { offset: 28, length: 13, type: 'strikethrough' },
-    { offset: 42, length: 9, type: 'code' },
-    { offset: 52, length: 7, type: 'spoiler' },
-    { offset: 61, length: 18, type: 'url' },
-    {
-      offset: 80,
-      length: 3,
-      type: 'text_link',
-      url: 'https://google.com/'
-    }
-  ]
-
-  text: 'norm bold it italic underiline striketrough code url',
-  entities: [
-    { offset: 5, length: 5, type: 'bold' },
-    { offset: 10, length: 2, type: 'bold' },
-    { offset: 10, length: 2, type: 'italic' },
-    { offset: 13, length: 6, type: 'italic' },
-    { offset: 20, length: 10, type: 'underline' },
-    { offset: 31, length: 12, type: 'strikethrough' },
-    { offset: 44, length: 4, type: 'code' },
-    {
-      offset: 49,
-      length: 3,
-      type: 'text_link',
-      url: 'https://google.com/'
-    }
-  ]
-
- */
-
-// TODO: не поддерживается вложенный i в b
-// yarn ts-node --esm ./src/helpers/convertTgInputToHtml.ts
-
-// console.log(111,
-//   convertTgInputToHtml(
-//     'norm bold it italic underiline striketrough code url',
-//       [
-//       { offset: 5, length: 5, type: 'bold' },
-//       { offset: 10, length: 2, type: 'bold' },
-//       { offset: 10, length: 2, type: 'italic' },
-//       { offset: 13, length: 6, type: 'italic' },
-//       { offset: 20, length: 10, type: 'underline' },
-//       { offset: 31, length: 12, type: 'strikethrough' },
-//       { offset: 44, length: 4, type: 'code' },
-//       {
-//         offset: 49,
-//         length: 3,
-//         type: 'text_link',
-//         url: 'https://google.com/'
-//       }
-//     ]
-//   )
-// )
