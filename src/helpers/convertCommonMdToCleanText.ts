@@ -34,7 +34,7 @@ export function convertCommonMdToCleanText(mdStr?: string): string | undefined {
 }
 
 
-function makeCleanText(tree: Node): string {
+export function makeCleanText(tree: Node): string {
   return toMarkdown(tree, {
     ...TO_MARKDOWN_OPTIONS,
     handlers: {
