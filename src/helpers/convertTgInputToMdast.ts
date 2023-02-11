@@ -1,6 +1,5 @@
 import {TgEntity, TgEntityType} from '../types/TgEntity.js'
 import {MdastNode, MdastRoot} from 'hast-util-to-mdast/lib';
-import {convertMdastToHtml} from './convertCommonMdToTgHtml.js';
 
 
 // TODO: размножилисб - <i>bold </i><b>bold</b> <i>strikethrough </i><s>strikethrough</s>

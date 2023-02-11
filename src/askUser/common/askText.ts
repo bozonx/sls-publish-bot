@@ -10,8 +10,8 @@ import {
   makeCancelBtn,
   SKIP_BTN_CALLBACK
 } from '../../helpers/buttons.js';
-import {convertMdastToHtml} from '../../helpers/convertCommonMdToTgHtml.js';
 import {convertTgInputToMdast} from '../../helpers/convertTgInputToMdast.js';
+import {convertMdastToHtml} from '../../helpers/convertMdastToHtml.js';
 
 
 type ResultCallback = (textHtml?: string, cleanText?: string) => void

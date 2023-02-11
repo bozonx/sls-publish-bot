@@ -18,7 +18,7 @@ import {
   SKIP_BTN_CALLBACK
 } from '../../helpers/buttons.js';
 import {convertTgInputToMdast} from '../../helpers/convertTgInputToMdast.js';
-import {convertMdastToHtml} from '../../helpers/convertCommonMdToTgHtml.js';
+import {convertMdastToHtml} from '../../helpers/convertMdastToHtml.js';
 
 
 export type AskPostMediaDone = (mediaGroup: MediaGroupItem[], captionHtml?: string) => void
