@@ -30,7 +30,7 @@ export function convertCommonMdToTgHtml(mdStr?: string): string | undefined {
     // mdastExtensions: [gfmFromMarkdown()],
   } as any)
 
-  return preSpaces + makeHtml(tree)
+  return preSpaces + makeHtml(tree).replace(/\n$/, '')
 }
 
 function makeHtml(tree: Node): string {
@@ -60,7 +60,6 @@ function makeHtml(tree: Node): string {
           + `</i>`
       },
       strong: (node, parent, state, info): string => {
-        console.log(111, node)
         return `<b>`
           + makeHtml({
             type: 'root',
@@ -148,8 +147,8 @@ function makeHtml(tree: Node): string {
 //   const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
 //   const test3 = '[${ TITLE }](${ ARTICLE_URL })\n\n#tgTag1 #tg_tag3'
 //
-//   console.log(111, convertCommonMdToTgHtml(text))
-//   //console.log(111, convertCommonMdToTgHtml(test3))
+//   //console.log(111, convertCommonMdToTgHtml(text))
+//   console.log(111, convertCommonMdToTgHtml(test3))
 // })()
 
 

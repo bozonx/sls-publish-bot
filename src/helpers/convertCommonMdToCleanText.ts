@@ -1,71 +1,14 @@
-import {unified} from 'unified'
-import remarkParse from 'remark-parse'
-import remarkStringify from 'remark-stringify'
-import {visit} from 'unist-util-visit'
-import {VFile} from 'vfile'
+import _ from 'lodash'
+import {fromMarkdown} from 'mdast-util-from-markdown'
+import {Node} from 'mdast-util-to-markdown/lib'
+import {toMarkdown} from 'mdast-util-to-markdown'
 
 
-function toTextValue(node: any): string {
-  if (node.value) return node.value
-  else if (node.children) {
-    return node.children.map((item: any) => toTextValue(item)).join('')
-  }
-
-  return ''
-}
-
-function toTextNode(node: any) {
-  node.type = 'text'
-
-  if (node.children) {
-    node.value = node.children.map((node: any) => toTextValue(node)).join('')
-  }
-
-  delete node.children
-  delete node.url
-  delete node.title
-}
-
-function toParagraphNode(node: any) {
-  node.type = 'paragraph'
-
-  delete node.depth
-}
-
-function remarkClearMd() {
-  return (tree: any) => {
-    visit(tree, (node) => {
-      if (['emphasis', 'strong', 'inlineCode', 'link'].includes(node.type)) {
-        toTextNode(node)
-      }
-      else if (['heading'].includes(node.type)) {
-        toParagraphNode(node)
-      }
-      else if (node.type === 'image') {
-        node.type = 'text'
-        node.value = ''
-
-        delete node.children
-        delete node.url
-        delete node.title
-        delete node.alt
-      }
-      else if (node.type === 'code') {
-        node.type = 'paragraph'
-
-        node.children = [{
-          type: 'text',
-          // replace <> to ! to not allow to put slash
-          value: node.value.replace(/[<>]/g, '!')
-        }]
-
-        delete node.lang
-        delete node.meta
-        delete node.position
-      }
-    })
-  }
-}
+const TO_MARKDOWN_OPTIONS = {
+  emphasis: '_',
+  listItemIndent: 'one',
+  rule: '-',
+} as any
 
 
 /**
@@ -77,7 +20,7 @@ function remarkClearMd() {
  *   to:
  *     norm bold italic underiline monospace  https://google.com url norm
  */
-export async function convertCommonMdToCleanText(mdStr?: string): Promise<string | undefined> {
+export function convertCommonMdToCleanText(mdStr?: string): string | undefined {
   if (!mdStr) return
 
   let preSpaces = ''
@@ -85,24 +28,68 @@ export async function convertCommonMdToCleanText(mdStr?: string): Promise<string
 
   if (preSpacesMatch?.[1]) preSpaces = preSpacesMatch[1]
 
-  const vfile = await unified()
-    // read MD to syntax tree
-    .use(remarkParse)
-    .use(remarkClearMd as any)
-    // make string from syntax tree
-    .use(remarkStringify, {
-      listItemIndent: 'one',
-      rule: '-',
-    })
-    .process(new VFile(mdStr))
+  const tree = fromMarkdown(mdStr)
 
-  return preSpaces + String(vfile)
+  return preSpaces + makeCleanText(tree).replace(/\n$/, '')
 }
 
-// (async () => {
-//   const text = `
+
+function makeCleanText(tree: Node): string {
+  return toMarkdown(tree, {
+    ...TO_MARKDOWN_OPTIONS,
+    handlers: {
+      heading: (node, parent, state, info): string => {
+        return _.trim(makeCleanText({
+          type: 'root',
+          children: node.children
+        }))
+      },
+      code: (node, parent, state, info): string => {
+        return node.value
+      },
+      emphasis: (node, parent, state, info): string => {
+        return makeCleanText({
+          type: 'root',
+          children: node.children
+        }).replace(/\n$/, '')
+      },
+      strong: (node, parent, state, info): string => {
+        return makeCleanText({
+          type: 'root',
+          children: node.children
+        }).replace(/\n$/, '')
+      },
+      delete: (node, parent, state, info): string => {
+        return makeCleanText({
+          type: 'root',
+          children: node.children
+        }).replace(/\n$/, '')
+      },
+      link: (node, parent, state, info): string => {
+        return makeCleanText({
+          type: 'root',
+          children: node.children
+        }).replace(/\n$/, '')
+      },
+      inlineCode: (node, parent, state, info): string => {
+        return node.value
+      },
+      image: (node, parent, state, info): string => {
+        return ''
+      },
+      // it is need to not ecranize
+      text: (node): string => {
+        return node.value
+      }
+    },
+  })
+}
+
+
+
+// const text = `
 //
-// norm **bold _italic2_** _italic_ __underiline__ \`monospace\`
+// norm **bold _italic2_** _italic_ <u>underiline</u> <s>strikethrough</s> \`monospace\`
 // [https://google.com](https://google.com) [url](https://google.com/) norm
 // ![img](https://google.com)
 // ***bold and italic***
@@ -120,9 +107,7 @@ export async function convertCommonMdToCleanText(mdStr?: string): Promise<string
 // ###### h6
 //
 // > block quotes
-// >
 // > block quotes 2
-// > ### h3
 // > *qqq*
 //
 // 1. item1
@@ -143,11 +128,95 @@ export async function convertCommonMdToCleanText(mdStr?: string): Promise<string
 //
 // `
 //
-//   const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | ${ TAGS } #dfdf #dd'
+// const test2 = ' \n\n[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) |\n\n ${ TAGS } #dfdf #dd'
 //
-//   console.log(111, await convertCommonMdToCleanText(text))
-//   //console.log(111, await convertCommonMdToCleanText(test2))
+// //console.log(111, convertCommonMdToCleanText(text))
+// console.log(111, convertCommonMdToCleanText(test2))
+
+
+
+
+// export async function convertCommonMdToCleanText(mdStr?: string): Promise<string | undefined> {
+//   if (!mdStr) return
 //
-// //convertCommonMdToCleanText('# fff\n> fff\ngggg\nkkk')
-// })()
+//   let preSpaces = ''
+//   const preSpacesMatch = mdStr.match(/^(\s*)/)
 //
+//   if (preSpacesMatch?.[1]) preSpaces = preSpacesMatch[1]
+//
+//   const vfile = await unified()
+//     // read MD to syntax tree
+//     .use(remarkParse)
+//     .use(remarkClearMd as any)
+//     // make string from syntax tree
+//     .use(remarkStringify, {
+//       listItemIndent: 'one',
+//       rule: '-',
+//     })
+//     .process(new VFile(mdStr))
+//
+//   return preSpaces + String(vfile)
+// }
+
+// function toTextValue(node: any): string {
+//   if (node.value) return node.value
+//   else if (node.children) {
+//     return node.children.map((item: any) => toTextValue(item)).join('')
+//   }
+//
+//   return ''
+// }
+//
+// function toTextNode(node: any) {
+//   node.type = 'text'
+//
+//   if (node.children) {
+//     node.value = node.children.map((node: any) => toTextValue(node)).join('')
+//   }
+//
+//   delete node.children
+//   delete node.url
+//   delete node.title
+// }
+//
+// function toParagraphNode(node: any) {
+//   node.type = 'paragraph'
+//
+//   delete node.depth
+// }
+//
+// function remarkClearMd() {
+//   return (tree: any) => {
+//     visit(tree, (node) => {
+//       if (['emphasis', 'strong', 'inlineCode', 'link'].includes(node.type)) {
+//         toTextNode(node)
+//       }
+//       else if (['heading'].includes(node.type)) {
+//         toParagraphNode(node)
+//       }
+//       else if (node.type === 'image') {
+//         node.type = 'text'
+//         node.value = ''
+//
+//         delete node.children
+//         delete node.url
+//         delete node.title
+//         delete node.alt
+//       }
+//       else if (node.type === 'code') {
+//         node.type = 'paragraph'
+//
+//         node.children = [{
+//           type: 'text',
+//           // replace <> to ! to not allow to put slash
+//           value: node.value.replace(/[<>]/g, '!')
+//         }]
+//
+//         delete node.lang
+//         delete node.meta
+//         delete node.position
+//       }
+//     })
+//   }
+// }
+
