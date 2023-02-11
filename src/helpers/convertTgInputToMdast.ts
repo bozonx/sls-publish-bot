@@ -1,45 +1,78 @@
-import {toHast} from 'mdast-util-to-hast'
-import {html as htmlFormat} from 'telegram-format';
-import {NormalizedTgItem, SUPPORTED_TG_ENTITY_TYPES, SupportedTgEntityType, TgEntity} from '../types/TgEntity.js'
+import {TgEntity} from '../types/TgEntity.js'
+import {MdastNode, MdastRoot} from 'hast-util-to-mdast/lib';
+import {convertMdastToHtml} from './convertCommonMdToTgHtml.js';
 
 
 /**
- * Convert text from telegram input to HTML
+ * Convert text from telegram input to Mdast tree
  * Trim it by yourself
  */
-export function convertTgInputToHtml(rawText: string, entities?: TgEntity[]): string {
-  const normalized = normalizeTg(rawText, entities)
+export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): MdastRoot {
+  if (!entities || !entities.length) return {
+    type: 'root',
+    children: [{ type: 'text', value: rawText }]
+  }
 
-  return normalized.map((item) => makeHtml(item)).join('')
-}
-
-
-function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[] {
-  if (!entities || !entities.length) return [{text: rawText, type: 'text'}]
-
-  const result: NormalizedTgItem[] = []
+  const result: MdastNode[] = []
   // set the first text part
   if (entities[0].offset !== 0) {
     result.push({
-      text: rawText.slice(0, entities[0].offset),
+      value: rawText.slice(0, entities[0].offset),
       type: 'text',
     })
   }
 
+  // TODO: ещё есть большой code
+
   for (const i in entities) {
-    const text = rawText.slice(entities[i].offset, entities[i].offset + entities[i].length)
+    const value = rawText.slice(entities[i].offset, entities[i].offset + entities[i].length)
 
     if (entities[i].type === 'spoiler') {
-      result.push({ text, type: 'text' })
+      result.push({ type: 'text', value })
     }
     else if (entities[i].type === 'url') {
-      result.push({ text, type: 'url', url: text })
+      result.push({ type: 'link', url: value, children: [{ type: 'text', value }] })
     }
     else if (entities[i].type === 'text_link') {
-      result.push({ text, type: 'url', url: entities[i].url })
+      result.push({
+        type: 'link',
+        url: entities[i].url || '',
+        children: [{ type: 'text', value }]
+      })
+    }
+    else if (entities[i].type === 'bold') {
+      result.push({
+        type: 'strong',
+        children: [{ type: 'text', value }]
+      })
+    }
+    else if (entities[i].type === 'italic') {
+      result.push({
+        type: 'emphasis',
+        children: [{ type: 'text', value }]
+      })
+    }
+    else if (entities[i].type === 'strikethrough') {
+      result.push({
+        type: 'delete',
+        children: [{ type: 'text', value }]
+      })
+    }
+    else if (entities[i].type === 'underline') {
+      // TODO: не поддерживается почему-то
+      result.push({
+        type: 'text',
+        value
+      })
+    }
+    else if (entities[i].type === 'code') {
+      result.push({
+        type: 'inlineCode',
+        value,
+      })
     }
     else {
-      result.push({ text, type: entities[i].type as SupportedTgEntityType })
+      result.push({ type: 'text', value })
     }
 
     const theNext = entities[Number(i) + 1]
@@ -48,11 +81,11 @@ function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[]
     // add simple text after it
     if (entities[i].offset + entities[i].length < theNext.offset) {
       result.push({
-        text: rawText.slice(
+        type: 'text',
+        value: rawText.slice(
           entities[i].offset + entities[i].length,
           theNext.offset
         ),
-        type: 'text'
       })
     }
   }
@@ -61,44 +94,22 @@ function normalizeTg(rawText: string, entities?: TgEntity[]): NormalizedTgItem[]
   // add the last line
   if (theLast.offset + theLast.length < rawText.length) {
     result.push({
-      text: rawText.slice(
+      type: 'text',
+      value: rawText.slice(
         theLast.offset + theLast.length,
         theLast.offset + theLast.length + rawText.length
-      ),
-      type: 'text'
+      )
     })
   }
 
-  return result
-}
-
-function makeHtml(item: NormalizedTgItem): string {
-  switch (item.type) {
-    case SUPPORTED_TG_ENTITY_TYPES.bold:
-      return htmlFormat.bold(item.text)
-    case SUPPORTED_TG_ENTITY_TYPES.italic:
-      return htmlFormat.italic(item.text)
-    case SUPPORTED_TG_ENTITY_TYPES.underline:
-      return htmlFormat.underline(item.text)
-    case SUPPORTED_TG_ENTITY_TYPES.strikethrough:
-      return htmlFormat.strikethrough(item.text)
-    case SUPPORTED_TG_ENTITY_TYPES.code:
-      return htmlFormat.monospace(item.text)
-    case SUPPORTED_TG_ENTITY_TYPES.url:
-      if (item.url) {
-        return htmlFormat.url(item.text, item.url)
-      }
-      else {
-        return htmlFormat.url(item.text, item.text)
-      }
-    case SUPPORTED_TG_ENTITY_TYPES.text:
-      return item.text
-    default:
-      return ''
+  return {
+    type: 'root',
+    children: result as any
   }
 }
 
 
+// TODO: проверить вложенность b в i
 
 //const test1 = '\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'
 const test1 = 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url'
@@ -118,7 +129,10 @@ const entities1 = [
   }
 ]
 
-console.log(111, convertTgInputToHtml(test1, entities1 as any))
+const mdast = convertTgInputToMdast(test1, entities1 as any)
+
+console.log(111, mdast)
+console.log(222, convertMdastToHtml(mdast))
 
 
 

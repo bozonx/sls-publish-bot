@@ -1,4 +1,22 @@
 
+// export type MdastNodeType = 'strong'
+//   | 'emphasis'
+//   | 'underline'
+//   | 'delete'
+//   | 'inlineCode'
+//   | 'link'
+//   | 'text'
+
+// export const SUPPORTED_TG_ENTITY_TYPES: Record<SupportedTgEntityType, SupportedTgEntityType> = {
+//   strong: 'strong',
+//   emphasis: 'emphasis',
+//   underline: 'underline',
+//   delete: 'delete',
+//   inlineCode: 'inlineCode',
+//   link: 'link',
+//   text: 'text',
+// }
+
 export type SupportedTgEntityType = 'bold'
   | 'italic'
   | 'underline'

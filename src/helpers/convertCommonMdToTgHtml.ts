@@ -30,16 +30,16 @@ export function convertCommonMdToTgHtml(mdStr?: string): string | undefined {
     // mdastExtensions: [gfmFromMarkdown()],
   } as any)
 
-  return preSpaces + makeHtml(tree).replace(/\n$/, '')
+  return preSpaces + convertMdastToHtml(tree).replace(/\n$/, '')
 }
 
-function makeHtml(tree: Node): string {
+export function convertMdastToHtml(tree: Node): string {
   return toMarkdown(tree, {
     ...TO_MARKDOWN_OPTIONS,
     handlers: {
       heading: (node, parent, state, info): string => {
         return `<b>`
-          + _.trim(makeHtml({
+          + _.trim(convertMdastToHtml({
             type: 'root',
             children: node.children
           }))
@@ -53,7 +53,7 @@ function makeHtml(tree: Node): string {
       },
       emphasis: (node, parent, state, info): string => {
         return `<i>`
-          + makeHtml({
+          + convertMdastToHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')
@@ -61,7 +61,7 @@ function makeHtml(tree: Node): string {
       },
       strong: (node, parent, state, info): string => {
         return `<b>`
-          + makeHtml({
+          + convertMdastToHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')
@@ -69,7 +69,7 @@ function makeHtml(tree: Node): string {
       },
       delete: (node, parent, state, info): string => {
         return `<s>`
-          + makeHtml({
+          + convertMdastToHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')
@@ -77,7 +77,7 @@ function makeHtml(tree: Node): string {
       },
       link: (node, parent, state, info): string => {
         return `<a href="${node.url}">`
-          + makeHtml({
+          + convertMdastToHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')
