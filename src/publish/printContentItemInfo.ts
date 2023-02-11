@@ -31,7 +31,7 @@ export async function printContentItemInitialDetails(
       true
     )
   }
-  const postTexts = await makePostFromContentItem(
+  const postTexts = makePostFromContentItem(
     resolvedSns,
     tgChat.app.blogs[blogName],
     contentItem,
@@ -43,7 +43,7 @@ export async function printContentItemInitialDetails(
   // send record's info from content plan
   await tgChat.reply(
     tgChat.app.i18n.menu.contentParams + '\n\n'
-    + await makeContentPlanPreDetails(
+    + makeContentPlanPreDetails(
       contentItem,
       tgChat.app.i18n,
       tgChat.app.appConfig.utcOffset,
@@ -55,14 +55,14 @@ export async function printContentItemInitialDetails(
 }
 
 
-async function makeContentPlanPreDetails(
+function makeContentPlanPreDetails(
   contentItem: ContentItem,
   i18n: typeof ru,
   utcOffset: number,
   resolvedSns: SnType[],
   useFooter: boolean,
   postTexts: Partial<Record<SnType, string>>,
-): Promise<string> {
+): string {
   const result: string[] = [
     `${i18n.contentInfo.dateTime}: ${makeHumanDateTimeStr(contentItem.date, contentItem.time, utcOffset)}`,
     `${i18n.commonPhrases.sns}: ${resolvedSns.join(', ')}`,
@@ -85,7 +85,7 @@ async function makeContentPlanPreDetails(
   result.push(`${i18n.contentInfo.note}: ${contentItem.note}`)
 
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
-    const contentLengthDetails = await makeContentLengthDetails(
+    const contentLengthDetails = makeContentLengthDetails(
       i18n,
       useFooter,
       postTexts,
@@ -98,7 +98,7 @@ async function makeContentPlanPreDetails(
   return result.join('\n')
 }
 
-export async function makeContentPlanFinalDetails(
+export function makeContentPlanFinalDetails(
   blogName: string,
   tgChat: TgChat,
   state: ContentItemState,
@@ -133,7 +133,7 @@ export async function makeContentPlanFinalDetails(
   }
 
   if (contentItem.type !== PUBLICATION_TYPES.poll) {
-    const contentLengthDetails = await makeContentLengthDetails(
+    const contentLengthDetails = makeContentLengthDetails(
       tgChat.app.i18n,
       useTgFooter,
       postTexts,

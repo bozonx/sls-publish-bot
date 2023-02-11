@@ -38,13 +38,13 @@ export async function makeFinalArticleNodes(
   return telegraPhContent
 }
 
-async function makeArticleTgPostHtml(
+function makeArticleTgPostHtml(
   articleTitle: string,
   articleUrl: string,
   articleAnnouncement?: string,
   tgTags?: string[],
   postTmpl?: string,
-): Promise<string> {
+): string {
   let postStr: string
   const tags = makeTagsString(tgTags)
 
@@ -87,7 +87,7 @@ export async function makePublishTaskTgArticle(
 
   // create article on telegra.ph
   const articleUrl = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
-  const postHtml = await makeArticleTgPostHtml(
+  const postHtml = makeArticleTgPostHtml(
     articleTitle,
     articleUrl,
     articleAnnouncement,

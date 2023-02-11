@@ -4,9 +4,6 @@ import {makeCleanText} from './convertCommonMdToCleanText.js';
 import {MdastNode} from 'hast-util-to-mdast/lib';
 
 
-// TODO: убрать async
-
-
 export function convertHtmlToCleanText(htmlStr?: string): string | undefined {
   if (!htmlStr) return
 
@@ -29,60 +26,59 @@ export function convertHtmlToCleanText(htmlStr?: string): string | undefined {
       }
     }
   })
-  // TODO: <br /> заменить просто на перенос строки
 
   return preSpaces + makeCleanText(mdastTree).replace(/\n$/, '')
 }
 
 
-
-const test = `
-
-text
-<h1>h1</h1>
-<h2>h2</h2>
-<h3>h3</h3>
-<h4>h4</h4>
-<h5>h4</h5>
-<h6>h6</h6>
-<p>
-some paragraph <b>bold </b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
-</p>
-
-inline elements <b>bold </b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
-inline <b>bold <i>bold-italic</i><s> bold-strike</s></b>
-
-<p>
-<b>bold <i>bold-italic</i><s> bold-strike</s></b>
-<br />
-<i>italic <s>italic-strike</s><b> italic-bold</b></i>
-</p>
-<br />
-<a href="https://ya.ru">link</a>
-
-<ul>
-<li>item 1</li>
-<li>
-  item 2
-  <ul>
-    <li>item 2.1</li>
-    <li><b>bbb </b>item 2.2</li>
-  </ul>
-</li>
-</ul>
-<ol>
-<li>item 1</li>
-<li>item 2</li>
-</ol>
-
-<hr />
-
-<blockquote>quote some</blockquote>
-
-`
-
-console.log(await convertHtmlToCleanText(test))
-
+//
+// const test = `
+//
+// text
+// <h1>h1</h1>
+// <h2>h2</h2>
+// <h3>h3</h3>
+// <h4>h4</h4>
+// <h5>h4</h5>
+// <h6>h6</h6>
+// <p>
+// some paragraph <b>bold </b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
+// </p>
+//
+// inline elements <b>bold </b><i>italic </i><s> strike</s><u> undelined</u> <code>monospace</code>
+// inline <b>bold <i>bold-italic</i><s> bold-strike</s></b>
+//
+// <p>
+// <b>bold <i>bold-italic</i><s> bold-strike</s></b>
+// <br />
+// <i>italic <s>italic-strike</s><b> italic-bold</b></i>
+// </p>
+// <br />
+// <a href="https://ya.ru">link</a>
+//
+// <ul>
+// <li>item 1</li>
+// <li>
+//   item 2
+//   <ul>
+//     <li>item 2.1</li>
+//     <li><b>bbb </b>item 2.2</li>
+//   </ul>
+// </li>
+// </ul>
+// <ol>
+// <li>item 1</li>
+// <li>item 2</li>
+// </ol>
+//
+// <hr />
+//
+// <blockquote>quote some</blockquote>
+//
+// `
+//
+// console.log(await convertHtmlToCleanText(test))
+//
 
 
 

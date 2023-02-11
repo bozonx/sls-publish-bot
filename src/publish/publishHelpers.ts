@@ -18,13 +18,13 @@ export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | u
   }
 }
 
-export async function makeContentLengthDetails(
+export function makeContentLengthDetails(
   i18n: typeof ru,
   useTgFooter: boolean,
   postTexts: Partial<Record<SnType, string>> = {},
   instaTags: string[] = []
-): Promise<string> {
-  const cleanTexts = await makeCleanTexts(postTexts) || {}
+): string {
+  const cleanTexts = makeCleanTexts(postTexts) || {}
   const result: string[] = []
 
   if (cleanTexts.telegram) {

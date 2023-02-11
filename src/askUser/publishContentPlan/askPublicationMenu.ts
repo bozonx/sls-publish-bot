@@ -58,7 +58,7 @@ export async function askPublicationMenu(
   tgChat: TgChat,
   state: ContentItemState,
   item: ContentItem,
-  validate: (state: ContentItemState) => Promise<void>,
+  validate: (state: ContentItemState) => void,
   onDone: () => void,
 ) {
   await addSimpleStep(
@@ -204,7 +204,7 @@ async function handleButtons(
   tgChat: TgChat,
   state: ContentItemState,
   item: ContentItem,
-  validate: (state: ContentItemState) => Promise<void>,
+  validate: (state: ContentItemState) => void,
   onDone: () => void
 ) {
   switch (queryData) {

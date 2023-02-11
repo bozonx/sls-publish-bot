@@ -203,16 +203,16 @@ export function resolvePostFooter(
   return (blogConfig as BlogTelegramConfig)?.postFooter
 }
 
-export async function makeCleanTexts(
+export function makeCleanTexts(
   postTexts?: Partial<Record<SnType, string>>
-): Promise<Partial<Record<SnType, string>> | undefined> {
+): Partial<Record<SnType, string>> | undefined {
   if (!postTexts) return
 
   let cleanTexts: Partial<Record<SnType, string>> = {}
 
   for (const sn in postTexts) {
     // TODO: а для инсты то может не html быть???
-    cleanTexts[sn as SnType] = await convertHtmlToCleanText(postTexts[sn as SnType]!)
+    cleanTexts[sn as SnType] = convertHtmlToCleanText(postTexts[sn as SnType]!)
   }
 
   return cleanTexts

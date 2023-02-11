@@ -14,7 +14,7 @@ import {convertCommonMdToTgHtml} from '../helpers/convertCommonMdToTgHtml.js';
  * Make full post texts for each social media.
  * It depends on publication type
  */
-export async function makePostFromContentItem(
+export function makePostFromContentItem(
   sns: SnType[],
   blogCfg: BlogConfig,
   item: ContentItem,
@@ -22,7 +22,7 @@ export async function makePostFromContentItem(
   textBlocks?: NotionBlocks,
   replacedHtmlText?: string,
   instaTags?: string[]
-): Promise<Partial<Record<SnType, string>>> {
+): Partial<Record<SnType, string>> {
   const result = {} as Record<SnType, string>
 
   if (sns.includes(SN_TYPES.telegram)) {

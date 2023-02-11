@@ -106,7 +106,7 @@ export async function startPublicationMenu(
         // do nothing on article case
       }
       else {
-        postTexts = await makePostFromContentItem(
+        postTexts = makePostFromContentItem(
           state.sns,
           tgChat.app.blogs[blogName],
           item,
@@ -135,7 +135,7 @@ export async function startPublicationMenu(
         await tgChat.reply(postTexts.instagram)
       }
       // print details
-      await tgChat.reply(await makeContentPlanFinalDetails(
+      await tgChat.reply(makeContentPlanFinalDetails(
         blogName,
         tgChat,
         state,

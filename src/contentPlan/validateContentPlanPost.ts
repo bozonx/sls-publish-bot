@@ -16,7 +16,7 @@ import {NotionBlocks} from '../types/notion.js';
 import {makeCleanTexts} from '../helpers/helpers.js';
 
 
-export async function validateContentPlanPost(
+export function validateContentPlanPost(
   tgChat: TgChat,
   blogName: string,
   item: ContentItem,
@@ -29,7 +29,7 @@ export async function validateContentPlanPost(
     PUBLICATION_TYPES.article,
     PUBLICATION_TYPES.poll,
   ].includes(item.type)) {
-    postTexts = await makePostFromContentItem(
+    postTexts = makePostFromContentItem(
       state.sns,
       tgChat.app.blogs[blogName],
       item,
@@ -106,16 +106,16 @@ export async function validateContentPlanPost(
     }
   }
 
-  await validateContentLengths(tgChat, item.type, postTexts)
+  validateContentLengths(tgChat, item.type, postTexts)
 }
 
 
-export async function validateContentLengths(
+export function validateContentLengths(
   tgChat: TgChat,
   pubType: PublicationType,
   postTexts: Partial<Record<SnType, string>> | undefined
 ) {
-  const cleanTexts = await makeCleanTexts(postTexts)
+  const cleanTexts = makeCleanTexts(postTexts)
 
   if (!cleanTexts) return
 
