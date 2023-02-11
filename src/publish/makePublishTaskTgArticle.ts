@@ -66,12 +66,6 @@ async function makeArticleTgPostHtml(
     });
   }
 
-  //postStr = postStr.replace(/\n/g, '<br />')
-
-  console.log(1111,'|' + postTmpl + '|')
-  console.log(2222,'|' + postStr + '|')
-  console.log(3333,'|' + convertCommonMdToTgHtml(postStr) + '|')
-
   return convertCommonMdToTgHtml(postStr) || ''
 }
 
