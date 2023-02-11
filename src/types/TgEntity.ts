@@ -58,4 +58,6 @@ export interface TgEntity {
   length: number
   type: TgEntityType
   url?: string
+  // compacted types
+  types?: TgEntityType[]
 }

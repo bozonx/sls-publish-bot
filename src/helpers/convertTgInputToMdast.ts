@@ -1,4 +1,4 @@
-import {SupportedTgEntityType, TgEntity} from '../types/TgEntity.js'
+import {TgEntity, TgEntityType} from '../types/TgEntity.js'
 import {MdastNode, MdastRoot} from 'hast-util-to-mdast/lib';
 import {convertMdastToHtml} from './convertCommonMdToTgHtml.js';
 
@@ -13,71 +13,48 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
     children: [{ type: 'text', value: rawText }]
   }
 
+  const compactedEntities = compactEntities(entities)
   const result: MdastNode[] = []
   // set the first text part
-  if (entities[0].offset !== 0) {
+  if (compactedEntities[0].offset !== 0) {
     result.push({
-      value: rawText.slice(0, entities[0].offset),
+      value: rawText.slice(0, compactedEntities[0].offset),
       type: 'text',
     })
   }
 
   // TODO: ещё есть большой code
 
-  for (const i in entities) {
-    const current = entities[i]
+  for (const i in compactedEntities) {
+    const current = compactedEntities[i]
     // skip the empty
     if (!current) continue
 
-    const theNext = entities[Number(i) + 1]
+    const theNext = compactedEntities[Number(i) + 1]
     //let theNextType: SupportedTgEntityType | undefined
     const value = rawText.slice(current.offset, current.offset + current.length)
-
-    // // Remove the next if it has the same position
-    // if (current.offset === theNext?.offset && current.length === theNext?.length) {
-    //   // @ts-ignore
-    //   entities[Number(i) + 1] = undefined
-    //   theNextType = theNext.type as any
-    // }
-
-    // TODO: use theNextType
 
     if (current.type === 'spoiler') {
       result.push({ type: 'text', value })
     }
     else if (current.type === 'url') {
-      result.push({ type: 'link', url: value, children: [{ type: 'text', value }] })
+      result.push({
+        type: 'link',
+        url: value,
+        children: [wrapText(value, current.types) as any]
+      })
     }
     else if (current.type === 'text_link') {
       result.push({
         type: 'link',
         url: current.url || '',
-        children: [{ type: 'text', value }]
+        children: [wrapText(value, current.types) as any]
       })
     }
-    else if (current.type === 'bold') {
+    else if (['bold', 'italic', 'strikethrough'].includes(current.type)) {
       result.push({
-        type: 'strong',
-        children: [{ type: 'text', value }]
-      })
-    }
-    else if (current.type === 'italic') {
-      result.push({
-        type: 'emphasis',
-        children: [{ type: 'text', value }]
-      })
-    }
-    else if (current.type === 'strikethrough') {
-      result.push({
-        type: 'delete',
-        children: [{ type: 'text', value }]
-      })
-    }
-    else if (current.type === 'underline') {
-      // TODO: не поддерживается почему-то
-      result.push({
-        type: 'text',
-        value
+        type: convertTgTypeToMdast(current.type) as any,
+        children: [wrapText(value, current.types) as any]
       })
     }
     else if (current.type === 'code') {
@@ -86,6 +63,7 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
         value,
       })
     }
+    // TODO: underline сделать тэгом
     else {
       result.push({ type: 'text', value })
     }
@@ -103,7 +81,7 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
     }
   }
 
-  const theLast = entities[entities.length - 1]
+  const theLast = compactedEntities[compactedEntities.length - 1]
   // add the last line
   if (theLast.offset + theLast.length < rawText.length) {
     result.push({
@@ -121,11 +99,60 @@ export function convertTgInputToMdast(rawText: string, entities?: TgEntity[]): M
   }
 }
 
-// function makeInlineEl() {
-//
-// }
+function compactEntities(entities: TgEntity[]): TgEntity[] {
+  const result: TgEntity[] = []
 
-// TODO: проверить вложенность b в i
+  for (let i = 0; i < entities.length; i++) {
+    const current = entities[i]
+    const theSamePositionTypes: TgEntityType[] = []
+
+    current.types = theSamePositionTypes
+
+    result.push(current)
+
+    for (let n = i + 1; n < entities.length; n++) {
+      const theNext = entities[n]
+
+      if (current.length === theNext.length && current.offset === theNext.offset) {
+        theSamePositionTypes.push(theNext.type)
+
+        if (n !== entities.length - 1) {
+          i = n + 1
+        }
+      }
+    }
+
+  }
+
+  return result
+}
+
+function wrapText(value: string, entityTypes?: TgEntityType[]): MdastNode {
+  if (!entityTypes?.length) return {type: 'text', value}
+
+  return {
+    type: convertTgTypeToMdast(entityTypes[0]) as any,
+    children: [wrapText(value, entityTypes.slice(1)) as any]
+  }
+}
+
+function convertTgTypeToMdast(tgType: TgEntityType): string {
+  switch (tgType) {
+    case 'bold':
+      return 'strong'
+    case 'italic':
+      return 'emphasis'
+    case 'underline':
+      return 'underline'
+    case 'strikethrough':
+      return 'delete'
+    case 'code':
+      return 'inlineCode'
+  }
+
+  return tgType
+}
+
 
 //const test1 = '\n\nnorm *bold _italic2_*\n _italic_ __underiline__ ~strikethrough~ `monospace`  [https://google.com](https://google.com) [url](https://google.com/) norm'
 const test1 = 'norm bold italic underiline strikethrough monospace spoiler  https://google.com url'
@@ -160,24 +187,17 @@ const entities2 = [
     url: 'https://google.com/'
   }
 ]
-const test3 = 'norm bold it italic underiline striketrough code url'
+const test3 = 'norm bold it italic'
 const entities3 = [
   { offset: 5, length: 5, type: 'bold' },
   { offset: 10, length: 2, type: 'bold' },
   { offset: 10, length: 2, type: 'italic' },
   { offset: 13, length: 6, type: 'italic' },
-  { offset: 20, length: 10, type: 'underline' },
-  { offset: 31, length: 12, type: 'strikethrough' },
-  { offset: 44, length: 4, type: 'code' },
-  {
-    offset: 49,
-    length: 3,
-    type: 'text_link',
-    url: 'https://google.com/'
-  }
-]
+] as any
 
-const mdast = convertTgInputToMdast(test3, entities3 as any)
+const mdast = convertTgInputToMdast(test1, entities1 as any)
 
-console.log(111, mdast)
+// console.log(111, mdast)
 console.log(222, convertMdastToHtml(mdast))
+
+//console.log(333, compactEntities(entities3))
