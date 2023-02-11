@@ -3,7 +3,6 @@ import TgChat from '../../apiTg/TgChat.js';
 import {ChatEvents, WARN_SIGN} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, TextMessageEvent} from '../../types/MessageEvent.js';
-import {convertTgInputToHtml} from '../../helpers/convertTgInputToHtml.js';
 import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN_CALLBACK,
@@ -11,6 +10,8 @@ import {
   makeCancelBtn,
   SKIP_BTN_CALLBACK
 } from '../../helpers/buttons.js';
+import {convertMdastToHtml} from '../../helpers/convertCommonMdToTgHtml.js';
+import {convertTgInputToMdast} from '../../helpers/convertTgInputToMdast.js';
 
 
 type ResultCallback = (textHtml?: string, cleanText?: string) => void
@@ -85,7 +86,10 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       ChatEvents.TEXT,
       tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
         handleResult(
-          _.trim(convertTgInputToHtml(textMsg.text, textMsg.entities)),
+          _.trim(convertMdastToHtml(convertTgInputToMdast(
+            textMsg.text,
+            textMsg.entities
+          ))),
           _.trim(textMsg.text)
         );
       })
@@ -99,7 +103,10 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
         if (photoMsg.caption) {
           handleResult(
-            _.trim(convertTgInputToHtml(photoMsg.caption, photoMsg.entities)),
+            _.trim(convertMdastToHtml(convertTgInputToMdast(
+              photoMsg.caption,
+              photoMsg.entities
+            ))),
             _.trim(photoMsg.caption)
           );
         }
@@ -117,7 +124,10 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       tgChat.asyncCb(async (videoMsg: PhotoMessageEvent) => {
         if (videoMsg.caption) {
           handleResult(
-            _.trim(convertTgInputToHtml(videoMsg.caption, videoMsg.entities)),
+            _.trim(convertMdastToHtml(convertTgInputToMdast(
+              videoMsg.caption,
+              videoMsg.entities
+            ))),
             _.trim(videoMsg.caption)
           );
         }

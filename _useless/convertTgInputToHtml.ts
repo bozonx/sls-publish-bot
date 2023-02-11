@@ -1,6 +1,6 @@
 import {toHast} from 'mdast-util-to-hast'
 import {html as htmlFormat} from 'telegram-format';
-import {NormalizedTgItem, SUPPORTED_TG_ENTITY_TYPES, SupportedTgEntityType, TgEntity} from '../types/TgEntity.js'
+import {NormalizedTgItem, SUPPORTED_TG_ENTITY_TYPES, SupportedTgEntityType, TgEntity} from '../src/types/TgEntity'
 
 
 /**
