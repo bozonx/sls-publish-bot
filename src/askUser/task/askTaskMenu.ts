@@ -151,7 +151,7 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
               await tgChat.reply(tgChat.app.i18n.message.taskAutoDeleteTimeWasChanged)
 
               onDone()
-            }))
+            }), undefined, tgChat.app.i18n.buttons.clear)
           }
           // else do nothing
         })

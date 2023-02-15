@@ -27,7 +27,7 @@ const PERIOD_MENU_PRESET = {
 export async function askTimePeriod(tgChat: TgChat, onDone: (
   hoursPeriod?: number,
   certainIsoDateTime?: string
-) => void, stepName?: string) {
+) => void, stepName?: string, skipBtnText?: string) {
   // TODO: change msg
   const msg = tgChat.app.i18n.menu.selectPollClose;
   const buttons = [
@@ -47,7 +47,7 @@ export async function askTimePeriod(tgChat: TgChat, onDone: (
       makeBackBtn(tgChat.app.i18n),
       makeCancelBtn(tgChat.app.i18n),
       {
-        text: tgChat.app.i18n.commonPhrases.skip,
+        text: skipBtnText || tgChat.app.i18n.commonPhrases.skip,
         callback_data: PERIOD_MENU_ACTION.skip,
       }
     ],
