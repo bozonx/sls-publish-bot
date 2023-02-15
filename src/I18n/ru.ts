@@ -236,6 +236,7 @@ const dict = {
     cantPostToLogChannel: 'Не удалось записать в канал лога: ',
     noChannel: 'Не найден канал для публикации',
     dateLessThenAutoDelete: 'Выбрана дата меньше чем дата авто удаления поста',
+    dateGreaterThenAutoDelete: 'Выбрана дата больше чем дата авто удаления поста',
     onlyImageAllowed: 'Разрешено прикреплять только картинки',
     onlyVideoAllowed: 'Разрешено прикреплять только видео',
     videoNotSuppoerted: 'Видео не поддерживается в этом формате',

@@ -99,10 +99,20 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
           }
           else if (queryData === TASK_ACTIONS.CHANGE_EXEC_DATE) {
             await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+              const startTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
+              const autoDeleteDateTime = (task as PostponeTgPostTask).autoDeleteDateTime
+
+              if (
+                autoDeleteDateTime && moment(autoDeleteDateTime).unix()
+                <= moment(startTime).unix()
+              ) {
+                await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateGreaterThenAutoDelete}`)
+
+                return
+              }
+
               try {
-                await tgChat.app.tasks.editTask(taskId, {
-                  startTime: makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
-                })
+                await tgChat.app.tasks.editTask(taskId, { startTime })
               }
               catch (e) {
                 await tgChat.reply(tgChat.app.i18n.menu.taskEditError + e)
