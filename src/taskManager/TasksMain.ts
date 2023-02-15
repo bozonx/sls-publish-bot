@@ -98,15 +98,24 @@ export default class TasksMain {
   async editTask(taskId: string, partial: Record<string, any>) {
     if (!this.tasks[taskId]) throw new Error(`Can't find task ${taskId}`)
 
+    const newPartial = { ...partial }
+    // remove params which is null
+    for (const index of Object.keys(newPartial)) {
+      if (newPartial[index] === null) {
+        delete newPartial[index]
+        delete this.tasks[taskId]
+      }
+    }
+
     this.tasks[taskId] = {
       ...this.tasks[taskId],
-      ...partial,
+      ...newPartial,
     }
 
     await this.saveTasks()
 
     this.app.channelLog.info(
-      this.app.i18n.message.taskRemoved + '\n'
+      this.app.i18n.message.taskEdited + '\n'
       + `taskId: ${taskId}\n`
       + await makeTaskDetails(this.tasks[taskId], this.app)
     )
