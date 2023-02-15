@@ -119,7 +119,6 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
               certainIsoDateTime?: string
             ) => {
               let autoDeleteDateTime: string | null = null
-              // TODO: может быть null
 
               if (!hoursPeriod && !certainIsoDateTime) {
                 await tgChat.reply(tgChat.app.i18n.commonPhrases.removedDeleteTimer)

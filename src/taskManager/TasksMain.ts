@@ -100,10 +100,10 @@ export default class TasksMain {
 
     const newPartial = { ...partial }
     // remove params which is null
-    for (const index of Object.keys(newPartial)) {
-      if (newPartial[index] === null) {
-        delete newPartial[index]
-        delete this.tasks[taskId]
+    for (const key of Object.keys(newPartial)) {
+      if (newPartial[key] === null) {
+        delete newPartial[key]
+        delete (this.tasks[taskId] as any)[key]
       }
     }
 
