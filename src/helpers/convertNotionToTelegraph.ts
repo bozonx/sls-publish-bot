@@ -1,5 +1,5 @@
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
-import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
+import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToSimpleTextList} from './convertHelpers.js';
 import TgChat from '../apiTg/TgChat.js';

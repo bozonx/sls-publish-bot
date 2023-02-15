@@ -3,7 +3,7 @@
  */
 
 import App from '../App.js';
-import {TelegraphNode} from './telegraphCli/types.js';
+import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {Account, PageList, Telegraph, upload} from "better-telegraph";
 import {makeTelegraPhUrl} from '../helpers/helpers.js';
 

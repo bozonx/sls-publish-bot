@@ -1,5 +1,5 @@
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {TelegraphNode} from '../apiTelegraPh/telegraphCli/types.js';
+import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
 
 
