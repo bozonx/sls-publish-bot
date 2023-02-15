@@ -2,7 +2,7 @@ import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
-import {askDateTime} from '../common/askDateTime.js';
+import {askDateTime} from './askDateTime.js';
 import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN_CALLBACK,
@@ -17,7 +17,7 @@ import {ChatEvents} from '../../types/constants.js';
 type OnDoneType = (messageIds: number[], chatId: number, startTime: string) => void;
 
 
-export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType) {
+export async function askSharePost(msg: string, tgChat: TgChat, onDone: OnDoneType) {
   const buttons = [
     [
       makeBackBtn(tgChat.app.i18n),

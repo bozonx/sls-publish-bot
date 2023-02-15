@@ -1,7 +1,7 @@
 import {askTasksListMenu, TASK_LIST_ACTIONS, TASKS_MAIN_STEP} from './askTasksListMenu.js';
 import {askTaskMenu} from './askTaskMenu.js';
 import TgChat from '../../apiTg/TgChat.js';
-import {askTaskAdd} from './askTaskAdd.js';
+import {askSharePost} from '../common/askSharePost.js';
 import {askTaskFinishPoll} from './askTaskFinishPoll.js';
 import {
   CloneTgPostTask,
@@ -18,7 +18,7 @@ export async function startTaskMenu(tgChat: TgChat) {
     tgChat,
     tgChat.asyncCb(async (taskId?: string, action?: string) => {
       if (action === TASK_LIST_ACTIONS.DELETE_POST) {
-        return askTaskAdd(tgChat.app.i18n.menu.taskDeletePost, tgChat, tgChat.asyncCb(async (
+        return askSharePost(tgChat.app.i18n.menu.taskDeletePost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string
@@ -37,12 +37,13 @@ export async function startTaskMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.CLONE_POST) {
-        return askTaskAdd(tgChat.app.i18n.menu.taskClonePost, tgChat, tgChat.asyncCb(async (
+        return askSharePost(tgChat.app.i18n.menu.taskClonePost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string
         ) => {
-          await askChat(tgChat.asyncCb(async(toChatId: string | number) => {
+          const msg = tgChat.app.i18n.message.pleaseSelectChatForClone
+          await askChat(msg, tgChat, tgChat.asyncCb(async(toChatId: string | number) => {
             // TODO: а чё поддерживаются сразу несолько чтоли???
             const task: CloneTgPostTask = {
               startTime,
@@ -61,7 +62,7 @@ export async function startTaskMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
-        return askTaskAdd(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (
+        return askSharePost(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string
@@ -80,7 +81,7 @@ export async function startTaskMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.UNPIN_POST) {
-        return askTaskAdd(tgChat.app.i18n.menu.taskUnpinPost, tgChat, tgChat.asyncCb(async (
+        return askSharePost(tgChat.app.i18n.menu.taskUnpinPost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string

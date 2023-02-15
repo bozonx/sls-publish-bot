@@ -2,7 +2,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {ChatEvents} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
-import {handleIncomeMessage} from './askTaskAdd.js';
+import {handleIncomeMessage} from '../common/askSharePost.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
