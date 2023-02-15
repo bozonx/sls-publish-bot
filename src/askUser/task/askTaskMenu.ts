@@ -97,9 +97,7 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
           else if (queryData === TASK_ACTIONS.CHANGE_EXEC_DATE) {
             await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
               try {
-                await tgChat.app.tasks.removeTask(taskId)
-                await tgChat.app.tasks.addTaskSilently({
-                  ...task,
+                await tgChat.app.tasks.editTask(taskId, {
                   startTime: makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
                 })
               }
@@ -115,9 +113,7 @@ export async function askTaskMenu(taskId: string, tgChat: TgChat, onDone: () => 
           else if (queryData === TASK_ACTIONS.CHANGE_AUTO_DELETE_DATE) {
             await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
               try {
-                await tgChat.app.tasks.removeTask(taskId)
-                await tgChat.app.tasks.addTaskSilently({
-                  ...task,
+                await tgChat.app.tasks.editTask(taskId,{
                   autoDeleteDateTime: makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
                 })
               }

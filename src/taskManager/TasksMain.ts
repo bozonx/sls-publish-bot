@@ -92,9 +92,25 @@ export default class TasksMain {
       this.app.i18n.message.taskRemoved + '\n'
       + `taskId: ${taskId}\n`
       + await makeTaskDetails(removedTask, this.app)
-    );
+    )
   }
 
+  async editTask(taskId: string, partial: Record<string, any>) {
+    if (!this.tasks[taskId]) throw new Error(`Can't find task ${taskId}`)
+
+    this.tasks[taskId] = {
+      ...this.tasks[taskId],
+      ...partial,
+    }
+
+    await this.saveTasks()
+
+    this.app.channelLog.info(
+      this.app.i18n.message.taskRemoved + '\n'
+      + `taskId: ${taskId}\n`
+      + await makeTaskDetails(this.tasks[taskId], this.app)
+    )
+  }
 
   //////// Public but for inner use
 

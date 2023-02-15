@@ -246,6 +246,7 @@ const dict = {
     taskDoneSuccessful: 'Задача была успешно выполнена.',
     taskRegistered: 'Задание успешно зарегистрировано',
     taskRemoved: 'Задание было удалено',
+    taskEdited: 'Задание было изменено',
     taskFlushed: 'Задание было выполнено',
     mediaPlaced: 'Новое медиа было установлено',
     removedImg: 'Картинка была удалена',
