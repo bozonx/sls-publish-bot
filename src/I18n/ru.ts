@@ -163,6 +163,7 @@ const dict = {
     dateLabel: {
       postponePost: 'Дата публикации поста',
       deletePost: 'Дата удаления поста',
+      clonePost: 'Дата клонирования поста',
       pinPost: 'Дата прикрепления поста',
       unpinPost: 'Дата открепления поста',
       finishPoll: 'Дата завершения опроса',

@@ -1,4 +1,4 @@
-import {PostponeTgPostTask, TaskItem} from '../types/TaskItem.js';
+import {CloneTgPostTask, PostponeTgPostTask, TaskItem} from '../types/TaskItem.js';
 import moment from 'moment/moment.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
 import App from '../App.js';
@@ -35,6 +35,19 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
     }
     catch (e) {
       resultArr.push(`Chat username: CAN'T GET CHAT ${task.chatId}`)
+    }
+  }
+  if ((task as CloneTgPostTask).toChatId) {
+    try {
+      const res = await app.tg.bot.telegram.getChat((task as CloneTgPostTask).toChatId)
+
+      username = (res as any).username
+
+      resultArr.push(`To chat username: ${username}`);
+      resultArr.push(`To chat id: ${(task as CloneTgPostTask).toChatId}`);
+    }
+    catch (e) {
+      resultArr.push(`Chat username: CAN'T GET TO CHAT ${(task as CloneTgPostTask).toChatId}`)
     }
   }
 

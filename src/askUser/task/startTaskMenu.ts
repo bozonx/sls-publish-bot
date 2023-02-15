@@ -10,6 +10,7 @@ import {
   PinTgPostTask,
   UnpinTgPostTask
 } from '../../types/TaskItem.js';
+import {askChat} from '../common/askChat.js';
 
 
 export async function startTaskMenu(tgChat: TgChat) {
@@ -41,20 +42,22 @@ export async function startTaskMenu(tgChat: TgChat) {
           chatId: number,
           startTime: string
         ) => {
-          // TODO: а чё поддерживаются сразу несолько чтоли???
-          const task: CloneTgPostTask = {
-            startTime,
-            type: 'clonePost',
-            sn: 'telegram',
-            // from chat
-            chatId,
-            messageIds,
-            toChatId: 1
-          }
+          await askChat(tgChat.asyncCb(async(toChatId: string | number) => {
+            // TODO: а чё поддерживаются сразу несолько чтоли???
+            const task: CloneTgPostTask = {
+              startTime,
+              type: 'clonePost',
+              sn: 'telegram',
+              // from chat
+              chatId,
+              messageIds,
+              toChatId
+            }
 
-          await tgChat.app.tasks.addTaskAndLog(task)
-          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
-          await tgChat.steps.to(TASKS_MAIN_STEP)
+            await tgChat.app.tasks.addTaskAndLog(task)
+            await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+            await tgChat.steps.to(TASKS_MAIN_STEP)
+          }))
         }));
       }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
