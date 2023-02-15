@@ -1,5 +1,6 @@
 import TasksMain from './TasksMain.js';
 import {
+  CloneTgPostTask,
   DeleteTgPostTask,
   FinishTgPollTask,
   PinTgPostTask,
@@ -57,6 +58,8 @@ export default class ExecuteTask {
         return await this.executePostponePost(task);
       case TASK_TYPES.deletePost:
         return await this.executeDeletePost(task);
+      case TASK_TYPES.clonePost:
+        return await this.executeClonePost(task);
       case TASK_TYPES.pinPost:
         return await this.executePinPost(task);
       case TASK_TYPES.unpinPost:
@@ -129,6 +132,18 @@ export default class ExecuteTask {
 
     await Promise.all(deleteTask.messageIds.map((msgId) => {
       return this.tasks.app.tg.bot.telegram.deleteMessage(task.chatId, msgId);
+    }))
+  }
+
+  private async executeClonePost(task: TaskItem) {
+    const cloneTask = task as CloneTgPostTask
+
+    await Promise.all(cloneTask.messageIds.map((msgId) => {
+      return this.tasks.app.tg.bot.telegram.copyMessage(
+        cloneTask.toChatId,
+        cloneTask.chatId,
+        msgId
+      )
     }))
   }
 

@@ -3,7 +3,13 @@ import {askTaskMenu} from './askTaskMenu.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askTaskAdd} from './askTaskAdd.js';
 import {askTaskFinishPoll} from './askTaskFinishPoll.js';
-import {DeleteTgPostTask, FinishTgPollTask, PinTgPostTask, UnpinTgPostTask} from '../../types/TaskItem.js';
+import {
+  CloneTgPostTask,
+  DeleteTgPostTask,
+  FinishTgPollTask,
+  PinTgPostTask,
+  UnpinTgPostTask
+} from '../../types/TaskItem.js';
 
 
 export async function startTaskMenu(tgChat: TgChat) {
@@ -30,7 +36,26 @@ export async function startTaskMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.CLONE_POST) {
-        // TODO: add
+        return askTaskAdd(tgChat.app.i18n.menu.taskClonePost, tgChat, tgChat.asyncCb(async (
+          messageIds: number[],
+          chatId: number,
+          startTime: string
+        ) => {
+          // TODO: а чё поддерживаются сразу несолько чтоли???
+          const task: CloneTgPostTask = {
+            startTime,
+            type: 'clonePost',
+            sn: 'telegram',
+            // from chat
+            chatId,
+            messageIds,
+            toChatId: 1
+          }
+
+          await tgChat.app.tasks.addTaskAndLog(task)
+          await tgChat.reply(tgChat.app.i18n.message.taskRegistered)
+          await tgChat.steps.to(TASKS_MAIN_STEP)
+        }));
       }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
         return askTaskAdd(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (

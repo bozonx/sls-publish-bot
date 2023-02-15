@@ -6,6 +6,7 @@ import {PrimitiveMediaGroup} from './types.js';
 export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
   postponePost: 'postponePost',
   deletePost: 'deletePost',
+  clonePost: 'clonePost',
   pinPost: 'pinPost',
   unpinPost: 'unpinPost',
   finishPoll: 'finishPoll',
@@ -14,6 +15,7 @@ export const TASK_TYPES: Record<TaskTypes, TaskTypes> = {
 
 export type TaskTypes = 'postponePost'
   | 'deletePost'
+  | 'clonePost'
   | 'pinPost'
   | 'unpinPost'
   | 'finishPoll';
@@ -32,7 +34,13 @@ export interface PostponeTgPostTask extends TaskTgBase {
 
 export interface DeleteTgPostTask extends TaskTgBase {
   type: 'deletePost'
-  messageIds: number[];
+  messageIds: number[]
+}
+
+export interface CloneTgPostTask extends TaskTgBase {
+  type: 'clonePost'
+  messageIds: number[]
+  toChatId: number | string
 }
 
 export interface PinTgPostTask extends TaskTgBase {
