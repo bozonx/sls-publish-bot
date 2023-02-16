@@ -3,12 +3,11 @@ import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToPlainText} from './convertHelpers.js';
 import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
-import App from '../App.js';
 
 
 export async function convertNotionToTelegraph(
-  app: App,
-  blocks: NotionBlocks
+  blocks: NotionBlocks,
+  imageUploader: (url: string) => Promise<string>
 ): Promise<TelegraphNode[]> {
   const result: TelegraphNode[] = []
   let ulElIndex = -1
@@ -18,7 +17,7 @@ export async function convertNotionToTelegraph(
     let children: TelegraphNode[] = []
 
     if ((block as any).children) {
-      children = await convertNotionToTelegraph(app, (block as any).children)
+      children = await convertNotionToTelegraph((block as any).children, imageUploader)
     }
 
     if (block.type !== NOTION_BLOCK_TYPES.bulleted_list_item) {
@@ -31,8 +30,7 @@ export async function convertNotionToTelegraph(
 
     switch (block.type) {
       case NOTION_BLOCK_TYPES.image:
-        const telegraphImgUrl = await app.telegraPh
-          .uploadImage((block as any).image.file.url)
+        const uploadedImgUrl = await imageUploader((block as any).image.file.url)
         const caption = richTextToTelegraphNodes((block as any).image.caption)
 
         if (caption.length) {
@@ -42,7 +40,7 @@ export async function convertNotionToTelegraph(
               {
                 tag: 'img',
                 attrs: {
-                  src: telegraphImgUrl,
+                  src: uploadedImgUrl,
                 },
               },
               {
@@ -55,7 +53,7 @@ export async function convertNotionToTelegraph(
           result.push({
             tag: 'img',
             attrs: {
-              src: telegraphImgUrl,
+              src: uploadedImgUrl,
               alt: 'alt',
               title: 'title',
             }
@@ -180,6 +178,10 @@ export async function convertNotionToTelegraph(
   return result
 }
 
+
+// export async function telegraphImageUploader(url: string, app: App): Promise<string> {
+//   return app.telegraPh.uploadImage(url)
+// }
 
 
 //const aa = 'форматированный текст _ наклонный _ * жирный * __ подчёркнутый __ ~ перечёркнутый ~'

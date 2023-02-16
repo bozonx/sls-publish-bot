@@ -17,7 +17,10 @@ export async function makeFinalArticleNodes(
 ): Promise<TelegraphNode[]> {
   const footerStr = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
   const trimmedArticle = trimPageBlocks(articleBlocks)
-  const telegraPhContent = await convertNotionToTelegraph(tgChat.app, trimmedArticle)
+  const telegraPhContent = await convertNotionToTelegraph(
+    trimmedArticle,
+    (url: string) => tgChat.app.telegraPh.uploadImage(url)
+  )
   // add footer
   if (footerStr) {
     const convertedFooter = parseMarkdown(footerStr) as any[]
