@@ -47,6 +47,8 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
       return
     }
 
+    //console.log(JSON.stringify(pageBlocks, null, 2))
+
     if (parsedContentItem.type === PUBLICATION_TYPES.article && !pageBlocks) {
       await tgChat.reply(WARN_SIGN + ' ' + tgChat.app.i18n.errors.articleNeedText)
       await tgChat.steps.back()

@@ -6,6 +6,8 @@ import {richTextToHtml, richTextToHtmlCodeBlock} from './convertHelpersHtml.js';
 import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
 
 
+// TODO: наверное сначало конвертировать в hast дерево
+
 export function convertNotionToGenericHtml(blocks: NotionBlocks): string {
   const result: string[] = []
   let ulElIndex = -1
