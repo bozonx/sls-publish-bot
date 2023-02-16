@@ -1,11 +1,10 @@
 import _ from 'lodash';
-import {parseMarkdown} from 'better-telegraph'
+import {parseMarkdown, NodeElement} from 'better-telegraph'
 import TgChat from '../apiTg/TgChat.js';
 import {makeTagsString} from '../lib/common.js';
 import {registerTgTaskOnlyText} from './registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import {convertCommonMdToTgHtml} from '../helpers/convertCommonMdToTgHtml.js';
-import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {convertNotionToTelegraph} from '../helpers/convertNotionToTelegraph.js';
 import {trimPageBlocks} from '../helpers/convertHelpers.js';
 
@@ -14,7 +13,7 @@ export async function makeFinalArticleNodes(
   blogName: string,
   tgChat: TgChat,
   articleBlocks: NotionBlocks,
-): Promise<TelegraphNode[]> {
+): Promise<NodeElement[]> {
   const footerStr = tgChat.app.blogs[blogName].sn.telegram?.articleFooter
   const trimmedArticle = trimPageBlocks(articleBlocks)
   const telegraPhContent = await convertNotionToTelegraph(

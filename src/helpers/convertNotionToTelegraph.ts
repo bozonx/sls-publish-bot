@@ -1,5 +1,5 @@
+import {NodeElement} from 'better-telegraph';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
-import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToPlainText} from './convertHelpers.js';
 import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
@@ -8,13 +8,13 @@ import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
 export async function convertNotionToTelegraph(
   blocks: NotionBlocks,
   imageUploader: (url: string) => Promise<string>
-): Promise<TelegraphNode[]> {
-  const result: TelegraphNode[] = []
+): Promise<NodeElement[]> {
+  const result: NodeElement[] = []
   let ulElIndex = -1
   let olElIndex = -1
 
   for (const block of blocks) {
-    let children: TelegraphNode[] = []
+    let children: NodeElement[] = []
 
     if ((block as any).children) {
       children = await convertNotionToTelegraph((block as any).children, imageUploader)
@@ -54,8 +54,8 @@ export async function convertNotionToTelegraph(
             tag: 'img',
             attrs: {
               src: uploadedImgUrl,
-              alt: 'alt',
-              title: 'title',
+              // alt: 'alt',
+              // title: 'title',
             }
           })
         }
@@ -100,7 +100,7 @@ export async function convertNotionToTelegraph(
         }
         break;
       case NOTION_BLOCK_TYPES.bulleted_list_item:
-        const liItem: TelegraphNode = {
+        const liItem: NodeElement = {
           tag: 'li',
           children: [
             ...richTextToTelegraphNodes((block as any)?.bulleted_list_item?.rich_text),
@@ -122,7 +122,7 @@ export async function convertNotionToTelegraph(
 
         break;
       case NOTION_BLOCK_TYPES.numbered_list_item:
-        const liItemNum: TelegraphNode = {
+        const liItemNum: NodeElement = {
           tag: 'li',
           children: [
             ...richTextToTelegraphNodes((block as any)?.numbered_list_item?.rich_text),
@@ -156,7 +156,7 @@ export async function convertNotionToTelegraph(
       case NOTION_BLOCK_TYPES.code:
         result.push({
           tag: 'pre',
-          attrs: {lang: (block as any)?.code?.language},
+          attrs: {lang: (block as any)?.code?.language} as any,
           children: [
             richTextToPlainText((block as any)?.code?.rich_text),
             ...children,

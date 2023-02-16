@@ -1,12 +1,12 @@
-import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
-import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
+import {NodeElement} from 'better-telegraph';
 import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
+import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
+import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
 
 
 export function richTextToTelegraphNodes(
   richText?: TextRichTextItemResponse[]
-): (TelegraphNode | string)[] {
+): (NodeElement | string)[] {
   if (!richText) return []
   else if (!richText.length) return []
 
@@ -25,8 +25,8 @@ function toTelegraPh(
   text: string,
   annotations: NotionAnnotation,
   link?: string | null
-): TelegraphNode | string {
-  let preparedText: TelegraphNode | string = htmlFormat.escape(text)
+): NodeElement | string {
+  let preparedText: NodeElement | string = htmlFormat.escape(text)
 
   if (link) {
     preparedText = {

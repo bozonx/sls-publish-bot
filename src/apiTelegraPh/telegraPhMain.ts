@@ -1,10 +1,5 @@
-/*
- * Взято из https://github.com/husky-dev/telegraph-cli
- */
-
 import App from '../App.js';
-import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
-import {Account, PageList, Telegraph, upload} from "better-telegraph";
+import {Account, PageList, Telegraph, upload, NodeElement} from "better-telegraph";
 import {makeTelegraPhUrl} from '../helpers/helpers.js';
 
 
@@ -15,30 +10,12 @@ export default class TelegraPhMain {
 
   constructor(app: App) {
     this.app = app;
-    // const api = new Telegraph({
-    //   accessToken: this.app.appConfig.telegraPhToken,
-    // });
-    //this.api = getApi({ token: this.app.appConfig.telegraPhToken });
     this.api = new Telegraph({
       accessToken: this.app.appConfig.telegraPhToken,
     });
   }
 
   async init() {
-
-
-    // const res = await this.api.getPage(
-    //   'Narushennaya-logika-v-putinskoj-propagande-09-26',
-    //   { return_content: true }
-    // );
-
-    //const res = await this.api.getAccountInfo({});
-
-    //await this.create(0, 'some title');
-
-    // const md = `## ttt\ntext*dd* _sdf_`
-    //
-    // console.log(11111, parseMarkdownStr(md));
   }
 
 
@@ -57,7 +34,7 @@ export default class TelegraPhMain {
    * see https://www.npmjs.com/package/better-telegraph#create
    * @return {string} path like 'some-title-10-30-3'
    */
-  async create(blogName: string, title: string, content: TelegraphNode[]): Promise<string> {
+  async create(blogName: string, title: string, content: NodeElement[]): Promise<string> {
     const res = await this.api.create({
       title,
       content,

@@ -61,8 +61,8 @@ export async function convertNotionToHast(
             tagName: 'img',
             properties: {
               src: uploadedImgUrl,
-              alt: 'alt',
-              title: 'title',
+              // alt: 'alt',
+              // title: 'title',
             },
             children: []
           })
