@@ -3,7 +3,7 @@ import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
 import {richTextToSimpleTextList} from './convertHelpers.js';
 import {richTextToMdV2, richTextToMdV2CodeBlock} from './convertHelpersMdV2.js';
-import {makeMdImageString} from './convertHelpersCommonMd.js';
+import {makeMdImageString} from './convertHelpers.js';
 
 
 export function convertNotionToPrettyMdV2(notionBlocks: NotionBlocks, skipImage = false): string {
