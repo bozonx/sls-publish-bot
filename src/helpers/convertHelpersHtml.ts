@@ -44,21 +44,23 @@ function toHtml(
     if (annotations[decorationName] !== true) continue
 
     if (decorationName === 'bold') {
+      // it uses <b>
       preparedText = htmlFormat.bold(preparedText)
     }
     else if (decorationName === 'italic') {
+      // it uses <i>
       preparedText = htmlFormat.italic(preparedText)
     }
     else if (decorationName === 'strikethrough') {
-      // TODO: должно быть s, strike, del
+      // it uses <s>
       preparedText = htmlFormat.strikethrough(preparedText)
     }
     else if (decorationName === 'underline') {
-      // TODO: u, ins
+      // it uses <u>
       preparedText = htmlFormat.underline(preparedText)
     }
     else if (decorationName === 'code') {
-      // TODO: должно быть code
+      // it uses <code>
       preparedText = htmlFormat.monospace(preparedText)
     }
     // else no formatting
