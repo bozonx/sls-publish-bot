@@ -1,5 +1,5 @@
 import {fromMarkdown} from 'mdast-util-from-markdown'
-import {convertMdastToHtml} from './convertMdastToHtml.js';
+import {convertMdastToTgHtml} from './convertMdastToTgHtml.js';
 
 
 /**
@@ -21,7 +21,7 @@ export function convertCommonMdToTgHtml(mdStr?: string): string | undefined {
     // mdastExtensions: [gfmFromMarkdown()],
   } as any)
 
-  return preSpaces + convertMdastToHtml(tree).replace(/\n$/, '')
+  return preSpaces + convertMdastToTgHtml(tree).replace(/\n$/, '')
 }
 
 

@@ -10,13 +10,13 @@ const TO_MARKDOWN_OPTIONS = {
 } as any
 
 
-export function convertMdastToHtml(tree: Node): string {
+export function convertMdastToTgHtml(tree: Node): string {
   return toMarkdown(tree, {
     ...TO_MARKDOWN_OPTIONS,
     handlers: {
       heading: (node, parent, state, info): string => {
         return `<b>`
-          + _.trim(convertMdastToHtml({
+          + _.trim(convertMdastToTgHtml({
             type: 'root',
             children: node.children
           }))
@@ -30,7 +30,7 @@ export function convertMdastToHtml(tree: Node): string {
       },
       emphasis: (node, parent, state, info): string => {
         return `<i>`
-          + convertMdastToHtml({
+          + convertMdastToTgHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')
@@ -38,7 +38,7 @@ export function convertMdastToHtml(tree: Node): string {
       },
       strong: (node, parent, state, info): string => {
         return `<b>`
-          + convertMdastToHtml({
+          + convertMdastToTgHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')
@@ -46,7 +46,7 @@ export function convertMdastToHtml(tree: Node): string {
       },
       delete: (node, parent, state, info): string => {
         return `<s>`
-          + convertMdastToHtml({
+          + convertMdastToTgHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')
@@ -54,7 +54,7 @@ export function convertMdastToHtml(tree: Node): string {
       },
       link: (node, parent, state, info): string => {
         return `<a href="${node.url}">`
-          + convertMdastToHtml({
+          + convertMdastToTgHtml({
             type: 'root',
             children: node.children
           }).replace(/\n$/, '')

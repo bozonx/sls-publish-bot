@@ -11,7 +11,7 @@ import {
   SKIP_BTN_CALLBACK
 } from '../../helpers/buttons.js';
 import {convertTgInputToMdast} from '../../helpers/convertTgInputToMdast.js';
-import {convertMdastToHtml} from '../../helpers/convertMdastToHtml.js';
+import {convertMdastToTgHtml} from '../../helpers/convertMdastToTgHtml.js';
 
 
 type ResultCallback = (textHtml?: string, cleanText?: string) => void
@@ -86,7 +86,7 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       ChatEvents.TEXT,
       tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
         handleResult(
-          _.trim(convertMdastToHtml(convertTgInputToMdast(
+          _.trim(convertMdastToTgHtml(convertTgInputToMdast(
             textMsg.text,
             textMsg.entities
           ))),
@@ -103,7 +103,7 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
         if (photoMsg.caption) {
           handleResult(
-            _.trim(convertMdastToHtml(convertTgInputToMdast(
+            _.trim(convertMdastToTgHtml(convertTgInputToMdast(
               photoMsg.caption,
               photoMsg.entities
             ))),
@@ -124,7 +124,7 @@ function listenToText(tgChat: TgChat, state: BaseState, handleResult: ResultCall
       tgChat.asyncCb(async (videoMsg: PhotoMessageEvent) => {
         if (videoMsg.caption) {
           handleResult(
-            _.trim(convertMdastToHtml(convertTgInputToMdast(
+            _.trim(convertMdastToTgHtml(convertTgInputToMdast(
               videoMsg.caption,
               videoMsg.entities
             ))),

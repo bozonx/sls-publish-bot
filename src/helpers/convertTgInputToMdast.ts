@@ -294,4 +294,4 @@ const entities4 =  [
 // const mdast = convertTgInputToMdast(test4, entities4 as any)
 //
 // // console.log(111, mdast)
-// console.log(222, convertMdastToHtml(mdast))
+// console.log(222, convertMdastToTgHtml(mdast))
