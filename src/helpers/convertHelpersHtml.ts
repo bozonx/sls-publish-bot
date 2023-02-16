@@ -1,11 +1,10 @@
 import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
 import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {richTextToSimpleTextList} from './convertHelpers.js';
+import {richTextToPlainText} from './convertHelpers.js';
 
 
 export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {
-  // TODO: review
   if (!richText) return ''
   else if (!richText.length) return ''
 
@@ -25,7 +24,7 @@ export function richTextToHtmlCodeBlock(
 ): string {
   if (!richText.length) return ''
 
-  return htmlFormat.monospaceBlock(richTextToSimpleTextList(richText), language)
+  return htmlFormat.monospaceBlock(richTextToPlainText(richText), language)
 }
 
 function toHtml(

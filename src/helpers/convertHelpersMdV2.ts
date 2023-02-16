@@ -1,7 +1,7 @@
 import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
 import {markdownv2 as mdFormat} from 'telegram-format/dist/source/markdownv2.js';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {richTextToSimpleTextList} from './convertHelpers.js';
+import {richTextToPlainText} from './convertHelpers.js';
 
 
 /**
@@ -27,7 +27,7 @@ export function richTextToMdV2CodeBlock(
 ): string {
   if (!richText.length) return ''
 
-  return mdFormat.monospaceBlock(richTextToSimpleTextList(richText), language);
+  return mdFormat.monospaceBlock(richTextToPlainText(richText), language);
 }
 
 

@@ -3,9 +3,9 @@ import {NotionBlocks} from '../types/notion.js';
 
 
 /**
- * Make simple text without formatting from Rich text items
+ * Make plain text string without formatting from Rich text items
  */
-export function richTextToSimpleTextList(richText?: TextRichTextItemResponse[]): string {
+export function richTextToPlainText(richText?: TextRichTextItemResponse[]): string {
   if (!richText) return ''
   else if (!richText.length) return ''
 

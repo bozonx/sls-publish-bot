@@ -2,7 +2,7 @@ import _ from 'lodash'
 import {html as htmlFormat} from 'telegram-format'
 import {NOTION_BLOCK_TYPES} from '../types/notion.js'
 import {NotionBlocks} from '../types/notion.js'
-import {richTextToSimpleTextList} from './convertHelpers.js'
+import {richTextToPlainText} from './convertHelpers.js'
 import {richTextToHtml, richTextToHtmlCodeBlock} from './convertHelpersHtml.js';
 
 
@@ -38,17 +38,17 @@ export function convertNotionToTgHtml(notionBlocks: NotionBlocks): string {
     switch (block.type) {
       case NOTION_BLOCK_TYPES.heading_1:
         result += htmlFormat.bold(
-          richTextToSimpleTextList((block as any)?.heading_1?.rich_text
+          richTextToPlainText((block as any)?.heading_1?.rich_text
           )) + '\n\n'
         break
       case NOTION_BLOCK_TYPES.heading_2:
         result += htmlFormat.bold(
-          richTextToSimpleTextList((block as any)?.heading_2?.rich_text
+          richTextToPlainText((block as any)?.heading_2?.rich_text
           )) + '\n\n'
         break
       case NOTION_BLOCK_TYPES.heading_3:
         result += htmlFormat.bold(
-          richTextToSimpleTextList((block as any)?.heading_3?.rich_text
+          richTextToPlainText((block as any)?.heading_3?.rich_text
           )) + '\n\n'
         break
       case NOTION_BLOCK_TYPES.paragraph:

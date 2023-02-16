@@ -1,7 +1,7 @@
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {NotionBlocks} from '../types/notion.js';
-import {richTextToSimpleTextList} from './convertHelpers.js';
+import {richTextToPlainText} from './convertHelpers.js';
 import TgChat from '../apiTg/TgChat.js';
 import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
 
@@ -68,21 +68,21 @@ export async function convertNotionToTelegraph(
       case NOTION_BLOCK_TYPES.heading_1:
         result.push({
           tag: 'h3',
-          children: [richTextToSimpleTextList((block as any)?.heading_1?.rich_text)],
+          children: [richTextToPlainText((block as any)?.heading_1?.rich_text)],
         })
 
         break
       case NOTION_BLOCK_TYPES.heading_2:
         result.push({
           tag: 'h3',
-          children: [richTextToSimpleTextList((block as any)?.heading_2?.rich_text)],
+          children: [richTextToPlainText((block as any)?.heading_2?.rich_text)],
         })
 
         break;
       case NOTION_BLOCK_TYPES.heading_3:
         result.push({
           tag: 'h4',
-          children: [richTextToSimpleTextList((block as any)?.heading_3?.rich_text)],
+          children: [richTextToPlainText((block as any)?.heading_3?.rich_text)],
         })
 
         break;
@@ -162,7 +162,7 @@ export async function convertNotionToTelegraph(
           tag: 'pre',
           attrs: {lang: (block as any)?.code?.language},
           children: [
-            richTextToSimpleTextList((block as any)?.code?.rich_text),
+            richTextToPlainText((block as any)?.code?.rich_text),
             ...children,
           ],
         });

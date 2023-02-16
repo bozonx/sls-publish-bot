@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {NOTION_BLOCK_TYPES} from '../types/notion.js';
 import {NotionBlocks} from '../types/notion.js';
-import {richTextToSimpleTextList} from './convertHelpers.js';
+import {richTextToPlainText} from './convertHelpers.js';
 import {richTextToHtml, richTextToHtmlCodeBlock} from './convertHelpersHtml.js';
 import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
 
@@ -33,7 +33,7 @@ export function convertNotionToGenericHtml(blocks: NotionBlocks): string {
       case NOTION_BLOCK_TYPES.heading_1:
         result.push(
           '<h1>'
-          + richTextToSimpleTextList((block as any)?.heading_1?.rich_text)
+          + richTextToPlainText((block as any)?.heading_1?.rich_text)
           + '</h1>'
         )
 
@@ -41,7 +41,7 @@ export function convertNotionToGenericHtml(blocks: NotionBlocks): string {
       case NOTION_BLOCK_TYPES.heading_2:
         result.push(
           '<h2>'
-          + richTextToSimpleTextList((block as any)?.heading_2?.rich_text)
+          + richTextToPlainText((block as any)?.heading_2?.rich_text)
           + '</h2>'
         )
 
@@ -49,7 +49,7 @@ export function convertNotionToGenericHtml(blocks: NotionBlocks): string {
       case NOTION_BLOCK_TYPES.heading_3:
         result.push(
           '<h3>'
-          + richTextToSimpleTextList((block as any)?.heading_3?.rich_text)
+          + richTextToPlainText((block as any)?.heading_3?.rich_text)
           + '</h3>'
         )
 
