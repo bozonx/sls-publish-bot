@@ -43,7 +43,7 @@ function toTelegraPh(
 
     if (decorationName === 'bold') {
       preparedText = {
-        tag: 'strong',
+        tag: 'b',
         children: [preparedText],
       }
     }

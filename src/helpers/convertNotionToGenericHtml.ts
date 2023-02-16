@@ -6,6 +6,7 @@ import {richTextToHtml, richTextToHtmlCodeBlock} from './convertHelpersHtml.js';
 import {richTextToTelegraphNodes} from './convertHelpersTelegraPh.js';
 
 
+// TODO: а может лучше из Telegraph дерева конвертнуть
 // TODO: наверное сначало конвертировать в hast дерево
 
 export function convertNotionToGenericHtml(blocks: NotionBlocks): string {
