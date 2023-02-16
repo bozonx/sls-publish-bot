@@ -9,7 +9,9 @@ import {askTimePeriod} from '../common/askTimePeriod.js';
 
 
 export async function startTaskMenu(taskId: string, tgChat: TgChat, onDone: () => void) {
-  return askTaskMenu(taskId, tgChat, tgChat.asyncCb(async (action?: keyof typeof TASK_ACTIONS) => {
+  const task = tgChat.app.tasks.getTask(taskId)
+
+  return askTaskMenu(taskId, tgChat, tgChat.asyncCb(async (action: keyof typeof TASK_ACTIONS) => {
     if (action === TASK_ACTIONS.DELETE) {
       try {
         await tgChat.app.tasks.removeTask(taskId)
@@ -71,7 +73,7 @@ export async function startTaskMenu(taskId: string, tgChat: TgChat, onDone: () =
         // validate that selected date is greater than auto-delete date
         else if (
           certainIsoDateTime && moment(certainIsoDateTime).unix()
-          <= moment(task.startTime).unix()
+          <= moment((task as PostponeTgPostTask).startTime).unix()
         ) {
           await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
 
@@ -79,7 +81,7 @@ export async function startTaskMenu(taskId: string, tgChat: TgChat, onDone: () =
         }
 
         if (hoursPeriod) {
-          autoDeleteDateTime = replaceHorsInDate(task.startTime, hoursPeriod)
+          autoDeleteDateTime = replaceHorsInDate((task as PostponeTgPostTask).startTime, hoursPeriod)
         }
         else {
           autoDeleteDateTime = certainIsoDateTime || null
