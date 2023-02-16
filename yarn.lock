@@ -998,6 +998,11 @@ stringify-entities@^4.0.0:
     character-entities-html4 "^2.0.0"
     character-entities-legacy "^3.0.0"
 
+telegraf-entity@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/telegraf-entity/-/telegraf-entity-1.1.0.tgz#8ba8d629f1c1e7d734d6a952102cb0bab6c14fe5"
+  integrity sha512-+zXO4l1pCHVYzNREcBBK3BW07EGETJM6VjOD+8WGU59IiC3eyANOGFZTcu+S9rCdblvnQAWm91KY+kt2M37m6w==
+
 telegraf@^4.11.2:
   version "4.11.2"
   resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.11.2.tgz#1cf4e74418b4fb6eaddd11a74cc50b0971c06c35"

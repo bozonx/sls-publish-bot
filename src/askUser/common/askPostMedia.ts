@@ -17,8 +17,7 @@ import {
   makeOkBtn, OK_BTN_CALLBACK,
   SKIP_BTN_CALLBACK
 } from '../../helpers/buttons.js';
-import {convertTgInputToMdast} from '../../helpers/convertTgInputToMdast.js';
-import {convertMdastToTgHtml} from '../../helpers/convertMdastToTgHtml.js';
+import {convertTgInputToHtml} from '../../helpers/convertTgInputToHtml.js';
 
 
 export type AskPostMediaDone = (mediaGroup: MediaGroupItem[], captionHtml?: string) => void
@@ -59,10 +58,10 @@ export async function askPostMedia(
         ChatEvents.PHOTO,
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
           if (photoMsg.caption && !captionHtml) {
-            captionHtml = convertMdastToTgHtml(convertTgInputToMdast(
+            captionHtml = convertTgInputToHtml(
               photoMsg.caption,
               photoMsg.entities
-            ))
+            )
           }
 
           if (!onlyOneImage) {
@@ -83,10 +82,10 @@ export async function askPostMedia(
         ChatEvents.VIDEO,
         tgChat.asyncCb(async (videoMsg: VideoMessageEvent) => {
           if (videoMsg.caption && !captionHtml) {
-            captionHtml = convertMdastToTgHtml(convertTgInputToMdast(
+            captionHtml = convertTgInputToHtml(
               videoMsg.caption,
               videoMsg.entities
-            ))
+            )
           }
 
           if (!onlyOneImage) {
