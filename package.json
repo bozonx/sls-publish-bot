@@ -27,6 +27,7 @@
     "better-telegraph": "^2.1.1",
     "dotenv": "^16.0.3",
     "hast-util-from-html": "^1.0.1",
+    "hast-util-to-html": "^8.0.4",
     "hast-util-to-mdast": "^9.0.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",

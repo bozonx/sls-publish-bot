@@ -1,39 +1,40 @@
+import {Element, Text} from 'hast'
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
 import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
 
 
-export function richTextToTelegraphNodes(
+export function richTextToHastElements(
   richText?: TextRichTextItemResponse[]
-): (TelegraphNode | string)[] {
+): (Element | Text)[] {
   if (!richText) return []
   else if (!richText.length) return []
 
   return richText.map((item: TextRichTextItemResponse) => {
     switch (item.type) {
       case NOTION_RICH_TEXT_TYPES.text:
-        return toTelegraPh(item.text.content, item.annotations, item.href)
+        return toHastElement(item.text.content, item.annotations, item.href)
       default:
-        return item.plain_text
+        return { type: 'text', value: item.plain_text }
     }
   });
 }
 
 
-function toTelegraPh(
+function toHastElement(
   text: string,
   annotations: NotionAnnotation,
   link?: string | null
-): TelegraphNode | string {
-  let preparedText: TelegraphNode | string = htmlFormat.escape(text)
+): Element | Text {
+  let preparedText: Element | Text = { type: 'text', value: htmlFormat.escape(text) }
 
   if (link) {
     preparedText = {
-      tag: 'a',
-      attrs: {href: link},
+      type: 'element',
+      tagName: 'a',
+      properties: { href: link },
       children: [preparedText],
-    };
+    }
   }
 
   for (const index of Object.keys(annotations)) {
@@ -43,31 +44,36 @@ function toTelegraPh(
 
     if (decorationName === 'bold') {
       preparedText = {
-        tag: 'b',
+        type: 'element',
+        tagName: 'b',
         children: [preparedText],
       }
     }
     else if (decorationName === 'italic') {
       preparedText = {
-        tag: 'i',
+        type: 'element',
+        tagName: 'i',
         children: [preparedText],
       }
     }
     else if (decorationName === 'strikethrough') {
       preparedText = {
-        tag: 's',
+        type: 'element',
+        tagName: 's',
         children: [preparedText],
       }
     }
     else if (decorationName === 'underline') {
       preparedText = {
-        tag: 'u',
+        type: 'element',
+        tagName: 'u',
         children: [preparedText],
       }
     }
     else if (decorationName === 'code') {
       preparedText = {
-        tag: 'code',
+        type: 'element',
+        tagName: 'code',
         children: [preparedText],
       }
     }
