@@ -1,5 +1,4 @@
 import {askTasksListMenu, TASK_LIST_ACTIONS, TASKS_MAIN_STEP} from './askTasksListMenu.js';
-import {askTaskMenu} from './askTaskMenu.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askSharePost} from '../common/askSharePost.js';
 import {askTaskFinishPoll} from './askTaskFinishPoll.js';
@@ -11,6 +10,7 @@ import {
   UnpinTgPostTask
 } from '../../types/TaskItem.js';
 import {askChat} from '../common/askChat.js';
+import {startTaskMenu} from './startTaskMenu.js';
 
 
 export async function startTaskListMenu(tgChat: TgChat) {
@@ -119,7 +119,7 @@ export async function startTaskListMenu(tgChat: TgChat) {
         }));
       }
       else if (taskId) {
-        return askTaskMenu(taskId, tgChat, tgChat.asyncCb(async () => {
+        return startTaskMenu(taskId, tgChat, tgChat.asyncCb(async () => {
           await tgChat.steps.to(TASKS_MAIN_STEP)
         }));
       }
