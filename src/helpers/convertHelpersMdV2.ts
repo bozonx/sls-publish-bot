@@ -37,31 +37,34 @@ function toMarkDownV2(
   link?: string | null
 ): string {
   // escape text for telegram requirements
-  let preparedText = mdFormat.escape(text);
+  let preparedText = mdFormat.escape(text)
 
   if (link) {
-    preparedText = mdFormat.url(preparedText, link);
+    preparedText = mdFormat.url(preparedText, link)
   }
 
-  // TODO: а если несколько сразу ???
+  for (const index of Object.keys(annotations)) {
+    const decorationName = index as keyof NotionAnnotation
 
-  if (annotations.bold) {
-    return mdFormat.bold(preparedText);
+    if (annotations[decorationName] !== true) continue
+
+    if (decorationName === 'bold') {
+      preparedText = mdFormat.bold(preparedText)
+    }
+    else if (decorationName === 'italic') {
+      preparedText = mdFormat.italic(preparedText)
+    }
+    else if (decorationName === 'strikethrough') {
+      preparedText = mdFormat.strikethrough(preparedText)
+    }
+    else if (decorationName === 'underline') {
+      preparedText = mdFormat.underline(preparedText)
+    }
+    else if (decorationName === 'code') {
+      preparedText = mdFormat.monospace(preparedText)
+    }
+    // else no formatting
   }
-  else if (annotations.italic) {
-    return mdFormat.italic(preparedText);
-  }
-  else if (annotations.strikethrough) {
-    return mdFormat.strikethrough(preparedText);
-  }
-  else if (annotations.underline) {
-    return mdFormat.underline(preparedText);
-  }
-  else if (annotations.code) {
-    return mdFormat.monospace(preparedText);
-  }
-  else {
-    // no formatting
-    return preparedText;
-  }
+
+  return preparedText
 }

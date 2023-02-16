@@ -1,6 +1,7 @@
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {TelegraphNode} from '../../_useless/telegraphCli/types.js';
 import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion.js';
+import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
 
 
 export function richTextToTelegraphNodes(
@@ -25,8 +26,7 @@ function toTelegraPh(
   annotations: NotionAnnotation,
   link?: string | null
 ): TelegraphNode | string {
-  // TODO: need escape???
-  let preparedText: TelegraphNode | string = text;
+  let preparedText: TelegraphNode | string = htmlFormat.escape(text)
 
   if (link) {
     preparedText = {

@@ -32,34 +32,37 @@ function toHtml(
   annotations: NotionAnnotation,
   link?: string | null
 ): string {
-  let preparedText = htmlFormat.escape(text);
+  let preparedText = htmlFormat.escape(text)
 
   if (link) {
-    preparedText = htmlFormat.url(preparedText, link);
+    preparedText = htmlFormat.url(preparedText, link)
   }
 
-  // TODO: а если несколько сразу ???
+  for (const index of Object.keys(annotations)) {
+    const decorationName = index as keyof NotionAnnotation
 
-  if (annotations.bold) {
-    return htmlFormat.bold(preparedText);
+    if (annotations[decorationName] !== true) continue
+
+    if (decorationName === 'bold') {
+      preparedText = htmlFormat.bold(preparedText)
+    }
+    else if (decorationName === 'italic') {
+      preparedText = htmlFormat.italic(preparedText)
+    }
+    else if (decorationName === 'strikethrough') {
+      // TODO: должно быть s, strike, del
+      preparedText = htmlFormat.strikethrough(preparedText)
+    }
+    else if (decorationName === 'underline') {
+      // TODO: u, ins
+      preparedText = htmlFormat.underline(preparedText)
+    }
+    else if (decorationName === 'code') {
+      // TODO: должно быть code
+      preparedText = htmlFormat.monospace(preparedText)
+    }
+    // else no formatting
   }
-  else if (annotations.italic) {
-    return htmlFormat.italic(preparedText);
-  }
-  else if (annotations.strikethrough) {
-    // TODO: должно быть s, strike, del
-    return htmlFormat.strikethrough(preparedText);
-  }
-  else if (annotations.underline) {
-    // TODO: u, ins
-    return htmlFormat.underline(preparedText);
-  }
-  else if (annotations.code) {
-    // TODO: должно быть code
-    return htmlFormat.monospace(preparedText);
-  }
-  else {
-    // no formatting
-    return preparedText;
-  }
+
+  return preparedText
 }
