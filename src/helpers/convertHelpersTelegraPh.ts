@@ -36,40 +36,43 @@ function toTelegraPh(
     };
   }
 
-  // TODO: а если несколько сразу ???
+  for (const index of Object.keys(annotations)) {
+    const decorationName = index as keyof NotionAnnotation
 
-  if (annotations.bold) {
-    return {
-      tag: 'strong',
-      children: [preparedText],
-    };
+    if (annotations[decorationName] !== true) continue
+
+    if (decorationName === 'bold') {
+      preparedText = {
+        tag: 'strong',
+        children: [preparedText],
+      }
+    }
+    else if (decorationName === 'italic') {
+      preparedText = {
+        tag: 'i',
+        children: [preparedText],
+      }
+    }
+    else if (decorationName === 'strikethrough') {
+      preparedText = {
+        tag: 's',
+        children: [preparedText],
+      }
+    }
+    else if (decorationName === 'underline') {
+      preparedText = {
+        tag: 'u',
+        children: [preparedText],
+      }
+    }
+    else if (decorationName === 'code') {
+      preparedText = {
+        tag: 'code',
+        children: [preparedText],
+      }
+    }
+    // else no formatting
   }
-  else if (annotations.italic) {
-    return {
-      tag: 'i',
-      children: [preparedText],
-    };
-  }
-  else if (annotations.strikethrough) {
-    return {
-      tag: 's',
-      children: [preparedText],
-    };
-  }
-  else if (annotations.underline) {
-    return {
-      tag: 'u',
-      children: [preparedText],
-    };
-  }
-  else if (annotations.code) {
-    return {
-      tag: 'code',
-      children: [preparedText],
-    };
-  }
-  else {
-    // no formatting for other case
-    return preparedText;
-  }
+
+  return preparedText
 }
