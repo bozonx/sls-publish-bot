@@ -8,7 +8,7 @@ import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
 type OnDoneType = (messageIds: number[], chatId: number, startTime: string) => void
 
 
-export async function startTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType) {
+export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType) {
   await askSharePost(msg, tgChat, tgChat.asyncCb(async(messageIds: number[], chatId: number) => {
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
       onDone(

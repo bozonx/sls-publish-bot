@@ -11,7 +11,7 @@ import {
 } from '../../types/TaskItem.js';
 import {askChat} from '../common/askChat.js';
 import {startTaskMenu} from './startTaskMenu.js';
-import {startTaskAdd} from './startTaskAdd.js';
+import {askTaskAdd} from './askTaskAdd.js';
 
 
 export async function startTaskListMenu(tgChat: TgChat) {
@@ -19,7 +19,7 @@ export async function startTaskListMenu(tgChat: TgChat) {
     tgChat,
     tgChat.asyncCb(async (taskId?: string, action?: string) => {
       if (action === TASK_LIST_ACTIONS.DELETE_POST) {
-        return startTaskAdd(tgChat.app.i18n.menu.taskDeletePost, tgChat, tgChat.asyncCb(async (
+        return askTaskAdd(tgChat.app.i18n.menu.taskDeletePost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string
@@ -63,7 +63,7 @@ export async function startTaskListMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.PIN_POST) {
-        return startTaskAdd(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (
+        return askTaskAdd(tgChat.app.i18n.menu.taskPinPost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string
@@ -82,7 +82,7 @@ export async function startTaskListMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.UNPIN_POST) {
-        return startTaskAdd(tgChat.app.i18n.menu.taskUnpinPost, tgChat, tgChat.asyncCb(async (
+        return askTaskAdd(tgChat.app.i18n.menu.taskUnpinPost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string
