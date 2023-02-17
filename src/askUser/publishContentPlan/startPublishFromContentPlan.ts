@@ -3,7 +3,7 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js'
 import {askContentToUse} from './askContentToUse.js';
 import {prepareContentItem} from '../../contentPlan/parseContent.js';
 import ContentItem from '../../types/ContentItem.js';
-import {loadNotPublished} from '../../contentPlan/requestContentPlan.js';
+import {requestNotPublishedFromContentPlan} from '../../contentPlan/requestNotPublishedFromContentPlan.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
 import {resolvePostFooter, resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
@@ -20,7 +20,7 @@ export async function startPublishFromContentPlan(blogName: string, tgChat: TgCh
 
   try {
     // load not published records from content plan
-    notPublishedItems = await loadNotPublished(blogName,tgChat)
+    notPublishedItems = await requestNotPublishedFromContentPlan(blogName,tgChat)
   }
   catch (e) {
     await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e)
