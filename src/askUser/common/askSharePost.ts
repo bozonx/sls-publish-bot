@@ -1,8 +1,6 @@
-import moment from 'moment';
 import TgChat from '../../apiTg/TgChat.js';
 import BaseState from '../../types/BaseState.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
-import {askDateTime} from './askDateTime.js';
 import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN_CALLBACK,
@@ -14,7 +12,7 @@ import {
 import {ChatEvents} from '../../types/constants.js';
 
 
-type OnDoneType = (messageIds: number[], chatId: number, startTime: string) => void;
+type OnDoneType = (messageIds: number[], chatId: number) => void;
 
 
 export async function askSharePost(msg: string, tgChat: TgChat, onDone: OnDoneType) {
@@ -93,22 +91,11 @@ export async function askSharePost(msg: string, tgChat: TgChat, onDone: OnDoneTy
               return
             }
 
-            return await handleIncomeMessage(mediaIds, chatId, tgChat, onDone);
+            onDone(mediaIds, chatId)
           }
         })
       ),
       ChatEvents.CALLBACK_QUERY
     ]);
   });
-}
-
-
-export async function handleIncomeMessage(messageIds: number[], chatId: number, tgChat: TgChat, onDone: OnDoneType) {
-  await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-    onDone(
-      messageIds,
-      chatId,
-      moment(`${isoDate} ${time}`).utcOffset(tgChat.app.appConfig.utcOffset).format()
-    );
-  }), tgChat.app.i18n.message.maxTaskTime);
 }
