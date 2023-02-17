@@ -1,4 +1,3 @@
-import moment from 'moment/moment.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {askSharePost} from '../common/askSharePost.js';

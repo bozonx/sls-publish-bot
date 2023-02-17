@@ -1,6 +1,5 @@
 import {askTasksListMenu, TASK_LIST_ACTIONS, TASKS_MAIN_STEP} from './askTasksListMenu.js';
 import TgChat from '../../apiTg/TgChat.js';
-import {askSharePost} from '../common/askSharePost.js';
 import {askTaskFinishPoll} from './askTaskFinishPoll.js';
 import {
   CloneTgPostTask,
@@ -38,14 +37,13 @@ export async function startTaskListMenu(tgChat: TgChat) {
         }));
       }
       else if (action === TASK_LIST_ACTIONS.CLONE_POST) {
-        return askSharePost(tgChat.app.i18n.menu.taskClonePost, tgChat, tgChat.asyncCb(async (
+        return askTaskAdd(tgChat.app.i18n.menu.taskClonePost, tgChat, tgChat.asyncCb(async (
           messageIds: number[],
           chatId: number,
           startTime: string
         ) => {
           const msg = tgChat.app.i18n.message.pleaseSelectChatForClone
           await askChat(msg, tgChat, tgChat.asyncCb(async(toChatId: string | number) => {
-            // TODO: а чё поддерживаются сразу несолько чтоли???
             const task: CloneTgPostTask = {
               startTime,
               type: 'clonePost',

@@ -21,6 +21,7 @@ export async function startTaskMenu(taskId: string, tgChat: TgChat, onDone: () =
       }
 
       await tgChat.reply(tgChat.app.i18n.message.taskRemoved)
+      onDone()
     }
     else if (action === TASK_ACTIONS.FLUSH) {
       try {
@@ -30,8 +31,8 @@ export async function startTaskMenu(taskId: string, tgChat: TgChat, onDone: () =
         await tgChat.reply('Task flush error: ' + e)
       }
 
-      await tgChat.reply(tgChat.app.i18n.message.taskFlushed);
-
+      await tgChat.reply(tgChat.app.i18n.message.taskFlushed)
+      onDone()
     }
     else if (action === TASK_ACTIONS.CHANGE_EXEC_DATE) {
       await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
