@@ -100,7 +100,7 @@ export async function startTaskListMenu(tgChat: TgChat) {
       }
       else if (action === TASK_LIST_ACTIONS.FINISH_POLL) {
         return askTaskFinishPoll(tgChat.app.i18n.menu.taskFinishPoll, tgChat, tgChat.asyncCb(async (
-          messageIds: number[],
+          messageId: number,
           chatId: number,
           startTime: string
         ) => {
@@ -109,7 +109,7 @@ export async function startTaskListMenu(tgChat: TgChat) {
             type: 'finishPoll',
             sn: 'telegram',
             chatId,
-            messageId: messageIds[0],
+            messageId: messageId,
           }
 
           await tgChat.app.tasks.addTaskAndLog(task)
