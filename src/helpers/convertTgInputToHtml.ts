@@ -7,7 +7,7 @@ import {EntityMessage} from '../apiTg/EntityMessage.js';
  * Trim it by yourself
  */
 export function convertTgInputToHtml(rawText: string, entities?: TgEntity[]): string {
-  if (!entities?.length) return ''
+  if (!entities?.length) return rawText
 
   const formatter = new EntityMessage(rawText, entities)
 
