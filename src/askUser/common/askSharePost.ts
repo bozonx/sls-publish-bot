@@ -15,7 +15,12 @@ import {ChatEvents} from '../../types/constants.js';
 type OnDoneType = (messageIds: number[], chatId: number) => void;
 
 
-export async function askSharePost(msg: string, tgChat: TgChat, onDone: OnDoneType) {
+export async function askSharePost(
+  msg: string,
+  tgChat: TgChat,
+  onDone: OnDoneType,
+  onlyOneImage = true
+) {
   const buttons = [
     [
       makeBackBtn(tgChat.app.i18n),
