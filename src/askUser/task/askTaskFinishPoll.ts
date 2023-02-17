@@ -2,8 +2,9 @@ import TgChat from '../../apiTg/TgChat.js';
 import {ChatEvents} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
-import {handleIncomeMessage} from '../common/askSharePost.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
+import {askDateTime} from '../common/askDateTime.js';
+import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
 
 
 type OnDoneType = (messageId: number, chatId: number, startTime: string) => void;
@@ -25,16 +26,13 @@ export async function askTaskFinishPoll(msg: string, tgChat: TgChat, onDone: OnD
       tgChat.events.addListener(
         ChatEvents.POLL,
         tgChat.asyncCb(async (pollMsg: PollMessageEvent) => {
-          await handleIncomeMessage(
-            [pollMsg.messageId],
-            pollMsg.chatId,
-            tgChat,
-            (messageIds: number[], chatId: number, startTime: string) => onDone(
-              messageIds[0],
-              chatId,
-              startTime
+          await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+            onDone(
+              pollMsg.messageId,
+              pollMsg.chatId,
+              makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
             )
-          );
+          }), tgChat.app.i18n.message.maxTaskTime)
         })
       ),
       ChatEvents.POLL,
