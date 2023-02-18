@@ -175,6 +175,7 @@ const dict = {
     },
     next: 'Следующие',
     prev: 'Предыдущие',
+    seconds: 'секунд',
   },
   customPost: {
     actionMenu: 'Настройка публикации поста',
@@ -250,6 +251,8 @@ const dict = {
     onlyVideoAllowed: 'Разрешено прикреплять только видео',
     videoNotSuppoerted: 'Видео не поддерживается в этом формате',
     articleNeedText: 'Для статьи необходим текст, но его нет',
+    dateHasToBeGreaterThanCurrent: 'Дата должны быть больше чем текущая',
+    dateTimeHasToBeGreaterThanCurrent: 'Дата и время должны быть больше чем текущее + ',
   },
   message: {
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
