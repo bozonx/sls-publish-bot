@@ -8,7 +8,7 @@ import PollData from '../types/PollData.js';
 import {MediaGroupItem} from '../types/types.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {convertNotionToHtml} from '../helpers/convertNotionToHast.js';
-import {makeBloggerEditPostUrl} from '../helpers/helpers.js';
+import {makeBloggerEditPostUrl, makeIsoDateTimeStr} from '../helpers/helpers.js';
 
 
 export async function contentPublishFork(
@@ -87,20 +87,19 @@ export async function contentPublishFork(
 
           const content = await convertNotionToHtml(articleBlocks!, async (url: string) => url)
 
-          console.log(222,
-            tgChat.app.blogs[blogName].sn.blogger!.blogId,
-            articleTitle!,
-            content,
-            tgTags
-            )
+          // console.log(222,
+          //   tgChat.app.blogs[blogName].sn.blogger!.blogId,
+          //   articleTitle!,
+          //   content,
+          //   tgTags
+          // )
 
           const data = await tgChat.app.bloggerCom.createPost(
             blogId,
             articleTitle!,
             content,
-            tgTags
-            // pubDate: string,
-            // pubTime: string,
+            makeIsoDateTimeStr(pubDate, pubTime, tgChat.app.appConfig.utcOffset),
+            tgTags,
           )
 
           await tgChat.reply(
@@ -112,9 +111,33 @@ export async function contentPublishFork(
           PUBLICATION_TYPES.post1000,
           PUBLICATION_TYPES.post2000,
         ].includes(pubType)) {
-          // TODO: convert to article - see postTexts?.blogger
-          await tgChat.reply(`Publication to site isn't supported at the moment`)
-          await tgChat.steps.back()
+          if (!tgChat.app.blogs?.[blogName]?.sn?.blogger?.blogId) {
+            throw new Error(`Can't find blogger.com blogId of ${blogName}`)
+          }
+
+          console.log(1111,
+            postTexts?.blogger,
+            finalMediaGroup,
+            articleBlocks,
+            articleTitle,
+            tgTags
+          )
+
+          // // TODO: upload main image
+          //
+          // const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
+          // const data = await tgChat.app.bloggerCom.createPost(
+          //   blogId,
+          //   articleTitle!,
+          //   postTexts?.blogger || '',
+          //   makeIsoDateTimeStr(pubDate, pubTime, tgChat.app.appConfig.utcOffset),
+          //   tgTags,
+          // )
+          //
+          // await tgChat.reply(
+          //   tgChat.app.i18n.message.bloggerComPostEditUrl + ': '
+          //   + makeBloggerEditPostUrl(blogId, data.id!)
+          // )
         }
         else {
           await tgChat.reply(`Blogger doesn't support ${pubType}`)

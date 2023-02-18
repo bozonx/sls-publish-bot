@@ -56,7 +56,7 @@ export function makePostFromContentItem(
       PUBLICATION_TYPES.poll,
     ].includes(item.type) && textBlocks && !replacedHtmlText) {
       const trimmedPost = trimPageBlocks(textBlocks)
-      // TODO: а может лучше делать html ???
+
       postText = convertNotionToInstagramPost(trimmedPost)
     }
 

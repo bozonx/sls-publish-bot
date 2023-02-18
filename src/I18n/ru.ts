@@ -271,7 +271,7 @@ const dict = {
     selectedChat: 'Выбран чат',
     pleaseSelectChatForClone: `Чтобы передать id чата в который будет склонировано сообщение`
       + ` просто расшарьте что-нибудь из него сюда и из сообщения извлекётся id чата`,
-    bloggerComPostEditUrl: 'Ссылка на редактирование статьи',
+    bloggerComPostEditUrl: 'Ссылка на редактирование статьи на blogger.com',
   },
 }
 

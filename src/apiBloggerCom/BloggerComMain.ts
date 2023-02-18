@@ -37,16 +37,19 @@ export default class BloggerComMain {
     blogId: string,
     title: string,
     content: string,
-    labels?: string[]
+    // like '2023-02-24T13:05:00+03:00'
+    publishIsoDateTime: string,
+    labels?: string[],
+    isDraft = false
   ): Promise<blogger_v3.Schema$Post> {
     const res = await this.blogger.posts.insert({
       blogId,
-      isDraft: true,
+      isDraft,
       requestBody: {
         title,
         content,
         labels,
-        //content: '<p>0test <b>bold</b></p>',
+        published: publishIsoDateTime,
         // "images": [
         //   {
         //     "url": string
@@ -54,12 +57,8 @@ export default class BloggerComMain {
         //
         //   }
         // ],
-        // customMetaData
-        // published: '2023-02-18T13:05:00+03:00',
       }
     })
-
-    console.log(3333, res)
 
     if (res.status !== 200) {
       throw new Error(`Can't create a new post on blogger.com: ${res.status} ${res.statusText}`)
