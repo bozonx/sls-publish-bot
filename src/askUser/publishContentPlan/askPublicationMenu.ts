@@ -112,7 +112,7 @@ export async function askPublicationMenu(
           }] : [],
           // ask article announcement
           (item.type === PUBLICATION_TYPES.article) ? [{
-            text: (state.articleAnnounceHtml)
+            text: (state.articleAnnounceMd)
               ? tgChat.app.i18n.buttons.replaceArticleAnnounce
               : tgChat.app.i18n.buttons.addArticleAnnounce,
             callback_data: PUBLISH_MENU_ACTION.ADD_ARTICLE_ANNOUNCE,
@@ -255,12 +255,12 @@ async function handleButtons(
       // it's only for article
       return await askText(
         tgChat,
-        tgChat.asyncCb(async (textHtml?: string) => {
-          state.articleAnnounceHtml = textHtml
+        tgChat.asyncCb(async (textHtml?: string, cleanText?: string) => {
+          state.articleAnnounceMd = cleanText
           // print result
-          if (state.articleAnnounceHtml) {
+          if (state.articleAnnounceMd) {
             await tgChat.reply(tgChat.app.i18n.menu.selectedAnnounce)
-            await tgChat.reply(state.articleAnnounceHtml, undefined, true, true)
+            await tgChat.reply(state.articleAnnounceMd, undefined, true, true)
           }
           else {
             await tgChat.reply(tgChat.app.i18n.menu.notSelectedAnnounce)

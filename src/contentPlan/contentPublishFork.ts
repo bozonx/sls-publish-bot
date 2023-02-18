@@ -25,6 +25,7 @@ export async function contentPublishFork(
   postTexts?: Partial<Record<SnType, string>>,
   articleBlocks?: NotionBlocks,
   articleTitle?: string,
+  articleAnnounceMd?: string,
   tgUrlBtn?: TgReplyBtnUrl,
   autoDeleteTgIsoDateTime?: string,
   sections?: string[],
@@ -42,8 +43,7 @@ export async function contentPublishFork(
             articleBlocks!,
             articleTitle!,
             sections,
-            // TODO: где взять arcticleAnoucement ???
-            //postTexts?.telegram
+            articleAnnounceMd
           );
         }
         // poll

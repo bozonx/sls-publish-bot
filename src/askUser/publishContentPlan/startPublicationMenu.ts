@@ -30,7 +30,7 @@ export interface ContentItemState {
   replacedMediaGroup?: MediaGroupItem[]
   // it's for announcement
   replacedHtmlText?: string
-  articleAnnounceHtml?: string
+  articleAnnounceMd?: string
   //replacedCleanText?: string
   tgUrlBtn?: TgReplyBtnUrl
   autoDeleteTgIsoDateTime?: string
@@ -165,6 +165,7 @@ export async function startPublicationMenu(
             pageBlocks,
             // article title
             item.nameGist,
+            state.articleAnnounceMd,
             state.tgUrlBtn,
             state.autoDeleteTgIsoDateTime,
             item.sections

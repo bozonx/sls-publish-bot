@@ -43,15 +43,15 @@ export async function makeFinalArticleNodes(
 function makeArticleTgPostHtml(
   articleTitle: string,
   articleUrl: string,
-  articleAnnouncement?: string,
+  articleAnnounceMd?: string,
   sections?: string[],
   postTmpl?: string,
 ): string {
   let postStr: string
   const tags = makeTagsString(sections)
 
-  if (articleAnnouncement) {
-    postStr = _.template(articleAnnouncement)({
+  if (articleAnnounceMd) {
+    postStr = _.template(articleAnnounceMd)({
       TITLE: articleTitle,
       ARTICLE_URL: articleUrl,
     })
@@ -79,11 +79,13 @@ export async function makePublishTaskTgArticle(
   articleBlocks: NotionBlocks,
   articleTitle: string,
   sections?: string[],
-  articleAnnouncement?: string
+  articleAnnounceMd?: string
 ) {
   const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
 
-  if (!postTmpl) throw new Error(`Telegram config doesn't have article post template`)
+  if (!postTmpl && !articleAnnounceMd) {
+    throw new Error(`No post template and article announcement to make post for article`)
+  }
 
   const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, articleBlocks)
 
@@ -92,7 +94,7 @@ export async function makePublishTaskTgArticle(
   const postHtml = makeArticleTgPostHtml(
     articleTitle,
     articleUrl,
-    articleAnnouncement,
+    articleAnnounceMd,
     sections,
     postTmpl
   )
