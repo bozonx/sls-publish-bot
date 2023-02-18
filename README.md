@@ -51,6 +51,7 @@ services:
     environment:
       - BOT_TOKEN=
       - TELEGRA_PH_TOKEN=
+      - GOOGLE_API_TOKENS=
       - LOG_CHANNEL_ID=
       - NOTION_TOKEN=
       - UTC_OFFSET=3

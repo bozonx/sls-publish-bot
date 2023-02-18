@@ -75,8 +75,7 @@ export async function contentPublishFork(
         break;
       case SN_TYPES.blogger:
         if (pubType === PUBLICATION_TYPES.article) {
-          await tgChat.reply(`Publication to site isn't supported at the moment`)
-          await tgChat.steps.back()
+          tgChat.app
         }
         else if ([
           PUBLICATION_TYPES.post1000,

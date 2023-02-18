@@ -3,13 +3,11 @@ import {blogger_v3, google} from 'googleapis'
 
 export default class BloggerComMain {
   private readonly gapiTokens: {access_token: string, refresh_token: string}
-  private readonly bloggerBlogId: string
   private blogger!: blogger_v3.Blogger
 
 
-  constructor(gapiTokensStr: string, bloggerBlogId: string) {
+  constructor(gapiTokensStr: string) {
     this.gapiTokens = JSON.parse(gapiTokensStr)
-    this.bloggerBlogId = bloggerBlogId
   }
 
   async init() {
@@ -21,6 +19,7 @@ export default class BloggerComMain {
   }
 
   async createPost(
+    blogId: string,
     title: string,
     content: string,
     labels?: string[]
@@ -32,7 +31,7 @@ export default class BloggerComMain {
 
     const res = await this.blogger.posts.insert(
       {
-        blogId: this.bloggerBlogId,
+        blogId,
         isDraft: true,
         requestBody: {
           title,
