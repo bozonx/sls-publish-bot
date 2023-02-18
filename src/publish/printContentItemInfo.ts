@@ -1,7 +1,7 @@
 import TgChat from '../apiTg/TgChat.js';
 import ContentItem from '../types/ContentItem.js';
 import {isoDateToHuman, makeHumanDateTimeStr, prepareFooter, resolvePostFooter} from '../helpers/helpers.js';
-import {SnType} from '../types/snTypes.js';
+import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
 import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMenu.js';
 import {convertCommonMdToTgHtml} from '../helpers/convertCommonMdToTgHtml.js';
@@ -74,7 +74,7 @@ function makeContentPlanPreDetails(
     result.push(`${i18n.contentInfo.sections}: ${contentItem.sections.join(', ')}`)
   }
 
-  if (contentItem.instaTags) {
+  if (contentItem.instaTags?.length && resolvedSns.includes(SN_TYPES.instagram)) {
     result.push(`${i18n.contentInfo.instaTags}: ${contentItem.instaTags.join(', ')}`)
   }
 
