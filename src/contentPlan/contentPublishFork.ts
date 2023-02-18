@@ -27,7 +27,7 @@ export async function contentPublishFork(
   articleTitle?: string,
   tgUrlBtn?: TgReplyBtnUrl,
   autoDeleteTgIsoDateTime?: string,
-  tgTags?: string[],
+  sections?: string[],
 ) {
   for (const sn of sns) {
     switch (sn) {
@@ -41,7 +41,7 @@ export async function contentPublishFork(
             pubTime,
             articleBlocks!,
             articleTitle!,
-            tgTags,
+            sections,
             // TODO: где взять arcticleAnoucement ???
             //postTexts?.telegram
           );
@@ -99,7 +99,7 @@ export async function contentPublishFork(
             articleTitle!,
             content,
             makeIsoDateTimeStr(pubDate, pubTime, tgChat.app.appConfig.utcOffset),
-            tgTags,
+            sections,
           )
 
           await tgChat.reply(
@@ -120,7 +120,7 @@ export async function contentPublishFork(
             finalMediaGroup,
             articleBlocks,
             articleTitle,
-            tgTags
+            sections
           )
 
           // // TODO: upload main image

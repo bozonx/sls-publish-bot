@@ -44,11 +44,11 @@ function makeArticleTgPostHtml(
   articleTitle: string,
   articleUrl: string,
   articleAnnouncement?: string,
-  tgTags?: string[],
+  sections?: string[],
   postTmpl?: string,
 ): string {
   let postStr: string
-  const tags = makeTagsString(tgTags)
+  const tags = makeTagsString(sections)
 
   if (articleAnnouncement) {
     postStr = _.template(articleAnnouncement)({
@@ -56,7 +56,7 @@ function makeArticleTgPostHtml(
       ARTICLE_URL: articleUrl,
     })
 
-    if (tgTags && tgTags.length) {
+    if (sections && sections.length) {
       postStr += '\n\n' + tags
     }
   }
@@ -78,7 +78,7 @@ export async function makePublishTaskTgArticle(
   time: string,
   articleBlocks: NotionBlocks,
   articleTitle: string,
-  tgTags?: string[],
+  sections?: string[],
   articleAnnouncement?: string
 ) {
   const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
@@ -93,7 +93,7 @@ export async function makePublishTaskTgArticle(
     articleTitle,
     articleUrl,
     articleAnnouncement,
-    tgTags,
+    sections,
     postTmpl
   )
 

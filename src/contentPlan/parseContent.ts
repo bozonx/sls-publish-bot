@@ -22,7 +22,7 @@ export function parseContentItem(item: PageObjectResponse): ContentItem {
     onlySn: (item.properties[CONTENT_PROPS.onlySn] as any)?.multi_select
       .map((el: any) => el.name) || [],
     type: pubType,
-    tgTags: (item.properties[CONTENT_PROPS.tgTags] as any)?.multi_select
+    sections: (item.properties[CONTENT_PROPS.sections] as any)?.multi_select
       .map((el: any) => el.name) || [],
     instaTags: (item.properties[CONTENT_PROPS.instaTags] as any)?.multi_select
       .map((el: any) => el.name) || [],

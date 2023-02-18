@@ -40,7 +40,7 @@ export function makePostFromContentItem(
 
     if (postText) {
       result[SN_TYPES.telegram] = makeResultPostText(
-        item.tgTags || [],
+        item.sections || [],
         useTgFooter,
         postText,
         convertCommonMdToTgHtml(resolvePostFooter(item.type, blogCfg.sn.telegram!))

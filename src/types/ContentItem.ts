@@ -10,7 +10,7 @@ export const CONTENT_PROPS = {
   status: 'status',
   onlySn: 'onlySn',
   type: 'type',
-  tgTags: 'tgTags',
+  sections: 'sections',
   instaTags: 'instaTags',
 }
 
@@ -38,6 +38,6 @@ export default interface ContentItem {
   onlySn: SnType[]
   type: PublicationType
   // additional
-  tgTags?: string[]
+  sections?: string[]
   instaTags?: string[]
 }

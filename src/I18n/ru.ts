@@ -187,7 +187,7 @@ const dict = {
     note: 'Заметка',
     noRestriction: 'Без ограничений',
     instaTags: 'Тэги Instagram',
-    tgTags: 'Тэги Telegram',
+    sections: 'Разделы',
   },
   pageInfo: {
     title: 'Название',
@@ -271,7 +271,7 @@ const dict = {
     selectedChat: 'Выбран чат',
     pleaseSelectChatForClone: `Чтобы передать id чата в который будет склонировано сообщение`
       + ` просто расшарьте что-нибудь из него сюда и из сообщения извлекётся id чата`,
-    bloggerComPostEditUrl: 'Ссылка на редактирование статьи на blogger.com',
+    bloggerComPostEditUrl: 'Ссылка на редактирование статьи на blogger',
   },
 }
 

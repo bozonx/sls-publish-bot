@@ -166,7 +166,7 @@ export async function startPublicationMenu(
             item.nameGist,
             state.tgUrlBtn,
             state.autoDeleteTgIsoDateTime,
-            item.tgTags
+            item.sections
           );
         }
         catch (e) {
