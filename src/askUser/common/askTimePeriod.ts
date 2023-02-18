@@ -74,7 +74,7 @@ export async function askTimePeriod(tgChat: TgChat, onDone: (
             // set certain date
             await askDateTime(tgChat, (isoDate: string, time: string) => {
               onDone(undefined, makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset))
-            });
+            }, undefined, undefined, true)
           }
           else if (queryData.indexOf(PERIOD_MENU_ACTION.hours) === 0) {
             const splat = queryData.split('|');

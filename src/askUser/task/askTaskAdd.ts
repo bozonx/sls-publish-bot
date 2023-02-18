@@ -15,7 +15,7 @@ export async function askTaskAdd(msg: string, tgChat: TgChat, onDone: OnDoneType
         chatId,
         makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
       )
-    }), tgChat.app.i18n.message.maxTaskTime)
+    }), tgChat.app.i18n.message.maxTaskTime, undefined, true)
   }))
 }
 

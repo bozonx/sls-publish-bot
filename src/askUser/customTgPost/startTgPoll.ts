@@ -75,7 +75,7 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
           await tgChat.steps.cancel();
         }), tgChat.app.i18n.commonPhrases.publishConfirmation);
       }), POLL_FINISH_STEP);
-    }));
+    }), undefined, undefined,true)
 
   }));
 }

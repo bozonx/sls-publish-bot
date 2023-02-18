@@ -32,7 +32,7 @@ export async function askTaskFinishPoll(msg: string, tgChat: TgChat, onDone: OnD
               pollMsg.chatId,
               makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
             )
-          }), tgChat.app.i18n.message.maxTaskTime)
+          }), tgChat.app.i18n.message.maxTaskTime, undefined, true)
         })
       ),
       ChatEvents.POLL,

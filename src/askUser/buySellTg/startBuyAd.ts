@@ -126,6 +126,6 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
           }));
         }));
       }));
-    }));
+    }), undefined, undefined, true);
   }));
 }
