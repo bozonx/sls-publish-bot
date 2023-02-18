@@ -30,8 +30,9 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
 
       username = (res as any).username
 
-      resultArr.push(`Chat username: ${username}`);
-      resultArr.push(`chatId: ${task.chatId}`);
+      if (username) resultArr.push(`Chat username: ${username}`)
+
+      resultArr.push(`chatId: ${task.chatId}`)
     }
     catch (e) {
       resultArr.push(`Chat username: CAN'T GET CHAT ${task.chatId}`)
@@ -43,8 +44,9 @@ export async function makeTaskDetails(task: TaskItem, app: App): Promise<string>
 
       username = (res as any).username
 
-      resultArr.push(`To chat username: ${username}`);
-      resultArr.push(`To chat id: ${(task as CloneTgPostTask).toChatId}`);
+      if (username) resultArr.push(`To chat username: ${username}`)
+
+      resultArr.push(`To chat id: ${(task as CloneTgPostTask).toChatId}`)
     }
     catch (e) {
       resultArr.push(`Chat username: CAN'T GET TO CHAT ${(task as CloneTgPostTask).toChatId}`)
