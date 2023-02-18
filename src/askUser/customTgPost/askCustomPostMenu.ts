@@ -18,16 +18,7 @@ import {
 } from '../../helpers/buttons.js';
 
 
-export type CustomPostAction = 'FOOTER_SWITCH'
-  | 'PREVIEW_SWITCH'
-  | 'DATE_SELECT'
-  | 'TIME_SELECT'
-  | 'ADD_TEXT'
-  | 'ADD_TAGS'
-  | 'ADD_URL_BUTTON'
-  | 'SET_AUTO_REMOVE';
-
-export const CUSTOM_POST_ACTION: Record<CustomPostAction, CustomPostAction> = {
+export const CUSTOM_POST_ACTION = {
   FOOTER_SWITCH: 'FOOTER_SWITCH',
   PREVIEW_SWITCH: 'PREVIEW_SWITCH',
   DATE_SELECT: 'DATE_SELECT',

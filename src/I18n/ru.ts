@@ -82,6 +82,8 @@ const dict = {
     postMediaSkip: 'Без картинки',
     addText: 'Добавить текст',
     replaceText: 'Заменить текст',
+    addArticleAnnounce: 'Добавить анонс статьи',
+    replaceArticleAnnounce: 'Заменить анонс статьи',
     addTgUrlButton: 'Добавить URL кнопку в Telegram',
     changeTgUrlButton: 'Изменить URL кнопку в Telegram',
     setTgAutoRemove: 'Установить таймер авто удаления в Telegram',
