@@ -28,8 +28,6 @@ export default class TgChat {
     this.botChatId = chatId;
     this.app = app;
     this.steps = new BreadCrumbs(async () => {
-      await this.reply(this.app.i18n.greet);
-
       await topLevelMenuStarter(this);
     });
     this.events = new IndexedEventEmitter();
