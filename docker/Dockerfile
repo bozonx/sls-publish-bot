@@ -17,7 +17,7 @@ COPY ./package.json ./tsconfig.json ./yarn.lock $APP_DIR/
 COPY ./src/ $APP_DIR/src
 
 RUN mkdir -p $DATA_DIR
-RUN yarn install
+RUN yarn install --prod
 
 CMD ["yarn", "prod"]
 
