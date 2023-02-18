@@ -20,7 +20,11 @@ export default class BloggerComMain {
     this.blogger = new blogger_v3.Blogger({ auth: oauth2Client })
   }
 
-  async createPost(title: string, content: string): Promise<blogger_v3.Schema$Post> {
+  async createPost(
+    title: string,
+    content: string,
+    labels?: string[]
+  ): Promise<blogger_v3.Schema$Post> {
 
     // const blog = await blogger.blogs.get({
     //   blogId: this.bloggerBlogId,
@@ -33,7 +37,8 @@ export default class BloggerComMain {
         requestBody: {
           title,
           content,
-          //content: '<p>test <b>bold</b></p>',
+          labels,
+          //content: '<p>0test <b>bold</b></p>',
           // "images": [
           //   {
           //     "url": string
@@ -42,8 +47,7 @@ export default class BloggerComMain {
           //   }
           // ],
           // customMetaData
-          // labels[]
-          // published
+          // published: '2023-02-18T13:05:00+03:00',
 
         }
       },
