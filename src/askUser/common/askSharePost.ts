@@ -41,6 +41,8 @@ export async function askSharePost(
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
           chatId = textMsg.chatId
           mediaIds = [textMsg.messageId]
+
+          onDone(mediaIds, chatId)
         })
       ),
       ChatEvents.TEXT,
@@ -52,6 +54,8 @@ export async function askSharePost(
         tgChat.asyncCb(async (photoMsg: PhotoMessageEvent) => {
           chatId = photoMsg.chatId
           mediaIds.push(photoMsg.messageId)
+
+          if (onlyOneImage) onDone(mediaIds, chatId)
         })
       ),
       ChatEvents.PHOTO,
@@ -63,6 +67,8 @@ export async function askSharePost(
         tgChat.asyncCb(async (videoMsg: VideoMessageEvent) => {
           chatId = videoMsg.chatId
           mediaIds.push(videoMsg.messageId)
+
+          if (onlyOneImage) onDone(mediaIds, chatId)
         })
       ),
       ChatEvents.VIDEO,
@@ -74,6 +80,8 @@ export async function askSharePost(
         tgChat.asyncCb(async (pollMsg: PollMessageEvent) => {
           chatId = pollMsg.chatId
           mediaIds = [pollMsg.messageId]
+
+          onDone(mediaIds, chatId)
         })
       ),
       ChatEvents.POLL,
