@@ -6,6 +6,13 @@ import {richTextToPlainText} from './convertHelpers.js';
 import {richTextToHastElements} from './convertHelpersHast.js';
 
 
+export async function convertNotionToHtml(
+  blocks: NotionBlocks,
+  imageUploader: (url: string) => Promise<string>
+): Promise<string> {
+  return toHtml(await convertNotionToHast(blocks, imageUploader))
+}
+
 export async function convertNotionToHast(
   blocks: NotionBlocks,
   imageUploader: (url: string) => Promise<string>

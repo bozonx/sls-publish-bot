@@ -7,6 +7,8 @@ import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
 import {MediaGroupItem} from '../types/types.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
+import {convertNotionToHtml} from '../helpers/convertNotionToHast.js';
+import {makeBloggerEditPostUrl} from '../helpers/helpers.js';
 
 
 export async function contentPublishFork(
@@ -75,13 +77,42 @@ export async function contentPublishFork(
         break;
       case SN_TYPES.blogger:
         if (pubType === PUBLICATION_TYPES.article) {
-          tgChat.app
+          if (!tgChat.app.blogs?.[blogName]?.sn?.blogger?.blogId) {
+            throw new Error(`Can't find blogger.com blogId of ${blogName}`)
+          }
+
+          const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
+
+          // TODO: add image uploader
+
+          const content = await convertNotionToHtml(articleBlocks!, async (url: string) => url)
+
+          console.log(222,
+            tgChat.app.blogs[blogName].sn.blogger!.blogId,
+            articleTitle!,
+            content,
+            tgTags
+            )
+
+          const data = await tgChat.app.bloggerCom.createPost(
+            blogId,
+            articleTitle!,
+            content,
+            tgTags
+            // pubDate: string,
+            // pubTime: string,
+          )
+
+          await tgChat.reply(
+            tgChat.app.i18n.message.bloggerComPostEditUrl + ': '
+            + makeBloggerEditPostUrl(blogId, data.id!)
+          )
         }
         else if ([
           PUBLICATION_TYPES.post1000,
           PUBLICATION_TYPES.post2000,
         ].includes(pubType)) {
-          // TODO: convert to article
+          // TODO: convert to article - see postTexts?.blogger
           await tgChat.reply(`Publication to site isn't supported at the moment`)
           await tgChat.steps.back()
         }

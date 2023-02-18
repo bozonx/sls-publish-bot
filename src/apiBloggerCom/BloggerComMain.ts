@@ -1,19 +1,34 @@
 import {blogger_v3, google} from 'googleapis'
 
 
+interface AccessJson {
+  clientId: string,
+  clientSecret: string,
+  access_token: string,
+  refresh_token: string,
+}
+
+
 export default class BloggerComMain {
-  private readonly gapiTokens: {access_token: string, refresh_token: string}
+  private readonly accessObj: AccessJson
   private blogger!: blogger_v3.Blogger
 
 
-  constructor(gapiTokensStr: string) {
-    this.gapiTokens = JSON.parse(gapiTokensStr)
+  constructor(accessObjStr: string) {
+    this.accessObj = JSON.parse(accessObjStr)
   }
 
   async init() {
-    const oauth2Client = new google.auth.OAuth2()
+    const oauth2Client = new google.auth.OAuth2(
+      this.accessObj.clientId,
+      this.accessObj.clientSecret,
+      'https://oauth2.googleapis.com/token'
+    )
 
-    oauth2Client.setCredentials(this.gapiTokens)
+    oauth2Client.setCredentials({
+      access_token: this.accessObj.access_token,
+      refresh_token: this.accessObj.refresh_token,
+    })
 
     this.blogger = new blogger_v3.Blogger({ auth: oauth2Client })
   }
@@ -24,33 +39,27 @@ export default class BloggerComMain {
     content: string,
     labels?: string[]
   ): Promise<blogger_v3.Schema$Post> {
+    const res = await this.blogger.posts.insert({
+      blogId,
+      isDraft: true,
+      requestBody: {
+        title,
+        content,
+        labels,
+        //content: '<p>0test <b>bold</b></p>',
+        // "images": [
+        //   {
+        //     "url": string
+        //
+        //
+        //   }
+        // ],
+        // customMetaData
+        // published: '2023-02-18T13:05:00+03:00',
+      }
+    })
 
-    // const blog = await blogger.blogs.get({
-    //   blogId: this.bloggerBlogId,
-    // });
-
-    const res = await this.blogger.posts.insert(
-      {
-        blogId,
-        isDraft: true,
-        requestBody: {
-          title,
-          content,
-          labels,
-          //content: '<p>0test <b>bold</b></p>',
-          // "images": [
-          //   {
-          //     "url": string
-          //
-          //
-          //   }
-          // ],
-          // customMetaData
-          // published: '2023-02-18T13:05:00+03:00',
-
-        }
-      },
-    )
+    console.log(3333, res)
 
     if (res.status !== 200) {
       throw new Error(`Can't create a new post on blogger.com: ${res.status} ${res.statusText}`)
@@ -63,9 +72,9 @@ export default class BloggerComMain {
 
 // (async () => {
 //   const bloggerCom = new BloggerComMain(
-//     process.env['GOOGLE_API_TOKENS'] || '',
-//     process.env['BLOGGER_BLOG_ID'] || '',
+//     process.env['GOOGLE_API_TOKENS'] || '{}',
 //   )
 //
 //   await bloggerCom.init()
+//   await bloggerCom.createPost('', '', '')
 // })()

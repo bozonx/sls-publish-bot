@@ -27,6 +27,10 @@ export function makeTelegraPhUrl(tgPath: string): string {
   return `https://telegra.ph/${tgPath}`;
 }
 
+export function makeBloggerEditPostUrl(blogId: string, postId: string): string {
+  return `https://www.blogger.com/blog/post/edit/${blogId}/${postId}`
+}
+
 /**
  * Match blog sns, onlySns and sn for specific publication type
  */

@@ -21,6 +21,7 @@ export interface BlogInstagramConfig extends BlogBaseConfig {
   postFooter?: string
 }
 export interface BlogBloggerConfig extends BlogBaseConfig {
+  blogId: string;
   articleFooter?: string;
 }
 export interface BlogZenConfig extends BlogBaseConfig {
