@@ -94,6 +94,8 @@ export function validateContentPlanPost(
         PUBLICATION_TYPES.reels,
       ].includes(item.type)
       && !postTexts?.[sn as SnType] && !state.mainImgUrl && !state.replacedMediaGroup?.length
+      // it only checks for tg and insta, not for blogger because it converts post to article
+      && [SN_TYPES.telegram, SN_TYPES.instagram].includes(sn)
     ) {
       throw tgChat.app.i18n.errors.noImageNoText + ' - ' + sn
     }

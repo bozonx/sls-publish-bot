@@ -2,7 +2,6 @@
 // TODO: refactor
 
 
-import {TELEGRAM_MAX_CAPTION, TELEGRAM_MAX_POST} from '../types/constants.js';
 import {PublicationType} from '../types/publicationType.js';
 
 const dict = {

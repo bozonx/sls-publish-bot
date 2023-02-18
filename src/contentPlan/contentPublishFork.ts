@@ -123,21 +123,23 @@ export async function contentPublishFork(
             sections
           )
 
-          // // TODO: upload main image
-          //
-          // const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
-          // const data = await tgChat.app.bloggerCom.createPost(
-          //   blogId,
-          //   articleTitle!,
-          //   postTexts?.blogger || '',
-          //   makeIsoDateTimeStr(pubDate, pubTime, tgChat.app.appConfig.utcOffset),
-          //   tgTags,
-          // )
-          //
-          // await tgChat.reply(
-          //   tgChat.app.i18n.message.bloggerComPostEditUrl + ': '
-          //   + makeBloggerEditPostUrl(blogId, data.id!)
-          // )
+          const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
+
+          // TODO: add image uploader
+
+          const content = await convertNotionToHtml(articleBlocks!, async (url: string) => url)
+          const data = await tgChat.app.bloggerCom.createPost(
+            blogId,
+            articleTitle!,
+            content,
+            makeIsoDateTimeStr(pubDate, pubTime, tgChat.app.appConfig.utcOffset),
+            sections,
+          )
+
+          await tgChat.reply(
+            tgChat.app.i18n.message.bloggerComPostEditUrl + ': '
+            + makeBloggerEditPostUrl(blogId, data.id!)
+          )
         }
         else {
           await tgChat.reply(`Blogger doesn't support ${pubType}`)
