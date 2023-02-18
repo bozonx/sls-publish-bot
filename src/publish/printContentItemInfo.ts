@@ -74,7 +74,7 @@ function makeContentPlanPreDetails(
     result.push(`${i18n.contentInfo.sections}: ${contentItem.sections.join(', ')}`)
   }
 
-  if (contentItem.instaTags?.length && resolvedSns.includes(SN_TYPES.instagram)) {
+  if (contentItem.instaTags?.length) {
     result.push(`${i18n.contentInfo.instaTags}: ${contentItem.instaTags.join(', ')}`)
   }
 
