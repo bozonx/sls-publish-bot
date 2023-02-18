@@ -30,6 +30,7 @@ export interface ContentItemState {
   replacedMediaGroup?: MediaGroupItem[]
   // it's for announcement
   replacedHtmlText?: string
+  articleAnnounceHtml?: string
   //replacedCleanText?: string
   tgUrlBtn?: TgReplyBtnUrl
   autoDeleteTgIsoDateTime?: string

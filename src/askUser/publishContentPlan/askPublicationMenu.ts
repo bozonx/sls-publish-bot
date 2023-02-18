@@ -17,7 +17,7 @@ import {askSns} from '../common/askSns.js';
 import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {MediaGroupItem} from '../../types/types.js';
-import {TgReplyBtnUrl, TgReplyButton} from '../../types/TgReplyButton.js';
+import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
@@ -34,19 +34,12 @@ import {
 } from '../../helpers/buttons.js';
 
 
-export type PublishMenuAction = 'CHANGE_TIME'
-  | 'FOOTER_SWITCH'
-  | 'PREVIEW_SWITCH'
-  | 'ADD_TEXT'
-  | 'CHANGE_INSTA_TAGS'
-  | 'CHANGE_IMAGE'
-  | 'CHANGE_SNS'
-
-export const PUBLISH_MENU_ACTION: Record<PublishMenuAction, PublishMenuAction> = {
+export const PUBLISH_MENU_ACTION = {
   CHANGE_TIME: 'CHANGE_TIME',
   FOOTER_SWITCH: 'FOOTER_SWITCH',
   PREVIEW_SWITCH: 'PREVIEW_SWITCH',
   ADD_TEXT: 'ADD_TEXT',
+  ADD_ARTICLE_ANNOUNCE: 'ADD_ARTICLE_ANNOUNCE',
   CHANGE_INSTA_TAGS: 'CHANGE_INSTA_TAGS',
   CHANGE_IMAGE: 'CHANGE_IMAGE',
   CHANGE_SNS: 'CHANGE_SNS',
@@ -116,6 +109,13 @@ export async function askPublicationMenu(
           (item.type === PUBLICATION_TYPES.announcement) ? [{
             text: tgChat.app.i18n.buttons.replaceText,
             callback_data: PUBLISH_MENU_ACTION.ADD_TEXT,
+          }] : [],
+          // ask article announcement
+          (item.type === PUBLICATION_TYPES.article) ? [{
+            text: (state.articleAnnounceHtml)
+              ? tgChat.app.i18n.buttons.replaceArticleAnnounce
+              : tgChat.app.i18n.buttons.addArticleAnnounce,
+            callback_data: PUBLISH_MENU_ACTION.ADD_ARTICLE_ANNOUNCE,
           }] : [],
           // ask to change main image/video
           ([
@@ -251,6 +251,27 @@ async function handleButtons(
         // print menu again
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
       }), undefined, undefined, tgChat.app.i18n.buttons.getInitialNotionText);
+    case PUBLISH_MENU_ACTION.ADD_ARTICLE_ANNOUNCE:
+      // it's only for article
+      return await askText(
+        tgChat,
+        tgChat.asyncCb(async (textHtml?: string) => {
+          state.articleAnnounceHtml = textHtml
+          // print result
+          if (state.articleAnnounceHtml) {
+            await tgChat.reply(tgChat.app.i18n.menu.selectedAnnounce)
+            await tgChat.reply(state.articleAnnounceHtml, undefined, true, true)
+          }
+          else {
+            await tgChat.reply(tgChat.app.i18n.menu.notSelectedAnnounce)
+          }
+          // print menu again
+          return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
+        }),
+        tgChat.app.i18n.menu.askAnnounce,
+        undefined,
+        tgChat.app.i18n.buttons.clearAnnouce
+      )
     case PUBLISH_MENU_ACTION.CHANGE_TIME:
       return askTime(tgChat, tgChat.asyncCb(async (newTime: string) => {
         // validate that selected date is greater than auto-delete date
