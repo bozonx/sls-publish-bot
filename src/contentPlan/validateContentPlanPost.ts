@@ -100,10 +100,14 @@ export function validateContentPlanPost(
       throw tgChat.app.i18n.errors.noImageNoText + ' - ' + sn
     }
     // if text based post has no text
-    else if ([
-      PUBLICATION_TYPES.post2000,
-      PUBLICATION_TYPES.announcement,
-    ].includes(item.type) && !postTexts?.[sn as SnType]) {
+    else if (
+      [
+        PUBLICATION_TYPES.post2000,
+        PUBLICATION_TYPES.announcement,
+      ].includes(item.type) && !postTexts?.[sn as SnType]
+      // it only checks for tg and insta, not for blogger because it converts post to article
+      && [SN_TYPES.telegram, SN_TYPES.instagram].includes(sn)
+    ) {
       throw tgChat.app.i18n.errors.noText + ' - ' + sn
     }
   }
