@@ -3,7 +3,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {askDate} from './askDate.js';
 import {makeHumanDateStr, makeHumanDateTimeStr, makeIsoDateTimeStr} from '../../helpers/helpers.js';
 import {askTime} from './askTime.js';
-import {WARN_SIGN} from '../../types/constants.js';
+import {MAX_TIMEOUT_SECONDS, WARN_SIGN} from '../../types/constants.js';
 
 
 export async function askDateTime(
@@ -11,7 +11,8 @@ export async function askDateTime(
   onDone: (isoDate: string, time: string) => void,
   additionalMsg?: string,
   stepName?: string,
-  hasBeGreaterThanCurrent = false
+  hasBeGreaterThanCurrent = false,
+  checkMaxTaskTime = false,
 ) {
   await askDate(tgChat, tgChat.asyncCb(async (isoDate: string) => {
     // поидее нет смысла, так как контрол всеравно не даст установмить меньше дату
@@ -33,9 +34,11 @@ export async function askDateTime(
       + makeHumanDateStr(isoDate, tgChat.app.appConfig.utcOffset)
 
     await askTime(tgChat, tgChat.asyncCb(async (time: string) => {
+      const isoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
+
       if (hasBeGreaterThanCurrent) {
         if (
-          moment(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)).utc().unix()
+          moment(isoDateTime).utc().unix()
           < (moment().utc().unix() + tgChat.app.appConfig.expiredTaskOffsetSec)
         ) {
           await tgChat.reply(
@@ -43,6 +46,17 @@ export async function askDateTime(
             + tgChat.app.i18n.errors.dateTimeHasToBeGreaterThanCurrent
             + tgChat.app.appConfig.expiredTaskOffsetSec + ' '
             + tgChat.app.i18n.commonPhrases.seconds
+          )
+
+          return
+        }
+      }
+
+      if (checkMaxTaskTime) {
+        if (moment(isoDateTime).unix() > moment().unix() + MAX_TIMEOUT_SECONDS) {
+          await tgChat.reply(
+            WARN_SIGN + ' '
+            + `Too big date! Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`
           )
 
           return

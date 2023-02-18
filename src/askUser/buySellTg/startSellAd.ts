@@ -136,7 +136,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
             }));
           }));
         }));
-      }), undefined, undefined, true);
+      }), undefined, undefined, true, true);
     }),
     false,
     undefined,

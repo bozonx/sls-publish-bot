@@ -58,7 +58,7 @@ export async function startTaskMenu(taskId: string, tgChat: TgChat, onDone: () =
         await tgChat.reply(tgChat.app.i18n.message.taskTimeWasChanged)
 
         onDone()
-      }), undefined, undefined, true)
+      }), undefined, undefined, true, true)
     }
     else if (action === TASK_ACTIONS.CHANGE_AUTO_DELETE_DATE) {
       return await askTimePeriod(tgChat, tgChat.asyncCb(async (

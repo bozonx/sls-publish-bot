@@ -60,6 +60,6 @@ export async function startOrdinaryTgPost(
         );
         await tgChat.steps.cancel();
       }), tgChat.app.i18n.commonPhrases.publishConfirmation);
-    }), undefined, ORDINARY_POST_DATE_STEP, true);
+    }), undefined, ORDINARY_POST_DATE_STEP, true, true);
   }), postAsText, footerTmpl, mediaRequired, onlyOneImage, disableTags);
 }
