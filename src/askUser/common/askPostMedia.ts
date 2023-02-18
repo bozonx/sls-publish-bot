@@ -68,10 +68,10 @@ export async function askPostMedia(
             mediaGroup.push(photoMsg.photo);
           }
           else if (!mediaGroup.length) {
-            mediaGroup[0] = photoMsg.photo;
-          }
+            mediaGroup[0] = photoMsg.photo
 
-          //await toNextStep(tgChat)
+            onDone(mediaGroup, captionHtml)
+          }
         })
       ),
       ChatEvents.PHOTO
@@ -92,10 +92,10 @@ export async function askPostMedia(
             mediaGroup.push(videoMsg.video);
           }
           else if (!mediaGroup.length) {
-            mediaGroup[0] = videoMsg.video;
-          }
+            mediaGroup[0] = videoMsg.video
 
-          //await toNextStep(tgChat)
+            onDone(mediaGroup, captionHtml)
+          }
         })
       ),
       ChatEvents.VIDEO
@@ -122,10 +122,10 @@ export async function askPostMedia(
             for (const item of medias) mediaGroup.push(item);
           }
           else if (!mediaGroup.length) {
-            mediaGroup[0] = medias[0];
-          }
+            mediaGroup[0] = medias[0]
 
-          //await toNextStep(tgChat)
+            onDone(mediaGroup, captionHtml)
+          }
         })
       ),
       ChatEvents.TEXT
@@ -170,9 +170,9 @@ async function handlePrimaryButtons(
   }
 }
 
-async function toNextStep(tgChat: TgChat) {
-  await tgChat.reply(
-    tgChat.app.i18n.message.waitImagesAndPressOk,
-    [[makeOkBtn(tgChat.app.i18n)]]
-  )
-}
+// async function toNextStep(tgChat: TgChat) {
+//   await tgChat.reply(
+//     tgChat.app.i18n.message.waitImagesAndPressOk,
+//     [[makeOkBtn(tgChat.app.i18n)]]
+//   )
+// }

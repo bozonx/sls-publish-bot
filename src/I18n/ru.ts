@@ -273,7 +273,7 @@ const dict = {
     //loadedTask: 'Задача была загруженна с диска:',
     noTask: 'Задание не найдено',
     noMediaCaption: 'Не задано описание для медиа',
-    waitImagesAndPressOk: 'Дождитесь окончания загрузки картинок/видео и нажмите ОК.',
+    //waitImagesAndPressOk: 'Дождитесь окончания загрузки картинок/видео и нажмите ОК.',
     taskTimeWasChanged: 'Время выполнения задачи было успешно изменено',
     taskAutoDeleteTimeWasChanged: 'Время авто удаления поста было успешно изменено',
     selectedChat: 'Выбран чат',
