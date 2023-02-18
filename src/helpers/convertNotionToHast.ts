@@ -115,10 +115,7 @@ export async function convertNotionToHast(
             type: 'element',
             tagName: 'p',
             children: [
-              {
-                type: 'text',
-                value: richTextToPlainText((block as any)?.paragraph?.rich_text)
-              },
+              ...richTextToHastElements((block as any)?.paragraph?.rich_text),
               ...children
             ],
           })
@@ -1569,6 +1566,6 @@ export async function convertNotionToHast(
 // ] as NotionBlocks
 //
 // (async () => {
-//   console.log(111, toHtml(await convertNotionToHast(aa, async (url: string) => url)))
+//   console.log(111, await convertNotionToHtml(aa, async (url: string) => url))
 // })()
-//
+

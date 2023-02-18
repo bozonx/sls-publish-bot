@@ -84,6 +84,7 @@ export async function contentPublishFork(
           const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
 
           // TODO: add image uploader
+          // https://telegra.ph/file/f1b0e1c0dd8b8433fdfb5.jpg
 
           const content = await convertNotionToHtml(articleBlocks!, async (url: string) => url)
 
