@@ -4,6 +4,7 @@ import {blogger_v3, google} from 'googleapis'
 export default class BloggerComMain {
   private readonly gapiTokens: {access_token: string, refresh_token: string}
   private readonly bloggerBlogId: string
+  private blogger!: blogger_v3.Blogger
 
 
   constructor(gapiTokensStr: string, bloggerBlogId: string) {
@@ -16,19 +17,23 @@ export default class BloggerComMain {
 
     oauth2Client.setCredentials(this.gapiTokens)
 
-    const blogger = new blogger_v3.Blogger({ auth: oauth2Client })
+    this.blogger = new blogger_v3.Blogger({ auth: oauth2Client })
+  }
+
+  async createPost(title: string, content: string): Promise<blogger_v3.Schema$Post> {
 
     // const blog = await blogger.blogs.get({
     //   blogId: this.bloggerBlogId,
     // });
 
-    const res = await blogger.posts.insert(
+    const res = await this.blogger.posts.insert(
       {
         blogId: this.bloggerBlogId,
         isDraft: true,
         requestBody: {
-          title: 'test1',
-          content: '<p>test <b>bold</b></p>',
+          title,
+          content,
+          //content: '<p>test <b>bold</b></p>',
           // "images": [
           //   {
           //     "url": string
@@ -44,9 +49,12 @@ export default class BloggerComMain {
       },
     )
 
-    console.log(111, res)
+    if (res.status !== 200) {
+      throw new Error(`Can't create a new post on blogger.com: ${res.status} ${res.statusText}`)
+    }
 
-   }
+    return res.data
+  }
 }
 
 
