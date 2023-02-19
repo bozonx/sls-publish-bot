@@ -14,7 +14,7 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../contentPlan/validateContentPlanPost.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {printPost} from '../../publish/publishHelpers.js';
-import {justPublishToTelegraph, makeFinalArticleNodes} from '../../publish/makePublishTaskTgArticle.js';
+import {justPublishToTelegraph} from '../../publish/makePublishTaskTgArticle.js';
 
 
 export interface ContentItemState {

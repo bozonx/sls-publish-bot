@@ -30,7 +30,15 @@ export async function convertNotionToTelegraph(
 
     switch (block.type) {
       case NOTION_BLOCK_TYPES.image:
-        const uploadedImgUrl = await imageUploader((block as any).image.file.url)
+        let uploadedImgUrl
+
+        try {
+          uploadedImgUrl = await imageUploader((block as any).image.file.url)
+        }
+        catch (e) {
+          throw new Error(`Can't upload the image: ${(block as any).image.file.url}`)
+        }
+
         const caption = richTextToTelegraphNodes((block as any).image.caption)
 
         if (caption.length) {

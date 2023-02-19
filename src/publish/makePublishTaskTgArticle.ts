@@ -7,6 +7,7 @@ import {NotionBlocks} from '../types/notion.js';
 import {convertCommonMdToTgHtml} from '../helpers/convertCommonMdToTgHtml.js';
 import {convertNotionToTelegraph} from '../helpers/convertNotionToTelegraph.js';
 import {trimPageBlocks} from '../helpers/convertHelpers.js';
+import {WARN_SIGN} from '../types/constants.js';
 
 
 export async function justPublishToTelegraph(
@@ -15,16 +16,60 @@ export async function justPublishToTelegraph(
   title: string,
   pageBlocks: NotionBlocks
 ): Promise<string> {
-  const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, pageBlocks!)
+  try {
+    const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, pageBlocks!)
+    // create article on telegra.ph
+    return await tgChat.app.telegraPh.create(
+      blogName,
+      title,
+      telegraphNodes
+    )
+  }
+  catch (e) {
+    await tgChat.reply(WARN_SIGN + ' ' + e)
+
+    throw e
+  }
+}
+
+export async function makePublishTaskTgArticle(
+  blogName: string,
+  tgChat: TgChat,
+  isoDate: string,
+  time: string,
+  articleBlocks: NotionBlocks,
+  articleTitle: string,
+  sections?: string[],
+  articleAnnounceMd?: string
+) {
+  const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
+
+  if (!postTmpl && !articleAnnounceMd) {
+    throw new Error(`No post template and article announcement to make post for article`)
+  }
+
   // create article on telegra.ph
-  return await tgChat.app.telegraPh.create(
+  const articleUrl = await justPublishToTelegraph(blogName, tgChat, articleTitle, articleBlocks)
+  const postHtml = makeArticleTgPostHtml(
+    articleTitle,
+    articleUrl,
+    articleAnnounceMd,
+    sections,
+    postTmpl
+  )
+
+  await registerTgTaskOnlyText(
     blogName,
-    title,
-    telegraphNodes
+    tgChat,
+    isoDate,
+    time,
+    postHtml,
+    true
   )
 }
 
-export async function makeFinalArticleNodes(
+
+async function makeFinalArticleNodes(
   blogName: string,
   tgChat: TgChat,
   articleBlocks: NotionBlocks,
@@ -84,40 +129,4 @@ function makeArticleTgPostHtml(
   }
 
   return convertCommonMdToTgHtml(postStr) || ''
-}
-
-export async function makePublishTaskTgArticle(
-  blogName: string,
-  tgChat: TgChat,
-  isoDate: string,
-  time: string,
-  articleBlocks: NotionBlocks,
-  articleTitle: string,
-  sections?: string[],
-  articleAnnounceMd?: string
-) {
-  const postTmpl = tgChat.app.blogs[blogName].sn.telegram?.articlePostTmpl
-
-  if (!postTmpl && !articleAnnounceMd) {
-    throw new Error(`No post template and article announcement to make post for article`)
-  }
-
-  // create article on telegra.ph
-  const articleUrl = await justPublishToTelegraph(blogName, tgChat, articleTitle, articleBlocks)
-  const postHtml = makeArticleTgPostHtml(
-    articleTitle,
-    articleUrl,
-    articleAnnounceMd,
-    sections,
-    postTmpl
-  )
-
-  await registerTgTaskOnlyText(
-    blogName,
-    tgChat,
-    isoDate,
-    time,
-    postHtml,
-    true
-  )
 }
