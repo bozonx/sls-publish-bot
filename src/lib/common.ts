@@ -1,6 +1,6 @@
-import {LOG_LEVELS, LogLevel} from '../types/Logger.js';
 import _ from 'lodash';
 import moment from 'moment';
+import {LOG_LEVELS, LogLevel} from '../types/Logger.js';
 
 
 export function isPromise(toCheck: any): boolean {
@@ -41,6 +41,9 @@ export function isValidUrl(url?: string): boolean {
  * The number can be less than 0!
  */
 export function calcSecondsToDate(toDateStr: string, utcOffset: number): number {
+
+  // TODO: нахер здесь utcOffset ???
+
   const now = moment().utcOffset(utcOffset);
   const toDate = moment(toDateStr).utcOffset(utcOffset);
 

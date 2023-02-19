@@ -5,7 +5,6 @@
 import {PublicationType} from '../types/publicationType.js';
 
 const dict = {
-  greet: 'Добро пожаловать в бот блогов свободы.\nВремя сервера: ',
   menu: {
     mainMenu: 'Главное меню',
     selectedBlog: 'Выбран блог: ',
@@ -255,6 +254,8 @@ const dict = {
     dateTimeHasToBeGreaterThanCurrent: 'Дата и время должны быть больше чем текущее + ',
   },
   message: {
+    greet: 'Добро пожаловать в бот блогов свободы.\nВремя сервера: ',
+    localTime: 'Часовой пояс по Москве, +3:00',
     prePublishInfo: 'Это тот пост будет опубликован в канале ',
     taskDoneSuccessful: 'Задача была успешно выполнена.',
     taskRegistered: 'Задание успешно зарегистрировано',

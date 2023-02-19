@@ -14,7 +14,8 @@ export async function requestNotPublishedFromContentPlan(
   startCursorUuid?: string
 ): Promise<PageObjectResponse[]> {
   const currentDate: string = moment()
-    .utcOffset(tgChat.app.appConfig.utcOffset)
+    // change local date and time to UTC time
+    .utcOffset(0)
     .format(ISO_DATE_FORMAT)
 
   const response = await tgChat.app.notion.api.databases.query({

@@ -1,3 +1,4 @@
+import moment from 'moment/moment.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {
   PRINT_SHORT_DATE_TIME_FORMAT,
@@ -21,7 +22,6 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
-import moment from 'moment/moment.js';
 import {ContentItemState} from './startPublicationMenu.js';
 import ContentItem from '../../types/ContentItem.js';
 import {

@@ -1,3 +1,4 @@
+import moment from 'moment/moment.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askTgPoll} from './askTgPoll.js';
 import {askConfirm} from '../common/askConfirm.js';
@@ -7,7 +8,6 @@ import {registerTgTaskCopy} from '../../publish/registerTgPost.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
 import {makePollInfo} from '../../publish/publishHelpers.js';
-import moment from 'moment/moment.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN} from '../../types/constants.js';
 
 

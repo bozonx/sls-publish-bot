@@ -35,11 +35,13 @@ export async function askDateTime(
 
     await askTime(tgChat, tgChat.asyncCb(async (time: string) => {
       const isoDateTime = makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)
+      const isoDateTimeUnix = moment(isoDateTime).unix()
+      const currentUnix = moment().unix()
 
       if (hasBeGreaterThanCurrent) {
         if (
-          moment(isoDateTime).utc().unix()
-          < (moment().utc().unix() + tgChat.app.appConfig.expiredTaskOffsetSec)
+          isoDateTimeUnix
+          < (currentUnix + tgChat.app.appConfig.expiredTaskOffsetSec)
         ) {
           await tgChat.reply(
             WARN_SIGN + ' '
@@ -53,7 +55,7 @@ export async function askDateTime(
       }
 
       if (checkMaxTaskTime) {
-        if (moment(isoDateTime).unix() > moment().unix() + MAX_TIMEOUT_SECONDS) {
+        if (isoDateTimeUnix > currentUnix + MAX_TIMEOUT_SECONDS) {
           await tgChat.reply(
             WARN_SIGN + ' '
             + `Too big date! Max is (${MAX_TIMEOUT_SECONDS}) seconds (24 days)`

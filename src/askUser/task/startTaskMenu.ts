@@ -1,9 +1,9 @@
+import moment from 'moment/moment.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askTaskMenu, TASK_ACTIONS} from './askTaskMenu.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
 import {PostponeTgPostTask} from '../../types/TaskItem.js';
-import moment from 'moment/moment.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 

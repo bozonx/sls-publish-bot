@@ -9,7 +9,9 @@ import {isoDateToHuman} from '../helpers/helpers.js';
 
 export async function topLevelMenuStarter(tgChat: TgChat) {
   await tgChat.reply(
-    tgChat.app.i18n.greet + isoDateToHuman(moment().format())
+    tgChat.app.i18n.message.greet
+    + isoDateToHuman(moment().utcOffset(tgChat.app.appConfig.utcOffset).format()) + '\n'
+    + tgChat.app.i18n.message.localTime
   )
 
   return askMainMenu(tgChat, tgChat.asyncCb(async (blogNameOrAction: string) => {
