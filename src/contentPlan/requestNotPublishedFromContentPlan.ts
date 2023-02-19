@@ -2,7 +2,7 @@ import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
 import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants.js';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {ISO_DATE_FORMAT} from '../types/constants.js';
+import {ISO_DATE_FORMAT, UTC_TIMEZONE_NUM} from '../types/constants.js';
 
 
 /**
@@ -15,7 +15,7 @@ export async function requestNotPublishedFromContentPlan(
 ): Promise<PageObjectResponse[]> {
   const currentDate: string = moment()
     // change local date and time to UTC time
-    .utcOffset(0)
+    .utcOffset(UTC_TIMEZONE_NUM)
     .format(ISO_DATE_FORMAT)
 
   const response = await tgChat.app.notion.api.databases.query({

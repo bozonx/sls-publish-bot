@@ -361,6 +361,8 @@ async function registerPublishTaskTg(
     throw new Error(`Telegram chat id doesn't set`)
   }
 
+  // TODO: review
+
   const task: PostponeTgPostTask = {
     // time like '2022-11-01T19:58:00+03:00'
     startTime,

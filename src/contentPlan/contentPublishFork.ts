@@ -99,6 +99,9 @@ export async function contentPublishFork(
             blogId,
             articleTitle!,
             content,
+
+            // TODO: конвертнуть offset 0
+
             makeIsoDateTimeStr(pubIsoDate, pubTime, tgChat.app.appConfig.utcOffset),
             sections,
           )
@@ -133,6 +136,9 @@ export async function contentPublishFork(
             blogId,
             articleTitle!,
             content,
+
+            // TODO: конвертнуть offset 0
+
             makeIsoDateTimeStr(pubIsoDate, pubTime, tgChat.app.appConfig.utcOffset),
             sections,
           )

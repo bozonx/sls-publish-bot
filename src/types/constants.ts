@@ -13,6 +13,7 @@ export const WARN_SIGN = '⚠';
 export const MAX_TIMEOUT_SECONDS = 2147483;
 export const FILE_ENCODING = 'utf8';
 export const MAX_INSTA_TAGS = 30
+export const UTC_TIMEZONE_NUM = 0
 
 export enum ChatEvents {
   CALLBACK_QUERY,
