@@ -19,7 +19,6 @@ import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
-import {CUSTOM_POST_ACTION} from '../customTgPost/askCustomPostMenu.js';
 import {askUrlButton} from '../common/askUrlButton.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import {ContentItemState} from './startPublicationMenu.js';
@@ -43,6 +42,9 @@ export const PUBLISH_MENU_ACTION = {
   CHANGE_INSTA_TAGS: 'CHANGE_INSTA_TAGS',
   CHANGE_IMAGE: 'CHANGE_IMAGE',
   CHANGE_SNS: 'CHANGE_SNS',
+  SET_AUTO_REMOVE: 'SET_AUTO_REMOVE',
+  ADD_URL_BUTTON: 'ADD_URL_BUTTON',
+  ONLY_MAKE_TELEGRAPH_ARTICLE: 'ONLY_MAKE_TELEGRAPH_ARTICLE',
 }
 
 
@@ -52,7 +54,7 @@ export async function askPublicationMenu(
   state: ContentItemState,
   item: ContentItem,
   validate: (state: ContentItemState) => void,
-  onDone: () => void,
+  onDone: (action?: keyof typeof PUBLISH_MENU_ACTION) => void,
 ) {
   await addSimpleStep(
     tgChat,
@@ -168,7 +170,7 @@ export async function askPublicationMenu(
             text: (state.tgUrlBtn)
               ? tgChat.app.i18n.buttons.changeTgUrlButton
               : tgChat.app.i18n.buttons.addTgUrlButton,
-            callback_data: CUSTOM_POST_ACTION.ADD_URL_BUTTON,
+            callback_data: PUBLISH_MENU_ACTION.ADD_URL_BUTTON,
           }] : [],
           // ask auto remove
           (state.sns.includes(SN_TYPES.telegram) && [
@@ -181,7 +183,14 @@ export async function askPublicationMenu(
             text: (state.autoDeleteTgIsoDateTime)
               ? tgChat.app.i18n.buttons.changeTgAutoRemove
               : tgChat.app.i18n.buttons.setTgAutoRemove,
-            callback_data: CUSTOM_POST_ACTION.SET_AUTO_REMOVE,
+            callback_data: PUBLISH_MENU_ACTION.SET_AUTO_REMOVE,
+          }] : [],
+          (
+            state.sns.includes(SN_TYPES.telegram)
+            && item.type === PUBLICATION_TYPES.article
+          ) ? [{
+            text: tgChat.app.i18n.buttons.onlyTelegraphArticle,
+            callback_data: PUBLISH_MENU_ACTION.ONLY_MAKE_TELEGRAPH_ARTICLE,
           }] : [],
           [
             makeBackBtn(tgChat.app.i18n),
@@ -205,7 +214,7 @@ async function handleButtons(
   state: ContentItemState,
   item: ContentItem,
   validate: (state: ContentItemState) => void,
-  onDone: () => void
+  onDone: (action?: keyof typeof PUBLISH_MENU_ACTION) => void
 ) {
   switch (queryData) {
     case BACK_BTN_CALLBACK:
@@ -365,7 +374,7 @@ async function handleButtons(
         // print menu again
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
       }));
-    case CUSTOM_POST_ACTION.ADD_URL_BUTTON:
+    case PUBLISH_MENU_ACTION.ADD_URL_BUTTON:
       return await askUrlButton(tgChat, tgChat.asyncCb(async (urlButton?: TgReplyBtnUrl) => {
         if (!urlButton) {
           await tgChat.reply(tgChat.app.i18n.commonPhrases.removedUrlButton);
@@ -387,7 +396,7 @@ async function handleButtons(
         // print menu again
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
       }));
-    case CUSTOM_POST_ACTION.SET_AUTO_REMOVE:
+    case PUBLISH_MENU_ACTION.SET_AUTO_REMOVE:
       return await askTimePeriod(tgChat, tgChat.asyncCb(async (
         hoursPeriod?: number,
         certainIsoDateTime?: string
@@ -431,6 +440,11 @@ async function handleButtons(
         return askPublicationMenu(blogName, tgChat, state, item, validate, onDone)
       }));
     default:
-      throw new Error(`Unknown action`)
+      if (!Object.keys(PUBLISH_MENU_ACTION).includes(queryData)) {
+        throw new Error(`Unknown action`)
+      }
+
+      // it is for ONLY_MAKE_TELEGRAPH_ARTICLE
+      onDone(queryData as keyof typeof PUBLISH_MENU_ACTION)
   }
 }

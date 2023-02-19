@@ -1,7 +1,7 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import ContentItem from '../../types/ContentItem.js';
-import {askPublicationMenu} from './askPublicationMenu.js';
+import {askPublicationMenu, PUBLISH_MENU_ACTION} from './askPublicationMenu.js';
 import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
@@ -14,6 +14,7 @@ import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../contentPlan/validateContentPlanPost.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {printPost} from '../../publish/publishHelpers.js';
+import {justPublishToTelegraph, makeFinalArticleNodes} from '../../publish/makePublishTaskTgArticle.js';
 
 
 export interface ContentItemState {
@@ -68,7 +69,21 @@ export async function startPublicationMenu(
       state,
       pageBlocks
     ),
-    tgChat.asyncCb(async () => {
+    tgChat.asyncCb(async (action?: keyof typeof PUBLISH_MENU_ACTION) => {
+      if (action === PUBLISH_MENU_ACTION.ONLY_MAKE_TELEGRAPH_ARTICLE) {
+        const publishUrl = await justPublishToTelegraph(
+          blogName,
+          tgChat,
+          item.nameGist!,
+          pageBlocks!
+        )
+
+        await tgChat.reply(publishUrl)
+        await tgChat.steps.cancel()
+
+        return
+      }
+
       let pollData: PollData | undefined
       let postTexts: Partial<Record<SnType, string>> | undefined
       const postAsText = ([

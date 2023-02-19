@@ -9,6 +9,21 @@ import {convertNotionToTelegraph} from '../helpers/convertNotionToTelegraph.js';
 import {trimPageBlocks} from '../helpers/convertHelpers.js';
 
 
+export async function justPublishToTelegraph(
+  blogName: string,
+  tgChat: TgChat,
+  title: string,
+  pageBlocks: NotionBlocks
+): Promise<string> {
+  const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, pageBlocks!)
+  // create article on telegra.ph
+  return await tgChat.app.telegraPh.create(
+    blogName,
+    title,
+    telegraphNodes
+  )
+}
+
 export async function makeFinalArticleNodes(
   blogName: string,
   tgChat: TgChat,
@@ -87,10 +102,8 @@ export async function makePublishTaskTgArticle(
     throw new Error(`No post template and article announcement to make post for article`)
   }
 
-  const telegraphNodes = await makeFinalArticleNodes(blogName, tgChat, articleBlocks)
-
   // create article on telegra.ph
-  const articleUrl = await tgChat.app.telegraPh.create(blogName, articleTitle, telegraphNodes)
+  const articleUrl = await justPublishToTelegraph(blogName, tgChat, articleTitle, articleBlocks)
   const postHtml = makeArticleTgPostHtml(
     articleTitle,
     articleUrl,

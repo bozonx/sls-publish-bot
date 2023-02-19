@@ -114,6 +114,7 @@ const dict = {
     cancel: 'Отмена',
     ok: 'Ок',
     toMainMenu: 'В главное меню',
+    onlyTelegraphArticle: 'Только сформировать telegra.ph статью',
     //skip: 'Пропустить',
   },
   commonPhrases: {
