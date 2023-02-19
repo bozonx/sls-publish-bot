@@ -179,12 +179,10 @@ export default class TasksMain {
    */
   private registerTask(task: TaskItem, specifiedTaskId?: string): string {
     // seconds from now to start time
-    const secondsToPublish = calcSecondsToDate(task.startTime, this.app.appConfig.utcOffset);
+    const secondsToPublish = calcSecondsToDate(task.startTime)
     const taskId: string = (specifiedTaskId)
       ? specifiedTaskId
       : String(Object.keys(this.tasks).length);
-
-    //console.log(2222, secondsToPublish)
 
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(() => {

@@ -7,7 +7,7 @@ import {makeTaskDetails} from './makeTaskDetails.js';
 
 export async function validateTask(task: TaskItem, app: App): Promise<string | undefined> {
   // seconds from now to start time
-  const secondsToPublish = calcSecondsToDate(task.startTime, app.appConfig.utcOffset);
+  const secondsToPublish = calcSecondsToDate(task.startTime)
 
   if (secondsToPublish > MAX_TIMEOUT_SECONDS) {
     return `Too big timeout number! ${task.startTime} is ${secondsToPublish} seconds. `

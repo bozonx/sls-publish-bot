@@ -40,14 +40,8 @@ export function isValidUrl(url?: string): boolean {
  * Calculate seconds from now to specified date.
  * The number can be less than 0!
  */
-export function calcSecondsToDate(toDateStr: string, utcOffset: number): number {
-
-  // TODO: нахер здесь utcOffset ???
-
-  const now = moment().utcOffset(utcOffset);
-  const toDate = moment(toDateStr).utcOffset(utcOffset);
-
-  return toDate.unix() - now.unix();
+export function calcSecondsToDate(toIsoDate: string): number {
+  return moment(toIsoDate).unix() - moment().unix()
 }
 
 export function validateTime(rawStr: string) {
