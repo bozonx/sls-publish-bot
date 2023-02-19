@@ -121,19 +121,22 @@ export function makeHumanDateStr(dateStr: string, utcOffset: number): string {
   return moment(dateStr).format(PRINT_FULL_DATE_FORMAT) + ` ${makeUtcOffsetStr(utcOffset)}`
 }
 
-export function makeIsoDateTimeStr(dateStr: string, timeStr: string, utcOffset: number): string {
-  // TODO: вылазиет предупреждение что не точный ISO формат
+export function makeIsoDateTimeStr(isoDateStr: string, timeStr: string, utcOffset: number): string {
+  // TODO: dateStr должен быть нужного формата - YYYY-MM-DD
 
-  // TODO: нахер здесь utcOffset ???
-
-  return moment(
-    moment(dateStr).utcOffset(utcOffset).format(ISO_DATE_FORMAT)
-    + ' ' + timeStr
-  ).format()
+  return `${isoDateStr}T${timeToIso(timeStr)}:00${makeIsoUtcOffsetStr(utcOffset)}`
 }
 
 export function isoDateToHuman(isoDate: string): string {
   return moment(isoDate).format(PRINT_FULL_DATE_FORMAT + ' HH:mm Z') + ' UTC'
+}
+
+export function timeToIso(rawTimeStr: string): string {
+  if (rawTimeStr.match(/^\d\D/)) {
+    return '0' + rawTimeStr
+  }
+
+  return rawTimeStr
 }
 
 export function addHorsInDate(isoDateTime: string, hours: number): string {
