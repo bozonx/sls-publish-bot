@@ -4,7 +4,7 @@ import {askConfirm} from '../common/askConfirm.js';
 import {askCustomPostTg, CustomPostState} from './askCustomPostTg.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {registerTgPost} from '../../publish/registerTgPost.js';
-import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
+import {addHorsInDate, makeIsoDateTimeStr} from '../../helpers/helpers.js';
 import {WARN_SIGN} from '../../types/constants.js';
 
 
@@ -39,7 +39,7 @@ export async function startOrdinaryTgPost(
       }
 
       if (state.autoDeletePeriodHours) {
-        resolvedAutoDeleteTime = replaceHorsInDate(
+        resolvedAutoDeleteTime = addHorsInDate(
           makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset),
           state.autoDeletePeriodHours
         )

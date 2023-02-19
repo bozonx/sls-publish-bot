@@ -2,7 +2,7 @@ import moment from 'moment/moment.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askTaskMenu, TASK_ACTIONS} from './askTaskMenu.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
+import {addHorsInDate, makeIsoDateTimeStr} from '../../helpers/helpers.js';
 import {PostponeTgPostTask} from '../../types/TaskItem.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
@@ -82,7 +82,7 @@ export async function startTaskMenu(taskId: string, tgChat: TgChat, onDone: () =
         }
 
         if (hoursPeriod) {
-          autoDeleteDateTime = replaceHorsInDate((task as PostponeTgPostTask).startTime, hoursPeriod)
+          autoDeleteDateTime = addHorsInDate((task as PostponeTgPostTask).startTime, hoursPeriod)
         }
         else {
           autoDeleteDateTime = certainIsoDateTime || null

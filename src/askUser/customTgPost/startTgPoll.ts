@@ -6,7 +6,7 @@ import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {registerTgTaskCopy} from '../../publish/registerTgPost.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
-import {makeIsoDateTimeStr, replaceHorsInDate} from '../../helpers/helpers.js';
+import {addHorsInDate, makeIsoDateTimeStr} from '../../helpers/helpers.js';
 import {makePollInfo} from '../../publish/publishHelpers.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN} from '../../types/constants.js';
 
@@ -50,7 +50,7 @@ export async function startTgPoll(blogName: string, tgChat: TgChat) {
           finalClosePollIsoDateTime = certainCloseIsoDateTime
         }
         else if (closeHoursPeriod) {
-          finalClosePollIsoDateTime = replaceHorsInDate(publishIsoDateTime, closeHoursPeriod)
+          finalClosePollIsoDateTime = addHorsInDate(publishIsoDateTime, closeHoursPeriod)
         }
 
         if (finalClosePollIsoDateTime) {

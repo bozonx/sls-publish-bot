@@ -5,10 +5,10 @@ import {
   WARN_SIGN
 } from '../../types/constants.js';
 import {
+  addHorsInDate,
   addSimpleStep, compactButtons,
   makeHumanDateTimeStr,
-  makeIsoDateTimeStr,
-  replaceHorsInDate
+  makeIsoDateTimeStr
 } from '../../helpers/helpers.js';
 import {askTime} from '../common/askTime.js';
 import {askPostMedia} from '../common/askPostMedia.js';
@@ -417,7 +417,7 @@ async function handleButtons(
         }
 
         if (hoursPeriod) {
-          state.autoDeleteTgIsoDateTime = replaceHorsInDate(pubIsoDate, hoursPeriod)
+          state.autoDeleteTgIsoDateTime = addHorsInDate(pubIsoDate, hoursPeriod)
         }
         else {
           state.autoDeleteTgIsoDateTime = certainIsoDateTime
