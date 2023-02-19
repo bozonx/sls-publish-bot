@@ -20,6 +20,4 @@ export async function validateTask(task: TaskItem, app: App): Promise<string | u
       + `Task:\n`
       + await makeTaskDetails(task, app);
   }
-
-  // TODO: validate other params
 }
