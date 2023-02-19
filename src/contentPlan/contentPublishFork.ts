@@ -15,7 +15,7 @@ export async function contentPublishFork(
   blogName: string,
   tgChat: TgChat,
   pubType: PublicationType,
-  pubDate: string,
+  pubIsoDate: string,
   pubTime: string,
   sns: SnType[],
   finalMediaGroup: MediaGroupItem[],
@@ -38,7 +38,7 @@ export async function contentPublishFork(
           await makePublishTaskTgArticle(
             blogName,
             tgChat,
-            pubDate,
+            pubIsoDate,
             pubTime,
             articleBlocks!,
             articleTitle!,
@@ -51,7 +51,7 @@ export async function contentPublishFork(
           await registerTgTaskPoll(
             blogName,
             tgChat,
-            pubDate,
+            pubIsoDate,
             pubTime,
             pollData!,
             autoDeleteTgIsoDateTime,
@@ -63,7 +63,7 @@ export async function contentPublishFork(
           await registerTgPost(
             blogName,
             tgChat,
-            pubDate,
+            pubIsoDate,
             pubTime,
             postTexts?.telegram || '',
             postAsText,
@@ -99,7 +99,7 @@ export async function contentPublishFork(
             blogId,
             articleTitle!,
             content,
-            makeIsoDateTimeStr(pubDate, pubTime, tgChat.app.appConfig.utcOffset),
+            makeIsoDateTimeStr(pubIsoDate, pubTime, tgChat.app.appConfig.utcOffset),
             sections,
           )
 
@@ -133,7 +133,7 @@ export async function contentPublishFork(
             blogId,
             articleTitle!,
             content,
-            makeIsoDateTimeStr(pubDate, pubTime, tgChat.app.appConfig.utcOffset),
+            makeIsoDateTimeStr(pubIsoDate, pubTime, tgChat.app.appConfig.utcOffset),
             sections,
           )
 

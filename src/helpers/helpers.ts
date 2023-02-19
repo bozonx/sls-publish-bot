@@ -122,7 +122,9 @@ export function makeHumanDateStr(dateStr: string, utcOffset: number): string {
 }
 
 export function makeIsoDateTimeStr(isoDateStr: string, timeStr: string, utcOffset: number): string {
-  // TODO: dateStr должен быть нужного формата - YYYY-MM-DD
+  if (!isoDateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    throw new Error(`The date isn't in ISO format - ${isoDateStr}`)
+  }
 
   return `${isoDateStr}T${timeToIso(timeStr)}:00${makeIsoUtcOffsetStr(utcOffset)}`
 }
