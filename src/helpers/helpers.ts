@@ -226,12 +226,10 @@ export function makeCleanTexts(
 ): Partial<Record<SnType, string>> | undefined {
   if (!postTexts) return
 
-  let cleanTexts: Partial<Record<SnType, string>> = {}
-
-  for (const sn in postTexts) {
-    // TODO: а для инсты то может не html быть???
-    cleanTexts[sn as SnType] = convertHtmlToCleanText(postTexts[sn as SnType]!)
+  return {
+    telegram: convertHtmlToCleanText(postTexts.telegram),
+    // do not need to clear instagram text
+    instagram: postTexts.instagram,
+    // blogger doesn't matter
   }
-
-  return cleanTexts
 }

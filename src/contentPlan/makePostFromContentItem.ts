@@ -61,7 +61,6 @@ export function makePostFromContentItem(
     }
 
     if (postText) {
-      // TODO: футер надо преобразовать
       // add tags at the end of text
       result[SN_TYPES.instagram] = makeResultPostText(
         instaTags || [],
