@@ -11,7 +11,7 @@ import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
 import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
 import {convertNotionToTgHtml} from '../../helpers/convertNotionToTgHtml.js';
 import {publishTgImage} from '../../apiTg/publishTg.js';
-import {printCreative} from '../../../tgAdvertHelpers/tgAdvertHelpers.js';
+import {printCreative} from '../../tgAdvertHelpers/printCreative.js';
 
 
 const BUY_AD_TYPE_IDS: Record<BuyAdType, string> = {

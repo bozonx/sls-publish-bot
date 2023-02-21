@@ -1,9 +1,9 @@
-import {getFirstImageFromNotionBlocks} from '../src/publish/publishHelpers.js';
-import {convertNotionToTgHtml} from '../src/helpers/convertNotionToTgHtml.js';
-import {publishTgImage} from '../src/apiTg/publishTg.js';
+import {getFirstImageFromNotionBlocks} from '../publish/publishHelpers.js';
+import {convertNotionToTgHtml} from '../helpers/convertNotionToTgHtml.js';
+import {publishTgImage} from '../apiTg/publishTg.js';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {NotionBlocks} from '../src/types/notion.js';
-import TgChat from '../src/apiTg/TgChat.js';
+import {NotionBlocks} from '../types/notion.js';
+import TgChat from '../apiTg/TgChat.js';
 
 
 export async function printCreative(tgChat: TgChat, item: PageObjectResponse, pageContent: NotionBlocks) {
