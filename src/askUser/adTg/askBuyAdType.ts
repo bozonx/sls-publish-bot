@@ -2,14 +2,14 @@ import TgChat from '../../apiTg/TgChat.js';
 import {breakArray} from '../../lib/arrays.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
-import {AD_BUY_TYPES, BuyAdType} from '../../types/types.js';
+import {AD_BUY_TYPES} from '../../types/types.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const BUY_AD_TYPE_CB = 'BUY_AD_TYPE_CB|'
 
 
-export async function askBuyAdType(tgChat: TgChat, onDone: (adType: BuyAdType) => void) {
+export async function askBuyAdType(tgChat: TgChat, onDone: (adType: keyof typeof AD_BUY_TYPES) => void) {
   await addSimpleStep(
     tgChat,
     (): [string, TgReplyButton[][]] => {
@@ -38,7 +38,7 @@ export async function askBuyAdType(tgChat: TgChat, onDone: (adType: BuyAdType) =
       }
       else if (queryData.indexOf(BUY_AD_TYPE_CB) === 0) {
         const splat = queryData.split('|');
-        const adType = splat[1] as BuyAdType;
+        const adType = splat[1] as keyof typeof AD_BUY_TYPES;
 
         await tgChat.reply(tgChat.app.i18n.commonPhrases.type + adType);
 

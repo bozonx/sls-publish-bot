@@ -1,26 +1,25 @@
+import {CreatePageParameters, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askCreative} from './askCreative.js';
-import {CreatePageParameters, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {askCost} from '../common/askCost.js';
-import {AdFormat, BuyAdType, CurrencyTicker} from '../../types/types.js';
+import {AD_BUY_TYPES, AdFormat, CurrencyTicker} from '../../types/types.js';
 import {askFormat} from '../common/askFormat.js';
 import {askNote} from '../common/askNote.js';
 import {askBuyAdType} from './askBuyAdType.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
-import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
-import {convertNotionToTgHtml} from '../../helpers/convertNotionToTgHtml.js';
-import {publishTgImage} from '../../apiTg/publishTg.js';
 import {printCreative} from '../../tgAdvertHelpers/printCreative.js';
 
 
-const BUY_AD_TYPE_IDS: Record<BuyAdType, string> = {
-  best_articles: 'ZpdT',
-  question_solve: 'Th{s',
+// TODO: это нафига???
+const BUY_AD_TYPE_IDS: Record<keyof typeof AD_BUY_TYPES, string> = {
+  bestArticles: 'ZpdT',
+  questionSolve: 'Th{s',
   advert: '?QvM',
   recommend: 'h{Sb',
 };
 
+// TODO: это нафига???
 const BUY_AD_FORMAT_IDS: Record<AdFormat, string> = {
   '1/24': 'CYmi',
   '1/48': 'oR::',
@@ -51,7 +50,7 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
         await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
           const formatId: string = BUY_AD_FORMAT_IDS[format];
 
-          await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: BuyAdType) => {
+          await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_BUY_TYPES) => {
             const adTypeId: string = BUY_AD_TYPE_IDS[adType];
 
             await tgChat.reply(tgChat.app.i18n.message.noteOrDone);

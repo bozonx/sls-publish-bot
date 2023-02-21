@@ -12,11 +12,10 @@ export const CURRENCY_TICKERS: Record<CurrencyTicker, CurrencyTicker> = {
   BUSD: 'BUSD',
 };
 
-export type BuyAdType = 'best_articles' | 'question_solve' | 'advert' | 'recommend';
 
-export const AD_BUY_TYPES: Record<BuyAdType, BuyAdType> = {
-  best_articles: 'best_articles',
-  question_solve: 'question_solve',
+export const AD_BUY_TYPES = {
+  bestArticles: 'bestArticles',
+  questionSolve: 'questionSolve',
   advert: 'advert',
   recommend: 'recommend',
 };
