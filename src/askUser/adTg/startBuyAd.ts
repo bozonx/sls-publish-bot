@@ -7,6 +7,11 @@ import {askFormat} from '../common/askFormat.js';
 import {askNote} from '../common/askNote.js';
 import {askBuyAdType} from './askBuyAdType.js';
 import {askDateTime} from '../common/askDateTime.js';
+import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
+import {getFirstImageFromNotionBlocks} from '../../publish/publishHelpers.js';
+import {convertNotionToTgHtml} from '../../helpers/convertNotionToTgHtml.js';
+import {publishTgImage} from '../../apiTg/publishTg.js';
+import {printCreative} from '../../../tgAdvertHelpers/tgAdvertHelpers.js';
 
 
 const BUY_AD_TYPE_IDS: Record<BuyAdType, string> = {
@@ -34,6 +39,10 @@ const BUY_AD_FORMAT_IDS: Record<AdFormat, string> = {
 
 export async function startBuyAd(blogName: string, tgChat: TgChat) {
   await askCreative(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
+    const pageContent = await requestPageBlocks(item.id, tgChat.app.notion);
+
+    await printCreative(tgChat, item, pageContent)
+
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
 
       // TODO: ask channel
