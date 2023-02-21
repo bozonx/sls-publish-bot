@@ -29,14 +29,14 @@ export async function askBlogMenu(blogName: string, tgChat: TgChat, onDone: (act
             text: tgChat.app.i18n.menu.customTgPostMenu,
             callback_data: BLOG_MENU_ACTIONS.CUSTOM_TG_POST,
           }],
-          // blogSns.telegram && [{
-          //   text: tgChat.app.i18n.menu.buyAdvertTg,
-          //   callback_data: BLOG_MENU_ACTIONS.BUY_TG_AD,
-          // }],
-          // blogSns.telegram && [{
-          //   text: tgChat.app.i18n.menu.sellAdvertTg,
-          //   callback_data: BLOG_MENU_ACTIONS.SELL_TG_AD_PLACE,
-          // }],
+          blogSns.telegram && [{
+            text: tgChat.app.i18n.menu.buyAdvertTg,
+            callback_data: BLOG_MENU_ACTIONS.BUY_TG_AD,
+          }],
+          blogSns.telegram && [{
+            text: tgChat.app.i18n.menu.sellAdvertTg,
+            callback_data: BLOG_MENU_ACTIONS.SELL_TG_AD_PLACE,
+          }],
           [
             {
               text: tgChat.app.i18n.buttons.toMainMenu,

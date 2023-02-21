@@ -1,8 +1,8 @@
 import TgChat from '../apiTg/TgChat.js';
 import {startPublishFromContentPlan} from './publishContentPlan/startPublishFromContentPlan.js';
 import {askBlogMenu, BLOG_MENU_ACTIONS} from './askBlogMenu.js';
-import {startSellAd} from './buySellTg/startSellAd.js';
-import {startBuyAd} from './buySellTg/startBuyAd.js';
+import {startSellAd} from './adTg/startSellAd.js';
+import {startBuyAd} from './adTg/startBuyAd.js';
 import {startCustomTgPostTypeMenu} from './customTgPost/startCustomTgPostTypeMenu.js';
 
 
