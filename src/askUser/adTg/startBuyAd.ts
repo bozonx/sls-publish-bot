@@ -54,11 +54,17 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
           const formatId: string = BUY_AD_FORMAT_IDS[format]
 
           await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_BUY_TYPES) => {
+
+            // TODO: вместо этого выгрузить данные из notion
+
             const adTypeId: string = BUY_AD_TYPE_IDS[adType];
 
-            await tgChat.reply(tgChat.app.i18n.message.noteOrDone);
+            await tgChat.reply(tgChat.app.i18n.message.noteOrDone)
 
             await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
+
+              // TODO: перенести в отдельный файл
+
               const request: CreatePageParameters = {
                 parent: { database_id: tgChat.app.blogs[blogName].notion.buyTgDbId },
                 properties: {

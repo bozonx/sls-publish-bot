@@ -1,6 +1,6 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {askCost} from '../common/askCost.js';
-import {AD_FORMATS, CurrencyTicker, SellAdType} from '../../types/types.js';
+import {AD_FORMATS, AD_SELL_TYPES, CurrencyTicker} from '../../types/types.js';
 import {askFormat} from '../common/askFormat.js';
 import {askCustomPostTg, CustomPostState} from '../customTgPost/askCustomPostTg.js';
 import {askNote} from '../common/askNote.js';
@@ -10,7 +10,7 @@ import {askDateTime} from '../common/askDateTime.js';
 import {registerTgPost} from '../../publish/registerTgPost.js';
 
 
-const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {
+const SELL_AD_TYPE_IDS: Record<keyof typeof AD_SELL_TYPES, string> = {
   publish_post: 'nbiD',
   recommend: 'dgBa',
   other: 'a=W|',
@@ -46,7 +46,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
           await askFormat(tgChat, tgChat.asyncCb(async (format: keyof typeof AD_FORMATS) => {
             const formatId: string = SELL_AD_FORMAT_IDS[format];
 
-            await askSellAdType(tgChat, tgChat.asyncCb(async (adType: SellAdType) => {
+            await askSellAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_SELL_TYPES) => {
               const adTypeId: string = SELL_AD_TYPE_IDS[adType];
 
               // TODO: ask вп если не было введено цены ???

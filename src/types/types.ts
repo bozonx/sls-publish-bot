@@ -20,9 +20,7 @@ export const AD_BUY_TYPES = {
   recommend: 'recommend',
 };
 
-export type SellAdType = 'publish_post' | 'recommend' | 'other';
-
-export const AD_SELL_TYPES: Record<SellAdType, SellAdType> = {
+export const AD_SELL_TYPES = {
   publish_post: 'publish_post',
   recommend: 'recommend',
   other: 'other',
