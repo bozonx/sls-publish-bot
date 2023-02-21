@@ -6,11 +6,18 @@ import {NotionBlocks} from '../types/notion.js';
 import TgChat from '../apiTg/TgChat.js';
 
 
+const CREATIVE_PROPS = {
+  btnText: 'btnText',
+  btnUrl: 'btnUrl',
+  usePreview: 'usePreview',
+}
+
+
 export async function printCreative(tgChat: TgChat, item: PageObjectResponse, pageContent: NotionBlocks) {
   const image = getFirstImageFromNotionBlocks(pageContent)
-  const btnText = (item.properties?.btnText as any).rich_text[0]?.plain_text
-  const btnUrl = (item.properties?.btnUrl as any).url
-  const usePreview = (item.properties?.usePreview as any).checkbox
+  const btnText = (item.properties?.[CREATIVE_PROPS.btnText] as any).rich_text[0]?.plain_text
+  const btnUrl = (item.properties?.[CREATIVE_PROPS.btnUrl] as any).url
+  const usePreview = (item.properties?.[CREATIVE_PROPS.usePreview] as any).checkbox
   const creativeHtml = convertNotionToTgHtml(pageContent)
   const btnUrlResult = (btnText && btnUrl) ? {text: btnText, url: btnUrl} : undefined
 
