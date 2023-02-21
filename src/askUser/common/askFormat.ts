@@ -2,14 +2,14 @@ import TgChat from '../../apiTg/TgChat.js';
 import {breakArray} from '../../lib/arrays.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
-import {AD_FORMATS, AdFormat} from '../../types/types.js';
+import {AD_FORMATS} from '../../types/types.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 
 const FORMAT_CB = 'FORMAT_CB|'
 
 
-export async function askFormat(tgChat: TgChat, onDone: (format: AdFormat) => void) {
+export async function askFormat(tgChat: TgChat, onDone: (format: keyof typeof AD_FORMATS) => void) {
   await addSimpleStep(
     tgChat,
     (): [string, TgReplyButton[][]] => {
@@ -38,7 +38,7 @@ export async function askFormat(tgChat: TgChat, onDone: (format: AdFormat) => vo
       }
       else if (queryData.indexOf(FORMAT_CB) === 0) {
         const splat = queryData.split('|');
-        const format = splat[1] as AdFormat;
+        const format = splat[1] as keyof typeof AD_FORMATS
 
         await tgChat.reply(tgChat.app.i18n.commonPhrases.selectedFormat + format);
 

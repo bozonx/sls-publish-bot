@@ -2,7 +2,7 @@ import {CreatePageParameters, PageObjectResponse} from '@notionhq/client/build/s
 import TgChat from '../../apiTg/TgChat.js';
 import {askCreative} from './askCreative.js';
 import {askCost} from '../common/askCost.js';
-import {AD_BUY_TYPES, AdFormat, CurrencyTicker} from '../../types/types.js';
+import {AD_BUY_TYPES, AD_FORMATS, CurrencyTicker} from '../../types/types.js';
 import {askFormat} from '../common/askFormat.js';
 import {askNote} from '../common/askNote.js';
 import {askBuyAdType} from './askBuyAdType.js';
@@ -20,7 +20,7 @@ const BUY_AD_TYPE_IDS: Record<keyof typeof AD_BUY_TYPES, string> = {
 };
 
 // TODO: это нафига???
-const BUY_AD_FORMAT_IDS: Record<AdFormat, string> = {
+const BUY_AD_FORMAT_IDS: Record<keyof typeof AD_FORMATS, string> = {
   '1/24': 'CYmi',
   '1/48': 'oR::',
   '2/24': 'Ngws',
@@ -44,11 +44,14 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
 
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
 
-      // TODO: ask channel
+      // TODO: ask channel - в какой канал публиковать
 
       await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
-        await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
-          const formatId: string = BUY_AD_FORMAT_IDS[format];
+        await askFormat(tgChat, tgChat.asyncCb(async (format: keyof typeof AD_FORMATS) => {
+
+          // TODO: вместо этого выгрузить данные из notion
+
+          const formatId: string = BUY_AD_FORMAT_IDS[format]
 
           await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_BUY_TYPES) => {
             const adTypeId: string = BUY_AD_TYPE_IDS[adType];

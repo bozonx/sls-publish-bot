@@ -1,6 +1,6 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {askCost} from '../common/askCost.js';
-import {AdFormat, CurrencyTicker, SellAdType} from '../../types/types.js';
+import {AD_FORMATS, CurrencyTicker, SellAdType} from '../../types/types.js';
 import {askFormat} from '../common/askFormat.js';
 import {askCustomPostTg, CustomPostState} from '../customTgPost/askCustomPostTg.js';
 import {askNote} from '../common/askNote.js';
@@ -16,7 +16,7 @@ const SELL_AD_TYPE_IDS: Record<SellAdType, string> = {
   other: 'a=W|',
 };
 
-const SELL_AD_FORMAT_IDS: Record<AdFormat, string> = {
+const SELL_AD_FORMAT_IDS: Record<keyof typeof AD_FORMATS, string> = {
   '1/24': 'UkwQ',
   '1/48': 'QkT=',
   '2/24': 'kXXI',
@@ -43,7 +43,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
     ) => {
       await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
         await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
-          await askFormat(tgChat, tgChat.asyncCb(async (format: AdFormat) => {
+          await askFormat(tgChat, tgChat.asyncCb(async (format: keyof typeof AD_FORMATS) => {
             const formatId: string = SELL_AD_FORMAT_IDS[format];
 
             await askSellAdType(tgChat, tgChat.asyncCb(async (adType: SellAdType) => {
