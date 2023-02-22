@@ -21,7 +21,7 @@ export const AD_BUY_TYPES = {
 };
 
 export const AD_SELL_TYPES = {
-  publish_post: 'publish_post',
+  publishPost: 'publishPost',
   recommend: 'recommend',
   other: 'other',
 };
