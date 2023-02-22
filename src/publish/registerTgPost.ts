@@ -36,7 +36,7 @@ export async function registerTgPost(
   if (postAsText) {
     // post as only text
     const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
-    const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl);
+    const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl)
 
     await registerTgTaskOnlyText(
       blogName,
@@ -47,7 +47,7 @@ export async function registerTgPost(
       (imgUrl) ? true : usePreview,
       tgUrlBtn,
       autoDeleteTgIsoDateTime
-    );
+    )
   }
   else if (mediaGroup.length > 1) {
     // post several images

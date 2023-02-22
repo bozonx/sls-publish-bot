@@ -253,6 +253,7 @@ const dict = {
     articleNeedText: 'Для статьи необходим текст, но его нет',
     dateHasToBeGreaterThanCurrent: 'Дата должны быть больше чем текущая',
     dateTimeHasToBeGreaterThanCurrent: 'Дата и время должны быть больше чем текущее + ',
+    errorUploadingImageTelegraph: 'Не удалось загрузить картинку в telegra.ph, попробуйте снова.',
   },
   message: {
     greet: 'Добро пожаловать в бот блогов свободы.\nВремя сервера: ',

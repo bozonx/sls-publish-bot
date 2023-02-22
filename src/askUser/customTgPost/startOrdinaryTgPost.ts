@@ -46,18 +46,25 @@ export async function startOrdinaryTgPost(
       }
 
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
-        await registerTgPost(
-          blogName,
-          tgChat,
-          isoDate,
-          time,
-          resultTextHtml,
-          postAsText,
-          state.usePreview,
-          state.mediaGroup,
-          state.tgUrlBtn,
-          resolvedAutoDeleteTime
-        );
+        try {
+          await registerTgPost(
+            blogName,
+            tgChat,
+            isoDate,
+            time,
+            resultTextHtml,
+            postAsText,
+            state.usePreview,
+            state.mediaGroup,
+            state.tgUrlBtn,
+            resolvedAutoDeleteTime
+          )
+        }
+        catch (e) {
+          await tgChat.reply(String(e))
+
+          return
+        }
         await tgChat.steps.cancel();
       }), tgChat.app.i18n.commonPhrases.publishConfirmation);
     }), undefined, ORDINARY_POST_DATE_STEP, true, true);

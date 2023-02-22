@@ -18,7 +18,14 @@ export async function makePost2000Text(
     ? imgUrl
     : (await tgChat.app.tg.bot.telegram.getFileLink(imgUrl)).href
   // save image to telegraph
-  const imgTelegraphUrl = await tgChat.app.telegraPh.uploadImage(resolvedImgUrl)
+  let imgTelegraphUrl
+
+  try {
+    imgTelegraphUrl = await tgChat.app.telegraPh.uploadImage(resolvedImgUrl)
+  }
+  catch (e) {
+    throw new Error(tgChat.app.i18n.errors.errorUploadingImageTelegraph)
+  }
   // put image to the text as hidden url
   return putLinkToSpace(rawTextHtml, imgTelegraphUrl)
 }

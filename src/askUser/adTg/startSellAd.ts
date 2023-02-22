@@ -52,19 +52,26 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
               // TODO: ask вп если не было введено цены ???
 
               await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
-                await registerTgPost(
-                  blogName,
-                  tgChat,
-                  isoDate,
-                  time,
-                  resultText,
-                  // TODO: use post as image
-                  isPost2000,
-                  state.usePreview,
-                  state.mediaGroup,
-                  state.tgUrlBtn,
-                  state.autoDeleteTgIsoDateTime
-                );
+                try {
+                  await registerTgPost(
+                    blogName,
+                    tgChat,
+                    isoDate,
+                    time,
+                    resultText,
+                    // TODO: use post as image
+                    isPost2000,
+                    state.usePreview,
+                    state.mediaGroup,
+                    state.tgUrlBtn,
+                    state.autoDeleteTgIsoDateTime
+                  )
+                }
+                catch (e) {
+                  await tgChat.reply(String(e))
+
+                  return
+                }
 
                 const request: CreatePageParameters = {
                   parent: { database_id: tgChat.app.blogs[blogName].notion.sellTgDbId },

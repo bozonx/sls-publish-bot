@@ -134,15 +134,22 @@ export async function startPublicationMenu(
 
         if (state.sns.includes(SN_TYPES.telegram)) {
           // print telegram post preview
-          await printPost(
-            tgChat.botChatId,
-            tgChat,
-            usePreview,
-            postAsText,
-            finalMediaGroup,
-            state.tgUrlBtn,
-            postTexts?.telegram
-          )
+          try {
+            await printPost(
+              tgChat.botChatId,
+              tgChat,
+              usePreview,
+              postAsText,
+              finalMediaGroup,
+              state.tgUrlBtn,
+              postTexts?.telegram
+            )
+          }
+          catch (e) {
+            await tgChat.reply(String(e))
+
+            return
+          }
         }
       }
       // make text for instagram
@@ -164,27 +171,34 @@ export async function startPublicationMenu(
       await askConfirm(tgChat, tgChat.asyncCb(async () => {
         try {
           // Do publish
-          await contentPublishFork(
-            blogName,
-            tgChat,
-            item.type,
-            item.date,
-            state.pubTime,
-            state.sns,
-            finalMediaGroup,
-            postAsText,
-            usePreview,
-            pollData,
-            postTexts,
-            // it's for article only
-            pageBlocks,
-            // article title
-            item.nameGist,
-            state.articleAnnounceMd,
-            state.tgUrlBtn,
-            state.autoDeleteTgIsoDateTime,
-            item.sections
-          );
+          try {
+            await contentPublishFork(
+              blogName,
+              tgChat,
+              item.type,
+              item.date,
+              state.pubTime,
+              state.sns,
+              finalMediaGroup,
+              postAsText,
+              usePreview,
+              pollData,
+              postTexts,
+              // it's for article only
+              pageBlocks,
+              // article title
+              item.nameGist,
+              state.articleAnnounceMd,
+              state.tgUrlBtn,
+              state.autoDeleteTgIsoDateTime,
+              item.sections
+            )
+          }
+          catch (e) {
+            await tgChat.reply(String(e))
+
+            return
+          }
         }
         catch (e) {
           await tgChat.reply(`${WARN_SIGN} ${e}`)

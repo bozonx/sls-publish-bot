@@ -73,7 +73,14 @@ export async function askCustomPostTg(
             state.footerTmplHtml
           );
 
-          await printPostPreview(tgChat, state, resultTextHtml);
+          try {
+            await printPostPreview(tgChat, state, resultTextHtml)
+          }
+          catch (e) {
+            await tgChat.reply(String(e))
+
+            return
+          }
 
           onDone(state, resultTextHtml);
         }
