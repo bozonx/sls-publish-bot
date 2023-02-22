@@ -7,7 +7,7 @@ import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
 import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/MessageEvent.js';
-import {isValidUrl} from '../lib/common.js';
+import {makePost2000Text} from '../helpers/makePost2000.js';
 
 
 export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {
@@ -60,24 +60,6 @@ export function makeContentLengthDetails(
   // Blogger doesn't have a post. It will be an article
 
   return result.join('\n')
-}
-
-export async function makePost2000Text(
-  tgChat: TgChat,
-  rawTextHtml: string,
-  imgUrl?: string
-): Promise<string> {
-  // if no image then return just text
-  if (!imgUrl) return rawTextHtml
-  // if there is an image then put it to text
-  // make image from file id if need
-  const resolvedImgUrl = (isValidUrl(imgUrl))
-    ? imgUrl
-    : (await tgChat.app.tg.bot.telegram.getFileLink(imgUrl)).href
-  // save image to telegraph
-  const imgTelegraphUrl = await tgChat.app.telegraPh.uploadImage(resolvedImgUrl)
-  // put image to the text as hidden url
-  return `<a href="${imgTelegraphUrl}"> </a>` + rawTextHtml
 }
 
 export function makePublishInfoMessage(
