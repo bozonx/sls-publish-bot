@@ -59,12 +59,10 @@ export async function askContentToUse(
                 callback_data: CONTENT_MARKER + index,
               }];
             }),
-            compactUndefined([
-              hasNext && {
-                text: tgChat.app.i18n.commonPhrases.next,
-                callback_data: ASK_CONTENT_ITEM.NEXT,
-              } || undefined,
-            ]),
+            (hasNext) ? [{
+              text: tgChat.app.i18n.commonPhrases.next,
+              callback_data: ASK_CONTENT_ITEM.NEXT,
+            }] : [],
             [
               makeBackBtn(tgChat.app.i18n),
               makeCancelBtn(tgChat.app.i18n),
