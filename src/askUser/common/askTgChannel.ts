@@ -10,7 +10,12 @@ import {
   makeCancelBtn,
   SKIP_BTN_CALLBACK
 } from '../../helpers/buttons.js';
+import {askText} from './askText.js';
 
+
+const ASK_TG_CHANNEL = {
+  ANOTHER: 'ANOTHER',
+}
 
 type ResultCallback = (channelName?: string, channelUrl?: string) => void
 
@@ -29,6 +34,10 @@ export async function askTgChannel(
         text: (skipLabel) ? skipLabel : tgChat.app.i18n.commonPhrases.skip,
         callback_data: SKIP_BTN_CALLBACK,
       },
+      {
+        text: tgChat.app.i18n.menu.anotherChannel,
+        callback_data: ASK_TG_CHANNEL.ANOTHER,
+      },
     ] : [],
     [
       makeBackBtn(tgChat.app.i18n),
@@ -45,14 +54,10 @@ export async function askTgChannel(
       tgChat.events.addListener(
         ChatEvents.TEXT,
         tgChat.asyncCb(async (textMsg: TextMessageEvent) => {
-          const url = _.trim(textMsg.text)
 
-          // TODO: распознать имя канала
+          // TODO: сделать поиск
 
-          onDone(
-            'no name',
-            url
-          );
+          // const url = _.trim(textMsg.text)
         })
       ),
       ChatEvents.TEXT
@@ -68,6 +73,11 @@ export async function askTgChannel(
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel()
           }
+          else if (queryData === ASK_TG_CHANNEL.ANOTHER) {
+            await askAnotherChannel(tgChat, (channelName: string, channelUrl?: string) => {
+              onDone(channelName, channelUrl)
+            })
+          }
           else if (queryData === SKIP_BTN_CALLBACK) {
             onDone()
           }
@@ -76,4 +86,13 @@ export async function askTgChannel(
       ChatEvents.CALLBACK_QUERY
     ]);
   });
+}
+
+
+async function askAnotherChannel(tgChat: TgChat, onDone: (channelName: string, channelUrl?: string) => void) {
+  await askText(tgChat, tgChat.asyncCb(async (textHtml?: string, channelName?: string) => {
+    await askText(tgChat, (textHtml?: string, channelUrl?: string) => {
+      onDone(channelName!, channelUrl)
+    }, tgChat.app.i18n.menu.anotherChannelUrl, true, tgChat.app.i18n.commonPhrases.skip)
+  }), tgChat.app.i18n.menu.anotherChannelName, false)
 }

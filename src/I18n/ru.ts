@@ -48,7 +48,7 @@ const dict = {
     makePoll: 'Создайте или расшарьте сюда опрос',
     postFooter: 'Футер поста: ',
     askTypeText: 'Введите или расшарьте текст. Поддерживается стандартное форматирование Telegram кроме spoiler',
-    askTgChannel: 'Введите URL канала, его имя распознается само',
+    askTgChannel: 'Выберете канал. Введите часть названия канала для фильтрации',
     selectedPostText: 'Будет использован текст поста:',
     selectedAnnounce: 'Будет использован анонс статьи:',
     selectedNoPostText: 'У поста нет текста.',
@@ -80,6 +80,9 @@ const dict = {
     selectPollClose: 'Чтобы установить отложенное закрытие опроса напишите количество '
       + 'часов от публикации до закрытия опроса (например 24, 72, макс 596), либо выберете из меню.',
     askAnnounce: 'Вставьте анонс в виде markdown. Можно вставлять ${ TITLE } и ${ ARTICLE_URL }',
+    anotherChannel: 'Другой канал',
+    anotherChannelName: 'Название канала',
+    anotherChannelUrl: 'Url канала',
   },
   buttons: {
     postMediaSkip: 'Без картинки',
@@ -116,7 +119,6 @@ const dict = {
     ok: 'Ок',
     toMainMenu: 'В главное меню',
     onlyTelegraphArticle: 'Только сформировать telegra.ph статью',
-    //skip: 'Пропустить',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',
