@@ -5,51 +5,100 @@ import {PageObjectResponse, RichTextItemResponse} from '@notionhq/client/build/s
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {CONTENT_PROPS} from '../../types/ContentItem.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
+import {Pagination} from '../../helpers/Pagination.js';
+import {requestNotPublishedFromContentPlan} from '../../contentPlan/requestNotPublishedFromContentPlan.js';
+import {compactUndefined} from '../../lib/arrays.js';
+import {TELEGRAPH_LIST_MENU} from '../telegraph/askTelegraphList.js';
 
 
-const CONTENT_MARKER = 'content:'
+const ASK_CONTENT_ITEM = {
+  NEXT: 'NEXT',
+  PREV: 'PREV',
+}
+
+const CONTENT_MARKER = 'CONTENT_MARKER:'
 
 
 export async function askContentToUse(
-  items: PageObjectResponse[],
+  blogName: string,
   tgChat: TgChat,
   onDone: (item: PageObjectResponse) => void
 ) {
-  await addSimpleStep(
-    tgChat,
-    () => [
-      tgChat.app.i18n.menu.selectContent,
-      [
-        ...items.map((item, index) => {
-          return [{
-            text: makeButtonTitle(item),
-            callback_data: CONTENT_MARKER + index,
-          }];
-        }),
-        [
-          makeBackBtn(tgChat.app.i18n),
-          makeCancelBtn(tgChat.app.i18n),
-        ],
-      ]
-    ],
-    (queryData: string) => {
-      if (queryData === BACK_BTN_CALLBACK) {
-        return tgChat.steps.back()
+  const pagination = new Pagination(
+    tgChat.app.appConfig.itemsPerPage,
+    async (pageSize: number, offset?: number, nextCursor?: string | null) => {
+      try {
+        // load not published records from content plan
+        return await requestNotPublishedFromContentPlan(
+          blogName,
+          tgChat,
+          pageSize,
+          nextCursor!
+        )
       }
-      else if (queryData === CANCEL_BTN_CALLBACK) {
-        return tgChat.steps.cancel()
-      }
-      else if (queryData.indexOf(CONTENT_MARKER) === 0) {
-        const splat = queryData.split(':')
-        const itemIndex = Number(splat[1])
+      catch (e) {
+        await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e)
+        await tgChat.steps.back()
 
-        onDone(items[itemIndex])
+        return
       }
-      else {
-        throw new Error(`Unknown action`)
-      }
+    },
+    async (items: PageObjectResponse[], hasNext: boolean, hasPrev: boolean, totalCount?: number) => {
+      await addSimpleStep(
+        tgChat,
+        () => [
+          tgChat.app.i18n.menu.selectContent,
+          [
+            ...items.map((item, index) => {
+              return [{
+                text: makeButtonTitle(item),
+                callback_data: CONTENT_MARKER + index,
+              }];
+            }),
+            compactUndefined([
+              hasPrev && {
+                text: tgChat.app.i18n.commonPhrases.prev,
+                callback_data: ASK_CONTENT_ITEM.PREV,
+              } || undefined,
+              hasNext && {
+                text: tgChat.app.i18n.commonPhrases.next,
+                callback_data: ASK_CONTENT_ITEM.NEXT,
+              } || undefined,
+            ]),
+            [
+              makeBackBtn(tgChat.app.i18n),
+              makeCancelBtn(tgChat.app.i18n),
+            ],
+          ]
+        ],
+        (queryData: string) => {
+          if (queryData === BACK_BTN_CALLBACK) {
+            return tgChat.steps.back()
+          }
+          else if (queryData === CANCEL_BTN_CALLBACK) {
+            return tgChat.steps.cancel()
+          }
+          else if (queryData === TELEGRAPH_LIST_MENU.NEXT) {
+            return pagination.goNext()
+          }
+          else if (queryData === TELEGRAPH_LIST_MENU.PREV) {
+            return pagination.goPrev()
+          }
+          else if (queryData.indexOf(CONTENT_MARKER) === 0) {
+            const splat = queryData.split(':')
+            const itemIndex = Number(splat[1])
+
+            onDone(items[itemIndex])
+          }
+          else {
+            throw new Error(`Unknown action`)
+          }
+        }
+      )
     }
-  );
+  )
+
+  await pagination.init()
 }
 
 

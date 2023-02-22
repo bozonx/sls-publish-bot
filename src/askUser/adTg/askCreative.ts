@@ -1,6 +1,5 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {DB_DEFAULT_PAGE_SIZE} from '../../apiNotion/constants.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
@@ -19,7 +18,7 @@ export async function askCreative(blogName: string, tgChat: TgChat, onDone: (ite
         items = (await tgChat.app.notion.api.databases.query({
           database_id: tgChat.app.blogs[blogName].notion.creativeDbId,
           // TODO: сделать пагинацию
-          page_size: DB_DEFAULT_PAGE_SIZE,
+          page_size: 10,
         })).results as any;
       }
       catch (e) {

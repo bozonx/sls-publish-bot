@@ -1,8 +1,7 @@
 import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
-import {DB_DEFAULT_PAGE_SIZE} from '../apiNotion/constants.js';
-import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 import {ISO_DATE_FORMAT, UTC_TIMEZONE_NUM} from '../types/constants.js';
+import {NotionListItem} from '../types/notion.js';
 
 
 /**
@@ -11,8 +10,9 @@ import {ISO_DATE_FORMAT, UTC_TIMEZONE_NUM} from '../types/constants.js';
 export async function requestNotPublishedFromContentPlan(
   blogName: string,
   tgChat: TgChat,
-  startCursorUuid?: string
-): Promise<PageObjectResponse[]> {
+  pageSize: number,
+  startCursorUuid: string | null
+): Promise<NotionListItem> {
   const currentDate: string = moment()
     // change local date and time to UTC time
     .utcOffset(UTC_TIMEZONE_NUM)
@@ -20,16 +20,24 @@ export async function requestNotPublishedFromContentPlan(
 
   const response = await tgChat.app.notion.api.databases.query({
     database_id: tgChat.app.blogs[blogName].notion.contentPlanDbId,
-    ...makeContentPlanQuery(currentDate, startCursorUuid),
+    ...makeContentPlanQuery(currentDate, pageSize, startCursorUuid),
   })
 
-  return (response as any).results
+  return {
+    items: (response as any).results,
+    nextCursor: response.next_cursor,
+    hasMore: response.has_more,
+  }
 }
 
-function makeContentPlanQuery(currentDate: string, startCursorUuid?: string): Record<string, any> {
+function makeContentPlanQuery(
+  currentDate: string,
+  pageSize: number,
+  startCursorUuid: string | null
+): Record<string, any> {
   return {
     start_cursor: startCursorUuid,
-    page_size: DB_DEFAULT_PAGE_SIZE,
+    page_size: pageSize,
     filter: {
       and: [
         {

@@ -7,11 +7,9 @@ import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from
 import {Pagination} from '../../helpers/Pagination.js';
 
 
-export type TelegraphListMenu = 'TELEGRAPH_NEXT' | 'TELEGRAPH_PREV';
-
-export const TELEGRAPH_LIST_MENU: Record<TelegraphListMenu, TelegraphListMenu> = {
-  TELEGRAPH_NEXT: 'TELEGRAPH_NEXT',
-  TELEGRAPH_PREV: 'TELEGRAPH_PREV',
+export const TELEGRAPH_LIST_MENU = {
+  NEXT: 'NEXT',
+  PREV: 'PREV',
 };
 
 const PAGE_ITEM_CALLBACK = 'PAGE_ITEM_CALLBACK:'
@@ -20,13 +18,21 @@ const PAGE_ITEM_CALLBACK = 'PAGE_ITEM_CALLBACK:'
 export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => void) {
   const pagination = new Pagination(
     tgChat.app.appConfig.itemsPerPage,
-    async (offset: number, pageSize: number) => {
-      const pages: PageList = await tgChat.app.telegraPh.getPages(pageSize, offset)
+    async (pageSize: number, offset?: number) => {
+      try {
+        const pages: PageList = await tgChat.app.telegraPh.getPages(pageSize, offset)
 
-      return [pages.pages, pages.total_count]
+        return {
+          items: pages.pages,
+          totalCount: pages.total_count
+        }
+      }
+      catch (e) {
+        await tgChat.reply(String(e))
+      }
     },
     async (pages: Page[], hasNext: boolean, hasPrev: boolean, totalCount?: number) => {
-      await addSimpleStep(
+      addSimpleStep(
         tgChat,
         async (): Promise<[string, TgReplyButton[][]]> => {
           return [
@@ -41,11 +47,11 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => v
               compactUndefined([
                 hasPrev && {
                   text: tgChat.app.i18n.commonPhrases.prev,
-                  callback_data: TELEGRAPH_LIST_MENU.TELEGRAPH_PREV,
+                  callback_data: TELEGRAPH_LIST_MENU.PREV,
                 } || undefined,
                 hasNext && {
                   text: tgChat.app.i18n.commonPhrases.next,
-                  callback_data: TELEGRAPH_LIST_MENU.TELEGRAPH_NEXT,
+                  callback_data: TELEGRAPH_LIST_MENU.NEXT,
                 } || undefined,
               ]),
               [
@@ -68,11 +74,11 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => v
           else if (queryData === BACK_BTN_CALLBACK) {
             return tgChat.steps.back();
           }
-          else if (queryData === TELEGRAPH_LIST_MENU.TELEGRAPH_NEXT) {
-            await pagination.goNext()
+          else if (queryData === TELEGRAPH_LIST_MENU.NEXT) {
+            return pagination.goNext()
           }
-          else if (queryData === TELEGRAPH_LIST_MENU.TELEGRAPH_PREV) {
-            await pagination.goPrev()
+          else if (queryData === TELEGRAPH_LIST_MENU.PREV) {
+            return pagination.goPrev()
           }
           // else if (Object.keys(TELEGRAPH_LIST_MENU).includes(queryData)) {
           //   onDone(queryData as TelegraphListMenu);

@@ -3,7 +3,6 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js'
 import {askContentToUse} from './askContentToUse.js';
 import {prepareContentItem} from '../../contentPlan/parseContent.js';
 import ContentItem from '../../types/ContentItem.js';
-import {requestNotPublishedFromContentPlan} from '../../contentPlan/requestNotPublishedFromContentPlan.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
 import {resolvePostFooter, resolveSns} from '../../helpers/helpers.js';
 import {getFirstImageFromNotionBlocks,} from '../../publish/publishHelpers.js';
@@ -16,21 +15,8 @@ import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 
 
 export async function startPublishFromContentPlan(blogName: string, tgChat: TgChat) {
-  let notPublishedItems: PageObjectResponse[]
-
-  try {
-    // load not published records from content plan
-    notPublishedItems = await requestNotPublishedFromContentPlan(blogName,tgChat)
-  }
-  catch (e) {
-    await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e)
-    await tgChat.steps.back()
-
-    return
-  }
-
   // ask use select not published item
-  await askContentToUse(notPublishedItems, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
+  await askContentToUse(blogName, tgChat, tgChat.asyncCb(async (item: PageObjectResponse) => {
     let parsedContentItem: ContentItem
     let pageBlocks: NotionBlocks | undefined
 

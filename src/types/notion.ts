@@ -1,7 +1,13 @@
-import {BlockObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
+import {BlockObjectResponse, PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';
 
 
 export type NotionBlocks = BlockObjectResponse[]
+
+export interface NotionListItem {
+  items: PageObjectResponse[],
+  nextCursor: string | null,
+  hasMore: boolean,
+}
 
 export type NotionAnnotation = {
   bold: boolean
