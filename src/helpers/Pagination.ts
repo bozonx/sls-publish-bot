@@ -18,7 +18,6 @@ type PaginationRenderHandler = (pages: any[], hasNext: boolean, hasPrev: boolean
 export class Pagination {
   private offset = 0
   private nextCursor?: string | null
-  private firstPageNextCursor?: string
   private readonly pageSize: number
   private readonly loadList: PaginationListHandler
   private readonly renderList: PaginationRenderHandler
@@ -54,23 +53,20 @@ export class Pagination {
     if (!result) return
 
     let hasNext: boolean
-    let hasPrev: boolean
+    let hasPrev = false
 
     if (typeof result.nextCursor === 'undefined') {
       // ordinary style
       hasNext = (typeof result.totalCount === 'number')
         ? (this.offset + this.pageSize < result.totalCount)
         : result.items.length === this.pageSize
-      hasPrev = this.offset > 0
     }
     else {
       // notion style
       this.nextCursor = result.nextCursor
 
-      if (!this.firstPageNextCursor && this.nextCursor) this.firstPageNextCursor = this.nextCursor
-
       hasNext = Boolean(result.hasNext)
-      hasPrev = this.firstPageNextCursor !== this.nextCursor
+      hasPrev = this.offset > 0
     }
 
     await this.renderList(result.items, hasNext, hasPrev, result.totalCount)

@@ -8,12 +8,10 @@ import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from
 import {Pagination} from '../../helpers/Pagination.js';
 import {requestNotPublishedFromContentPlan} from '../../contentPlan/requestNotPublishedFromContentPlan.js';
 import {compactUndefined} from '../../lib/arrays.js';
-import {TELEGRAPH_LIST_MENU} from '../telegraph/askTelegraphList.js';
 
 
 const ASK_CONTENT_ITEM = {
   NEXT: 'NEXT',
-  PREV: 'PREV',
 }
 
 const CONTENT_MARKER = 'CONTENT_MARKER:'
@@ -49,7 +47,7 @@ export async function askContentToUse(
         return
       }
     },
-    async (items: PageObjectResponse[], hasNext: boolean, hasPrev: boolean) => {
+    async (items: PageObjectResponse[], hasNext: boolean) => {
       await addSimpleStep(
         tgChat,
         () => [
@@ -62,10 +60,6 @@ export async function askContentToUse(
               }];
             }),
             compactUndefined([
-              hasPrev && {
-                text: tgChat.app.i18n.commonPhrases.prev,
-                callback_data: ASK_CONTENT_ITEM.PREV,
-              } || undefined,
               hasNext && {
                 text: tgChat.app.i18n.commonPhrases.next,
                 callback_data: ASK_CONTENT_ITEM.NEXT,
@@ -84,11 +78,8 @@ export async function askContentToUse(
           else if (queryData === CANCEL_BTN_CALLBACK) {
             return tgChat.steps.cancel()
           }
-          else if (queryData === TELEGRAPH_LIST_MENU.NEXT) {
+          else if (queryData === ASK_CONTENT_ITEM.NEXT) {
             return pagination.goNext()
-          }
-          else if (queryData === TELEGRAPH_LIST_MENU.PREV) {
-            return pagination.goPrev()
           }
           else if (queryData.indexOf(CONTENT_MARKER) === 0) {
             const splat = queryData.split(':')
@@ -116,5 +107,5 @@ function makeButtonTitle(item: PageObjectResponse): string {
 
   const gistRichText: RichTextItemResponse = (nameProp as any).title[0]
 
-  return `${shortDateText} ${gistRichText.plain_text}`
+  return `${shortDateText} ${gistRichText?.plain_text || 'No name!'}`
 }
