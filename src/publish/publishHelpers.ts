@@ -89,7 +89,7 @@ export async function printPost(
     if (!resultTextHtml) throw new Error(`No text`);
     // post as only text
     const imgUrl: string | undefined = resolveImageUrl(mediaGroup)
-    const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl);
+    const post2000Txt = await makePost2000Text(tgChat, resultTextHtml, imgUrl)
 
     return await publishTgText(
       tgChat.app,
@@ -97,7 +97,7 @@ export async function printPost(
       post2000Txt,
       usePreview,
       tgUrlBtn
-    );
+    )
   }
   else if (mediaGroup.length > 1) {
     // media group
