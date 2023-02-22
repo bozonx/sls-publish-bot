@@ -36,9 +36,12 @@ export async function createBuyAdItem(
   adType: keyof typeof AD_BUY_TYPES,
   format: keyof typeof AD_FORMATS,
   cost?: number,
-  note?: string
+  note?: string,
+  channelName?: string,
+  channelUrl?: string
 ) {
   // TODO: note - преобразовать html в notion
+  // TODO: use channelName, channelUrl
 
   // TODO: вместо этого выгрузить данные из notion
 

@@ -10,6 +10,7 @@ import {askDateTime} from '../common/askDateTime.js';
 import {requestPageBlocks} from '../../apiNotion/requestPageBlocks.js';
 import {printCreative} from '../../tgAdvertHelpers/printCreative.js';
 import {createBuyAdItem} from '../../notionRequests/createBuyAdItem.js';
+import {askTgChannel} from '../common/askTgChannel.js';
 
 
 export async function startBuyAd(blogName: string, tgChat: TgChat) {
@@ -19,40 +20,41 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
     await printCreative(tgChat, item, pageContent)
 
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+      await askTgChannel(tgChat, tgChat.asyncCb(async (channelName?: string, channelUrl?: string) => {
+        await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
+          await askFormat(tgChat, tgChat.asyncCb(async (format: keyof typeof AD_FORMATS) => {
+            await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_BUY_TYPES) => {
+              await tgChat.reply(tgChat.app.i18n.message.noteOrDone)
 
-      // TODO: ask channel - в какой канал публиковать
+              await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
+                try {
+                  await createBuyAdItem(
+                    blogName,
+                    tgChat,
+                    isoDate,
+                    time,
+                    adType,
+                    format,
+                    cost,
+                    note,
+                    channelName,
+                    channelUrl
+                  )
+                }
+                catch (e) {
+                  await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
 
-      await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
-        await askFormat(tgChat, tgChat.asyncCb(async (format: keyof typeof AD_FORMATS) => {
-          await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_BUY_TYPES) => {
-            await tgChat.reply(tgChat.app.i18n.message.noteOrDone)
+                  return
+                }
 
-            await askNote(tgChat, tgChat.asyncCb(async (note: string) => {
-              try {
-                await createBuyAdItem(
-                  blogName,
-                  tgChat,
-                  isoDate,
-                  time,
-                  adType,
-                  format,
-                  cost,
-                  note
-                )
-              }
-              catch (e) {
-                await tgChat.reply(tgChat.app.i18n.errors.cantCreatePage + e)
+                await tgChat.reply(tgChat.app.i18n.message.buyAdDone)
+                await tgChat.steps.cancel();
+              }))
 
-                return
-              }
-
-              await tgChat.reply(tgChat.app.i18n.message.buyAdDone)
-              await tgChat.steps.cancel();
-            }))
-
+            }));
           }));
-        }));
-      }));
+        }))
+      }))
     }), undefined, undefined, true, true);
   }));
 }

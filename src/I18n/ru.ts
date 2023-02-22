@@ -48,6 +48,7 @@ const dict = {
     makePoll: 'Создайте или расшарьте сюда опрос',
     postFooter: 'Футер поста: ',
     askTypeText: 'Введите или расшарьте текст. Поддерживается стандартное форматирование Telegram кроме spoiler',
+    askTgChannel: 'Введите URL канала, его имя распознается само',
     selectedPostText: 'Будет использован текст поста:',
     selectedAnnounce: 'Будет использован анонс статьи:',
     selectedNoPostText: 'У поста нет текста.',
