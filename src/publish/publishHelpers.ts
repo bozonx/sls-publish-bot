@@ -95,7 +95,7 @@ export async function printPost(
       tgChat.app,
       chatId,
       post2000Txt,
-      usePreview,
+      (imgUrl) ? true : usePreview,
       tgUrlBtn
     )
   }
