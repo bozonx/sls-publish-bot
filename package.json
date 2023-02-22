@@ -13,9 +13,9 @@
     "prod": "yarn ts-node --esm ./src/index.ts",
     "container": "mkdir -p ${DATA_DIR} && yarn install --prod && yarn prod",
     "typecheck": "tsc --noEmit ./src/index.ts",
-    "build": "docker build -f ./docker/Dockerfile -t bozonx/publish_bot:latest .",
-    "push": "docker push bozonx/publish_bot:latest",
-    "prod-test-run": "docker run --name sls-bot -ti --rm bozonx/publish_bot:latest"
+    "build": "_useless/docker build -f ./docker/Dockerfile -t bozonx/publish_bot:latest .",
+    "push": "_useless/docker push bozonx/publish_bot:latest",
+    "prod-test-run": "_useless/docker run --name sls-bot -ti --rm bozonx/publish_bot:latest"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.3",
