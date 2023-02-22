@@ -60,13 +60,13 @@ export class Pagination {
       hasNext = (typeof result.totalCount === 'number')
         ? (this.offset + this.pageSize < result.totalCount)
         : result.items.length === this.pageSize
+      hasPrev = this.offset > 0
     }
     else {
       // notion style
       this.nextCursor = result.nextCursor
 
       hasNext = Boolean(result.hasNext)
-      hasPrev = this.offset > 0
     }
 
     await this.renderList(result.items, hasNext, hasPrev, result.totalCount)
