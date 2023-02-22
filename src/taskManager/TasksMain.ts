@@ -88,7 +88,7 @@ export default class TasksMain {
     this.clearTask(taskId)
     // do noting on error
     await this.saveTasks()
-    this.app.channelLog.info(
+    this.app.channelLog.log(
       this.app.i18n.message.taskRemoved + '\n'
       + `taskId: ${taskId}\n`
       + await makeTaskDetails(removedTask, this.app)
@@ -114,7 +114,7 @@ export default class TasksMain {
 
     await this.saveTasks()
 
-    this.app.channelLog.info(
+    this.app.channelLog.log(
       this.app.i18n.message.taskEdited + '\n'
       + `taskId: ${taskId}\n`
       + await makeTaskDetails(this.tasks[taskId], this.app)
