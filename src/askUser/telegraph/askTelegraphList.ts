@@ -55,7 +55,7 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => v
             ],
           ]
         },
-        (queryData: string) => {
+        async (queryData: string) => {
           if (queryData.indexOf(PAGE_ITEM_CALLBACK) === 0) {
             const splat: string[] = queryData.split(':');
             const page: Page = pages[Number(splat[1])];
@@ -69,10 +69,10 @@ export async function askTelegraphList(tgChat: TgChat, onDone: (page: Page) => v
             return tgChat.steps.back();
           }
           else if (queryData === TELEGRAPH_LIST_MENU.TELEGRAPH_NEXT) {
-            askTelegraphList(tgChat, onDone)
+            await pagination.goNext()
           }
           else if (queryData === TELEGRAPH_LIST_MENU.TELEGRAPH_PREV) {
-            askTelegraphList(tgChat, onDone)
+            await pagination.goPrev()
           }
           // else if (Object.keys(TELEGRAPH_LIST_MENU).includes(queryData)) {
           //   onDone(queryData as TelegraphListMenu);

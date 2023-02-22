@@ -1,7 +1,7 @@
 
 
 // returns [items[], totalCount]
-type PaginationListHandler = (offset: number, pageSize: number) => Promise<[any[], number?]>
+type PaginationListHandler = (offset: number, pageSize: number) => Promise<[any[], number | undefined]>
 type PaginationRenderHandler = (pages: any[], hasNext: boolean, hasPrev: boolean, totalCount?: number) => Promise<void>
 
 export class Pagination {
@@ -22,15 +22,26 @@ export class Pagination {
     await this.loadAndRenderPage()
   }
 
+  async goNext() {
+    this.offset += this.pageSize
+
+    await this.loadAndRenderPage()
+  }
+
+  async goPrev() {
+    this.offset -= this.pageSize
+
+    await this.loadAndRenderPage()
+  }
+
 
   private async loadAndRenderPage() {
     const [pages, totalCount] = await this.loadList(this.offset, this.pageSize)
-    const hasNext = pages.length === this.pageSize
-    const hasPrev = this.offset > this.pageSize - 1
 
-    // TODO: нужно ли отнимать -1 ?
-    // TODO: проверить конец
-    this.offset += this.pageSize
+    const hasNext = (typeof totalCount === 'number')
+      ? (this.offset + this.pageSize < totalCount)
+      : pages.length === this.pageSize
+    const hasPrev = this.offset > 0
 
     await this.renderList(pages, hasNext, hasPrev, totalCount)
   }
