@@ -29,12 +29,18 @@ export async function askContentToUse(
     async (pageSize: number, offset?: number, nextCursor?: string | null) => {
       try {
         // load not published records from content plan
-        return await requestNotPublishedFromContentPlan(
+        const result = await requestNotPublishedFromContentPlan(
           blogName,
           tgChat,
           pageSize,
           nextCursor!
         )
+
+        return {
+          items: result.items,
+          nextCursor: result.nextCursor,
+          hasNext: result.hasMore,
+        }
       }
       catch (e) {
         await tgChat.reply(tgChat.app.i18n.errors.errorLoadFromNotion + e)
@@ -43,7 +49,7 @@ export async function askContentToUse(
         return
       }
     },
-    async (items: PageObjectResponse[], hasNext: boolean, hasPrev: boolean, totalCount?: number) => {
+    async (items: PageObjectResponse[], hasNext: boolean, hasPrev: boolean) => {
       await addSimpleStep(
         tgChat,
         () => [

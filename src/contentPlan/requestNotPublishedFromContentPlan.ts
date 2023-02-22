@@ -23,6 +23,9 @@ export async function requestNotPublishedFromContentPlan(
     ...makeContentPlanQuery(currentDate, pageSize, startCursorUuid),
   })
 
+
+  console.log(1111, response)
+
   return {
     items: (response as any).results,
     nextCursor: response.next_cursor,
@@ -38,39 +41,39 @@ function makeContentPlanQuery(
   return {
     start_cursor: startCursorUuid,
     page_size: pageSize,
-    filter: {
-      and: [
-        {
-          property: 'date',
-          date: {
-            on_or_after: currentDate,
-          },
-        },
-        {
-          or: [
-            {
-              property: 'status',
-              select: {
-                equals: 'to_edit',
-              },
-            },
-            {
-              property: 'status',
-              select: {
-                equals: 'to_correct',
-              },
-            },
-            {
-              property: 'status',
-              select: {
-                equals: 'to_publish',
-              },
-            },
-          ],
-        }
-      ],
-
-    },
+    // filter: {
+    //   and: [
+    //     {
+    //       property: 'date',
+    //       date: {
+    //         on_or_after: currentDate,
+    //       },
+    //     },
+    //     {
+    //       or: [
+    //         {
+    //           property: 'status',
+    //           select: {
+    //             equals: 'to_edit',
+    //           },
+    //         },
+    //         {
+    //           property: 'status',
+    //           select: {
+    //             equals: 'to_correct',
+    //           },
+    //         },
+    //         {
+    //           property: 'status',
+    //           select: {
+    //             equals: 'to_publish',
+    //           },
+    //         },
+    //       ],
+    //     }
+    //   ],
+    //
+    // },
     sorts: [
       {
         property: 'date',

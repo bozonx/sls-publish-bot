@@ -3,8 +3,8 @@
 interface PaginationListResult {
   items: any[]
   totalCount?: number
-  hasNext?: boolean
   nextCursor?: string | null
+  hasNext?: boolean
 }
 
 // returns [items[], totalCount]
@@ -17,7 +17,8 @@ type PaginationRenderHandler = (pages: any[], hasNext: boolean, hasPrev: boolean
 
 export class Pagination {
   private offset = 0
-  private nextCursor: string | null | undefined
+  private nextCursor?: string | null
+  private firstPageNextCursor?: string
   private readonly pageSize: number
   private readonly loadList: PaginationListHandler
   private readonly renderList: PaginationRenderHandler
@@ -66,8 +67,10 @@ export class Pagination {
       // notion style
       this.nextCursor = result.nextCursor
 
-      hasNext = result.hasNext!
-      hasPrev = this.nextCursor !== null
+      if (!this.firstPageNextCursor && this.nextCursor) this.firstPageNextCursor = this.nextCursor
+
+      hasNext = Boolean(result.hasNext)
+      hasPrev = this.firstPageNextCursor !== this.nextCursor
     }
 
     await this.renderList(result.items, hasNext, hasPrev, result.totalCount)

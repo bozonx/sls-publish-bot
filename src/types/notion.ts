@@ -4,9 +4,9 @@ import {BlockObjectResponse, PageObjectResponse} from '@notionhq/client/build/sr
 export type NotionBlocks = BlockObjectResponse[]
 
 export interface NotionListItem {
-  items: PageObjectResponse[],
-  nextCursor: string | null,
-  hasMore: boolean,
+  items: PageObjectResponse[]
+  nextCursor: string | null
+  hasMore: boolean
 }
 
 export type NotionAnnotation = {
