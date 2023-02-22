@@ -20,7 +20,7 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
     await printCreative(tgChat, item, pageContent)
 
     await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
-      await askTgChannel(tgChat, tgChat.asyncCb(async (channelName?: string, channelUrl?: string) => {
+      await askTgChannel(tgChat, tgChat.asyncCb(async (channelName: string, channelUrl?: string) => {
         await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
           await askFormat(tgChat, tgChat.asyncCb(async (format: keyof typeof AD_FORMATS) => {
             await askBuyAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_BUY_TYPES) => {
@@ -35,10 +35,10 @@ export async function startBuyAd(blogName: string, tgChat: TgChat) {
                     time,
                     adType,
                     format,
-                    cost,
-                    note,
                     channelName,
-                    channelUrl
+                    channelUrl,
+                    cost,
+                    note
                   )
                 }
                 catch (e) {

@@ -35,13 +35,12 @@ export async function createBuyAdItem(
   time: string,
   adType: keyof typeof AD_BUY_TYPES,
   format: keyof typeof AD_FORMATS,
+  channelName: string,
+  channelUrl?: string,
   cost?: number,
   note?: string,
-  channelName?: string,
-  channelUrl?: string
 ) {
   // TODO: note - преобразовать html в notion
-  // TODO: use channelName, channelUrl
 
   // TODO: вместо этого выгрузить данные из notion
 
@@ -82,17 +81,16 @@ export async function createBuyAdItem(
           id: formatId,
         }
       },
-
-      // channel: {
-      //   type: 'rich_text',
-      //   rich_text: [{
-      //     type: 'text',
-      //     text: {
-      //       content: 'some channel',
-      //       link: { url: 'https://ya.ru' },
-      //     },
-      //   }],
-      // },
+      channel: {
+        type: 'rich_text',
+        rich_text: [{
+          type: 'text',
+          text: {
+            content: channelName,
+            link: (channelUrl) ? { url: channelUrl } : undefined,
+          },
+        }],
+      },
     },
   };
 
