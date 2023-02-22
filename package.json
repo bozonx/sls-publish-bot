@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "ts-node-esm ./src/index.ts",
     "prod": "yarn ts-node --esm ./src/index.ts",
+    "container": "mkdir -p ${DATA_DIR} && yarn install --prod && yarn prod",
     "typecheck": "tsc --noEmit ./src/index.ts",
     "build": "docker build -f ./docker/Dockerfile -t bozonx/publish_bot:latest .",
     "push": "docker push bozonx/publish_bot:latest",

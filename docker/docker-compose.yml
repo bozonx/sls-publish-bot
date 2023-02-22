@@ -2,5 +2,5 @@ version: '3'
 
 services:
   app:
-    image: bozonx/publish_bot:latest
+    image: node:18.12
     restart: always
