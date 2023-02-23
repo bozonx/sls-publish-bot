@@ -28,16 +28,6 @@ export async function createSellAdItem(
 ) {
   let resolvedAutoDeleteTime = autoDeleteTgIsoDateTime
 
-  // validate that selected date is greater than auto-delete date
-  if (
-    resolvedAutoDeleteTime && moment(resolvedAutoDeleteTime).unix()
-    <= moment(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)).unix()
-  ) {
-    await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
-
-    return
-  }
-
   if (autoDeletePeriodHours) {
     resolvedAutoDeleteTime = addHorsInDate(
       makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset),

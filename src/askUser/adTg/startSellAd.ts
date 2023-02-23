@@ -9,6 +9,9 @@ import {askDateTime} from '../common/askDateTime.js';
 import {createSellAdItem} from '../../notionRequests/createSellAdItem.js';
 import {askText} from '../common/askText.js';
 import {askAdBuyer} from './askAdBuyer.js';
+import moment from 'moment';
+import {makeIsoDateTimeStr} from '../../helpers/helpers.js';
+import {WARN_SIGN} from '../../types/constants.js';
 
 
 export async function startSellAd(blogName: string, tgChat: TgChat) {
@@ -25,6 +28,16 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
       tgChat,
       tgChat.asyncCb(async (state: CustomPostState, resultTextHtml: string) => {
         await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
+          // validate that selected date is greater than auto-delete date
+          if (
+            state.autoDeleteTgIsoDateTime && moment(state.autoDeleteTgIsoDateTime).unix()
+            <= moment(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)).unix()
+          ) {
+            await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
+
+            return
+          }
+
           await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
             await askSellAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_SELL_TYPES) => {
               await askAdBuyer(tgChat, tgChat.asyncCb(async (buyerHtml?: string) => {
