@@ -1,5 +1,3 @@
-import {RichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-
 type RichTextItemRequest = {
   text: {
     content: string;
@@ -25,7 +23,7 @@ export function convertHtmlToNotion(htmlText: string): RichTextItemRequest[] {
       type: 'text',
       text: {
         content: htmlText,
-        link: { url: '' },
+        //link: { url: '' },
       },
       annotations: {
         bold: false,
@@ -37,3 +35,8 @@ export function convertHtmlToNotion(htmlText: string): RichTextItemRequest[] {
     }
   ]
 }
+
+
+console.log(111, convertHtmlToNotion(
+  `norm <ib><gg <i>ii</i></b> <a href="https://ya.ru">aaa</a> <s>sss</s> <u>uuu</u>`
+))
