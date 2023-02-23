@@ -18,7 +18,9 @@ export async function createSellAdItem(
   tgUrlBtn?: TgReplyBtnUrl,
   autoDeleteTgIsoDateTime?: string,
   cost?: number,
-  note?: string
+  note?: string,
+  contactHtml?: string,
+  buyerHtml?: string
 ) {
   try {
     await registerTgPost(
@@ -40,6 +42,10 @@ export async function createSellAdItem(
     return
   }
 
+  // TODO: note - преобразовать html в notion
+  // TODO: contactHtml - преобразовать html в notion
+  // TODO: buyerHtml - преобразовать html в notion
+
   const request: CreatePageParameters = {
     parent: { database_id: tgChat.app.blogs[blogName].notion.sellTgDbId },
     properties: {
@@ -58,7 +64,7 @@ export async function createSellAdItem(
           },
         }],
       },
-      ad_type: {
+      adType: {
         type: 'select',
         select: {
           name: adType,
@@ -70,29 +76,41 @@ export async function createSellAdItem(
           name: format,
         }
       },
+      buyer: buyerHtml && {
+        type: 'rich_text',
+        rich_text: [{
+          type: 'text',
+          text: {
+            content: buyerHtml
+          },
+        }],
+      } || (undefined as any),
+      contact: contactHtml && {
+        type: 'rich_text',
+        rich_text: [{
+          type: 'text',
+          text: {
+            content: contactHtml
+          },
+        }],
+      } || (undefined as any),
+      priceRub: (typeof cost !== 'undefined') ? {
+        type: 'number',
+        number: cost,
+      } : (undefined as any),
+      note: note && {
+        type: 'title',
+        title: [{
+          text: {
+            content: note,
+          },
+        }],
+      } || (undefined as any),
 
       //is_collab: { id: 'jh%3Dp', name: 'is_collab', type: 'checkbox', checkbox: {} },
 
     },
   };
-
-  if (typeof cost !== 'undefined') {
-    request.properties.price_rub = {
-      type: 'number',
-      number: cost,
-    };
-  }
-
-  if (note) {
-    request.properties.note = {
-      type: 'title',
-      title: [{
-        text: {
-          content: note,
-        },
-      }],
-    };
-  }
 
   const result = await tgChat.app.notion.api.pages.create(request)
 

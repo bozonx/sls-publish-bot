@@ -49,6 +49,7 @@ const dict = {
     postFooter: 'Футер поста: ',
     askTypeText: 'Введите или расшарьте текст. Поддерживается стандартное форматирование Telegram кроме spoiler',
     askTgChannel: 'Выберете канал. Введите часть названия канала для фильтрации',
+    askAdBuyer: 'Введите имя покупателя, можно вставлять ссылки и форматирование',
     selectedPostText: 'Будет использован текст поста:',
     selectedAnnounce: 'Будет использован анонс статьи:',
     selectedNoPostText: 'У поста нет текста.',
@@ -83,6 +84,7 @@ const dict = {
     anotherChannel: 'Другой канал',
     anotherChannelName: 'Название канала',
     anotherChannelUrl: 'Url канала',
+    adContact: 'Введите контакт для связи',
   },
   buttons: {
     postMediaSkip: 'Без картинки',

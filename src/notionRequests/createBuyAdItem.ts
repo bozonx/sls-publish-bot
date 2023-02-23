@@ -36,7 +36,7 @@ export async function createBuyAdItem(
           },
         }],
       },
-      ad_type: {
+      adType: {
         type: 'select',
         select: {
           name: adType,
@@ -58,28 +58,22 @@ export async function createBuyAdItem(
           },
         }],
       } : (undefined as any),
+      priceRub: (typeof cost !== 'undefined') ? {
+        type: 'number',
+        number: cost,
+      } : (undefined as any),
+      note: note && {
+        type: 'title',
+        title: [{
+          text: {
+            content: note,
+          },
+        }],
+      } || (undefined as any),
     },
-  };
-
-  if (typeof cost !== 'undefined') {
-    request.properties.price_rub = {
-      type: 'number',
-      number: cost,
-    };
   }
 
-  if (note) {
-    request.properties.note = {
-      type: 'title',
-      title: [{
-        text: {
-          content: note,
-        },
-      }],
-    };
-  }
-
-  const result = await tgChat.app.notion.api.pages.create(request);
+  const result = await tgChat.app.notion.api.pages.create(request)
 
   if (!result.id) throw new Error(`No result id`)
 }
