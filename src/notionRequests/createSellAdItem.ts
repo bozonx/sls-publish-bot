@@ -1,11 +1,10 @@
-import moment from 'moment/moment.js';
 import {registerTgPost} from '../publish/registerTgPost.js';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import {AD_FORMATS, AD_SELL_TYPES, MediaGroupItem} from '../types/types.js';
 import TgChat from '../apiTg/TgChat.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {addHorsInDate, makeIsoDateTimeStr} from '../helpers/helpers.js';
-import {WARN_SIGN} from '../types/constants.js';
+import {convertHtmlToNotion} from '../helpers/convertHtmlToNotion.js';
 
 
 export async function createSellAdItem(
@@ -55,10 +54,6 @@ export async function createSellAdItem(
     return
   }
 
-  // TODO: note - преобразовать html в notion
-  // TODO: contactHtml - преобразовать html в notion
-  // TODO: buyerHtml - преобразовать html в notion
-
   const request: CreatePageParameters = {
     parent: { database_id: tgChat.app.blogs[blogName].notion.sellTgDbId },
     properties: {
@@ -91,21 +86,11 @@ export async function createSellAdItem(
       },
       buyer: buyerHtml && {
         type: 'rich_text',
-        rich_text: [{
-          type: 'text',
-          text: {
-            content: buyerHtml
-          },
-        }],
+        rich_text: convertHtmlToNotion(buyerHtml),
       } || (undefined as any),
       contact: contactHtml && {
         type: 'rich_text',
-        rich_text: [{
-          type: 'text',
-          text: {
-            content: contactHtml
-          },
-        }],
+        rich_text: convertHtmlToNotion(contactHtml),
       } || (undefined as any),
       priceRub: (typeof cost !== 'undefined') ? {
         type: 'number',
@@ -113,11 +98,7 @@ export async function createSellAdItem(
       } : (undefined as any),
       note: note && {
         type: 'title',
-        title: [{
-          text: {
-            content: note,
-          },
-        }],
+        title: convertHtmlToNotion(note),
       } || (undefined as any),
 
       //is_collab: { id: 'jh%3Dp', name: 'is_collab', type: 'checkbox', checkbox: {} },
