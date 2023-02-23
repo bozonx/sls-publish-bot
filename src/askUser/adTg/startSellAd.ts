@@ -16,6 +16,10 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
     const splat = format.split('/')
     const autoDeletePeriod = Number(splat[1])
 
+    if (Number.isInteger(autoDeletePeriod)) {
+      await tgChat.reply(tgChat.app.i18n.message.selectedAutoDeletePeriod + autoDeletePeriod)
+    }
+
     await askCustomPostTg(
       blogName,
       tgChat,
