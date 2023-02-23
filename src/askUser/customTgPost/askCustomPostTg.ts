@@ -35,11 +35,13 @@ export async function askCustomPostTg(
   tgChat: TgChat,
   onDone: (state: CustomPostState, resultTextHtml: string) => void,
   // post as only text. If false then as image or video
-  postAsText: boolean,
+  // if undefined then it'be resolved depends on image
+  postAsText: boolean | undefined,
   footerTmpl: string | undefined,
   mediaRequired: boolean,
   onlyOneImage: boolean,
   disableTags: boolean,
+  autoDeletePeriodHours?: number
 ) {
   await askPostMedia(
     tgChat,
@@ -56,8 +58,11 @@ export async function askCustomPostTg(
         mediaGroup,
         footerTmplHtml: convertCommonMdToTgHtml(footerTmpl),
         cleanFooterTmpl: convertCommonMdToCleanText(footerTmpl),
-        postAsText,
+        postAsText: (typeof postAsText === 'undefined')
+          ? !mediaGroup.length
+          : postAsText,
         onlyOneImage,
+        autoDeletePeriodHours
       };
 
       await askCustomPostMenu(

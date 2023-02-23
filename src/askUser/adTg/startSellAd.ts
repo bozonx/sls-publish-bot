@@ -13,9 +13,8 @@ import {askAdBuyer} from './askAdBuyer.js';
 
 export async function startSellAd(blogName: string, tgChat: TgChat) {
   await askFormat(tgChat, tgChat.asyncCb(async (format: keyof typeof AD_FORMATS) => {
-
-    // TODO: это может быть и текст
-    // TODO: передать время автоудаления
+    const splat = format.split('/')
+    const autoDeletePeriod = Number(splat[1])
 
     await askCustomPostTg(
       blogName,
@@ -23,9 +22,6 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
       tgChat.asyncCb(async (state: CustomPostState, resultTextHtml: string) => {
         await askDateTime(tgChat, tgChat.asyncCb(async (isoDate: string, time: string) => {
           await askCost(tgChat, tgChat.asyncCb(async (cost: number | undefined, currency: CurrencyTicker) => {
-
-            // TODO: ask вп если не было введено цены ???
-
             await askSellAdType(tgChat, tgChat.asyncCb(async (adType: keyof typeof AD_SELL_TYPES) => {
               await askAdBuyer(tgChat, tgChat.asyncCb(async (buyerHtml?: string) => {
                 await askText(tgChat, tgChat.asyncCb(async (contactHtml?: string) => {
@@ -43,6 +39,7 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
                         adType,
                         state.tgUrlBtn,
                         state.autoDeleteTgIsoDateTime,
+                        state.autoDeletePeriodHours,
                         cost,
                         note,
                         contactHtml,
@@ -64,11 +61,12 @@ export async function startSellAd(blogName: string, tgChat: TgChat) {
           }))
         }), undefined, undefined, true, true);
       }),
-      false,
       undefined,
+      undefined,
+      false,
       true,
       true,
-      true,
+      (Number.isInteger(autoDeletePeriod)) ? autoDeletePeriod : undefined
     )
   }))
 }

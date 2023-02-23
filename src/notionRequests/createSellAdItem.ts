@@ -1,8 +1,11 @@
+import moment from 'moment/moment.js';
 import {registerTgPost} from '../publish/registerTgPost.js';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import {AD_FORMATS, AD_SELL_TYPES, MediaGroupItem} from '../types/types.js';
 import TgChat from '../apiTg/TgChat.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
+import {addHorsInDate, makeIsoDateTimeStr} from '../helpers/helpers.js';
+import {WARN_SIGN} from '../types/constants.js';
 
 
 export async function createSellAdItem(
@@ -17,11 +20,31 @@ export async function createSellAdItem(
   adType: keyof typeof AD_SELL_TYPES,
   tgUrlBtn?: TgReplyBtnUrl,
   autoDeleteTgIsoDateTime?: string,
+  autoDeletePeriodHours?: number,
   cost?: number,
   note?: string,
   contactHtml?: string,
   buyerHtml?: string
 ) {
+  let resolvedAutoDeleteTime = autoDeleteTgIsoDateTime
+
+  // validate that selected date is greater than auto-delete date
+  if (
+    resolvedAutoDeleteTime && moment(resolvedAutoDeleteTime).unix()
+    <= moment(makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset)).unix()
+  ) {
+    await tgChat.reply(`${WARN_SIGN} ${tgChat.app.i18n.errors.dateLessThenAutoDelete}`)
+
+    return
+  }
+
+  if (autoDeletePeriodHours) {
+    resolvedAutoDeleteTime = addHorsInDate(
+      makeIsoDateTimeStr(isoDate, time, tgChat.app.appConfig.utcOffset),
+      autoDeletePeriodHours
+    )
+  }
+
   try {
     await registerTgPost(
       blogName,
@@ -33,7 +56,7 @@ export async function createSellAdItem(
       usePreview,
       mediaGroup,
       tgUrlBtn,
-      autoDeleteTgIsoDateTime
+      resolvedAutoDeleteTime
     )
   }
   catch (e) {
