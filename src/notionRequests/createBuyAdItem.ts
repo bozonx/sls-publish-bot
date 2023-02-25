@@ -50,8 +50,8 @@ export async function createBuyAdItem(
         }
       },
       channel: (channelName) ? {
-        type: 'rich_text',
-        rich_text: [{
+        type: 'title',
+        title: [{
           type: 'text',
           text: {
             content: channelName,
@@ -64,8 +64,8 @@ export async function createBuyAdItem(
         number: cost,
       } : (undefined as any),
       note: note && {
-        type: 'title',
-        title: convertHtmlToNotionRichText(note),
+        type: 'rich_text',
+        rich_text: convertHtmlToNotionRichText(note),
       } || (undefined as any),
     },
   }

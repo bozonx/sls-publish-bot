@@ -107,9 +107,9 @@ function makeItemContent(item: ElementContent): [string, RichTextItemRequest['an
 }
 
 
-const test1 = `norm <b>bb gg <i>ii</i></b> <a href="https://ya.ru">aaa</a> <s>sss</s> <u>uuu</u>`
-const testmd1 = 'norm **bb _ii_** [link](https://ya.ru) --ss-- __uu__'
-
-console.log(111, convertHtmlToNotionRichText(
-  test1
-))
+// const test1 = `norm <b>bb gg <i>ii</i></b> <a href="https://ya.ru">aaa</a> <s>sss</s> <u>uuu</u>`
+// const testmd1 = 'norm **bb _ii_** [link](https://ya.ru) --ss-- __uu__'
+//
+// console.log(111, convertHtmlToNotionRichText(
+//   test1
+// ))
