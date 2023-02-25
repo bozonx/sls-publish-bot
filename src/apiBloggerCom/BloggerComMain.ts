@@ -63,11 +63,9 @@ export default class BloggerComMain {
       content,
       labels,
       published: publishIsoDateTime,
-      // "images": [
+      // images: [
       //   {
-      //     "url": string
-      //
-      //
+      //     url: 'https://telegra.ph/file/bbdc3eba69247e60553d8.jpg',
       //   }
       // ],
     }
@@ -137,9 +135,9 @@ export default class BloggerComMain {
 //   await bloggerCom.createPost(
 //     '4309559355980291324',
 //     'some title',
-//     '<p>some content</p>',
+//     '<p>some content <img src="https://telegra.ph/file/bbdc3eba69247e60553d8.jpg" /></p>',
+//     '2023-02-28T13:05:00+03:00',
 //     undefined,
-//     undefined,
-//     true
+//     false
 //   )
 // })()
