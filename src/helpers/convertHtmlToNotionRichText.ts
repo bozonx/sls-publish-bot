@@ -23,7 +23,6 @@ type RichTextItemRequest = {
 
 /**
  * It converts to Notion rich text. It means only inline
- * @param htmlText
  */
 export function convertHtmlToNotionRichText(htmlText: string): RichTextItemRequest[] {
   const tree = fromHtml(htmlText, {
@@ -41,7 +40,7 @@ export function convertHtmlToNotionRichText(htmlText: string): RichTextItemReque
       })
     }
     else if (child.type === 'element') {
-      const [content, annotations, url] = makeChildrenContent(child.children)
+      const [content, annotations, url] = makeItemContent(child)
 
       result.push({
         type: 'text',
@@ -59,52 +58,58 @@ export function convertHtmlToNotionRichText(htmlText: string): RichTextItemReque
 }
 
 
-function makeChildrenContent(items: ElementContent[]): [string, RichTextItemRequest['annotations'], string?] {
+function makeItemContent(item: ElementContent): [string, RichTextItemRequest['annotations'], string?] {
   let content = ''
   let url: string | undefined
   let annotations: RichTextItemRequest['annotations'] = {}
 
-  for (const item of items) {
-    if (item.type === 'text') {
-      content += item.value
+  if (item.type === 'text') {
+    content += item.value
+  }
+  else if (item.type === 'element') {
+    if (item.tagName === 'a') {
+      url = item?.properties?.href as string || undefined
     }
-    else if (item.type === 'element') {
-      const childContent = makeChildrenContent(item.children)
+    else if (['b', 'strong'].includes(item.tagName)) {
+      annotations.bold = true
+    }
+    else if (['i', 'em'].includes(item.tagName)) {
+      annotations.italic = true
+    }
+    else if (['s'].includes(item.tagName)) {
+      annotations.strikethrough = true
+    }
+    else if (['u'].includes(item.tagName)) {
+      annotations.underline = true
+    }
+    else if (['code'].includes(item.tagName)) {
+      annotations.code = true
+    }
 
-      content += childContent[0]
-      url = childContent[2]
-      annotations = {
-        ...annotations,
-        ...childContent[1]
+    for (const child of item.children) {
+      if (child.type === 'text') {
+        content += child.value
       }
+      else if (child.type === 'element') {
+        const childContent = makeItemContent(child)
 
-      if (item.tagName === 'a') {
-        url = item?.properties?.href as string || undefined
-      }
-      else if (['b', 'strong'].includes(item.tagName)) {
-        annotations.bold = true
-      }
-      else if (['i', 'em'].includes(item.tagName)) {
-        annotations.italic = true
-      }
-      else if (['s'].includes(item.tagName)) {
-        annotations.strikethrough = true
-      }
-      else if (['u'].includes(item.tagName)) {
-        annotations.underline = true
-      }
-      else if (['code'].includes(item.tagName)) {
-        annotations.code = true
+        content += childContent[0]
+        url = childContent[2]
+        annotations = {
+          ...annotations,
+          ...childContent[1]
+        }
       }
     }
   }
-
-  console.log(1111, content, annotations, url)
 
   return [content, annotations, url]
 }
 
 
+const test1 = `norm <b>bb gg <i>ii</i></b> <a href="https://ya.ru">aaa</a> <s>sss</s> <u>uuu</u>`
+const testmd1 = 'norm **bb _ii_** [link](https://ya.ru) --ss-- __uu__'
+
 console.log(111, convertHtmlToNotionRichText(
-  `norm <b>bb gg <i>ii</i></b> <a href="https://ya.ru">aaa</a> <s>sss</s> <u>uuu</u>`
+  test1
 ))

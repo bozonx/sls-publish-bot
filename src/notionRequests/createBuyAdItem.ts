@@ -1,7 +1,7 @@
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import TgChat from '../apiTg/TgChat.js';
 import {AD_BUY_TYPES, AD_FORMATS} from '../types/types.js';
-import {convertHtmlToNotion} from '../helpers/convertHtmlToNotion.js';
+import {convertHtmlToNotionRichText} from '../helpers/convertHtmlToNotionRichText.js';
 
 
 export async function createBuyAdItem(
@@ -65,7 +65,7 @@ export async function createBuyAdItem(
       } : (undefined as any),
       note: note && {
         type: 'title',
-        title: convertHtmlToNotion(note),
+        title: convertHtmlToNotionRichText(note),
       } || (undefined as any),
     },
   }

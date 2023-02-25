@@ -4,7 +4,7 @@ import {AD_FORMATS, AD_SELL_TYPES, MediaGroupItem} from '../types/types.js';
 import TgChat from '../apiTg/TgChat.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {addHorsInDate, makeIsoDateTimeStr} from '../helpers/helpers.js';
-import {convertHtmlToNotion} from '../helpers/convertHtmlToNotion.js';
+import {convertHtmlToNotionRichText} from '../helpers/convertHtmlToNotionRichText.js';
 
 
 export async function createSellAdItem(
@@ -85,20 +85,21 @@ export async function createSellAdItem(
         }
       },
       buyer: buyerHtml && {
-        type: 'rich_text',
-        rich_text: convertHtmlToNotion(buyerHtml),
+        type: 'title',
+        title: convertHtmlToNotionRichText(buyerHtml),
       } || (undefined as any),
       contact: contactHtml && {
         type: 'rich_text',
-        rich_text: convertHtmlToNotion(contactHtml),
+        rich_text: convertHtmlToNotionRichText(contactHtml),
       } || (undefined as any),
       priceRub: (typeof cost !== 'undefined') ? {
         type: 'number',
         number: cost,
       } : (undefined as any),
       note: note && {
-        type: 'title',
-        title: convertHtmlToNotion(note),
+        type: 'rich_text',
+        rich_text: convertHtmlToNotionRichText(note),
+
       } || (undefined as any),
 
       //is_collab: { id: 'jh%3Dp', name: 'is_collab', type: 'checkbox', checkbox: {} },
