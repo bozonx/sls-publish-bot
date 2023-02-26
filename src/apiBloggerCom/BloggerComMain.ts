@@ -1,7 +1,7 @@
 import {OAuth2Client} from 'google-auth-library'
 import {GaxiosError} from 'gaxios'
 
-/**
+/*
  * See
  * * https://www.npmjs.com/package/google-auth-library
  * * https://developers.google.com/blogger/docs/3.0/using?hl=ru#AddingAPost
@@ -63,11 +63,6 @@ export default class BloggerComMain {
       content,
       labels,
       published: publishIsoDateTime,
-      // images: [
-      //   {
-      //     url: 'https://telegra.ph/file/bbdc3eba69247e60553d8.jpg',
-      //   }
-      // ],
     }
 
     return this.doPostRequest(url, data, isDraft)
