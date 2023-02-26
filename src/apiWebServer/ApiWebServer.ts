@@ -1,9 +1,11 @@
+import * as https from 'https';
+import * as http from 'https';
 import _ from 'lodash';
 import express from 'express'
 import App from '../App.js';
 import {ZEN_DATA_TMPL} from './zenDataTmpl.js';
 import * as core from 'express-serve-static-core';
-import http from 'http';
+import * as fs from 'fs';
 
 
 type ZenDataHandler = () => Promise<Record<string, any>>
@@ -13,7 +15,7 @@ export class ApiWebServer {
   private readonly app: App
   private zenDataHandler?: ZenDataHandler
   private readonly express: core.Express
-  private mainServer?: http.Server
+  private mainServer?: https.Server | http.Server
 
 
   constructor(app: App) {
@@ -49,7 +51,28 @@ export class ApiWebServer {
     //   res.send(JSON.stringify(data))
     // })
 
-    this.mainServer = this.express.listen(this.app.appConfig.webServerPost, this.app.appConfig.hostname)
+
+
+    if (this.app.appConfig.isProduction) {
+      if (
+        !this.app.appConfig.sslPrivateKeyFilePath
+        || !this.app.appConfig.sslCertFilePath
+      ) {
+        throw new Error(`Can't find SSL certificate`)
+      }
+
+      const privateKey = fs.readFileSync(this.app.appConfig.sslPrivateKeyFilePath)
+      const certificate = fs.readFileSync(this.app.appConfig.sslCertFilePath)
+      const credentials = {key: privateKey, cert: certificate}
+
+      this.mainServer = https.createServer(credentials, this.express);
+
+    }
+    else {
+      this.mainServer = http.createServer(this.express)
+    }
+
+    this.mainServer.listen(this.app.appConfig.webServerPost, this.app.appConfig.hostname)
   }
 
   async destroy() {

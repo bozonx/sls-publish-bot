@@ -23,4 +23,6 @@ export default interface AppConfig {
   },
   webServerPost: number
   hostname: string
+  sslPrivateKeyFilePath?: string
+  sslCertFilePath?: string
 }
