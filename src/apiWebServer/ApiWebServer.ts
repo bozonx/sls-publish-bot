@@ -46,9 +46,7 @@ export class ApiWebServer {
     //   res.send(JSON.stringify(data))
     // })
 
-    // TODO: host 0.0.0.0
-    // TODO: порт взять из конфига
-    app.listen(3001)
+    app.listen(this.app.appConfig.webServerPost, this.app.appConfig.hostname)
   }
 
 

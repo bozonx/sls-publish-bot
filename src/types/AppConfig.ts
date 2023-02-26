@@ -21,4 +21,6 @@ export default interface AppConfig {
     //parseMode: 'MarkdownV2';
     parseMode: 'HTML';
   },
+  webServerPost: number
+  hostname: string
 }

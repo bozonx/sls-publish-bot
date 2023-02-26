@@ -27,6 +27,9 @@ const appConfig: AppConfig = {
   telegram: {
     parseMode: 'HTML',
   },
+
+  webServerPost: process.env.WEB_SERVER_PORT as any,
+  hostname: process.env.HOST_NAME as any,
 }
 
 export default appConfig;
