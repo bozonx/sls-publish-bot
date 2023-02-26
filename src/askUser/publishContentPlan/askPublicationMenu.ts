@@ -45,6 +45,7 @@ export const PUBLISH_MENU_ACTION = {
   SET_AUTO_REMOVE: 'SET_AUTO_REMOVE',
   ADD_URL_BUTTON: 'ADD_URL_BUTTON',
   ONLY_MAKE_TELEGRAPH_ARTICLE: 'ONLY_MAKE_TELEGRAPH_ARTICLE',
+  MAKE_ZEN_ARTICLE: 'MAKE_ZEN_ARTICLE',
 }
 
 
@@ -191,6 +192,15 @@ export async function askPublicationMenu(
           ) ? [{
             text: tgChat.app.i18n.buttons.onlyTelegraphArticle,
             callback_data: PUBLISH_MENU_ACTION.ONLY_MAKE_TELEGRAPH_ARTICLE,
+          }] : [],
+          (
+            //state.sns.includes(SN_TYPES.zen)
+            // TODO: change
+            true
+            && item.type === PUBLICATION_TYPES.article
+          ) ? [{
+            text: tgChat.app.i18n.buttons.makeZenArticle,
+            callback_data: PUBLISH_MENU_ACTION.MAKE_ZEN_ARTICLE,
           }] : [],
           [
             makeBackBtn(tgChat.app.i18n),

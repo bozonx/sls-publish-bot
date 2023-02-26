@@ -15,7 +15,8 @@
     "dev": "ts-node-esm ./src/index.ts",
     "prod": "yarn ts-node --esm ./src/index.ts",
     "container": "mkdir -p ${DATA_DIR} && yarn install --prod && yarn prod",
-    "typecheck": "tsc --noEmit ./src/index.ts"
+    "typecheck": "tsc --noEmit ./src/index.ts",
+    "static": "npx http-server ./src/webApps -p 3000"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.3",

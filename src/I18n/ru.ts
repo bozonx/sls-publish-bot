@@ -121,6 +121,7 @@ const dict = {
     ok: 'Ок',
     toMainMenu: 'В главное меню',
     onlyTelegraphArticle: 'Только сформировать telegra.ph статью',
+    makeZenArticle: 'Сформировать Zen статью',
   },
   commonPhrases: {
     setPubTime: 'Установить время публикации',

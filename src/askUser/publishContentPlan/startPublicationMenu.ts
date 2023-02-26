@@ -15,6 +15,7 @@ import {validateContentPlanPost} from '../../contentPlan/validateContentPlanPost
 import {MediaGroupItem} from '../../types/types.js';
 import {printPost} from '../../publish/publishHelpers.js';
 import {justPublishToTelegraph} from '../../publish/makePublishTaskTgArticle.js';
+import {MenuButtonWebApp} from 'typegram/menu-button';
 
 
 export interface ContentItemState {
@@ -80,6 +81,29 @@ export async function startPublicationMenu(
 
         await tgChat.reply(publishUrl)
         await tgChat.steps.cancel()
+
+        return
+      }
+      else if (action === PUBLISH_MENU_ACTION.MAKE_ZEN_ARTICLE) {
+        await tgChat.app.tg.bot.telegram.sendMessage(
+          tgChat.botChatId,
+          'some text',
+          {
+            reply_markup: {
+              one_time_keyboard: true,
+              keyboard: [
+                [
+                  {
+                    text: 'some text',
+
+                    //The Web App will be able to send a “web_app_data” service message. Available in private chats only.
+                    web_app: {url: 'http://localhost:3000/publishZen.html'}
+                  }
+                ]
+              ]
+            }
+          }
+        )
 
         return
       }
