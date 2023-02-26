@@ -194,9 +194,12 @@ export default class TasksMain {
 
   private async loadOldTasks(): Promise<Record<string, TaskItem> | undefined> {
     try {
-      const fileContent: Buffer | undefined = await fs.readFile(this.filePath);
+      const fileContent: Buffer | undefined = await fs.readFile(this.filePath)
+      const contentStr = fileContent.toString(FILE_ENCODING)
 
-      return JSON.parse(fileContent.toString(FILE_ENCODING));
+      if (!contentStr) return
+
+      return JSON.parse(fileContent.toString(FILE_ENCODING))
     }
     catch (e: any) {
       if (e.code === 'ENOENT') {
