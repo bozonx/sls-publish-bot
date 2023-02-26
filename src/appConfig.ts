@@ -34,4 +34,4 @@ const appConfig: AppConfig = {
   sslCertFilePath: '/home/node/files/cert/certificate.pem',
 }
 
-export default appConfig;
+export default appConfig

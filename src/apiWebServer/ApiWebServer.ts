@@ -70,7 +70,7 @@ export class ApiWebServer {
       this.mainServer = http.createServer({}, this.expressApp)
     }
 
-    this.mainServer.listen(this.app.appConfig.webServerPost, this.app.appConfig.hostname)
+    this.mainServer.listen(this.app.appConfig.webServerPost, '0.0.0.0')
   }
 
   async destroy() {
