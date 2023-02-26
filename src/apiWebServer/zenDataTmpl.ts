@@ -17,10 +17,10 @@ export const ZEN_DATA_TMPL = `<!DOCTYPE html>
   <button onclick="copyElementToClipboard('img-url-block')">copy image url</button>
   <button onclick="copyElementToClipboard('content-block')">copy content</button>
   <hr />
-  <p id="header-block">\${DATA.title}</p>
+  <div id="header-block">\${DATA.title}</div>
   <hr />
-  <p id="img-url-block">\${DATA.mainImgUrl}</p>
+  <div id="img-url-block">\${DATA.mainImgUrl}</div>
   <hr />
-  <p id="content-block">\${DATA.content}</p>
+  <div id="content-block">\${DATA.content}</div>
 </body>
 </html>`

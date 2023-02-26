@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import TgChat from '../../apiTg/TgChat.js';
 import {ContentItemState} from './startPublicationMenu.js';
 import ContentItem from '../../types/ContentItem.js';
@@ -25,17 +26,11 @@ export async function generateZenData(
     true
   )
 
-  console.log(1111, contentHtml)
-
   if (footerStr) {
     const footerHtml = convertCommonMdToTgHtml(footerStr)
 
-    console.log(2222, footerHtml)
-
-    contentHtml += '<br />' + footerHtml
+    contentHtml += '<p><br /></p><p>' + _.trim(footerHtml) + '</p>'
   }
-
-  console.log(3333, contentHtml)
 
   return {
     title: item.nameGist,
