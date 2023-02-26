@@ -4,7 +4,6 @@ import {ContentItemState} from './startPublicationMenu.js';
 import ContentItem from '../../types/ContentItem.js';
 import {NotionBlocks} from '../../types/notion.js';
 import {trimPageBlocks} from '../../helpers/convertHelpers.js';
-import {convertCommonMdToTgHtml} from '../../helpers/convertCommonMdToTgHtml.js';
 import {convertNotionToHtml} from '../../helpers/convertNotionToHast.js';
 
 
@@ -16,7 +15,7 @@ export async function generateZenData(
   pageBlocks?: NotionBlocks,
   mainImgUrl?: string
 ): Promise<Record<string, any>> {
-  const footerStr = (item.type === 'article')
+  const footerHtml = (item.type === 'article')
     ? tgChat.app.blogs[blogName].sn.zen?.articleFooter
     : tgChat.app.blogs[blogName].sn.zen?.postFooter
   const trimmedArticle = trimPageBlocks(pageBlocks!)
@@ -26,9 +25,7 @@ export async function generateZenData(
     true
   )
 
-  if (footerStr) {
-    const footerHtml = convertCommonMdToTgHtml(footerStr)
-
+  if (footerHtml) {
     contentHtml += '<p><br /></p><p>' + _.trim(footerHtml) + '</p>'
   }
 

@@ -34,8 +34,8 @@ slsfreedom:
         - article
         - post1000
         - post2000
-      postFooter:    'Автор: Козырин Иван, [Система Личной Свободы](https://dzen.ru/sls_freedom)'
-      articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://dzen.ru/sls_freedom)'
+      postFooter:    'Автор: Козырин Иван, <a href="https://dzen.ru/sls_freedom">Система Личной Свободы</a>'
+      articleFooter: 'Автор: Козырин Иван, <a href="https://dzen.ru/sls_freedom">Система Личной Свободы</a>'
 
 svobzhi:
   dispname: 'Свободный Образ Жизни'
