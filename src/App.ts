@@ -9,6 +9,7 @@ import ConsoleLogger from './lib/ConsoleLogger.js';
 import TelegraPhMain from './apiTelegraPh/telegraPhMain.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
+import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 
 
 export default class App {
@@ -17,6 +18,7 @@ export default class App {
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
   public readonly bloggerCom: BloggerComMain;
+  public readonly webServer: ApiWebServer
   public readonly tasks: TasksMain;
   public readonly channelLog: ChannelLogger;
   public readonly consoleLog: ConsoleLogger;
@@ -30,6 +32,7 @@ export default class App {
     this.tasks = new TasksMain(this);
     this.telegraPh = new TelegraPhMain(this);
     this.bloggerCom = new BloggerComMain(this.appConfig.googleApiToken)
+    this.webServer = new ApiWebServer(this)
     this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
     this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
     this.notion = new NotionApi(this.appConfig.notionToken)
@@ -41,6 +44,7 @@ export default class App {
       await this.tg.init()
       await this.telegraPh.init()
       await this.bloggerCom.init()
+      await this.webServer.init()
       await this.tasks.init()
     })()
       .catch((e) => {

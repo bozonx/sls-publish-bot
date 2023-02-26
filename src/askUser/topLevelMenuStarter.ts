@@ -14,6 +14,11 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
     + tgChat.app.i18n.message.localTime
   )
 
+
+
+  await test(tgChat)
+
+
   return askMainMenu(tgChat, tgChat.asyncCb(async (blogNameOrAction: string) => {
 
     switch (blogNameOrAction) {
@@ -25,4 +30,50 @@ export async function topLevelMenuStarter(tgChat: TgChat) {
         return startBlogMenu(blogNameOrAction, tgChat);
     }
   }));
+}
+
+
+async function test(tgChat: TgChat) {
+
+  /*
+
+    query_id
+    The bot can call the Bot API method answerWebAppQuery to send
+      an inline message from the user back to the bot and close the Web App
+    initData
+    elegram.WebApp.themeParams
+    headerColor, backgroundColor
+    MainButton
+    onEvent(eventType, eventHandler)
+    openLink(url[, options])
+    elegram.WebApp.WebAppInitData
+   */
+
+  // await tgChat.app.tg.bot.telegram.sendMessage(
+  //   tgChat.botChatId,
+  //   'some text',
+  //   {
+  //     reply_markup: {
+  //       //one_time_keyboard: true,
+  //       keyboard: [
+  //         [
+  //           {
+  //             text: 'zen',
+  //
+  //
+  //             //The Web App will be able to send a “web_app_data” service message. Available in private chats only.
+  //             web_app: {
+  //               url: 'http://127.0.0.1:3000/publishZen.html',
+  //
+  //             }
+  //           }
+  //         ]
+  //       ]
+  //     }
+  //   }
+  // )
+
+  //tgChat.app.tg.bot.telegram.answerWebAppQuery()
+
+
 }

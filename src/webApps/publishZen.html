@@ -2,6 +2,33 @@
 <html lang="ru">
 <head>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    window.Telegram.WebApp.MainButton.show()
+    window.Telegram.WebApp.MainButton.onClick(() => {
+      window.Telegram.WebApp.sendData('close')
+      window.Telegram.WebApp.close()
+    })
+
+    document.addEventListener("readystatechange", (event) => {
+      if (event.target.readyState !== "complete") return
+
+      window.Telegram.WebApp.ready()
+
+      console.log(111, Telegram.WebApp.initData)
+
+
+      // var textArea = document.createElement("textarea");
+      // textArea.value = 'test text';
+      // document.body.appendChild(textArea);
+      // textArea.select();
+      //
+      // var successful = document.execCommand('copy');
+
+      //console.log(222, window.navigator.clipboard )
+
+    });
+
+  </script>
 </head>
 <body>
   <p>content</p>
