@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import express from 'express'
 import App from '../App.js';
+import {ZEN_DATA_TMPL} from './zenDataTmpl.js';
 
 
 type ZenDataHandler = () => Promise<Record<string, any>>
@@ -27,32 +29,7 @@ export class ApiWebServer {
         data = await this.zenDataHandler()
       }
 
-      const html = `<!DOCTYPE html>
-<html lang="ru">
-<head>
-<script>
-function copyElementToClipboard(elementId) {
-  window.getSelection().removeAllRanges()
-  let range = document.createRange()
-  range.selectNode(document.getElementById(element))
-  window.getSelection().addRange(range)
-  document.execCommand('copy')
-  window.getSelection().removeAllRanges()
-}
-</script>
-</head>
-<body>
-<button onclick="copyElementToClipboard('header-block')">copy header</button>
-<button onclick="copyElementToClipboard('img-url-block')">copy image url</button>
-<button onclick="copyElementToClipboard('content-block')">copy content</button>
-<p>header:</p>
-<p id="header-block">${data.title}</p>
-<p>img url:</p>
-<p id="img-url-block">${data.mainImgUrl}</p>
-<p>content:</p>
-<p id="content-block">${data.content}</p>
-</body>
-</html>`
+      const html = _.template(ZEN_DATA_TMPL)({DATA: data})
 
       res.send(html)
     })
