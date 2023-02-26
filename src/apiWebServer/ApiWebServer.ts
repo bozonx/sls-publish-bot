@@ -1,5 +1,5 @@
 import * as https from 'https';
-import * as http from 'https';
+import * as http from 'http';
 import _ from 'lodash';
 import express from 'express'
 import App from '../App.js';
@@ -14,18 +14,18 @@ type ZenDataHandler = () => Promise<Record<string, any>>
 export class ApiWebServer {
   private readonly app: App
   private zenDataHandler?: ZenDataHandler
-  private readonly express: core.Express
+  private readonly expressApp: core.Express
   private mainServer?: https.Server | http.Server
 
 
   constructor(app: App) {
     this.app = app
-    this.express = express()
+    this.expressApp = express()
   }
 
 
   async init() {
-    this.express.get('/zendata', async (req, res) => {
+    this.expressApp.get('/zendata', async (req, res) => {
       res.header('Content-Type', 'text/html')
 
       let data: Record<string, any> = {}
@@ -52,7 +52,6 @@ export class ApiWebServer {
     // })
 
 
-
     if (this.app.appConfig.isProduction) {
       if (
         !this.app.appConfig.sslPrivateKeyFilePath
@@ -65,11 +64,10 @@ export class ApiWebServer {
       const certificate = fs.readFileSync(this.app.appConfig.sslCertFilePath)
       const credentials = {key: privateKey, cert: certificate}
 
-      this.mainServer = https.createServer(credentials, this.express);
-
+      this.mainServer = https.createServer(credentials, this.expressApp);
     }
     else {
-      this.mainServer = http.createServer(this.express)
+      this.mainServer = http.createServer({}, this.expressApp)
     }
 
     this.mainServer.listen(this.app.appConfig.webServerPost, this.app.appConfig.hostname)
