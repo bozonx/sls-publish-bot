@@ -10,14 +10,32 @@ export function richTextToHastElements(
   if (!richText) return []
   else if (!richText.length) return []
 
-  return richText.map((item: TextRichTextItemResponse) => {
-    switch (item.type) {
-      case NOTION_RICH_TEXT_TYPES.text:
-        return toHastElement(item.text.content, item.annotations, item.href)
-      default:
-        return { type: 'text', value: item.plain_text }
+  const result: (Element | Text)[] = []
+
+  richText.forEach((item: TextRichTextItemResponse) => {
+    if (item.type === NOTION_RICH_TEXT_TYPES.text) {
+      if (
+        !item.href
+        && !item.annotations.bold
+        && !item.annotations.italic
+        && !item.annotations.strikethrough
+        && !item.annotations.underline
+        && !item.annotations.code
+      ) {
+        // means just simple text - change new lines to <br />
+        splitNewLines(item.plain_text).forEach((el) => result.push(el))
+
+        return
+      }
+
+      result.push(toHastElement(item.text.content, item.annotations, item.href))
     }
-  });
+    else {
+      splitNewLines(item.plain_text).forEach((el) => result.push(el))
+    }
+  })
+
+  return result
 }
 
 
@@ -81,4 +99,26 @@ function toHastElement(
   }
 
   return preparedText
+}
+
+
+function splitNewLines(text: string): (Element | Text)[] {
+  const result: (Element | Text)[] = []
+
+  if (text.match(/\n/)) {
+    const splat = text.split('\n')
+
+    for (const index in splat) {
+      result.push({ type: 'text', value: splat[index] })
+
+      if (Number(index) !== splat.length - 1) {
+        result.push({ type: 'element', tagName: 'br', children: [] })
+      }
+    }
+  }
+  else {
+    result.push({ type: 'text', value: text })
+  }
+
+  return result
 }
