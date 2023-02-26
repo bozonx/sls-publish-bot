@@ -14,8 +14,8 @@ import PollData from '../types/PollData.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {PhotoData, PhotoUrlData, VideoData} from '../types/MessageEvent.js';
 import {PrimitiveMediaGroup} from '../types/types.js';
-import {makeIsoDateTimeStr} from '../helpers/helpers.js';
-import {makePost2000Text} from '../helpers/makePost2000.js';
+import {makeIsoDateTimeStr} from './helpers.js';
+import {makePost2000Text} from './makePost2000.js';
 
 
 /**

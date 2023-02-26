@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {parseMarkdown, NodeElement} from 'better-telegraph'
 import TgChat from '../apiTg/TgChat.js';
 import {makeTagsString} from '../lib/common.js';
-import {registerTgTaskOnlyText} from './registerTgPost.js';
+import {registerTgTaskOnlyText} from '../helpers/registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import {convertCommonMdToTgHtml} from '../helpers/convertCommonMdToTgHtml.js';
 import {convertNotionToTelegraph} from '../helpers/convertNotionToTelegraph.js';

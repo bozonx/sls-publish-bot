@@ -1,4 +1,4 @@
-import {getFirstImageFromNotionBlocks} from '../publish/publishHelpers.js';
+import {getFirstImageFromNotionBlocks} from '../helpers/publishHelpers.js';
 import {convertNotionToTgHtml} from '../helpers/convertNotionToTgHtml.js';
 import {publishTgImage} from '../apiTg/publishTg.js';
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints.js';

@@ -4,10 +4,10 @@ import {askTgPoll} from './askTgPoll.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {PollMessageEvent} from '../../types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {registerTgTaskCopy} from '../../publish/registerTgPost.js';
+import {registerTgTaskCopy} from '../../helpers/registerTgPost.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';
 import {addHorsInDate, makeIsoDateTimeStr} from '../../helpers/helpers.js';
-import {makePollInfo} from '../../publish/publishHelpers.js';
+import {makePollInfo} from '../../helpers/publishHelpers.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN} from '../../types/constants.js';
 
 

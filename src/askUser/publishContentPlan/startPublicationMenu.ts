@@ -2,7 +2,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {SN_TYPES, SnType} from '../../types/snTypes.js';
 import ContentItem from '../../types/ContentItem.js';
 import {askPublicationMenu, PUBLISH_MENU_ACTION} from './askPublicationMenu.js';
-import {makeContentPlanFinalDetails} from '../../publish/printContentItemInfo.js';
+import {makeContentPlanFinalDetails} from '../../contentPlan/printContentItemInfo.js';
 import {WARN_SIGN} from '../../types/constants.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {makePostFromContentItem} from '../../contentPlan/makePostFromContentItem.js';
@@ -13,8 +13,8 @@ import {NotionBlocks} from '../../types/notion.js';
 import {TgReplyBtnUrl} from '../../types/TgReplyButton.js';
 import {validateContentPlanPost} from '../../contentPlan/validateContentPlanPost.js';
 import {MediaGroupItem} from '../../types/types.js';
-import {printPost} from '../../publish/publishHelpers.js';
-import {justPublishToTelegraph} from '../../publish/makePublishTaskTgArticle.js';
+import {printPost} from '../../helpers/publishHelpers.js';
+import {justPublishToTelegraph} from '../../contentPlan/makePublishTaskTgArticle.js';
 import {MenuButtonWebApp} from 'typegram/menu-button';
 
 

@@ -1,5 +1,5 @@
 import TgChat from '../apiTg/TgChat.js';
-import {makeCleanTexts, makeHumanDateTimeStr} from '../helpers/helpers.js';
+import {makeCleanTexts, makeHumanDateTimeStr} from './helpers.js';
 import ru from '../I18n/ru.js';
 import {SnType} from '../types/snTypes.js';
 import {NotionBlocks} from '../types/notion.js';
@@ -7,7 +7,7 @@ import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
 import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/MessageEvent.js';
-import {makePost2000Text} from '../helpers/makePost2000.js';
+import {makePost2000Text} from './makePost2000.js';
 
 
 export function getFirstImageFromNotionBlocks(blocks?: NotionBlocks): string | undefined {

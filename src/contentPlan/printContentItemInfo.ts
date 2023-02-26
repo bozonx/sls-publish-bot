@@ -7,8 +7,8 @@ import {ContentItemState} from '../askUser/publishContentPlan/startPublicationMe
 import {convertCommonMdToTgHtml} from '../helpers/convertCommonMdToTgHtml.js';
 import {PUBLICATION_TYPES} from '../types/publicationType.js';
 import ru from '../I18n/ru.js';
-import {makeContentLengthDetails} from './publishHelpers.js';
-import {makePostFromContentItem} from '../contentPlan/makePostFromContentItem.js';
+import {makeContentLengthDetails} from '../helpers/publishHelpers.js';
+import {makePostFromContentItem} from './makePostFromContentItem.js';
 
 
 export async function printContentItemInitialDetails(

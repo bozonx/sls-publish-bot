@@ -1,4 +1,4 @@
-import {registerTgPost} from '../publish/registerTgPost.js';
+import {registerTgPost} from '../helpers/registerTgPost.js';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
 import {AD_FORMATS, AD_SELL_TYPES, MediaGroupItem} from '../types/types.js';
 import TgChat from '../apiTg/TgChat.js';

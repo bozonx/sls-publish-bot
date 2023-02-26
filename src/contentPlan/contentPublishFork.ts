@@ -1,8 +1,8 @@
 import TgChat from '../apiTg/TgChat.js';
-import {makePublishTaskTgArticle} from '../publish/makePublishTaskTgArticle.js';
+import {makePublishTaskTgArticle} from './makePublishTaskTgArticle.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
-import {registerTgTaskPoll, registerTgPost} from '../publish/registerTgPost.js';
+import {registerTgTaskPoll, registerTgPost} from '../helpers/registerTgPost.js';
 import {NotionBlocks} from '../types/notion.js';
 import PollData from '../types/PollData.js';
 import {MediaGroupItem} from '../types/types.js';

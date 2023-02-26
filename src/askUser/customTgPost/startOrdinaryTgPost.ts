@@ -3,7 +3,7 @@ import TgChat from '../../apiTg/TgChat.js';
 import {askConfirm} from '../common/askConfirm.js';
 import {askCustomPostTg, CustomPostState} from './askCustomPostTg.js';
 import {askDateTime} from '../common/askDateTime.js';
-import {registerTgPost} from '../../publish/registerTgPost.js';
+import {registerTgPost} from '../../helpers/registerTgPost.js';
 import {addHorsInDate, makeIsoDateTimeStr} from '../../helpers/helpers.js';
 import {WARN_SIGN} from '../../types/constants.js';
 
