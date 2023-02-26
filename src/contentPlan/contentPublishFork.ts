@@ -1,3 +1,4 @@
+import moment from 'moment';
 import TgChat from '../apiTg/TgChat.js';
 import {makePublishTaskTgArticle} from './makePublishTaskTgArticle.js';
 import {SN_TYPES, SnType} from '../types/snTypes.js';
@@ -76,47 +77,8 @@ export async function contentPublishFork(
 
         break;
       case SN_TYPES.blogger:
-        if (pubType === PUBLICATION_TYPES.article) {
-          if (!tgChat.app.blogs?.[blogName]?.sn?.blogger?.blogId) {
-            throw new Error(`Can't find blogger.com blogId of ${blogName}`)
-          }
-
-          const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
-
-          // TODO: add image uploader
-          // https://telegra.ph/file/f1b0e1c0dd8b8433fdfb5.jpg
-
-          const content = await convertNotionToHtml(
-            articleBlocks!,
-            // TODO: use google content image uploader
-            (url: string) => tgChat.app.telegraPh.uploadImage(url)
-            //async (url: string) => url
-          )
-
-          // console.log(222,
-          //   tgChat.app.blogs[blogName].sn.blogger!.blogId,
-          //   articleTitle!,
-          //   content,
-          //   tgTags
-          // )
-
-          const data = await tgChat.app.bloggerCom.createPost(
-            blogId,
-            articleTitle!,
-            content,
-
-            // TODO: конвертнуть offset 0
-
-            makeIsoDateTimeStr(pubIsoDate, pubTime, tgChat.app.appConfig.utcOffset),
-            sections,
-          )
-
-          await tgChat.reply(
-            tgChat.app.i18n.message.bloggerComPostEditUrl + ': '
-            + makeBloggerEditPostUrl(blogId, data.id!)
-          )
-        }
-        else if ([
+        if ([
+          PUBLICATION_TYPES.article,
           PUBLICATION_TYPES.post1000,
           PUBLICATION_TYPES.post2000,
         ].includes(pubType)) {
@@ -124,27 +86,23 @@ export async function contentPublishFork(
             throw new Error(`Can't find blogger.com blogId of ${blogName}`)
           }
 
-          console.log(1111,
-            postTexts?.blogger,
-            finalMediaGroup,
-            articleBlocks,
-            articleTitle,
-            sections
+          const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
+          const content = await convertNotionToHtml(
+            articleBlocks!,
+
+            // TODO: use google content image uploader
+
+            (url: string) => tgChat.app.telegraPh.uploadImage(url)
+            //async (url: string) => url
           )
 
-          const blogId: string = tgChat.app.blogs[blogName].sn.blogger!.blogId
-
-          // TODO: add image uploader
-
-          const content = await convertNotionToHtml(articleBlocks!, async (url: string) => url)
           const data = await tgChat.app.bloggerCom.createPost(
             blogId,
             articleTitle!,
             content,
-
-            // TODO: конвертнуть offset 0
-
-            makeIsoDateTimeStr(pubIsoDate, pubTime, tgChat.app.appConfig.utcOffset),
+            moment(
+              makeIsoDateTimeStr(pubIsoDate, pubTime, tgChat.app.appConfig.utcOffset)
+            ).utcOffset(0).format(),
             sections,
           )
 
