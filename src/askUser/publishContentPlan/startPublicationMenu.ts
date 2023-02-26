@@ -96,7 +96,7 @@ export async function startPublicationMenu(
         ))
 
         await tgChat.reply(
-          tgChat.app.i18n.message.zenData
+          tgChat.app.i18n.message.zenData + '\n'
           //+ `http://${makeMyDomain(tgChat.app.appConfig)}/zendata`,
           + makeMyWebUrl(tgChat.app.appConfig) + '/zendata',
           undefined,
