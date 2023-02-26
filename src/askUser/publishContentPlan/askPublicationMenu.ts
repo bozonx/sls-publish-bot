@@ -194,12 +194,14 @@ export async function askPublicationMenu(
             callback_data: PUBLISH_MENU_ACTION.ONLY_MAKE_TELEGRAPH_ARTICLE,
           }] : [],
           (
-            //state.sns.includes(SN_TYPES.zen)
-            // TODO: change
-            true
-            && item.type === PUBLICATION_TYPES.article
+            state.sns.includes(SN_TYPES.zen)
+            && [
+              PUBLICATION_TYPES.article,
+              PUBLICATION_TYPES.post1000,
+              PUBLICATION_TYPES.post2000,
+            ].includes(item.type)
           ) ? [{
-            text: tgChat.app.i18n.buttons.makeZenArticle,
+            text: tgChat.app.i18n.buttons.makeForZen,
             callback_data: PUBLISH_MENU_ACTION.MAKE_ZEN_ARTICLE,
           }] : [],
           [

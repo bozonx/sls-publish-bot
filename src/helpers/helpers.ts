@@ -39,7 +39,7 @@ export function makeMyDomain(appConfig: AppConfig): string {
 export function makeMyWebUrl(appConfig: AppConfig): string {
   const protocol = (appConfig.isProduction) ? 'https' : 'http'
 
-  return `${protocol}://${makeMyWebUrl(appConfig)}`
+  return `${protocol}://${makeMyDomain(appConfig)}`
 }
 
 export function makeBloggerEditPostUrl(blogId: string, postId: string): string {

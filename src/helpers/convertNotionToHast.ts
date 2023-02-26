@@ -8,14 +8,16 @@ import {richTextToHastElements} from './convertHelpersHast.js';
 
 export async function convertNotionToHtml(
   blocks: NotionBlocks,
-  imageUploader: (url: string) => Promise<string>
+  imageUploader?: (url: string) => Promise<string>,
+  skipImages = false
 ): Promise<string> {
-  return toHtml(await convertNotionToHast(blocks, imageUploader))
+  return toHtml(await convertNotionToHast(blocks, imageUploader, skipImages))
 }
 
 export async function convertNotionToHast(
   blocks: NotionBlocks,
-  imageUploader: (url: string) => Promise<string>
+  imageUploader: (url: string) => Promise<string> = async (url: string) => url,
+  skipImages = false
 ): Promise<Root> {
   const result: Element[] = []
   let ulElIndex = -1
@@ -39,6 +41,8 @@ export async function convertNotionToHast(
 
     switch (block.type) {
       case NOTION_BLOCK_TYPES.image:
+        if (skipImages) break
+
         const uploadedImgUrl = await imageUploader((block as any).image.file.url)
         const caption = richTextToHastElements((block as any).image.caption)
 
