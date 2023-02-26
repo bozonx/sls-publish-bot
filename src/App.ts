@@ -61,6 +61,7 @@ export default class App {
       await this.channelLog.info(`Bot is shutting down`);
 
       await this.tasks.destroy();
+      await this.webServer.destroy()
       await this.tg.destroy(reason);
     })()
       .catch((e) => {
