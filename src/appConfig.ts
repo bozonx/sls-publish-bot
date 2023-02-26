@@ -7,6 +7,7 @@ dotenv.config();
 
 
 const appConfig: AppConfig = {
+  isProduction: process.env.NODE_ENV === 'production',
   botToken: process.env.BOT_TOKEN as any,
   notionToken: process.env.NOTION_TOKEN as any,
   telegraPhToken: process.env.TELEGRA_PH_TOKEN as any,

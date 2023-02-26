@@ -2,6 +2,7 @@ import {LogLevel} from './Logger.js';
 
 
 export default interface AppConfig {
+  isProduction: boolean;
   botToken: string;
   notionToken: string;
   telegraPhToken: string;

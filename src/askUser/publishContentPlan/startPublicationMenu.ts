@@ -91,13 +91,13 @@ export async function startPublicationMenu(
           {
             reply_markup: {
               one_time_keyboard: true,
-              keyboard: [
+              inline_keyboard: [
                 [
                   {
                     text: 'some text',
 
                     //The Web App will be able to send a “web_app_data” service message. Available in private chats only.
-                    web_app: {url: 'http://localhost:3000/publishZen.html'}
+                    web_app: {url: 'http://127.0.0.1:3000/publishZen.html'}
                   }
                 ]
               ]

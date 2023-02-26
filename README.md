@@ -31,6 +31,8 @@ DATA_DIR=./_testData
 EXPIRED_TASK_OFFSET_SEC=1
 ```
 
+To get log channel id - in TgMain uncomment console.log('--- forwarded' ...
+
 ## Prod
 
 ### Docker run for test
