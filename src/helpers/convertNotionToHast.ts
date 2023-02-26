@@ -9,15 +9,17 @@ import {richTextToHastElements} from './convertHelpersHast.js';
 export async function convertNotionToHtml(
   blocks: NotionBlocks,
   imageUploader?: (url: string) => Promise<string>,
-  skipImages = false
+  skipImages = false,
+  hrToSimpleLine = false
 ): Promise<string> {
-  return toHtml(await convertNotionToHast(blocks, imageUploader, skipImages))
+  return toHtml(await convertNotionToHast(blocks, imageUploader, skipImages, hrToSimpleLine))
 }
 
 export async function convertNotionToHast(
   blocks: NotionBlocks,
   imageUploader: (url: string) => Promise<string> = async (url: string) => url,
-  skipImages = false
+  skipImages = false,
+  hrToSimpleLine = false
 ): Promise<Root> {
   const result: Element[] = []
   let ulElIndex = -1
@@ -27,7 +29,12 @@ export async function convertNotionToHast(
     let children: Element[] = []
 
     if ((block as any).children) {
-      children = (await convertNotionToHast((block as any).children, imageUploader))
+      children = (await convertNotionToHast(
+        (block as any).children,
+        imageUploader,
+        skipImages,
+        hrToSimpleLine
+      ))
         .children as Element[]
     }
 
@@ -207,11 +214,20 @@ export async function convertNotionToHast(
 
         break;
       case NOTION_BLOCK_TYPES.divider:
-        result.push({
-          type: 'element',
-          tagName: 'hr',
-          children: [],
-        });
+        if (hrToSimpleLine) {
+          result.push({
+            type: 'element',
+            tagName: 'p',
+            children: [{ type: 'text', value: '—' }],
+          })
+        }
+        else {
+          result.push({
+            type: 'element',
+            tagName: 'hr',
+            children: [],
+          });
+        }
 
         break;
       default:

@@ -22,11 +22,12 @@ export async function generateZenData(
   let contentHtml = await convertNotionToHtml(
     trimmedArticle,
     undefined,
-    true
+    true,
+    true,
   )
 
   if (footerHtml) {
-    contentHtml += '<p><br /></p><p>' + _.trim(footerHtml) + '</p>'
+    contentHtml += _.trim(footerHtml)
   }
 
   return {
