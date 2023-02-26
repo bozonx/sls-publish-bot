@@ -50,7 +50,7 @@ export class ApiWebServer {
   }
 
 
-  setZenDataHandler(handler: ZenDataHandler) {
+  setZenDataHandler(handler: ZenDataHandler | undefined) {
     this.zenDataHandler = handler
   }
 

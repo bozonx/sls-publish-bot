@@ -16,6 +16,7 @@ import {MediaGroupItem} from '../../types/types.js';
 import {printPost} from '../../helpers/publishHelpers.js';
 import {justPublishToTelegraph} from '../../contentPlan/makePublishTaskTgArticle.js';
 import {generateZenData} from './generateZenData.js';
+import {makeMyDomain, makeMyWebUrl} from '../../helpers/helpers.js';
 
 
 export interface ContentItemState {
@@ -96,10 +97,10 @@ export async function startPublicationMenu(
 
         await tgChat.reply(
           tgChat.app.i18n.message.zenData
-          // TODO: сгенерировать url
-          + `http://localhost:3001/zendata`,
+          //+ `http://${makeMyDomain(tgChat.app.appConfig)}/zendata`,
+          + makeMyWebUrl(tgChat.app.appConfig) + '/zendata',
           undefined,
-          true,
+          true
         )
 
         return

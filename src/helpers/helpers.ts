@@ -10,6 +10,7 @@ import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {compactUndefined} from '../lib/arrays.js';
 import {convertHtmlToCleanText} from './convertHtmlToCleanText.js';
+import AppConfig from '../types/AppConfig.js';
 
 
 export function makeBaseState(): BaseState {
@@ -25,6 +26,20 @@ export function makeBaseState(): BaseState {
 
 export function makeTelegraPhUrl(tgPath: string): string {
   return `https://telegra.ph/${tgPath}`;
+}
+
+export function makeMyDomain(appConfig: AppConfig): string {
+  if (!appConfig.webServerPost || appConfig.webServerPost === 80) {
+    return appConfig.hostname
+  }
+
+  return `${appConfig.hostname}:${appConfig.webServerPost}`
+}
+
+export function makeMyWebUrl(appConfig: AppConfig): string {
+  const protocol = (appConfig.isProduction) ? 'https' : 'http'
+
+  return `${protocol}://${makeMyWebUrl(appConfig)}`
 }
 
 export function makeBloggerEditPostUrl(blogId: string, postId: string): string {

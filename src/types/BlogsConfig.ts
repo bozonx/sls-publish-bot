@@ -42,8 +42,8 @@ export interface BlogConfig {
   sn: {
     telegram?: BlogTelegramConfig
     instagram?: BlogInstagramConfig
-    zen?: BlogZenConfig
     blogger?: BlogBloggerConfig
+    zen?: BlogZenConfig
   };
 }
 

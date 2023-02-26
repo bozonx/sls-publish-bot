@@ -26,19 +26,16 @@ slsfreedom:
       reelFooter:  "[СЛС 🏄](https://t.me/+4g8VsoMuldFiMzNi) | #рилс ${ TAGS }"
       articlePostTmpl: "[${ TITLE }](${ ARTICLE_URL })\n\n${ TAGS }"
       articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+DT00UFZf3_IwYmY6)'
+    blogger:
+      blogId: '4309559355980291324'
+      articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'
     zen:
       supportedTypes:
         - article
         - post1000
         - post2000
-        - mem
-        - photos
-        - reels
       postFooter:    'Автор: Козырин Иван, [Система Личной Свободы](https://dzen.ru/sls_freedom)'
       articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://dzen.ru/sls_freedom)'
-    blogger:
-      blogId: '4309559355980291324'
-      articleFooter: 'Автор: Козырин Иван, [Система Личной Свободы](https://t.me/+X3brRqc3VsJkNmMy)'
 
 svobzhi:
   dispname: 'Свободный Образ Жизни'
