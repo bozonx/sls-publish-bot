@@ -30,8 +30,8 @@ const appConfig: AppConfig = {
 
   webServerPost: process.env.WEB_SERVER_PORT as any,
   hostname: process.env.HOST_NAME as any,
-  sslPrivateKeyFilePath: '/home/node/cert/privatekey.pem',
-  sslCertFilePath: '/home/node/data/certificate.pem',
+  sslPrivateKeyFilePath: '/home/node/files/cert/privatekey.pem',
+  sslCertFilePath: '/home/node/files/cert/certificate.pem',
 }
 
 export default appConfig;
