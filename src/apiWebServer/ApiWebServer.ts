@@ -50,34 +50,8 @@ export class ApiWebServer {
       res.send(html)
     })
 
-    if (this.app.appConfig.isProduction) {
-      if (
-        !this.app.appConfig.sslPrivateKeyFilePath
-        || !this.app.appConfig.sslCertFilePath
-      ) {
-        throw new Error(`Can't find SSL certificate`)
-      }
-
-      const privateKey = fs.readFileSync(this.app.appConfig.sslPrivateKeyFilePath)
-      const certificate = fs.readFileSync(this.app.appConfig.sslCertFilePath)
-      const credentials = {key: privateKey, cert: certificate}
-
-      this.mainServer = https.createServer(credentials, this.expressApp);
-    }
-    else {
-      this.mainServer = http.createServer({}, this.expressApp)
-    }
-
-    // const privateKey = fs.readFileSync('./_testData/privatekey.pem')
-    // const certificate = fs.readFileSync('./_testData/certificate.pem')
-    // const credentials = {
-    //   key: privateKey,
-    //   cert: certificate,
-    // }
-    //
-    // this.mainServer = https.createServer(credentials, this.expressApp);
-
-    this.mainServer.listen(this.app.appConfig.webServerLocalPort, '0.0.0.0')
+    this.mainServer = this.expressApp
+      .listen(this.app.appConfig.webServerLocalPort, '0.0.0.0')
   }
 
   async destroy() {
@@ -106,3 +80,22 @@ export class ApiWebServer {
 //   }
 //   res.send(JSON.stringify(data))
 // })
+
+
+// if (this.app.appConfig.isProduction) {
+//   if (
+//     !this.app.appConfig.sslPrivateKeyFilePath
+//     || !this.app.appConfig.sslCertFilePath
+//   ) {
+//     throw new Error(`Can't find SSL certificate`)
+//   }
+//
+//   const privateKey = fs.readFileSync(this.app.appConfig.sslPrivateKeyFilePath)
+//   const certificate = fs.readFileSync(this.app.appConfig.sslCertFilePath)
+//   const credentials = {key: privateKey, cert: certificate}
+//
+//   this.mainServer = https.createServer(credentials, this.expressApp);
+// }
+// else {
+//   this.mainServer = http.createServer({}, this.expressApp)
+// }

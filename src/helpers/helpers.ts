@@ -29,7 +29,10 @@ export function makeTelegraPhUrl(tgPath: string): string {
 }
 
 export function makeMyDomain(appConfig: AppConfig): string {
-  if (!appConfig.webServerExternalPort || appConfig.webServerExternalPort === 80) {
+  if (
+    !appConfig.webServerExternalPort
+    || [80, 443].includes(appConfig.webServerExternalPort)
+  ) {
     return appConfig.hostname
   }
 
