@@ -21,7 +21,8 @@ export default interface AppConfig {
     //parseMode: 'MarkdownV2';
     parseMode: 'HTML';
   },
-  webServerPost: number
+  webServerExternalPort: number
+  webServerLocalPort: number
   hostname: string
   sslPrivateKeyFilePath?: string
   sslCertFilePath?: string

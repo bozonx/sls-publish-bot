@@ -28,7 +28,8 @@ const appConfig: AppConfig = {
     parseMode: 'HTML',
   },
 
-  webServerPost: process.env.WEB_SERVER_PORT as any,
+  webServerExternalPort: process.env.WEB_SERVER_EXTERNAL_PORT as any,
+  webServerLocalPort: process.env.WEB_SERVER_LOCAL_PORT as any,
   hostname: process.env.HOST_NAME as any,
   sslPrivateKeyFilePath: '/home/node/files/cert/privatekey.pem',
   sslCertFilePath: '/home/node/files/cert/certificate.pem',
