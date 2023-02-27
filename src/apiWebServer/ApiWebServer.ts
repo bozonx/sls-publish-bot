@@ -1,7 +1,7 @@
 import * as https from 'https';
 import * as http from 'http';
 import _ from 'lodash';
-import express from 'express'
+import express, {NextFunction} from 'express'
 import App from '../App.js';
 import {ZEN_DATA_TMPL} from './zenDataTmpl.js';
 import * as core from 'express-serve-static-core';
@@ -21,6 +21,17 @@ export class ApiWebServer {
   constructor(app: App) {
     this.app = app
     this.expressApp = express()
+
+    this.expressApp.use((err: any, req: any, res: any, next: NextFunction) => {
+      if (err) {
+        console.error(err.stack)
+        res.status(500).send('Something broke!')
+        next(err)
+      }
+      else {
+        next()
+      }
+    })
   }
 
 
@@ -39,19 +50,6 @@ export class ApiWebServer {
       res.send(html)
     })
 
-    // app.get('/zendata', async (req, res) => {
-    //   res.header('Content-Type', 'application/json')
-    //
-    //   let data: Record<string, any> | null = null
-    //
-    //   if (this.zenDataHandler) {
-    //     data = await this.zenDataHandler()
-    //   }
-    //
-    //   res.send(JSON.stringify(data))
-    // })
-
-
     if (this.app.appConfig.isProduction) {
       if (
         !this.app.appConfig.sslPrivateKeyFilePath
@@ -69,6 +67,15 @@ export class ApiWebServer {
     else {
       this.mainServer = http.createServer({}, this.expressApp)
     }
+
+    // const privateKey = fs.readFileSync('./_testData/privatekey.pem')
+    // const certificate = fs.readFileSync('./_testData/certificate.pem')
+    // const credentials = {
+    //   key: privateKey,
+    //   cert: certificate,
+    // }
+    //
+    // this.mainServer = https.createServer(credentials, this.expressApp);
 
     this.mainServer.listen(this.app.appConfig.webServerLocalPort, '0.0.0.0')
   }
@@ -89,3 +96,13 @@ export class ApiWebServer {
   }
 
 }
+
+
+// app.get('/zendata', async (req, res) => {
+//   res.header('Content-Type', 'application/json')
+//   let data: Record<string, any> | null = null
+//   if (this.zenDataHandler) {
+//     data = await this.zenDataHandler()
+//   }
+//   res.send(JSON.stringify(data))
+// })
