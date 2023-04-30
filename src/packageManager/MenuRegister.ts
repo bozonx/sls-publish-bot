@@ -9,15 +9,16 @@ export type MenuChangeHandler = (
 
 
 export class MenuRegister {
+  currentPath: string = ''
+  currentMenu: MenuItem[] = []
   //private menuObj: Record<string, any> = {}
   // TODO: а как их удалять если нужно???
   private registeredHandlers: MenuChangeHandler[] = []
 
 
-  async init() {
-    const rootPath: string = ''
 
-    await this.toPath(rootPath)
+  async init() {
+    await this.toPath(this.currentPath)
   }
 
   async destroy() {
@@ -41,5 +42,10 @@ export class MenuRegister {
     for (const handler of this.registeredHandlers) {
       await handler(menuPath, (item: MenuItem) => items.push(item))
     }
+
+    console.log(111, items)
+
+    this.currentMenu = items
   }
+
 }
