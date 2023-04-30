@@ -10,6 +10,8 @@ import TelegraPhMain from './apiTelegraPh/telegraPhMain.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
+import {PackageManager} from './package/PackageManager.js';
+import {PackageIndex} from './types/types.js';
 
 
 export default class App {
@@ -25,6 +27,8 @@ export default class App {
   public readonly notion: NotionApi;
   public readonly i18n = ru;
 
+  private readonly packageManager: PackageManager
+
 
   constructor(rawExecConfig: BlogsConfig) {
     this.blogs = this.makeExecConf(rawExecConfig);
@@ -36,6 +40,7 @@ export default class App {
     this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
     this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
     this.notion = new NotionApi(this.appConfig.notionToken)
+    this.packageManager = new PackageManager(this)
   }
 
 
@@ -63,10 +68,15 @@ export default class App {
       await this.tasks.destroy();
       await this.webServer.destroy()
       await this.tg.destroy(reason);
+      await this.packageManager.destroy()
     })()
       .catch((e) => {
         this.consoleLog.error(e);
       });
+  }
+
+  use(pkg: PackageIndex) {
+    pkg(this.packageManager.ctx)
   }
 
 

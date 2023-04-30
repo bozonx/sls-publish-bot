@@ -5,7 +5,6 @@ import express, {NextFunction} from 'express'
 import App from '../App.js';
 import {ZEN_DATA_TMPL} from './zenDataTmpl.js';
 import * as core from 'express-serve-static-core';
-import * as fs from 'fs';
 
 
 type ZenDataHandler = () => Promise<Record<string, any>>

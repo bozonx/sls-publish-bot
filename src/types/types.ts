@@ -1,5 +1,8 @@
 import {PhotoData, PhotoUrlData, VideoData} from './MessageEvent.js';
+import {PackageContext} from '../package/PackageContext.js';
 
+
+export type PackageIndex = (ctx: PackageContext) => void
 export type CurrencyTicker = 'RUB' | 'TRY' | 'EUR' | 'USD' | 'USDT' | 'BUSD';
 export type MediaGroupItem = PhotoData | PhotoUrlData | VideoData
 
