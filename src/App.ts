@@ -12,13 +12,15 @@ import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
-import {MenuRegister} from './packageManager/MenuRegister.js';
+import {MenuManager} from './menuManager/MenuManager.js';
+import {TelegramMenuRenderer} from './menuManager/TelegramMenuRenderer.js';
 
 
 export default class App {
   public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
-  public readonly menu: MenuRegister
+  public readonly menu: MenuManager
+  public readonly telegramMenuRenderer: TelegramMenuRenderer
   public readonly blogs: BlogsConfig;
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
@@ -34,7 +36,8 @@ export default class App {
 
 
   constructor(rawExecConfig: BlogsConfig) {
-    this.menu = new MenuRegister()
+    this.menu = new MenuManager()
+    this.telegramMenuRenderer = new TelegramMenuRenderer(this)
     this.blogs = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
@@ -57,6 +60,7 @@ export default class App {
       await this.webServer.init()
       await this.tasks.init()
       await this.menu.init()
+      await this.telegramMenuRenderer.init()
     })()
       .catch((e) => {
         this.consoleLog.error(e)

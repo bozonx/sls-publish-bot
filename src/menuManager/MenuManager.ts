@@ -1,4 +1,3 @@
-import {objSetMutate} from 'squidlet-lib';
 import {MenuItem} from '../types/MenuItem.js';
 
 
@@ -8,7 +7,7 @@ export type MenuChangeHandler = (
 ) => Promise<void>
 
 
-export class MenuRegister {
+export class MenuManager {
   currentPath: string = ''
   currentMenu: MenuItem[] = []
   //private menuObj: Record<string, any> = {}
@@ -42,8 +41,6 @@ export class MenuRegister {
     for (const handler of this.registeredHandlers) {
       await handler(menuPath, (item: MenuItem) => items.push(item))
     }
-
-    console.log(111, items)
 
     this.currentMenu = items
   }

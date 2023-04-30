@@ -1,7 +1,7 @@
 import {ConsoleLogger, IndexedEventEmitter} from 'squidlet-lib';
 import App from '../App.js';
 import ChannelLogger from '../helpers/ChannelLogger.js';
-import {MenuChangeHandler} from './MenuRegister.js';
+import {MenuChangeHandler} from '../menuManager/MenuManager.js';
 
 
 export class PackageContext {
