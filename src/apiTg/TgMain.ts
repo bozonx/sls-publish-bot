@@ -81,7 +81,7 @@ export default class TgMain {
 
     this.bot.on('message', (ctx) => {
       // uncomment this to find channel id by forwarding a message
-      //console.log('--- forwarded', (ctx.update?.message as any)?.forward_from_chat)
+      console.log('--- forwarded', (ctx.update?.message as any)?.forward_from_chat)
 
       const message: Message.CommonMessage = ctx.update.message;
 
