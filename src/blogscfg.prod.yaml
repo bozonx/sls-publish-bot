@@ -37,39 +37,39 @@ slsfreedom:
       postFooter:    '<p>—</p><p>Автор: Козырин Иван, <a href="https://dzen.ru/sls_freedom">Система Личной Свободы</a></p>'
       articleFooter: '<p>—</p><p>Автор: Козырин Иван, <a href="https://dzen.ru/sls_freedom">Система Личной Свободы</a></p>'
 
-svobzhi:
-  dispname: 'Свободный Образ Жизни'
-  notion:
-    contentPlanDbId: '2176dd13961a4b808a84e67c40fd3c09'
-    buyTgDbId: 'dad72ed89af547009d53a97d9b6ce1bc'
-    sellTgDbId: 'e98d41de7910449fb9cae61f45107d20'
-    creativeDbId: 'f569397146f44beb88bc1289245619b2'
-    contragentsTgDbId: '2af17ff1a9974c36a46ba585bfe07376'
-  sn:
-    telegram:
-      channelId: ${ SOZH_CHANNEL_ID }
-      supportedTypes:
-        - post1000
-        - post2000
-        - mem
-        - photos
-        - story
-        - narrative
-        - announcement
-        - poll
-        - reels
-      postFooter:  "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | ${ TAGS }"
-      storyFooter: "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | #сторис ${ TAGS }"
-      memFooter:   "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | #мем ${ TAGS }"
-      reelFooter:  "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | #рилс ${ TAGS }"
-    instagram:
-      supportedTypes:
-        - post1000
-        - post2000
-        - mem
-        - photos
-        - story
-        - narrative
-        - reels
-      postFooter:  "${ TAGS }"
-
+#svobzhi:
+#  dispname: 'Свободный Образ Жизни'
+#  notion:
+#    contentPlanDbId: '2176dd13961a4b808a84e67c40fd3c09'
+#    buyTgDbId: 'dad72ed89af547009d53a97d9b6ce1bc'
+#    sellTgDbId: 'e98d41de7910449fb9cae61f45107d20'
+#    creativeDbId: 'f569397146f44beb88bc1289245619b2'
+#    contragentsTgDbId: '2af17ff1a9974c36a46ba585bfe07376'
+#  sn:
+#    telegram:
+#      channelId: ${ SOZH_CHANNEL_ID }
+#      supportedTypes:
+#        - post1000
+#        - post2000
+#        - mem
+#        - photos
+#        - story
+#        - narrative
+#        - announcement
+#        - poll
+#        - reels
+#      postFooter:  "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | ${ TAGS }"
+#      storyFooter: "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | #сторис ${ TAGS }"
+#      memFooter:   "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | #мем ${ TAGS }"
+#      reelFooter:  "[СОЖ 🌴](https://t.me/+VJIbse-RFE04NTA6) | #рилс ${ TAGS }"
+#    instagram:
+#      supportedTypes:
+#        - post1000
+#        - post2000
+#        - mem
+#        - photos
+#        - story
+#        - narrative
+#        - reels
+#      postFooter:  "${ TAGS }"
+#
