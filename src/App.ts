@@ -1,3 +1,4 @@
+import {ConsoleLogger} from 'squidlet-lib';
 import TgMain from './apiTg/TgMain.js';
 import AppConfig from './types/AppConfig.js';
 import appConfig from './appConfig.js';
@@ -5,7 +6,6 @@ import ru from './I18n/ru.js';
 import NotionApi from './apiNotion/NotionApi.js';
 import TasksMain from './taskManager/TasksMain.js';
 import ChannelLogger from './helpers/ChannelLogger.js';
-import ConsoleLogger from './lib/ConsoleLogger.js';
 import TelegraPhMain from './apiTelegraPh/telegraPhMain.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
@@ -46,7 +46,7 @@ export default class App {
 
   init() {
     (async () => {
-      await this.packageManager.init()
+      //await this.packageManager.init()
       await this.tg.init()
       await this.telegraPh.init()
       await this.bloggerCom.init()

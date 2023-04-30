@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import moment from 'moment';
-import {compactUndefined} from 'squidlet-lib';
+import {compactUndefined, isPromise} from 'squidlet-lib';
 import BaseState from '../types/BaseState.js';
 import TgChat from '../apiTg/TgChat.js';
 import {ChatEvents, ISO_DATE_FORMAT, PRINT_FULL_DATE_FORMAT} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import {BlogBaseConfig, BlogTelegramConfig} from '../types/BlogsConfig.js';
-import {isPromise, makeTagsString} from '../lib/common.js';
+import {makeTagsString} from '../lib/common.js';
 import {SN_SUPPORT_TYPES, SnType} from '../types/snTypes.js';
 import {PUBLICATION_TYPES, PublicationType} from '../types/publicationType.js';
 import {convertHtmlToCleanText} from './convertHtmlToCleanText.js';

@@ -1,6 +1,6 @@
-import AppConfig from './types/AppConfig.js';
-import {LOG_LEVELS} from './types/Logger.js';
 import dotenv from 'dotenv';
+import {LOG_LEVELS} from 'squidlet-lib';
+import AppConfig from './types/AppConfig.js';
 
 
 dotenv.config();

@@ -1,5 +1,5 @@
+import {ConsoleLogger} from 'squidlet-lib';
 import App from '../App.js';
-import ConsoleLogger from '../lib/ConsoleLogger.js';
 import ChannelLogger from '../helpers/ChannelLogger.js';
 
 

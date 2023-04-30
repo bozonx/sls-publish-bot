@@ -1,5 +1,4 @@
-import {LOG_LEVELS, Logger, LogLevel} from '../types/Logger.js';
-import {calcAllowedLogLevels} from '../lib/common.js';
+import {calcAllowedLogLevels, LOG_LEVELS, Logger, LogLevel} from 'squidlet-lib';
 import TgChat from '../apiTg/TgChat.js';
 
 
@@ -54,4 +53,12 @@ export default class BotChatLog implements Logger {
         this.tgChat.app.consoleLog.error(`Can't send ERROR message to log channel: ${e}`);
       });
   }
+
+  log = (message: string) => {
+    this.tgChat.reply(`LOG: ${message}`)
+      .catch((e) => {
+        this.tgChat.app.consoleLog.error(`Can't send LOG message to log channel: ${e}`);
+      });
+  }
+
 }
