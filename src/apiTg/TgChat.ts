@@ -1,6 +1,6 @@
+import {IndexedEventEmitter} from 'squidlet-lib';
 import App from '../App.js';
 import BreadCrumbs from '../helpers/BreadCrumbs.js';
-import IndexedEventEmitter from '../lib/IndexedEventEmitter.js';
 import {ChatEvents} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import BaseState from '../types/BaseState.js';
