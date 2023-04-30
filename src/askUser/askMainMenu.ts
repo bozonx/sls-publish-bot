@@ -1,6 +1,7 @@
 import TgChat from '../apiTg/TgChat.js'
 import {addSimpleStep} from '../helpers/helpers.js'
 import {TgReplyButton} from '../types/TgReplyButton.js'
+import * as querystring from 'querystring';
 
 
 export const MAIN_MENU_ACTION = {
@@ -14,7 +15,7 @@ const BLOG_MARKER = 'blog:'
 export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: string) => void) {
   await addSimpleStep(
     tgChat,
-    (): [string, TgReplyButton[][]] => {
+    async (): Promise<[string, TgReplyButton[][]]> => {
       return [
         tgChat.app.i18n.menu.mainMenu,
         [
@@ -33,11 +34,15 @@ export async function askMainMenu(tgChat: TgChat, onDone: (blogNameOrAction: str
               text: tgChat.app.i18n.menu.selectManageTasks,
               callback_data: MAIN_MENU_ACTION.TASKS,
             }
-          ]
+          ],
+
+          ...await tgChat.app.telegramMenuRenderer.makeInlineKeys()
         ]
       ]
     },
     tgChat.asyncCb(async (queryData: string) => {
+      tgChat.app.telegramMenuRenderer.handleClick(queryData)
+
       if (queryData.indexOf(BLOG_MARKER) === 0) {
         const splat: string[] = queryData.split(':');
         const blogName: string = splat[1];
