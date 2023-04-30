@@ -23,4 +23,7 @@ export class PackageContext {
   }
 
 
+  registerMenuItem() {
+    // TODO: зарегистрировать элемент меню
+  }
 }

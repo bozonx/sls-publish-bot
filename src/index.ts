@@ -1,9 +1,11 @@
+import path from 'node:path';
 import _ from 'lodash';
 import * as fs from 'fs';
 import yaml from 'js-yaml'
 import dotenv from 'dotenv';
 import App from './App.js';
 import BlogsConfig from './types/BlogsConfig.js';
+import {PackageIndex} from './types/types.js';
 
 
 dotenv.config();
@@ -27,10 +29,25 @@ const finalCfgString = _.template(confStr)({
   ...JSON.parse(process.env.CHANNEL_IDS),
 })
 const conf = yaml.load(finalCfgString) as BlogsConfig
-const app = new App(conf)
 
-app.init()
 
-// Enable graceful stop
-process.once('SIGINT', () => app.destroy('SIGINT'));
-process.once('SIGTERM', () => app.destroy('SIGTERM'));
+(async () => {
+  const packages: string[] = (process.env.PACKAGES)
+    ? JSON.parse(process.env.PACKAGES)
+    : []
+
+  const app = new App(conf)
+
+  for (const packagePath of packages) {
+    const pkg: {default: PackageIndex} = await import(path.resolve(packagePath + '/index.js'))
+
+    app.use(pkg.default)
+  }
+
+  app.init()
+
+  // Enable graceful stop
+  process.once('SIGINT', () => app.destroy('SIGINT'));
+  process.once('SIGTERM', () => app.destroy('SIGTERM'));
+})()
+
