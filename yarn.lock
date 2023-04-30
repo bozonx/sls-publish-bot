@@ -1527,8 +1527,10 @@ space-separated-tokens@^2.0.0:
   resolved "https://registry.yarnpkg.com/space-separated-tokens/-/space-separated-tokens-2.0.2.tgz#1ecd9d2350a3844572c3f4a312bceb018348859f"
   integrity sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==
 
-"squidlet-lib@file:../squidlet-lib":
+squidlet-lib@^0.1.0:
   version "0.1.0"
+  resolved "https://registry.yarnpkg.com/squidlet-lib/-/squidlet-lib-0.1.0.tgz#91374dc093213be0408c90c4c79f71c2fa3056c9"
+  integrity sha512-spSLwiWXQr5VqN2gGZSpvxpNhC4WbtsfvDkrqdoT+UsvKZ5Vr6brkY/FGPIjVzyGbiKirVy8mRwc9ptPSFpgGA==
 
 statuses@2.0.1:
   version "2.0.1"
