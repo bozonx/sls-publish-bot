@@ -19,9 +19,10 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
     },
   }
 
-  //ctx.registerMenuItem('blog', 'newItem', menuItem)
-  ctx.onMenuChange(() => {
+  ctx.onMenuChange(async (menuPath: string, registerItem: (item: MenuItem) => void) => {
+    if (menuPath !== '') return
 
+    registerItem(menuItem)
   })
 }
 

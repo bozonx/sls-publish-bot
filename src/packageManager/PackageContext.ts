@@ -1,14 +1,16 @@
-import {ConsoleLogger} from 'squidlet-lib';
+import {ConsoleLogger, IndexedEventEmitter} from 'squidlet-lib';
 import App from '../App.js';
 import ChannelLogger from '../helpers/ChannelLogger.js';
-import {MenuItem} from '../types/MenuItem.js';
-import {MenuChangeHandler, MenuChangeHandler} from './MenuRegister.js';
+import {MenuChangeHandler} from './MenuRegister.js';
 
 
 export class PackageContext {
   private readonly app
 
 
+  get events(): IndexedEventEmitter {
+    return this.app.events
+  }
 
   get channelLog(): ChannelLogger {
     return this.app.channelLog
@@ -23,10 +25,6 @@ export class PackageContext {
     this.app = app
   }
 
-
-  // registerMenuItem(pathToMenu: string, itemName: string, menuItem: MenuItem) {
-  //   this.app.menu.addMenuItem(pathToMenu, itemName, menuItem)
-  // }
 
   onMenuChange(cb: MenuChangeHandler) {
     this.app.menu.onMenuChange(cb)

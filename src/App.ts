@@ -1,4 +1,4 @@
-import {ConsoleLogger} from 'squidlet-lib';
+import {ConsoleLogger, IndexedEventEmitter} from 'squidlet-lib';
 import TgMain from './apiTg/TgMain.js';
 import AppConfig from './types/AppConfig.js';
 import appConfig from './appConfig.js';
@@ -16,6 +16,7 @@ import {MenuRegister} from './packageManager/MenuRegister.js';
 
 
 export default class App {
+  public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
   public readonly menu: MenuRegister
   public readonly blogs: BlogsConfig;
@@ -55,6 +56,7 @@ export default class App {
       await this.bloggerCom.init()
       await this.webServer.init()
       await this.tasks.init()
+      await this.menu.init()
     })()
       .catch((e) => {
         this.consoleLog.error(e)
@@ -69,6 +71,7 @@ export default class App {
     (async () => {
       await this.channelLog.info(`Bot is shutting down`);
 
+      await this.menu.destroy();
       await this.tasks.destroy();
       await this.webServer.destroy()
       await this.tg.destroy(reason);
