@@ -12,10 +12,12 @@ import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
+import {MenuRegister} from './packageManager/MenuRegister.js';
 
 
 export default class App {
   public readonly appConfig: AppConfig = appConfig;
+  public readonly menu: MenuRegister
   public readonly blogs: BlogsConfig;
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
@@ -31,6 +33,7 @@ export default class App {
 
 
   constructor(rawExecConfig: BlogsConfig) {
+    this.menu = new MenuRegister()
     this.blogs = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
