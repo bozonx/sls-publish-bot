@@ -46,6 +46,7 @@ export default class App {
 
   init() {
     (async () => {
+      await this.packageManager.init()
       await this.tg.init()
       await this.telegraPh.init()
       await this.bloggerCom.init()
