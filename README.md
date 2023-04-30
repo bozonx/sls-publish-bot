@@ -63,14 +63,6 @@ services:
 
 start chat in telegram with `freedom_publish_bot`
 
-## Docker hook
-
-docker login
-docker push bozonx/publish_bot:latest
-
 ## Push to prod
 
-```bash
-yarn build
-yarn push
-```
+Just push to main branch
