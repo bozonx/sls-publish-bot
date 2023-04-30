@@ -7,7 +7,7 @@ import {CONTENT_PROPS} from '../../types/ContentItem.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 import {Pagination} from '../../helpers/Pagination.js';
 import {requestNotPublishedFromContentPlan} from '../../contentPlan/requestNotPublishedFromContentPlan.js';
-import {compactUndefined} from '../../lib/arrays.js';
+
 
 
 const ASK_CONTENT_ITEM = {

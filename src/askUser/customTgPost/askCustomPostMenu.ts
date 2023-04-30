@@ -1,8 +1,8 @@
 import moment from 'moment';
+import {compactUndefined} from 'squidlet-lib';
 import TgChat from '../../apiTg/TgChat.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT, WARN_SIGN} from '../../types/constants.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
-import {compactUndefined} from '../../lib/arrays.js';
 import {askText} from '../common/askText.js';
 import {askTags} from '../common/askTags.js';
 import {TgReplyBtnUrl, TgReplyButton} from '../../types/TgReplyButton.js';

@@ -1,8 +1,8 @@
 import {PageList, Page} from 'better-telegraph';
+import {compactUndefined} from 'squidlet-lib';
 import TgChat from '../../apiTg/TgChat.js';
 import {addSimpleStep} from '../../helpers/helpers.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
-import {compactUndefined} from '../../lib/arrays.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 import {Pagination} from '../../helpers/Pagination.js';
 

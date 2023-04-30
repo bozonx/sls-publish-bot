@@ -1,10 +1,10 @@
 import moment from 'moment';
+import {compactUndefined} from 'squidlet-lib';
 import TgChat from '../../apiTg/TgChat.js';
 import {ChatEvents, ISO_DATE_FORMAT} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
 import {makeUtcOffsetStr} from '../../helpers/helpers.js';
-import {compactUndefined} from '../../lib/arrays.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 
 

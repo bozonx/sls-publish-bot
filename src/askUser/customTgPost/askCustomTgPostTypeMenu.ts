@@ -1,6 +1,7 @@
+import {compactUndefined} from 'squidlet-lib';
 import TgChat from '../../apiTg/TgChat.js';
 import {addSimpleStep, compactButtons} from '../../helpers/helpers.js';
-import {breakArray, compactUndefined} from '../../lib/arrays.js';
+import {breakArray} from '../../lib/arrays.js';
 import {PUBLICATION_TYPES} from '../../types/publicationType.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';

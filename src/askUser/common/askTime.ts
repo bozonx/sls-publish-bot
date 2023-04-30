@@ -1,9 +1,10 @@
+import {compactUndefined} from 'squidlet-lib';
 import _ from 'lodash';
 import TgChat from '../../apiTg/TgChat.js';
 import {ChatEvents, OFTEN_USED_TIME} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
 import {TextMessageEvent} from '../../types/MessageEvent.js';
-import {breakArray, compactUndefined} from '../../lib/arrays.js';
+import {breakArray} from '../../lib/arrays.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {normalizeTime, validateTime} from '../../lib/common.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
