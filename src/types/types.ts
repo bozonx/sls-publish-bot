@@ -1,5 +1,5 @@
 import {PhotoData, PhotoUrlData, VideoData} from './MessageEvent.js';
-import {PackageContext} from '../package/PackageContext.js';
+import {PackageContext} from '../packageManager/PackageContext.js';
 
 
 export type PackageIndex = (ctx: PackageContext) => void

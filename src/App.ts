@@ -10,7 +10,7 @@ import TelegraPhMain from './apiTelegraPh/telegraPhMain.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
-import {PackageManager} from './package/PackageManager.js';
+import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
 
 
