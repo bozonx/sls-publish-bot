@@ -8,9 +8,6 @@
   "author": "Kozyrin Ivan <ipkozyrin@gmail.com>",
   "license": "MIT",
   "private": false,
-  "engines": {
-    "node": ">=14.16"
-  },
   "scripts": {
     "dev": "ts-node-esm ./src/index.ts",
     "prod": "yarn ts-node --esm ./src/index.ts",
