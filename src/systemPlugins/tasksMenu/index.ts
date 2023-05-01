@@ -4,7 +4,7 @@ import {MenuItem, MenuItemContext} from '../../types/MenuItem.js';
 import {MenuDefinition} from '../../menuManager/MenuManager.js';
 
 
-const TASKS_PATH = 'tasks'
+export const TASKS_PATH = 'tasks'
 
 
 function makeTasksMenu(ctx: PackageContext): MenuItem[] {
