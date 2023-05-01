@@ -8,7 +8,7 @@ export interface MenuStep extends MenuDefinition {
 
 
 export class SpecificMenuBase {
-  private steps: MenuStep[] = []
+  steps: MenuStep[] = []
 
 
   getStep(stepName: string): MenuStep | undefined {
@@ -31,47 +31,6 @@ export class SpecificMenuBase {
     }
     else {
       foundStep.state = {...foundStep.state, ...newState}
-    }
-  }
-
-  makeSystemBtns(): MenuItem[][] {
-    const items: MenuItem[][] = []
-
-    if (this.steps.length === 1 && this.steps[0].name !== '') {
-      items.push([this.makeBackToMainMenuBtn()])
-    }
-    else if (this.steps.length > 1) {
-      items.push([this.makeBackBtn()])
-      items.push([this.makeCancelBtn()])
-    }
-
-    return items
-  }
-
-  private makeBackToMainMenuBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.toMainMenu},
-      pressed: async (itemCtx: MenuItemContext) => {
-      }
-    }
-  }
-
-  private makeBackBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.back},
-      pressed: async (itemCtx: MenuItemContext) => {
-      }
-    }
-  }
-
-  private makeCancelBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.cancel},
-      pressed: async (itemCtx: MenuItemContext) => {
-      }
     }
   }
 

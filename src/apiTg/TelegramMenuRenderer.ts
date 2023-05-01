@@ -131,4 +131,50 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
     return result
   }
 
+
+  // TODO: move to base class
+  makeSystemBtns(): MenuItem[][] {
+    const items: MenuItem[][] = []
+
+    if (this.steps.length === 1 && this.steps[0].name !== '') {
+      items.push([this.makeBackToMainMenuBtn()])
+    }
+    else if (this.steps.length > 1) {
+      items.push([this.makeBackBtn()])
+      items.push([this.makeCancelBtn()])
+    }
+
+    return items
+  }
+
+  // TODO: move to base class
+  private makeBackToMainMenuBtn(): MenuItem {
+    return {
+      type: 'button',
+      view: {name: this.tgChat.app.i18n.buttons.toMainMenu},
+      pressed: async (itemCtx: MenuItemContext) => {
+      }
+    }
+  }
+
+  // TODO: move to base class
+  private makeBackBtn(): MenuItem {
+    return {
+      type: 'button',
+      view: {name: this.tgChat.app.i18n.buttons.back},
+      pressed: async (itemCtx: MenuItemContext) => {
+      }
+    }
+  }
+
+  // TODO: move to base class
+  private makeCancelBtn(): MenuItem {
+    return {
+      type: 'button',
+      view: {name: this.tgChat.app.i18n.buttons.cancel},
+      pressed: async (itemCtx: MenuItemContext) => {
+      }
+    }
+  }
+
 }
