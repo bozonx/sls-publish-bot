@@ -12,7 +12,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
         {
           type: 'button',
           view: {
-            name: ctx.i18n.menu.flushTask,
+            name: ctx.i18n.buttons.deletePost,
           },
           async pressed(itemCtx: MenuItemContext) {
           },
@@ -20,7 +20,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
         {
           type: 'button',
           view: {
-            name: ctx.i18n.menu.deleteTask,
+            name: ctx.i18n.buttons.clonePost,
           },
           async pressed(itemCtx: MenuItemContext) {
           },
@@ -28,7 +28,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
         {
           type: 'button',
           view: {
-            name: ctx.i18n.menu.changeTaskExecDate,
+            name: ctx.i18n.buttons.pinPost,
           },
           async pressed(itemCtx: MenuItemContext) {
           },
@@ -36,7 +36,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
         {
           type: 'button',
           view: {
-            name: ctx.i18n.menu.changeTaskAutoDeleteDate,
+            name: ctx.i18n.buttons.unpinPost,
           },
           async pressed(itemCtx: MenuItemContext) {
           },
@@ -44,7 +44,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
         {
           type: 'button',
           view: {
-            name: ctx.i18n.menu.changeTaskAutoDeleteDate,
+            name: ctx.i18n.buttons.finishPoll,
           },
           async pressed(itemCtx: MenuItemContext) {
           },

@@ -35,7 +35,7 @@ export default class App {
 
 
   constructor(rawExecConfig: BlogsConfig) {
-    this.menu = new MenuManager()
+    this.menu = new MenuManager(this)
     this.blogs = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);

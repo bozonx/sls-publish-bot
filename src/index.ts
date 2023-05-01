@@ -7,6 +7,7 @@ import App from './App.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import {PackageIndex} from './types/types.js';
 import {systemPlugins} from './systemPlugins/index.js';
+import {userPlugins} from './plugins/allPlugins.js';
 
 
 dotenv.config();
@@ -33,9 +34,9 @@ const conf = yaml.load(finalCfgString) as BlogsConfig
 
 
 (async () => {
-  const packages: string[] = [
-    ...((process.env.PACKAGES) ? JSON.parse(process.env.PACKAGES) : []),
-  ]
+  // const packages: string[] = [
+  //   ...((process.env.PACKAGES) ? JSON.parse(process.env.PACKAGES) : []),
+  // ]
 
   const app = new App(conf)
 
@@ -43,11 +44,16 @@ const conf = yaml.load(finalCfgString) as BlogsConfig
     app.use(sysPlugin)
   }
 
-  for (const packagePath of packages) {
-    const pkg: {default: PackageIndex} = await import(path.resolve(packagePath + '/index.js'))
-
-    app.use(pkg.default)
+  // TODO: подгужать их другим способом
+  for (const sysPlugin of userPlugins) {
+    app.use(sysPlugin)
   }
+
+  // for (const packagePath of packages) {
+  //   const pkg: {default: PackageIndex} = await import(path.resolve(packagePath + '/index.js'))
+  //
+  //   app.use(pkg.default)
+  // }
 
   app.init()
 
