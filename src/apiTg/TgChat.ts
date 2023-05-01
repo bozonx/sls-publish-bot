@@ -13,36 +13,42 @@ import {
   TextMessageEvent,
   VideoMessageEvent
 } from '../types/MessageEvent.js';
+import {MenuManager} from '../menuManager/MenuManager.js';
+import {TelegramMenuRenderer} from '../menuManager/TelegramMenuRenderer.js';
 
 
 export default class TgChat {
   public readonly app: App;
+  public readonly menu: MenuManager
+  public readonly telegramMenuRenderer: TelegramMenuRenderer
   public readonly events: IndexedEventEmitter;
   // chat id where was start function called
   public readonly botChatId: number | string;
-  public readonly steps: BreadCrumbs;
+  //public readonly steps: BreadCrumbs;
   public readonly log: BotChatLog;
 
 
   constructor(chatId: number | string, app: App) {
     this.botChatId = chatId;
     this.app = app;
-    this.steps = new BreadCrumbs(async () => {
-      await topLevelMenuStarter(this);
-    });
+    this.menu = new MenuManager()
+    this.telegramMenuRenderer = new TelegramMenuRenderer(this)
+    // this.steps = new BreadCrumbs(async () => {
+    //   await topLevelMenuStarter(this);
+    // });
     this.events = new IndexedEventEmitter();
     this.log = new BotChatLog(this.app.appConfig.botChatLogLevel, this);
   }
 
   async destroy() {
-    this.steps.destroy();
+    await this.menu.destroy();
     this.events.destroy();
   }
 
 
   async startCmd() {
     // Start from very beginning and cancel current state if need.
-    await this.steps.init();
+    await this.menu.init();
   }
 
   /**

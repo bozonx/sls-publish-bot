@@ -21,7 +21,7 @@ export enum ChatEvents {
   PHOTO,
   VIDEO,
   //MEDIA_GROUP_ITEM,
-  POLL
+  POLL,
 }
 
 // TODO: may be move to config ???

@@ -1,13 +1,14 @@
 import App from '../App.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
+import TgChat from '../apiTg/TgChat.js';
 
 
 export class TelegramMenuRenderer {
-  private readonly app
+  private readonly tgChat
 
 
-  constructor(app: App) {
-    this.app = app
+  constructor(tgChat: TgChat) {
+    this.tgChat = tgChat
   }
 
   async init() {

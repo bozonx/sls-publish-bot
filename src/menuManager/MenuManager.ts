@@ -1,19 +1,16 @@
+import {compactUndefined, isPromise} from 'squidlet-lib';
 import {MenuItem} from '../types/MenuItem.js';
 
 
-export type MenuChangeHandler = (
-  menuPath: string,
-  registerItem: (item: MenuItem) => void
-) => Promise<void>
+export type MenuChangeHandler = (menuPath: string) => (MenuItem | Promise<MenuItem>)
 
 
 export class MenuManager {
+  //changeEvent = new IndexedEvents<(menuPath: string) => void>()
   currentPath: string = ''
   currentMenu: MenuItem[] = []
   //private menuObj: Record<string, any> = {}
-  // TODO: а как их удалять если нужно???
   private registeredHandlers: MenuChangeHandler[] = []
-
 
 
   async init() {
@@ -21,25 +18,40 @@ export class MenuManager {
   }
 
   async destroy() {
-
+    // @ts-ignore
+    delete this.currentPath
+    // @ts-ignore
+    delete this.currentMenu
+    // @ts-ignore
+    delete this.registeredHandlers
   }
 
 
-  onMenuChange(handler: MenuChangeHandler) {
+  onMenuChange(handler: MenuChangeHandler): number {
     this.registeredHandlers.push(handler)
+
+    return this.registeredHandlers.length - 1
   }
 
-  // addMenuItem(pathToMenu: string, itemName: string, menuItem: MenuItem) {
-  //   objSetMutate(this.menuObj, pathToMenu + '.' + itemName, menuItem)
-  //
-  //   console.log(111, this.menuObj)
-  // }
+  removeListener(handlerIndex: number) {
+    delete this.registeredHandlers[handlerIndex]
+  }
 
   async toPath(menuPath: string) {
-    const items: MenuItem[] = []
+    this.currentPath = menuPath
 
-    for (const handler of this.registeredHandlers) {
-      await handler(menuPath, (item: MenuItem) => items.push(item))
+    const items: MenuItem[] = []
+    const handlers: MenuChangeHandler[] = compactUndefined(this.registeredHandlers)
+
+    for (const handler of handlers) {
+      const res: MenuItem | Promise<MenuItem> = handler(menuPath)
+
+      if (isPromise(res)) {
+        items.push(await res)
+      }
+      else {
+        items.push(res as MenuItem)
+      }
     }
 
     this.currentMenu = items

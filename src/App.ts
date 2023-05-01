@@ -17,10 +17,8 @@ import {TelegramMenuRenderer} from './menuManager/TelegramMenuRenderer.js';
 
 
 export default class App {
-  public readonly events = new IndexedEventEmitter()
+  //public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
-  public readonly menu: MenuManager
-  public readonly telegramMenuRenderer: TelegramMenuRenderer
   public readonly blogs: BlogsConfig;
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
@@ -36,8 +34,6 @@ export default class App {
 
 
   constructor(rawExecConfig: BlogsConfig) {
-    this.menu = new MenuManager()
-    this.telegramMenuRenderer = new TelegramMenuRenderer(this)
     this.blogs = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);
@@ -59,8 +55,6 @@ export default class App {
       await this.bloggerCom.init()
       await this.webServer.init()
       await this.tasks.init()
-      await this.menu.init()
-      await this.telegramMenuRenderer.init()
     })()
       .catch((e) => {
         this.consoleLog.error(e)
@@ -75,7 +69,6 @@ export default class App {
     (async () => {
       await this.channelLog.info(`Bot is shutting down`);
 
-      await this.menu.destroy();
       await this.tasks.destroy();
       await this.webServer.destroy()
       await this.tg.destroy(reason);
