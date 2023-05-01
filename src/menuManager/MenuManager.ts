@@ -8,7 +8,7 @@ export interface MenuDefinition {
   name: string,
   messageHtml?: string
   // params which is set only once by plugin, it isn't state
-  params?: Record<string, any>
+  //params?: Record<string, any>
 }
 
 export type MenuChangeHandler = (menuDefinition: MenuDefinition) =>

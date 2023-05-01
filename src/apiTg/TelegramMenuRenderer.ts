@@ -3,7 +3,7 @@ import TgChat from './TgChat.js';
 import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
 import {MenuDefinition} from '../menuManager/MenuManager.js';
 import {ChatEvents} from '../types/constants.js';
-import {SpecificMenuBase} from '../menuManager/SpecificMenuBase.js';
+import {MenuStep, SpecificMenuBase} from '../menuManager/SpecificMenuBase.js';
 
 
 const CB_DELIMITER = '|'
@@ -26,14 +26,17 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
     this.tgChat = tgChat
     this.itemContext = {
       toPath: async (
-        toDefinition?: Omit<MenuDefinition, 'state'>,
-        replaceState?: Record<string, any>
-      )=> this.toPath(toDefinition, replaceState),
+        name: string,
+        messageHtml?: string,
+        state?: Record<string, any>,
+      )=> this.toPath(name, messageHtml, state),
+      backToPath: async (pathTo: string) => this.backToPath(pathTo),
+      backSteps: async(stepsNum: number) => this.backSteps(stepsNum),
     }
   }
 
 
-  async init(currentDefinition: MenuDefinition) {
+  async init(currentDefinition: MenuStep) {
     this.tgChat.events.addListener(ChatEvents.CALLBACK_QUERY, this.handleClick)
 
     await this.toPath(currentDefinition)
@@ -51,8 +54,9 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
   }
 
   async toPath(
-    toDefinition?: Omit<MenuDefinition, 'state'>,
-    replaceState?: Record<string, any>
+    name: string,
+    messageHtml?: string,
+    state?: Record<string, any>
   ) {
     if (!toDefinition) return
 
@@ -88,6 +92,14 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
     }
 
     this.prevMenuMsgIds = [msgId]
+  }
+
+  async backToPath(pathTo: string) {
+
+  }
+
+  async backSteps(stepsNum: number) {
+
   }
 
   handleClick = (cbId: string) => {

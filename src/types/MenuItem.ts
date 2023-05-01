@@ -6,9 +6,12 @@ export interface MenuView {
 
 export interface MenuItemContext {
   toPath: (
-    toDefinition?: Omit<MenuDefinition, 'state'>,
-    replaceState?: Record<string, any>
+    name: string,
+    messageHtml?: string,
+    state?: Record<string, any>,
   ) => Promise<void>
+  backToPath(pathTo: string): Promise<void>
+  backSteps(stepsNum: number): Promise<void>
 }
 
 export interface MenuItem {
