@@ -157,46 +157,46 @@ export default class TgChat {
     await this.app.tg.bot.telegram.deleteMessage(this.botChatId, messageId);
   }
 
-  async addOrdinaryStep(
-    onStart: (state: BaseState) => Promise<void>,
-    initialState?: BaseState,
-    stepName?: string
-  ) {
-    const initState = initialState || makeBaseState();
-
-    await this.steps.addAndRunStep({
-      name: stepName,
-      state: initState,
-      onStart: async (state: BaseState): Promise<void> => onStart(state),
-      // go to the new one step normally
-      onEnd: async (state: BaseState): Promise<void> => {
-        for (const item of state.handlerIndexes) {
-          this.events.removeListener(item[0], item[1])
-        }
-        // don't wait of removing the asking message
-        for (const messageId of state.messageIds) {
-          this.deleteMessage(messageId)
-            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message onEnd: ${e}`));
-        }
-
-        state.handlerIndexes.splice(0)
-        state.messageIds.splice(0)
-      },
-      // go back to one or more steps
-      onCancel: async (state: BaseState): Promise<void> => {
-        for (const item of state.handlerIndexes) {
-          this.events.removeListener(item[0], item[1]);
-        }
-        // don't wait of removing the asking message
-        for (const messageId of state.messageIds) {
-          this.deleteMessage(messageId)
-            .catch((e) => this.app.consoleLog.warn(`Can't delete menu message onCancel: ${e}`));
-        }
-
-        state.handlerIndexes.splice(0)
-        state.messageIds.splice(0)
-      },
-    });
-  }
+  // async addOrdinaryStep(
+  //   onStart: (state: BaseState) => Promise<void>,
+  //   initialState?: BaseState,
+  //   stepName?: string
+  // ) {
+  //   const initState = initialState || makeBaseState();
+  //
+  //   await this.steps.addAndRunStep({
+  //     name: stepName,
+  //     state: initState,
+  //     onStart: async (state: BaseState): Promise<void> => onStart(state),
+  //     // go to the new one step normally
+  //     onEnd: async (state: BaseState): Promise<void> => {
+  //       for (const item of state.handlerIndexes) {
+  //         this.events.removeListener(item[0], item[1])
+  //       }
+  //       // don't wait of removing the asking message
+  //       for (const messageId of state.messageIds) {
+  //         this.deleteMessage(messageId)
+  //           .catch((e) => this.app.consoleLog.warn(`Can't delete menu message onEnd: ${e}`));
+  //       }
+  //
+  //       state.handlerIndexes.splice(0)
+  //       state.messageIds.splice(0)
+  //     },
+  //     // go back to one or more steps
+  //     onCancel: async (state: BaseState): Promise<void> => {
+  //       for (const item of state.handlerIndexes) {
+  //         this.events.removeListener(item[0], item[1]);
+  //       }
+  //       // don't wait of removing the asking message
+  //       for (const messageId of state.messageIds) {
+  //         this.deleteMessage(messageId)
+  //           .catch((e) => this.app.consoleLog.warn(`Can't delete menu message onCancel: ${e}`));
+  //       }
+  //
+  //       state.handlerIndexes.splice(0)
+  //       state.messageIds.splice(0)
+  //     },
+  //   });
+  // }
 
 }

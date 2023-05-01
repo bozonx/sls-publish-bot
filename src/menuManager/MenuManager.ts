@@ -6,10 +6,8 @@ export type MenuChangeHandler = (menuPath: string) => (MenuItem | Promise<MenuIt
 
 
 export class MenuManager {
-  //changeEvent = new IndexedEvents<(menuPath: string) => void>()
   currentPath: string = ''
   currentMenu: MenuItem[] = []
-  //private menuObj: Record<string, any> = {}
   private registeredHandlers: MenuChangeHandler[] = []
 
 

@@ -1,6 +1,8 @@
-import App from '../App.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from '../apiTg/TgChat.js';
+
+
+const CB_DELIMITER = '|'
 
 
 export class TelegramMenuRenderer {
@@ -11,21 +13,17 @@ export class TelegramMenuRenderer {
     this.tgChat = tgChat
   }
 
-  async init() {
-  }
-
 
   async makeInlineKeys(): Promise<TgReplyButton[][]> {
     const result: TgReplyButton[][] = []
 
-    for (const index in this.app.menu.currentMenu) {
-      const item = this.app.menu.currentMenu[index]
-      const itemView = item.render()
-      const cbId = this.app.menu.currentPath + ':' + index
+    for (const index in this.tgChat.menu.currentMenu) {
+      const item = this.tgChat.menu.currentMenu[index]
+      const cbId = this.tgChat.menu.currentPath + CB_DELIMITER + index
 
       result.push([
         {
-          text: itemView.name,
+          text: item.view.name,
           callback_data: cbId,
         }
       ])
@@ -37,13 +35,13 @@ export class TelegramMenuRenderer {
   }
 
   handleClick(cbId: string) {
-    const splat: string[] = cbId.split(':')
+    const splat: string[] = cbId.split(CB_DELIMITER)
 
-    if (splat[0] !== this.app.menu.currentPath) return
+    if (splat[0] !== this.tgChat.menu.currentPath) return
 
     const itemId: string = splat[1]
 
-    this.app.menu.currentMenu[Number(itemId)].pressed()
+    this.tgChat.menu.currentMenu[Number(itemId)].pressed()
   }
 
 }

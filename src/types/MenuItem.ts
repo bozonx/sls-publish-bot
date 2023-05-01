@@ -4,7 +4,7 @@ export interface MenuView {
 
 export interface MenuItem {
   type: 'button'
-  render(): MenuView
+  view: MenuView
   pressed(): void
   destroy(): Promise<void>
 }
