@@ -90,24 +90,24 @@ export async function addSimpleStep(
   cb: (queryData: string) => void,
   stepName?: string
 ) {
-  await tgChat.addOrdinaryStep(async (state: BaseState) => {
-    const initResult = init()
-    const [msg, buttons] = (isPromise(initResult))
-      ? await initResult
-      : initResult as [string, TgReplyButton[][]]
-    // print main menu message
-    state.messageIds.push(await tgChat.reply(msg, buttons, true))
-    // listen to result
-    state.handlerIndexes.push([
-      tgChat.events.addListener(
-        ChatEvents.CALLBACK_QUERY,
-        // This it to make it safe and put error message to the LOG
-        // TODO: сделать просто через улавливание ошибок
-        tgChat.asyncCb(async (queryData: string) => cb(queryData))
-      ),
-      ChatEvents.CALLBACK_QUERY
-    ]);
-  }, undefined, stepName);
+  // await tgChat.addOrdinaryStep(async (state: BaseState) => {
+  //   const initResult = init()
+  //   const [msg, buttons] = (isPromise(initResult))
+  //     ? await initResult
+  //     : initResult as [string, TgReplyButton[][]]
+  //   // print main menu message
+  //   state.messageIds.push(await tgChat.reply(msg, buttons, true))
+  //   // listen to result
+  //   state.handlerIndexes.push([
+  //     tgChat.events.addListener(
+  //       ChatEvents.CALLBACK_QUERY,
+  //       // This it to make it safe and put error message to the LOG
+  //       // TODO: сделать просто через улавливание ошибок
+  //       tgChat.asyncCb(async (queryData: string) => cb(queryData))
+  //     ),
+  //     ChatEvents.CALLBACK_QUERY
+  //   ]);
+  // }, undefined, stepName);
 }
 
 export function makeUtcOffsetStr(utcOffsetNum: number): string {
