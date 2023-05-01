@@ -134,17 +134,18 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
 
   // TODO: move to base class
   makeSystemBtns(): MenuItem[][] {
-    const items: MenuItem[][] = []
-
     if (this.steps.length === 1 && this.steps[0].name !== '') {
-      items.push([this.makeBackToMainMenuBtn()])
+      return [[this.makeBackToMainMenuBtn()]]
     }
     else if (this.steps.length > 1) {
-      items.push([this.makeBackBtn()])
-      items.push([this.makeCancelBtn()])
+      return [[
+        this.makeBackBtn(),
+        this.makeCancelBtn(),
+      ]]
     }
-
-    return items
+    else {
+      return []
+    }
   }
 
   // TODO: move to base class
