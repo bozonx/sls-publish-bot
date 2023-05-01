@@ -1,5 +1,6 @@
 import {MenuDefinition} from './MenuManager.js';
 import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
+import BreadCrumbs from '../helpers/BreadCrumbs.js';
 
 
 export interface MenuStep extends MenuDefinition {
@@ -8,14 +9,33 @@ export interface MenuStep extends MenuDefinition {
 
 
 export class SpecificMenuBase {
-  steps: MenuStep[] = []
+  breadCrumbs: BreadCrumbs
 
 
-  getStep(stepName: string): MenuStep | undefined {
-    return this.steps
-      .reverse()
-      .find((el) => el.name === stepName)
+  constructor() {
+    const initialStep = async () => {
+      // TODO: что тут должно быть???
+    }
+
+    this.breadCrumbs = new BreadCrumbs(initialStep)
   }
+
+  // steps: MenuStep[] = []
+  //
+  //
+  // getStep(stepName: string): MenuStep | undefined {
+  //   return this.steps
+  //     .reverse()
+  //     .find((el) => el.name === stepName)
+  // }
+  //
+  // addStep(step: MenuStep) {
+  //
+  // }
+  //
+  // async runStep() {
+  //   // TODO: end prev step
+  // }
 
   getState(stepName: string): Record<string, any> | undefined {
     return this.getStep(stepName)?.state
