@@ -1,23 +1,19 @@
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from './TgChat.js';
 import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
-import {MenuDefinition, MenuEvents} from '../menuManager/MenuManager.js';
+import {MenuDefinition} from '../menuManager/MenuManager.js';
 import {ChatEvents} from '../types/constants.js';
+import {SpecificMenuBase} from '../menuManager/SpecificMenuBase.js';
 
 
 const CB_DELIMITER = '|'
 const ITEM_INDEX_DELIMITER = '.'
+export const MENU_DELIMITER = '/'
 
 
-export interface StatefulMenuDefinition extends MenuDefinition {
-  state: Record<string, any>
-}
-
-
-export class TelegramMenuRenderer {
+export class TelegramMenuRenderer extends SpecificMenuBase {
   currentDefinition?: MenuDefinition
   currentMenu: MenuItem[][] = []
-  private steps: MenuDefinition[] = []
 
   private prevMenuMsgIds: number[] = []
   private readonly tgChat
@@ -25,6 +21,8 @@ export class TelegramMenuRenderer {
 
 
   constructor(tgChat: TgChat) {
+    super()
+
     this.tgChat = tgChat
     this.itemContext = {
       toPath: async (
@@ -128,36 +126,6 @@ export class TelegramMenuRenderer {
     }
 
     return result
-  }
-
-  private makeBackToMainMenuBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.toMainMenu},
-      pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.toMainMenu)
-      }
-    }
-  }
-
-  private makeBackBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.back},
-      pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.back)
-      }
-    }
-  }
-
-  private makeCancelBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.cancel},
-      pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.cancel)
-      }
-    }
   }
 
 }
