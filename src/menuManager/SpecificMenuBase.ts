@@ -2,16 +2,16 @@ import {MenuDefinition} from './MenuManager.js';
 import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
 
 
-export interface StatefulMenuDefinition extends MenuDefinition {
+export interface MenuStep extends MenuDefinition {
   state: Record<string, any>
 }
 
 
 export class SpecificMenuBase {
-  private steps: MenuDefinition[] = []
+  private steps: MenuStep[] = []
 
 
-  getStep(stepName: string): MenuDefinition | undefined {
+  getStep(stepName: string): MenuStep | undefined {
     return this.steps
       .reverse()
       .find((el) => el.name === stepName)
@@ -40,7 +40,6 @@ export class SpecificMenuBase {
       type: 'button',
       view: {name: this.app.i18n.buttons.toMainMenu},
       pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.toMainMenu)
       }
     }
   }
@@ -50,7 +49,6 @@ export class SpecificMenuBase {
       type: 'button',
       view: {name: this.app.i18n.buttons.back},
       pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.back)
       }
     }
   }
@@ -60,7 +58,6 @@ export class SpecificMenuBase {
       type: 'button',
       view: {name: this.app.i18n.buttons.cancel},
       pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.cancel)
       }
     }
   }
