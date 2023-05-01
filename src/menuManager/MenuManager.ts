@@ -1,5 +1,5 @@
-import {isPromise, compactUndefined, IndexedEvents} from 'squidlet-lib';
-import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
+import {isPromise, compactUndefined} from 'squidlet-lib';
+import {MenuItem} from '../types/MenuItem.js';
 import App from '../App.js';
 
 
@@ -7,7 +7,8 @@ export interface MenuDefinition {
   // this is a part of path
   name: string,
   messageHtml?: string
-  state: Record<string, any>
+  // params which is set only once by plugin, it isn't state
+  params?: Record<string, any>
 }
 
 export type MenuChangeHandler = (menuDefinition: MenuDefinition) =>
@@ -23,12 +24,7 @@ export const MENU_DELIMITER = '/'
 
 
 export class MenuManager {
-  private actionEvents = new IndexedEvents<
-    (eventName: MenuEvents) => void
-  >()
   private readonly app
-  private steps: MenuDefinition[] = []
-
   private registeredHandlers: MenuChangeHandler[] = []
 
 
@@ -93,46 +89,7 @@ export class MenuManager {
       items = [...items, ...newItems]
     }
 
-    if (this.steps.length === 1 && this.steps[0].name !== '') {
-      items.push([this.makeBackToMainMenuBtn()])
-    }
-    else if (this.steps.length > 1) {
-      items.push([this.makeBackBtn()])
-      items.push([this.makeCancelBtn()])
-    }
-
     return items
-  }
-
-
-  private makeBackToMainMenuBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.toMainMenu},
-      pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.toMainMenu)
-      }
-    }
-  }
-
-  private makeBackBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.back},
-      pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.back)
-      }
-    }
-  }
-
-  private makeCancelBtn(): MenuItem {
-    return {
-      type: 'button',
-      view: {name: this.app.i18n.buttons.cancel},
-      pressed: async (itemCtx: MenuItemContext) => {
-        this.actionEvents.emit(MenuEvents.cancel)
-      }
-    }
   }
 
 }

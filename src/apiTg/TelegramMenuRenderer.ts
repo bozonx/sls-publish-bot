@@ -1,7 +1,7 @@
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from './TgChat.js';
 import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
-import {MenuDefinition} from '../menuManager/MenuManager.js';
+import {MenuDefinition, MenuEvents} from '../menuManager/MenuManager.js';
 import {ChatEvents} from '../types/constants.js';
 
 
@@ -9,9 +9,15 @@ const CB_DELIMITER = '|'
 const ITEM_INDEX_DELIMITER = '.'
 
 
+export interface StatefulMenuDefinition extends MenuDefinition {
+  state: Record<string, any>
+}
+
+
 export class TelegramMenuRenderer {
   currentDefinition?: MenuDefinition
   currentMenu: MenuItem[][] = []
+  private steps: MenuDefinition[] = []
 
   private prevMenuMsgIds: number[] = []
   private readonly tgChat
@@ -54,7 +60,10 @@ export class TelegramMenuRenderer {
 
     // TODO: use replaceState
 
-    this.currentDefinition = toDefinition
+    this.currentDefinition = {
+      ...toDefinition,
+      state: replaceState,
+    }
     this.currentMenu = await this.tgChat.app.menu.collectCurrentItems(this.currentDefinition)
 
     const inlineKeys: TgReplyButton[][] = this.makeInlineKeys(this.currentDefinition, this.currentMenu)
@@ -71,6 +80,14 @@ export class TelegramMenuRenderer {
       true,
       true
     )
+
+    if (this.steps.length === 1 && this.steps[0].name !== '') {
+      items.push([this.makeBackToMainMenuBtn()])
+    }
+    else if (this.steps.length > 1) {
+      items.push([this.makeBackBtn()])
+      items.push([this.makeCancelBtn()])
+    }
 
     this.prevMenuMsgIds = [msgId]
   }
@@ -111,6 +128,36 @@ export class TelegramMenuRenderer {
     }
 
     return result
+  }
+
+  private makeBackToMainMenuBtn(): MenuItem {
+    return {
+      type: 'button',
+      view: {name: this.app.i18n.buttons.toMainMenu},
+      pressed: async (itemCtx: MenuItemContext) => {
+        this.actionEvents.emit(MenuEvents.toMainMenu)
+      }
+    }
+  }
+
+  private makeBackBtn(): MenuItem {
+    return {
+      type: 'button',
+      view: {name: this.app.i18n.buttons.back},
+      pressed: async (itemCtx: MenuItemContext) => {
+        this.actionEvents.emit(MenuEvents.back)
+      }
+    }
+  }
+
+  private makeCancelBtn(): MenuItem {
+    return {
+      type: 'button',
+      view: {name: this.app.i18n.buttons.cancel},
+      pressed: async (itemCtx: MenuItemContext) => {
+        this.actionEvents.emit(MenuEvents.cancel)
+      }
+    }
   }
 
 }
