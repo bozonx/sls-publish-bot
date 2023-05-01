@@ -2,7 +2,13 @@ import {compactUndefined} from 'squidlet-lib';
 import {MenuItem} from '../types/MenuItem.js';
 
 
-export type MenuChangeHandler = (menuPath: string) => (undefined | MenuItem | Promise<MenuItem>)
+export interface MenuDefinition {
+  path: string,
+  messageHtml: string
+}
+
+export type MenuChangeHandler = (menuDefinition: MenuDefinition) => (undefined | MenuItem | Promise<MenuItem>)
+
 
 
 export class MenuManager {
