@@ -19,7 +19,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
   ctx.registerMenuChangeHandler((currentDefinition: MenuDefinition) => {
     if (currentDefinition.path !== '') return
 
-    return menuItem
+    return [menuItem]
   })
 }
 

@@ -43,7 +43,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
             ? ctx.i18n.menu.taskMenuDefinition + '\n\n' + ctx.i18n.menu.taskList
             : ctx.i18n.menu.emptyTaskList + '\n\n' + ctx.i18n.menu.taskMenuDefinition
 
-          ctx.
+          //ctx.
         },
       }]
     }
