@@ -4,7 +4,7 @@ import BreadCrumbs from '../helpers/BreadCrumbs.js';
 import {ChatEvents} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import BaseState from '../types/BaseState.js';
-import {makeBaseState} from '../helpers/helpers.js';
+import {isoDateToHuman, makeBaseState} from '../helpers/helpers.js';
 import BotChatLog from '../helpers/BotChatLog.js';
 import {
   PhotoMessageEvent,
@@ -15,6 +15,8 @@ import {
 import {TelegramMenuRenderer} from './TelegramMenuRenderer.js';
 import {MenuItem} from '../types/MenuItem.js';
 import {MenuDefinition} from '../menuManager/MenuManager.js';
+import moment from 'moment/moment.js';
+import ru from '../I18n/ru.js';
 
 
 export default class TgChat {
@@ -26,6 +28,10 @@ export default class TgChat {
   public readonly botChatId: number | string;
   //public readonly steps: BreadCrumbs;
   public readonly log: BotChatLog;
+
+  get i18n(): typeof ru {
+    return this.app.i18n
+  }
 
 
   constructor(chatId: number | string, app: App) {
@@ -46,10 +52,16 @@ export default class TgChat {
 
 
   async startCmd() {
+    await this.reply(
+      this.i18n.message.greet
+      + isoDateToHuman(moment().utcOffset(this.app.appConfig.utcOffset).format()) + '\n'
+      + this.i18n.message.localTime
+    )
+
     // TODO: оно тут разве должно быть???
     const greet: MenuDefinition = {
       path: '',
-      messageHtml: 'Hello!!!'
+      messageHtml: this.i18n.menu.mainMenu
     }
     // Start from very beginning and cancel current state if need.
     await this.menu.init(greet);
