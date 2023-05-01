@@ -1,6 +1,6 @@
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from './TgChat.js';
-import {MenuItem} from '../types/MenuItem.js';
+import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
 import {MenuDefinition} from '../menuManager/MenuManager.js';
 import {ChatEvents} from '../types/constants.js';
 
@@ -14,10 +14,14 @@ export class TelegramMenuRenderer {
 
   private prevMenuMsgIds: number[] = []
   private readonly tgChat
+  private itemContext: MenuItemContext
 
 
   constructor(tgChat: TgChat) {
     this.tgChat = tgChat
+    this.itemContext = {
+      toPath: async (toDefinition?: MenuDefinition)=> this.toPath(toDefinition),
+    }
   }
 
 
@@ -68,7 +72,8 @@ export class TelegramMenuRenderer {
 
     const itemId: string = splat[1]
 
-    this.currentMenu[Number(itemId)].pressed()
+    this.currentMenu[Number(itemId)].pressed({...this.itemContext})
+      .catch((e) => this.tgChat.log.error(e))
   }
 
 

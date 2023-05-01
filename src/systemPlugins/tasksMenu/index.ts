@@ -1,6 +1,6 @@
 import {PackageIndex} from '../../types/types.js'
 import {PackageContext} from '../../packageManager/PackageContext.js';
-import {MenuItem} from '../../types/MenuItem.js';
+import {MenuItem, MenuItemContext} from '../../types/MenuItem.js';
 import {MenuDefinition} from '../../menuManager/MenuManager.js';
 
 
@@ -17,7 +17,7 @@ function makeTasksMenu(ctx: PackageContext): MenuItem[] {
       view: {
         name: 'task1',
       },
-      pressed() {
+      async pressed(itemCtx: MenuItemContext) {
         console.log(111, 'menu item pressed')
       },
       // async destroy(): Promise<void> {
@@ -35,7 +35,7 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
         view: {
           name: ctx.i18n.menu.selectManageTasks,
         },
-        pressed() {
+        async pressed(itemCtx: MenuItemContext) {
           const taskList = ctx.tasks.getTasksList()
           const tasksIds = Object.keys(taskList)
 
@@ -43,7 +43,10 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
             ? ctx.i18n.menu.taskMenuDefinition + '\n\n' + ctx.i18n.menu.taskList
             : ctx.i18n.menu.emptyTaskList + '\n\n' + ctx.i18n.menu.taskMenuDefinition
 
-          //ctx.
+          await itemCtx.toPath({
+            path: TASKS_PATH,
+            messageHtml: msg,
+          })
         },
       }]
     }
