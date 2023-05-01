@@ -13,6 +13,8 @@ import {
   VideoMessageEvent
 } from '../types/MessageEvent.js';
 import {TelegramMenuRenderer} from './TelegramMenuRenderer.js';
+import {MenuItem} from '../types/MenuItem.js';
+import {MenuDefinition} from '../menuManager/MenuManager.js';
 
 
 export default class TgChat {
@@ -44,8 +46,13 @@ export default class TgChat {
 
 
   async startCmd() {
+    // TODO: оно тут разве должно быть???
+    const greet: MenuDefinition = {
+      path: '',
+      messageHtml: 'Hello!!!'
+    }
     // Start from very beginning and cancel current state if need.
-    await this.menu.init();
+    await this.menu.init(greet);
   }
 
   /**

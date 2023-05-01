@@ -1,3 +1,4 @@
+import {isPromise} from 'squidlet-lib';
 import {compactUndefined} from 'squidlet-lib';
 import {MenuItem} from '../types/MenuItem.js';
 
@@ -27,6 +28,26 @@ export class MenuManager {
 
   removeHandler(handlerIndex: number) {
     delete this.registeredHandlers[handlerIndex]
+  }
+
+  async collectCurrentItems(currentDefinition: MenuDefinition): Promise<MenuItem[]> {
+    const items: MenuItem[] = []
+    const handlers: MenuChangeHandler[] = this.handlers
+
+    for (const handler of handlers) {
+      const res: undefined | MenuItem | Promise<MenuItem> = handler(currentDefinition)
+
+      if (typeof res === 'undefined') continue
+
+      if (isPromise(res)) {
+        items.push(await res)
+      }
+      else {
+        items.push(res as MenuItem)
+      }
+    }
+
+    return items
   }
 
 }

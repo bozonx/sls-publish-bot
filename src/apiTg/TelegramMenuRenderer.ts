@@ -1,8 +1,7 @@
-import {isPromise} from 'squidlet-lib';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from './TgChat.js';
 import {MenuItem} from '../types/MenuItem.js';
-import {MenuChangeHandler, MenuDefinition} from '../menuManager/MenuManager.js';
+import {MenuDefinition} from '../menuManager/MenuManager.js';
 import {ChatEvents} from '../types/constants.js';
 
 
@@ -43,10 +42,10 @@ export class TelegramMenuRenderer {
     if (!toDefinition) return
 
     this.currentDefinition = toDefinition
-    this.currentMenu = await this.collectCurrentItems(this.currentDefinition)
+    this.currentMenu = await this.tgChat.app.menu.collectCurrentItems(this.currentDefinition)
 
     const inlineKeys: TgReplyButton[][] = this.makeInlineKeys(this.currentDefinition, this.currentMenu)
-
+    // delete prev messages
     for (const msgId of this.prevMenuMsgIds) {
       await this.tgChat.deleteMessage(msgId)
         .catch((e) => this.tgChat.log.error)
@@ -92,26 +91,6 @@ export class TelegramMenuRenderer {
     }
 
     return result
-  }
-
-  private async collectCurrentItems(currentDefinition: MenuDefinition): Promise<MenuItem[]> {
-    const items: MenuItem[] = []
-    const handlers: MenuChangeHandler[] = this.tgChat.app.menu.handlers
-
-    for (const handler of handlers) {
-      const res: undefined | MenuItem | Promise<MenuItem> = handler(currentDefinition)
-
-      if (typeof res === 'undefined') continue
-
-      if (isPromise(res)) {
-        items.push(await res)
-      }
-      else {
-        items.push(res as MenuItem)
-      }
-    }
-
-    return items
   }
 
 }
