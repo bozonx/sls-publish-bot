@@ -1,7 +1,6 @@
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from './TgChat.js';
 import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
-import {MenuDefinition} from '../menuManager/MenuManager.js';
 import {ChatEvents} from '../types/constants.js';
 import {MenuStep, SpecificMenuBase} from '../menuManager/SpecificMenuBase.js';
 
@@ -12,7 +11,7 @@ export const MENU_DELIMITER = '/'
 
 
 export class TelegramMenuRenderer extends SpecificMenuBase {
-  currentDefinition?: MenuDefinition
+  currentStep?: MenuStep
   currentMenu: MenuItem[][] = []
 
   private prevMenuMsgIds: number[] = []
@@ -47,7 +46,7 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
   }
 
   async destroy() {
-    this.currentDefinition = undefined
+    this.currentStep = undefined
     this.currentMenu = []
     this.prevMenuMsgIds = []
   }
@@ -57,22 +56,18 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
     this.prevMenuMsgIds.push(msgId)
   }
 
-  async toPath(
-    name: string,
-    messageHtml?: string,
-    state?: Record<string, any>
-  ) {
-    if (!toDefinition) return
-
-    // TODO: use replaceState
-
-    this.currentDefinition = {
-      ...toDefinition,
-      state: replaceState,
+  async toPath(name: string, messageHtml?: string, state?: Record<string, any>) {
+    this.currentStep = {
+      name,
+      messageHtml,
+      state: state || {},
     }
-    this.currentMenu = await this.tgChat.app.menu.collectCurrentItems(this.currentDefinition)
+    this.currentMenu = [
+      ...await this.tgChat.app.menu.collectCurrentItems(this.currentStep),
+      ...this.makeSystemBtns(),
+    ]
 
-    const inlineKeys: TgReplyButton[][] = this.makeInlineKeys(this.currentDefinition, this.currentMenu)
+    const inlineKeys: TgReplyButton[][] = this.makeInlineKeys(this.currentStep, this.currentMenu)
     // delete prev messages
     for (const msgId of this.prevMenuMsgIds) {
       await this.tgChat.deleteMessage(msgId)
@@ -81,19 +76,11 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
     // TODO: а если нет сообщения ???? просто кнопки отобразятся???
     // render the menu
     const msgId: number = await this.tgChat.reply(
-      this.currentDefinition.messageHtml || '',
+      this.currentStep.messageHtml || '',
       inlineKeys,
       true,
       true
     )
-
-    if (this.steps.length === 1 && this.steps[0].name !== '') {
-      items.push([this.makeBackToMainMenuBtn()])
-    }
-    else if (this.steps.length > 1) {
-      items.push([this.makeBackBtn()])
-      items.push([this.makeCancelBtn()])
-    }
 
     this.prevMenuMsgIds = [msgId]
   }
@@ -109,7 +96,7 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
   handleClick = (cbId: string) => {
     const splat: string[] = cbId.split(CB_DELIMITER)
     // TODO: взять полный путь
-    if (splat[0] !== this.currentDefinition?.name) return
+    if (splat[0] !== this.currentStep?.name) return
 
     const [rowIndex, itemIndex] = splat[1].split(ITEM_INDEX_DELIMITER)
 
@@ -120,7 +107,7 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
 
 
   private makeInlineKeys(
-    currentDefinition: MenuDefinition,
+    currentDefinition: MenuStep,
     menuItems: MenuItem[][]
   ): TgReplyButton[][] {
     const result: TgReplyButton[][] = []

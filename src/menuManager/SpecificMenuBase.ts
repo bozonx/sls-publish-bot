@@ -34,6 +34,19 @@ export class SpecificMenuBase {
     }
   }
 
+  makeSystemBtns(): MenuItem[][] {
+    const items: MenuItem[][] = []
+
+    if (this.steps.length === 1 && this.steps[0].name !== '') {
+      items.push([this.makeBackToMainMenuBtn()])
+    }
+    else if (this.steps.length > 1) {
+      items.push([this.makeBackBtn()])
+      items.push([this.makeCancelBtn()])
+    }
+
+    return items
+  }
 
   private makeBackToMainMenuBtn(): MenuItem {
     return {
