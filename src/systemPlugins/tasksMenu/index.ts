@@ -7,30 +7,48 @@ import {MenuDefinition} from '../../menuManager/MenuManager.js';
 const TASKS_PATH = 'tasks'
 
 
-const telegramPost: PackageIndex = (ctx: PackageContext) => {
+function makeTasksMenu(ctx: PackageContext): MenuItem[] {
   const taskList = ctx.tasks.getTasksList()
   const tasksIds = Object.keys(taskList)
-  const menuItem: MenuItem = {
-    type: 'button',
-    view: {
-      name: (tasksIds.length)
-        ? ctx.i18n.menu.taskMenuDefinition + '\n\n' + ctx.i18n.menu.taskList
-        : ctx.i18n.menu.emptyTaskList + '\n\n' + ctx.i18n.menu.taskMenuDefinition,
-    },
-    pressed() {
-      console.log(111, 'menu item pressed')
-    },
-    async destroy(): Promise<void> {
-      console.log(222, 'menu item destory')
-    },
-  }
 
+  return [
+    {
+      type: 'button',
+      view: {
+        name: 'task1',
+      },
+      pressed() {
+        console.log(111, 'menu item pressed')
+      },
+      // async destroy(): Promise<void> {
+      //   console.log(222, 'menu item destory')
+      // },
+    },
+  ]
+}
+
+const telegramPost: PackageIndex = (ctx: PackageContext) => {
   ctx.registerMenuChangeHandler((currentDefinition: MenuDefinition) => {
     if (currentDefinition.path === '') {
-      return menuItem
-    }
-    else if (currentDefinition.path === 'TASKS_PATH') {
+      return [{
+        type: 'button',
+        view: {
+          name: ctx.i18n.menu.selectManageTasks,
+        },
+        pressed() {
+          const taskList = ctx.tasks.getTasksList()
+          const tasksIds = Object.keys(taskList)
 
+          const msg = (tasksIds.length)
+            ? ctx.i18n.menu.taskMenuDefinition + '\n\n' + ctx.i18n.menu.taskList
+            : ctx.i18n.menu.emptyTaskList + '\n\n' + ctx.i18n.menu.taskMenuDefinition
+
+          ctx.
+        },
+      }]
+    }
+    else if (currentDefinition.path === TASKS_PATH) {
+      return makeTasksMenu(ctx)
     }
     else {
       return

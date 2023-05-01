@@ -6,5 +6,5 @@ export interface MenuItem {
   type: 'button'
   view: MenuView
   pressed(): void
-  destroy(): Promise<void>
+  destroy?(): Promise<void>
 }

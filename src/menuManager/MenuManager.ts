@@ -8,7 +8,7 @@ export interface MenuDefinition {
   messageHtml: string
 }
 
-export type MenuChangeHandler = (menuDefinition: MenuDefinition) => (undefined | MenuItem | Promise<MenuItem>)
+export type MenuChangeHandler = (menuDefinition: MenuDefinition) => (undefined | MenuItem[] | Promise<MenuItem[]>)
 
 
 
@@ -31,20 +31,17 @@ export class MenuManager {
   }
 
   async collectCurrentItems(currentDefinition: MenuDefinition): Promise<MenuItem[]> {
-    const items: MenuItem[] = []
+    let items: MenuItem[] = []
     const handlers: MenuChangeHandler[] = this.handlers
 
     for (const handler of handlers) {
-      const res: undefined | MenuItem | Promise<MenuItem> = handler(currentDefinition)
+      const res: undefined | MenuItem[] | Promise<MenuItem[]> = handler(currentDefinition)
 
       if (typeof res === 'undefined') continue
 
-      if (isPromise(res)) {
-        items.push(await res)
-      }
-      else {
-        items.push(res as MenuItem)
-      }
+      const newItems: MenuItem[] = (isPromise(res)) ? await res : res as MenuItem[]
+
+      items = [...items, ...newItems]
     }
 
     return items
