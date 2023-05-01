@@ -7,48 +7,55 @@ import {TASKS_PATH} from '../../systemPlugins/tasksMenu/index.js';
 
 const telegramPost: PackageIndex = (ctx: PackageContext) => {
   ctx.registerMenuChangeHandler((currentDefinition: MenuDefinition) => {
-    if (currentDefinition.path === TASKS_PATH) {
+    // TODO: лучше проверить весь путь
+    if (currentDefinition.name === TASKS_PATH) {
       return [
-        {
-          type: 'button',
-          view: {
-            name: ctx.i18n.buttons.deletePost,
+        [
+          {
+            type: 'button',
+            view: {
+              name: ctx.i18n.buttons.deletePost,
+            },
+            async pressed(itemCtx: MenuItemContext) {
+            },
           },
-          async pressed(itemCtx: MenuItemContext) {
+          {
+            type: 'button',
+            view: {
+              name: ctx.i18n.buttons.clonePost,
+            },
+            async pressed(itemCtx: MenuItemContext) {
+            },
           },
-        },
-        {
-          type: 'button',
-          view: {
-            name: ctx.i18n.buttons.clonePost,
+        ],
+        [
+          {
+            type: 'button',
+            view: {
+              name: ctx.i18n.buttons.pinPost,
+            },
+            async pressed(itemCtx: MenuItemContext) {
+            },
           },
-          async pressed(itemCtx: MenuItemContext) {
+          {
+            type: 'button',
+            view: {
+              name: ctx.i18n.buttons.unpinPost,
+            },
+            async pressed(itemCtx: MenuItemContext) {
+            },
           },
-        },
-        {
-          type: 'button',
-          view: {
-            name: ctx.i18n.buttons.pinPost,
+        ],
+        [
+          {
+            type: 'button',
+            view: {
+              name: ctx.i18n.buttons.finishPoll,
+            },
+            async pressed(itemCtx: MenuItemContext) {
+            },
           },
-          async pressed(itemCtx: MenuItemContext) {
-          },
-        },
-        {
-          type: 'button',
-          view: {
-            name: ctx.i18n.buttons.unpinPost,
-          },
-          async pressed(itemCtx: MenuItemContext) {
-          },
-        },
-        {
-          type: 'button',
-          view: {
-            name: ctx.i18n.buttons.finishPoll,
-          },
-          async pressed(itemCtx: MenuItemContext) {
-          },
-        },
+        ],
       ]
     }
     else {

@@ -1,5 +1,4 @@
-import {isPromise} from 'squidlet-lib';
-import {compactUndefined} from 'squidlet-lib';
+import {isPromise, compactUndefined, IndexedEvents} from 'squidlet-lib';
 import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
 import App from '../App.js';
 
@@ -7,18 +6,26 @@ import App from '../App.js';
 export interface MenuDefinition {
   // this is a part of path
   name: string,
-  messageHtml: string
+  messageHtml?: string
   state: Record<string, any>
+}
+
+export type MenuChangeHandler = (menuDefinition: MenuDefinition) =>
+  (undefined | MenuItem[][] | Promise<MenuItem[][]>)
+
+export enum MenuEvents {
+  toMainMenu,
+  back,
+  cancel,
 }
 
 export const MENU_DELIMITER = '/'
 
 
-export type MenuChangeHandler = (menuDefinition: MenuDefinition) => (undefined | MenuItem[] | Promise<MenuItem[]>)
-
-
-
 export class MenuManager {
+  private actionEvents = new IndexedEvents<
+    (eventName: MenuEvents) => void
+  >()
   private readonly app
   private steps: MenuDefinition[] = []
 
@@ -32,6 +39,10 @@ export class MenuManager {
 
   constructor(app: App) {
     this.app = app
+  }
+
+  async destroy() {
+    this.actionEvents.destroy()
   }
 
 
@@ -68,30 +79,26 @@ export class MenuManager {
     delete this.registeredHandlers[handlerIndex]
   }
 
-  async collectCurrentItems(currentDefinition: MenuDefinition): Promise<MenuItem[]> {
-    let items: MenuItem[] = []
+  async collectCurrentItems(currentDefinition: MenuDefinition): Promise<MenuItem[][]> {
+    let items: MenuItem[][] = []
     const handlers: MenuChangeHandler[] = this.handlers
 
     for (const handler of handlers) {
-      const res: undefined | MenuItem[] | Promise<MenuItem[]> = handler(currentDefinition)
+      const res: undefined | MenuItem[][] | Promise<MenuItem[][]> = handler(currentDefinition)
 
       if (typeof res === 'undefined') continue
 
-      const newItems: MenuItem[] = (isPromise(res)) ? await res : res as MenuItem[]
+      const newItems: MenuItem[][] = (isPromise(res)) ? await res : res as MenuItem[][]
 
       items = [...items, ...newItems]
     }
 
-    if (currentDefinition.path) {
-      const pathSplat = currentDefinition.path.split(MENU_DELIMITER)
-
-      if (pathSplat.length === 1) {
-        items.push(this.makeBackToMainMenuBtn())
-      }
-      else if (pathSplat.length > 2) {
-        items.push(this.makeBackBtn())
-        items.push(this.makeCancelBtn())
-      }
+    if (this.steps.length === 1 && this.steps[0].name !== '') {
+      items.push([this.makeBackToMainMenuBtn()])
+    }
+    else if (this.steps.length > 1) {
+      items.push([this.makeBackBtn()])
+      items.push([this.makeCancelBtn()])
     }
 
     return items
@@ -102,8 +109,8 @@ export class MenuManager {
     return {
       type: 'button',
       view: {name: this.app.i18n.buttons.toMainMenu},
-      async pressed(itemCtx: MenuItemContext): Promise<void> {
-
+      pressed: async (itemCtx: MenuItemContext) => {
+        this.actionEvents.emit(MenuEvents.toMainMenu)
       }
     }
   }
@@ -112,8 +119,8 @@ export class MenuManager {
     return {
       type: 'button',
       view: {name: this.app.i18n.buttons.back},
-      async pressed(itemCtx: MenuItemContext): Promise<void> {
-
+      pressed: async (itemCtx: MenuItemContext) => {
+        this.actionEvents.emit(MenuEvents.back)
       }
     }
   }
@@ -122,8 +129,8 @@ export class MenuManager {
     return {
       type: 'button',
       view: {name: this.app.i18n.buttons.cancel},
-      async pressed(itemCtx: MenuItemContext): Promise<void> {
-
+      pressed: async (itemCtx: MenuItemContext) => {
+        this.actionEvents.emit(MenuEvents.cancel)
       }
     }
   }

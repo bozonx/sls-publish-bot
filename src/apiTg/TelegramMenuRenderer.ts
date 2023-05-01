@@ -6,11 +6,12 @@ import {ChatEvents} from '../types/constants.js';
 
 
 const CB_DELIMITER = '|'
+const ITEM_INDEX_DELIMITER = '.'
 
 
 export class TelegramMenuRenderer {
   currentDefinition?: MenuDefinition
-  currentMenu: MenuItem[] = []
+  currentMenu: MenuItem[][] = []
 
   private prevMenuMsgIds: number[] = []
   private readonly tgChat
@@ -20,7 +21,10 @@ export class TelegramMenuRenderer {
   constructor(tgChat: TgChat) {
     this.tgChat = tgChat
     this.itemContext = {
-      toPath: async (toDefinition?: MenuDefinition)=> this.toPath(toDefinition),
+      toPath: async (
+        toDefinition?: Omit<MenuDefinition, 'state'>,
+        replaceState?: Record<string, any>
+      )=> this.toPath(toDefinition, replaceState),
     }
   }
 
@@ -42,8 +46,13 @@ export class TelegramMenuRenderer {
     this.prevMenuMsgIds.push(msgId)
   }
 
-  async toPath(toDefinition?: MenuDefinition) {
+  async toPath(
+    toDefinition?: Omit<MenuDefinition, 'state'>,
+    replaceState?: Record<string, any>
+  ) {
     if (!toDefinition) return
+
+    // TODO: use replaceState
 
     this.currentDefinition = toDefinition
     this.currentMenu = await this.tgChat.app.menu.collectCurrentItems(this.currentDefinition)
@@ -54,9 +63,10 @@ export class TelegramMenuRenderer {
       await this.tgChat.deleteMessage(msgId)
         .catch((e) => this.tgChat.log.error)
     }
+    // TODO: а если нет сообщения ???? просто кнопки отобразятся???
     // render the menu
     const msgId: number = await this.tgChat.reply(
-      this.currentDefinition.messageHtml,
+      this.currentDefinition.messageHtml || '',
       inlineKeys,
       true,
       true
@@ -67,32 +77,37 @@ export class TelegramMenuRenderer {
 
   handleClick = (cbId: string) => {
     const splat: string[] = cbId.split(CB_DELIMITER)
+    // TODO: взять полный путь
+    if (splat[0] !== this.currentDefinition?.name) return
 
-    if (splat[0] !== this.currentDefinition?.path) return
+    const [rowIndex, itemIndex] = splat[1].split(ITEM_INDEX_DELIMITER)
 
-    const itemId: string = splat[1]
-
-    this.currentMenu[Number(itemId)].pressed({...this.itemContext})
+    this.currentMenu[Number(rowIndex)][Number(itemIndex)]
+      .pressed({...this.itemContext})
       .catch((e) => this.tgChat.log.error(e))
   }
 
 
   private makeInlineKeys(
     currentDefinition: MenuDefinition,
-    menuItems: MenuItem[]
+    menuItems: MenuItem[][]
   ): TgReplyButton[][] {
     const result: TgReplyButton[][] = []
 
-    for (const index in menuItems) {
-      const item = menuItems[index]
-      const cbId = currentDefinition.path + CB_DELIMITER + index
+    for (const rowIndex in menuItems) {
+      for (const itemIndex in menuItems[rowIndex]) {
+        const item = menuItems[rowIndex][itemIndex]
+        // TODO: взять полный путь
+        const cbId = currentDefinition.name + CB_DELIMITER
+          + rowIndex + ITEM_INDEX_DELIMITER + itemIndex
 
-      result.push([
-        {
-          text: item.view.name,
-          callback_data: cbId,
-        }
-      ])
+        result.push([
+          {
+            text: item.view.name,
+            callback_data: cbId,
+          }
+        ])
+      }
     }
 
     return result

@@ -5,7 +5,10 @@ export interface MenuView {
 }
 
 export interface MenuItemContext {
-  toPath: (toDefinition?: MenuDefinition) => Promise<void>
+  toPath: (
+    toDefinition?: Omit<MenuDefinition, 'state'>,
+    replaceState?: Record<string, any>
+  ) => Promise<void>
 }
 
 export interface MenuItem {

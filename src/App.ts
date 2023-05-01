@@ -71,6 +71,7 @@ export default class App {
     (async () => {
       await this.channelLog.info(`Bot is shutting down`);
 
+      await this.menu.destroy()
       await this.tasks.destroy();
       await this.webServer.destroy()
       await this.tg.destroy(reason);

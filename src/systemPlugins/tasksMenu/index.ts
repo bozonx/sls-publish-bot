@@ -7,11 +7,11 @@ import {MenuDefinition} from '../../menuManager/MenuManager.js';
 export const TASKS_PATH = 'tasks'
 
 
-function makeTasksMenu(ctx: PackageContext): MenuItem[] {
+function makeTasksMenu(ctx: PackageContext): MenuItem[][] {
   const taskList = ctx.tasks.getTasksList()
   const tasksIds = Object.keys(taskList)
 
-  return [
+  return [[
     {
       type: 'button',
       view: {
@@ -24,13 +24,13 @@ function makeTasksMenu(ctx: PackageContext): MenuItem[] {
       //   console.log(222, 'menu item destory')
       // },
     },
-  ]
+  ]]
 }
 
 const telegramPost: PackageIndex = (ctx: PackageContext) => {
   ctx.registerMenuChangeHandler((currentDefinition: MenuDefinition) => {
-    if (currentDefinition.path === '') {
-      return [{
+    if (currentDefinition.name === '') {
+      return [[{
         type: 'button',
         view: {
           name: ctx.i18n.menu.selectManageTasks,
@@ -44,13 +44,14 @@ const telegramPost: PackageIndex = (ctx: PackageContext) => {
             : ctx.i18n.menu.emptyTaskList + '\n\n' + ctx.i18n.menu.taskMenuDefinition
 
           await itemCtx.toPath({
-            path: TASKS_PATH,
+            name: TASKS_PATH,
             messageHtml: msg,
           })
         },
-      }]
+      }]]
     }
-    else if (currentDefinition.path === TASKS_PATH) {
+    // TODO: лучше проверить весь путь
+    else if (currentDefinition.name === TASKS_PATH) {
       return makeTasksMenu(ctx)
     }
     else {
