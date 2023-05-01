@@ -39,7 +39,11 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
   async init(currentDefinition: MenuStep) {
     this.tgChat.events.addListener(ChatEvents.CALLBACK_QUERY, this.handleClick)
 
-    await this.toPath(currentDefinition)
+    await this.toPath(
+      currentDefinition.name,
+      currentDefinition.messageHtml,
+      currentDefinition.state
+    )
   }
 
   async destroy() {
@@ -95,11 +99,11 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
   }
 
   async backToPath(pathTo: string) {
-
+    // TODO: add
   }
 
   async backSteps(stepsNum: number) {
-
+    // TODO: add
   }
 
   handleClick = (cbId: string) => {
