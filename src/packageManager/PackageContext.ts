@@ -1,4 +1,4 @@
-import {ConsoleLogger, IndexedEventEmitter} from 'squidlet-lib';
+import {ConsoleLogger} from 'squidlet-lib';
 import App from '../App.js';
 import ChannelLogger from '../helpers/ChannelLogger.js';
 import {MenuChangeHandler} from '../menuManager/MenuManager.js';
@@ -23,7 +23,6 @@ export class PackageContext {
 
 
   registerMenuChangeHandler(cb: MenuChangeHandler) {
-    // TODO: register html menu too
     this.app.menu.onMenuChange(cb)
   }
 

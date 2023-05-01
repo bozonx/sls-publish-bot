@@ -20,7 +20,7 @@ import {TelegramMenuRenderer} from './TelegramMenuRenderer.js';
 export default class TgChat {
   public readonly app: App;
   //readonly tgChatMenu: TgChatMenu
-  public readonly telegramMenuRenderer: TelegramMenuRenderer
+  public readonly menu: TelegramMenuRenderer
   public readonly events: IndexedEventEmitter;
   // chat id where was start function called
   public readonly botChatId: number | string;
@@ -31,8 +31,7 @@ export default class TgChat {
   constructor(chatId: number | string, app: App) {
     this.botChatId = chatId;
     this.app = app;
-    this.menu = new MenuManager()
-    this.telegramMenuRenderer = new TelegramMenuRenderer(this)
+    this.menu = new TelegramMenuRenderer(this)
     // this.steps = new BreadCrumbs(async () => {
     //   await topLevelMenuStarter(this);
     // });

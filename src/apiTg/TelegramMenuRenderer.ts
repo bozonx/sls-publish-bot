@@ -1,11 +1,17 @@
+import {isPromise} from 'squidlet-lib';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from './TgChat.js';
+import {MenuItem} from '../types/MenuItem.js';
+import {MenuChangeHandler} from '../menuManager/MenuManager.js';
 
 
 const CB_DELIMITER = '|'
 
 
 export class TelegramMenuRenderer {
+  currentPath: string = ''
+  currentMenu: MenuItem[] = []
+
   private readonly tgChat
 
 
@@ -14,12 +20,48 @@ export class TelegramMenuRenderer {
   }
 
 
-  async makeInlineKeys(): Promise<TgReplyButton[][]> {
+  async init() {
+    this.currentPath = ''
+
+    await this.toPath(this.currentPath)
+  }
+
+  async destroy() {
+    this.currentPath = ''
+    this.currentMenu = []
+  }
+
+
+  async toPath(menuPath: string) {
+    this.currentPath = menuPath
+    this.currentMenu = await this.collectCurrentItems(this.currentPath)
+
+    const inlineKeys: TgReplyButton[][] = this.makeInlineKeys(this.currentPath, this.currentMenu)
+
+
+    // TODO: надо нарисовать сразу
+
+    // TODO: слушать события клика
+
+  }
+
+  handleClick(cbId: string) {
+    const splat: string[] = cbId.split(CB_DELIMITER)
+
+    if (splat[0] !== this.currentPath) return
+
+    const itemId: string = splat[1]
+
+    this.currentMenu[Number(itemId)].pressed()
+  }
+
+
+  private makeInlineKeys(currentPath: string, menuItems: MenuItem[]): TgReplyButton[][] {
     const result: TgReplyButton[][] = []
 
-    for (const index in this.tgChat.menu.currentMenu) {
-      const item = this.tgChat.menu.currentMenu[index]
-      const cbId = this.tgChat.menu.currentPath + CB_DELIMITER + index
+    for (const index in menuItems) {
+      const item = menuItems[index]
+      const cbId = currentPath + CB_DELIMITER + index
 
       result.push([
         {
@@ -29,19 +71,25 @@ export class TelegramMenuRenderer {
       ])
     }
 
-    // TODO: слушать события
-
     return result
   }
 
-  handleClick(cbId: string) {
-    const splat: string[] = cbId.split(CB_DELIMITER)
+  private async collectCurrentItems(currentPath: string): Promise<MenuItem[]> {
+    const items: MenuItem[] = []
+    const handlers: MenuChangeHandler[] = this.tgChat.app.menu.handlers
 
-    if (splat[0] !== this.tgChat.menu.currentPath) return
+    for (const handler of handlers) {
+      const res: MenuItem | Promise<MenuItem> = handler(currentPath)
 
-    const itemId: string = splat[1]
+      if (isPromise(res)) {
+        items.push(await res)
+      }
+      else {
+        items.push(res as MenuItem)
+      }
+    }
 
-    this.tgChat.menu.currentMenu[Number(itemId)].pressed()
+    return items
   }
 
 }
