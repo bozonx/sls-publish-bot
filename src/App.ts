@@ -13,12 +13,13 @@ import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
 import {MenuManager} from './menuManager/MenuManager.js';
-import {TelegramMenuRenderer} from './menuManager/TelegramMenuRenderer.js';
+import {TelegramMenuRenderer} from './apiTg/TelegramMenuRenderer.js';
 
 
 export default class App {
   //public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
+  public readonly menu: MenuManager
   public readonly blogs: BlogsConfig;
   public readonly tg: TgMain;
   public readonly telegraPh: TelegraPhMain;
@@ -34,6 +35,7 @@ export default class App {
 
 
   constructor(rawExecConfig: BlogsConfig) {
+    this.menu = new MenuManager()
     this.blogs = this.makeExecConf(rawExecConfig);
     this.tg = new TgMain(this);
     this.tasks = new TasksMain(this);

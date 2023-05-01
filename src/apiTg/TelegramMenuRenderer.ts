@@ -1,5 +1,5 @@
 import {TgReplyButton} from '../types/TgReplyButton.js';
-import TgChat from '../apiTg/TgChat.js';
+import TgChat from './TgChat.js';
 
 
 const CB_DELIMITER = '|'

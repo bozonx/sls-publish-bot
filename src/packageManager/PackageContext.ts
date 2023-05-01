@@ -8,10 +8,6 @@ export class PackageContext {
   private readonly app
 
 
-  get events(): IndexedEventEmitter {
-    return this.app.events
-  }
-
   get channelLog(): ChannelLogger {
     return this.app.channelLog
   }
@@ -26,7 +22,8 @@ export class PackageContext {
   }
 
 
-  onMenuChange(cb: MenuChangeHandler) {
+  registerMenuChangeHandler(cb: MenuChangeHandler) {
+    // TODO: register html menu too
     this.app.menu.onMenuChange(cb)
   }
 

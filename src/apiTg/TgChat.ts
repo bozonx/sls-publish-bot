@@ -14,12 +14,12 @@ import {
   VideoMessageEvent
 } from '../types/MessageEvent.js';
 import {MenuManager} from '../menuManager/MenuManager.js';
-import {TelegramMenuRenderer} from '../menuManager/TelegramMenuRenderer.js';
+import {TelegramMenuRenderer} from './TelegramMenuRenderer.js';
 
 
 export default class TgChat {
   public readonly app: App;
-  public readonly menu: MenuManager
+  //readonly tgChatMenu: TgChatMenu
   public readonly telegramMenuRenderer: TelegramMenuRenderer
   public readonly events: IndexedEventEmitter;
   // chat id where was start function called
