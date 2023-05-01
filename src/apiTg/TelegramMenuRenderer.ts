@@ -153,6 +153,7 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
       type: 'button',
       view: {name: this.tgChat.app.i18n.buttons.toMainMenu},
       pressed: async (itemCtx: MenuItemContext) => {
+        await this.backToPath('')
       }
     }
   }
@@ -163,6 +164,7 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
       type: 'button',
       view: {name: this.tgChat.app.i18n.buttons.back},
       pressed: async (itemCtx: MenuItemContext) => {
+        await this.backSteps(1)
       }
     }
   }
@@ -173,6 +175,7 @@ export class TelegramMenuRenderer extends SpecificMenuBase {
       type: 'button',
       view: {name: this.tgChat.app.i18n.buttons.cancel},
       pressed: async (itemCtx: MenuItemContext) => {
+        await this.backToPath('')
       }
     }
   }
