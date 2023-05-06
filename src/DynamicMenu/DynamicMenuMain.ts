@@ -2,6 +2,9 @@ import {isPromise} from 'squidlet-lib';
 import {DynamicMenuInstance} from './DynamicMenuInstance.js';
 
 
+/**
+ * Please handler error inside handler
+ */
 export type MenuChangeHandler = (menu: DynamicMenuInstance) => void | Promise<void>
 
 

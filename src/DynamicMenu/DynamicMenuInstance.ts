@@ -120,10 +120,6 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
       // and render the menu
       this.doRender()
     })()
-      .catch((e) => {
-        // TODO: что делать в случае ошибки???
-        throw e
-      })
   }
 
 }
