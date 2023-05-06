@@ -1,5 +1,5 @@
 import {IndexedEvents} from 'squidlet-lib';
-import {DynamicMenuFactory} from './DynamicMenuFactory.js';
+import {DynamicMenuMain} from './DynamicMenuMain.js';
 import {DynamicMenuButton} from './interfaces/DynamicMenuButton.js';
 import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
 
@@ -13,7 +13,7 @@ import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
   readonly renderEvent = new IndexedEvents()
   readonly breadCrumbs: DynamicBreadCrumbs
-  private readonly menuMain: DynamicMenuFactory
+  private readonly menuMain: DynamicMenuMain
   private readonly instanceContext: InstanceContext
   private readonly instanceId: string
 
@@ -28,7 +28,7 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
 
 
   constructor(
-    menuMain: DynamicMenuFactory,
+    menuMain: DynamicMenuMain,
     instanceContext: InstanceContext,
     instanceId: string
   ) {

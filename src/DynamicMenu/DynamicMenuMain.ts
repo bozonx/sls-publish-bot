@@ -4,7 +4,7 @@ import {DynamicMenuInstance} from './DynamicMenuInstance.js';
 export type MenuChangeHandler = (menu: DynamicMenuInstance) => void | Promise<void>
 
 
-export class DynamicMenuFactory {
+export class DynamicMenuMain {
   private instances: DynamicMenuInstance[] = []
   private registeredHandlers: MenuChangeHandler[] = []
 
@@ -21,7 +21,7 @@ export class DynamicMenuFactory {
 
 
   getInstance(instanceId: string): DynamicMenuInstance | undefined {
-    return this.instances[instanceId]
+    return this.instances[Number(instanceId)]
   }
 
   makeInstance<InstanceContext = Record<any, any>>(instanceContext: InstanceContext): DynamicMenuInstance {
