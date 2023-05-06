@@ -1,10 +1,9 @@
-export type DynamicMenuItemTypes = 'button' | 'checkbox'
-
-
-export interface DynamicMenuItem {
+/**
+ * It is button of menu
+ */
+export interface DynamicMenuButton {
   // unique id
   uid: string
-  type: DynamicMenuItemTypes
   // specify name to use it in sorting. Better to make it unique in specific menu level
   // It also is used as menu path
   name: string
@@ -15,6 +14,4 @@ export interface DynamicMenuItem {
   disabled: boolean
   // if false it will not be rendered
   visible: boolean
-  // it is for checkbox
-  checked?: boolean
 }

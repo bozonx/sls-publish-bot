@@ -1,8 +1,11 @@
 import {DynamicMenuFactory} from './DynamicMenuFactory.js';
-import {DynamicMenuItem} from './interfaces/DynamicMenuItem.js';
+import {DynamicMenuButton} from './interfaces/DynamicMenuButton.js';
 
 
 // TODO: пути будут по названиям кнопок
+// TODO: нужно дестроить текущее меню при нормальном переходе
+// TODO: нужно отменять текущее меню при отмене
+// TODO: нужен стейт текущего уровня
 
 
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
@@ -37,7 +40,7 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
    * @param item
    * @param after - name of element to render after it
    */
-  addItem(item: DynamicMenuItem, after: string) {
+  addItem(item: DynamicMenuButton, after: string) {
 
   }
 
