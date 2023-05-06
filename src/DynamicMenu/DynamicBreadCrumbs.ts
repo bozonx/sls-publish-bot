@@ -58,9 +58,11 @@ export default class DynamicBreadCrumbs {
   }
 
   toPath(newPath: string): string {
-    this.steps = []
-
     const pathNames: string[] = newPath.split(BREADCRUMBS_DELIMITER)
+
+    // TODO: если это часть текущего пути то просто срезать путь
+
+    this.steps = []
 
     // TODO: что будет в случае рута???
 
@@ -76,6 +78,13 @@ export default class DynamicBreadCrumbs {
     this.pathChangeEvent.emit()
 
     return this.currentStepId
+  }
+
+  toStep(stepId: string): string {
+    // if index less than specified
+    //if (this.steps.length -1 < stepIndex) return
+
+    //this.steps.splice(stepIndex)
   }
 
 }

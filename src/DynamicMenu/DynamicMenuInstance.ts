@@ -1,3 +1,4 @@
+import {IndexedEvents} from 'squidlet-lib';
 import {DynamicMenuFactory} from './DynamicMenuFactory.js';
 import {DynamicMenuButton} from './interfaces/DynamicMenuButton.js';
 import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
@@ -10,6 +11,7 @@ import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
 
 
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
+  readonly renderEvent = new IndexedEvents()
   readonly breadCrumbs: DynamicBreadCrumbs
   private readonly menuMain: DynamicMenuFactory
   private readonly instanceContext: InstanceContext
@@ -38,6 +40,8 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
 
 
   async init() {
+    this.breadCrumbs.pathChangeEvent.addListener(this.handlePathChange)
+
     this.breadCrumbs.addStep(BREADCRUMBS_ROOT)
   }
 
@@ -51,5 +55,9 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
 
   }
 
+
+  private handlePathChange = () => {
+
+  }
 
 }
