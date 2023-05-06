@@ -52,6 +52,15 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
     return this.breadCrumbs.pathChangeEvent.once(handler)
   }
 
+  updateCurrentPathStep(partialData: Record<string, any>) {
+    const step = this.breadCrumbs.getCurrentStep()
+
+    step.state = {
+      ...step.state,
+      ...partialData,
+    }
+  }
+
   doRender() {
     this.renderEvent.emit()
   }
@@ -93,7 +102,7 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
       // clear current menu
       this.currentMenu = []
       // call all the handlers
-      await this.menuMain.emitAllHandlers(this)
+      await this.menuMain.$emitAllHandlers(this)
       // and render the menu
       this.doRender()
     })()

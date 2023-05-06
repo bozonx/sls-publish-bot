@@ -28,6 +28,11 @@ export class DynamicMenuMain {
     return this.instances[Number(instanceId)]
   }
 
+  /**
+   * Make a new instance for you.
+   * Don't forget to call init() method of it
+   * @param instanceContext
+   */
   makeInstance<InstanceContext extends Record<any, any>>(
     instanceContext: InstanceContext
   ): DynamicMenuInstance<InstanceContext> {
@@ -39,8 +44,6 @@ export class DynamicMenuMain {
     )
 
     this.instances.push(newInstance)
-
-    // TODO: когда вызывать instance.init() ????
 
     return newInstance
   }
@@ -55,7 +58,8 @@ export class DynamicMenuMain {
     delete this.registeredHandlers[Number(handlerIndex)]
   }
 
-  async emitAllHandlers(menu: DynamicMenuInstance<any>) {
+
+  async $emitAllHandlers(menu: DynamicMenuInstance<any>) {
     for (const item of this.registeredHandlers) {
       const res = item(menu)
 
