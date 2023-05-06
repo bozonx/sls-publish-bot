@@ -47,5 +47,8 @@ export class DynamicMenuMain {
     delete this.registeredHandlers[handlerIndex]
   }
 
+  async emitAllHandlers() {
+    // TODO: поднимаем все хэндлеры в DynamicMenuMain и выполняем их
+  }
 
 }
