@@ -55,7 +55,7 @@ export class DynamicMenuMain {
     delete this.registeredHandlers[Number(handlerIndex)]
   }
 
-  async emitAllHandlers(menu: DynamicMenuInstance) {
+  async emitAllHandlers(menu: DynamicMenuInstance<any>) {
     for (const item of this.registeredHandlers) {
       const res = item(menu)
 
