@@ -1,3 +1,4 @@
+import {isPromise} from 'squidlet-lib';
 import {DynamicMenuInstance} from './DynamicMenuInstance.js';
 
 
@@ -27,7 +28,9 @@ export class DynamicMenuMain {
     return this.instances[Number(instanceId)]
   }
 
-  makeInstance<InstanceContext = Record<any, any>>(instanceContext: InstanceContext): DynamicMenuInstance {
+  makeInstance<InstanceContext extends Record<any, any>>(
+    instanceContext: InstanceContext
+  ): DynamicMenuInstance<InstanceContext> {
     const instanceId = String(this.instances.length)
     const newInstance = new DynamicMenuInstance<InstanceContext>(
       this,
@@ -36,6 +39,8 @@ export class DynamicMenuMain {
     )
 
     this.instances.push(newInstance)
+
+    // TODO: когда вызывать instance.init() ????
 
     return newInstance
   }
@@ -47,11 +52,15 @@ export class DynamicMenuMain {
   }
 
   removeHandler(handlerIndex: string) {
-    delete this.registeredHandlers[handlerIndex]
+    delete this.registeredHandlers[Number(handlerIndex)]
   }
 
-  async emitAllHandlers() {
-    // TODO: поднимаем все хэндлеры в DynamicMenuMain и выполняем их
+  async emitAllHandlers(menu: DynamicMenuInstance) {
+    for (const item of this.registeredHandlers) {
+      const res = item(menu)
+
+      if (isPromise(res)) await res
+    }
   }
 
 }

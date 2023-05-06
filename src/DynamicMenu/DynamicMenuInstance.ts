@@ -90,7 +90,7 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
       // clear current menu
       this.currentMenu = []
       // call all the handlers
-      await this.menuMain.emitAllHandlers()
+      await this.menuMain.emitAllHandlers(this)
       // and render the menu
       this.doRender()
     })()
