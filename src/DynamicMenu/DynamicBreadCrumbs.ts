@@ -5,6 +5,9 @@ export const BREADCRUMBS_DELIMITER = '/'
 export const BREADCRUMBS_ROOT = '!'
 
 
+// TODO: как менять стейт??
+
+
 export interface DynamicBreadCrumbsStep {
   // Name of the step. It is part of path
   name: string

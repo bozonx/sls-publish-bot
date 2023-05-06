@@ -7,7 +7,6 @@ import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
 // TODO: пути будут по названиям кнопок
 // TODO: нужно дестроить текущее меню при нормальном переходе
 // TODO: нужно отменять текущее меню при отмене
-// TODO: нужен стейт текущего уровня
 
 
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
