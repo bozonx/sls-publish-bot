@@ -1,5 +1,5 @@
 import TgChat from '../src/tgApi/TgChat';
-import BaseState from '../src/types/BaseState';
+import BaseState from '../../src/types/BaseState';
 import {
   AppEvents,
   BACK_BTN, BACK_BTN_CALLBACK,
@@ -8,7 +8,7 @@ import {
   CREATE_PREFIX,
   SN_TYPES
 } from '../src/types/consts';
-import {PublicationTypes} from '../src/types/types';
+import {PublicationTypes} from '../../src/types/types';
 import {OK_BTN} from '../src/types/consts';
 import {OK_BTN_CALLBACK} from '../src/types/consts';
 

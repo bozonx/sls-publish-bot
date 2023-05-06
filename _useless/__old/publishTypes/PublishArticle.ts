@@ -1,8 +1,8 @@
-import PublishHelper from "./PublishHelper";
+import PublishHelper from "../../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/publishTypes/PublishHelper";
 import NotionListItem from '../../src/notionApi/types/NotionListItem';
 import {checkSection, makeSectionsInfo, parseSections} from '../../src/helpers/parseMdBlocks';
 import TgChat from '../../src/tgApi/TgChat';
-import {askRawPageToUse} from '../askRawPageToUse';
+import {askRawPageToUse} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/askRawPageToUse';
 import {askPubTime} from '../askPubDate';
 
 

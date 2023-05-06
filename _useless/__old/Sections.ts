@@ -1,5 +1,5 @@
 import {MdBlock} from 'notion-to-md/build/types';
-import {SectionTypes} from '../src/types/types';
+import {SectionTypes} from '../../src/types/types';
 
 
 export default interface Sections {

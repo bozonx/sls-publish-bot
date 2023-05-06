@@ -1,8 +1,8 @@
-import PublishHelper from "./PublishHelper";
+import PublishHelper from "../../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/publishTypes/PublishHelper";
 import TgChat from '../../src/tgApi/TgChat';
 
 
-export default class PublishStory {
+export default class PublishPost1000 {
   private readonly tgChat: TgChat;
   private readonly publishHelper: PublishHelper;
 

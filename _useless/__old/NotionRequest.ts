@@ -1,4 +1,4 @@
-import App from "../src/App";
+import App from "../../src/App";
 import NotionPage from "../src/notionApi/types/NotionPage";
 import NotionApi from "../src/notionApi/NotionApi";
 import NotionListItem from '../src/notionApi/types/NotionListItem';

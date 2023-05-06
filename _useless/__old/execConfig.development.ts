@@ -1,8 +1,8 @@
 
 // TODO: remove
 
-import BlogsConfig from '../src/types/BlogsConfig';
-import {PUBLICATION_TYPES} from '../src/types/publicationType';
+import BlogsConfig from '../../src/types/BlogsConfig';
+import {PUBLICATION_TYPES} from '../../src/types/publicationType';
 
 
 const execConf: BlogsConfig = {

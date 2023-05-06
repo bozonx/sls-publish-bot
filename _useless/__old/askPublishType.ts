@@ -1,4 +1,4 @@
-import BaseState from '../src/types/BaseState';
+import BaseState from '../../src/types/BaseState';
 import {
   AppEvents,
   CANCEL_BTN,
@@ -6,7 +6,7 @@ import {
   PUBLICATION_TYPES
 } from '../src/types/consts';
 import TgChat from '../src/tgApi/TgChat';
-import {PublicationTypes} from '../src/types/types';
+import {PublicationTypes} from '../../src/types/types';
 
 
 interface AskPublishState extends BaseState {

@@ -4,9 +4,16 @@ import {DynamicMenuButton, DynamicMenuButtonState} from './interfaces/DynamicMen
 import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
 
 
+export type RenderHandler = (menu: DynamicMenuButton[]) => void
+
+
+// TODO: add menuLoading marker
+
+
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
-  readonly renderEvent = new IndexedEvents()
+  readonly renderEvent = new IndexedEvents<RenderHandler>()
   readonly breadCrumbs: DynamicBreadCrumbs
+
   private readonly menuMain: DynamicMenuMain
   private readonly instanceContext: InstanceContext
   private readonly instanceId: string
@@ -19,6 +26,10 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
 
   get id(): string {
     return this.instanceId
+  }
+
+  get buttons(): DynamicMenuButton[] {
+    return this.currentMenu
   }
 
 
@@ -40,7 +51,10 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
   }
 
   async destroy() {
-    // TODO: add
+    this.renderEvent.destroy()
+    this.breadCrumbs.destroy()
+
+    this.currentMenu = []
   }
 
 
@@ -62,7 +76,7 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
   }
 
   doRender() {
-    this.renderEvent.emit()
+    this.renderEvent.emit(this.currentMenu)
   }
 
   /**

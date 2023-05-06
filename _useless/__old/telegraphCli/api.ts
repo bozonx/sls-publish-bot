@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { log } from './log';
-import { isUnknownDict, isStr } from './types';
+import { log } from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/telegraphCli/log';
+import { isUnknownDict, isStr } from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/telegraphCli/types';
 
-import { APIError } from './errors';
+import { APIError } from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/telegraphCli/errors';
 import {
   TelegraphAccount,
   TelegraphAccountField,
@@ -10,7 +10,7 @@ import {
   TelegraphPage,
   TelegraphPageList,
   TelegraphPageViews,
-} from './types';
+} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/telegraphCli/types';
 
 interface ApiOpt {
   token?: string;

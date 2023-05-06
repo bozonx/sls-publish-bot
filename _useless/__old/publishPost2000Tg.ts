@@ -3,11 +3,11 @@
 // TODO: remove
 
 
-import ContentItem from '../src/types/ContentItem';
+import ContentItem from '../../src/types/ContentItem';
 import RawPageContent from '../src/types/PageContent';
-import TgChat from '../src/apiTg/TgChat';
+import TgChat from '../../src/apiTg/TgChat';
 import {transformNotionToTelegramPostMd} from '../src/helpers/transformNotionToTelegramPostMd';
-import {prepareFooter} from '../src/helpers/helpers';
+import {prepareFooter} from '../../src/helpers/helpers';
 import {publishPostNoImageTg} from '../src/publish/publishHelpers';
 
 // TODO: сделать текстом + картинка предпросмотром - точку сделать ссылкой

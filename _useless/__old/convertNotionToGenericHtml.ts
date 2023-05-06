@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import {NOTION_BLOCK_TYPES} from '../src/types/notion';
-import {NotionBlocks} from '../src/types/notion';
-import {richTextToPlainText} from '../src/helpers/convertHelpers';
-import {richTextToHtml, richTextToHtmlCodeBlock} from '../src/helpers/convertHelpersHtml';
-import {richTextToTelegraphNodes} from '../src/helpers/convertHelpersTelegraPh';
+import {NOTION_BLOCK_TYPES} from '../../src/types/notion';
+import {NotionBlocks} from '../../src/types/notion';
+import {richTextToPlainText} from '../../src/helpers/convertHelpers';
+import {richTextToHtml, richTextToHtmlCodeBlock} from '../../src/helpers/convertHelpersHtml';
+import {richTextToTelegraphNodes} from '../../src/helpers/convertHelpersTelegraPh';
 
 
 // TODO: а может лучше из Telegraph дерева конвертнуть

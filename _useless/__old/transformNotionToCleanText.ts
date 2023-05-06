@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import {NOTION_BLOCK_TYPES} from '../src/types/notion';
-import {NotionBlocks} from '../src/types/notion';
+import {NOTION_BLOCK_TYPES} from '../../src/types/notion';
+import {NotionBlocks} from '../../src/types/notion';
 import {richTextToSimpleTextList} from '../src/helpers/transformHelpers';
 
 // TODO: поидее не нужно

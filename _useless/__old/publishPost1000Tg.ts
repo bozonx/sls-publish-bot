@@ -1,8 +1,8 @@
-import TgChat from '../src/apiTg/TgChat';
-import ContentItem, {SN_TYPES} from '../src/types/ContentItem';
+import TgChat from '../../src/apiTg/TgChat';
+import ContentItem, {SN_TYPES} from '../../src/types/ContentItem';
 import RawPageContent from '../src/types/PageContent';
 import {transformNotionToTelegramPostMd} from '../src/helpers/transformNotionToTelegramPostMd';
-import {prepareFooter} from '../src/helpers/helpers';
+import {prepareFooter} from '../../src/helpers/helpers';
 import {publishImageTg, publishPostNoImageTg} from '../src/publish/publishHelpers';
 
 

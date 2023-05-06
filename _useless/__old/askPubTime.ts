@@ -1,6 +1,6 @@
 import TgChat from '../src/tgApi/TgChat';
-import {makeBaseState} from '../src/helpers/helpers';
-import BaseState from '../src/types/BaseState';
+import {makeBaseState} from '../../src/helpers/helpers';
+import BaseState from '../../src/types/BaseState';
 import {AppEvents} from '../src/types/consts';
 
 
