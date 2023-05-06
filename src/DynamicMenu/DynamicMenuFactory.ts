@@ -1,9 +1,7 @@
 import {DynamicMenuInstance} from './DynamicMenuInstance.js';
 
 
-export type MenuChangeHandler = (menuDefinition: MenuDefinition) =>
-  (undefined | MenuItem[][] | Promise<MenuItem[][]>)
-
+export type MenuChangeHandler = (menu: DynamicMenuInstance) => void | Promise<void>
 
 
 export class DynamicMenuFactory {
@@ -28,7 +26,11 @@ export class DynamicMenuFactory {
 
   makeInstance<InstanceContext = Record<any, any>>(instanceContext: InstanceContext): DynamicMenuInstance {
     const instanceId = String(this.instances.length)
-    const newInstance = new DynamicMenuInstance<InstanceContext>(instanceContext, instanceId)
+    const newInstance = new DynamicMenuInstance<InstanceContext>(
+      this,
+      instanceContext,
+      instanceId
+    )
 
     this.instances.push(newInstance)
 
