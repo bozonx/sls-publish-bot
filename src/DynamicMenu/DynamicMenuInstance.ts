@@ -1,5 +1,6 @@
 import {DynamicMenuFactory} from './DynamicMenuFactory.js';
 import {DynamicMenuButton} from './interfaces/DynamicMenuButton.js';
+import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
 
 
 // TODO: пути будут по названиям кнопок
@@ -9,6 +10,7 @@ import {DynamicMenuButton} from './interfaces/DynamicMenuButton.js';
 
 
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
+  readonly breadCrumbs: DynamicBreadCrumbs
   private readonly menuMain: DynamicMenuFactory
   private readonly instanceContext: InstanceContext
   private readonly instanceId: string
@@ -31,8 +33,13 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
     this.menuMain = menuMain
     this.instanceContext = instanceContext
     this.instanceId = instanceId
+    this.breadCrumbs = new DynamicBreadCrumbs()
   }
 
+
+  async init() {
+    this.breadCrumbs.addStep(BREADCRUMBS_ROOT)
+  }
 
   /**
    * It will be called in MenuChangeHandler.
