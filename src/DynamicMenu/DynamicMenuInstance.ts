@@ -38,11 +38,14 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
     this.breadCrumbs = new DynamicBreadCrumbs()
   }
 
-
   async init() {
     this.breadCrumbs.pathChangeEvent.addListener(this.handlePathChange)
 
     this.breadCrumbs.addStep(BREADCRUMBS_ROOT)
+  }
+
+  async destroy() {
+    // TODO: add
   }
 
 

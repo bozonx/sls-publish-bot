@@ -10,13 +10,16 @@ export class DynamicMenuMain {
 
 
   constructor() {
-
   }
 
   async destroy() {
     this.registeredHandlers = []
 
-    // TODO: destroy all the instances
+    for (const itemIndex in this.instances) {
+      await this.instances[itemIndex].destroy()
+
+      delete this.instances[itemIndex]
+    }
   }
 
 
