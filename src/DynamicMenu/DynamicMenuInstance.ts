@@ -2,6 +2,9 @@ import {DynamicMenuFactory} from './DynamicMenuFactory.js';
 import {DynamicMenuItem} from './interfaces/DynamicMenuItem.js';
 
 
+// TODO: пути будут по названиям кнопок
+
+
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
   private readonly menuMain: DynamicMenuFactory
   private readonly instanceContext: InstanceContext
