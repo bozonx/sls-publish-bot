@@ -4,11 +4,6 @@ import {DynamicMenuButton, DynamicMenuButtonState} from './interfaces/DynamicMen
 import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
 
 
-// TODO: пути будут по названиям кнопок
-// TODO: нужно дестроить текущее меню при нормальном переходе
-// TODO: нужно отменять текущее меню при отмене
-
-
 export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
   readonly renderEvent = new IndexedEvents()
   readonly breadCrumbs: DynamicBreadCrumbs
@@ -48,6 +43,14 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
     // TODO: add
   }
 
+
+  /**
+   * It useful for listen a moment to destroy things which menu handler uses
+   * @param handler
+   */
+  onceChangedPath(handler: () => void): number {
+    return this.breadCrumbs.pathChangeEvent.once(handler)
+  }
 
   doRender() {
     this.renderEvent.emit()

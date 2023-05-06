@@ -28,6 +28,10 @@ export default class DynamicBreadCrumbs {
   }
 
 
+  getCurrentStep(): DynamicBreadCrumbsStep {
+    return this.steps[Number(this.currentStepId)]
+  }
+
   getCurrentPath(): string {
     return this.getPathOfStepId(this.currentStepId)
   }
