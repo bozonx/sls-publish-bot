@@ -67,7 +67,13 @@ export default class DynamicBreadCrumbs {
 
   toPath(newPath: string): string {
     const pathNames: string[] = newPath.split(BREADCRUMBS_DELIMITER)
+    const newPathId = String(pathNames.length - 1)
 
+    if (this.pathBaseOfCurrentPath(newPath)) {
+      this.toStep(newPathId)
+
+      return this.currentStepId
+    }
     // TODO: если это часть текущего пути то просто срезать путь
 
     this.steps = []
@@ -81,7 +87,7 @@ export default class DynamicBreadCrumbs {
       })
     }
 
-    this.currentStepId = String(pathNames.length - 1)
+    this.currentStepId = newPathId
 
     this.pathChangeEvent.emit()
 
@@ -93,6 +99,23 @@ export default class DynamicBreadCrumbs {
     //if (this.steps.length -1 < stepIndex) return
 
     //this.steps.splice(stepIndex)
+  }
+
+  back() {
+    // TODO: do not remove bread crumbs just chanes id
+  }
+
+  forward() {
+    // return to breadcrumb and it's saved state
+  }
+
+
+  private pathBaseOfCurrentPath(newPath: string): boolean {
+    const currentPath = this.steps
+      .map((el) => el.name)
+      .join(BREADCRUMBS_DELIMITER)
+
+    return currentPath.indexOf(newPath) >= 0
   }
 
 }
