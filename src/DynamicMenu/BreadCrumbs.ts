@@ -1,64 +1,85 @@
+import {IndexedEvents} from 'squidlet-lib';
+
+
+export const BREADCRUMBS_DELIMITER = '/'
+
+
 export interface BreadCrumbsStep {
-  // It will be called when step is started
-  onStart(state: Record<string, any>): Promise<void>
-  // It will be called when step is finished (the next is added)
-  onEnd(state: Record<string, any>): Promise<void>
-  // It will be called on canceling step or if is going to switch to previous one
-  onCancel(state: Record<string, any>): Promise<void>
+  // Name of the step. It is part of path
+  name: string
   state: Record<string, any>
-  // optional step name which is used to switch to the certain step
-  name?: string
+  // // It will be called when step is started
+  // onStart(state: Record<string, any>): Promise<void>
+  // // It will be called when step is finished (the next is added)
+  // onEnd(state: Record<string, any>): Promise<void>
+  // // It will be called on canceling step or if is going to switch to previous one
+  // onCancel(state: Record<string, any>): Promise<void>
 }
 
 export default class BreadCrumbs {
+  pathChangeEvent: IndexedEvents<() => void> = new IndexedEvents()
+  private currentStepId: string = '0'
   private readonly steps: BreadCrumbsStep[] = []
-  private readonly initialStep: () => Promise<void>
-  private initing = false
 
 
-  constructor(initialStep: () => Promise<void>) {
-    this.initialStep = initialStep
+  constructor() {
   }
 
   destroy() {
     // clear all the steps
     this.deleteStepAndAfter(0)
-    //delete this.initialStep
   }
 
 
-  async init() {
-    if (this.initing) return
+  addStep(name: string, initialState: Record<any, any> = {}): string {
+    const stepId = String(this.steps.length)
 
-    this.initing = true
+    this.steps.push({
+      name,
+      state: initialState,
+    })
 
-    await this.initialStep()
+    this.currentStepId = stepId
 
-    this.initing = false
+    this.pathChangeEvent.emit()
+
+    return this.currentStepId
   }
 
-  /**
-   * Add a step and run it
-   */
-  async addAndRunStep(step: BreadCrumbsStep) {
-    this.steps.push(step)
-
-    const stepIndex = this.steps.length -1
-
-    try {
-      // normally end prev step
-      if (stepIndex > 0) {
-        await this.justEndStep(stepIndex - 1)
-      }
-      // run current step
-      await this.justExecuteStep(stepIndex)
-    }
-    catch (e) {
-      this.deleteStepAndAfter(stepIndex)
-
-      throw e
-    }
+  getCurrentPath(): string {
+    return this.getPathOfStepId(this.currentStepId)
   }
+
+  getPathOfStepId(stepId: string): string {
+    const names: string[] = this.steps.map((el) => el.name)
+    // TODO: проверить
+    const sliced: string[] = names.splice(0, Number(this.currentStepId) + 1)
+
+    return sliced.join(BREADCRUMBS_DELIMITER)
+  }
+
+  // /**
+  //  * Add a step and run it
+  //  */
+  // async addAndRunStep(step: BreadCrumbsStep) {
+  //   this.steps.push(step)
+  //
+  //   const stepIndex = this.steps.length -1
+  //
+  //   try {
+  //     // normally end prev step
+  //     if (stepIndex > 0) {
+  //       await this.justEndStep(stepIndex - 1)
+  //     }
+  //     // run current step
+  //     await this.justExecuteStep(stepIndex)
+  //   }
+  //   catch (e) {
+  //     this.deleteStepAndAfter(stepIndex)
+  //
+  //     throw e
+  //   }
+  // }
 
   /**
    * Switch to certain step by it's id.
