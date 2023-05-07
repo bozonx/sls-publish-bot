@@ -94,11 +94,16 @@ export default class DynamicBreadCrumbs {
     return this.currentStepId
   }
 
-  toStep(stepId: string): string {
-    // if index less than specified
-    //if (this.steps.length -1 < stepIndex) return
+  toStep(stepId: string) {
+    const newStepIdNum = Number(stepId)
+    // if new step is greater or equal with current - do nothing
+    if (newStepIdNum >= Number(this.currentStepId)) return this.currentStepId
 
-    //this.steps.splice(stepIndex)
+    this.currentStepId = stepId
+
+    // TODO: check
+    // remove tail
+    this.steps.splice(newStepIdNum)
   }
 
   back() {
