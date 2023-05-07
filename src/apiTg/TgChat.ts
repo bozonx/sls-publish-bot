@@ -1,5 +1,5 @@
 import {IndexedEventEmitter} from 'squidlet-lib';
-import App from '../App.js';
+import System from '../System.js';
 import BreadCrumbs from '../../_useless/BreadCrumbs.js';
 import {ChatEvents} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
@@ -20,7 +20,7 @@ import ru from '../I18n/ru.js';
 
 
 export default class TgChat {
-  public readonly app: App;
+  public readonly app: System;
   //readonly tgChatMenu: TgChatMenu
   public readonly menu: TelegramMenuRenderer
   public readonly events: IndexedEventEmitter;
@@ -34,7 +34,7 @@ export default class TgChat {
   }
 
 
-  constructor(chatId: number | string, app: App) {
+  constructor(chatId: number | string, app: System) {
     this.botChatId = chatId;
     this.app = app;
     this.menu = new TelegramMenuRenderer(this)

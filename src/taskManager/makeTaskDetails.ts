@@ -1,10 +1,10 @@
 import moment from 'moment/moment.js';
 import {CloneTgPostTask, PostponeTgPostTask, TaskItem} from '../types/TaskItem.js';
 import {PRINT_SHORT_DATE_TIME_FORMAT} from '../types/constants.js';
-import App from '../App.js';
+import System from '../System.js';
 
 
-export async function makeTaskDetails(task: TaskItem, app: App): Promise<string> {
+export async function makeTaskDetails(task: TaskItem, app: System): Promise<string> {
   let username: string | undefined;
   const resultArr = [
     `${app.i18n.commonPhrases.type}${task.type}`,

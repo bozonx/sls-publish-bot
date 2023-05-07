@@ -187,7 +187,7 @@ export async function convertNotionToTelegraph(
 }
 
 
-// export async function telegraphImageUploader(url: string, app: App): Promise<string> {
+// export async function telegraphImageUploader(url: string, app: System): Promise<string> {
 //   return app.telegraPh.uploadImage(url)
 // }
 

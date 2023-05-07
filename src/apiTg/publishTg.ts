@@ -1,4 +1,4 @@
-import App from '../App.js';
+import System from '../System.js';
 import PollData from '../types/PollData.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem, PrimitiveMediaGroup} from '../types/types.js';
@@ -8,7 +8,7 @@ import {MediaGroupItem, PrimitiveMediaGroup} from '../types/types.js';
  * Publish only text without image
  */
 export async function publishTgText(
-  app: App,
+  app: System,
   chatId: number | string,
   msgHtml: string,
   allowPreview = true,
@@ -37,7 +37,7 @@ export async function publishTgText(
  * Publish one image
  */
 export async function publishTgImage(
-  app: App,
+  app: System,
   chatId: number | string,
   imageUrl: string,
   captionMd?: string,
@@ -66,7 +66,7 @@ export async function publishTgImage(
  * Publish one video
  */
 export async function publishTgVideo(
-  app: App,
+  app: System,
   chatId: number | string,
   videoUrl: string,
   captionMd?: string,
@@ -95,7 +95,7 @@ export async function publishTgVideo(
  * Publish media group
  */
 export async function publishTgMediaGroup(
-  app: App,
+  app: System,
   chatId: number | string,
   mediaGroup: (MediaGroupItem | PrimitiveMediaGroup)[],
   captionMd?: string,
@@ -140,7 +140,7 @@ export async function publishTgMediaGroup(
  * Make copy of message
  */
 export async function publishTgCopy(
-  app: App,
+  app: System,
   chatId: number | string,
   fromChatId: number | string,
   messageId: number,
@@ -168,7 +168,7 @@ export async function publishTgCopy(
  * Publish poll
  */
 export async function publishTgPoll(
-  app: App,
+  app: System,
   chatId: number | string,
   pollData: PollData,
   disableNotification = false

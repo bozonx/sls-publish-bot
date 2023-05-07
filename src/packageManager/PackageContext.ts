@@ -1,5 +1,5 @@
 import {ConsoleLogger} from 'squidlet-lib';
-import App from '../App.js';
+import System from '../System.js';
 import ChannelLogger from '../helpers/ChannelLogger.js';
 import {MenuChangeHandler} from '../../_useless/menuManager/MenuManager.js';
 import ru from '../I18n/ru.js';
@@ -27,7 +27,7 @@ export class PackageContext {
   }
 
 
-  constructor(app: App) {
+  constructor(app: System) {
     this.app = app
   }
 

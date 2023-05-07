@@ -10,7 +10,7 @@ import {PackageIndex} from './types/types.js';
 import {DynamicMenuMain} from './DynamicMenu/DynamicMenuMain.js';
 
 
-export default class App {
+export default class System {
   //public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
   public readonly menu: DynamicMenuMain = new DynamicMenuMain()

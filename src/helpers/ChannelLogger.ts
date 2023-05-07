@@ -1,15 +1,15 @@
 import {calcAllowedLogLevels, LOG_LEVELS, Logger, LogLevel} from 'squidlet-lib';
-import App from '../App.js';
+import System from '../System.js';
 
 
 export default class ChannelLogger implements Logger {
-  private readonly app: App;
+  private readonly app: System;
   private readonly allowDebug: boolean
   private readonly allowInfo: boolean
   private readonly allowWarn: boolean
 
 
-  constructor(level: LogLevel, app: App) {
+  constructor(level: LogLevel, app: System) {
     this.app = app;
 
     const allowedLogLevels: LogLevel[] = calcAllowedLogLevels(level);

@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises';
 import path from 'path';
 import {clearTimeout} from 'timers';
-import App from '../App.js';
+import System from '../System.js';
 import {TaskItem} from '../types/TaskItem.js';
 import {calcSecondsToDate} from '../lib/common.js';
 import {FILE_ENCODING} from '../types/constants.js';
@@ -14,7 +14,7 @@ const STATE_TASKS_FILENAME = 'tasks.json';
 
 
 export default class TasksMain {
-  readonly app: App;
+  readonly app: System;
   private readonly execute: ExecuteTask;
   private readonly filePath: string;
   // Object like {taskId: TaskItem}
@@ -23,7 +23,7 @@ export default class TasksMain {
   private readonly timeouts: Record<string, NodeJS.Timeout> = {};
 
 
-  constructor(app: App) {
+  constructor(app: System) {
     this.app = app;
     this.execute = new ExecuteTask(this);
     this.filePath = path.resolve(this.app.appConfig.dataDirPath, STATE_TASKS_FILENAME);

@@ -1,11 +1,11 @@
-import App from '../App.js';
+import System from '../System.js';
 import {TaskItem} from '../types/TaskItem.js';
 import {calcSecondsToDate} from '../lib/common.js';
 import {MAX_TIMEOUT_SECONDS} from '../types/constants.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
 
 
-export async function validateTask(task: TaskItem, app: App): Promise<string | undefined> {
+export async function validateTask(task: TaskItem, app: System): Promise<string | undefined> {
   // seconds from now to start time
   const secondsToPublish = calcSecondsToDate(task.startTime)
 

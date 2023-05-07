@@ -1,14 +1,14 @@
-import App from '../App.js';
+import System from '../System.js';
 import {Account, PageList, Telegraph, upload, NodeElement} from "better-telegraph";
 import {makeTelegraPhUrl} from '../helpers/helpers.js';
 
 
 export default class TelegraPhMain {
-  private readonly app: App;
+  private readonly app: System;
   private readonly api;
 
 
-  constructor(app: App) {
+  constructor(app: System) {
     this.app = app;
     this.api = new Telegraph({
       accessToken: this.app.appConfig.telegraPhToken,

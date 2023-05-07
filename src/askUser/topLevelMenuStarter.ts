@@ -39,7 +39,7 @@ async function test(tgChat: TgChat) {
 
     query_id
     The bot can call the Bot API method answerWebAppQuery to send
-      an inline message from the user back to the bot and close the Web App
+      an inline message from the user back to the bot and close the Web System
     initData
     elegram.WebApp.themeParams
     headerColor, backgroundColor
@@ -61,7 +61,7 @@ async function test(tgChat: TgChat) {
   //             text: 'zen',
   //
   //
-  //             //The Web App will be able to send a “web_app_data” service message. Available in private chats only.
+  //             //The Web System will be able to send a “web_app_data” service message. Available in private chats only.
   //             web_app: {
   //               url: 'http://127.0.0.1:3000/publishZen.html',
   //

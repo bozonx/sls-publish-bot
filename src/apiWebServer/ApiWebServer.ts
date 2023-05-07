@@ -2,7 +2,7 @@ import * as https from 'https';
 import * as http from 'http';
 import _ from 'lodash';
 import express, {NextFunction} from 'express'
-import App from '../App.js';
+import System from '../System.js';
 import {ZEN_DATA_TMPL} from './zenDataTmpl.js';
 import * as core from 'express-serve-static-core';
 
@@ -11,13 +11,13 @@ type ZenDataHandler = () => Promise<Record<string, any>>
 
 
 export class ApiWebServer {
-  private readonly app: App
+  private readonly app: System
   private zenDataHandler?: ZenDataHandler
   private readonly expressApp: core.Express
   private mainServer?: https.Server | http.Server
 
 
-  constructor(app: App) {
+  constructor(app: System) {
     this.app = app
     this.expressApp = express()
 

@@ -1,6 +1,6 @@
 import {pathJoin} from 'squidlet-lib'
 import {PackageContext} from './PackageContext.js'
-import App from '../App.js';
+import System from '../System.js';
 import {PackageIndex} from '../types/types.js';
 
 
@@ -9,7 +9,7 @@ export class PackageManager {
   readonly ctx
 
 
-  constructor(app: App) {
+  constructor(app: System) {
     this.app = app
     this.ctx = new PackageContext(this.app)
   }

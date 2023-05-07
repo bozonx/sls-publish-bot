@@ -1,19 +1,19 @@
 import _ from 'lodash';
 import { Context, Telegraf } from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
-import App from '../App.js';
+import System from '../System.js';
 import TgChat from './TgChat.js';
 import MessageEventBase from '../types/MessageEvent.js';
 
 
 export default class TgMain {
   public readonly bot: Telegraf;
-  private readonly app: App;
+  private readonly app: System;
   // chats where users talk to bot
   private readonly chats: Record<string, TgChat> = {};
 
 
-  constructor(app: App) {
+  constructor(app: System) {
     this.app = app;
     this.bot = new Telegraf(this.app.appConfig.botToken, {
       telegram: {

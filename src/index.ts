@@ -3,7 +3,7 @@ import _ from 'lodash';
 import * as fs from 'fs';
 import yaml from 'js-yaml'
 import dotenv from 'dotenv';
-import App from './App.js';
+import System from './System.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import {systemPlugins} from './systemPlugins/index.js';
 import {userPlugins} from './plugins/allPlugins.js';
@@ -37,7 +37,7 @@ else if (!process.env.CHANNEL_IDS) {
   //   ...((process.env.PACKAGES) ? JSON.parse(process.env.PACKAGES) : []),
   // ]
 
-  const app = new App()
+  const app = new System()
 
   for (const sysPlugin of systemPlugins) {
     app.use(sysPlugin)
