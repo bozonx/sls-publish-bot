@@ -1,8 +1,13 @@
+import {Router} from './Router.js';
+
 /**
  * The singleton of whole UI
  */
 export class Window {
-  async destroy() {
+  readonly router = new Router()
 
+
+  async destroy() {
+    await this.router.destroy()
   }
 }
