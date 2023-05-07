@@ -1,4 +1,4 @@
-import BreadCrumbs from './BreadCrumbs.js';
+import BreadCrumbs, {BREADCRUMBS_DELIMITER} from './BreadCrumbs.js';
 import {Window} from './Window.js';
 import {Route} from './interfaces/Route.js';
 import {Screen} from './Screen.js';
@@ -26,9 +26,9 @@ export class Router {
     this.routes = routes
   }
 
-  async init() {
+  async init(initialPath: string = BREADCRUMBS_DELIMITER) {
     this.breadCrumbs.pathChangeEvent.addListener(this.onPathChanged)
-    await this.toPath('/')
+    await this.toPath(initialPath)
   }
 
   async destroy() {
