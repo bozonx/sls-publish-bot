@@ -1,16 +1,17 @@
 import {Window} from '../../AbstractUi/Window.js';
 import {TelegramRenderer} from './TelegramRenderer.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
-import {TgReplyButton} from '../../types/TgReplyButton.js';
-import {AnyElement} from '../../AbstractUi/interfaces/AnyElement.js';
 import {UI_EVENTS} from '../../AbstractUi/interfaces/UiEvents.js';
+import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
 
 
 export class TgRendererChat {
-  public window: Window
-  private renderer: TelegramRenderer
+  window: Window
   // chat id where was start function called
-  public readonly botChatId: number | string
+  readonly botChatId: number | string
+
+  private renderer: TelegramRenderer
+  private menuMsgId?: number
 
 
   constructor(chatId: number | string, renderer: TelegramRenderer) {
@@ -21,7 +22,7 @@ export class TgRendererChat {
 
 
   async init() {
-    this.window.onDomChanged(this.handleDomChanged)
+    this.window.onDomChanged(() => this.render())
 
     await this.window.init()
   }
@@ -29,8 +30,7 @@ export class TgRendererChat {
   async destroy() {
     // TODO: должен вызываться из Renderer
   }
-  
-  
+
 
   handleCallbackQueryEvent(queryData: any) {
     if (!queryData) {
@@ -78,24 +78,17 @@ export class TgRendererChat {
   }
 
 
-
-  /////////////
-
-
-  private handleDomChanged = () => {
-    this.render()
-  }
-
   private render() {
     (async () => {
-      // TODO: remove previous menu
-      // TODO: draw a new one
-      // TODO: support of line groups
-      // TODO: support of menu message in html
+      const [messageHtml, buttons] = convertDocumentToTgUi(this.window.rootDocument)
 
-      await this.renderer.bot.telegram.sendMessage(
+      if (typeof this.menuMsgId !== 'undefined') {
+        await this.renderer.bot.telegram.deleteMessage(this.botChatId, this.menuMsgId)
+      }
+
+      const sentMessage = await this.renderer.bot.telegram.sendMessage(
         this.botChatId,
-        message,
+        messageHtml,
         {
           parse_mode: 'HTML',
           reply_markup: {
@@ -104,21 +97,10 @@ export class TgRendererChat {
           disable_web_page_preview: true,
         },
       )
+
+      this.menuMsgId = sentMessage.message_id
     })()
       .catch((e) => this.renderer.ctx.consoleLog.error(e))
   }
 
 }
-
-
-// export function convertMenuBtnsToTgInlineBtns(menu: DynamicMenuButton[]): TgReplyButton[][] {
-//   return menu.map((item) => {
-//     return [
-//       {
-//         text: item.label,
-//         // TODO: наперное полный путь + name
-//         callback_data: '!!!!',
-//       }
-//     ]
-//   })
-// }
