@@ -44,7 +44,9 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
     this.breadCrumbs = new DynamicBreadCrumbs()
   }
 
-  async init() {
+  init(initialPath?: string) {
+    // TODO: initialPath - поидее можно сразу устанавливать готовый путь и разбить его на степс
+
     this.breadCrumbs.pathChangeEvent.addListener(this.handlePathChange)
 
     this.breadCrumbs.addStep(BREADCRUMBS_ROOT)

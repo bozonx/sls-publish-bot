@@ -1,6 +1,6 @@
-import tasksMenu from './tasksMenu/index.js';
+//import tasksMenu from './tasksMenu/index.js';
 
 
 export const systemPlugins = [
-  tasksMenu,
+  //tasksMenu,
 ]

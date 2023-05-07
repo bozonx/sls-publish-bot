@@ -7,6 +7,7 @@ import System from './System.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import {systemPlugins} from './systemPlugins/index.js';
 import {userPlugins} from './plugins/allPlugins.js';
+import {TelegramRenderer} from './renderers/TelegramRenderer.js';
 
 
 dotenv.config();
@@ -38,6 +39,7 @@ else if (!process.env.CHANNEL_IDS) {
   // ]
 
   const system = new System()
+  const tgRenderer = new TelegramRenderer(system)
 
   for (const sysPlugin of systemPlugins) {
     system.use(sysPlugin)
@@ -55,6 +57,7 @@ else if (!process.env.CHANNEL_IDS) {
   // }
 
   system.init()
+  tgRenderer.init()
 
   // Enable graceful stop
   process.once('SIGINT', () => system.destroy('SIGINT'));
