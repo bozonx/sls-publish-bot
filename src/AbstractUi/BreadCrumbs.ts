@@ -3,19 +3,21 @@ import {UiState} from './UiState.js';
 
 
 export const BREADCRUMBS_DELIMITER = '/'
-export const BREADCRUMBS_ROOT = '!'
 
 
-export interface DynamicBreadCrumbsStep {
+export interface BreadCrumbsStep {
   // Name of the step. It is part of path
   name: string
+  // local state of path
   state: UiState
+  // it is set from router
+  params: Record<string, any>
 }
 
 export default class BreadCrumbs {
   pathChangeEvent: IndexedEvents<() => void> = new IndexedEvents()
   private currentStepId: string = '0'
-  private steps: DynamicBreadCrumbsStep[] = []
+  private steps: BreadCrumbsStep[] = []
 
 
   constructor() {
@@ -31,7 +33,7 @@ export default class BreadCrumbs {
     return this.currentStepId
   }
 
-  getCurrentStep(): DynamicBreadCrumbsStep {
+  getCurrentStep(): BreadCrumbsStep {
     return this.steps[Number(this.currentStepId)]
   }
 
@@ -40,6 +42,9 @@ export default class BreadCrumbs {
   }
 
   getPathOfStepId(stepId: string): string {
+
+    // TODO: почему не используется stepId ???
+
     const names: string[] = this.steps.map((el) => el.name)
     // TODO: проверить
     const sliced: string[] = names.splice(0, Number(this.currentStepId) + 1)
@@ -51,13 +56,15 @@ export default class BreadCrumbs {
    * Add step to current path
    * @param name
    * @param initialState
+   * @param params
    */
-  addStep(name: string, initialState: Record<any, any> = {}): string {
+  addStep(name: string, initialState: Record<any, any> = {}, params: Record<any, any> = {}): string {
     const stepId = String(this.steps.length)
 
     this.steps.push({
       name,
       state: new UiState(initialState),
+      params,
     })
 
     this.currentStepId = stepId
@@ -67,12 +74,15 @@ export default class BreadCrumbs {
     return this.currentStepId
   }
 
-  toPath(newPath: string): string {
+  toPath(newPath: string, params: Record<string, any>): string {
+
+    // TODO: если будет или не будет начальный слэш???
+
     const pathNames: string[] = newPath.split(BREADCRUMBS_DELIMITER)
     const newPathId = String(pathNames.length - 1)
 
     if (this.pathBaseOfCurrentPath(newPath)) {
-      this.toStep(newPathId)
+      this.toStep(newPathId, params)
 
       return this.currentStepId
     }
@@ -86,6 +96,7 @@ export default class BreadCrumbs {
       this.steps.push({
         name,
         state: new UiState(),
+        params,
       })
     }
 
@@ -96,10 +107,12 @@ export default class BreadCrumbs {
     return this.currentStepId
   }
 
-  toStep(stepId: string) {
+  toStep(stepId: string, params: Record<string, any>) {
     const newStepIdNum = Number(stepId)
     // if new step is greater or equal with current - do nothing
     if (newStepIdNum >= Number(this.currentStepId)) return this.currentStepId
+
+    // TODO: обновить params
 
     this.currentStepId = stepId
 
@@ -113,7 +126,7 @@ export default class BreadCrumbs {
   }
 
   forward() {
-    // return to breadcrumb and it's saved state
+    // TODO: return to breadcrumb and it's saved state
   }
 
 
