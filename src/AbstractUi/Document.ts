@@ -7,7 +7,12 @@ export type DocumentEventHandler = (elementPath: string, eventName: string, data
 
 export class Document {
   readonly events = new IndexedEvents<DocumentEventHandler>()
-  elements: AnyElement[] = []
+  readonly elements: AnyElement[] = []
+
+
+  async destroy() {
+    // TODO: destroy all the elements
+  }
 
 
   on(elementPath: string, eventName: string, handler: (data: any) => void) {
