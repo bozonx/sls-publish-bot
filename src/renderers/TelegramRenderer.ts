@@ -3,8 +3,10 @@ import {Context, Telegraf} from 'telegraf';
 import System from '../System.js';
 import {DynamicMenuInstance} from '../DynamicMenu/DynamicMenuInstance.js';
 import {DynamicMenuButton} from '../DynamicMenu/interfaces/DynamicMenuButton.js';
-import TgChat from '../apiTg/TgChat.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
+
+
+// TODO: подключить его как пакет
 
 
 export function convertMenuBtnsToTgInlineBtns(menu: DynamicMenuButton[]): TgReplyButton[][] {
@@ -23,12 +25,23 @@ export function convertMenuBtnsToTgInlineBtns(menu: DynamicMenuButton[]): TgRepl
 export class TgRendererChat {
   private renderer: TelegramRenderer
   // chat id where was start function called
-  public readonly botChatId: number | string;
+  public readonly botChatId: number | string
+  private menuInstanceContext: Record<string, any> = {}
+  private menuInstance!: DynamicMenuInstance
 
 
   constructor(chatId: number | string, renderer: TelegramRenderer) {
     this.botChatId = chatId
     this.renderer = renderer
+  }
+
+
+  async init() {
+    this.menuInstance = this.renderer.system.menu.makeInstance(this.menuInstanceContext)
+
+    this.menuInstance.renderEvent.addListener(this.renderHandler)
+
+    this.menuInstance.init()
   }
 
   async renderMenu(message: string, menu: DynamicMenuButton[]) {
@@ -47,14 +60,27 @@ export class TgRendererChat {
     )
   }
 
+
+  private renderHandler = (menu: DynamicMenuButton[]) => {
+    console.log(1111, menu, this.menuInstance.breadCrumbs.getCurrentPath())
+
+    this.renderMenu('somemst', menu)
+      .catch((e) => {
+        // TODO: what to do on error???
+      })
+
+    // TODO: remove previous menu
+    // TODO: draw a new one
+    // TODO: support of line groups
+    // TODO: support of menu message in html
+  }
+
 }
 
 
 export class TelegramRenderer {
-  public readonly bot: Telegraf;
-  private readonly system: System
-  private menuInstanceContext: Record<string, any> = {}
-  private menuInstance!: DynamicMenuInstance
+  readonly bot: Telegraf;
+  readonly system: System
   // chats where users talk to bot
   private readonly chats: Record<string, TgRendererChat> = {}
 
@@ -71,10 +97,6 @@ export class TelegramRenderer {
 
 
   init() {
-    this.menuInstance = this.system.menu.makeInstance(this.menuInstanceContext)
-
-    this.menuInstance.renderEvent.addListener(this.renderHandler)
-
     this.bot.start((ctx: Context) => {
       if (!ctx.chat?.id) throw new Error(`No chat id`);
 
@@ -82,8 +104,8 @@ export class TelegramRenderer {
         this.chats[ctx.chat.id] = new TgRendererChat(ctx.chat.id, this)
       }
 
-      // this.chats[ctx.chat.id].startCmd()
-      //   .catch((e) => this.system.consoleLog.error(e));
+      this.chats[ctx.chat.id].init()
+        .catch((e) => this.system.consoleLog.error(e));
     });
 
     this.addListeners();
@@ -96,8 +118,7 @@ export class TelegramRenderer {
 
       console.log(3333)
     });
-    
-    this.menuInstance.init()
+
     this.system.consoleLog.info('Bot launched');
   }
   
@@ -241,14 +262,6 @@ export class TelegramRenderer {
     //     });
     //   }
     // });
-  }
-
-  private renderHandler = (menu: DynamicMenuButton[]) => {
-    console.log(1111, menu, this.menuInstance.breadCrumbs.getCurrentPath())
-    // TODO: remove previous menu
-    // TODO: draw a new one
-    // TODO: support of line groups
-    // TODO: support of menu message in html
   }
 
 }
