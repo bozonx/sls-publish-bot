@@ -26,7 +26,7 @@ export class Window {
   }
 
   async init() {
-    this.router.init()
+    await this.router.init()
   }
 
   async destroy() {

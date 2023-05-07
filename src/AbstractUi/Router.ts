@@ -26,8 +26,9 @@ export class Router {
     this.routes = routes
   }
 
-  init() {
+  async init() {
     this.breadCrumbs.pathChangeEvent.addListener(this.onPathChanged)
+    await this.toPath('/')
   }
 
   async destroy() {
