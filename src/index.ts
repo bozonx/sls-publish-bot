@@ -37,15 +37,15 @@ else if (!process.env.CHANNEL_IDS) {
   //   ...((process.env.PACKAGES) ? JSON.parse(process.env.PACKAGES) : []),
   // ]
 
-  const app = new System()
+  const system = new System()
 
   for (const sysPlugin of systemPlugins) {
-    app.use(sysPlugin)
+    system.use(sysPlugin)
   }
 
   // TODO: подгужать их другим способом
   for (const sysPlugin of userPlugins) {
-    app.use(sysPlugin)
+    system.use(sysPlugin)
   }
 
   // for (const packagePath of packages) {
@@ -54,10 +54,10 @@ else if (!process.env.CHANNEL_IDS) {
   //   app.use(pkg.default)
   // }
 
-  app.init()
+  system.init()
 
   // Enable graceful stop
-  process.once('SIGINT', () => app.destroy('SIGINT'));
-  process.once('SIGTERM', () => app.destroy('SIGTERM'));
+  process.once('SIGINT', () => system.destroy('SIGINT'));
+  process.once('SIGTERM', () => system.destroy('SIGTERM'));
 })()
 
