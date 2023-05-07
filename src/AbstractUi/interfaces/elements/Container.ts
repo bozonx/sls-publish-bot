@@ -1,4 +1,4 @@
-import {AnyElement} from './AnyElement.js';
+import {AnyElement} from '../AnyElement.js';
 
 
 export interface Container {
