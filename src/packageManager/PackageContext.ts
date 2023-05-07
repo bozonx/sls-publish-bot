@@ -1,6 +1,5 @@
 import {ConsoleLogger} from 'squidlet-lib';
 import System from '../System.js';
-import {MenuChangeHandler} from '../../_useless/menuManager/MenuManager.js';
 import ru from '../I18n/ru.js';
 import {DynamicMenuMain} from '../DynamicMenu/DynamicMenuMain.js';
 
