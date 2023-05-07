@@ -25,11 +25,13 @@ import {TimeInput} from './TimeInput.js';
 import {TimePeriodInput} from './TimePeriodInput.js';
 import {VideoInput} from './VideoInput.js';
 import {Container} from './Container.js';
+import {Component} from './Component.js';
 
 
 export type AnyElement = AudioInput
   | Button
   | CheckBox
+  | Component
   | Container
   | CurrencyInput
   | DateInput
