@@ -1,9 +1,9 @@
 import {Window} from '../../AbstractUi/Window.js';
 import {TelegramRenderer} from './TelegramRenderer.js';
-import {ChatEvents} from '../../types/constants.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
 import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {AnyElement} from '../../AbstractUi/interfaces/AnyElement.js';
+import {UI_EVENTS} from '../../AbstractUi/interfaces/UiEvents.js';
 
 
 export class TgRendererChat {
@@ -21,8 +21,7 @@ export class TgRendererChat {
 
 
   async init() {
-    this.window.onAttached(this.handleAttached)
-    this.window.onDetached(this.handleDetached)
+    this.window.onDomChanged(this.handleDomChanged)
 
     await this.window.init()
   }
@@ -35,26 +34,16 @@ export class TgRendererChat {
 
   handleCallbackQueryEvent(queryData: any) {
     if (!queryData) {
-      this.renderer.ctx.consoleLog.warn('Empty data came to handleCallbackQueryEvent');
+      this.renderer.ctx.consoleLog.warn('Empty data came to handleCallbackQueryEvent')
 
-      return;
+      return
     }
 
-    try {
-      this.events.emit(ChatEvents.CALLBACK_QUERY, queryData);
-    }
-    catch (e) {
-      this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    }
+    this.window.handleUiEvent(UI_EVENTS.click, queryData)
   }
 
   handleIncomeTextEvent(msgEvent: TextMessageEvent) {
-    // try {
-    //   this.events.emit(ChatEvents.TEXT, msgEvent);
-    // }
-    // catch (e) {
-    //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    // }
+    this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
   }
 
   handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
@@ -92,12 +81,8 @@ export class TgRendererChat {
 
   /////////////
 
-  private handleAttached = (elementPath: string, element: AnyElement) => {
-    // TODO: нужно перерисовать всё
-    this.render()
-  }
 
-  private handleDetached = (elementPath: string, element: AnyElement) => {
+  private handleDomChanged = () => {
     this.render()
   }
 
