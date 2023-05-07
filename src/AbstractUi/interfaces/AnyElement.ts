@@ -26,6 +26,7 @@ import {TimePeriodInput} from './TimePeriodInput.js';
 import {VideoInput} from './VideoInput.js';
 import {Container} from './Container.js';
 import {Component} from './Component.js';
+import {Text} from './Text.js';
 
 
 export type AnyElement = AudioInput
@@ -51,6 +52,7 @@ export type AnyElement = AudioInput
   | RadioGroupInput
   | SelectInput
   | TagsInput
+  | Text
   | TextArea
   | TextInput
   | TimeInput
