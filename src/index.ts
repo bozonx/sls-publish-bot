@@ -5,7 +5,6 @@ import yaml from 'js-yaml'
 import dotenv from 'dotenv';
 import App from './App.js';
 import BlogsConfig from './types/BlogsConfig.js';
-import {PackageIndex} from './types/types.js';
 import {systemPlugins} from './systemPlugins/index.js';
 import {userPlugins} from './plugins/allPlugins.js';
 
@@ -23,14 +22,14 @@ else if (!process.env.CHANNEL_IDS) {
   process.exit(2);
 }
 
-const confStr = fs.readFileSync(process.env.CONFIG_PATH, 'utf8')
-const finalCfgString = _.template(confStr)({
-  TAGS: '${ TAGS }',
-  TITLE: '${ TITLE }',
-  ARTICLE_URL: '${ ARTICLE_URL }',
-  ...JSON.parse(process.env.CHANNEL_IDS),
-})
-const conf = yaml.load(finalCfgString) as BlogsConfig
+// const confStr = fs.readFileSync(process.env.CONFIG_PATH, 'utf8')
+// const finalCfgString = _.template(confStr)({
+//   TAGS: '${ TAGS }',
+//   TITLE: '${ TITLE }',
+//   ARTICLE_URL: '${ ARTICLE_URL }',
+//   ...JSON.parse(process.env.CHANNEL_IDS),
+// })
+// const conf = yaml.load(finalCfgString) as BlogsConfig
 
 
 (async () => {
@@ -38,7 +37,7 @@ const conf = yaml.load(finalCfgString) as BlogsConfig
   //   ...((process.env.PACKAGES) ? JSON.parse(process.env.PACKAGES) : []),
   // ]
 
-  const app = new App(conf)
+  const app = new App()
 
   for (const sysPlugin of systemPlugins) {
     app.use(sysPlugin)

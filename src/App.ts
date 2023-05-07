@@ -1,50 +1,39 @@
-import {ConsoleLogger, IndexedEventEmitter} from 'squidlet-lib';
-import TgMain from './apiTg/TgMain.js';
+import {ConsoleLogger} from 'squidlet-lib';
 import AppConfig from './types/AppConfig.js';
 import appConfig from './appConfig.js';
 import ru from './I18n/ru.js';
-import NotionApi from './apiNotion/NotionApi.js';
 import TasksMain from './taskManager/TasksMain.js';
 import ChannelLogger from './helpers/ChannelLogger.js';
-import TelegraPhMain from './apiTelegraPh/telegraPhMain.js';
-import BlogsConfig from './types/BlogsConfig.js';
-import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
-import {MenuManager} from '../_useless/menuManager/MenuManager.js';
-import {TelegramMenuRenderer} from './apiTg/TelegramMenuRenderer.js';
+import {DynamicMenuMain} from './DynamicMenu/DynamicMenuMain.js';
 
 
 export default class App {
   //public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
-  public readonly menu: MenuManager
-  public readonly blogs: BlogsConfig;
-  public readonly tg: TgMain;
-  public readonly telegraPh: TelegraPhMain;
-  public readonly bloggerCom: BloggerComMain;
+  public readonly menu: DynamicMenuMain = new DynamicMenuMain()
+  //public readonly blogs: BlogsConfig;
+  // public readonly tg: TgMain;
+  // public readonly telegraPh: TelegraPhMain;
+  // public readonly bloggerCom: BloggerComMain;
+  // public readonly notion: NotionApi;
   public readonly webServer: ApiWebServer
   public readonly tasks: TasksMain;
   public readonly channelLog: ChannelLogger;
   public readonly consoleLog: ConsoleLogger;
-  public readonly notion: NotionApi;
   public readonly i18n = ru;
 
   private readonly packageManager: PackageManager
 
 
-  constructor(rawExecConfig: BlogsConfig) {
-    this.menu = new MenuManager(this)
-    this.blogs = this.makeExecConf(rawExecConfig);
-    this.tg = new TgMain(this);
+  constructor() {
+    //this.blogs = this.makeExecConf(rawExecConfig);
     this.tasks = new TasksMain(this);
-    this.telegraPh = new TelegraPhMain(this);
-    this.bloggerCom = new BloggerComMain(this.appConfig.googleApiToken)
     this.webServer = new ApiWebServer(this)
     this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
     this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
-    this.notion = new NotionApi(this.appConfig.notionToken)
     this.packageManager = new PackageManager(this)
   }
 
@@ -52,9 +41,6 @@ export default class App {
   init() {
     (async () => {
       //await this.packageManager.init()
-      await this.tg.init()
-      await this.telegraPh.init()
-      await this.bloggerCom.init()
       await this.webServer.init()
       await this.tasks.init()
     })()
@@ -74,7 +60,6 @@ export default class App {
       await this.menu.destroy()
       await this.tasks.destroy();
       await this.webServer.destroy()
-      await this.tg.destroy(reason);
       await this.packageManager.destroy()
     })()
       .catch((e) => {
@@ -84,13 +69,6 @@ export default class App {
 
   use(pkg: PackageIndex) {
     pkg(this.packageManager.ctx)
-  }
-
-
-  private makeExecConf(rawBlogsConfig: BlogsConfig): BlogsConfig {
-    // TODO: check conf
-
-    return rawBlogsConfig;
   }
 
 }
