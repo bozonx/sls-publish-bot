@@ -9,9 +9,17 @@ export class Router {
 
   private window: Window
   private routes: Route[] = []
-  private currentScreenInstance?: Screen
-  private currentRoute?: Route
+  private currentScreenInstance!: Screen
+  private currentRoute!: Route
 
+
+  get screen(): Screen {
+    return this.currentScreenInstance
+  }
+
+  get route(): Route {
+    return this.currentRoute
+  }
 
   constructor(window: Window, routes: Route[]) {
     this.window = window
@@ -34,6 +42,8 @@ export class Router {
 
     if (!route) {
       // TODO: to screen 404
+
+      return
     }
 
     this.currentRoute = route
