@@ -8,7 +8,15 @@ export function convertDocumentToTgUi(document: Document): [string, TgReplyButto
   const buttons: TgReplyButton[][] = []
 
   for (const element of document.elements) {
+    const type: string = (element as any)?.type
 
+    if (type === 'Button') {
+      buttons.push([{
+        text: (element as any).text,
+        // TODO: сгенерировать путь до элемента по именам
+        callback_data: (element as any).name,
+      }])
+    }
   }
 
   return [messageHtml, buttons]
