@@ -7,7 +7,7 @@ import System from './System.js';
 import BlogsConfig from './types/BlogsConfig.js';
 import {systemPlugins} from './systemPlugins/index.js';
 import {userPlugins} from './plugins/allPlugins.js';
-import {TelegramRenderer} from './renderers/TelegramRenderer.js';
+import {TelegramRenderer} from './plugins/telegramRenderer/TelegramRenderer.js';
 
 
 dotenv.config();

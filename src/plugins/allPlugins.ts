@@ -2,7 +2,11 @@
 // import telegramTasks from './telegramTasks/index.js';
 
 
+import telegramRenderer from './telegramRenderer/index.js';
+
+
 export const userPlugins = [
+  telegramRenderer,
   // telegramPost,
   // telegramTasks,
 ]

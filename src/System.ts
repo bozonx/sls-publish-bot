@@ -71,7 +71,7 @@ export default class System {
     (async () => {
       //await this.channelLog.info(`Bot is shutting down`);
 
-      await this.menu.destroy()
+      await this.window.destroy()
       //await this.tasks.destroy();
       await this.webServer.destroy()
       await this.packageManager.destroy()
