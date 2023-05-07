@@ -52,6 +52,21 @@ export default class BreadCrumbs {
     return sliced.join(BREADCRUMBS_DELIMITER)
   }
 
+  getDirName(): string {
+    // TODO: только до текущего stepId
+
+    const names: string[] = this.steps.map((el) => el.name)
+
+    if (names.length) names.pop()
+
+    if (names.length) {
+      return names.join(BREADCRUMBS_DELIMITER)
+    }
+    else {
+      return BREADCRUMBS_DELIMITER
+    }
+  }
+
   /**
    * Add step to current path
    * @param name

@@ -26,6 +26,7 @@ export class Window {
   }
 
   async init() {
+    // TODO: set initial path
     await this.router.init()
   }
 

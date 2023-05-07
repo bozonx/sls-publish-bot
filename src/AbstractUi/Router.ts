@@ -2,6 +2,7 @@ import BreadCrumbs, {BREADCRUMBS_DELIMITER} from './BreadCrumbs.js';
 import {Window} from './Window.js';
 import {Route} from './interfaces/Route.js';
 import {Screen} from './Screen.js';
+import {UiState} from './UiState.js';
 
 
 export class Router {
@@ -20,6 +21,30 @@ export class Router {
   get route(): Route {
     return this.currentRoute
   }
+
+  /**
+   * Get cleared current path without params
+   */
+  get path(): string {
+    return this.breadCrumbs.getCurrentPath()
+  }
+
+  getBaseName(): string {
+    return this.breadCrumbs.getCurrentStep().name
+  }
+
+  getDirName(): string {
+    return this.breadCrumbs.getDirName()
+  }
+
+  get routeParams(): Record<string, any> {
+    return this.breadCrumbs.getCurrentStep().params
+  }
+
+  get routeState(): UiState {
+    return this.breadCrumbs.getCurrentStep().state
+  }
+
 
   constructor(window: Window, routes: Route[]) {
     this.window = window
@@ -54,7 +79,7 @@ export class Router {
     // TODO: можно извлечь параметры из пути и передать их в breadcrumbs
     const pathParams = {}
 
-    this.breadCrumbs.toPath(pathTo, pathParams)
+    this.breadCrumbs.toPath(clearPath, pathParams)
   }
 
 
@@ -62,10 +87,6 @@ export class Router {
     (async () => {
       if (this.currentScreenInstance) {
         await this.currentScreenInstance.destroy()
-      }
-
-      if (!this.currentRoute) {
-        throw new Error(`No route`)
       }
 
       // TODO: что ещё ему передать??
@@ -83,7 +104,7 @@ export class Router {
   private resolveRouteByPath(pathTo: string): Route | undefined {
     return this.routes.find((el) => {
 
-      // TODO: make more smart comparison
+      // TODO: make smarter comparison
 
       if (el.path === pathTo) return true
     })
