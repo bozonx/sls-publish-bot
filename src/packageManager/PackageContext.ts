@@ -18,10 +18,6 @@ export class PackageContext {
     return this.system.appConfig
   }
 
-  get window(): Window {
-    return this.system.window
-  }
-
   get consoleLog(): ConsoleLogger {
     return this.system.consoleLog
   }
@@ -39,5 +35,9 @@ export class PackageContext {
     this.system = system
   }
 
+
+  newWindow(): Window {
+    return this.system.newWindow()
+  }
 
 }

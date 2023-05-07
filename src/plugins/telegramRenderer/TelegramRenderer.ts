@@ -1,23 +1,9 @@
 import _ from 'lodash';
 import {Context, Telegraf} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
-import {TgReplyButton} from '../../types/TgReplyButton.js';
 import {TgRendererChat} from './TgRendererChat.js';
 import {PackageContext} from '../../packageManager/PackageContext.js';
 import MessageEventBase from '../../types/MessageEvent.js';
-
-
-export function convertMenuBtnsToTgInlineBtns(menu: DynamicMenuButton[]): TgReplyButton[][] {
-  return menu.map((item) => {
-    return [
-      {
-        text: item.label,
-        // TODO: наперное полный путь + name
-        callback_data: '!!!!',
-      }
-    ]
-  })
-}
 
 
 export class TelegramRenderer {

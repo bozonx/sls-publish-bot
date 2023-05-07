@@ -3,10 +3,12 @@ import {Document} from './Document.js';
 import {Router} from './Router.js';
 import {UiState} from './UiState.js';
 import {WindowConfig} from './interfaces/WindowConfig.js';
+import {AnyElement} from './interfaces/AnyElement.js';
 
 
 export enum WINDOW_EVENTS {
-
+  attached,
+  detached,
 }
 
 
@@ -37,6 +39,15 @@ export class Window {
     this.state.destroy()
     await this.router.destroy()
     await this.rootDocument.destroy()
+  }
+
+
+  onAttached(handler: (elementPath: string, element: AnyElement) => void): number {
+    return this.events.addListener(WINDOW_EVENTS.attached, handler)
+  }
+
+  onDetached(handler: (elementPath: string, element: AnyElement) => void): number {
+    return this.events.addListener(WINDOW_EVENTS.detached, handler)
   }
 
 }

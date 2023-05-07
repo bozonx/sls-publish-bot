@@ -13,7 +13,7 @@ import {WindowConfig} from './AbstractUi/interfaces/WindowConfig.js';
 export default class System {
   //public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
-  public readonly window: Window
+
   //public readonly blogs: BlogsConfig;
   // public readonly tg: TgMain;
   // public readonly telegraPh: TelegraPhMain;
@@ -31,19 +31,7 @@ export default class System {
   constructor() {
     //this.blogs = this.makeExecConf(rawExecConfig);
     //this.tasks = new TasksMain(this);
-    const testWindowConfig: WindowConfig = {
-      currentPath: '/',
-      routes: [
-        {
-          path: 'test',
-          screen: new Screen(),
-          params: {},
-        },
 
-      ]
-    }
-
-    this.window = new Window(testWindowConfig)
     this.webServer = new ApiWebServer(this)
     this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
     //this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
@@ -56,7 +44,6 @@ export default class System {
       //await this.packageManager.init()
       await this.webServer.init()
       //await this.tasks.init()
-      await this.window.init()
     })()
       .catch((e) => {
         this.consoleLog.error(e)
@@ -71,7 +58,6 @@ export default class System {
     (async () => {
       //await this.channelLog.info(`Bot is shutting down`);
 
-      await this.window.destroy()
       //await this.tasks.destroy();
       await this.webServer.destroy()
       await this.packageManager.destroy()
@@ -83,6 +69,22 @@ export default class System {
 
   use(pkg: PackageIndex) {
     pkg(this.packageManager.ctx)
+  }
+
+  newWindow(): Window {
+    const testWindowConfig: WindowConfig = {
+      currentPath: '/',
+      routes: [
+        {
+          path: 'test',
+          screen: new Screen(),
+          params: {},
+        },
+
+      ]
+    }
+
+    return new Window(testWindowConfig)
   }
 
 }

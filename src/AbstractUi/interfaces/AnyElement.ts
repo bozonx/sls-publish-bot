@@ -27,10 +27,12 @@ import {VideoInput} from './elements/VideoInput.js';
 import {Container} from './elements/Container.js';
 import {Component} from './Component.js';
 import {Text} from './elements/Text.js';
+import {ButtonGroup} from './elements/ButtonGroup.js';
 
 
 export type AnyElement = AudioInput
   | Button
+  | ButtonGroup
   | CheckBox
   | Component
   | Container
