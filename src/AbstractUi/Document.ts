@@ -10,6 +10,10 @@ export class Document {
   readonly elements: AnyElement[] = []
 
 
+  async init() {
+
+  }
+
   async destroy() {
     // TODO: destroy all the elements
   }
@@ -25,6 +29,10 @@ export class Document {
 
   incomeEvent(elementPath: string, eventName: string, data: any) {
     this.events.emit(elementPath, eventName, data)
+  }
+
+  async attach(elementPath: string, element: AnyElement) {
+    // TODO:
   }
 
 }

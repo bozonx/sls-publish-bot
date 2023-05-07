@@ -89,6 +89,7 @@ export class Router {
         await this.currentScreenInstance.destroy()
       }
 
+      // TODO: нужно же брать уже готовый инстанс
       // TODO: что ещё ему передать??
       this.currentScreenInstance = new Screen(this.window)
 

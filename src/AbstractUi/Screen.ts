@@ -7,15 +7,17 @@ export class Screen {
   readonly document = new Document()
   readonly state = new UiState()
 
-  private readonly window: Window
+  private readonly window!: Window
 
 
-  constructor(window: Window) {
-    this.window = window
+  constructor() {
   }
 
-  async init() {
+  async init(window: Window) {
+    this.window = window
+    await this.document.init()
 
+    // TODO: должен поднять событие что его надо отрендерить
   }
 
   async destroy() {

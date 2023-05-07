@@ -1,4 +1,5 @@
 import {IndexedEventEmitter} from 'squidlet-lib';
+import {Document} from './Document.js';
 import {Router} from './Router.js';
 import {UiState} from './UiState.js';
 import {WindowConfig} from './interfaces/WindowConfig.js';
@@ -16,6 +17,8 @@ export class Window {
   readonly events = new IndexedEventEmitter()
   readonly router: Router
   readonly state = new UiState()
+  readonly rootDocument = new Document()
+
 
   private readonly initialConfig: WindowConfig
 
@@ -26,12 +29,14 @@ export class Window {
   }
 
   async init() {
-    // TODO: set initial path
-    await this.router.init()
+    await this.router.init(this.initialConfig.currentPath)
   }
 
   async destroy() {
+    this.events.destroy()
+    this.state.destroy()
     await this.router.destroy()
+    await this.rootDocument.destroy()
   }
 
 }

@@ -1,7 +1,7 @@
 import {ConsoleLogger} from 'squidlet-lib';
 import System from '../System.js';
 import ru from '../I18n/ru.js';
-import {DynamicMenuMain} from '../DynamicMenu/DynamicMenuMain.js';
+import {Window} from '../AbstractUi/Window.js';
 
 
 export class PackageContext {
@@ -12,8 +12,8 @@ export class PackageContext {
   //   return this.app.channelLog
   // }
 
-  get menu(): DynamicMenuMain {
-    return this.system.menu
+  get window(): Window {
+    return this.system.window
   }
 
   get consoleLog(): ConsoleLogger {

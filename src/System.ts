@@ -5,13 +5,15 @@ import ru from './I18n/ru.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
-import {DynamicMenuMain} from './DynamicMenu/DynamicMenuMain.js';
+import {Window} from './AbstractUi/Window.js';
+import {Screen} from './AbstractUi/Screen.js';
+import {WindowConfig} from './AbstractUi/interfaces/WindowConfig.js';
 
 
 export default class System {
   //public readonly events = new IndexedEventEmitter()
   public readonly appConfig: AppConfig = appConfig;
-  public readonly menu: DynamicMenuMain = new DynamicMenuMain()
+  public readonly window: Window
   //public readonly blogs: BlogsConfig;
   // public readonly tg: TgMain;
   // public readonly telegraPh: TelegraPhMain;
@@ -29,6 +31,19 @@ export default class System {
   constructor() {
     //this.blogs = this.makeExecConf(rawExecConfig);
     //this.tasks = new TasksMain(this);
+    const testWindowConfig: WindowConfig = {
+      currentPath: '/',
+      routes: [
+        {
+          path: 'test',
+          screen: new Screen(),
+          params: {},
+        },
+
+      ]
+    }
+
+    this.window = new Window(testWindowConfig)
     this.webServer = new ApiWebServer(this)
     this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
     //this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
@@ -41,6 +56,7 @@ export default class System {
       //await this.packageManager.init()
       await this.webServer.init()
       //await this.tasks.init()
+      await this.window.init()
     })()
       .catch((e) => {
         this.consoleLog.error(e)
