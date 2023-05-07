@@ -2,6 +2,7 @@ import {ConsoleLogger} from 'squidlet-lib';
 import System from '../System.js';
 import ru from '../I18n/ru.js';
 import {Window} from '../AbstractUi/Window.js';
+import AppConfig from '../types/AppConfig.js';
 
 
 export class PackageContext {
@@ -11,6 +12,11 @@ export class PackageContext {
   // get channelLog(): ChannelLogger {
   //   return this.app.channelLog
   // }
+
+  // TODO: поидее не особо нужно
+  get config(): AppConfig {
+    return this.system.appConfig
+  }
 
   get window(): Window {
     return this.system.window
