@@ -1,12 +1,16 @@
 import BreadCrumbs from './BreadCrumbs.js';
 import {Window} from './Window.js';
 import {Route} from './interfaces/Route.js';
+import {Screen} from './Screen.js';
 
 
 export class Router {
+  breadCrumbs = new BreadCrumbs()
+
   private window: Window
-  private breadCrumbs = new BreadCrumbs()
   private routes: Route[] = []
+  private currentScreenInstance?: Screen
+  private currentRoute?: Route
 
 
   constructor(window: Window, routes: Route[]) {
@@ -15,7 +19,7 @@ export class Router {
   }
 
   init() {
-
+    this.breadCrumbs.pathChangeEvent.addListener(this.onPathChanged)
   }
 
   async destroy() {
@@ -32,18 +36,38 @@ export class Router {
       // TODO: to screen 404
     }
 
+    this.currentRoute = route
+
     // TODO: при извлечении параметров очистить путь
     const clearPath = pathTo
     // TODO: можно извлечь параметры из пути и передать их в breadcrumbs
     const pathParams = {}
 
     this.breadCrumbs.toPath(pathTo, pathParams)
-
-    // TODO: нужно найти соответствующий путь
-    // TODO: нужно закрыть предыдущий экран - выполнить у него destroy
-    // TODO: инициализировать новый экран
   }
 
+
+  private onPathChanged = () => {
+    (async () => {
+      if (this.currentScreenInstance) {
+        await this.currentScreenInstance.destroy()
+      }
+
+      if (!this.currentRoute) {
+        throw new Error(`No route`)
+      }
+
+      // TODO: что ещё ему передать??
+      this.currentScreenInstance = new Screen(this.window)
+
+      await this.currentScreenInstance.init()
+    })()
+      .catch((e) => {
+        throw e
+
+        // TODO: что делать с ошибкой??
+      })
+  }
 
   private resolveRouteByPath(pathTo: string): Route | undefined {
     return this.routes.find((el) => {

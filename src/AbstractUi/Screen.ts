@@ -14,6 +14,9 @@ export class Screen {
     this.window = window
   }
 
+  async init() {
+
+  }
 
   async destroy() {
     await this.document.destroy()
