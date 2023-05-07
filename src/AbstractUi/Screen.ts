@@ -1,11 +1,11 @@
 import {Document} from './Document.js';
 import {Window} from './Window.js';
-import {State} from './State.js';
+import {UiState} from './UiState.js';
 
 
 export class Screen {
   readonly document = new Document()
-  readonly state = new State()
+  readonly state = new UiState()
 
   private readonly window: Window
 

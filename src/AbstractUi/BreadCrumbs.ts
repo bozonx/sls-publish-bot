@@ -1,4 +1,5 @@
 import {IndexedEvents} from 'squidlet-lib'
+import {UiState} from './UiState.js';
 
 
 export const BREADCRUMBS_DELIMITER = '/'
@@ -8,7 +9,7 @@ export const BREADCRUMBS_ROOT = '!'
 export interface DynamicBreadCrumbsStep {
   // Name of the step. It is part of path
   name: string
-  state: Record<string, any>
+  state: UiState
 }
 
 export default class BreadCrumbs {
@@ -22,6 +23,7 @@ export default class BreadCrumbs {
 
   destroy() {
     // TODO: add
+    // TODO: destroy states
   }
 
 
@@ -55,7 +57,7 @@ export default class BreadCrumbs {
 
     this.steps.push({
       name,
-      state: initialState,
+      state: new UiState(initialState),
     })
 
     this.currentStepId = stepId
@@ -83,7 +85,7 @@ export default class BreadCrumbs {
     for (const name of pathNames) {
       this.steps.push({
         name,
-        state: {},
+        state: new UiState(),
       })
     }
 
