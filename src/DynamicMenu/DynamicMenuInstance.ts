@@ -1,4 +1,4 @@
-import {IndexedEvents} from 'squidlet-lib';
+import {IndexedEvents, makeUniqId} from 'squidlet-lib';
 import {DynamicMenuMain} from './DynamicMenuMain.js';
 import {DynamicMenuButton, DynamicMenuButtonState} from './interfaces/DynamicMenuButton.js';
 import DynamicBreadCrumbs, {BREADCRUMBS_ROOT} from './DynamicBreadCrumbs.js';
@@ -87,15 +87,23 @@ export class DynamicMenuInstance<InstanceContext = Record<any, any>> {
    * @param item
    * @param after - name of element to render after it
    */
-  addItem(item: DynamicMenuButton, after?: string) {
-    this.currentMenu.push(item)
+  addItem(item: Omit<DynamicMenuButton, 'uid'>, after?: string) {
+    this.currentMenu.push({
+      ...item,
+      // TODO: Use constatne
+      uid: makeUniqId(8),
+    })
 
     // TODO: sort - put it after specified item
 
   }
 
-  addItemBefore(item: DynamicMenuButton, before: string) {
-    this.currentMenu.push(item)
+  addItemBefore(item: Omit<DynamicMenuButton, 'uid'>, before: string) {
+    this.currentMenu.push({
+      ...item,
+      // TODO: Use constatne
+      uid: makeUniqId(8),
+    })
 
     // TODO: sort - put it before specified item
   }
