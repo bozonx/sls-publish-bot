@@ -1,7 +1,7 @@
 import {ConsoleLogger} from 'squidlet-lib';
 import App from '../App.js';
 import ChannelLogger from '../helpers/ChannelLogger.js';
-import {MenuChangeHandler} from '../menuManager/MenuManager.js';
+import {MenuChangeHandler} from '../../_useless/menuManager/MenuManager.js';
 import ru from '../I18n/ru.js';
 import TasksMain from '../taskManager/TasksMain.js';
 

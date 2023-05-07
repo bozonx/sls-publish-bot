@@ -1,8 +1,8 @@
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import TgChat from './TgChat.js';
-import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
+import {MenuItem, MenuItemContext} from '../../_useless/MenuItem.js';
 import {ChatEvents} from '../types/constants.js';
-import {MenuStep, SpecificMenuBase} from '../menuManager/SpecificMenuBase.js';
+import {MenuStep, SpecificMenuBase} from '../../_useless/menuManager/SpecificMenuBase.js';
 
 
 const CB_DELIMITER = '|'

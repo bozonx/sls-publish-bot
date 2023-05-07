@@ -1,7 +1,7 @@
 import {PackageIndex} from '../../types/types.js'
 import {PackageContext} from '../../packageManager/PackageContext.js';
-import {MenuItem, MenuItemContext} from '../../types/MenuItem.js';
-import {MenuDefinition} from '../../menuManager/MenuManager.js';
+import {MenuItem, MenuItemContext} from '../../../_useless/MenuItem.js';
+import {MenuDefinition} from '../../../_useless/menuManager/MenuManager.js';
 
 
 const telegramPost: PackageIndex = (ctx: PackageContext) => {

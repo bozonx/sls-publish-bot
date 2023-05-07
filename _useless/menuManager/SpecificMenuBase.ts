@@ -1,6 +1,6 @@
-import {MenuDefinition} from './MenuManager.js';
-import {MenuItem, MenuItemContext} from '../types/MenuItem.js';
-import BreadCrumbs from '../helpers/BreadCrumbs.js';
+import {MenuDefinition} from './MenuManager';
+import {MenuItem, MenuItemContext} from '../../src/types/MenuItem';
+import BreadCrumbs from '../../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/BreadCrumbs';
 
 
 export interface MenuStep extends MenuDefinition {

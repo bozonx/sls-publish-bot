@@ -1,6 +1,6 @@
 import {IndexedEventEmitter} from 'squidlet-lib';
 import App from '../App.js';
-import BreadCrumbs from '../helpers/BreadCrumbs.js';
+import BreadCrumbs from '../../_useless/BreadCrumbs.js';
 import {ChatEvents} from '../types/constants.js';
 import {TgReplyButton} from '../types/TgReplyButton.js';
 import BaseState from '../types/BaseState.js';
@@ -13,8 +13,8 @@ import {
   VideoMessageEvent
 } from '../types/MessageEvent.js';
 import {TelegramMenuRenderer} from './TelegramMenuRenderer.js';
-import {MenuItem} from '../types/MenuItem.js';
-import {MenuDefinition} from '../menuManager/MenuManager.js';
+import {MenuItem} from '../../_useless/MenuItem.js';
+import {MenuDefinition} from '../../_useless/menuManager/MenuManager.js';
 import moment from 'moment/moment.js';
 import ru from '../I18n/ru.js';
 

@@ -1,6 +1,6 @@
 import {isPromise, compactUndefined} from 'squidlet-lib';
-import {MenuItem} from '../types/MenuItem.js';
-import App from '../App.js';
+import {MenuItem} from '../../src/types/MenuItem';
+import App from '../../src/App';
 
 
 export interface MenuDefinition {

@@ -12,7 +12,7 @@ import BloggerComMain from './apiBloggerCom/BloggerComMain.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
-import {MenuManager} from './menuManager/MenuManager.js';
+import {MenuManager} from '../_useless/menuManager/MenuManager.js';
 import {TelegramMenuRenderer} from './apiTg/TelegramMenuRenderer.js';
 
 

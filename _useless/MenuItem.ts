@@ -1,4 +1,4 @@
-import {MenuDefinition} from '../menuManager/MenuManager.js';
+import {MenuDefinition} from '../../../../../../mnt/disk2/workspace/sls-publish-bot/_useless/menuManager/MenuManager';
 
 export interface MenuView {
   name: string,
