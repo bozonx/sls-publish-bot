@@ -22,7 +22,8 @@ export default class System {
   public readonly webServer: ApiWebServer
   //public readonly tasks: TasksMain;
   //public readonly channelLog: ChannelLogger;
-  public readonly consoleLog: ConsoleLogger;
+  // it is system log - usually print to console or external logger
+  public readonly log: ConsoleLogger;
   public readonly i18n = ru;
 
   private readonly packageManager: PackageManager
@@ -35,7 +36,7 @@ export default class System {
     //this.tasks = new TasksMain(this);
 
     this.webServer = new ApiWebServer(this)
-    this.consoleLog = new ConsoleLogger(this.appConfig.consoleLogLevel);
+    this.log = new ConsoleLogger(this.appConfig.consoleLogLevel);
     //this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
     this.packageManager = new PackageManager(this)
   }

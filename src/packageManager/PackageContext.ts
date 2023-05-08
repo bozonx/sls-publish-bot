@@ -19,8 +19,8 @@ export class PackageContext {
     return this.system.appConfig
   }
 
-  get consoleLog(): ConsoleLogger {
-    return this.system.consoleLog
+  get log(): ConsoleLogger {
+    return this.system.log
   }
 
   get i18n(): typeof ru {
@@ -46,7 +46,7 @@ export class PackageContext {
   }
 
   onInit(cb: () => Promise<void>, after?: string[]) {
-    this.system.onInit(cb, before)
+    this.system.onInit(cb, after)
   }
 
   onDestroy(cb: () => Promise<void>, before?: string[]) {
