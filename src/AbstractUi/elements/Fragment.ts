@@ -1,6 +1,5 @@
 import {AnyElement} from '../interfaces/AnyElement.js';
-import {ElementBase} from '../interfaces/ElementBase.js';
-import {ElementInitial} from '../interfaces/types.js';
+import {ELEMENT_DEFAULTS, ElementBase, ElementInitial} from '../interfaces/ElementBase.js';
 
 
 export const FRAGMENT_TYPE = 'Fragment'
@@ -13,7 +12,7 @@ export interface Fragment extends ElementBase {
 export function fragment(params: ElementInitial<Fragment>): Fragment {
   return {
     type: FRAGMENT_TYPE,
+    ...ELEMENT_DEFAULTS,
     ...params,
-    attached: false,
   }
 }
