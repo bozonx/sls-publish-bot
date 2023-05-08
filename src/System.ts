@@ -6,8 +6,8 @@ import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
 import {Window} from './AbstractUi/Window.js';
-import {Screen} from './AbstractUi/Screen.js';
 import {WindowConfig} from './AbstractUi/interfaces/WindowConfig.js';
+import {Route} from './AbstractUi/interfaces/Route.js';
 
 
 export default class System {
@@ -26,6 +26,7 @@ export default class System {
   public readonly i18n = ru;
 
   private readonly packageManager: PackageManager
+  private routes: Route[] = []
 
 
   constructor() {
@@ -71,20 +72,17 @@ export default class System {
     pkg(this.packageManager.ctx)
   }
 
-  newWindow(): Window {
-    const testWindowConfig: WindowConfig = {
-      currentPath: '/',
-      routes: [
-        {
-          path: 'test',
-          screen: new Screen(),
-          params: {},
-        },
+  registerRoute(route: Route) {
+    this.routes.push(route)
+  }
 
-      ]
+  newWindow(): Window {
+    const windowConfig: WindowConfig = {
+      currentPath: '/',
+      routes: this.routes
     }
 
-    return new Window(testWindowConfig)
+    return new Window(windowConfig)
   }
 
 }

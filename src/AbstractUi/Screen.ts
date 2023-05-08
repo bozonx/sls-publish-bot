@@ -11,7 +11,7 @@ export class Screen {
   private readonly window!: Window
 
 
-  constructor(definition: ScreenDefinition) {
+  constructor(definition: () => ScreenDefinition) {
     // TODO: use definition
   }
 

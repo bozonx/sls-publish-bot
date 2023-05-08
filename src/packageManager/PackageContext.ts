@@ -42,7 +42,7 @@ export class PackageContext {
   }
 
   registerRoute(route: Route) {
-    // TODO: !!!!
+    this.system.registerRoute(route)
   }
 
 }
