@@ -7,15 +7,19 @@ import {button} from '../../AbstractUi/elements/Button.js';
 
 const publisher: PackageIndex = (ctx: PackageContext) => {
   const screen = new Screen({
-    template: fragment([
-      button({
-        name: 'publisher',
-        text: 'Publisher btn',
-        onClick() {
+    template: fragment({
+      name: 'screenRoot',
+      children: [
+        button({
+          name: 'publisher',
+          text: 'Publisher btn',
+          onClick() {
 
-        },
-      }),
-    ])
+          },
+          //disabled: false,
+        }),
+      ]
+    })
   })
 
 
