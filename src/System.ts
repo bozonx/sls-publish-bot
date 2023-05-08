@@ -27,6 +27,7 @@ export default class System {
 
   private readonly packageManager: PackageManager
   private routes: Route[] = []
+  private initQueue: {cb: () => Promise<void>, after?: string[]}[] = []
 
 
   constructor() {
@@ -45,6 +46,12 @@ export default class System {
       //await this.packageManager.init()
       await this.webServer.init()
       //await this.tasks.init()
+
+      for (const item of this.initQueue) {
+        // TODO: handle error
+        await item.cb()
+        // TODO: use after
+      }
     })()
       .catch((e) => {
         this.consoleLog.error(e)
@@ -83,6 +90,13 @@ export default class System {
     }
 
     return new Window(windowConfig)
+  }
+
+  onInit(cb: () => Promise<void>, after?: string[]) {
+    this.initQueue.push({
+      cb,
+      after
+    })
   }
 
 }

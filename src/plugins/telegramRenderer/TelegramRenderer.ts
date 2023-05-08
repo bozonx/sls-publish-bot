@@ -21,9 +21,14 @@ export class TelegramRenderer {
         testEnv: !this.ctx.config.isProduction,
       }
     })
+
+    this.ctx.onInit(async () => {
+      await this.init()
+    })
   }
 
 
+  // TODO: где будет запущено ???
   init() {
     this.bot.start((ctx: Context) => {
       if (!ctx.chat?.id) throw new Error(`No chat id`);

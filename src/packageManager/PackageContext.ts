@@ -45,4 +45,8 @@ export class PackageContext {
     this.system.registerRoute(route)
   }
 
+  onInit(cb: () => Promise<void>, after?: string[]) {
+
+  }
+
 }
