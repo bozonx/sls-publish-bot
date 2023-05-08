@@ -28,7 +28,6 @@ export class TelegramRenderer {
   }
 
 
-  // TODO: где будет запущено ???
   init() {
     this.bot.start((ctx: Context) => {
       if (!ctx.chat?.id) throw new Error(`No chat id`);

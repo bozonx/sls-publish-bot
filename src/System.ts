@@ -99,4 +99,8 @@ export default class System {
     })
   }
 
+  onDestroy(cb: () => Promise<void>, before?: string[]) {
+    // TODO: to do
+  }
+
 }

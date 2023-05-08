@@ -46,7 +46,11 @@ export class PackageContext {
   }
 
   onInit(cb: () => Promise<void>, after?: string[]) {
+    this.system.onInit(cb, before)
+  }
 
+  onDestroy(cb: () => Promise<void>, before?: string[]) {
+    this.system.onDestroy(cb, before)
   }
 
 }
