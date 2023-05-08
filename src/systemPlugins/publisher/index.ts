@@ -1,10 +1,15 @@
 import {PackageIndex} from '../../types/types.js';
 import {PackageContext} from '../../packageManager/PackageContext.js';
 import {Screen} from '../../AbstractUi/Screen.js';
+import {fragment} from '../../AbstractUi/interfaces/elements/Fragment.js';
 
 
 const publisher: PackageIndex = (ctx: PackageContext) => {
-  const screen = new Screen()
+  const screen = new Screen({
+    template: fragment([
+
+    ])
+  })
 
 
   ctx.registerRoute({
