@@ -28,6 +28,7 @@ import {Container} from './elements/Container.js';
 import {Component} from './Component.js';
 import {Text} from './elements/Text.js';
 import {ButtonGroup} from './elements/ButtonGroup.js';
+import {Fragment} from './elements/Fragment.js';
 
 
 export type AnyElement = AudioInput
@@ -42,6 +43,7 @@ export type AnyElement = AudioInput
   | ExternalLink
   | FileInput
   | Form
+  | Fragment
   | GalleryInput
   | ImageInput
   | Link

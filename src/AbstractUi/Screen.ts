@@ -1,6 +1,7 @@
 import {Document} from './Document.js';
 import {Window} from './Window.js';
 import {UiState} from './UiState.js';
+import {ScreenDefinition} from './interfaces/ScreenDefinition.js';
 
 
 export class Screen {
@@ -10,7 +11,7 @@ export class Screen {
   private readonly window!: Window
 
 
-  constructor() {
+  constructor(definition: ScreenDefinition) {
   }
 
   async init(window: Window) {

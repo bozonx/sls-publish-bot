@@ -3,6 +3,7 @@ import System from '../System.js';
 import ru from '../I18n/ru.js';
 import {Window} from '../AbstractUi/Window.js';
 import AppConfig from '../types/AppConfig.js';
+import {Route} from '../AbstractUi/interfaces/Route.js';
 
 
 export class PackageContext {
@@ -38,6 +39,10 @@ export class PackageContext {
 
   newWindow(): Window {
     return this.system.newWindow()
+  }
+
+  registerRoute(route: Route) {
+
   }
 
 }
