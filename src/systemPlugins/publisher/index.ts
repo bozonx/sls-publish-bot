@@ -1,7 +1,7 @@
 import {PackageIndex} from '../../types/types.js';
 import {PackageContext} from '../../packageManager/PackageContext.js';
 import {Screen} from '../../AbstractUi/Screen.js';
-import {fragment} from '../../AbstractUi/interfaces/elements/Fragment.js';
+import {fragment} from '../../AbstractUi/elements/Fragment.js';
 
 
 const publisher: PackageIndex = (ctx: PackageContext) => {

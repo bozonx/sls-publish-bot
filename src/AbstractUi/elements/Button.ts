@@ -1,4 +1,4 @@
-import {ElementBase} from '../ElementBase.js';
+import {ElementBase} from '../interfaces/ElementBase.js';
 
 
 export interface Button extends ElementBase {

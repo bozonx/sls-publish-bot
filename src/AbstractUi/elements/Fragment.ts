@@ -1,4 +1,4 @@
-import {AnyElement} from '../AnyElement.js';
+import {AnyElement} from '../interfaces/AnyElement.js';
 
 
 export interface Fragment {

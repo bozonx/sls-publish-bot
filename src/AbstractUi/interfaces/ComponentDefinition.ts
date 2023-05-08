@@ -1,4 +1,4 @@
-import {Fragment} from './elements/Fragment.js';
+import {Fragment} from '../elements/Fragment.js';
 
 
 export interface ComponentDefinition {
