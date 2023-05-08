@@ -12,6 +12,7 @@ export class Screen {
 
 
   constructor(definition: ScreenDefinition) {
+    // TODO: use definition
   }
 
   async init(window: Window) {
