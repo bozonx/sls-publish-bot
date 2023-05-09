@@ -16,18 +16,13 @@ import {UserManager} from './userManager/UserManager.js';
 export default class System {
   //public readonly events = new IndexedEventEmitter()
   readonly appConfig: AppConfig = appConfig;
-
-  readonly webServer: ApiWebServer
-  readonly tasks: TasksMain;
+  readonly webServer = new ApiWebServer(this)
   // it is system log - usually print to console or external logger
   readonly log: ConsoleLogger;
   readonly i18n = ru
   readonly userManager = new UserManager(this)
-  readonly uiManager = new UiManager(this)
-  // to collect routes from packages after start and before init
-  routes: Route[] = []
 
-  private readonly packageManager: PackageManager
+  private readonly packageManager = new PackageManager(this)
 
   // TODO: сделать это через отдельный класс, который будет сортировать ф-и инициализации
   // the queue of packages to init
@@ -37,22 +32,14 @@ export default class System {
 
 
   constructor() {
-    this.tasks = new TasksMain(this)
-    this.webServer = new ApiWebServer(this)
-    this.log = new ConsoleLogger(this.appConfig.consoleLogLevel);
-    this.packageManager = new PackageManager(this)
-
-    this.routes.push({
-      path: '/',
-      screen: new Screen(homeScreenDefinition)
-    })
+    this.log = new ConsoleLogger(this.appConfig.consoleLogLevel)
   }
 
 
   init() {
     (async () => {
       await this.webServer.init()
-      await this.tasks.init()
+      await this.userManager.init()
 
       for (const item of this.initQueue) {
         // TODO: handle error
@@ -79,7 +66,6 @@ export default class System {
       //await this.channelLog.info(`Bot is shutting down`);
 
       await this.userManager.destroy()
-      await this.tasks.destroy();
       await this.webServer.destroy()
       await this.packageManager.destroy()
     })()

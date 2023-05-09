@@ -4,6 +4,8 @@ import System from '../System.js';
 import {PackageIndex} from '../types/types.js';
 
 
+// TODO: только регистрация пакетов, а инициализация будет на каждого юзера своя
+
 export class PackageManager {
   private readonly app
   readonly ctx

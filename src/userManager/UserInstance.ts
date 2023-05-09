@@ -1,15 +1,44 @@
 import {UserManager} from './UserManager.js';
+import TasksMain from '../taskManager/TasksMain.js';
+import {UiManager} from '../uiManager/UiManager.js';
+import {Route} from '../AbstractUi/interfaces/Route.js';
+import {Screen} from '../AbstractUi/Screen.js';
+import {homeScreenDefinition} from '../uiManager/homeScreenDefinition.js';
+
 
 export class UserInstance {
   userManager: UserManager
+  readonly tasks: TasksMain;
+  readonly uiManager = new UiManager(this)
+  // to collect routes from packages after start and before init
+  routes: Route[] = []
+  // TODO: сделать это через отдельный класс, который будет сортировать ф-и инициализации
+  // the queue of packages to init
+  private initQueue: {cb: () => Promise<void>, after?: string[]}[] = []
+  // the queue of packages to destroy
+  private destroyQueue: {cb: () => Promise<void>, before?: string[]}[] = []
 
+  // TODO: у юзера могут быть свои пакеты
+  // TODO: у юзера могут быть свои роуты
 
   constructor(userManager: UserManager) {
     this.userManager = userManager
+    this.tasks = new TasksMain(this)
+
+    // TODO: это перенести в юзера, так как будет перевод на язык юзера
+    this.routes.push({
+      path: '/',
+      screen: new Screen(homeScreenDefinition)
+    })
+  }
+
+  async init() {
+    await this.tasks.init()
+
   }
 
   async destroy() {
-
+    await this.tasks.destroy();
   }
 
 }

@@ -11,6 +11,12 @@ export class UserManager {
     this.system = system
   }
 
+  async init() {
+    for (const userId of Object.keys(this.users)) {
+      await this.users[userId].init()
+    }
+  }
+
   async destroy() {
     for (const userId of Object.keys(this.users)) {
       await this.users[userId].destroy()
