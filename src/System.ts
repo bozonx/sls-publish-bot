@@ -90,16 +90,6 @@ export default class System {
     this.routes.push(route)
   }
 
-  // TODO: новый UI инстанс
-  newUi(): Window {
-    const windowConfig: WindowConfig = {
-      currentPath: '/',
-      routes: this.routes
-    }
-
-    return new Window(windowConfig)
-  }
-
   onSystemInit(cb: () => Promise<void>, after?: string[]) {
     this.initQueue.push({
       cb,

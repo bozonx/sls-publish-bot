@@ -1,7 +1,7 @@
 import {Logger} from 'squidlet-lib';
 
 
-export class UiInstance {
+export class UiMain {
   //public readonly channelLog: ChannelLogger;
 
   //this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);

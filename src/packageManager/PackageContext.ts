@@ -1,9 +1,9 @@
 import {ConsoleLogger} from 'squidlet-lib';
 import System from '../System.js';
 import ru from '../I18n/ru.js';
-import {Window} from '../AbstractUi/Window.js';
 import AppConfig from '../types/AppConfig.js';
 import {Route} from '../AbstractUi/interfaces/Route.js';
+import {UiMain} from '../uiManager/UiMain.js';
 
 
 export class PackageContext {
@@ -33,8 +33,8 @@ export class PackageContext {
   }
 
 
-  newUi(): Window {
-    return this.system.newUi()
+  newUi(): UiMain {
+    return this.system.uiManager.newUi()
   }
 
   registerRoute(route: Route) {
