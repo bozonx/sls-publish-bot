@@ -7,7 +7,8 @@ import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
 import {Route} from './AbstractUi/interfaces/Route.js';
 import {UiManager} from './uiManager/UiManager.js';
-import {HomeScreen} from './uiManager/HomeScreen.js';
+import {Screen} from './AbstractUi/Screen.js';
+import {homeScreenDefinition} from './uiManager/homeScreenDefinition.js';
 
 
 export default class System {
@@ -41,7 +42,7 @@ export default class System {
 
     this.routes.push({
       path: '/',
-      screen: HomeScreen
+      screen: new Screen(homeScreenDefinition)
     })
   }
 
