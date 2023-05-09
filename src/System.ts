@@ -10,6 +10,7 @@ import {UiManager} from './uiManager/UiManager.js';
 import {Screen} from './AbstractUi/Screen.js';
 import {homeScreenDefinition} from './uiManager/homeScreenDefinition.js';
 import TasksMain from './taskManager/TasksMain.js';
+import {UserManager} from './userManager/UserManager.js';
 
 
 export default class System {
@@ -20,7 +21,8 @@ export default class System {
   readonly tasks: TasksMain;
   // it is system log - usually print to console or external logger
   readonly log: ConsoleLogger;
-  readonly i18n = ru;
+  readonly i18n = ru
+  readonly userManager = new UserManager(this)
   readonly uiManager = new UiManager(this)
   // to collect routes from packages after start and before init
   routes: Route[] = []
@@ -76,6 +78,7 @@ export default class System {
       }
       //await this.channelLog.info(`Bot is shutting down`);
 
+      await this.userManager.destroy()
       await this.tasks.destroy();
       await this.webServer.destroy()
       await this.packageManager.destroy()

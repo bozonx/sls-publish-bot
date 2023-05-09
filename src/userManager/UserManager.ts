@@ -4,7 +4,7 @@ import {UserInstance} from './UserInstance.js';
 
 export class UserManager {
   private system: System
-  private users: Record<string, UserInstance>
+  private users: Record<string, UserInstance> = {}
 
 
   constructor(system: System) {
