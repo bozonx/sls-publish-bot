@@ -7,6 +7,7 @@ import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
 import {Route} from './AbstractUi/interfaces/Route.js';
 import {UiManager} from './uiManager/UiManager.js';
+import {HomeScreen} from './uiManager/HomeScreen.js';
 
 
 export default class System {
@@ -37,6 +38,11 @@ export default class System {
     this.webServer = new ApiWebServer(this)
     this.log = new ConsoleLogger(this.appConfig.consoleLogLevel);
     this.packageManager = new PackageManager(this)
+
+    this.routes.push({
+      path: '/',
+      screen: HomeScreen
+    })
   }
 
 

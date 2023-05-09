@@ -2,7 +2,7 @@ import {calcAllowedLogLevels, LOG_LEVELS, AsyncLogger, LogLevel} from 'squidlet-
 import {UiMain} from './UiMain.js';
 
 
-export default class Notify implements AsyncLogger {
+export class Notify implements AsyncLogger {
   private readonly uiMain: UiMain;
   private readonly allowDebug: boolean
   private readonly allowInfo: boolean

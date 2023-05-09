@@ -16,7 +16,7 @@ export class Screen {
   }
 
   async init(window: Window) {
-    this.window = window
+    //this.window = window
     await this.document.init()
 
     // TODO: должен поднять событие что его надо отрендерить
