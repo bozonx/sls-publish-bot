@@ -64,10 +64,10 @@ export class TgBot {
         return;
       }
 
-      const eventName = this.main.config.testBotToken
-        + EVENT_DELIMITER + TG_BOT_EVENT.callbackQuery
+      const eventName = this.main.config.testBotToken + EVENT_DELIMITER + ctx.chat.id + EVENT_DELIMITER
+        + TG_BOT_EVENT.callbackQuery
 
-      this.events.emit(eventName, ctx.chat.id, (ctx.update.callback_query as  any).data)
+      this.events.emit(eventName, (ctx.update.callback_query as  any).data)
     });
 
     // this.bot.on('message', (ctx) => {
@@ -201,8 +201,9 @@ export class TgBot {
     return this.events.addListener(eventName, handler)
   }
 
-  onCallbackQuery(botToken: string, handler: (chatId: number, queryData: string) => void): number {
-    const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.callbackQuery
+  onCallbackQuery(botToken: string, chatId: number, handler: (queryData: string) => void): number {
+    const eventName = botToken + EVENT_DELIMITER + chatId + EVENT_DELIMITER
+      + TG_BOT_EVENT.callbackQuery
 
     return this.events.addListener(eventName, handler)
   }

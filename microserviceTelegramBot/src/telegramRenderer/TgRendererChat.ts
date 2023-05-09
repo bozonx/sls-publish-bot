@@ -1,15 +1,13 @@
 import {Window} from '../../../src/AbstractUi/Window.js';
 import {TelegramRenderer} from './TelegramRenderer.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../../src/types/MessageEvent.js';
-import {UI_EVENTS} from '../../../src/AbstractUi/interfaces/UiEvents.js';
 import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
 
 
 export class TgRendererChat {
   // chat id where was start function called
-  readonly botChatId: number | string
-
-  private botToken: string
+  private readonly botChatId: number
+  private readonly botToken: string
   private window!: Window
   private renderer: TelegramRenderer
   private menuMsgId?: number
@@ -39,17 +37,14 @@ export class TgRendererChat {
 
 
   startListeners() {
-    this.renderer.main.tg.onCallbackQuery(this.botToken, (chatId: number, queryData: string) => {
-
-      // TODO: лучше то вешать сразу на chatId
-
+    this.renderer.main.tg.onCallbackQuery(this.botToken, this.botChatId, (queryData: string) => {
       if (!queryData) {
-        this.renderer.main.log.warn('Empty data came to handleCallbackQueryEvent')
+        this.renderer.main.log.warn('Empty data came ad callback query')
 
         return
       }
 
-      this.window.handleUiEvent(UI_EVENTS.click, queryData)
+      //this.window.handleUiEvent(UI_EVENTS.click, queryData)
     });
   }
 
