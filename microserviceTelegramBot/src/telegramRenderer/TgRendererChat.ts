@@ -29,6 +29,8 @@ export class TgRendererChat {
     this.window.onDomChanged(() => this.render())
 
     await this.window.init()
+
+    this.startListeners()
   }
   
   async destroy() {
@@ -36,19 +38,21 @@ export class TgRendererChat {
   }
 
 
-  handleCallbackQueryEvent(queryData: any) {
-    if (!queryData) {
-      this.renderer.main.log.warn('Empty data came to handleCallbackQueryEvent')
+  startListeners() {
+    this.renderer.main.tg.onCallbackQuery(this.botToken, (chatId: number | string, queryData: string) => {
+      if (!queryData) {
+        this.renderer.main.log.warn('Empty data came to handleCallbackQueryEvent')
 
-      return
-    }
+        return
+      }
 
-    this.window.handleUiEvent(UI_EVENTS.click, queryData)
+      this.window.handleUiEvent(UI_EVENTS.click, queryData)
+    });
   }
 
   handleIncomeTextEvent(msgEvent: TextMessageEvent) {
     // TODO: нужно отправить это в элемент в фокусе
-    this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
+    //this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
   }
 
   handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {

@@ -8,9 +8,9 @@ import {TgBotConfig} from './types/TgBotConfig.js';
 export class Main {
   readonly config: TgBotConfig
   readonly tg: TgBot
-  renderer: TelegramRenderer
-  log: ConsoleLogger
-  uiFilesManager: UiFilesManager = new UiFilesManager(this)
+  readonly renderer: TelegramRenderer
+  readonly log: ConsoleLogger
+  readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
 
 
   constructor(config: TgBotConfig) {
@@ -22,5 +22,14 @@ export class Main {
   }
 
 
+  async init() {
+    await this.tg.init()
+    await this.renderer.init()
+  }
+
+  async destroy() {
+    await this.renderer.destroy()
+    await this.tg.destroy('App stops')
+  }
 
 }
