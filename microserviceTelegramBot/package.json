@@ -1,0 +1,28 @@
+{
+  "name": "microservice-telegram-bot",
+  "version": "0.0.1",
+  "description": "It talks to user using AbstractUi",
+  "exports": "./src/index.js",
+  "type": "module",
+  "repository": "https://github.com/bozonx/sls-publish-bot.git",
+  "author": "Kozyrin Ivan <ipkozyrin@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "ts-node-esm ./src/index.ts",
+    "prod": "yarn ts-node --esm ./src/index.ts",
+    "container": "yarn install --prod && yarn prod"
+  },
+  "dependencies": {
+    "@types/node": "^20.1.1",
+    "better-telegraph": "^2.1.1",
+    "squidlet-lib": "^0.1.3",
+    "telegraf": "^4.12.2",
+    "telegraf-entity": "^1.1.0",
+    "telegram-format": "^2.1.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
