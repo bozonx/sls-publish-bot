@@ -41,11 +41,11 @@ export class TgBot {
       this.events.emit(TG_BOT_EVENT.cmdStart, this.main.config.testBotToken, ctx.chat.id)
     });
 
-    this.addListeners();
+    //this.addListeners();
 
     this.bot.launch()
       .then(() => {
-        const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
+        const eventName = this.main.config.testBotToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
 
         this.events.emit(eventName)
 

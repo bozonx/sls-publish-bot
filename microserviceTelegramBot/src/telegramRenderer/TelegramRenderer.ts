@@ -14,14 +14,13 @@ export class TelegramRenderer {
 
 
   async init() {
-
     this.main.tg.onCmdStart((botToken: string, chatId: number) => {
       if (!this.chats[chatId]) {
         this.chats[chatId] = new TgRendererChat(this, this.main.config.testBotToken, chatId)
       }
 
-      this.chats[ctx.chat.id].init()
-        .catch((e) => this.ctx.consoleLog.error(e));
+      this.chats[chatId].init()
+        .catch((e) => this.main.log.error(e));
     })
   }
   
@@ -32,6 +31,5 @@ export class TelegramRenderer {
       this.chats[itemIndex] = undefined;
     }
   }
-
 
 }
