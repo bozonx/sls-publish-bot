@@ -6,23 +6,26 @@ import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
 
 
 export class TgRendererChat {
-  window: Window
   // chat id where was start function called
   readonly botChatId: number | string
 
+  private botToken: string
+  private window!: Window
   private renderer: TelegramRenderer
   private menuMsgId?: number
 
 
-  constructor(chatId: number | string, renderer: TelegramRenderer) {
-    this.botChatId = chatId
+  constructor(botToken: string, botChatId: number | string, renderer: TelegramRenderer) {
+    this.botToken = botToken
+    this.botChatId = botChatId
     this.renderer = renderer
 
   }
 
 
   async init() {
-    const windowConfig = this.renderer.main.uiFilesManager.loadWindowConfig()
+    const windowConfig = this.renderer.main.uiFilesManager
+      .loadWindowConfig(this.botToken)
     this.window = new Window(windowConfig)
     this.window.onDomChanged(() => this.render())
 
