@@ -27,6 +27,9 @@ export class UiMain {
     this.window = new Window(windowConfig)
   }
 
+  async destroy() {
+    // TODO: add
+  }
 
 
   // TODO: add on UI init

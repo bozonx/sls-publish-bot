@@ -9,6 +9,12 @@ export class UiManager {
   // TODO: сделать это через отдельный класс, который будет сортировать ф-и инициализации
   private initQueue: {cb: () => Promise<void>, after?: string[]}[] = []
   private destroyQueue: {cb: () => Promise<void>, before?: string[]}[] = []
+  private uiInstances: UiMain[] = []
+
+
+  get uis(): UiMain[] {
+    return this.uiInstances
+  }
 
 
   constructor(system: System) {
@@ -31,13 +37,18 @@ export class UiManager {
       await item.cb()
       // TODO: use bedore
     }
+
+    for (const ui of this.uiInstances) {
+      await ui.destroy()
+    }
   }
 
   newUi(): UiMain {
+    const ui = new UiMain(this)
 
-    // TODO: сохранять их
+    this.uiInstances.push(ui)
 
-    return new UiMain(this)
+    return ui
   }
 
   /**
