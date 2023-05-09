@@ -1,5 +1,5 @@
-import {PackageIndex} from '../../types/types.js';
-import {PackageContext} from '../../packageManager/PackageContext.js';
+import {PackageIndex} from '../../../src/types/types.js';
+import {PackageContext} from '../../../src/packageManager/PackageContext.js';
 import {TelegramRenderer} from './TelegramRenderer.js';
 
 

@@ -2,8 +2,8 @@ import _ from 'lodash';
 import {Context, Telegraf} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
 import {TgRendererChat} from './TgRendererChat.js';
-import {PackageContext} from '../../packageManager/PackageContext.js';
-import MessageEventBase from '../../types/MessageEvent.js';
+import {PackageContext} from '../../../src/packageManager/PackageContext.js';
+import MessageEventBase from '../../../src/types/MessageEvent.js';
 
 
 export class TelegramRenderer {

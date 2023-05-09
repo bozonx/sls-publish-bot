@@ -1,7 +1,7 @@
-import {Window} from '../../AbstractUi/Window.js';
+import {Window} from '../../../src/AbstractUi/Window.js';
 import {TelegramRenderer} from './TelegramRenderer.js';
-import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
-import {UI_EVENTS} from '../../AbstractUi/interfaces/UiEvents.js';
+import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../../src/types/MessageEvent.js';
+import {UI_EVENTS} from '../../../src/AbstractUi/interfaces/UiEvents.js';
 import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
 
 

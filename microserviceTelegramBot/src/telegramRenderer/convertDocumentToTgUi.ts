@@ -1,5 +1,5 @@
-import {TgReplyButton} from '../../types/TgReplyButton.js';
-import {Document} from '../../AbstractUi/Document.js';
+import {TgReplyButton} from '../../../src/types/TgReplyButton.js';
+import {Document} from '../../../src/AbstractUi/Document.js';
 
 
 export function convertDocumentToTgUi(document: Document): [string, TgReplyButton[][]] {
