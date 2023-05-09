@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "ts-node-esm ./src/index.ts",
     "prod": "yarn ts-node --esm ./src/index.ts",
+    "build": "tsc",
     "container": "yarn install --prod && yarn prod"
   },
   "dependencies": {
