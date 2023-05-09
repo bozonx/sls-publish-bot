@@ -8,27 +8,34 @@ import {PackageIndex} from './types/types.js';
 import {Window} from './AbstractUi/Window.js';
 import {WindowConfig} from './AbstractUi/interfaces/WindowConfig.js';
 import {Route} from './AbstractUi/interfaces/Route.js';
+import {UiManager} from './uiManager/UiManager.js';
 
 
 export default class System {
   //public readonly events = new IndexedEventEmitter()
-  public readonly appConfig: AppConfig = appConfig;
+  readonly appConfig: AppConfig = appConfig;
 
   //public readonly blogs: BlogsConfig;
   // public readonly tg: TgMain;
   // public readonly telegraPh: TelegraPhMain;
   // public readonly bloggerCom: BloggerComMain;
   // public readonly notion: NotionApi;
-  public readonly webServer: ApiWebServer
+  readonly webServer: ApiWebServer
   //public readonly tasks: TasksMain;
-  //public readonly channelLog: ChannelLogger;
   // it is system log - usually print to console or external logger
-  public readonly log: ConsoleLogger;
-  public readonly i18n = ru;
+  readonly log: ConsoleLogger;
+  readonly i18n = ru;
+  readonly uiManager = new UiManager(this)
 
   private readonly packageManager: PackageManager
+
+  // to collect routes from packages after start and before init
   private routes: Route[] = []
+  // TODO: сделать это через отдельный класс, который будет сортировать ф-и инициализации
+  // the queue of packages to init
   private initQueue: {cb: () => Promise<void>, after?: string[]}[] = []
+  // the queue of packages to destroy
+  private destroyQueue: {cb: () => Promise<void>, before?: string[]}[] = []
 
 
   constructor() {
@@ -37,7 +44,6 @@ export default class System {
 
     this.webServer = new ApiWebServer(this)
     this.log = new ConsoleLogger(this.appConfig.consoleLogLevel);
-    //this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
     this.packageManager = new PackageManager(this)
   }
 
@@ -55,7 +61,7 @@ export default class System {
       }
     })()
       .catch((e) => {
-        this.consoleLog.error(e)
+        this.log.error(e)
 
         // TODO: нормально задестроить
 
@@ -72,7 +78,7 @@ export default class System {
       await this.packageManager.destroy()
     })()
       .catch((e) => {
-        this.consoleLog.error(e);
+        this.log.error(e);
       });
   }
 
@@ -84,7 +90,8 @@ export default class System {
     this.routes.push(route)
   }
 
-  newWindow(): Window {
+  // TODO: новый UI инстанс
+  newUi(): Window {
     const windowConfig: WindowConfig = {
       currentPath: '/',
       routes: this.routes
@@ -93,15 +100,18 @@ export default class System {
     return new Window(windowConfig)
   }
 
-  onInit(cb: () => Promise<void>, after?: string[]) {
+  onSystemInit(cb: () => Promise<void>, after?: string[]) {
     this.initQueue.push({
       cb,
       after
     })
   }
 
-  onDestroy(cb: () => Promise<void>, before?: string[]) {
-    // TODO: to do
+  onSystemDestroy(cb: () => Promise<void>, before?: string[]) {
+    this.destroyQueue.push({
+      cb,
+      before
+    })
   }
 
 }

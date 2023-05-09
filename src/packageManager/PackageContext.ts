@@ -10,10 +10,6 @@ export class PackageContext {
   private readonly system
 
 
-  // get channelLog(): ChannelLogger {
-  //   return this.app.channelLog
-  // }
-
   // TODO: поидее не особо нужно
   get config(): AppConfig {
     return this.system.appConfig
@@ -37,20 +33,28 @@ export class PackageContext {
   }
 
 
-  newWindow(): Window {
-    return this.system.newWindow()
+  newUi(): Window {
+    return this.system.newUi()
   }
 
   registerRoute(route: Route) {
     this.system.registerRoute(route)
   }
 
-  onInit(cb: () => Promise<void>, after?: string[]) {
-    this.system.onInit(cb, after)
+  onSystemInit(cb: () => Promise<void>, after?: string[]) {
+    this.system.onSystemInit(cb, after)
   }
 
-  onDestroy(cb: () => Promise<void>, before?: string[]) {
-    this.system.onDestroy(cb, before)
+  onSystemDestroy(cb: () => Promise<void>, before?: string[]) {
+    this.system.onSystemDestroy(cb, before)
+  }
+
+  onUiInit(cb: () => Promise<void>, after?: string[]) {
+    this.system.uiManager.onUiInit(cb, after)
+  }
+
+  onUiDestroy(cb: () => Promise<void>, before?: string[]) {
+    this.system.uiManager.onUiDestroy(cb, before)
   }
 
 }
