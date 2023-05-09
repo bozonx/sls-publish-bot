@@ -1,4 +1,4 @@
-import TelegramRenderer from './telegramRenderer/index.js';
+import {TelegramRenderer} from './telegramRenderer/TelegramRenderer.js';
 
 
 export class Main {

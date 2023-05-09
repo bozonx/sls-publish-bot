@@ -1,14 +1,14 @@
 import _ from 'lodash';
-import {Context, Telegraf} from 'telegraf';
+import {Context} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
 import {TgRendererChat} from './TgRendererChat.js';
-import {PackageContext} from '../../../src/packageManager/PackageContext.js';
 import MessageEventBase from '../../../src/types/MessageEvent.js';
 import {Main} from '../Main.js';
+import {TgBot} from '../TgBot.js';
 
 
 export class TelegramRenderer {
-  readonly bot: Telegraf;
+  readonly tg: TgBot
   readonly main: Main
   // chats where users talk to bot
   private readonly chats: Record<string, TgRendererChat> = {}
@@ -16,12 +16,7 @@ export class TelegramRenderer {
 
   constructor(main: Main) {
     this.main = main
-    // TODO: токен брать как-то по другому, ведь юзер сам может задать своего бота
-    this.bot = new Telegraf(this.ctx.config.botToken, {
-      telegram: {
-        testEnv: !this.ctx.config.isProduction,
-      }
-    })
+
 
     this.ctx.onInit(async () => {
       await this.init()

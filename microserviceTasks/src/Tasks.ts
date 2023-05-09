@@ -9,7 +9,6 @@ import ExecuteTask from './ExecuteTask.js';
 import {makeTaskDetails} from './makeTaskDetails.js';
 import {validateTask} from './validateTask.js';
 
-// TODO: сделать из этого внешний интерфейс микросервиск Tasks
 
 const STATE_TASKS_FILENAME = 'tasks.json';
 
@@ -62,7 +61,7 @@ export default class TasksMain {
   async addTaskAndLog(task: TaskItem): Promise<string | null> {
     await this.system.uiManager.notifyAll.log(
       this.system.i18n.message.taskRegistered
-        + '\n' + await makeTaskDetails(task, this.system)
+      + '\n' + await makeTaskDetails(task, this.system)
     )
 
     return this.addTaskSilently(task);
