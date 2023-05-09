@@ -1,5 +1,5 @@
 import {calcAllowedLogLevels, LOG_LEVELS, Logger, LogLevel} from 'squidlet-lib';
-import System from '../System.js';
+import System from '../src/System';
 
 
 export default class ChannelLogger implements Logger {
