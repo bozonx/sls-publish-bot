@@ -9,6 +9,7 @@ import {Route} from './AbstractUi/interfaces/Route.js';
 import {UiManager} from './uiManager/UiManager.js';
 import {Screen} from './AbstractUi/Screen.js';
 import {homeScreenDefinition} from './uiManager/homeScreenDefinition.js';
+import TasksMain from './taskManager/TasksMain.js';
 
 
 export default class System {
@@ -16,7 +17,7 @@ export default class System {
   readonly appConfig: AppConfig = appConfig;
 
   readonly webServer: ApiWebServer
-  //public readonly tasks: TasksMain;
+  readonly tasks: TasksMain;
   // it is system log - usually print to console or external logger
   readonly log: ConsoleLogger;
   readonly i18n = ru;
@@ -34,8 +35,7 @@ export default class System {
 
 
   constructor() {
-    //this.tasks = new TasksMain(this);
-
+    this.tasks = new TasksMain(this)
     this.webServer = new ApiWebServer(this)
     this.log = new ConsoleLogger(this.appConfig.consoleLogLevel);
     this.packageManager = new PackageManager(this)
@@ -49,9 +49,8 @@ export default class System {
 
   init() {
     (async () => {
-      //await this.packageManager.init()
       await this.webServer.init()
-      //await this.tasks.init()
+      await this.tasks.init()
 
       for (const item of this.initQueue) {
         // TODO: handle error
@@ -77,7 +76,7 @@ export default class System {
       }
       //await this.channelLog.info(`Bot is shutting down`);
 
-      //await this.tasks.destroy();
+      await this.tasks.destroy();
       await this.webServer.destroy()
       await this.packageManager.destroy()
     })()

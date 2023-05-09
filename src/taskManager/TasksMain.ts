@@ -14,7 +14,7 @@ const STATE_TASKS_FILENAME = 'tasks.json';
 
 
 export default class TasksMain {
-  readonly app: System;
+  readonly system: System;
   private readonly execute: ExecuteTask;
   private readonly filePath: string;
   // Object like {taskId: TaskItem}
@@ -23,10 +23,10 @@ export default class TasksMain {
   private readonly timeouts: Record<string, NodeJS.Timeout> = {};
 
 
-  constructor(app: System) {
-    this.app = app;
+  constructor(system: System) {
+    this.system = system;
     this.execute = new ExecuteTask(this);
-    this.filePath = path.resolve(this.app.appConfig.dataDirPath, STATE_TASKS_FILENAME);
+    this.filePath = path.resolve(this.system.appConfig.dataDirPath, STATE_TASKS_FILENAME);
   }
 
 
@@ -36,10 +36,10 @@ export default class TasksMain {
     // register them and start timers
     for (const taskId in oldTasks) {
       const task = oldTasks[taskId];
-      const validateResult = await validateTask(task, this.app);
+      const validateResult = await validateTask(task, this.system);
 
       if (validateResult) {
-        this.app.channelLog.warn(`Task was skipped: ` + validateResult)
+        this.system.uiManager.channelLog.warn(`Task was skipped: ` + validateResult)
         // skip not valid tasks
         continue;
       }
@@ -59,9 +59,9 @@ export default class TasksMain {
   }
 
   async addTaskAndLog(task: TaskItem): Promise<string | null> {
-    await this.app.channelLog.log(
-      this.app.i18n.message.taskRegistered
-        + '\n' + await makeTaskDetails(task, this.app)
+    await this.system.channelLog.log(
+      this.system.i18n.message.taskRegistered
+        + '\n' + await makeTaskDetails(task, this.system)
     )
 
     return this.addTaskSilently(task);
@@ -88,10 +88,10 @@ export default class TasksMain {
     this.clearTask(taskId)
     // do noting on error
     await this.saveTasks()
-    this.app.channelLog.log(
-      this.app.i18n.message.taskRemoved + '\n'
+    this.system.channelLog.log(
+      this.system.i18n.message.taskRemoved + '\n'
       + `taskId: ${taskId}\n`
-      + await makeTaskDetails(removedTask, this.app)
+      + await makeTaskDetails(removedTask, this.system)
     )
   }
 
@@ -114,10 +114,10 @@ export default class TasksMain {
 
     await this.saveTasks()
 
-    this.app.channelLog.log(
-      this.app.i18n.message.taskEdited + '\n'
+    this.system.channelLog.log(
+      this.system.i18n.message.taskEdited + '\n'
       + `taskId: ${taskId}\n`
-      + await makeTaskDetails(this.tasks[taskId], this.app)
+      + await makeTaskDetails(this.tasks[taskId], this.system)
     )
   }
 
@@ -128,10 +128,10 @@ export default class TasksMain {
    * @return if sting - taskId, if null - task haven't been added
    */
   async addTaskSilently(task: TaskItem): Promise<string | null> {
-    const validateResult = await validateTask(task, this.app);
+    const validateResult = await validateTask(task, this.system);
 
     if (validateResult) {
-      this.app.channelLog.error(`Task was skipped: ` + validateResult)
+      this.system.channelLog.error(`Task was skipped: ` + validateResult)
       // skip not valid tasks
       return null;
     }
@@ -164,8 +164,8 @@ export default class TasksMain {
     catch (e) {
       const msg = `Can't save tasks file: ${e}`;
 
-      this.app.consoleLog.error(msg);
-      this.app.channelLog.error(msg);
+      this.system.consoleLog.error(msg);
+      this.system.channelLog.error(msg);
 
       return false;
     }
@@ -186,7 +186,7 @@ export default class TasksMain {
 
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(() => {
-      this.execute.execute(taskId).catch((e) => this.app.consoleLog.error(e));
+      this.execute.execute(taskId).catch((e) => this.system.consoleLog.error(e));
     },secondsToPublish * 1000);
 
     return taskId;
@@ -209,7 +209,7 @@ export default class TasksMain {
       else {
         const msg = `Can't load tasks file: ${e}`;
 
-        this.app.channelLog.error(msg);
+        this.system.channelLog.error(msg);
 
         throw new Error(msg);
       }

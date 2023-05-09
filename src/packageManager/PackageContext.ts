@@ -4,6 +4,7 @@ import ru from '../I18n/ru.js';
 import AppConfig from '../types/AppConfig.js';
 import {Route} from '../AbstractUi/interfaces/Route.js';
 import {UiMain} from '../uiManager/UiMain.js';
+import TasksMain from '../taskManager/TasksMain.js';
 
 
 export class PackageContext {
@@ -23,9 +24,9 @@ export class PackageContext {
     return this.system.i18n
   }
 
-  // get tasks(): TasksMain {
-  //   return this.app.tasks
-  // }
+  get tasks(): TasksMain {
+    return this.system.tasks
+  }
 
 
   constructor(system: System) {

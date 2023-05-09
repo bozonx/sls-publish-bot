@@ -1,9 +1,11 @@
 import System from '../System.js';
 import {UiMain} from './UiMain.js';
+import {NotifyAll} from './NotifyAll.js';
 
 
 export class UiManager {
   system: System
+  notifyAll: NotifyAll
   // TODO: сделать это через отдельный класс, который будет сортировать ф-и инициализации
   private initQueue: {cb: () => Promise<void>, after?: string[]}[] = []
   private destroyQueue: {cb: () => Promise<void>, before?: string[]}[] = []
@@ -11,6 +13,8 @@ export class UiManager {
 
   constructor(system: System) {
     this.system = system
+
+    this.notifyAll = new NotifyAll(this)
   }
 
   async init() {
@@ -30,6 +34,9 @@ export class UiManager {
   }
 
   newUi(): UiMain {
+
+    // TODO: сохранять их
+
     return new UiMain(this)
   }
 
