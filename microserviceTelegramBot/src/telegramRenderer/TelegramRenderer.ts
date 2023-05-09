@@ -4,12 +4,11 @@ import {Message, PhotoSize, Video} from 'typegram/message';
 import {TgRendererChat} from './TgRendererChat.js';
 import MessageEventBase from '../../../src/types/MessageEvent.js';
 import {Main} from '../Main.js';
-import {TgBot} from '../TgBot.js';
 
 
 export class TelegramRenderer {
   readonly main: Main
-  // chats where users talk to bot
+  // {"token|chatId": TgRendererChat}
   private readonly chats: Record<string, TgRendererChat> = {}
 
 
@@ -66,10 +65,14 @@ export class TelegramRenderer {
 
     // TODO: add audio message
 
-    this.tg.onCallbackQuery('callback_query', (ctx) => {
-      this.chats[ctx.chat.id].handleCallbackQueryEvent(
-        (ctx.update.callback_query as  any).data
-      );
+    // TODO: где его взять ???
+    const botToken = this.main.config.testBotToken
+
+    this.main.tg.onCallbackQuery(botToken, (chatId: number | string, queryData: string) => {
+      // TODO: получается что слишком дофига функций вызывается
+
+      // TODO: check botToken
+      this.chats[chatId].handleCallbackQueryEvent(queryData)
     });
 
     this.bot.on('message', (ctx) => {

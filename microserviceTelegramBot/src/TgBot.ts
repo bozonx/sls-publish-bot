@@ -4,7 +4,11 @@ import {Message, PhotoSize, Video} from 'typegram/message';
 import {Main} from './Main.js';
 
 
+const EVENT_DELIMITER = '|'
+
 export enum TG_BOT_EVENT {
+  cmdStart,
+  launched,
   callbackQuery,
 }
 
@@ -35,7 +39,10 @@ export class TgBot {
         return;
       }
 
-      this.events.emit(TG_BOT_EVENT.callbackQuery, ctx.chat.id)
+      const eventName = this.main.config.testBotToken
+        + EVENT_DELIMITER + TG_BOT_EVENT.callbackQuery
+
+      this.events.emit(eventName, ctx.chat.id, (ctx.update.callback_query as  any).data)
     });
   }
 
@@ -60,8 +67,10 @@ export class TgBot {
 
   }
 
-  onCallbackQuery(botToken: string) {
+  onCallbackQuery(botToken: string, handler: (chatId: number | string, queryData: string) => void): number {
+    const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.callbackQuery
 
+    return this.events.addListener(eventName, handler)
   }
 
   onTextMessage(botToken: string) {
