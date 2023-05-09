@@ -39,7 +39,7 @@ export default class TasksMain {
       const validateResult = await validateTask(task, this.system);
 
       if (validateResult) {
-        this.system.uiManager.channelLog.warn(`Task was skipped: ` + validateResult)
+        this.system.uiManager.notifyAll.warn(`Task was skipped: ` + validateResult)
         // skip not valid tasks
         continue;
       }
@@ -59,7 +59,7 @@ export default class TasksMain {
   }
 
   async addTaskAndLog(task: TaskItem): Promise<string | null> {
-    await this.system.channelLog.log(
+    await this.system.uiManager.notifyAll.log(
       this.system.i18n.message.taskRegistered
         + '\n' + await makeTaskDetails(task, this.system)
     )
@@ -88,7 +88,7 @@ export default class TasksMain {
     this.clearTask(taskId)
     // do noting on error
     await this.saveTasks()
-    this.system.channelLog.log(
+    this.system.uiManager.notifyAll.log(
       this.system.i18n.message.taskRemoved + '\n'
       + `taskId: ${taskId}\n`
       + await makeTaskDetails(removedTask, this.system)
@@ -114,7 +114,7 @@ export default class TasksMain {
 
     await this.saveTasks()
 
-    this.system.channelLog.log(
+    this.system.uiManager.notifyAll.log(
       this.system.i18n.message.taskEdited + '\n'
       + `taskId: ${taskId}\n`
       + await makeTaskDetails(this.tasks[taskId], this.system)
@@ -131,7 +131,7 @@ export default class TasksMain {
     const validateResult = await validateTask(task, this.system);
 
     if (validateResult) {
-      this.system.channelLog.error(`Task was skipped: ` + validateResult)
+      this.system.uiManager.notifyAll.error(`Task was skipped: ` + validateResult)
       // skip not valid tasks
       return null;
     }
@@ -164,8 +164,8 @@ export default class TasksMain {
     catch (e) {
       const msg = `Can't save tasks file: ${e}`;
 
-      this.system.consoleLog.error(msg);
-      this.system.channelLog.error(msg);
+      this.system.log.error(msg);
+      this.system.uiManager.notifyAll.error(msg);
 
       return false;
     }
@@ -186,7 +186,7 @@ export default class TasksMain {
 
     this.tasks[taskId] = task;
     this.timeouts[taskId] = setTimeout(() => {
-      this.execute.execute(taskId).catch((e) => this.system.consoleLog.error(e));
+      this.execute.execute(taskId).catch((e) => this.system.log.error(e));
     },secondsToPublish * 1000);
 
     return taskId;
@@ -209,7 +209,7 @@ export default class TasksMain {
       else {
         const msg = `Can't load tasks file: ${e}`;
 
-        this.system.channelLog.error(msg);
+        this.system.uiManager.notifyAll.error(msg);
 
         throw new Error(msg);
       }
