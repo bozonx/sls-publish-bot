@@ -5,8 +5,6 @@ import ru from './I18n/ru.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
-import {Window} from './AbstractUi/Window.js';
-import {WindowConfig} from './AbstractUi/interfaces/WindowConfig.js';
 import {Route} from './AbstractUi/interfaces/Route.js';
 import {UiManager} from './uiManager/UiManager.js';
 
@@ -15,11 +13,6 @@ export default class System {
   //public readonly events = new IndexedEventEmitter()
   readonly appConfig: AppConfig = appConfig;
 
-  //public readonly blogs: BlogsConfig;
-  // public readonly tg: TgMain;
-  // public readonly telegraPh: TelegraPhMain;
-  // public readonly bloggerCom: BloggerComMain;
-  // public readonly notion: NotionApi;
   readonly webServer: ApiWebServer
   //public readonly tasks: TasksMain;
   // it is system log - usually print to console or external logger
@@ -39,7 +32,6 @@ export default class System {
 
 
   constructor() {
-    //this.blogs = this.makeExecConf(rawExecConfig);
     //this.tasks = new TasksMain(this);
 
     this.webServer = new ApiWebServer(this)
@@ -71,6 +63,11 @@ export default class System {
 
   destroy(reason: string) {
     (async () => {
+      for (const item of this.destroyQueue) {
+        // TODO: handle error
+        await item.cb()
+        // TODO: use bedore
+      }
       //await this.channelLog.info(`Bot is shutting down`);
 
       //await this.tasks.destroy();

@@ -1,13 +1,10 @@
 import System from '../System.js';
 import {UiContext} from './UiContext.js';
-import {WindowConfig} from '../AbstractUi/interfaces/WindowConfig.js';
-import {Window} from '../AbstractUi/Window.js';
 import {UiMain} from './UiMain.js';
 
 
 export class UiManager {
   system: System
-  uiContext: UiContext
   // TODO: сделать это через отдельный класс, который будет сортировать ф-и инициализации
   private initQueue: {cb: () => Promise<void>, after?: string[]}[] = []
   private destroyQueue: {cb: () => Promise<void>, before?: string[]}[] = []
@@ -15,18 +12,28 @@ export class UiManager {
 
   constructor(system: System) {
     this.system = system
-    this.uiContext = new UiContext(this)
   }
 
+  async init() {
+    for (const item of this.initQueue) {
+      // TODO: handle error
+      await item.cb()
+      // TODO: use after
+    }
+  }
+
+  async destroy() {
+    for (const item of this.destroyQueue) {
+      // TODO: handle error
+      await item.cb()
+      // TODO: use bedore
+    }
+  }
 
   newUi(): UiMain {
-    // TODO: add
-    const windowConfig: WindowConfig = {
-      currentPath: '/',
-      routes: this.routes
-    }
+    const uiContext = new UiContext(this)
 
-    return new Window(windowConfig)
+    return new UiMain(uiContext)
   }
 
   /**
