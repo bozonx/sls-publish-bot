@@ -1,16 +1,27 @@
+import {IndexedEventEmitter} from 'squidlet-lib';
 import {Context, Telegraf} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
+import {Main} from './Main.js';
+
+
+export enum TG_BOT_EVENT {
+  callbackQuery,
+}
 
 
 export class TgBot {
+  private readonly main: Main
+  private events = new IndexedEventEmitter()
   private readonly bot: Telegraf;
+
   // TODO: лучше не создавать инстансы бота, а напрямую делать запросы
 
-  constructor() {
+  constructor(main: Main) {
+    this.main = main
     // TODO: токен брать как-то по другому, ведь юзер сам может задать своего бота
-    this.bot = new Telegraf(this.ctx.config.botToken, {
+    this.bot = new Telegraf(this.main.config.testBotToken, {
       telegram: {
-        testEnv: !this.ctx.config.isProduction,
+        testEnv: !this.main.config.isProduction,
       }
     })
   }
@@ -19,20 +30,12 @@ export class TgBot {
   async init() {
     this.bot.on('callback_query', (ctx) => {
       if (!ctx.chat?.id) {
-        this.ctx.consoleLog.warn('No chat id in callback_query');
-
-        return;
-      }
-      else if (!this.chats[ctx.chat.id]) {
-        ctx.reply(this.ctx.i18n.errors.notRegisteredChat);
-        //this.ctx.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
+        this.main.log.warn('No chat id in callback_query');
 
         return;
       }
 
-      this.chats[ctx.chat.id].handleCallbackQueryEvent(
-        (ctx.update.callback_query as  any).data
-      );
+      this.events.emit(TG_BOT_EVENT.callbackQuery, ctx.chat.id)
     });
   }
 

@@ -15,16 +15,15 @@ export class TgRendererChat {
   private menuMsgId?: number
 
 
-  constructor(botToken: string, botChatId: number | string, renderer: TelegramRenderer) {
+  constructor(renderer: TelegramRenderer, botToken: string, botChatId: number | string) {
+    this.renderer = renderer
     this.botToken = botToken
     this.botChatId = botChatId
-    this.renderer = renderer
-
   }
 
 
   async init() {
-    const windowConfig = this.renderer.main.uiFilesManager
+    const windowConfig = await this.renderer.main.uiFilesManager
       .loadWindowConfig(this.botToken)
     this.window = new Window(windowConfig)
     this.window.onDomChanged(() => this.render())
@@ -48,6 +47,7 @@ export class TgRendererChat {
   }
 
   handleIncomeTextEvent(msgEvent: TextMessageEvent) {
+    // TODO: нужно отправить это в элемент в фокусе
     this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
   }
 
@@ -88,7 +88,7 @@ export class TgRendererChat {
       const [messageHtml, buttons] = convertDocumentToTgUi(this.window.rootDocument)
 
       if (typeof this.menuMsgId !== 'undefined') {
-        await this.renderer.bot.telegram.deleteMessage(this.botChatId, this.menuMsgId)
+        await this.renderer.main.tg.telegram.deleteMessage(this.botChatId, this.menuMsgId)
       }
 
       const sentMessage = await this.renderer.bot.telegram.sendMessage(

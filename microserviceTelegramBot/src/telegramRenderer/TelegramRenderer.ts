@@ -8,7 +8,6 @@ import {TgBot} from '../TgBot.js';
 
 
 export class TelegramRenderer {
-  readonly tg: TgBot
   readonly main: Main
   // chats where users talk to bot
   private readonly chats: Record<string, TgRendererChat> = {}
