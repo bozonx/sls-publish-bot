@@ -8,11 +8,11 @@ import {Window} from '../AbstractUi/Window.js';
 export class UiMain {
   readonly uiManager: UiManager
   readonly window: Window
-
-  private readonly uiContext: UiContext
   // TODO: use debug in debug mode
   // print all the messages exclude debug
-  private readonly notify = new Notify(this, 'error')
+  readonly notify = new Notify(this, 'error')
+
+  private readonly uiContext: UiContext
 
 
   constructor(uiManager: UiManager) {
