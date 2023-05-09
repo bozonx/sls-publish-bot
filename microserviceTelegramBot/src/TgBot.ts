@@ -12,7 +12,6 @@ const EVENT_DELIMITER = '|'
 export enum TG_BOT_EVENT {
   cmdStart,
   launched,
-  stopped,
   callbackQuery,
 }
 
@@ -37,21 +36,18 @@ export class TgBot {
 
   async init() {
     this.bot.start((ctx: Context) => {
-      if (!ctx.chat?.id) throw new Error(`No chat id`);
+      if (typeof ctx.chat?.id === 'undefined') return
 
-      if (!this.chats[ctx.chat.id]) {
-        this.chats[ctx.chat.id] = new TgRendererChat(ctx.chat.id, this)
-      }
-
-      this.chats[ctx.chat.id].init()
-        .catch((e) => this.ctx.consoleLog.error(e));
+      this.events.emit(TG_BOT_EVENT.cmdStart, this.main.config.testBotToken, ctx.chat.id)
     });
 
     this.addListeners();
 
     this.bot.launch()
       .then(() => {
+        const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
 
+        this.events.emit(eventName)
 
         // TODO: почему-то зависает
 
@@ -195,15 +191,17 @@ export class TgBot {
 
   }
 
-  onCmdStart(botToken: string) {
-
+  onCmdStart(handler:(botToken: string, chatId: number) => void) {
+    return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
   }
 
-  onBotLaunched(botToken: string) {
+  onBotLaunched(botToken: string, handler:() => void) {
+    const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
 
+    return this.events.addListener(eventName, handler)
   }
 
-  onCallbackQuery(botToken: string, handler: (chatId: number | string, queryData: string) => void): number {
+  onCallbackQuery(botToken: string, handler: (chatId: number, queryData: string) => void): number {
     const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.callbackQuery
 
     return this.events.addListener(eventName, handler)

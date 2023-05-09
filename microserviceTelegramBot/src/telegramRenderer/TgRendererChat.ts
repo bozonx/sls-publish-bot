@@ -15,7 +15,7 @@ export class TgRendererChat {
   private menuMsgId?: number
 
 
-  constructor(renderer: TelegramRenderer, botToken: string, botChatId: number | string) {
+  constructor(renderer: TelegramRenderer, botToken: string, botChatId: number) {
     this.renderer = renderer
     this.botToken = botToken
     this.botChatId = botChatId
@@ -39,7 +39,10 @@ export class TgRendererChat {
 
 
   startListeners() {
-    this.renderer.main.tg.onCallbackQuery(this.botToken, (chatId: number | string, queryData: string) => {
+    this.renderer.main.tg.onCallbackQuery(this.botToken, (chatId: number, queryData: string) => {
+
+      // TODO: лучше то вешать сразу на chatId
+
       if (!queryData) {
         this.renderer.main.log.warn('Empty data came to handleCallbackQueryEvent')
 
