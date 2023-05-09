@@ -17,11 +17,13 @@ export class TgRendererChat {
   constructor(chatId: number | string, renderer: TelegramRenderer) {
     this.botChatId = chatId
     this.renderer = renderer
-    this.window = this.renderer.ctx.newWindow()
+
   }
 
 
   async init() {
+    const windowConfig = this.renderer.main.uiFilesManager.loadWindowConfig()
+    this.window = new Window(windowConfig)
     this.window.onDomChanged(() => this.render())
 
     await this.window.init()
@@ -34,7 +36,7 @@ export class TgRendererChat {
 
   handleCallbackQueryEvent(queryData: any) {
     if (!queryData) {
-      this.renderer.ctx.consoleLog.warn('Empty data came to handleCallbackQueryEvent')
+      this.renderer.main.log.warn('Empty data came to handleCallbackQueryEvent')
 
       return
     }
@@ -100,7 +102,7 @@ export class TgRendererChat {
 
       this.menuMsgId = sentMessage.message_id
     })()
-      .catch((e) => this.renderer.ctx.consoleLog.error(e))
+      .catch((e) => this.renderer.main.log.error(e))
   }
 
 }

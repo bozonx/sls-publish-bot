@@ -16,39 +16,64 @@ export class TgBot {
   }
 
 
-  async sendMessage() {
+  async init() {
+    this.bot.on('callback_query', (ctx) => {
+      if (!ctx.chat?.id) {
+        this.ctx.consoleLog.warn('No chat id in callback_query');
+
+        return;
+      }
+      else if (!this.chats[ctx.chat.id]) {
+        ctx.reply(this.ctx.i18n.errors.notRegisteredChat);
+        //this.ctx.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
+
+        return;
+      }
+
+      this.chats[ctx.chat.id].handleCallbackQueryEvent(
+        (ctx.update.callback_query as  any).data
+      );
+    });
+  }
+
+  async destroy() {
 
   }
 
-  async deleteMessage() {
+
+  async sendMessage(botToken: string) {
 
   }
 
-  onCmdStart() {
+  async deleteMessage(botToken: string) {
 
   }
 
-  onBotLaunched() {
+  onCmdStart(botToken: string) {
 
   }
 
-  onCallbackQuery() {
+  onBotLaunched(botToken: string) {
 
   }
 
-  onTextMessage() {
+  onCallbackQuery(botToken: string) {
 
   }
 
-  onPhotoMessage() {
+  onTextMessage(botToken: string) {
 
   }
 
-  onVideoMessage() {
+  onPhotoMessage(botToken: string) {
 
   }
 
-  onPollMessage() {
+  onVideoMessage(botToken: string) {
+
+  }
+
+  onPollMessage(botToken: string) {
 
   }
 

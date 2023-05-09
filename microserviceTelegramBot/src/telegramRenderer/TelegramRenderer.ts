@@ -67,19 +67,7 @@ export class TelegramRenderer {
 
     // TODO: add audio message
 
-    this.bot.on('callback_query', (ctx) => {
-      if (!ctx.chat?.id) {
-        this.ctx.consoleLog.warn('No chat id in callback_query');
-
-        return;
-      }
-      else if (!this.chats[ctx.chat.id]) {
-        ctx.reply(this.ctx.i18n.errors.notRegisteredChat);
-        //this.ctx.consoleLog.error(`No chat id (${ctx.chat.id}) for handling callback query`)
-
-        return;
-      }
-
+    this.tg.onCallbackQuery('callback_query', (ctx) => {
       this.chats[ctx.chat.id].handleCallbackQueryEvent(
         (ctx.update.callback_query as  any).data
       );
