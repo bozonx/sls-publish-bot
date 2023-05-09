@@ -19,11 +19,11 @@ export default class System {
   readonly log: ConsoleLogger;
   readonly i18n = ru;
   readonly uiManager = new UiManager(this)
+  // to collect routes from packages after start and before init
+  routes: Route[] = []
 
   private readonly packageManager: PackageManager
 
-  // to collect routes from packages after start and before init
-  private routes: Route[] = []
   // TODO: сделать это через отдельный класс, который будет сортировать ф-и инициализации
   // the queue of packages to init
   private initQueue: {cb: () => Promise<void>, after?: string[]}[] = []

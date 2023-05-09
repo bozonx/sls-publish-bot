@@ -31,9 +31,7 @@ export class UiManager {
   }
 
   newUi(): UiMain {
-    const uiContext = new UiContext(this)
-
-    return new UiMain(uiContext)
+    return new UiMain(this)
   }
 
   /**

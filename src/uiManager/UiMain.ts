@@ -1,35 +1,34 @@
-import {Logger} from 'squidlet-lib';
+import {AsyncLogger} from 'squidlet-lib';
 import {UiContext} from './UiContext.js';
 import {WindowConfig} from '../AbstractUi/interfaces/WindowConfig.js';
+import {UiManager} from './UiManager.js';
 
 
 export class UiMain {
+  readonly uiManager: UiManager
+
   private readonly uiContext: UiContext
 
   //public readonly channelLog: ChannelLogger;
 
-  //this.channelLog = new ChannelLogger(this.appConfig.channelLogLevel, this);
 
-  // get channelLog(): ChannelLogger {
-  //   return this.app.channelLog
-  // }
-
-  constructor(uiContent: UiContext) {
-    this.uiContext = uiContent
+  constructor(uiManager: UiManager) {
+    this.uiManager = uiManager
+    this.uiContext = new UiContext(this)
 
 
     // TODO: add
     const windowConfig: WindowConfig = {
       currentPath: '/',
-      routes: this.routes
+      routes: this.uiContext.routes
     }
 
   }
 
 
-  // get notify(): Logger {
-  //   //return this.system.no
-  // }
+  get notify(): AsyncLogger {
+    //return this.system.no
+  }
 
 
   // TODO: add on UI init
