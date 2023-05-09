@@ -4,17 +4,18 @@ import {Message, PhotoSize, Video} from 'typegram/message';
 import {TgRendererChat} from './TgRendererChat.js';
 import {PackageContext} from '../../../src/packageManager/PackageContext.js';
 import MessageEventBase from '../../../src/types/MessageEvent.js';
+import {Main} from '../Main.js';
 
 
 export class TelegramRenderer {
   readonly bot: Telegraf;
-  readonly ctx: PackageContext
+  readonly main: Main
   // chats where users talk to bot
   private readonly chats: Record<string, TgRendererChat> = {}
 
 
-  constructor(ctx: PackageContext) {
-    this.ctx = ctx
+  constructor(main: Main) {
+    this.main = main
     // TODO: токен брать как-то по другому, ведь юзер сам может задать своего бота
     this.bot = new Telegraf(this.ctx.config.botToken, {
       telegram: {
