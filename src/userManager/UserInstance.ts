@@ -41,4 +41,24 @@ export class UserInstance {
     await this.tasks.destroy();
   }
 
+
+
+  registerRoute(route: Route) {
+    this.routes.push(route)
+  }
+
+  onUserInit(cb: () => Promise<void>, after?: string[]) {
+    this.initQueue.push({
+      cb,
+      after
+    })
+  }
+
+  onUserDestroy(cb: () => Promise<void>, before?: string[]) {
+    this.destroyQueue.push({
+      cb,
+      before
+    })
+  }
+
 }

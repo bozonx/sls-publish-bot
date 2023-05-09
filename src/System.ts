@@ -5,11 +5,6 @@ import ru from './I18n/ru.js';
 import {ApiWebServer} from './apiWebServer/ApiWebServer.js';
 import {PackageManager} from './packageManager/PackageManager.js';
 import {PackageIndex} from './types/types.js';
-import {Route} from './AbstractUi/interfaces/Route.js';
-import {UiManager} from './uiManager/UiManager.js';
-import {Screen} from './AbstractUi/Screen.js';
-import {homeScreenDefinition} from './uiManager/homeScreenDefinition.js';
-import TasksMain from './taskManager/TasksMain.js';
 import {UserManager} from './userManager/UserManager.js';
 
 
@@ -63,7 +58,6 @@ export default class System {
         await item.cb()
         // TODO: use bedore
       }
-      //await this.channelLog.info(`Bot is shutting down`);
 
       await this.userManager.destroy()
       await this.webServer.destroy()
@@ -76,10 +70,6 @@ export default class System {
 
   use(pkg: PackageIndex) {
     pkg(this.packageManager.ctx)
-  }
-
-  registerRoute(route: Route) {
-    this.routes.push(route)
   }
 
   onSystemInit(cb: () => Promise<void>, after?: string[]) {
