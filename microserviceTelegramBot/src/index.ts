@@ -13,6 +13,8 @@ const main = new Main(config)
 
 main.init()
 
+main.tg
+
 // Enable graceful stop
 process.once('SIGINT', () => main.destroy('SIGINT'));
 process.once('SIGTERM', () => main.destroy('SIGTERM'));

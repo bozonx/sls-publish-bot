@@ -13,6 +13,11 @@ export class UiFilesManager {
 
   async loadWindowConfig(botToken: string): Promise<WindowConfig> {
     // TODO: load from storage all the ui files
+
+    return {
+      currentPath: '/',
+      routes: []
+    }
   }
 
   async deleteWindowConfig(botToken: string) {

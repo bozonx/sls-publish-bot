@@ -33,13 +33,20 @@ export class TgChat {
   async init() {
     const windowConfig = await this.main.uiFilesManager
       .loadWindowConfig(this.botToken)
-    this.window = new Window(windowConfig)
-    // TODO: review
-    this.window.onDomChanged(() => this.renderMenu())
-
-    await this.window.init()
+    // this.window = new Window(windowConfig)
+    // // TODO: review
+    // this.window.onDomChanged(() => this.renderMenu())
+    //
+    // await this.window.init()
 
     this.startListeners()
+
+    // TODO: test
+    await this.main.tg.sendTextMessage(
+      this.botToken,
+      this.botChatId,
+      'text',
+    )
   }
   
   async destroy() {

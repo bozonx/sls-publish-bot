@@ -38,7 +38,6 @@ export class Main {
 
   init() {
     (async () => {
-      await this.tg.init()
       await this.telegramManager.init()
     })()
       .catch((e) => this.log.error(e))

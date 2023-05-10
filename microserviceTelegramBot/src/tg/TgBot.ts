@@ -134,7 +134,7 @@ export class TgBot {
     bot.start((ctx: Context) => {
       if (typeof ctx.chat?.id === 'undefined') return
 
-      this.events.emit(TG_BOT_EVENT.cmdStart, this.main.config.testBotToken, ctx.chat.id)
+      this.events.emit(TG_BOT_EVENT.cmdStart, botToken, ctx.chat.id)
     });
 
     bot.on('callback_query', (ctx) => {
@@ -144,7 +144,7 @@ export class TgBot {
         return;
       }
 
-      const eventName = this.main.config.testBotToken + EVENT_DELIMITER + ctx.chat.id + EVENT_DELIMITER
+      const eventName = botToken + EVENT_DELIMITER + ctx.chat.id + EVENT_DELIMITER
         + TG_BOT_EVENT.callbackQuery
 
       this.events.emit(eventName, (ctx.update.callback_query as  any).data)
