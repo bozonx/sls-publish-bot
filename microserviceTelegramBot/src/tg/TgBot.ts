@@ -2,7 +2,7 @@ import {IndexedEventEmitter} from 'squidlet-lib';
 import {Context, Telegraf} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
 import {Main} from '../Main.js';
-import {TgRendererChat} from './TgRendererChat.js';
+import {TgChat} from './TgChat.js';
 import MessageEventBase from '../../../src/types/MessageEvent.js';
 import _ from 'lodash';
 

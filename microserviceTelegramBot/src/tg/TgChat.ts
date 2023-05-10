@@ -4,7 +4,7 @@ import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent
 import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
 
 
-export class TgRendererChat {
+export class TgChat {
   // chat id where was start function called
   private readonly botChatId: number
   private readonly botToken: string

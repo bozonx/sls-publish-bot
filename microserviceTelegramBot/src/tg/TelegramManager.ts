@@ -1,11 +1,11 @@
-import {TgRendererChat} from './TgRendererChat.js';
+import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
 
 
 export class TelegramManager {
   readonly main: Main
-  // {"chatId": TgRendererChat}
-  private readonly chats: Record<string, TgRendererChat> = {}
+  // {"chatId": TgChat}
+  private readonly chats: Record<string, TgChat> = {}
 
 
   constructor(main: Main) {
@@ -16,7 +16,7 @@ export class TelegramManager {
   async init() {
     this.main.tg.onCmdStart((botToken: string, chatId: number) => {
       if (!this.chats[chatId]) {
-        this.chats[chatId] = new TgRendererChat(this, this.main.config.testBotToken, chatId)
+        this.chats[chatId] = new TgChat(this, this.main.config.testBotToken, chatId)
       }
 
       this.chats[chatId].init()
