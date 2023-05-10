@@ -2,9 +2,12 @@ import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
 
 
+const CHAT_DELIMITER = '|'
+
+
 export class TelegramManager {
   readonly main: Main
-  // {"chatId": TgChat}
+  // {"botToken|chatId": TgChat}
   private readonly chats: Record<string, TgChat> = {}
 
 
@@ -15,20 +18,22 @@ export class TelegramManager {
 
   async init() {
     this.main.tg.onCmdStart((botToken: string, chatId: number) => {
-      if (!this.chats[chatId]) {
-        this.chats[chatId] = new TgChat(this, this.main.config.testBotToken, chatId)
+      const id = botToken + CHAT_DELIMITER + chatId
+
+      if (!this.chats[id]) {
+        this.chats[id] = new TgChat(this, botToken, chatId)
       }
 
-      this.chats[chatId].init()
+      this.chats[id].init()
         .catch((e) => this.main.log.error(e));
     })
   }
   
   async destroy() {
     for (const itemIndex in this.chats) {
-      await this.chats[itemIndex].destroy();
-      // @ts-ignore
-      this.chats[itemIndex] = undefined;
+      await this.chats[itemIndex].destroy()
+
+      delete this.chats[itemIndex]
     }
   }
 

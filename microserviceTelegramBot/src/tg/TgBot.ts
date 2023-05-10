@@ -11,7 +11,7 @@ const EVENT_DELIMITER = '|'
 
 export enum TG_BOT_EVENT {
   cmdStart,
-  launched,
+  //launched,
   callbackQuery,
 }
 
@@ -45,9 +45,9 @@ export class TgBot {
 
     this.bot.launch()
       .then(() => {
-        const eventName = this.main.config.testBotToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
-
-        this.events.emit(eventName)
+        // const eventName = this.main.config.testBotToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
+        //
+        // this.events.emit(eventName)
 
         // TODO: почему-то зависает
 

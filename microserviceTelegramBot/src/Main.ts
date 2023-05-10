@@ -4,6 +4,7 @@ import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
 
+
 /*
 ему присылают уже сгенерированный фонфиг меню, который он будет показывать
   поьзователю. И будет обрабатывать ответы указанным образом
@@ -25,12 +26,12 @@ export class Main {
 
   constructor(config: TgBotConfig) {
     this.config = config
-    this.tg = new TgBot(this)
-    this.telegramManager = new TelegramManager(this)
 
     const logLevel: LogLevel = (this.config.debug) ? 'debug' : 'error'
 
     this.log = new ConsoleLogger(logLevel)
+    this.tg = new TgBot(this)
+    this.telegramManager = new TelegramManager(this)
   }
 
 
