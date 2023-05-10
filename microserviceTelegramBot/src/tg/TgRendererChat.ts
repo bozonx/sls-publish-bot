@@ -1,5 +1,5 @@
 import {Window} from '../../../src/AbstractUi/Window.js';
-import {TelegramRenderer} from './TelegramRenderer.js';
+import {TelegramManager} from './TelegramManager.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../../src/types/MessageEvent.js';
 import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
 
@@ -9,11 +9,11 @@ export class TgRendererChat {
   private readonly botChatId: number
   private readonly botToken: string
   private window!: Window
-  private renderer: TelegramRenderer
+  private renderer: TelegramManager
   private menuMsgId?: number
 
 
-  constructor(renderer: TelegramRenderer, botToken: string, botChatId: number) {
+  constructor(renderer: TelegramManager, botToken: string, botChatId: number) {
     this.renderer = renderer
     this.botToken = botToken
     this.botChatId = botChatId

@@ -2,7 +2,7 @@ import {TgRendererChat} from './TgRendererChat.js';
 import {Main} from '../Main.js';
 
 
-export class TelegramRenderer {
+export class TelegramManager {
   readonly main: Main
   // {"chatId": TgRendererChat}
   private readonly chats: Record<string, TgRendererChat> = {}

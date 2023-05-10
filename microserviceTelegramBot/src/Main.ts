@@ -1,5 +1,5 @@
 import {ConsoleLogger, LogLevel} from 'squidlet-lib';
-import {TelegramRenderer} from './tg/TelegramRenderer.js';
+import {TelegramManager} from './tg/TelegramManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
@@ -17,16 +17,16 @@ import {TgBotConfig} from './types/TgBotConfig.js';
 
 export class Main {
   readonly config: TgBotConfig
-  readonly tg: TgBot
-  readonly renderer: TelegramRenderer
   readonly log: ConsoleLogger
+  readonly tg: TgBot
+  readonly telegramManager: TelegramManager
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
 
 
   constructor(config: TgBotConfig) {
     this.config = config
     this.tg = new TgBot(this)
-    this.renderer = new TelegramRenderer(this)
+    this.telegramManager = new TelegramManager(this)
 
     const logLevel: LogLevel = (this.config.debug) ? 'debug' : 'error'
 
@@ -37,14 +37,14 @@ export class Main {
   init() {
     (async () => {
       await this.tg.init()
-      await this.renderer.init()
+      await this.telegramManager.init()
     })()
       .catch((e) => this.log.error(e))
   }
 
   async destroy(reason: string) {
     (async () => {
-      await this.renderer.destroy()
+      await this.telegramManager.destroy()
       await this.tg.destroy(reason)
     })()
       .catch((e) => this.log.error(e))
