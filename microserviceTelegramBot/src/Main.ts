@@ -1,10 +1,8 @@
-import {ConsoleLogger} from 'squidlet-lib';
+import {ConsoleLogger, LogLevel} from 'squidlet-lib';
 import {TelegramRenderer} from './telegramRenderer/TelegramRenderer.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
-
-// TODO: !
 
 /*
 ему присылают уже сгенерированный фонфиг меню, который он будет показывать
@@ -29,8 +27,10 @@ export class Main {
     this.config = config
     this.tg = new TgBot(this)
     this.renderer = new TelegramRenderer(this)
-    // TODO: use debug in debug mode
-    this.log = new ConsoleLogger('error')
+
+    const logLevel: LogLevel = (this.config.debug) ? 'debug' : 'error'
+
+    this.log = new ConsoleLogger(logLevel)
   }
 
 
@@ -42,9 +42,12 @@ export class Main {
       .catch((e) => this.log.error(e))
   }
 
-  async destroy() {
-    await this.renderer.destroy()
-    await this.tg.destroy('App stops')
+  async destroy(reason: string) {
+    (async () => {
+      await this.renderer.destroy()
+      await this.tg.destroy(reason)
+    })()
+      .catch((e) => this.log.error(e))
   }
 
 }
