@@ -7,7 +7,7 @@ import {Main} from '../Main.js';
 
 export class TgChat {
   // chat id where was start function called
-  private readonly botChatId: number
+  private readonly botchatId: number | string
   private readonly botToken: string
   private window!: Window
   private telegramManager: TelegramManager
@@ -22,7 +22,7 @@ export class TgChat {
   }
 
 
-  constructor(telegramManager: TelegramManager, botToken: string, botChatId: number) {
+  constructor(telegramManager: TelegramManager, botToken: string, botchatId: number | string) {
     this.telegramManager = telegramManager
     this.botToken = botToken
     this.botChatId = botChatId

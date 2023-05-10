@@ -17,7 +17,7 @@ export class TelegramManager {
 
 
   async init() {
-    this.main.tg.onCmdStart((botToken: string, chatId: number) => {
+    this.main.tg.onCmdStart((botToken: string, chatId: number | string) => {
       const id = botToken + CHAT_DELIMITER + chatId
 
       if (!this.chats[id]) {

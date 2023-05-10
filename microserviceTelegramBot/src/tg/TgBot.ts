@@ -180,7 +180,7 @@ export class TgBot {
   }
 
 
-  async sendTextMessage(botToken: string, chatId: number, extra?: TextMessageExtra) {
+  async sendTextMessage(botToken: string, chatId: number | string, extra?: TextMessageExtra) {
     const bot = this.resolveBot(botToken)
 
     const sentMessage = await bot.telegram.sendMessage(botToken, chatId, extra)
@@ -201,31 +201,31 @@ export class TgBot {
 // .catch((e) => this.main.log.error(e))
   }
 
-  async sendPhotoMessage(botToken: string, chatId: number) {
+  async sendPhotoMessage(botToken: string, chatId: number | string) {
     const bot = this.resolveBot(botToken)
 
     // TODO: add
   }
 
-  async sendVideoMessage(botToken: string, chatId: number) {
+  async sendVideoMessage(botToken: string, chatId: number | string) {
     const bot = this.resolveBot(botToken)
 
     // TODO: add
   }
 
-  async sendPollMessage(botToken: string, chatId: number) {
+  async sendPollMessage(botToken: string, chatId: number | string) {
     const bot = this.resolveBot(botToken)
 
     // TODO: add
   }
 
-  async deleteMessage(botToken: string, chatId: number, msgId: number) {
+  async deleteMessage(botToken: string, chatId: number | string, msgId: number) {
     const bot = this.resolveBot(botToken)
 
     await bot.telegram.deleteMessage(chatId, msgId)
   }
 
-  onCmdStart(handler:(botToken: string, chatId: number) => void) {
+  onCmdStart(handler:(botToken: string, chatId: number | string) => void) {
     return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
   }
 
@@ -235,7 +235,7 @@ export class TgBot {
     return this.events.addListener(eventName, handler)
   }
 
-  onCallbackQuery(botToken: string, chatId: number, handler: (queryData: string) => void): number {
+  onCallbackQuery(botToken: string, chatId: number | string, handler: (queryData: string) => void): number {
     const eventName = botToken + EVENT_DELIMITER + chatId + EVENT_DELIMITER
       + TG_BOT_EVENT.callbackQuery
 
