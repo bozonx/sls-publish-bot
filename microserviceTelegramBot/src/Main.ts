@@ -51,4 +51,9 @@ export class Main {
       .catch((e) => this.log.error(e))
   }
 
+
+  registerBot(botToken: string) {
+    this.telegramManager.registerBot(botToken)
+  }
+
 }

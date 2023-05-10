@@ -37,4 +37,10 @@ export class TelegramManager {
     }
   }
 
+
+  registerBot(botToken: string) {
+    // TODO: save this token to use later
+    //this.main.tg
+  }
+
 }
