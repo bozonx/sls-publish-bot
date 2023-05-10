@@ -26,31 +26,118 @@ export class TgBot {
     this.main = main
   }
 
+  async destroy(reason: string) {
+    this.events.destroy()
 
-  async init() {
-    this.bot.start((ctx: Context) => {
+    for (const token of Object.keys(this.bots)) {
+      this.bots[token].stop(reason)
+    }
+  }
+
+
+  async sendTextMessage(
+    botToken: string,
+    chatId: number | string,
+    text: string | Format.FmtString,
+    extra?: Types.ExtraReplyMessage
+  ) {
+    const bot = await this.resolveBot(botToken)
+
+    return await bot.telegram.sendMessage(chatId, text, extra)
+  }
+
+  async sendPhotoMessage(botToken: string, chatId: number | string) {
+    const bot = await this.resolveBot(botToken)
+
+    // TODO: add
+  }
+
+  async sendVideoMessage(botToken: string, chatId: number | string) {
+    const bot = await this.resolveBot(botToken)
+
+    // TODO: add
+  }
+
+  async sendAudioMessage(botToken: string, chatId: number | string) {
+    const bot = await this.resolveBot(botToken)
+
+    // TODO: add
+  }
+
+  async sendPollMessage(botToken: string, chatId: number | string) {
+    const bot = await this.resolveBot(botToken)
+
+    // TODO: add
+  }
+
+  async deleteMessage(botToken: string, chatId: number | string, msgId: number) {
+    const bot = await this.resolveBot(botToken)
+
+    await bot.telegram.deleteMessage(chatId, msgId)
+  }
+
+  onCmdStart(handler:(botToken: string, chatId: number | string) => void) {
+    return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
+  }
+
+  // onBotLaunched(botToken: string, handler:() => void) {
+  //   const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
+  //
+  //   return this.events.addListener(eventName, handler)
+  // }
+
+  onCallbackQuery(botToken: string, chatId: number | string, handler: (queryData: string) => void): number {
+    const eventName = botToken + EVENT_DELIMITER + chatId + EVENT_DELIMITER
+      + TG_BOT_EVENT.callbackQuery
+
+    return this.events.addListener(eventName, handler)
+  }
+
+  onTextMessage(botToken: string) {
+
+  }
+
+  onPhotoMessage(botToken: string) {
+
+  }
+
+  onVideoMessage(botToken: string) {
+
+  }
+
+  onAudioMessage(botToken: string) {
+
+  }
+
+  onPollMessage(botToken: string) {
+
+  }
+
+
+  private async resolveBot(botToken: string) {
+    if (this.bots[botToken]) return this.bots[botToken]
+
+    this.bots[botToken] = new Telegraf(botToken, {
+      telegram: {
+        testEnv: !this.main.config.isProduction,
+      }
+    })
+
+    await this.initBot(botToken)
+
+    return this.bots[botToken]
+  }
+
+  private async initBot(botToken: string) {
+    const bot = this.bots[botToken]
+
+    bot.start((ctx: Context) => {
       if (typeof ctx.chat?.id === 'undefined') return
 
       this.events.emit(TG_BOT_EVENT.cmdStart, this.main.config.testBotToken, ctx.chat.id)
     });
 
-    //this.addListeners();
-
-    this.bot.launch()
-      .then(() => {
-        // const eventName = this.main.config.testBotToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
-        //
-        // this.events.emit(eventName)
-
-        // TODO: почему-то зависает
-
-        console.log(3333)
-      });
-    // TODO: ??? catch ???
-
-    this.main.log.info('Bot launched');
-
-    this.bot.on('callback_query', (ctx) => {
+    bot.on('callback_query', (ctx) => {
       if (!ctx.chat?.id) {
         this.main.log.warn('No chat id in callback_query');
 
@@ -169,94 +256,22 @@ export class TgBot {
     //     });
     //   }
     // });
-  }
-
-  async destroy(reason: string) {
-    for (const token of Object.keys(this.bots)) {
-      this.bots[token].stop(reason)
-    }
-  }
 
 
-  async sendTextMessage(
-    botToken: string,
-    chatId: number | string,
-    text: string | Format.FmtString,
-    extra?: Types.ExtraReplyMessage
-  ) {
-    const bot = this.resolveBot(botToken)
+    bot.launch()
+      .then(() => {
+        // const eventName = this.main.config.testBotToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
+        //
+        // this.events.emit(eventName)
 
-    return await bot.telegram.sendMessage(chatId, text, extra)
-  }
+        // TODO: почему-то зависает
 
-  async sendPhotoMessage(botToken: string, chatId: number | string) {
-    const bot = this.resolveBot(botToken)
+        console.log(3333)
+      })
+      .catch((e) => this.main.log.error(String(e)))
 
-    // TODO: add
-  }
-
-  async sendVideoMessage(botToken: string, chatId: number | string) {
-    const bot = this.resolveBot(botToken)
-
-    // TODO: add
-  }
-
-  async sendPollMessage(botToken: string, chatId: number | string) {
-    const bot = this.resolveBot(botToken)
-
-    // TODO: add
-  }
-
-  async deleteMessage(botToken: string, chatId: number | string, msgId: number) {
-    const bot = this.resolveBot(botToken)
-
-    await bot.telegram.deleteMessage(chatId, msgId)
-  }
-
-  onCmdStart(handler:(botToken: string, chatId: number | string) => void) {
-    return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
-  }
-
-  // onBotLaunched(botToken: string, handler:() => void) {
-  //   const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
-  //
-  //   return this.events.addListener(eventName, handler)
-  // }
-
-  onCallbackQuery(botToken: string, chatId: number | string, handler: (queryData: string) => void): number {
-    const eventName = botToken + EVENT_DELIMITER + chatId + EVENT_DELIMITER
-      + TG_BOT_EVENT.callbackQuery
-
-    return this.events.addListener(eventName, handler)
-  }
-
-  onTextMessage(botToken: string) {
-
-  }
-
-  onPhotoMessage(botToken: string) {
-
-  }
-
-  onVideoMessage(botToken: string) {
-
-  }
-
-  onPollMessage(botToken: string) {
-
-  }
-
-
-  private resolveBot(botToken: string) {
-    if (this.bots[botToken]) return this.bots[botToken]
-
-    this.bots[botToken] = new Telegraf(botToken, {
-      telegram: {
-        testEnv: !this.main.config.isProduction,
-      }
-    })
-
-    return this.bots[botToken]
+    // TODO: лучше не светить токены, а работать с их md5 суммой
+    this.main.log.info('Bot launched: ' + botToken);
   }
 
 }
