@@ -4,6 +4,18 @@ import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
 
+// TODO: !
+
+/*
+ему присылают уже сгенерированный фонфиг меню, который он будет показывать
+  поьзователю. И будет обрабатывать ответы указанным образом
+
+  получается что это будет abstractUi файлы, с которым будет работать бот.
+  Но они уже будут подготовленны - убранно лишее и не будут формироваться из
+  пакетов, а сразу готовы. Если что-то изменится, будет установлен новый пакет пользователем
+  то эти файлы обновятся
+ */
+
 
 export class Main {
   readonly config: TgBotConfig
@@ -22,9 +34,12 @@ export class Main {
   }
 
 
-  async init() {
-    await this.tg.init()
-    await this.renderer.init()
+  init() {
+    (async () => {
+      await this.tg.init()
+      await this.renderer.init()
+    })()
+      .catch((e) => this.log.error(e))
   }
 
   async destroy() {

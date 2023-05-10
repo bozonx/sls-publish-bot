@@ -1,11 +1,13 @@
-// TODO: !
+import {Main} from './Main.js';
+import {TgBotConfig} from './types/TgBotConfig.js';
 
-/*
-ему присылают уже сгенерированный фонфиг меню, который он будет показывать
-  поьзователю. И будет обрабатывать ответы указанным образом
 
-  получается что это будет abstractUi файлы, с которым будет работать бот.
-  Но они уже будут подготовленны - убранно лишее и не будут формироваться из
-  пакетов, а сразу готовы. Если что-то изменится, будет установлен новый пакет пользователем
-  то эти файлы обновятся
- */
+const config: TgBotConfig = {
+  // TODO: взять из env
+  isProduction: false,
+  testBotToken: '2200624704:AAGH52SeJJLMGVBwK4cMkOnJxTMtLJRc1xM',
+}
+
+const main = new Main(config)
+
+main.init()
