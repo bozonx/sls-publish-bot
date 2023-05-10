@@ -2,6 +2,7 @@ import {Window} from '../../../src/AbstractUi/Window.js';
 import {TelegramManager} from './TelegramManager.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../../src/types/MessageEvent.js';
 import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
+import {Main} from '../Main.js';
 
 
 export class TgChat {
@@ -9,22 +10,31 @@ export class TgChat {
   private readonly botChatId: number
   private readonly botToken: string
   private window!: Window
-  private renderer: TelegramManager
+  private telegramManager: TelegramManager
   private menuMsgId?: number
 
 
-  constructor(renderer: TelegramManager, botToken: string, botChatId: number) {
-    this.renderer = renderer
+  // TODO: токен брать как-то по другому, ведь юзер сам может задать своего бота
+
+
+  get main(): Main {
+    return this.telegramManager.main
+  }
+
+
+  constructor(telegramManager: TelegramManager, botToken: string, botChatId: number) {
+    this.telegramManager = telegramManager
     this.botToken = botToken
     this.botChatId = botChatId
   }
 
 
   async init() {
-    const windowConfig = await this.renderer.main.uiFilesManager
+    const windowConfig = await this.main.uiFilesManager
       .loadWindowConfig(this.botToken)
     this.window = new Window(windowConfig)
-    this.window.onDomChanged(() => this.render())
+    // TODO: review
+    this.window.onDomChanged(() => this.renderMenu())
 
     await this.window.init()
 
@@ -37,63 +47,65 @@ export class TgChat {
 
 
   startListeners() {
-    this.renderer.main.tg.onCallbackQuery(this.botToken, this.botChatId, (queryData: string) => {
+    this.main.tg.onCallbackQuery(this.botToken, this.botChatId, (queryData: string) => {
       if (!queryData) {
-        this.renderer.main.log.warn('Empty data came ad callback query')
+        this.main.log.warn('Empty data came ad callback query')
 
         return
       }
 
       //this.window.handleUiEvent(UI_EVENTS.click, queryData)
-    });
+    })
+
+    //
+    // handleIncomeTextEvent(msgEvent: TextMessageEvent) {
+    //   // TODO: нужно отправить это в элемент в фокусе
+    //   //this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
+    // }
+    //
+    // handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
+    //   // try {
+    //   //   this.events.emit(ChatEvents.PHOTO, msgEvent);
+    //   // }
+    //   // catch (e) {
+    //   //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    //   // }
+    // }
+    //
+    // handleIncomeVideoEvent(msgEvent: VideoMessageEvent) {
+    //   // try {
+    //   //   this.events.emit(ChatEvents.VIDEO, msgEvent);
+    //   // }
+    //   // catch (e) {
+    //   //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    //   // }
+    // }
+    //
+    // // handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
+    // //   this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
+    // // }
+    //
+    // handleIncomePollEvent(msgEvent: PollMessageEvent) {
+    //   // try {
+    //   //   this.events.emit(ChatEvents.POLL, msgEvent);
+    //   // }
+    //   // catch (e) {
+    //   //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    //   // }
+    // }
   }
 
-  handleIncomeTextEvent(msgEvent: TextMessageEvent) {
-    // TODO: нужно отправить это в элемент в фокусе
-    //this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
-  }
 
-  handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
-    // try {
-    //   this.events.emit(ChatEvents.PHOTO, msgEvent);
-    // }
-    // catch (e) {
-    //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    // }
-  }
-
-  handleIncomeVideoEvent(msgEvent: VideoMessageEvent) {
-    // try {
-    //   this.events.emit(ChatEvents.VIDEO, msgEvent);
-    // }
-    // catch (e) {
-    //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    // }
-  }
-
-  // handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
-  //   this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
-  // }
-
-  handleIncomePollEvent(msgEvent: PollMessageEvent) {
-    // try {
-    //   this.events.emit(ChatEvents.POLL, msgEvent);
-    // }
-    // catch (e) {
-    //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    // }
-  }
-
-
-  private render() {
+  private renderMenu() {
     (async () => {
       const [messageHtml, buttons] = convertDocumentToTgUi(this.window.rootDocument)
 
       if (typeof this.menuMsgId !== 'undefined') {
-        await this.renderer.main.tg.telegram.deleteMessage(this.botChatId, this.menuMsgId)
+        await this.main.tg.deleteMessage(this.botToken, this.botChatId, this.menuMsgId)
       }
 
-      const sentMessage = await this.renderer.bot.telegram.sendMessage(
+      const sentMessage = await this.main.tg.sendMessage(
+        this.botToken,
         this.botChatId,
         messageHtml,
         {
@@ -107,7 +119,7 @@ export class TgChat {
 
       this.menuMsgId = sentMessage.message_id
     })()
-      .catch((e) => this.renderer.main.log.error(e))
+      .catch((e) => this.main.log.error(e))
   }
 
 }

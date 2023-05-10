@@ -5,6 +5,7 @@ import {Main} from '../Main.js';
 import {TgChat} from './TgChat.js';
 import MessageEventBase from '../../../src/types/MessageEvent.js';
 import _ from 'lodash';
+import {TextMessageExtra} from '../types/messages.js';
 
 
 const EVENT_DELIMITER = '|'
@@ -19,18 +20,14 @@ export enum TG_BOT_EVENT {
 export class TgBot {
   private readonly main: Main
   private events = new IndexedEventEmitter()
-  private readonly bot: Telegraf;
 
   // TODO: лучше не создавать инстансы бота, а напрямую делать запросы
+  // like {botToken: Telegraf}
+  private readonly bots: Record<string, Telegraf> = {}
+
 
   constructor(main: Main) {
     this.main = main
-    // TODO: токен брать как-то по другому, ведь юзер сам может задать своего бота
-    this.bot = new Telegraf(this.main.config.testBotToken, {
-      telegram: {
-        testEnv: !this.main.config.isProduction,
-      }
-    })
   }
 
 
@@ -183,12 +180,49 @@ export class TgBot {
   }
 
 
-  async sendMessage(botToken: string) {
+  async sendTextMessage(botToken: string, chatId: number, extra?: TextMessageExtra) {
+    const bot = this.resolveBot(botToken)
 
+    const sentMessage = await bot.telegram.sendMessage(botToken, chatId, extra)
+//     const sentMessage = await this.renderer.bot.telegram.sendMessage(
+//       this.botChatId,
+//       messageHtml,
+//       {
+//         parse_mode: 'HTML',
+//         reply_markup: {
+//           inline_keyboard: buttons
+//         },
+//         disable_web_page_preview: true,
+//       },
+//     )
+//
+//     this.menuMsgId = sentMessage.message_id
+//   })()
+// .catch((e) => this.main.log.error(e))
   }
 
-  async deleteMessage(botToken: string) {
+  async sendPhotoMessage(botToken: string, chatId: number) {
+    const bot = this.resolveBot(botToken)
 
+    // TODO: add
+  }
+
+  async sendVideoMessage(botToken: string, chatId: number) {
+    const bot = this.resolveBot(botToken)
+
+    // TODO: add
+  }
+
+  async sendPollMessage(botToken: string, chatId: number) {
+    const bot = this.resolveBot(botToken)
+
+    // TODO: add
+  }
+
+  async deleteMessage(botToken: string, chatId: number, msgId: number) {
+    const bot = this.resolveBot(botToken)
+
+    await bot.telegram.deleteMessage(chatId, msgId)
   }
 
   onCmdStart(handler:(botToken: string, chatId: number) => void) {
@@ -222,6 +256,19 @@ export class TgBot {
 
   onPollMessage(botToken: string) {
 
+  }
+
+
+  private resolveBot(botToken: string) {
+    if (this.bots[botToken]) return this.bots[botToken]
+
+    this.bots[botToken] = new Telegraf(botToken, {
+      telegram: {
+        testEnv: !this.main.config.isProduction,
+      }
+    })
+
+    return this.bots[botToken]
   }
 
 }

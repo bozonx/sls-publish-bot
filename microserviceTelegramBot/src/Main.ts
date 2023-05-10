@@ -18,6 +18,7 @@ import {TgBotConfig} from './types/TgBotConfig.js';
 
 export class Main {
   readonly config: TgBotConfig
+  // TODO: connect logger microservice
   readonly log: ConsoleLogger
   readonly tg: TgBot
   readonly telegramManager: TelegramManager
