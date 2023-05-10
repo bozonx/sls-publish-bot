@@ -1,5 +1,6 @@
 import {Main} from './Main.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
+import {makeBotId} from '../../src/helpers/makeBotId.js';
 
 
 const config: TgBotConfig = {
@@ -21,7 +22,17 @@ process.once('SIGTERM', () => main.destroy('SIGTERM'));
 
 const testBotToken = '2200624704:AAGH52SeJJLMGVBwK4cMkOnJxTMtLJRc1xM'
 
-main.registerBot(testBotToken)
+
+const uiFiles = ''
+const botId = makeBotId(testBotToken)
+
+
+// // когда пользователь создает бота
+// main.registerBot(testBotToken, botId)
+// // Когда пользователь создал бота, то записываем стандартный ui.
+// // Если он внес правки, добавил/убрал какие-то плагины то тоже вызываем
+// main.setUi(botId, uiFiles)
+
 //main.telegramManager
 
 // main.onCmdStart(testBotToken, (chatId: number | string) => {

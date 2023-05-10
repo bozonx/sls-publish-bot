@@ -52,8 +52,18 @@ export class Main {
   }
 
 
-  registerBot(botToken: string) {
+  registerBot(botToken: string, botId: string): string {
+    // TODO: если уже есть бот то ничего не делаем
+
     this.telegramManager.registerBot(botToken)
+
+    // TODO: make botId - md5 из botToken
+
+    return '1'
+  }
+
+  setUi(botId: string, uiFiles: string) {
+    // TODO: parse uiFiles and save them to disk
   }
 
 }
