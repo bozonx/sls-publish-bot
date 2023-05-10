@@ -1,11 +1,7 @@
 import {IndexedEventEmitter} from 'squidlet-lib';
-import {Context, Telegraf} from 'telegraf';
+import {Context, Telegraf, Format, Types} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
 import {Main} from '../Main.js';
-import {TgChat} from './TgChat.js';
-import MessageEventBase from '../../../src/types/MessageEvent.js';
-import _ from 'lodash';
-import {TextMessageExtra} from '../types/messages.js';
 
 
 const EVENT_DELIMITER = '|'
@@ -52,7 +48,7 @@ export class TgBot {
       });
     // TODO: ??? catch ???
 
-    this.ctx.consoleLog.info('Bot launched');
+    this.main.log.info('Bot launched');
 
     this.bot.on('callback_query', (ctx) => {
       if (!ctx.chat?.id) {
@@ -176,29 +172,21 @@ export class TgBot {
   }
 
   async destroy(reason: string) {
-    this.bot.stop(reason);
+    for (const token of Object.keys(this.bots)) {
+      this.bots[token].stop(reason)
+    }
   }
 
 
-  async sendTextMessage(botToken: string, chatId: number | string, extra?: TextMessageExtra) {
+  async sendTextMessage(
+    botToken: string,
+    chatId: number | string,
+    text: string | Format.FmtString,
+    extra?: Types.ExtraReplyMessage
+  ) {
     const bot = this.resolveBot(botToken)
 
-    const sentMessage = await bot.telegram.sendMessage(botToken, chatId, extra)
-//     const sentMessage = await this.renderer.bot.telegram.sendMessage(
-//       this.botChatId,
-//       messageHtml,
-//       {
-//         parse_mode: 'HTML',
-//         reply_markup: {
-//           inline_keyboard: buttons
-//         },
-//         disable_web_page_preview: true,
-//       },
-//     )
-//
-//     this.menuMsgId = sentMessage.message_id
-//   })()
-// .catch((e) => this.main.log.error(e))
+    return await bot.telegram.sendMessage(chatId, text, extra)
   }
 
   async sendPhotoMessage(botToken: string, chatId: number | string) {
@@ -229,11 +217,11 @@ export class TgBot {
     return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
   }
 
-  onBotLaunched(botToken: string, handler:() => void) {
-    const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
-
-    return this.events.addListener(eventName, handler)
-  }
+  // onBotLaunched(botToken: string, handler:() => void) {
+  //   const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
+  //
+  //   return this.events.addListener(eventName, handler)
+  // }
 
   onCallbackQuery(botToken: string, chatId: number | string, handler: (queryData: string) => void): number {
     const eventName = botToken + EVENT_DELIMITER + chatId + EVENT_DELIMITER

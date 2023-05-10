@@ -3,11 +3,12 @@ import {TelegramManager} from './TelegramManager.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../../src/types/MessageEvent.js';
 import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
 import {Main} from '../Main.js';
+import {TG_PARSE_MODE} from '../types/constants.js';
 
 
 export class TgChat {
   // chat id where was start function called
-  private readonly botchatId: number | string
+  private readonly botChatId: number | string
   private readonly botToken: string
   private window!: Window
   private telegramManager: TelegramManager
@@ -22,7 +23,7 @@ export class TgChat {
   }
 
 
-  constructor(telegramManager: TelegramManager, botToken: string, botchatId: number | string) {
+  constructor(telegramManager: TelegramManager, botToken: string, botChatId: number | string) {
     this.telegramManager = telegramManager
     this.botToken = botToken
     this.botChatId = botChatId
@@ -104,12 +105,12 @@ export class TgChat {
         await this.main.tg.deleteMessage(this.botToken, this.botChatId, this.menuMsgId)
       }
 
-      const sentMessage = await this.main.tg.sendMessage(
+      const sentMessage = await this.main.tg.sendTextMessage(
         this.botToken,
         this.botChatId,
         messageHtml,
         {
-          parse_mode: 'HTML',
+          parse_mode: TG_PARSE_MODE,
           reply_markup: {
             inline_keyboard: buttons
           },
