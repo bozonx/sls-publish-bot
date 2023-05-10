@@ -1,7 +1,7 @@
 import {ConsoleLogger, LogLevel} from 'squidlet-lib';
-import {TelegramRenderer} from './telegramRenderer/TelegramRenderer.js';
+import {TelegramRenderer} from './tg/TelegramRenderer.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
-import {TgBot} from './TgBot.js';
+import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
 
 /*
