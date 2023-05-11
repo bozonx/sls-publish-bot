@@ -1,17 +1,7 @@
 import {Main} from '../Main.js';
+import {BotStorageInfo, ChatStorageInfo, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
 
 
-export interface BotStorageInfo {
-  botId: string
-  token: string
-  created: string
-}
-
-export interface ChatStorageInfo {
-  botId: string
-  chatId: string
-  created: string
-}
 
 
 export class ChatStorage {
@@ -27,16 +17,15 @@ export class ChatStorage {
    * Load all the bot tokens like - bot
    */
   async getAllBots(): Promise<BotStorageInfo[]> {
-    // TODO: если нет директории long - то ошибка
-    // TODO: это должна быть база данных !!!
-    // TODO: если нет директории с токенами то значит нет токенов
-
-    // TODO: load all the tokens
-    // TODO: можно опустить created
+    return await this.main.db.getAll<BotStorageInfo>(DB_TABLES.bots)
   }
 
   async getBotChats(botId: string): Promise<ChatStorageInfo[]> {
-
+    return await this.main.db.getAllByKey<ChatStorageInfo>(
+      DB_TABLES.chats,
+      DB_CHATS_COLS.botId,
+      botId
+    )
   }
 
   async saveChat(botId: string, chatId: string) {

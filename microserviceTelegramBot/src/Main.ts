@@ -6,6 +6,8 @@ import {TgBotConfig} from './types/TgBotConfig.js';
 import {ChatStorage} from './storage/ChatStorage.js';
 import {BotStatusStorage} from './storage/BotStatusStorage.js';
 import {UiFilesStorage} from './storage/UiFilesStorage.js';
+import {SqliteDb} from './storage/SqliteDb.js';
+import {DbStorage} from './types/DbStorage.js';
 
 
 /*
@@ -33,6 +35,7 @@ export class Main {
   // TODO: connect logger microservice
   readonly log: ConsoleLogger
   readonly tg = new TgBotApi(this)
+  readonly db: DbStorage = new SqliteDb(this)
   readonly chatsManager = new ChatsManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
   readonly chatStorage = new ChatStorage(this)
@@ -50,6 +53,7 @@ export class Main {
   init() {
     (async () => {
       this.log.info('Start instantiating')
+      await this.db.init()
       await this.chatsManager.init()
       this.log.info('Instantiated successfully')
     })()
@@ -60,6 +64,7 @@ export class Main {
     (async () => {
       await this.chatsManager.destroy()
       await this.tg.destroy(reason)
+      await this.db.destroy()
     })()
       .catch((e) => this.log.error(e))
   }
