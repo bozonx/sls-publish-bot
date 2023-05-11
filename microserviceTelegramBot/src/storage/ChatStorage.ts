@@ -48,4 +48,11 @@ export class ChatStorage {
 
   }
 
+  async removeBot(botId: string) {
+    // TODO: remove if exist
+    // TODO: and it's chats
+    // TODO: and all chat's info
+
+  }
+
 }

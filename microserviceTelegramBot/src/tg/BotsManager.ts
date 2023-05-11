@@ -8,7 +8,7 @@ import {BotStorageInfo} from '../storage/ChatStorage.js';
 
 export class BotsManager {
   readonly main: Main
-  // {"chatId": TgChat}
+  // like {"chatId": TgChat}
   private readonly chats: Record<string, TgChat> = {}
 
 
@@ -50,8 +50,17 @@ export class BotsManager {
   }
 
   async removeBot(botId: string) {
-    // TODO: add un register
-    // TODO: add remove storage
+    for (const chatId of Object.keys(this.chats)) {
+      const chat = this.chats[chatId]
+
+      if (chat.botId !== botId) continue
+
+      await this.chats[chatId].destroy()
+
+      delete this.chats[chatId]
+    }
+
+    await this.main.chatStorage.removeBot(botId)
   }
 
   async botStatus(botId: string): Promise<BotStatus> {

@@ -7,9 +7,9 @@ import {TG_PARSE_MODE} from '../types/constants.js';
 
 
 export class TgChat {
-  // chat id where was start function called
-  private readonly botChatId: number | string
-  private readonly botToken: string
+  readonly botId: string
+  readonly chatId: string
+
   private window!: Window
   private botsManager: BotsManager
   private menuMsgId?: number
@@ -23,10 +23,10 @@ export class TgChat {
   }
 
 
-  constructor(botsManager: BotsManager, botId: string, botChatId: number | string) {
+  constructor(botsManager: BotsManager, botId: string, chatId: string) {
     this.botsManager = botsManager
-    this.botToken = botToken
-    this.botChatId = botChatId
+    this.botId = botId
+    this.chatId = chatId
   }
 
 
