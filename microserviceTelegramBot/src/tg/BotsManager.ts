@@ -70,8 +70,16 @@ export class BotsManager {
     this.main.tg.onCmdStart((botId: string, chatId: string) => {
       (async () => {
         const id = botId + CHAT_DELIMITER + chatId
-        // destroy chat instance if it exists
-        if (this.chats[id]) await this.chats[id].destroy()
+
+        if (this.chats[id]) {
+          // destroy chat instance if it exists
+          await this.chats[id].destroy()
+        }
+        else {
+          // if chat doesn't exists
+          await this.main.botTokenStorage
+        }
+
         // make a new instance any way
         this.chats[id] = new TgChat(this, botId, chatId)
         // and init it
