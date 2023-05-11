@@ -76,15 +76,10 @@ export class TgBot {
     await bot.telegram.deleteMessage(chatId, msgId)
   }
 
-  onCmdStart(handler:(botToken: string, chatId: number | string) => void) {
+  onCmdStart(handler:(botToken: string, chatId: string) => void) {
     return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
   }
 
-  onCmdStartOnce(botToken: string, handler:(chatId: number | string) => void) {
-    return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
-
-    // TODO: remove listener
-  }
 
   // onBotLaunched(botToken: string, handler:() => void) {
   //   const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched

@@ -49,9 +49,11 @@ export class Main {
 
   init() {
     (async () => {
+      this.log.info('Start instantiating')
       await this.botsManager.init()
+      this.log.info('Instantiated successfully')
     })()
-      .catch((e) => this.log.error(e))
+      .catch((e) => this.log.error(`Instantiate error: ${e}`))
   }
 
   destroy(reason: string) {

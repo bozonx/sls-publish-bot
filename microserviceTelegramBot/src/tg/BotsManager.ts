@@ -25,13 +25,12 @@ export class BotsManager {
     for (const item of botTokens) {
       const botChatIds = await this.main.botTokenStorage.getBotChats(item.botId)
 
-      this.listenToNewChat(item.botId, item.token)
-
       for (const chat of botChatIds) {
         await this.initChat(item.botId, item.token, chat.chatId)
       }
-
     }
+
+    this.listenChatStart()
   }
   
   async destroy() {
@@ -67,11 +66,11 @@ export class BotsManager {
 
   }
 
-  private listenToNewChat(botId: string, botToken: string) {
+  private listenChatStart() {
 
     // TODO: хотя если уже существует то можно прибить чат и создать инстанс заного
 
-    this.main.tg.onCmdStartOnce(botToken: string, (chatId: number | string) => {
+    this.main.tg.onCmdStart((botToken: string, chatId: string) => {
       const id = botId + CHAT_DELIMITER + chatId
 
       if (!this.chats[id]) {
