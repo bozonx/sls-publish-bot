@@ -3,9 +3,19 @@ import {TelegramManager} from './tg/TelegramManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
+import {makeBotId} from '../../src/helpers/makeBotId.js';
 
 
 /*
+
+  Когда пользователь создает бота, то он навечно хранится в этом сервисе
+  и слушает события.
+  Бот удаляется только по запросу удаления,
+  либо запрос от cron который удаляет не используемые боты.
+  !!!! лучше чтобы был один запрос слушания событий к tg api сразу на много ботов
+
+
+----
 ему присылают уже сгенерированный фонфиг меню, который он будет показывать
   поьзователю. И будет обрабатывать ответы указанным образом
 
@@ -52,17 +62,17 @@ export class Main {
   }
 
 
-  registerBot(botToken: string, botId: string): string {
+  newBot(botToken: string): string {
+    const botId = makeBotId(testBotToken)
     // TODO: если уже есть бот то ничего не делаем
+    // TODO: сохранить связку в хранилище
 
-    this.telegramManager.registerBot(botToken)
+    //this.telegramManager.registerBot(botToken)
 
-    // TODO: make botId - md5 из botToken
-
-    return '1'
+    return botId
   }
 
-  setUi(botId: string, uiFiles: string) {
+  async setUi(botId: string, uiFiles: string) {
     // TODO: parse uiFiles and save them to disk
   }
 

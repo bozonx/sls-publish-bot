@@ -1,6 +1,6 @@
 import {Main} from './Main.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
-import {makeBotId} from '../../src/helpers/makeBotId.js';
+import {ServiceInterface} from './ServiceInterface.js';
 
 
 const config: TgBotConfig = {
@@ -10,6 +10,7 @@ const config: TgBotConfig = {
 }
 
 const main = new Main(config)
+const serviceInterface = new ServiceInterface(main)
 
 main.init()
 
@@ -17,24 +18,21 @@ main.init()
 process.once('SIGINT', () => main.destroy('SIGINT'));
 process.once('SIGTERM', () => main.destroy('SIGTERM'));
 
+
+
 //////// TEST
 
-
-const testBotToken = '2200624704:AAGH52SeJJLMGVBwK4cMkOnJxTMtLJRc1xM'
-
-
-const uiFiles = ''
-const botId = makeBotId(testBotToken)
+(async () => {
+  const testBotToken = '2200624704:AAGH52SeJJLMGVBwK4cMkOnJxTMtLJRc1xM'
 
 
-// // когда пользователь создает бота
-// main.registerBot(testBotToken, botId)
-// // Когда пользователь создал бота, то записываем стандартный ui.
-// // Если он внес правки, добавил/убрал какие-то плагины то тоже вызываем
-// main.setUi(botId, uiFiles)
+  const uiFiles = 'compiled js files. They render menu and listen events'
 
-//main.telegramManager
 
-// main.onCmdStart(testBotToken, (chatId: number | string) => {
-//
-// })
+// когда пользователь создает бота
+  const botId = await serviceInterface.newBot(testBotToken)
+// Когда пользователь создал бота, то записываем стандартный ui.
+// Если он внес правки, добавил/убрал какие-то плагины то тоже вызываем
+  await main.setUi(botId, uiFiles)
+
+})()

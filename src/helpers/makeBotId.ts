@@ -1,7 +1,7 @@
 import {createHmac} from 'node:crypto'
 
 
-// TODO: do it need to store separetelly???
+// TODO: do it need to be stored separately???
 // secret or salt to be hashed with
 const SECRET = 'Some secret'
 
