@@ -3,6 +3,9 @@ import {TelegramManager} from './tg/TelegramManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
+import {BotTokenStorage} from './storage/BotTokenStorage.js';
+import {BotStatusStorage} from './storage/BotStatusStorage.js';
+import {UiFilesStorage} from './storage/UiFilesStorage.js';
 
 
 /*
@@ -32,6 +35,9 @@ export class Main {
   readonly tg: TgBot
   readonly telegramManager: TelegramManager
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
+  readonly botTokenStorage = new BotTokenStorage(this)
+  readonly botStatusStorage = new BotStatusStorage(this)
+  readonly uiFilesStorage = new UiFilesStorage(this)
 
 
   constructor(config: TgBotConfig) {
