@@ -2,8 +2,6 @@ import {Main} from '../Main.js';
 import {BotStorageInfo, ChatStorageInfo, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
 
 
-
-
 export class ChatStorage {
   private readonly main: Main
 
@@ -30,6 +28,8 @@ export class ChatStorage {
 
   async saveChat(botId: string, chatId: string) {
     // TODO: if it exists do nothing
+
+    await this.main.db.insertRecord()
   }
 
   async saveBot(botToken: string, botId: string) {

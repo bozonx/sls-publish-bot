@@ -70,6 +70,8 @@ export class SqliteDb implements DbStorage {
     const colsStr = this.makeColStr(cols)
     const whereStr = this.makeWhereStr(where)
 
+    // ORDER BY col DESC
+
     return this.db.all<T[]>(`SELECT ${colsStr} FROM ${tableName} ${whereStr}`)
   }
 
@@ -87,15 +89,71 @@ export class SqliteDb implements DbStorage {
     )
   }
 
-  async insertRecord() {
-    const result = await db.run(
+  async create<T = Record<string, any>>(
+    tableName: string,
+    record: Record<any, any>
+  ): Promise<T> {
+    const result = await this.db.run(
       'INSERT INTO tbl (col) VALUES (?)',
       'foo'
     )
+
+    // TODO: проверить результат
+    //res.changes
+
+    // TODO: вернуть результат
   }
 
-  async deleteRecordByKey(table: string, keyName: string, keyValue: string) {
+  async updateByKey<T = Record<string, any>>(
+    tableName: string,
+    partialData: Record<any, any>,
+    keyName: string, value: string
+  ): Promise<T> {
+    const result = await this.db.run(
+      `UPDATE ${tableName} SET col = ? WHERE col = ?`,
+      'foo',
+      'test'
+    )
 
+    // TODO: проверить результат
+    //res.changes
+
+    // TODO: вернуть результат
+  }
+
+  async update<T = Record<string, any>>(
+    tableName: string,
+    partialData: Record<any, any>,
+    where: string
+  ): Promise<T> {
+    const result = await this.db.run(
+      `UPDATE ${tableName} SET col = ? WHERE col = ?`,
+      'foo',
+      'test'
+    )
+
+    // TODO: проверить результат
+    //res.changes
+
+    // TODO: вернуть результат
+  }
+
+  async deleteByKey(table: string, keyName: string, value: string) {
+    const result = await this.db.run(
+      `DELETE FROM ${table} WHERE ${keyName} = ${value}`
+    )
+
+    // TODO: проверить результат
+    //result.changes
+  }
+
+  async delete(table: string, where: string) {
+    const result = await this.db.run(
+      `DELETE FROM ${table} WHERE ${where}`
+    )
+
+    // TODO: проверить результат
+    //result.changes
   }
 
 

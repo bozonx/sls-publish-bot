@@ -27,4 +27,23 @@ export interface DbStorage {
     value: any,
     cols?: string[]
   ): Promise<T[]>
+
+  create<T = Record<string, any>>(tableName: string, record: Record<any, any>): Promise<T>
+
+  updateByKey<T = Record<string, any>>(
+    tableName: string,
+    partialData: Record<any, any>,
+    keyName: string,
+    value: string
+  ): Promise<T>
+
+  update<T = Record<string, any>>(
+    tableName: string,
+    partialData: Record<any, any>,
+    where: string
+  ): Promise<T>
+
+  deleteByKey(table: string, keyName: string, value: string): Promise<void>
+
+  delete(table: string, where: string): Promise<void>
 }
