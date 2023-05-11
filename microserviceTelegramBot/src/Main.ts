@@ -3,7 +3,6 @@ import {TelegramManager} from './tg/TelegramManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
-import {makeBotId} from '../../src/helpers/makeBotId.js';
 
 
 /*

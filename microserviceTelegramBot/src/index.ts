@@ -10,7 +10,7 @@ const config: TgBotConfig = {
 }
 
 const main = new Main(config)
-const serviceInterface = new ServiceInterface(main)
+const service = new ServiceInterface(main)
 
 main.init()
 
@@ -24,15 +24,12 @@ process.once('SIGTERM', () => main.destroy('SIGTERM'));
 
 (async () => {
   const testBotToken = '2200624704:AAGH52SeJJLMGVBwK4cMkOnJxTMtLJRc1xM'
-
-
   const uiFiles = 'compiled js files. They render menu and listen events'
 
-
-// когда пользователь создает бота
-  const botId = await serviceInterface.newBot(testBotToken)
-// Когда пользователь создал бота, то записываем стандартный ui.
-// Если он внес правки, добавил/убрал какие-то плагины то тоже вызываем
-  await main.setUi(botId, uiFiles)
+  // когда пользователь создает бота
+  const botId = await service.newBot(testBotToken)
+  // Когда пользователь создал бота, то записываем стандартный ui.
+  // Если он внес правки, добавил/убрал какие-то плагины то тоже вызываем
+  await service.setUi(botId, uiFiles)
 
 })()
