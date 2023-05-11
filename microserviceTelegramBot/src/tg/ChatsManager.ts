@@ -9,7 +9,6 @@ export class ChatsManager {
   readonly main: Main
   // like {"chatId": TgChat}
   private readonly chats: Record<string, TgChat> = {}
-  //private readonly handlerIndexed: Record<string, number[]> = {}
 
 
   constructor(main: Main) {

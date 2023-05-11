@@ -18,7 +18,7 @@ export class TgBotApi {
   private events = new IndexedEventEmitter()
 
   // TODO: лучше не создавать инстансы бота, а напрямую делать запросы
-  // like {botToken: Telegraf}
+  // like {botId: Telegraf}
   private readonly bots: Record<string, Telegraf> = {}
 
 

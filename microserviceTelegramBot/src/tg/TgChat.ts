@@ -36,7 +36,7 @@ export class TgChat {
     //
     // await this.window.init()
 
-    await this.renderMenu()
+    this.renderMenu()
   }
   
   async destroy() {
@@ -46,7 +46,7 @@ export class TgChat {
 
   handleIncomeCallbackQuery(queryData: string) {
     if (!queryData) {
-      this.main.log.warn('Empty data came ad callback query')
+      this.main.log.warn(`Empty data came in callback query to chat: ${this.chatId}, bot: ${this.botId}`)
 
       return
     }
@@ -111,27 +111,27 @@ export class TgChat {
         }
       )
 
-
-      const [messageHtml, buttons] = convertDocumentToTgUi(this.window.rootDocument)
-
-      if (typeof this.menuMsgId !== 'undefined') {
-        await this.main.tg.deleteMessage(this.botToken, this.botChatId, this.menuMsgId)
-      }
-
-      const sentMessage = await this.main.tg.sendTextMessage(
-        this.botToken,
-        this.botChatId,
-        messageHtml,
-        {
-          parse_mode: TG_PARSE_MODE,
-          reply_markup: {
-            inline_keyboard: buttons
-          },
-          disable_web_page_preview: true,
-        },
-      )
-
-      this.menuMsgId = sentMessage.message_id
+      //
+      // const [messageHtml, buttons] = convertDocumentToTgUi(this.window.rootDocument)
+      //
+      // if (typeof this.menuMsgId !== 'undefined') {
+      //   await this.main.tg.deleteMessage(this.botToken, this.botChatId, this.menuMsgId)
+      // }
+      //
+      // const sentMessage = await this.main.tg.sendTextMessage(
+      //   this.botToken,
+      //   this.botChatId,
+      //   messageHtml,
+      //   {
+      //     parse_mode: TG_PARSE_MODE,
+      //     reply_markup: {
+      //       inline_keyboard: buttons
+      //     },
+      //     disable_web_page_preview: true,
+      //   },
+      // )
+      //
+      // this.menuMsgId = sentMessage.message_id
     })()
       .catch((e) => this.main.log.error(e))
   }
