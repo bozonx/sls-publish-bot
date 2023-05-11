@@ -11,6 +11,14 @@ export class UiFilesManager {
   }
 
 
+  async setUi(botId: string, uiFiles: string) {
+    // TODO: parse uiFiles and save them to disk
+  }
+
+  async removeUi(botId: string) {
+    // TODO: add
+  }
+
   async loadWindowConfig(botToken: string): Promise<WindowConfig> {
     // TODO: load from storage all the ui files
 

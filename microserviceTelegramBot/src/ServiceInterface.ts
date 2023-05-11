@@ -11,20 +11,21 @@ export class ServiceInterface implements MicroserviceTgBotInterface {
   }
 
 
-  newBot(botToken: string): Promise<string> {
-
+  async newBot(botToken: string): Promise<string> {
+    return this.main.telegramManager.newBot(botToken)
   }
 
-  botStatus(botId: string): Promise<BotStatus> {
-
+  async botStatus(botId: string): Promise<BotStatus> {
+    return this.main.telegramManager.botStatus(botId)
   }
 
-  setUi(botId: string, uiFiles: string): Promise<void> {
-
+  async setUi(botId: string, uiFiles: string) {
+    await this.main.uiFilesManager.setUi(botId, uiFiles)
   }
 
-  removeBot(botId: string): Promise<void> {
-
+  async removeBot(botId: string) {
+    await this.main.uiFilesManager.removeUi(botId)
+    await this.main.telegramManager.removeBot(botId)
   }
 
 }

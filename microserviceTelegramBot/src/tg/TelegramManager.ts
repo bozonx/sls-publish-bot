@@ -1,5 +1,7 @@
 import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
+import {makeBotId} from '../../../src/helpers/makeBotId.js';
+import {BotStatus} from '../types/MicroserviceTgBotInterface.js';
 
 
 const CHAT_DELIMITER = '|'
@@ -38,9 +40,23 @@ export class TelegramManager {
   }
 
 
-  registerBot(botToken: string) {
-    // TODO: save this token to use later
-    //this.main.tg
+  newBot(botToken: string): string {
+    const botId = makeBotId(testBotToken)
+    // TODO: если уже есть бот то ничего не делаем
+    // TODO: сохранить связку в хранилище
+
+    //this.telegramManager.registerBot(botToken)
+
+    return botId
+  }
+
+  async removeBot(botId: string) {
+    // TODO: add un register
+    // TODO: add remove storage
+  }
+
+  async botStatus(botId: string): Promise<BotStatus> {
+
   }
 
 }

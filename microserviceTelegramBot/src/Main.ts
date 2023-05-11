@@ -61,19 +61,4 @@ export class Main {
       .catch((e) => this.log.error(e))
   }
 
-
-  newBot(botToken: string): string {
-    const botId = makeBotId(testBotToken)
-    // TODO: если уже есть бот то ничего не делаем
-    // TODO: сохранить связку в хранилище
-
-    //this.telegramManager.registerBot(botToken)
-
-    return botId
-  }
-
-  async setUi(botId: string, uiFiles: string) {
-    // TODO: parse uiFiles and save them to disk
-  }
-
 }
