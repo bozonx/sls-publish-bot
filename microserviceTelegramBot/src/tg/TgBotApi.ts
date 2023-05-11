@@ -4,7 +4,7 @@ import {Message, PhotoSize, Video} from 'typegram/message';
 import {Main} from '../Main.js';
 
 
-const EVENT_DELIMITER = '|'
+//const EVENT_DELIMITER = '|'
 
 export enum TG_BOT_EVENT {
   cmdStart,
@@ -45,31 +45,31 @@ export class TgBotApi {
     text: string | Format.FmtString,
     extra?: Types.ExtraReplyMessage
   ) {
-    const bot = await this.resolveBot(botToken)
+    const bot = await this.resolveBot(botId)
 
     return await bot.telegram.sendMessage(chatId, text, extra)
   }
 
-  async sendPhotoMessage(botToken: string, chatId: number | string) {
-    const bot = await this.resolveBot(botToken)
+  async sendPhotoMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
 
     // TODO: add
   }
 
-  async sendVideoMessage(botToken: string, chatId: number | string) {
-    const bot = await this.resolveBot(botToken)
+  async sendVideoMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
 
     // TODO: add
   }
 
-  async sendAudioMessage(botToken: string, chatId: number | string) {
-    const bot = await this.resolveBot(botToken)
+  async sendAudioMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
 
     // TODO: add
   }
 
-  async sendPollMessage(botToken: string, chatId: number | string) {
-    const bot = await this.resolveBot(botToken)
+  async sendPollMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
 
     // TODO: add
   }
@@ -85,7 +85,7 @@ export class TgBotApi {
   }
 
   onIncomeCallbackQuery(handler: (botId: string, chatId: string, queryData: string) => void): number {
-    // TODO: add
+    return this.events.addListener(TG_BOT_EVENT.callbackQuery, handler)
   }
 
 
@@ -95,56 +95,51 @@ export class TgBotApi {
   //   return this.events.addListener(eventName, handler)
   // }
 
-  onCallbackQuery(botToken: string, chatId: number | string, handler: (queryData: string) => void): number {
-    const eventName = botToken + EVENT_DELIMITER + chatId + EVENT_DELIMITER
-      + TG_BOT_EVENT.callbackQuery
-
-    return this.events.addListener(eventName, handler)
-  }
-
-  onTextMessage(botToken: string) {
+  onTextMessage() {
 
   }
 
-  onPhotoMessage(botToken: string) {
+  onPhotoMessage() {
 
   }
 
-  onVideoMessage(botToken: string) {
+  onVideoMessage() {
 
   }
 
-  onAudioMessage(botToken: string) {
+  onAudioMessage() {
 
   }
 
-  onPollMessage(botToken: string) {
+  onPollMessage() {
 
   }
 
 
-  private async resolveBot(botToken: string) {
-    if (this.bots[botToken]) return this.bots[botToken]
+  private async resolveBot(botId: string) {
+    if (this.bots[botId]) return this.bots[botId]
 
-    this.bots[botToken] = new Telegraf(botToken, {
+    // TODO: где взять bot token ???
+
+    this.bots[botId] = new Telegraf(botToken, {
       telegram: {
         testEnv: !this.main.config.isProduction,
       }
     })
 
-    await this.initBot(botToken)
+    await this.initBot(botId)
 
-    return this.bots[botToken]
+    return this.bots[botId]
   }
 
-  private async initBot(botToken: string) {
-    const bot = this.bots[botToken]
+  private async initBot(botId: string) {
+    const bot = this.bots[botId]
 
     bot.start((ctx: Context) => {
       if (typeof ctx.chat?.id === 'undefined') return
 
-      this.events.emit(TG_BOT_EVENT.cmdStart, botId, ctx.chat.id)
-    });
+      this.events.emit(TG_BOT_EVENT.cmdStart, botId, String(ctx.chat.id))
+    })
 
     bot.on('callback_query', (ctx) => {
       if (!ctx.chat?.id) {

@@ -23,6 +23,9 @@ export class ChatsManager {
       const botChatIds = await this.main.chatStorage.getBotChats(item.botId)
 
       for (const chat of botChatIds) {
+
+        // TODO: запустить слушание событий в боте
+
         await this.initChat(item.botId, chat.chatId)
       }
     }
@@ -44,7 +47,9 @@ export class ChatsManager {
     const botId = makeBotId(botToken)
 
     await this.main.chatStorage.saveBot(botToken, botId)
-    await this.main.tg.listenToStartBot(botToken, botId)
+
+    // TODO: он должен слушать толко старт или все события???
+    //await this.main.tg.listenToStartBot(botToken, botId)
 
     return botId
   }
