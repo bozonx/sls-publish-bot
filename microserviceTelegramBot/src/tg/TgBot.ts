@@ -76,7 +76,7 @@ export class TgBot {
     await bot.telegram.deleteMessage(chatId, msgId)
   }
 
-  onCmdStart(handler:(botToken: string, chatId: string) => void) {
+  onCmdStart(handler:(botId: string, chatId: string) => void) {
     return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
   }
 
@@ -135,7 +135,7 @@ export class TgBot {
     bot.start((ctx: Context) => {
       if (typeof ctx.chat?.id === 'undefined') return
 
-      this.events.emit(TG_BOT_EVENT.cmdStart, botToken, ctx.chat.id)
+      this.events.emit(TG_BOT_EVENT.cmdStart, botId, ctx.chat.id)
     });
 
     bot.on('callback_query', (ctx) => {

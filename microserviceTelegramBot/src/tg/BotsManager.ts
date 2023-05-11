@@ -67,18 +67,16 @@ export class BotsManager {
   }
 
   private listenChatStart() {
-
-    // TODO: хотя если уже существует то можно прибить чат и создать инстанс заного
-
-    this.main.tg.onCmdStart((botToken: string, chatId: string) => {
-      const id = botId + CHAT_DELIMITER + chatId
-
-      if (!this.chats[id]) {
-        this.chats[id] = new TgChat(this, botToken, chatId)
-      }
-
-      this.chats[id].init()
-        .catch((e) => this.main.log.error(e));
+    this.main.tg.onCmdStart((botId: string, chatId: string) => {
+      (async () => {
+        const id = botId + CHAT_DELIMITER + chatId
+        // destroy chat instance if it exists
+        if (this.chats[id]) await this.chats[id].destroy()
+        // make a new instance any way
+        this.chats[id] = new TgChat(this, botId, chatId)
+        // and init it
+        await this.chats[id].init()
+      })().catch((e) => this.main.log.error(e))
     })
   }
 

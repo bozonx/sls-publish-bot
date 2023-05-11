@@ -23,7 +23,7 @@ export class TgChat {
   }
 
 
-  constructor(botsManager: BotsManager, botToken: string, botChatId: number | string) {
+  constructor(botsManager: BotsManager, botId: string, botChatId: number | string) {
     this.botsManager = botsManager
     this.botToken = botToken
     this.botChatId = botChatId
