@@ -43,4 +43,9 @@ export class ChatStorage {
     // TODO: if it exists do nothing
   }
 
+  async saveBot(botToken: string, botId: string) {
+    // TODO: если уже есть бот то ничего не делаем
+
+  }
+
 }

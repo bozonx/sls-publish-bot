@@ -5,13 +5,10 @@ import {BotStatus} from '../types/MicroserviceTgBotInterface.js';
 import {BotStorageInfo} from '../storage/ChatStorage.js';
 
 
-// TODO: поидее не нужно, достаточно chatId
-const CHAT_DELIMITER = '|'
-
 
 export class BotsManager {
   readonly main: Main
-  // {"botId|chatId": TgChat}
+  // {"chatId": TgChat}
   private readonly chats: Record<string, TgChat> = {}
 
 
@@ -27,7 +24,7 @@ export class BotsManager {
       const botChatIds = await this.main.chatStorage.getBotChats(item.botId)
 
       for (const chat of botChatIds) {
-        await this.initChat(item.botId, item.token, chat.chatId)
+        await this.initChat(item.botId, chat.chatId)
       }
     }
 
@@ -43,12 +40,11 @@ export class BotsManager {
   }
 
 
-  newBot(botToken: string): string {
-    const botId = makeBotId(testBotToken)
-    // TODO: если уже есть бот то ничего не делаем
-    // TODO: сохранить связку в хранилище
+  async newBot(botToken: string): Promise<string> {
+    const botId = makeBotId(botToken)
 
-    //this.telegramManager.registerBot(botToken)
+    await this.main.chatStorage.saveBot(botToken, botId)
+    await this.main.tg.listenToStartBot(botToken, botId)
 
     return botId
   }
@@ -59,33 +55,32 @@ export class BotsManager {
   }
 
   async botStatus(botId: string): Promise<BotStatus> {
-
+    // TODO: add !!!
+    return {} as any
   }
 
-
-  private async initChat(botId: string, botToken: string, chatId: string) {
-
-  }
 
   private listenNewChatsStart() {
     this.main.tg.onCmdStart((botId: string, chatId: string) => {
       (async () => {
-        const id = botId + CHAT_DELIMITER + chatId
-
-        if (this.chats[id]) {
+        if (this.chats[chatId]) {
           // destroy chat instance if it exists
-          await this.chats[id].destroy()
+          await this.chats[chatId].destroy()
         }
         else {
           // if chat doesn't exists - save it
           await this.main.chatStorage.saveChat(botId, chatId)
         }
         // make a new instance any way
-        this.chats[id] = new TgChat(this, botId, chatId)
-        // and init it
-        await this.chats[id].init()
+        await this.initChat(botId, chatId)
       })().catch((e) => this.main.log.error(e))
     })
+  }
+
+  private async initChat(botId: string, chatId: string) {
+    this.chats[chatId] = new TgChat(this, botId, chatId)
+    // and init it
+    await this.chats[chatId].init()
   }
 
 }

@@ -35,6 +35,10 @@ export class TgBot {
   }
 
 
+  async listenToStartBot(botToken: string, botId: string) {
+    // TODO: начать слушать start
+  }
+
   async sendTextMessage(
     botToken: string,
     chatId: number | string,
