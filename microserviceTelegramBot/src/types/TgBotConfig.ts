@@ -9,4 +9,6 @@ export interface TgBotConfig {
   longStoragePath: string
   // storage for files which updates often
   varStoragePath: string
+  // at the moment only support sqlite
+  db: 'sqlite'
 }

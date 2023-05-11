@@ -2,6 +2,7 @@ import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
 import {makeBotId} from '../../../src/helpers/makeBotId.js';
 import {BotStatus} from '../types/MicroserviceTgBotInterface.js';
+import {BotStorageInfo} from '../storage/BotTokenStorage.js';
 
 
 const CHAT_DELIMITER = '|'
@@ -9,7 +10,7 @@ const CHAT_DELIMITER = '|'
 
 export class BotsManager {
   readonly main: Main
-  // {"botToken|chatId": TgChat}
+  // {"botId|chatId": TgChat}
   private readonly chats: Record<string, TgChat> = {}
 
 
@@ -19,22 +20,18 @@ export class BotsManager {
 
 
   async init() {
-    const botTokens: Record<string, string> = await this.main.botTokenStorage.loadAll()
+    const botTokens: BotStorageInfo[] = await this.main.botTokenStorage.getAllBots()
 
-    for (const botId of Object.keys(botTokens)) {
+    for (const item of botTokens) {
+      const botChatIds = await this.main.botTokenStorage.getBotChats(item.botId)
 
-    }
+      this.listenToNewChat(item.botId, item.token)
 
-    this.main.tg.onCmdStart((botToken: string, chatId: number | string) => {
-      const id = botToken + CHAT_DELIMITER + chatId
-
-      if (!this.chats[id]) {
-        this.chats[id] = new TgChat(this, botToken, chatId)
+      for (const chat of botChatIds) {
+        await this.initChat(item.botId, item.token, chat.chatId)
       }
 
-      this.chats[id].init()
-        .catch((e) => this.main.log.error(e));
-    })
+    }
   }
   
   async destroy() {
@@ -63,6 +60,27 @@ export class BotsManager {
 
   async botStatus(botId: string): Promise<BotStatus> {
 
+  }
+
+
+  private async initChat(botId: string, botToken: string, chatId: string) {
+
+  }
+
+  private listenToNewChat(botId: string, botToken: string) {
+
+    // TODO: хотя если уже существует то можно прибить чат и создать инстанс заного
+
+    this.main.tg.onCmdStartOnce(botToken: string, (chatId: number | string) => {
+      const id = botId + CHAT_DELIMITER + chatId
+
+      if (!this.chats[id]) {
+        this.chats[id] = new TgChat(this, botToken, chatId)
+      }
+
+      this.chats[id].init()
+        .catch((e) => this.main.log.error(e));
+    })
   }
 
 }

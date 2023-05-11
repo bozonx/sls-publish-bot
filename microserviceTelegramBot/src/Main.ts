@@ -75,6 +75,7 @@ export class Main {
       logLevel: (rawConfig.debug) ? 'debug' : rawConfig.logLevel || 'info',
       longStoragePath: rawConfig.longStoragePath,
       varStoragePath: rawConfig.varStoragePath,
+      db: 'sqlite'
     }
   }
 

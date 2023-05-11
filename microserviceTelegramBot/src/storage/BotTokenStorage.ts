@@ -9,7 +9,8 @@ export interface BotStorageInfo {
 
 export interface ChatStorageInfo {
   botId: string
-  chatId: string | number
+  chatId: string
+  created: string
 }
 
 
@@ -25,15 +26,16 @@ export class BotTokenStorage {
   /**
    * Load all the bot tokens like - bot
    */
-  async loadAllBots(): Promise<BotStorageInfo[]> {
+  async getAllBots(): Promise<BotStorageInfo[]> {
     // TODO: если нет директории long - то ошибка
     // TODO: это должна быть база данных !!!
     // TODO: если нет директории с токенами то значит нет токенов
 
     // TODO: load all the tokens
+    // TODO: можно опустить created
   }
 
-  async loadChatInfo(botId: string): Promise<ChatStorageInfo> {
+  async getBotChats(botId: string): Promise<ChatStorageInfo[]> {
 
   }
 
