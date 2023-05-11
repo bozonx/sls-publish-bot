@@ -14,7 +14,7 @@ export interface ChatStorageInfo {
 }
 
 
-export class BotTokenStorage {
+export class ChatStorage {
   private readonly main: Main
 
 
@@ -37,6 +37,10 @@ export class BotTokenStorage {
 
   async getBotChats(botId: string): Promise<ChatStorageInfo[]> {
 
+  }
+
+  async saveChat(botId: string, chatId: string) {
+    // TODO: if it exists do nothing
   }
 
 }

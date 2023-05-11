@@ -2,9 +2,10 @@ import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
 import {makeBotId} from '../../../src/helpers/makeBotId.js';
 import {BotStatus} from '../types/MicroserviceTgBotInterface.js';
-import {BotStorageInfo} from '../storage/BotTokenStorage.js';
+import {BotStorageInfo} from '../storage/ChatStorage.js';
 
 
+// TODO: поидее не нужно, достаточно chatId
 const CHAT_DELIMITER = '|'
 
 
@@ -20,17 +21,17 @@ export class BotsManager {
 
 
   async init() {
-    const botTokens: BotStorageInfo[] = await this.main.botTokenStorage.getAllBots()
+    const botTokens: BotStorageInfo[] = await this.main.chatStorage.getAllBots()
 
     for (const item of botTokens) {
-      const botChatIds = await this.main.botTokenStorage.getBotChats(item.botId)
+      const botChatIds = await this.main.chatStorage.getBotChats(item.botId)
 
       for (const chat of botChatIds) {
         await this.initChat(item.botId, item.token, chat.chatId)
       }
     }
 
-    this.listenChatStart()
+    this.listenNewChatsStart()
   }
   
   async destroy() {
@@ -66,7 +67,7 @@ export class BotsManager {
 
   }
 
-  private listenChatStart() {
+  private listenNewChatsStart() {
     this.main.tg.onCmdStart((botId: string, chatId: string) => {
       (async () => {
         const id = botId + CHAT_DELIMITER + chatId
@@ -76,10 +77,9 @@ export class BotsManager {
           await this.chats[id].destroy()
         }
         else {
-          // if chat doesn't exists
-          await this.main.botTokenStorage
+          // if chat doesn't exists - save it
+          await this.main.chatStorage.saveChat(botId, chatId)
         }
-
         // make a new instance any way
         this.chats[id] = new TgChat(this, botId, chatId)
         // and init it

@@ -3,7 +3,7 @@ import {BotsManager} from './tg/BotsManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
-import {BotTokenStorage} from './storage/BotTokenStorage.js';
+import {ChatStorage} from './storage/ChatStorage.js';
 import {BotStatusStorage} from './storage/BotStatusStorage.js';
 import {UiFilesStorage} from './storage/UiFilesStorage.js';
 
@@ -35,7 +35,7 @@ export class Main {
   readonly tg = new TgBot(this)
   readonly botsManager = new BotsManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
-  readonly botTokenStorage = new BotTokenStorage(this)
+  readonly chatStorage = new ChatStorage(this)
   readonly botStatusStorage = new BotStatusStorage(this)
   readonly uiFilesStorage = new UiFilesStorage(this)
 
