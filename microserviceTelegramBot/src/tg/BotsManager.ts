@@ -7,7 +7,7 @@ import {BotStatus} from '../types/MicroserviceTgBotInterface.js';
 const CHAT_DELIMITER = '|'
 
 
-export class TelegramManager {
+export class BotsManager {
   readonly main: Main
   // {"botToken|chatId": TgChat}
   private readonly chats: Record<string, TgChat> = {}

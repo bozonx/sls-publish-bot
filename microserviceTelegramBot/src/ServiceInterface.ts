@@ -12,11 +12,11 @@ export class ServiceInterface implements MicroserviceTgBotInterface {
 
 
   async newBot(botToken: string): Promise<string> {
-    return this.main.telegramManager.newBot(botToken)
+    return this.main.botsManager.newBot(botToken)
   }
 
   async botStatus(botId: string): Promise<BotStatus> {
-    return this.main.telegramManager.botStatus(botId)
+    return this.main.botsManager.botStatus(botId)
   }
 
   async setUi(botId: string, uiFiles: string) {
@@ -25,7 +25,7 @@ export class ServiceInterface implements MicroserviceTgBotInterface {
 
   async removeBot(botId: string) {
     await this.main.uiFilesManager.removeUi(botId)
-    await this.main.telegramManager.removeBot(botId)
+    await this.main.botsManager.removeBot(botId)
   }
 
 }

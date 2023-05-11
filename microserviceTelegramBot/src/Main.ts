@@ -1,5 +1,5 @@
 import {ConsoleLogger} from 'squidlet-lib';
-import {TelegramManager} from './tg/TelegramManager.js';
+import {BotsManager} from './tg/BotsManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
@@ -33,7 +33,7 @@ export class Main {
   // TODO: connect logger microservice
   readonly log: ConsoleLogger
   readonly tg = new TgBot(this)
-  readonly telegramManager = new TelegramManager(this)
+  readonly botsManager = new BotsManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
   readonly botTokenStorage = new BotTokenStorage(this)
   readonly botStatusStorage = new BotStatusStorage(this)
@@ -49,14 +49,14 @@ export class Main {
 
   init() {
     (async () => {
-      await this.telegramManager.init()
+      await this.botsManager.init()
     })()
       .catch((e) => this.log.error(e))
   }
 
   destroy(reason: string) {
     (async () => {
-      await this.telegramManager.destroy()
+      await this.botsManager.destroy()
       await this.tg.destroy(reason)
     })()
       .catch((e) => this.log.error(e))
