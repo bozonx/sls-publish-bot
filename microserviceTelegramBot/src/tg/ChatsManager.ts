@@ -1,8 +1,8 @@
 import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
 import {makeBotId} from '../../../src/helpers/makeBotId.js';
-import {BotStatus} from '../types/MicroserviceTgBotInterface.js';
 import {BotStorageInfo} from '../storage/ChatStorage.js';
+import {BotStatus} from '../types/BotStatus.js';
 
 
 export class ChatsManager {
