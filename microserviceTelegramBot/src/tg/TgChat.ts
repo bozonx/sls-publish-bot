@@ -15,9 +15,6 @@ export class TgChat {
   private menuMsgId?: number
 
 
-  // TODO: токен брать как-то по другому, ведь юзер сам может задать своего бота
-
-
   get main(): Main {
     return this.chatsManager.main
   }
@@ -32,21 +29,14 @@ export class TgChat {
 
   async init() {
     const windowConfig = await this.main.uiFilesManager
-      .loadWindowConfig(this.botToken)
+      .loadWindowConfig(this.botId)
     // this.window = new Window(windowConfig)
     // // TODO: review
     // this.window.onDomChanged(() => this.renderMenu())
     //
     // await this.window.init()
 
-    this.startListeners()
-
-    // TODO: test
-    await this.main.tg.sendTextMessage(
-      this.botToken,
-      this.botChatId,
-      'text',
-    )
+    await this.renderMenu()
   }
   
   async destroy() {
@@ -54,58 +44,74 @@ export class TgChat {
   }
 
 
-  startListeners() {
-    this.main.tg.onCallbackQuery(this.botToken, this.botChatId, (queryData: string) => {
-      if (!queryData) {
-        this.main.log.warn('Empty data came ad callback query')
+  handleIncomeCallbackQuery(queryData: string) {
+    if (!queryData) {
+      this.main.log.warn('Empty data came ad callback query')
 
-        return
-      }
+      return
+    }
 
-      //this.window.handleUiEvent(UI_EVENTS.click, queryData)
-    })
+    //this.window.handleUiEvent(UI_EVENTS.click, queryData)
+  }
 
-    //
-    // handleIncomeTextEvent(msgEvent: TextMessageEvent) {
-    //   // TODO: нужно отправить это в элемент в фокусе
-    //   //this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
+  handleIncomeTextEvent(msgEvent: TextMessageEvent) {
+    // TODO: нужно отправить это в элемент в фокусе
+    //this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
+  }
+
+  handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
+    // try {
+    //   this.events.emit(ChatEvents.PHOTO, msgEvent);
     // }
-    //
-    // handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
-    //   // try {
-    //   //   this.events.emit(ChatEvents.PHOTO, msgEvent);
-    //   // }
-    //   // catch (e) {
-    //   //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    //   // }
-    // }
-    //
-    // handleIncomeVideoEvent(msgEvent: VideoMessageEvent) {
-    //   // try {
-    //   //   this.events.emit(ChatEvents.VIDEO, msgEvent);
-    //   // }
-    //   // catch (e) {
-    //   //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    //   // }
-    // }
-    //
-    // // handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
-    // //   this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
-    // // }
-    //
-    // handleIncomePollEvent(msgEvent: PollMessageEvent) {
-    //   // try {
-    //   //   this.events.emit(ChatEvents.POLL, msgEvent);
-    //   // }
-    //   // catch (e) {
-    //   //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
-    //   // }
+    // catch (e) {
+    //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
     // }
   }
 
+  handleIncomeVideoEvent(msgEvent: VideoMessageEvent) {
+    // try {
+    //   this.events.emit(ChatEvents.VIDEO, msgEvent);
+    // }
+    // catch (e) {
+    //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    // }
+  }
+
+  // handleIncomeMediaGroupItemEvent(msgEvent: MediaGroupItemMessageEvent) {
+  //   this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
+  // }
+
+  handleIncomePollEvent(msgEvent: PollMessageEvent) {
+    // try {
+    //   this.events.emit(ChatEvents.POLL, msgEvent);
+    // }
+    // catch (e) {
+    //   this.renderer.ctx.consoleLog.warn(`An error was caught on events.emit in TgChan: ${e}`)
+    // }
+  }
 
   private renderMenu() {
     (async () => {
+      await this.main.tg.sendTextMessage(
+        this.botId,
+        this.chatId,
+        'text',
+        {
+          reply_markup: {
+            // TODO: add buttons
+            inline_keyboard: [
+              [
+                {
+                  text: 'btn1',
+                  callback_data: 'some',
+                }
+              ]
+            ]
+          }
+        }
+      )
+
+
       const [messageHtml, buttons] = convertDocumentToTgUi(this.window.rootDocument)
 
       if (typeof this.menuMsgId !== 'undefined') {

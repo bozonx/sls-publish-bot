@@ -9,6 +9,7 @@ export class ChatsManager {
   readonly main: Main
   // like {"chatId": TgChat}
   private readonly chats: Record<string, TgChat> = {}
+  //private readonly handlerIndexed: Record<string, number[]> = {}
 
 
   constructor(main: Main) {
@@ -28,6 +29,7 @@ export class ChatsManager {
     }
 
     this.listenNewChatsStart()
+    this.listenIncomeMessages()
   }
   
   async destroy() {
@@ -82,6 +84,12 @@ export class ChatsManager {
         // make a new instance any way
         await this.initChat(botId, chatId)
       })().catch((e) => this.main.log.error(e))
+    })
+  }
+
+  private listenIncomeMessages() {
+    this.main.tg.onIncomeCallbackQuery((botId: string, chatId: string, queryData: string) => {
+      if (!this.chats[chatId]) this.chats[chatId].handleIncomeCallbackQuery(queryData)
     })
   }
 

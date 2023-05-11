@@ -19,7 +19,7 @@ export class UiFilesManager {
     // TODO: add
   }
 
-  async loadWindowConfig(botToken: string): Promise<WindowConfig> {
+  async loadWindowConfig(botId: string): Promise<WindowConfig> {
     // TODO: load from storage all the ui files
 
     return {

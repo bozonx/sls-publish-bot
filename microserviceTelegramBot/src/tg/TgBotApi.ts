@@ -40,7 +40,7 @@ export class TgBotApi {
   }
 
   async sendTextMessage(
-    botToken: string,
+    botId: string,
     chatId: number | string,
     text: string | Format.FmtString,
     extra?: Types.ExtraReplyMessage
@@ -82,6 +82,10 @@ export class TgBotApi {
 
   onCmdStart(handler:(botId: string, chatId: string) => void) {
     return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
+  }
+
+  onIncomeCallbackQuery(handler: (botId: string, chatId: string, queryData: string) => void): number {
+    // TODO: add
   }
 
 
