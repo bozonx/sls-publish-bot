@@ -13,7 +13,7 @@ export enum TG_BOT_EVENT {
 }
 
 
-export class TgBot {
+export class TgBotApi {
   private readonly main: Main
   private events = new IndexedEventEmitter()
 

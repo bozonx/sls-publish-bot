@@ -1,7 +1,7 @@
 import {Window} from '../../../src/AbstractUi/Window.js';
 import {ChatsManager} from './ChatsManager.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../../src/types/MessageEvent.js';
-import {convertDocumentToTgUi} from './convertDocumentToTgUi.js';
+import {convertDocumentToTgUi} from '../ui/convertDocumentToTgUi.js';
 import {Main} from '../Main.js';
 import {TG_PARSE_MODE} from '../types/constants.js';
 

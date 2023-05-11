@@ -1,7 +1,7 @@
 import {ConsoleLogger} from 'squidlet-lib';
 import {ChatsManager} from './tg/ChatsManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
-import {TgBot} from './tg/TgBot.js';
+import {TgBotApi} from './tg/TgBotApi.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
 import {ChatStorage} from './storage/ChatStorage.js';
 import {BotStatusStorage} from './storage/BotStatusStorage.js';
@@ -32,7 +32,7 @@ export class Main {
   readonly config: TgBotConfig
   // TODO: connect logger microservice
   readonly log: ConsoleLogger
-  readonly tg = new TgBot(this)
+  readonly tg = new TgBotApi(this)
   readonly chatsManager = new ChatsManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
   readonly chatStorage = new ChatStorage(this)
