@@ -1,4 +1,4 @@
-import {ConsoleLogger, LogLevel} from 'squidlet-lib';
+import {ConsoleLogger} from 'squidlet-lib';
 import {TelegramManager} from './tg/TelegramManager.js';
 import {UiFilesManager} from './ui/UiFilesManager.js';
 import {TgBot} from './tg/TgBot.js';
@@ -40,15 +40,10 @@ export class Main {
   readonly uiFilesStorage = new UiFilesStorage(this)
 
 
-  constructor(config: TgBotConfig) {
-    this.config = config
-    // in debug log all the debug message
-    // in normal mode - use log level which is set in config
-    const logLevel: LogLevel = (this.config.debug)
-      ? 'debug'
-      : config.logLevel || 'info'
+  constructor(rawConfig: Partial<TgBotConfig>) {
+    this.config = this.prepareConfig(rawConfig)
 
-    this.log = new ConsoleLogger(logLevel)
+    this.log = new ConsoleLogger(this.config.logLevel)
   }
 
 
@@ -59,12 +54,28 @@ export class Main {
       .catch((e) => this.log.error(e))
   }
 
-  async destroy(reason: string) {
+  destroy(reason: string) {
     (async () => {
       await this.telegramManager.destroy()
       await this.tg.destroy(reason)
     })()
       .catch((e) => this.log.error(e))
+  }
+
+
+  private prepareConfig(rawConfig: Partial<TgBotConfig>): TgBotConfig {
+    if (!rawConfig.longStoragePath) throw new Error(`longStoragePath has to be set`)
+    if (!rawConfig.varStoragePath) throw new Error(`varStoragePath has to be set`)
+
+    return {
+      isProduction: process.env.NODE_ENV === 'production',
+      debug: Boolean(rawConfig.debug),
+      // in debug log all the debug message
+      // in normal mode - use log level which is set in config
+      logLevel: (rawConfig.debug) ? 'debug' : rawConfig.logLevel || 'info',
+      longStoragePath: rawConfig.longStoragePath,
+      varStoragePath: rawConfig.varStoragePath,
+    }
   }
 
 }

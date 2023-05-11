@@ -3,10 +3,9 @@ import {TgBotConfig} from './types/TgBotConfig.js';
 import {ServiceInterface} from './ServiceInterface.js';
 
 
-const config: TgBotConfig = {
-  // TODO: взять из env
-  isProduction: false,
-  debug: true,
+const config: Partial<TgBotConfig> = {
+  longStoragePath: '',
+  varStoragePath: '',
 }
 
 const main = new Main(config)
