@@ -19,8 +19,11 @@ export class BotsManager {
 
 
   async init() {
+    const botTokens: Record<string, string> = await this.main.botTokenStorage.loadAll()
 
-    // TODO: load all the bots tokens and init them
+    for (const botId of Object.keys(botTokens)) {
+
+    }
 
     this.main.tg.onCmdStart((botToken: string, chatId: number | string) => {
       const id = botToken + CHAT_DELIMITER + chatId

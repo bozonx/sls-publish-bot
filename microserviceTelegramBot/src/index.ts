@@ -4,8 +4,8 @@ import {ServiceInterface} from './ServiceInterface.js';
 
 
 const config: Partial<TgBotConfig> = {
-  longStoragePath: '',
-  varStoragePath: '',
+  longStoragePath: './_testData/long',
+  varStoragePath: './_testData/var',
 }
 
 const main = new Main(config)
