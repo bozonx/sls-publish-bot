@@ -32,8 +32,8 @@ export class Main {
   readonly config: TgBotConfig
   // TODO: connect logger microservice
   readonly log: ConsoleLogger
-  readonly tg: TgBot
-  readonly telegramManager: TelegramManager
+  readonly tg = new TgBot(this)
+  readonly telegramManager = new TelegramManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
   readonly botTokenStorage = new BotTokenStorage(this)
   readonly botStatusStorage = new BotStatusStorage(this)
@@ -42,12 +42,13 @@ export class Main {
 
   constructor(config: TgBotConfig) {
     this.config = config
-
-    const logLevel: LogLevel = (this.config.debug) ? 'debug' : 'error'
+    // in debug log all the debug message
+    // in normal mode - use log level which is set in config
+    const logLevel: LogLevel = (this.config.debug)
+      ? 'debug'
+      : config.logLevel || 'info'
 
     this.log = new ConsoleLogger(logLevel)
-    this.tg = new TgBot(this)
-    this.telegramManager = new TelegramManager(this)
   }
 
 

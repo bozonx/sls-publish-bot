@@ -19,6 +19,9 @@ export class TelegramManager {
 
 
   async init() {
+
+    // TODO: load all the bots tokens and init them
+
     this.main.tg.onCmdStart((botToken: string, chatId: number | string) => {
       const id = botToken + CHAT_DELIMITER + chatId
 
