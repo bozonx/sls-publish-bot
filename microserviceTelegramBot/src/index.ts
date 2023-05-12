@@ -1,11 +1,12 @@
+import path from 'path';
 import {Main} from './Main.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
 import {ServiceInterface} from './ServiceInterface.js';
 
 
 const config: Partial<TgBotConfig> = {
-  longStoragePath: './_testData/long',
-  varStoragePath: './_testData/var',
+  longStoragePath: path.resolve('./_testData/long'),
+  varStoragePath: path.resolve('./_testData/var'),
   debug: true,
 }
 

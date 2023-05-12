@@ -1,18 +1,19 @@
 import fs from 'node:fs/promises';
 import {pathJoin, mkdirPLogic} from 'squidlet-lib';
-import sqlite, { open } from 'sqlite'
+import * as sqlite from 'sqlite'
 import {DbStorage} from '../types/DbStorage.js';
 import {Main} from '../Main.js';
 import {isFileOrDirExists} from '../helpers/common.js';
 import {DB_BOTS_COLS, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
 
 
-const SQLITE_DB_FILE_EXT = '.sqlite'
+const SQLITE_DB_FILE_EXT = '.db'
 
 
 export class SqliteDb implements DbStorage {
   private readonly main: Main
   private db!: sqlite.Database
+  private dbName!: string
 
 
   constructor(main: Main) {
@@ -21,6 +22,8 @@ export class SqliteDb implements DbStorage {
 
 
   async init(dbName: string) {
+    this.dbName = dbName
+
     const dbDir = pathJoin(this.main.config.longStoragePath, dbName)
     const filename = pathJoin(dbDir, dbName) + SQLITE_DB_FILE_EXT
 
@@ -28,22 +31,34 @@ export class SqliteDb implements DbStorage {
 
     const needInit = !(await isFileOrDirExists(filename))
 
-    // TODO: проверить если нет файла то режим инициации бд
+    // if (needInit) {
+    //   await fs.writeFile(filename, '', 'utf8')
+    // }
 
-    this.db = await open({
+    //sqlite3.verbose()
+
+    this.db = await sqlite.open({
       filename,
       //driver: sqlite.cached.Database
       driver: sqlite.Database
-    })
+    }) as any
+
+    // this.db = new Database({
+    //   filename,
+    //   driver: Database
+    // })
+
+    console.log(22222, this.db)
 
     this.db.on('trace', (data: string) => {
       this.main.log.error(data)
     })
 
-    await this.initDb()
+    if (needInit) await this.initDb()
   }
 
   async destroy() {
+    this.main.log.debug(`Closing db ${this.dbName}`)
     await this.db.close()
   }
 
@@ -176,6 +191,8 @@ export class SqliteDb implements DbStorage {
   }
 
   private async initDb() {
+    this.main.log.debug(`Creating db ${this.dbName}`)
+
     await this.db.exec(`
       CREATE TABLE ${DB_TABLES.bots} (
         ${DB_BOTS_COLS.botId} TEXT PRIMARY KEY,
