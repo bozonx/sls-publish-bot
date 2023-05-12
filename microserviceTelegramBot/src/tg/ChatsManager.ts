@@ -44,7 +44,11 @@ export class ChatsManager {
 
   async newBot(botToken: string): Promise<string> {
     const botId = makeBotId(botToken)
-    // it will be saved if it doesn't exests
+    const found = Object.values(this.chats)
+      .find((chat) => chat.botId === botId)
+    // if it is already initialized - do nothing. It means that it works fine and saved
+    if (found) return botId
+    // if it is a new bot then save it
     await this.main.chatStorage.saveBot(botToken, botId)
     // make bot instance and start listeners
     await this.main.tgApi.initBotAndStartListeners(botId, botToken)
