@@ -20,13 +20,14 @@ export class ChatsManager {
     const botTokens: BotStorageInfo[] = await this.main.chatStorage.getAllBots()
 
     for (const item of botTokens) {
+      // make api bot instance and start listeners
+      await this.main.tgApi.initBotAndStartListeners(item.botId, item.token)
+
       const botChatIds = await this.main.chatStorage.getBotChats(item.botId)
 
       for (const chat of botChatIds) {
         await this.initChat(item.botId, chat.chatId)
       }
-      // make api bot instance and start listeners
-      await this.main.tgApi.initBotAndStartListeners(item.botId, item.token)
     }
 
     this.listenNewChatsStart()
