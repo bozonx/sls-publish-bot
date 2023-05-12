@@ -1,11 +1,11 @@
 import {ReceiverFn, SerializedObj} from './types/types.js';
-import {McServer} from './types/McServer.js';
+import {DataInterface} from './types/DataInterface.js';
 
 
 export const MSG_PREFIX = '!DATA!'
 
 
-export class ProcessServer implements McServer {
+export class ProcessServer implements DataInterface {
   private readonly receiver: ReceiverFn
 
 

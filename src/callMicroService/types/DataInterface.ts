@@ -1,4 +1,4 @@
-export interface McServer {
+export interface DataInterface {
   init(): Promise<void>
 
   destroy(): Promise<void>
