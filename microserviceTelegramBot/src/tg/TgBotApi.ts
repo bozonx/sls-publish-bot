@@ -27,11 +27,16 @@ export class TgBotApi {
   async destroy(reason: string) {
     this.events.destroy()
 
-    for (const token of Object.keys(this.bots)) {
-      this.bots[token].stop(reason)
-    }
+    for (const botId of Object.keys(this.bots)) this.stopBot(botId, reason)
   }
 
+
+  stopBot(botId: string, reason: string) {
+
+    // TODO: не будет работать - нужен token
+
+    this.bots[token].stop(reason)
+  }
 
   /**
    * Instantiate bot, launch it and start listeners

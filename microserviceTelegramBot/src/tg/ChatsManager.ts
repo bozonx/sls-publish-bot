@@ -37,8 +37,6 @@ export class ChatsManager {
     for (const itemIndex in this.chats) {
       await this.chats[itemIndex].destroy()
 
-      // TODO: удалить листенеры в api
-
       delete this.chats[itemIndex]
     }
   }
@@ -66,14 +64,16 @@ export class ChatsManager {
       delete this.chats[chatId]
     }
 
-    // TODO: отписаться в api
+    this.main.tgApi.stopBot(botId, 'removed')
 
     await this.main.chatStorage.removeBot(botId)
   }
 
   async botStatus(botId: string): Promise<BotStatus> {
     // TODO: add !!!
-    return {} as any
+    return {
+
+    } as any
   }
 
 
@@ -94,9 +94,7 @@ export class ChatsManager {
           await this.main.chatStorage.saveChat(botId, chatId)
         }
         // make a new instance any way
-
-        // TODO: !!!!
-        //await this.initChat(botId, chatId)
+        await this.initChat(botId, chatId)
       })().catch((e) => this.main.log.error(e))
     })
   }
@@ -114,9 +112,6 @@ export class ChatsManager {
   }
 
   private async initChat(botId: string, chatId: string) {
-
-    // TODO: запустить слушание событий в боте
-
     this.chats[chatId] = new TgChat(this, botId, chatId)
     // and init it
     await this.chats[chatId].init()

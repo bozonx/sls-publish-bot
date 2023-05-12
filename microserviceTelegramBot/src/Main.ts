@@ -45,7 +45,7 @@ export class Main {
   destroy(reason: string) {
     (async () => {
       await this.chatsManager.destroy()
-      await this.tg.destroy(reason)
+      await this.tgApi.destroy(reason)
       await this.db.destroy()
     })()
       .catch((e) => this.log.error(`Error while destroy: ${e}`))
