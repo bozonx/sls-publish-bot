@@ -4,8 +4,6 @@ import {Message, PhotoSize, Video} from 'typegram/message';
 import {Main} from '../Main.js';
 
 
-//const EVENT_DELIMITER = '|'
-
 export enum TG_BOT_EVENT {
   cmdStart,
   //launched,
@@ -35,6 +33,11 @@ export class TgBotApi {
   }
 
 
+  /**
+   * Instantiate bot, launch it and start listeners
+   * @param botId
+   * @param botToken
+   */
   async initBotAndStartListeners(botId: string, botToken: string) {
     const bot = this.bots[botId] = new Telegraf(botToken, {
       telegram: {
@@ -43,9 +46,8 @@ export class TgBotApi {
     })
 
     bot.start((ctx: Context) => {
-      if (typeof ctx.chat?.id === 'undefined') return
-
-      this.events.emit(TG_BOT_EVENT.cmdStart, botId, String(ctx.chat.id))
+      if (typeof ctx.chat?.id !== 'undefined')
+        this.events.emit(TG_BOT_EVENT.cmdStart, botId, String(ctx.chat.id))
     })
 
     bot.on('callback_query', (ctx) => {
@@ -55,10 +57,11 @@ export class TgBotApi {
         return;
       }
 
-      const eventName = botToken + EVENT_DELIMITER + ctx.chat.id + EVENT_DELIMITER
-        + TG_BOT_EVENT.callbackQuery
-
-      this.events.emit(eventName, (ctx.update.callback_query as  any).data)
+      this.events.emit(
+        TG_BOT_EVENT.callbackQuery,
+        botId,
+        ctx.chat.id,
+        (ctx.update.callback_query as  any).data)
     });
 
     // this.bot.on('message', (ctx) => {
@@ -175,19 +178,18 @@ export class TgBotApi {
         //
         // this.events.emit(eventName)
 
-        // TODO: почему-то зависает
+        // TODO: почему-то зависает - лучше здесь писать что бот был запущен
 
         console.log(3333)
       })
       .catch((e) => this.main.log.error(String(e)))
 
-    // TODO: лучше не светить токены, а работать с их md5 суммой
-    this.main.log.info('Bot launched: ' + botToken);
+    this.main.log.info(`Bot with id ${botId} launched`);
   }
 
   async sendTextMessage(
     botId: string,
-    chatId: number | string,
+    chatId: string,
     text: string | Format.FmtString,
     extra?: Types.ExtraReplyMessage
   ) {

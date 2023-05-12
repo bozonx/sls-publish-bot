@@ -48,9 +48,9 @@ export class ChatsManager {
     const botId = makeBotId(botToken)
 
     await this.main.chatStorage.saveBot(botToken, botId)
-
-    // TODO: он должен слушать толко старт или все события???
-    //await this.main.tg.listenToStartBot(botToken, botId)
+    // make bot instance and start listeners
+    await this.main.tg.initBotAndStartListeners(botId, botToken)
+    // when start command will be called then TgChat is instantiated
 
     return botId
   }
@@ -66,6 +66,8 @@ export class ChatsManager {
       delete this.chats[chatId]
     }
 
+    // TODO: отписаться в api
+
     await this.main.chatStorage.removeBot(botId)
   }
 
@@ -76,7 +78,8 @@ export class ChatsManager {
 
 
   /**
-   * Listen of all the bots' start command
+   * Listen of all the bots' start command.
+   * It chat exists it will be destroyed and reinitialized
    * @private
    */
   private listenNewChatsStart() {
@@ -91,6 +94,8 @@ export class ChatsManager {
           await this.main.chatStorage.saveChat(botId, chatId)
         }
         // make a new instance any way
+
+        // TODO: !!!!
         //await this.initChat(botId, chatId)
       })().catch((e) => this.main.log.error(e))
     })
