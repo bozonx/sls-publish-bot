@@ -30,9 +30,13 @@ export class ChatStorage {
   }
 
   async saveChat(botId: string, chatId: string) {
-    // TODO: if it exists do nothing
+    const exists = await this.main.longDb.exists(DB_TABLES.chats, chatId)
 
-    //await this.main.db.insertRecord()
+    if (exists) return
+
+    const data: Omit<ChatStorageInfo, 'created'> = { botId, chatId }
+
+    await this.main.longDb.create(DB_TABLES.chats, data)
   }
 
   async saveBot(botToken: string, botId: string) {

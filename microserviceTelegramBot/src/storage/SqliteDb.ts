@@ -56,9 +56,22 @@ export class SqliteDb implements DbStorage {
   }
 
 
+  async exists(tableName: string, id: string | number): Promise<boolean> {
+    // TODO: как-то сделать одним запросом
+    const pk = await this.db.get(`SELECT name FROM pragma_table_info('${tableName}') WHERE pk = 1;`)
+    const pkName = pk.name
+
+    const res = await this.db.get(
+      `SELECT ${pkName} FROM ${tableName} WHERE ${pkName} = ?`,
+      id
+    )
+
+    return Boolean(res)
+  }
+
   async getOne<T = any>(
     tableName: string,
-    id: any,
+    id: string | number,
     cols?: string[]
   ): Promise<T | undefined> {
     const colsStr = this.makeColStr(cols)
@@ -78,22 +91,20 @@ export class SqliteDb implements DbStorage {
     cols?: string[]
   ): Promise<T | undefined> {
     const colsStr = this.makeColStr(cols)
-    const whereStr = this.makeWhereStr(where)
 
-    return this.db.get<T>(`SELECT ${colsStr} FROM ${tableName} ${whereStr}`)
+    return this.db.get<T>(`SELECT ${colsStr} FROM ${tableName} WHERE ${where}`)
   }
 
   async getAll<T = Record<string, any>>(
     tableName: string,
-    where?: string,
+    where: string,
     cols?: string[]
   ): Promise<T[]> {
     const colsStr = this.makeColStr(cols)
-    const whereStr = this.makeWhereStr(where)
 
     // ORDER BY col DESC
 
-    return this.db.all<T[]>(`SELECT ${colsStr} FROM ${tableName} ${whereStr}`)
+    return this.db.all<T[]>(`SELECT ${colsStr} FROM ${tableName} WHERE ${where}`)
   }
 
   async getAllByKey<T = Record<string, any>>(
@@ -153,14 +164,13 @@ export class SqliteDb implements DbStorage {
     partialData: Record<any, any>,
     where: string
   ): Promise<void> {
-    const whereStr = this.makeWhereStr(where)
     const normalizedData = this.normalizeData(partialData)
     const setStr: string = Object.keys(normalizedData).map((key) => {
       return `${key} = ?`
     }).join(', ')
 
     const res = await this.db.run(
-      `UPDATE ${tableName} SET ${setStr} WHERE ${whereStr}`,
+      `UPDATE ${tableName} SET ${setStr} WHERE ${where}`,
       'foo',
       'test'
     )
@@ -192,9 +202,9 @@ export class SqliteDb implements DbStorage {
     return (cols) ? cols.join(',') : '*'
   }
 
-  private makeWhereStr(where?: string): string {
-    return (where) ? `WHERE ${where}` : ''
-  }
+  // private makeWhereStr(where?: string): string {
+  //   return (where) ? `WHERE ${where}` : ''
+  // }
 
   private normalizeData(dataToInsertOrUpdate: Record<any, any>): Record<any, any> {
     return omitObj(dataToInsertOrUpdate, CREATED_COL, UPDATED_COL)

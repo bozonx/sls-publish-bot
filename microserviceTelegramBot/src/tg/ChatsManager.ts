@@ -90,6 +90,7 @@ export class ChatsManager {
           await this.chats[chatId].destroy()
         }
         else {
+          // TODO: так это будет каждый раз чтоли???
           // if chat doesn't exists - save it
           await this.main.chatStorage.saveChat(botId, chatId)
         }

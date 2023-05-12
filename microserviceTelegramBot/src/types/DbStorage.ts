@@ -3,7 +3,13 @@ export interface DbStorage {
   destroy(): Promise<void>
 
 
-  getOne<T = any>(tableName: string, id: any, cols?: string[]): Promise<T | undefined>
+  exists(tableName: string, id: string | number): Promise<boolean>
+
+  getOne<T = any>(
+    tableName: string,
+    id: string | number,
+    cols?: string[]
+  ): Promise<T | undefined>
 
   getOneWhere<T = any>(
     tableName: string,
@@ -13,7 +19,7 @@ export interface DbStorage {
 
   getAll<T = Record<string, any>>(
     tableName: string,
-    where?: string,
+    where: string,
     cols?: string[]
   ): Promise<T[]>
 
