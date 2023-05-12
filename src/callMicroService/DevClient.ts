@@ -12,7 +12,7 @@ export class DevClient implements DataInterface {
     this.receiver = receiver
     this.devServer = devServer
 
-    this.devServer.$serverIncome((funcName: string, ...data: any[]) => {
+    this.devServer.$setClientReceive((funcName: string, ...data: any[]) => {
       this.receiver(funcName, ...data)
     })
   }
