@@ -193,37 +193,37 @@ export class TgBotApi {
     text: string | Format.FmtString,
     extra?: Types.ExtraReplyMessage
   ) {
-    const bot = await this.resolveBot(botId)
+    const bot = this.resolveBot(botId)
 
     return await bot.telegram.sendMessage(chatId, text, extra)
   }
 
   async sendPhotoMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
+    const bot = this.resolveBot(botId)
 
     // TODO: add
   }
 
   async sendVideoMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
+    const bot = this.resolveBot(botId)
 
     // TODO: add
   }
 
   async sendAudioMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
+    const bot = this.resolveBot(botId)
 
     // TODO: add
   }
 
   async sendPollMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
+    const bot = this.resolveBot(botId)
 
     // TODO: add
   }
 
   async deleteMessage(botToken: string, chatId: number | string, msgId: number) {
-    const bot = await this.resolveBot(botToken)
+    const bot = this.resolveBot(botToken)
 
     await bot.telegram.deleteMessage(chatId, msgId)
   }
@@ -264,21 +264,10 @@ export class TgBotApi {
   }
 
 
-  private async resolveBot(botId: string) {
+  private resolveBot(botId: string) {
     if (this.bots[botId]) return this.bots[botId]
 
-    // TODO: где взять bot token ???
-
-    // this.bots[botId] = new Telegraf(botToken, {
-    //   telegram: {
-    //     testEnv: !this.main.config.isProduction,
-    //   }
-    // })
-
-
-    // await this.initBot(botId)
-
-    return this.bots[botId]
+    throw new Error(`Can't find bot with id ${botId}`)
   }
 
 }
