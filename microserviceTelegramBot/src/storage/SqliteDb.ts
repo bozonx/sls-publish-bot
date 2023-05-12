@@ -41,11 +41,31 @@ export class SqliteDb implements DbStorage {
       driver: sqlite3.Database
     }) as any
 
-    this.db.on('trace', (data: string) => {
+    this.db.on('trace', (data: any) => {
+      if (this.main.config.debug) console.error(data)
+
       this.main.log.error(data)
     })
 
     if (needInit) await this.initDb()
+
+
+    //////////////////
+
+    const insertRes = await this.db.run(
+      `INSERT INTO bots (botId, token, created) VALUES ('123', 'qwe', datetime('now'));`
+      //'INSERT INTO bots (col) VALUES (?)',
+      //'foo'
+    )
+    // { stmt: Statement { stmt: undefined }, lastID: 1, changes: 1 }
+
+    console.log(111, insertRes)
+
+    const res = await this.db.all(`SELECT * FROM bots`)
+    // [ { botId: '123', token: 'qwe', created: '2023-05-12 16:37:45' } ]
+
+    console.log(222, res)
+
   }
 
   async destroy() {
