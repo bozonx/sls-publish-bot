@@ -18,11 +18,11 @@ export class ChatStorage {
    * Load all the bot tokens like - bot
    */
   async getAllBots(): Promise<BotStorageInfo[]> {
-    return await this.main.db.getAll<BotStorageInfo>(DB_TABLES.bots)
+    return await this.main.longDb.getAll<BotStorageInfo>(DB_TABLES.bots)
   }
 
   async getBotChats(botId: string): Promise<ChatStorageInfo[]> {
-    return await this.main.db.getAllByKey<ChatStorageInfo>(
+    return await this.main.longDb.getAllByKey<ChatStorageInfo>(
       DB_TABLES.chats,
       DB_CHATS_COLS.botId,
       botId

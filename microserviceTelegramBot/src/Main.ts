@@ -8,6 +8,7 @@ import {BotStatusStorage} from './storage/BotStatusStorage.js';
 import {UiFilesStorage} from './storage/UiFilesStorage.js';
 import {SqliteDb} from './storage/SqliteDb.js';
 import {DbStorage} from './types/DbStorage.js';
+import {LONG_DB_NAME} from './types/constants.js';
 
 
 export class Main {
@@ -15,7 +16,8 @@ export class Main {
   // TODO: connect logger microservice
   readonly log: ConsoleLogger
   readonly tgApi = new TgBotApi(this)
-  readonly db: DbStorage = new SqliteDb(this)
+  // db with not often data changes
+  readonly longDb: DbStorage = new SqliteDb(this)
   readonly chatsManager = new ChatsManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
   readonly chatStorage = new ChatStorage(this)
@@ -34,7 +36,7 @@ export class Main {
     (async () => {
       this.log.info('Start instantiating')
 
-      await this.db.init()
+      await this.longDb.init(LONG_DB_NAME)
       await this.chatsManager.init()
 
       this.log.info('Instantiated successfully')

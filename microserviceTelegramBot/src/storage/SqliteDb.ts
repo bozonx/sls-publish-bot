@@ -1,6 +1,13 @@
+import fs from 'node:fs/promises';
+import {pathJoin, mkdirPLogic} from 'squidlet-lib';
 import sqlite, { open } from 'sqlite'
 import {DbStorage} from '../types/DbStorage.js';
 import {Main} from '../Main.js';
+import {isFileOrDirExists} from '../helpers/common.js';
+import {DB_BOTS_COLS, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
+
+
+const SQLITE_DB_FILE_EXT = '.sqlite'
 
 
 export class SqliteDb implements DbStorage {
@@ -13,14 +20,18 @@ export class SqliteDb implements DbStorage {
   }
 
 
-  async init() {
+  async init(dbName: string) {
+    const dbDir = pathJoin(this.main.config.longStoragePath, dbName)
+    const filename = pathJoin(dbDir, dbName) + SQLITE_DB_FILE_EXT
 
-    // TODO: если бд не инициализированна то инициализировать её
+    await mkdirPLogic(dbDir, isFileOrDirExists, fs.mkdir)
+
+    const needInit = !(await isFileOrDirExists(filename))
 
     // TODO: проверить если нет файла то режим инициации бд
 
     this.db = await open({
-      filename: '',
+      filename,
       //driver: sqlite.cached.Database
       driver: sqlite.Database
     })
@@ -29,17 +40,11 @@ export class SqliteDb implements DbStorage {
       this.main.log.error(data)
     })
 
-
+    await this.initDb()
   }
 
   async destroy() {
     await this.db.close()
-  }
-
-
-  private async initDb() {
-    await this.db.exec('CREATE TABLE tbl (col TEXT)')
-    await this.db.exec('INSERT INTO tbl VALUES ("test")')
   }
 
 
@@ -104,6 +109,7 @@ export class SqliteDb implements DbStorage {
     //res.changes
 
     // TODO: вернуть результат
+    return {} as T
   }
 
   async updateByKey<T = Record<string, any>>(
@@ -121,6 +127,7 @@ export class SqliteDb implements DbStorage {
     //res.changes
 
     // TODO: вернуть результат
+    return {} as T
   }
 
   async update<T = Record<string, any>>(
@@ -138,6 +145,7 @@ export class SqliteDb implements DbStorage {
     //res.changes
 
     // TODO: вернуть результат
+    return {} as T
   }
 
   async deleteByKey(table: string, keyName: string, value: string) {
@@ -165,6 +173,24 @@ export class SqliteDb implements DbStorage {
 
   private makeWhereStr(where?: string): string {
     return (where) ? `WHERE ${where}` : ''
+  }
+
+  private async initDb() {
+    await this.db.exec(`
+      CREATE TABLE ${DB_TABLES.bots} (
+        ${DB_BOTS_COLS.botId} TEXT PRIMARY KEY,
+        ${DB_BOTS_COLS.token} TEXT,
+        ${DB_BOTS_COLS.created} DATETIME
+      );
+    `)
+    await this.db.exec(`
+      CREATE TABLE ${DB_TABLES.chats} (
+        ${DB_CHATS_COLS.chatId} TEXT PRIMARY KEY,
+        ${DB_CHATS_COLS.botId} TEXT REFERENCES bots(botId),
+        ${DB_CHATS_COLS.created} DATETIME
+      );
+    `)
+    //await this.db.exec('INSERT INTO tbl VALUES ("test")')
   }
 
 }

@@ -1,5 +1,5 @@
 export interface DbStorage {
-  init(): Promise<void>
+  init(dbName: string): Promise<void>
   destroy(): Promise<void>
 
   getOne<T = any>(
