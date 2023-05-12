@@ -1,18 +1,20 @@
 import fs from 'node:fs/promises';
 import {pathJoin, mkdirPLogic} from 'squidlet-lib';
-import * as sqlite from 'sqlite'
+import sqlite3 from 'sqlite3'
+import { open, Database } from 'sqlite'
 import {DbStorage} from '../types/DbStorage.js';
 import {Main} from '../Main.js';
 import {isFileOrDirExists} from '../helpers/common.js';
 import {DB_BOTS_COLS, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
 
 
+const SQLITE_DB_DIR = 'sqliteDBs'
 const SQLITE_DB_FILE_EXT = '.db'
 
 
 export class SqliteDb implements DbStorage {
   private readonly main: Main
-  private db!: sqlite.Database
+  private db!: Database
   private dbName!: string
 
 
@@ -24,31 +26,20 @@ export class SqliteDb implements DbStorage {
   async init(dbName: string) {
     this.dbName = dbName
 
-    const dbDir = pathJoin(this.main.config.longStoragePath, dbName)
+    const dbDir = pathJoin(this.main.config.longStoragePath, SQLITE_DB_DIR)
     const filename = pathJoin(dbDir, dbName) + SQLITE_DB_FILE_EXT
 
     await mkdirPLogic(dbDir, isFileOrDirExists, fs.mkdir)
 
     const needInit = !(await isFileOrDirExists(filename))
 
-    // if (needInit) {
-    //   await fs.writeFile(filename, '', 'utf8')
-    // }
+    sqlite3.verbose()
 
-    //sqlite3.verbose()
-
-    this.db = await sqlite.open({
+    this.db = await open({
       filename,
       //driver: sqlite.cached.Database
-      driver: sqlite.Database
+      driver: sqlite3.Database
     }) as any
-
-    // this.db = new Database({
-    //   filename,
-    //   driver: Database
-    // })
-
-    console.log(22222, this.db)
 
     this.db.on('trace', (data: string) => {
       this.main.log.error(data)
