@@ -40,6 +40,9 @@ process.once('SIGTERM', () => main.destroy('SIGTERM'));
   const testBotToken = '2200624704:AAGH52SeJJLMGVBwK4cMkOnJxTMtLJRc1xM'
   const uiFiles = 'compiled js files. They render menu and listen events'
 
+
+  // TODO: лучше делать через proxy
+
   await devClient.send('newBot', testBotToken)
 
 

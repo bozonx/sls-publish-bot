@@ -26,6 +26,7 @@ export class DevServer implements DataInterface {
     this.receiver(funcName, ...data)
   }
 
+  // TODO: не send а request - вернуть данные
 
   async send(funcName: string, ...data: any[]) {
     this.clientReceive(funcName, ...data)
