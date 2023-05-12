@@ -1,27 +1,24 @@
-import {ReceiverFn, SerializedObj} from './types/types.js';
+import {ReceiverFn} from './types/types.js';
 import {DataInterface} from './types/DataInterface.js';
-import * as child_process from 'child_process';
-
-
-export const MSG_PREFIX = '!DATA!'
+import {DevServer} from './DevServer.js';
 
 
 export class DevClient implements DataInterface {
   private readonly receiver: ReceiverFn
-  private readonly cmd: string
-  private readonly process
+  private readonly devServer: DevServer
 
 
-  constructor(receiver: ReceiverFn, cmd: string) {
+  constructor(receiver: ReceiverFn, devServer: DevServer) {
     this.receiver = receiver
-    this.cmd = cmd
+    this.devServer = devServer
+
+    this.devServer.$serverIncome((funcName: string, ...data: any[]) => {
+      this.receiver(funcName, ...data)
+    })
   }
 
 
   async init() {
-    // TODO: spawn process
-    child_process.spawn(this.cmd)
-    //process.stdin.on('data', this.handleIncomeMessage)
   }
 
   async destroy() {
@@ -29,30 +26,11 @@ export class DevClient implements DataInterface {
 
 
   async send(funcName: string, ...data: any[]) {
-    const json = JSON.stringify({
-      funcName,
-      data
-    } as SerializedObj)
-
-    process.stdout.write(MSG_PREFIX + json)
+    this.devServer.$serverIncome(funcName, ...data)
   }
 
   async sendBin(funcName: string, ...binData: Buffer[]) {
     // TODO: add !!!
-  }
-
-
-  private handleIncomeMessage = async (incomeRawData: Buffer) => {
-    const str = incomeRawData.toString()
-
-    if (str.indexOf(MSG_PREFIX) !== 0) return
-
-    const jsonStr = str.split(MSG_PREFIX)[1]
-    const {funcName, data}: SerializedObj = JSON.parse(jsonStr)
-
-    this.receiver(funcName, ...data)
-
-    // TODO: how to receive bin data???
   }
 
 }

@@ -9,7 +9,7 @@ export const MSG_PREFIX = '!DATA!'
 export class ProcessClient implements DataInterface {
   private readonly receiver: ReceiverFn
   private readonly cmd: string
-  private readonly process
+  //private readonly process
 
 
   constructor(receiver: ReceiverFn, cmd: string) {
