@@ -35,25 +35,29 @@ export class Main {
   }
 
 
-  init() {
-    (async () => {
+  async init() {
+    try {
       this.log.info('Start instantiating')
 
       await this.longDb.init(LONG_DB_NAME)
       await this.chatsManager.init()
 
       this.log.info('Instantiated successfully')
-    })()
-      .catch((e) => this.log.error(`Instantiate error: ${e}`))
+    }
+    catch(e) {
+      this.log.error(`Instantiate error: ${e}`)
+    }
   }
 
-  destroy(reason: string) {
-    (async () => {
+  async destroy(reason: string) {
+    try {
       await this.chatsManager.destroy()
       await this.tgApi.destroy(reason)
       await this.longDb.destroy()
-    })()
-      .catch((e) => this.log.error(`Error while destroy: ${e}`))
+    }
+    catch(e) {
+      this.log.error(`Error while destroy: ${e}`)
+    }
   }
 
 

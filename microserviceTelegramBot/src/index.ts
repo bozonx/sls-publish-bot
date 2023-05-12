@@ -13,7 +13,6 @@ const config: Partial<TgBotConfig> = {
 const main = new Main(config)
 const service = new ServiceInterface(main)
 
-main.init()
 
 // Enable graceful stop
 process.once('SIGINT', () => main.destroy('SIGINT'));
@@ -24,6 +23,8 @@ process.once('SIGTERM', () => main.destroy('SIGTERM'));
 //////// TEST
 
 (async () => {
+  await main.init()
+
   const testBotToken = '2200624704:AAGH52SeJJLMGVBwK4cMkOnJxTMtLJRc1xM'
   const uiFiles = 'compiled js files. They render menu and listen events'
 

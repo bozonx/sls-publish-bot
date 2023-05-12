@@ -41,11 +41,11 @@ export class SqliteDb implements DbStorage {
       driver: sqlite3.Database
     }) as any
 
-    this.db.on('trace', (data: any) => {
-      if (this.main.config.debug) console.error(data)
-
-      this.main.log.error(data)
-    })
+    if (this.main.config.debug) {
+      this.db.on('trace', (data: any) => {
+        console.log('SQL:', data)
+      })
+    }
 
     if (needInit) await this.initDb()
   }
@@ -128,9 +128,10 @@ export class SqliteDb implements DbStorage {
       ...this.normalizeData(record),
       created: `datetime('now', 'utc')`
     }
+    const valuesStr = Object.keys(normalizedRecord).map(() => '?').join(',')
 
     const res = await this.db.run(
-      `INSERT INTO ${tableName} (${Object.keys(normalizedRecord).join(',')}) VALUES ?`,
+      `INSERT INTO ${tableName} (${Object.keys(normalizedRecord).join(',')}) VALUES (${valuesStr})`,
       ...Object.values(normalizedRecord),
     )
 
@@ -211,22 +212,22 @@ export class SqliteDb implements DbStorage {
   private async initDb() {
     this.main.log.debug(`Creating db ${this.dbName}`)
 
+    await this.db.exec(`PRAGMA foreign_keys = ON;`)
+
     await this.db.exec(`
       CREATE TABLE ${DB_TABLES.bots} (
         ${DB_BOTS_COLS.botId} TEXT PRIMARY KEY,
-        ${DB_BOTS_COLS.token} TEXT,
+        ${DB_BOTS_COLS.token} TEXT NOT NULL,
         ${DB_BOTS_COLS.created} DATETIME
       );
     `)
     await this.db.exec(`
       CREATE TABLE ${DB_TABLES.chats} (
         ${DB_CHATS_COLS.chatId} TEXT PRIMARY KEY,
-        ${DB_CHATS_COLS.botId} TEXT,
+        ${DB_CHATS_COLS.botId} TEXT NOT NULL,
         ${DB_CHATS_COLS.created} DATETIME,
-        FOREIGN KEY (group_id)
-          REFERENCES bots(botId)
-            ON UPDATE SET NULL
-            ON DELETE SET NULL
+        FOREIGN KEY (${DB_BOTS_COLS.botId})
+          REFERENCES ${DB_TABLES.bots}(${DB_BOTS_COLS.botId})
       );
     `)
 
