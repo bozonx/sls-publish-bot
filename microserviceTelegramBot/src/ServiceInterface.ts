@@ -12,6 +12,12 @@ export class ServiceInterface implements MicroserviceTgBotInterface {
   }
 
 
+  receiverFromClient = (funcName: string, ...data: any[]) => {
+    // @ts-ignore
+    this[funcName](...data)
+  }
+
+
   async newBot(botToken: string): Promise<string> {
     return this.main.chatsManager.newBot(botToken)
   }
