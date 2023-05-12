@@ -39,16 +39,27 @@ export class ChatStorage {
     await this.main.longDb.create(DB_TABLES.chats, data)
   }
 
-  async saveBot(botToken: string, botId: string) {
-    // TODO: если уже есть бот то ничего не делаем
+  async saveBot(token: string, botId: string) {
+    const exists = await this.main.longDb.exists(DB_TABLES.bots, botId)
 
+    if (exists) return
+
+    const data: Omit<BotStorageInfo, 'created'> = { botId, token }
+
+    await this.main.longDb.create(DB_TABLES.bots, data)
   }
 
   async removeBot(botId: string) {
-    // TODO: remove if exist
-    // TODO: and it's chats
-    // TODO: and all chat's info
+    const exists = await this.main.longDb.exists(DB_TABLES.bots, botId)
 
+    if (exists) {
+      await this.main.longDb.delete(DB_TABLES.bots, botId)
+    }
+
+    await this.main.longDb.deleteAll(
+      DB_TABLES.chats,
+      `${DB_CHATS_COLS.botId} = ${botId}`
+    )
   }
 
 }

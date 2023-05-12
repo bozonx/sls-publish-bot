@@ -204,10 +204,6 @@ export class SqliteDb implements DbStorage {
     return (cols) ? cols.join(',') : '*'
   }
 
-  // private makeWhereStr(where?: string): string {
-  //   return (where) ? `WHERE ${where}` : ''
-  // }
-
   private normalizeData(dataToInsertOrUpdate: Record<any, any>): Record<any, any> {
     return omitObj(dataToInsertOrUpdate, CREATED_COL, UPDATED_COL)
   }
