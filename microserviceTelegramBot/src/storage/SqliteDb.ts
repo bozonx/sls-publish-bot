@@ -126,7 +126,7 @@ export class SqliteDb implements DbStorage {
   async create(tableName: string, record: Record<any, any>): Promise<string | number> {
     const normalizedRecord = {
       ...this.normalizeData(record),
-      created: `datetime('now', 'utc')`
+      created: `datetime("now", "utc")`
     }
     const valuesStr = Object.keys(normalizedRecord).map(() => '?').join(',')
 
