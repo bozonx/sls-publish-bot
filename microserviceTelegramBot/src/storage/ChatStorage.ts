@@ -32,7 +32,7 @@ export class ChatStorage {
   async saveChat(botId: string, chatId: string) {
     // TODO: if it exists do nothing
 
-    await this.main.db.insertRecord()
+    //await this.main.db.insertRecord()
   }
 
   async saveBot(botToken: string, botId: string) {

@@ -28,9 +28,6 @@ export class TgChat {
 
 
   async init() {
-
-    // TODO: а когда будет навешивание событий
-
     const windowConfig = await this.main.uiFilesManager
       .loadWindowConfig(this.botId)
     // this.window = new Window(windowConfig)
@@ -53,6 +50,8 @@ export class TgChat {
 
       return
     }
+
+    console.log(11111, queryData)
 
     //this.window.handleUiEvent(UI_EVENTS.click, queryData)
   }

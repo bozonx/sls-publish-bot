@@ -32,10 +32,9 @@ export class TgBotApi {
 
 
   stopBot(botId: string, reason: string) {
+    this.bots[botId].stop(reason)
 
-    // TODO: не будет работать - нужен token
-
-    this.bots[token].stop(reason)
+    delete this.bots[botId]
   }
 
   /**
