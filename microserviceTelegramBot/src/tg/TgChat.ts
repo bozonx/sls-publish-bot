@@ -51,7 +51,7 @@ export class TgChat {
       return
     }
 
-    console.log(11111, queryData)
+    console.log(2222, queryData)
 
     //this.window.handleUiEvent(UI_EVENTS.click, queryData)
   }

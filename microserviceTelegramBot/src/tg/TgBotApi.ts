@@ -9,6 +9,7 @@ export enum TG_BOT_EVENT {
   cmdStart,
   //launched,
   callbackQuery,
+  textMessage,
 }
 
 
@@ -94,11 +95,12 @@ export class TgBotApi {
       }
 
       if ((message as any).text) {
-        this.chats[ctx.chat.id].handleIncomeTextEvent({
-          ...msgBase,
-          text: (message as any).text,
-          entities: (message as any).entities,
-        });
+        // this.events.emit(TG_BOT_EVENT.textMessage, botId, String(ctx.chat.id))
+        // this.chats[ctx.chat.id].handleIncomeTextEvent({
+        //   ...msgBase,
+        //   text: (message as any).text,
+        //   entities: (message as any).entities,
+        // });
       }
       // else if ((message as any).photo) {
       //   const lastPhoto = _.last((message as any).photo) as PhotoSize;
