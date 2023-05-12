@@ -28,22 +28,32 @@ export interface DbStorage {
     cols?: string[]
   ): Promise<T[]>
 
-  create<T = Record<string, any>>(tableName: string, record: Record<any, any>): Promise<T>
+  /**
+   * Create and return an id
+   */
+  create(tableName: string, record: Record<any, any>): Promise<string | number>
 
-  updateByKey<T = Record<string, any>>(
+  // TODO: createAll
+
+  /**
+   * Update using primary key
+   */
+  update(
     tableName: string,
+    id: string | number,
     partialData: Record<any, any>,
-    keyName: string,
-    value: string
-  ): Promise<T>
+  ): Promise<void>
 
-  update<T = Record<string, any>>(
+  updateAll(
     tableName: string,
     partialData: Record<any, any>,
     where: string
-  ): Promise<T>
+  ): Promise<void>
 
-  deleteByKey(table: string, keyName: string, value: string): Promise<void>
+  /**
+   * Delete by primary key
+   */
+  delete(table: string, id: string | number): Promise<void>
 
-  delete(table: string, where: string): Promise<void>
+  deleteAll(table: string, where: string): Promise<void>
 }

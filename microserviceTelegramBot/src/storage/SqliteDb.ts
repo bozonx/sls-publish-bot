@@ -1,11 +1,11 @@
 import fs from 'node:fs/promises';
-import {pathJoin, mkdirPLogic} from 'squidlet-lib';
+import {pathJoin, mkdirPLogic, omitObj} from 'squidlet-lib';
 import sqlite3 from 'sqlite3'
 import { open, Database } from 'sqlite'
 import {DbStorage} from '../types/DbStorage.js';
 import {Main} from '../Main.js';
 import {isFileOrDirExists} from '../helpers/common.js';
-import {DB_BOTS_COLS, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
+import {CREATED_COL, DB_BOTS_COLS, DB_CHATS_COLS, DB_TABLES, UPDATED_COL} from '../types/dbTypes.js';
 
 
 const SQLITE_DB_DIR = 'sqliteDBs'
@@ -33,7 +33,7 @@ export class SqliteDb implements DbStorage {
 
     const needInit = !(await isFileOrDirExists(filename))
 
-    sqlite3.verbose()
+    if (this.main.config.debug) sqlite3.verbose()
 
     this.db = await open({
       filename,
@@ -48,24 +48,6 @@ export class SqliteDb implements DbStorage {
     })
 
     if (needInit) await this.initDb()
-
-
-    //////////////////
-
-    const insertRes = await this.db.run(
-      `INSERT INTO bots (botId, token, created) VALUES ('123', 'qwe', datetime('now'));`
-      //'INSERT INTO bots (col) VALUES (?)',
-      //'foo'
-    )
-    // { stmt: Statement { stmt: undefined }, lastID: 1, changes: 1 }
-
-    console.log(111, insertRes)
-
-    const res = await this.db.all(`SELECT * FROM bots`)
-    // [ { botId: '123', token: 'qwe', created: '2023-05-12 16:37:45' } ]
-
-    console.log(222, res)
-
   }
 
   async destroy() {
@@ -122,74 +104,81 @@ export class SqliteDb implements DbStorage {
     )
   }
 
-  async create<T = Record<string, any>>(
-    tableName: string,
-    record: Record<any, any>
-  ): Promise<T> {
-    const result = await this.db.run(
-      'INSERT INTO tbl (col) VALUES (?)',
-      'foo'
+  async create(tableName: string, record: Record<any, any>): Promise<string | number> {
+    const normalizedRecord = {
+      ...this.normalizeData(record),
+      created: `datetime('now', 'utc')`
+    }
+
+    const res = await this.db.run(
+      `INSERT INTO ${tableName} (${Object.keys(normalizedRecord).join(',')}) VALUES ?`,
+      ...Object.values(normalizedRecord),
     )
 
-    // TODO: проверить результат
-    //res.changes
+    if (!res.changes) throw new Error(`Wasn't created`)
 
-    // TODO: вернуть результат
-    return {} as T
+    return res.lastID!
   }
 
-  async updateByKey<T = Record<string, any>>(
+  async update(
     tableName: string,
+    id: string | number,
     partialData: Record<any, any>,
-    keyName: string, value: string
-  ): Promise<T> {
-    const result = await this.db.run(
-      `UPDATE ${tableName} SET col = ? WHERE col = ?`,
-      'foo',
-      'test'
+  ): Promise<void> {
+    const normalizedData = this.normalizeData(partialData)
+    const setStr: string = Object.keys(normalizedData).map((key) => {
+      return `${key} = ?`
+    }).join(', ')
+
+    // TODO: как-то сделать одним запросом
+    const pk = await this.db.get(`SELECT name FROM pragma_table_info('${tableName}') WHERE pk = 1;`)
+    const pkName = pk.name
+
+    const res = await this.db.run(
+      `UPDATE ${tableName} SET ${setStr} WHERE ${pkName} = ${id}`,
+      ...Object.values(normalizedData)
     )
 
-    // TODO: проверить результат
-    //res.changes
-
-    // TODO: вернуть результат
-    return {} as T
+    if (!res.changes) throw new Error(`Wasn't updated`)
   }
 
-  async update<T = Record<string, any>>(
+  async updateAll(
     tableName: string,
     partialData: Record<any, any>,
     where: string
-  ): Promise<T> {
-    const result = await this.db.run(
-      `UPDATE ${tableName} SET col = ? WHERE col = ?`,
+  ): Promise<void> {
+    const whereStr = this.makeWhereStr(where)
+    const normalizedData = this.normalizeData(partialData)
+    const setStr: string = Object.keys(normalizedData).map((key) => {
+      return `${key} = ?`
+    }).join(', ')
+
+    const res = await this.db.run(
+      `UPDATE ${tableName} SET ${setStr} WHERE ${whereStr}`,
       'foo',
       'test'
     )
 
-    // TODO: проверить результат
-    //res.changes
-
-    // TODO: вернуть результат
-    return {} as T
+    if (!res.changes) throw new Error(`Wasn't updated`)
   }
 
-  async deleteByKey(table: string, keyName: string, value: string) {
+  async delete(tableName: string, id: string | number) {
+    // TODO: как-то сделать одним запросом
+    const pk = await this.db.get(`SELECT name FROM pragma_table_info('${tableName}') WHERE pk = 1;`)
+    const pkName = pk.name
     const result = await this.db.run(
-      `DELETE FROM ${table} WHERE ${keyName} = ${value}`
+      `DELETE FROM ${tableName} WHERE ${pkName} = ${id}`
     )
 
-    // TODO: проверить результат
-    //result.changes
+    if (!result.changes) throw new Error(`Wasn't deleted`)
   }
 
-  async delete(table: string, where: string) {
+  async deleteAll(table: string, where: string) {
     const result = await this.db.run(
       `DELETE FROM ${table} WHERE ${where}`
     )
 
-    // TODO: проверить результат
-    //result.changes
+    if (!result.changes) throw new Error(`Wasn't deleted`)
   }
 
 
@@ -199,6 +188,10 @@ export class SqliteDb implements DbStorage {
 
   private makeWhereStr(where?: string): string {
     return (where) ? `WHERE ${where}` : ''
+  }
+
+  private normalizeData(dataToInsertOrUpdate: Record<any, any>): Record<any, any> {
+    return omitObj(dataToInsertOrUpdate, CREATED_COL, UPDATED_COL)
   }
 
   private async initDb() {
@@ -214,11 +207,16 @@ export class SqliteDb implements DbStorage {
     await this.db.exec(`
       CREATE TABLE ${DB_TABLES.chats} (
         ${DB_CHATS_COLS.chatId} TEXT PRIMARY KEY,
-        ${DB_CHATS_COLS.botId} TEXT REFERENCES bots(botId),
-        ${DB_CHATS_COLS.created} DATETIME
+        ${DB_CHATS_COLS.botId} TEXT,
+        ${DB_CHATS_COLS.created} DATETIME,
+        FOREIGN KEY (group_id)
+          REFERENCES bots(botId)
+            ON UPDATE SET NULL
+            ON DELETE SET NULL
       );
     `)
-    //await this.db.exec('INSERT INTO tbl VALUES ("test")')
+
+    this.main.log.debug(`DB ${this.dbName} was successfully created`)
   }
 
 }

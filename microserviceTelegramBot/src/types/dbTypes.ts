@@ -1,3 +1,6 @@
+export const CREATED_COL = 'created'
+export const UPDATED_COL = 'updated'
+
 export interface BotStorageInfo {
   botId: string
   token: string
@@ -18,11 +21,11 @@ export const DB_TABLES = {
 export const DB_BOTS_COLS: Record<keyof BotStorageInfo, keyof BotStorageInfo> = {
   botId: 'botId',
   token: 'token',
-  created: 'created',
+  [CREATED_COL]: CREATED_COL,
 }
 
 export const DB_CHATS_COLS: Record<keyof ChatStorageInfo, keyof ChatStorageInfo> = {
   botId: 'botId',
   chatId: 'chatId',
-  created: 'created',
+  [CREATED_COL]: CREATED_COL,
 }
