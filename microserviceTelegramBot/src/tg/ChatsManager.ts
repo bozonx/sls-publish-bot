@@ -122,22 +122,44 @@ export class ChatsManager {
     })
 
     this.main.tgApi.onTextMessage((botId: string, chatId: string, event: TextMessageEvent) => {
+      if (!this.chats[chatId]) {
+        this.main.log.warn(`Income text message to not registered chat ${chatId}`)
 
+        return
+      }
+
+      this.chats[chatId].handleIncomeTextEvent(event)
     })
 
     this.main.tgApi.onPhotoMessage((botId: string, chatId: string, event: PhotoMessageEvent) => {
+      if (!this.chats[chatId]) {
+        this.main.log.warn(`Income photo message to not registered chat ${chatId}`)
 
+        return
+      }
+
+      this.chats[chatId].handleIncomePhotoEvent(event)
     })
 
     this.main.tgApi.onVideoMessage((botId: string, chatId: string, event: VideoMessageEvent) => {
+      if (!this.chats[chatId]) {
+        this.main.log.warn(`Income video message to not registered chat ${chatId}`)
 
+        return
+      }
+
+      this.chats[chatId].handleIncomeVideoEvent(event)
     })
 
     this.main.tgApi.onPollMessage((botId: string, chatId: string, event: PollMessageEvent) => {
+      if (!this.chats[chatId]) {
+        this.main.log.warn(`Income poll message to not registered chat ${chatId}`)
 
+        return
+      }
+
+      this.chats[chatId].handleIncomePollEvent(event)
     })
-
-    // TODO: add other messages types
   }
 
   private async initChat(botId: string, chatId: string) {

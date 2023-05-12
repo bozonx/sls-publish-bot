@@ -56,12 +56,14 @@ export class TgChat {
     //this.window.handleUiEvent(UI_EVENTS.click, queryData)
   }
 
-  handleIncomeTextEvent(msgEvent: TextMessageEvent) {
+  handleIncomeTextEvent(event: TextMessageEvent) {
+    console.log(2222, event)
     // TODO: нужно отправить это в элемент в фокусе
     //this.window.handleUiEvent(UI_EVENTS.input, msgEvent)
   }
 
-  handleIncomePhotoEvent(msgEvent: PhotoMessageEvent) {
+  handleIncomePhotoEvent(event: PhotoMessageEvent) {
+    console.log(2222, event)
     // try {
     //   this.events.emit(ChatEvents.PHOTO, msgEvent);
     // }
@@ -70,7 +72,8 @@ export class TgChat {
     // }
   }
 
-  handleIncomeVideoEvent(msgEvent: VideoMessageEvent) {
+  handleIncomeVideoEvent(event: VideoMessageEvent) {
+    console.log(2222, event)
     // try {
     //   this.events.emit(ChatEvents.VIDEO, msgEvent);
     // }
@@ -83,7 +86,8 @@ export class TgChat {
   //   this.events.emit(ChatEvents.MEDIA_GROUP_ITEM, msgEvent);
   // }
 
-  handleIncomePollEvent(msgEvent: PollMessageEvent) {
+  handleIncomePollEvent(event: PollMessageEvent) {
+    console.log(2222, event)
     // try {
     //   this.events.emit(ChatEvents.POLL, msgEvent);
     // }
