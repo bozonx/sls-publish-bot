@@ -95,7 +95,7 @@ export class TgChat {
 
   private renderMenu() {
     (async () => {
-      await this.main.tg.sendTextMessage(
+      await this.main.tgApi.sendTextMessage(
         this.botId,
         this.chatId,
         'text',
@@ -118,10 +118,10 @@ export class TgChat {
       // const [messageHtml, buttons] = convertDocumentToTgUi(this.window.rootDocument)
       //
       // if (typeof this.menuMsgId !== 'undefined') {
-      //   await this.main.tg.deleteMessage(this.botToken, this.botChatId, this.menuMsgId)
+      //   await this.main.tgApi.deleteMessage(this.botToken, this.botChatId, this.menuMsgId)
       // }
       //
-      // const sentMessage = await this.main.tg.sendTextMessage(
+      // const sentMessage = await this.main.tgApi.sendTextMessage(
       //   this.botToken,
       //   this.botChatId,
       //   messageHtml,

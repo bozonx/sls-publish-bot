@@ -25,8 +25,8 @@ export class ChatsManager {
       for (const chat of botChatIds) {
         await this.initChat(item.botId, chat.chatId)
       }
-      // make bot instance and start listeners
-      await this.main.tg.initBotAndStartListeners(item.botId, item.token)
+      // make api bot instance and start listeners
+      await this.main.tgApi.initBotAndStartListeners(item.botId, item.token)
     }
 
     this.listenNewChatsStart()
@@ -49,7 +49,7 @@ export class ChatsManager {
 
     await this.main.chatStorage.saveBot(botToken, botId)
     // make bot instance and start listeners
-    await this.main.tg.initBotAndStartListeners(botId, botToken)
+    await this.main.tgApi.initBotAndStartListeners(botId, botToken)
     // when start command will be called then TgChat is instantiated
 
     return botId
@@ -83,7 +83,7 @@ export class ChatsManager {
    * @private
    */
   private listenNewChatsStart() {
-    this.main.tg.onCmdStart((botId: string, chatId: string) => {
+    this.main.tgApi.onCmdStart((botId: string, chatId: string) => {
       (async () => {
         if (this.chats[chatId]) {
           // destroy chat instance if it exists
@@ -106,7 +106,7 @@ export class ChatsManager {
    * @private
    */
   private listenIncomeMessages() {
-    this.main.tg.onIncomeCallbackQuery((botId: string, chatId: string, queryData: string) => {
+    this.main.tgApi.onIncomeCallbackQuery((botId: string, chatId: string, queryData: string) => {
       if (!this.chats[chatId]) this.chats[chatId].handleIncomeCallbackQuery(queryData)
     })
 

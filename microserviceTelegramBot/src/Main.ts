@@ -14,7 +14,7 @@ export class Main {
   readonly config: TgBotConfig
   // TODO: connect logger microservice
   readonly log: ConsoleLogger
-  readonly tg = new TgBotApi(this)
+  readonly tgApi = new TgBotApi(this)
   readonly db: DbStorage = new SqliteDb(this)
   readonly chatsManager = new ChatsManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
