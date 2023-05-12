@@ -49,7 +49,7 @@ export class ChatStorage {
     await this.main.longDb.create(DB_TABLES.bots, data)
   }
 
-  async removeBot(botId: string) {
+  async removeBotAndItsChats(botId: string) {
     const exists = await this.main.longDb.exists(DB_TABLES.bots, botId)
 
     if (exists) {

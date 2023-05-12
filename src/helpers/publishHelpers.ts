@@ -6,7 +6,7 @@ import {NotionBlocks} from '../types/notion.js';
 import {publishTgImage, publishTgMediaGroup, publishTgText, publishTgVideo} from '../apiTg/publishTg.js';
 import {TgReplyBtnUrl} from '../types/TgReplyButton.js';
 import {MediaGroupItem} from '../types/types.js';
-import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../types/MessageEvent.js';
+import {PhotoData, PhotoUrlData, PollMessageEvent, VideoData} from '../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {makePost2000Text} from './makePost2000.js';
 
 

@@ -44,7 +44,7 @@ export class ChatsManager {
 
   async newBot(botToken: string): Promise<string> {
     const botId = makeBotId(botToken)
-
+    // it will be saved if it doesn't exests
     await this.main.chatStorage.saveBot(botToken, botId)
     // make bot instance and start listeners
     await this.main.tgApi.initBotAndStartListeners(botId, botToken)
@@ -66,7 +66,7 @@ export class ChatsManager {
 
     this.main.tgApi.stopBot(botId, 'removed')
 
-    await this.main.chatStorage.removeBot(botId)
+    await this.main.chatStorage.removeBotAndItsChats(botId)
   }
 
   async botStatus(botId: string): Promise<BotStatus> {
@@ -106,7 +106,13 @@ export class ChatsManager {
    */
   private listenIncomeMessages() {
     this.main.tgApi.onIncomeCallbackQuery((botId: string, chatId: string, queryData: string) => {
-      if (!this.chats[chatId]) this.chats[chatId].handleIncomeCallbackQuery(queryData)
+      if (!this.chats[chatId]) {
+        this.main.log.warn(`Income message to not registered chat ${chatId}`)
+
+        return
+      }
+
+      this.chats[chatId].handleIncomeCallbackQuery(queryData)
     })
 
     // TODO: add other messages types

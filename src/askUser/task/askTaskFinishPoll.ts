@@ -1,7 +1,7 @@
 import TgChat from '../../apiTg/TgChat.js';
 import {ChatEvents} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
-import {PollMessageEvent} from '../../types/MessageEvent.js';
+import {PollMessageEvent} from '../../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {makeIsoDateTimeStr} from '../../helpers/helpers.js';

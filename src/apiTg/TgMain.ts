@@ -3,7 +3,7 @@ import { Context, Telegraf } from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
 import System from '../System.js';
 import TgChat from './TgChat.js';
-import MessageEventBase from '../types/MessageEvent.js';
+import MessageEventBase from '../../microserviceTelegramBot/src/types/MessageEvent.js';
 
 
 export default class TgMain {

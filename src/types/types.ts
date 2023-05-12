@@ -1,4 +1,4 @@
-import {PhotoData, PhotoUrlData, VideoData} from './MessageEvent.js';
+import {PhotoData, PhotoUrlData, VideoData} from '../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {PackageContext} from '../packageManager/PackageContext.js';
 
 

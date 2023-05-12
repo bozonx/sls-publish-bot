@@ -2,7 +2,7 @@ import _ from 'lodash';
 import TgChat from '../../apiTg/TgChat.js';
 import {ChatEvents} from '../../types/constants.js';
 import BaseState from '../../types/BaseState.js';
-import {TextMessageEvent} from '../../types/MessageEvent.js';
+import {TextMessageEvent} from '../../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN_CALLBACK,

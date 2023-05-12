@@ -11,7 +11,7 @@ import {
   PollMessageEvent,
   TextMessageEvent,
   VideoMessageEvent
-} from '../types/MessageEvent.js';
+} from '../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {TelegramMenuRenderer} from './TelegramMenuRenderer.js';
 import {MenuItem} from '../../_useless/MenuItem.js';
 import {MenuDefinition} from '../../_useless/menuManager/MenuManager.js';

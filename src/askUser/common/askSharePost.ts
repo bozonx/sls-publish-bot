@@ -1,6 +1,6 @@
 import TgChat from '../../apiTg/TgChat.js';
 import BaseState from '../../types/BaseState.js';
-import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../types/MessageEvent.js';
+import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {
   BACK_BTN_CALLBACK,
   CANCEL_BTN_CALLBACK,

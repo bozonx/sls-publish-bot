@@ -2,7 +2,7 @@ import moment from 'moment/moment.js';
 import TgChat from '../../apiTg/TgChat.js';
 import {askTgPoll} from './askTgPoll.js';
 import {askConfirm} from '../common/askConfirm.js';
-import {PollMessageEvent} from '../../types/MessageEvent.js';
+import {PollMessageEvent} from '../../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {askDateTime} from '../common/askDateTime.js';
 import {registerTgTaskCopy} from '../../helpers/registerTgPost.js';
 import {askTimePeriod} from '../common/askTimePeriod.js';

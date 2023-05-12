@@ -6,7 +6,7 @@ import {
   PhotoMessageEvent,
   TextMessageEvent,
   VideoMessageEvent
-} from '../../types/MessageEvent.js';
+} from '../../../microserviceTelegramBot/src/types/MessageEvent.js';
 import {isValidUrl} from '../../lib/common.js';
 import {MediaGroupItem} from '../../types/types.js';
 import {
