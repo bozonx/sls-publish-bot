@@ -1,5 +1,6 @@
-import {BotStatus, MicroserviceTgBotInterface} from './types/MicroserviceTgBotInterface.js';
+import {MicroserviceTgBotInterface} from './types/MicroserviceTgBotInterface.js';
 import {Main} from './Main.js';
+import {BotStatus} from './types/BotStatus.js';
 
 
 export class ServiceInterface implements MicroserviceTgBotInterface {

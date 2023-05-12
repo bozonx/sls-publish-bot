@@ -2,6 +2,9 @@ import {Main} from '../Main.js';
 import {BotStorageInfo, ChatStorageInfo, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
 
 
+// TODO: сделать небольшой кэш для данных из бд
+
+
 export class ChatStorage {
   private readonly main: Main
 

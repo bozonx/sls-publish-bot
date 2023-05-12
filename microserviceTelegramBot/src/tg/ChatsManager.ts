@@ -1,8 +1,8 @@
 import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
 import {makeBotId} from '../../../src/helpers/makeBotId.js';
-import {BotStorageInfo} from '../storage/ChatStorage.js';
 import {BotStatus} from '../types/BotStatus.js';
+import {BotStorageInfo} from '../types/dbTypes.js';
 
 
 export class ChatsManager {
@@ -23,11 +23,10 @@ export class ChatsManager {
       const botChatIds = await this.main.chatStorage.getBotChats(item.botId)
 
       for (const chat of botChatIds) {
-
-        // TODO: запустить слушание событий в боте
-
         await this.initChat(item.botId, chat.chatId)
       }
+      // make bot instance and start listeners
+      await this.main.tg.initBotAndStartListeners(item.botId, item.token)
     }
 
     this.listenNewChatsStart()
@@ -37,6 +36,8 @@ export class ChatsManager {
   async destroy() {
     for (const itemIndex in this.chats) {
       await this.chats[itemIndex].destroy()
+
+      // TODO: удалить листенеры в api
 
       delete this.chats[itemIndex]
     }
@@ -74,6 +75,10 @@ export class ChatsManager {
   }
 
 
+  /**
+   * Listen of all the bots' start command
+   * @private
+   */
   private listenNewChatsStart() {
     this.main.tg.onCmdStart((botId: string, chatId: string) => {
       (async () => {
@@ -86,18 +91,27 @@ export class ChatsManager {
           await this.main.chatStorage.saveChat(botId, chatId)
         }
         // make a new instance any way
-        await this.initChat(botId, chatId)
+        //await this.initChat(botId, chatId)
       })().catch((e) => this.main.log.error(e))
     })
   }
 
+  /**
+   * Listen income messages of all the bots and chats
+   * @private
+   */
   private listenIncomeMessages() {
     this.main.tg.onIncomeCallbackQuery((botId: string, chatId: string, queryData: string) => {
       if (!this.chats[chatId]) this.chats[chatId].handleIncomeCallbackQuery(queryData)
     })
+
+    // TODO: add other messages types
   }
 
   private async initChat(botId: string, chatId: string) {
+
+    // TODO: запустить слушание событий в боте
+
     this.chats[chatId] = new TgChat(this, botId, chatId)
     // and init it
     await this.chats[chatId].init()

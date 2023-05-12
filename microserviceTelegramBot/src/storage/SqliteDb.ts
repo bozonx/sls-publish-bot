@@ -15,6 +15,8 @@ export class SqliteDb implements DbStorage {
 
   async init() {
 
+    // TODO: если бд не инициализированна то инициализировать её
+
     // TODO: проверить если нет файла то режим инициации бд
 
     this.db = await open({

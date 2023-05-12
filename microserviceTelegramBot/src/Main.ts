@@ -10,26 +10,6 @@ import {SqliteDb} from './storage/SqliteDb.js';
 import {DbStorage} from './types/DbStorage.js';
 
 
-/*
-
-  Когда пользователь создает бота, то он навечно хранится в этом сервисе
-  и слушает события.
-  Бот удаляется только по запросу удаления,
-  либо запрос от cron который удаляет не используемые боты.
-  !!!! лучше чтобы был один запрос слушания событий к tg api сразу на много ботов
-
-
-----
-ему присылают уже сгенерированный фонфиг меню, который он будет показывать
-  поьзователю. И будет обрабатывать ответы указанным образом
-
-  получается что это будет abstractUi файлы, с которым будет работать бот.
-  Но они уже будут подготовленны - убранно лишее и не будут формироваться из
-  пакетов, а сразу готовы. Если что-то изменится, будет установлен новый пакет пользователем
-  то эти файлы обновятся
- */
-
-
 export class Main {
   readonly config: TgBotConfig
   // TODO: connect logger microservice
@@ -53,8 +33,10 @@ export class Main {
   init() {
     (async () => {
       this.log.info('Start instantiating')
+
       await this.db.init()
       await this.chatsManager.init()
+
       this.log.info('Instantiated successfully')
     })()
       .catch((e) => this.log.error(`Instantiate error: ${e}`))
@@ -66,7 +48,7 @@ export class Main {
       await this.tg.destroy(reason)
       await this.db.destroy()
     })()
-      .catch((e) => this.log.error(e))
+      .catch((e) => this.log.error(`Error while destroy: ${e}`))
   }
 
 

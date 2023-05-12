@@ -35,105 +35,12 @@ export class TgBotApi {
   }
 
 
-  async listenToStartBot(botToken: string, botId: string) {
-    // TODO: начать слушать start
-  }
-
-  async sendTextMessage(
-    botId: string,
-    chatId: number | string,
-    text: string | Format.FmtString,
-    extra?: Types.ExtraReplyMessage
-  ) {
-    const bot = await this.resolveBot(botId)
-
-    return await bot.telegram.sendMessage(chatId, text, extra)
-  }
-
-  async sendPhotoMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
-
-    // TODO: add
-  }
-
-  async sendVideoMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
-
-    // TODO: add
-  }
-
-  async sendAudioMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
-
-    // TODO: add
-  }
-
-  async sendPollMessage(botId: string, chatId: string) {
-    const bot = await this.resolveBot(botId)
-
-    // TODO: add
-  }
-
-  async deleteMessage(botToken: string, chatId: number | string, msgId: number) {
-    const bot = await this.resolveBot(botToken)
-
-    await bot.telegram.deleteMessage(chatId, msgId)
-  }
-
-  onCmdStart(handler:(botId: string, chatId: string) => void) {
-    return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
-  }
-
-  onIncomeCallbackQuery(handler: (botId: string, chatId: string, queryData: string) => void): number {
-    return this.events.addListener(TG_BOT_EVENT.callbackQuery, handler)
-  }
-
-
-  // onBotLaunched(botToken: string, handler:() => void) {
-  //   const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
-  //
-  //   return this.events.addListener(eventName, handler)
-  // }
-
-  onTextMessage() {
-
-  }
-
-  onPhotoMessage() {
-
-  }
-
-  onVideoMessage() {
-
-  }
-
-  onAudioMessage() {
-
-  }
-
-  onPollMessage() {
-
-  }
-
-
-  private async resolveBot(botId: string) {
-    if (this.bots[botId]) return this.bots[botId]
-
-    // TODO: где взять bot token ???
-
-    this.bots[botId] = new Telegraf(botToken, {
+  async initBotAndStartListeners(botId: string, botToken: string) {
+    const bot = this.bots[botId] = new Telegraf(botToken, {
       telegram: {
         testEnv: !this.main.config.isProduction,
       }
     })
-
-    await this.initBot(botId)
-
-    return this.bots[botId]
-  }
-
-  private async initBot(botId: string) {
-    const bot = this.bots[botId]
 
     bot.start((ctx: Context) => {
       if (typeof ctx.chat?.id === 'undefined') return
@@ -276,6 +183,100 @@ export class TgBotApi {
 
     // TODO: лучше не светить токены, а работать с их md5 суммой
     this.main.log.info('Bot launched: ' + botToken);
+  }
+
+  async sendTextMessage(
+    botId: string,
+    chatId: number | string,
+    text: string | Format.FmtString,
+    extra?: Types.ExtraReplyMessage
+  ) {
+    const bot = await this.resolveBot(botId)
+
+    return await bot.telegram.sendMessage(chatId, text, extra)
+  }
+
+  async sendPhotoMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
+
+    // TODO: add
+  }
+
+  async sendVideoMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
+
+    // TODO: add
+  }
+
+  async sendAudioMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
+
+    // TODO: add
+  }
+
+  async sendPollMessage(botId: string, chatId: string) {
+    const bot = await this.resolveBot(botId)
+
+    // TODO: add
+  }
+
+  async deleteMessage(botToken: string, chatId: number | string, msgId: number) {
+    const bot = await this.resolveBot(botToken)
+
+    await bot.telegram.deleteMessage(chatId, msgId)
+  }
+
+  onCmdStart(handler:(botId: string, chatId: string) => void) {
+    return this.events.addListener(TG_BOT_EVENT.cmdStart, handler)
+  }
+
+  onIncomeCallbackQuery(handler: (botId: string, chatId: string, queryData: string) => void): number {
+    return this.events.addListener(TG_BOT_EVENT.callbackQuery, handler)
+  }
+
+
+  // onBotLaunched(botToken: string, handler:() => void) {
+  //   const eventName = botToken + EVENT_DELIMITER + TG_BOT_EVENT.launched
+  //
+  //   return this.events.addListener(eventName, handler)
+  // }
+
+  onTextMessage() {
+
+  }
+
+  onPhotoMessage() {
+
+  }
+
+  onVideoMessage() {
+
+  }
+
+  onAudioMessage() {
+
+  }
+
+  onPollMessage() {
+
+  }
+
+
+  private async resolveBot(botId: string) {
+    if (this.bots[botId]) return this.bots[botId]
+
+    // TODO: где взять bot token ???
+
+    // this.bots[botId] = new Telegraf(botToken, {
+    //   telegram: {
+    //     testEnv: !this.main.config.isProduction,
+    //   }
+    // })
+
+
+    // await this.initBot(botId)
+
+    return this.bots[botId]
   }
 
 }
