@@ -56,25 +56,31 @@ export class SqliteDb implements DbStorage {
   }
 
 
-  async getOne<T = any>(tableName: string, where?: string, cols?: string[]): Promise<T | undefined> {
+  async getOne<T = any>(
+    tableName: string,
+    id: any,
+    cols?: string[]
+  ): Promise<T | undefined> {
+    const colsStr = this.makeColStr(cols)
+    // TODO: как-то сделать одним запросом
+    const pk = await this.db.get(`SELECT name FROM pragma_table_info('${tableName}') WHERE pk = 1;`)
+    const pkName = pk.name
+
+    return this.db.get<T>(
+      `SELECT ${colsStr} FROM ${tableName} WHERE ${pkName} = ?`,
+      id
+    )
+  }
+
+  async getOneWhere<T = any>(
+    tableName: string,
+    where: string,
+    cols?: string[]
+  ): Promise<T | undefined> {
     const colsStr = this.makeColStr(cols)
     const whereStr = this.makeWhereStr(where)
 
     return this.db.get<T>(`SELECT ${colsStr} FROM ${tableName} ${whereStr}`)
-  }
-
-  async getOneByKey<T = any>(
-    tableName: string,
-    keyName: string,
-    value: any,
-    cols?: string[]
-  ): Promise<T | undefined> {
-    const colsStr = this.makeColStr(cols)
-
-    return this.db.get<T>(
-      `SELECT ${colsStr} FROM ${tableName} WHERE ${keyName} = ?`,
-      value
-    )
   }
 
   async getAll<T = Record<string, any>>(

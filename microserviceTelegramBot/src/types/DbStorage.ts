@@ -2,16 +2,12 @@ export interface DbStorage {
   init(dbName: string): Promise<void>
   destroy(): Promise<void>
 
-  getOne<T = any>(
-    tableName: string,
-    where?: string,
-    cols?: string[]
-  ): Promise<T | undefined>
 
-  getOneByKey<T = any>(
+  getOne<T = any>(tableName: string, id: any, cols?: string[]): Promise<T | undefined>
+
+  getOneWhere<T = any>(
     tableName: string,
-    keyName: string,
-    value: any,
+    where: string,
     cols?: string[]
   ): Promise<T | undefined>
 
