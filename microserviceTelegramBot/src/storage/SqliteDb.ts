@@ -97,14 +97,16 @@ export class SqliteDb implements DbStorage {
 
   async getAll<T = Record<string, any>>(
     tableName: string,
-    where: string,
+    where?: string,
+    orderBy?: string,
+    desc: boolean = false,
     cols?: string[]
   ): Promise<T[]> {
     const colsStr = this.makeColStr(cols)
+    const whereStr = (where) ? `WHERE ${where}` : ''
+    const orderStr = (orderBy) ? `ORDER BY ${orderBy} ${(desc) ? 'DESC' : ''}` : ''
 
-    // ORDER BY col DESC
-
-    return this.db.all<T[]>(`SELECT ${colsStr} FROM ${tableName} WHERE ${where}`)
+    return this.db.all<T[]>(`SELECT ${colsStr} FROM ${tableName} ${whereStr} ${orderStr}`)
   }
 
   async getAllByKey<T = Record<string, any>>(

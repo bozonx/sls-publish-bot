@@ -19,7 +19,9 @@ export interface DbStorage {
 
   getAll<T = Record<string, any>>(
     tableName: string,
-    where: string,
+    where?: string,
+    orderBy?: string,
+    desc?: boolean,
     cols?: string[]
   ): Promise<T[]>
 
