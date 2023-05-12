@@ -3,6 +3,7 @@ import {Main} from '../Main.js';
 import {makeBotId} from '../../../src/helpers/makeBotId.js';
 import {BotStatus} from '../types/BotStatus.js';
 import {BotStorageInfo} from '../types/dbTypes.js';
+import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent.js';
 
 
 export class ChatsManager {
@@ -118,6 +119,22 @@ export class ChatsManager {
       }
 
       this.chats[chatId].handleIncomeCallbackQuery(queryData)
+    })
+
+    this.main.tgApi.onTextMessage((botId: string, chatId: string, event: TextMessageEvent) => {
+
+    })
+
+    this.main.tgApi.onPhotoMessage((botId: string, chatId: string, event: PhotoMessageEvent) => {
+
+    })
+
+    this.main.tgApi.onVideoMessage((botId: string, chatId: string, event: VideoMessageEvent) => {
+
+    })
+
+    this.main.tgApi.onPollMessage((botId: string, chatId: string, event: PollMessageEvent) => {
+
     })
 
     // TODO: add other messages types

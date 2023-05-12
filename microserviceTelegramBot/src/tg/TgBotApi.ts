@@ -2,7 +2,12 @@ import {IndexedEventEmitter} from 'squidlet-lib';
 import {Context, Telegraf, Format, Types} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
 import {Main} from '../Main.js';
-import MessageEventBase from '../types/MessageEvent.js';
+import MessageEventBase, {
+  PhotoMessageEvent,
+  PollMessageEvent,
+  TextMessageEvent,
+  VideoMessageEvent
+} from '../types/MessageEvent.js';
 
 
 export enum TG_BOT_EVENT {
@@ -10,6 +15,9 @@ export enum TG_BOT_EVENT {
   //launched,
   callbackQuery,
   textMessage,
+  photoMessage,
+  videoMessage,
+  pollMessage,
 }
 
 
@@ -85,6 +93,7 @@ export class TgBotApi {
       }
 
       const msgBase: MessageEventBase = {
+        // TODO: а зачем так то ???
         messageId: (typeof message.forward_from_message_id === 'undefined')
           ? message.message_id
           : message.forward_from_message_id,
@@ -95,12 +104,16 @@ export class TgBotApi {
       }
 
       if ((message as any).text) {
-        // this.events.emit(TG_BOT_EVENT.textMessage, botId, String(ctx.chat.id))
-        // this.chats[ctx.chat.id].handleIncomeTextEvent({
-        //   ...msgBase,
-        //   text: (message as any).text,
-        //   entities: (message as any).entities,
-        // });
+        this.events.emit(
+          TG_BOT_EVENT.textMessage,
+          botId,
+          String(ctx.chat.id),
+          {
+            ...msgBase,
+            text: (message as any).text,
+            entities: (message as any).entities,
+          } as TextMessageEvent
+        )
       }
       // else if ((message as any).photo) {
       //   const lastPhoto = _.last((message as any).photo) as PhotoSize;
@@ -244,24 +257,24 @@ export class TgBotApi {
   //   return this.events.addListener(eventName, handler)
   // }
 
-  onTextMessage() {
-
+  onTextMessage(handler: (botId: string, chatId: string, event: TextMessageEvent) => void): number {
+    return this.events.addListener(TG_BOT_EVENT.textMessage, handler)
   }
 
-  onPhotoMessage() {
-
+  onPhotoMessage(handler: (botId: string, chatId: string, event: PhotoMessageEvent) => void): number {
+    return this.events.addListener(TG_BOT_EVENT.photoMessage, handler)
   }
 
-  onVideoMessage() {
-
+  onVideoMessage(handler: (botId: string, chatId: string, event: VideoMessageEvent) => void): number {
+    return this.events.addListener(TG_BOT_EVENT.videoMessage, handler)
   }
 
-  onAudioMessage() {
+  // onAudioMessage(handler: (botId: string, chatId: string, event: AudioMessageEvent) => void): number {
+  //
+  // }
 
-  }
-
-  onPollMessage() {
-
+  onPollMessage(handler: (botId: string, chatId: string, event: PollMessageEvent) => void): number {
+    return this.events.addListener(TG_BOT_EVENT.pollMessage, handler)
   }
 
 
