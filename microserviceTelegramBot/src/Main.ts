@@ -21,7 +21,10 @@ export class Main {
   readonly chatsManager = new ChatsManager(this)
   readonly uiFilesManager: UiFilesManager = new UiFilesManager(this)
   readonly chatStorage = new ChatStorage(this)
+
+  // TODO: save status - and remove it when bot removes
   readonly botStatusStorage = new BotStatusStorage(this)
+
   readonly uiFilesStorage = new UiFilesStorage(this)
 
 
