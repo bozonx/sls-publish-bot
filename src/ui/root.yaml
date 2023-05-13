@@ -1,12 +1,12 @@
 tmpl:
-  - type: Router
-    root: '/'
-    children:
-      - type: VerticalMenu
-        header: 'menu msg'
-        children:
-          - type: Link
-            path: '/el1'
-            text: 'Element 1'
-
-
+  type: Document
+  children:
+    - type: Router
+      root: '/'
+      children:
+        - type: VerticalMenu
+          header: 'menu msg'
+          children:
+            - type: Link
+              path: '/el1'
+              text: 'Element 1'
