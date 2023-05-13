@@ -1,0 +1,12 @@
+tmpl:
+  - type: Router
+    root: '/'
+    children:
+      - type: VerticalMenu
+        header: 'menu msg'
+        children:
+          - type: Link
+            path: '/el1'
+            text: 'Element 1'
+
+
