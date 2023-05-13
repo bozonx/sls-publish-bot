@@ -1,12 +1,27 @@
 tmpl:
   type: Document
   children:
-    - type: Router
-      root: '/'
+    - type: SideMenu
       children:
         - type: VerticalMenu
           header: 'menu msg'
           children:
-            - type: Link
-              path: '/el1'
-              text: 'Element 1'
+            - type: ButtonGroup
+              children:
+              - type: Link
+                path: '/form1'
+                text: 'Element 1'
+              - type: Link
+                path: '/form2'
+                text: 'Element 2'
+            - type: NestedMenu
+              text: 'to nested menu'
+              header: 'newsted menu msg'
+              children:
+                - type: Link
+                  path: '/form3'
+                  text: 'Nested Element'
+    - type: MainSection
+      children:
+        - type: Router
+          root: '/'
