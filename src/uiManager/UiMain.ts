@@ -1,8 +1,8 @@
 import {UiContext} from './UiContext.js';
-import {WindowConfig} from '../AbstractUi/interfaces/WindowConfig.js';
+import {WindowConfig} from '../../../squidlet-ui-builder/src/AbstractUi/interfaces/WindowConfig.js';
 import {UiManager} from './UiManager.js';
 import {Notify} from './Notify.js';
-import {Window} from '../AbstractUi/Window.js';
+import {Window} from '../../../squidlet-ui-builder/src/AbstractUi/Window.js';
 
 
 export class UiMain {

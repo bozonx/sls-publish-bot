@@ -1,4 +1,4 @@
-import {Window} from '../../../src/AbstractUi/Window.js';
+import {Window} from '../../../../squidlet-ui-builder/src/AbstractUi/Window.js';
 import {ChatsManager} from './ChatsManager.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent.js';
 import {convertDocumentToTgUi} from '../ui/convertDocumentToTgUi.js';

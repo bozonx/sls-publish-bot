@@ -1,5 +1,5 @@
 import {TgReplyButton} from '../../../src/types/TgReplyButton.js';
-import {Document} from '../../../src/AbstractUi/Document.js';
+import {Document} from '../../../../squidlet-ui-builder/src/AbstractUi/Document.js';
 
 
 export function convertDocumentToTgUi(document: Document): [string, TgReplyButton[][]] {

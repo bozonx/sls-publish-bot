@@ -1,8 +1,8 @@
 import {UserManager} from './UserManager.js';
 import TasksMain from '../taskManager/TasksMain.js';
 import {UiManager} from '../uiManager/UiManager.js';
-import {Route} from '../AbstractUi/interfaces/Route.js';
-import {Screen} from '../AbstractUi/Screen.js';
+import {Route} from '../../../squidlet-ui-builder/src/AbstractUi/interfaces/Route.js';
+import {Screen} from '../../../squidlet-ui-builder/src/AbstractUi/Screen.js';
 import {homeScreenDefinition} from '../uiManager/homeScreenDefinition.js';
 
 

@@ -1,8 +1,8 @@
 import {PackageIndex} from '../../types/types.js';
 import {PackageContext} from '../../packageManager/PackageContext.js';
-import {Screen} from '../../AbstractUi/Screen.js';
-import {fragment} from '../../AbstractUi/elements/Fragment.js';
-import {button} from '../../AbstractUi/elements/Button.js';
+import {Screen} from '../../../../squidlet-ui-builder/src/AbstractUi/Screen.js';
+import {fragment} from '../../../../squidlet-ui-builder/src/AbstractUi/elements/Fragment.js';
+import {button} from '../../../../squidlet-ui-builder/src/AbstractUi/elements/Button.js';
 
 
 const publisher: PackageIndex = (ctx: PackageContext) => {

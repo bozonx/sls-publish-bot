@@ -1,5 +1,5 @@
 import {Main} from '../Main.js';
-import {WindowConfig} from '../../../src/AbstractUi/interfaces/WindowConfig.js';
+import {WindowConfig} from '../../../../squidlet-ui-builder/src/AbstractUi/interfaces/WindowConfig.js';
 
 
 export class UiFilesManager {

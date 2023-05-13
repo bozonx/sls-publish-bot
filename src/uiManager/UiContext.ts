@@ -1,5 +1,5 @@
 import {ConsoleLogger, AsyncLogger} from 'squidlet-lib';
-import {Route} from '../AbstractUi/interfaces/Route.js';
+import {Route} from '../../../squidlet-ui-builder/src/AbstractUi/interfaces/Route.js';
 import ru from '../I18n/ru.js';
 import AppConfig from '../types/AppConfig.js';
 import {UiMain} from './UiMain.js';
