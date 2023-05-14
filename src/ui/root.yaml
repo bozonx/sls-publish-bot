@@ -1,3 +1,4 @@
+name: Root
 tmpl:
   - component: Document
     children:
@@ -8,12 +9,12 @@ tmpl:
             children:
               - component: ButtonGroup
                 children:
-                - component: Link
-                  path: '/form1'
-                  text: 'Element 1'
-                - component: Link
-                  path: '/form2'
-                  text: 'Element 2'
+                  - component: Link
+                    path: '/form1'
+                    text: 'Element 1'
+                  - component: Link
+                    path: '/form2'
+                    text: 'Element 2'
               - component: NestedMenu
                 text: 'to nested menu'
                 header: 'newsted menu msg'
