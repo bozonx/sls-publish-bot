@@ -1,27 +1,27 @@
 tmpl:
-  component: Document
-  children:
-    - component: SideMenu
-      children:
-        - component: VerticalMenu
-          header: 'menu msg'
-          children:
-            - component: ButtonGroup
-              children:
-              - component: Link
-                path: '/form1'
-                text: 'Element 1'
-              - component: Link
-                path: '/form2'
-                text: 'Element 2'
-            - component: NestedMenu
-              text: 'to nested menu'
-              header: 'newsted menu msg'
-              children:
+  - component: Document
+    children:
+      - component: SideMenu
+        children:
+          - component: VerticalMenu
+            header: 'menu msg'
+            children:
+              - component: ButtonGroup
+                children:
                 - component: Link
-                  path: '/form3'
-                  text: 'Nested Element'
-    - component: MainSection
-      children:
-        - component: Router
-          root: '/'
+                  path: '/form1'
+                  text: 'Element 1'
+                - component: Link
+                  path: '/form2'
+                  text: 'Element 2'
+              - component: NestedMenu
+                text: 'to nested menu'
+                header: 'newsted menu msg'
+                children:
+                  - component: Link
+                    path: '/form3'
+                    text: 'Nested Element'
+      - component: MainSection
+        children:
+          - component: Router
+            root: '/'
