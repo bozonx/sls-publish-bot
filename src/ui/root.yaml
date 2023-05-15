@@ -1,14 +1,14 @@
 name: Root
 tmpl:
   - component: Document
-    children:
+    slot:
       - component: SideMenu
-        children:
+        slot:
           - component: VerticalMenu
             header: 'menu msg'
-            children:
+            slot:
               - component: ButtonGroup
-                children:
+                slot:
                   - component: Link
                     path: '/form1'
                     text: 'Element 1'
@@ -18,11 +18,11 @@ tmpl:
               - component: NestedMenu
                 text: 'to nested menu'
                 header: 'newsted menu msg'
-                children:
+                slot:
                   - component: Link
                     path: '/form3'
                     text: 'Nested Element'
       - component: MainSection
-        children:
+        slot:
           - component: Router
             root: '/'
