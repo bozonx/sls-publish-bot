@@ -1,4 +1,7 @@
 name: Root
+#components:
+screens:
+  - $include:./screens/TestFormScreen.yaml
 tmpl:
   - component: Document
     slot:
@@ -11,18 +14,21 @@ tmpl:
                 slot:
                   - component: Link
                     path: '/form1'
-                    text: 'Element 1'
+                    text: 'Link 1'
                   - component: Link
                     path: '/form2'
-                    text: 'Element 2'
+                    text: 'Link2 2'
               - component: NestedMenu
                 text: 'to nested menu'
-                header: 'newsted menu msg'
                 slot:
-                  - component: Link
-                    path: '/form3'
-                    text: 'Nested Element'
+                  - component: VerticalMenu
+                    header: 'newsted menu msg'
+                    slot:
+                      - component: Link
+                        path: '/form3'
+                        text: 'Nested Element'
       - component: MainSection
         slot:
           - component: Router
             root: '/'
+            routes: $include:./routes.yaml

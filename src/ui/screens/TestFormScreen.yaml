@@ -1,0 +1,4 @@
+name: TestFormScreen
+tmpl:
+  - component: Button
+    text: some text
