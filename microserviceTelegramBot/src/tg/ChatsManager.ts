@@ -1,6 +1,6 @@
 import {TgChat} from './TgChat.js';
 import {Main} from '../Main.js';
-import {makeBotId} from '../../../src/helpers/makeBotId.js';
+import {makeBotId} from '../../../__old/src/helpers/makeBotId.js';
 import {BotStatus} from '../types/BotStatus.js';
 import {BotStorageInfo} from '../types/dbTypes.js';
 import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent.js';

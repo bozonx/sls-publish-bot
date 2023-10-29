@@ -2,8 +2,8 @@ import path from 'path';
 import {Main} from './Main.js';
 import {TgBotConfig} from './types/TgBotConfig.js';
 import {ServiceInterface} from './ServiceInterface.js';
-import {DevServer} from '../../src/callMicroService/DevServer.js';
-import {DevClient} from '../../src/callMicroService/DevClient.js';
+import {DevServer} from '../../__old/src/callMicroService/DevServer.js';
+import {DevClient} from '../../__old/src/callMicroService/DevClient.js';
 
 
 const config: Partial<TgBotConfig> = {

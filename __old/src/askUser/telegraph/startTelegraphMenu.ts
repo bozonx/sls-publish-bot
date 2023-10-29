@@ -1,0 +1,15 @@
+import TgChat from '../../apiTg/TgChat';
+import {askTelegraphMenu, TELEGRAPH_MENU, TelegraphMenu} from './askTelegraphMenu';
+import {startTelegraphList} from './startTelegraphList';
+
+
+export async function startTelegraphMenu(tgChat: TgChat) {
+  await askTelegraphMenu(tgChat, tgChat.asyncCb(async (action: TelegraphMenu) => {
+    switch (action) {
+      case TELEGRAPH_MENU.TELEGRAPH_LIST:
+        return await startTelegraphList(tgChat)
+      default:
+        throw new Error(`Unknown action`)
+    }
+  }))
+}

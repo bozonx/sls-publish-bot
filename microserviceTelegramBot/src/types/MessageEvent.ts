@@ -1,4 +1,4 @@
-import {TgEntity} from '../../../src/types/TgEntity.js';
+import {TgEntity} from '../../../__old/src/types/TgEntity.js';
 
 
 export interface PhotoUrlData {
