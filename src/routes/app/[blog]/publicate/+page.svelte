@@ -1,17 +1,21 @@
 <script>
 import {Heading} from 'flowbite-svelte'
 import {t} from '$lib/store/t'
+import BlogDetails from '$lib/components/BlogDetails.svelte'
+import SelectPost from '$lib/components/SelectPost.svelte'
 
-let data
+export let data
 </script>
 
-<Heading tag="h1"></Heading>
+<Heading tag="h1">{$t('links.publicate')}</Heading>
 
 <div>
-  publicate
+  <BlogDetails details={data.blog} />
+
+  <SelectPost postResp={data.posts} />
 
   <pre>
-    * выбираем блог (из левого меню)
+    * + выбираем блог (из левого меню)
     * выбираем пост или статью
     * считываем ёё и мета дату из squidlet
     * предпросмотр всех данных

@@ -1,2 +1,5 @@
-pages:
+links:
   publicate: Публикация материала
+  selectPost: Выберете пост
+headers:
+  allBlogs: Все блоги
