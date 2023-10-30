@@ -6,12 +6,12 @@ import MenuWrapper from '$lib/components/MenuWrapper.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 
 
-breadcrumbs.set([{title: $page.params.blog}])
+export let data
+
+breadcrumbs.set([{title: data.blog.title}])
 </script>
 
 <div>
-  blog {$page.params.blog} menu
-
   <MenuWrapper>
     <li>
       <MenuItem href="/app/{$page.params.blog}/publicate">

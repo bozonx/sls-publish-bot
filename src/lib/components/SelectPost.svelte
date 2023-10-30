@@ -9,10 +9,6 @@ import {page} from "$app/stores";
 export let postResp
 </script>
 
-<div>
-  <Heading tag="h4">{$t('links.selectPost')}</Heading>
-</div>
-
 <MenuWrapper>
   {#each postResp.result as item}
     <li>

@@ -13,10 +13,18 @@ import TopBar from '$lib/components/layout/TopBar.svelte'
 
   <div>
     <div>
-      <BreadCrumbs />
+      <!--sidebar-->
+    </div>
+    <div class="pt-2">
+      <div class="mb-5">
+        <BreadCrumbs />
+      </div>
+
+      <main>
+        <slot />
+      </main>
     </div>
 
-    <slot />
   </div>
 
 </div>
