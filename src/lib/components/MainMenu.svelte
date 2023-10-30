@@ -1,0 +1,12 @@
+<script>
+  import { page } from '$app/stores'
+  import {t} from '$lib/store/t'
+  import MenuWrapper from '$lib/components/MenuWrapper.svelte'
+  import MenuItem from '$lib/components/MenuItem.svelte'
+</script>
+
+<MenuWrapper>
+  <li>
+    <MenuItem href="/app/config">{$t('menu.appConfig')}</MenuItem>
+  </li>
+</MenuWrapper>

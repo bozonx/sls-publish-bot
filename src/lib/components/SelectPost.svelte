@@ -1,7 +1,9 @@
 <script>
 import {Heading} from 'flowbite-svelte'
 import {t} from '$lib/store/t'
-import SelectPostItem from '$lib/components/SelectPostItem.svelte'
+import MenuWrapper from '$lib/components/MenuWrapper.svelte'
+import MenuItem from '$lib/components/MenuItem.svelte'
+import {page} from "$app/stores";
 
 
 export let postResp
@@ -11,10 +13,12 @@ export let postResp
   <Heading tag="h4">{$t('links.selectPost')}</Heading>
 </div>
 
-<ul>
+<MenuWrapper>
   {#each postResp.result as item}
     <li>
-      <SelectPostItem {item} />
+      <MenuItem href="/app/{$page.params.blog}/publicate/post?item={item.meta.fileName}">
+        {item.meta.title}
+      </MenuItem>
     </li>
   {/each}
-</ul>
+</MenuWrapper>

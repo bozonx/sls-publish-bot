@@ -1,17 +1,15 @@
 <script>
-import {Heading} from 'flowbite-svelte'
-import BlogItem from '$lib/components/BlogItem.svelte'
+import MenuItem from '$lib/components/MenuItem.svelte'
+import MenuWrapper from '$lib/components/MenuWrapper.svelte'
 import {t} from '$lib/store/t'
 
 export let items
 </script>
 
-<div>
-  <Heading tag="h4">{$t('headers.allBlogs')}</Heading>
-
-  <ul>
-    {#each items.result as item}
-      <BlogItem {item} />
-    {/each}
-  </ul>
-</div>
+<MenuWrapper>
+  {#each items.result as item}
+    <li>
+      <MenuItem href="/app/{item.name}">{item.title}</MenuItem>
+    </li>
+  {/each}
+</MenuWrapper>

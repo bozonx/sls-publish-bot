@@ -1,5 +1,8 @@
 <script>
+import {t} from '$lib/store/t'
 import AllBlogs from '$lib/components/AllBlogs.svelte'
+import MainMenu from '$lib/components/MainMenu.svelte'
+import SectionHeader from '$lib/components/SectionHeader.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 
 
@@ -8,7 +11,13 @@ export let data
 </script>
 
 <div>
-  main page
+  <div>
+    <SectionHeader>{$t('headers.allBlogs')}</SectionHeader>
+    <AllBlogs items={data.allBlogs} />
+  </div>
 
-  <AllBlogs items={data.allBlogs} />
+  <div class="mt-5">
+    <SectionHeader>{$t('headers.menu')}</SectionHeader>
+    <MainMenu />
+  </div>
 </div>

@@ -3,6 +3,7 @@ links:
   selectPost: Выберете пост
 headers:
   allBlogs: Все блоги
+  menu: Меню
   postDetails: Детали поста
   confirm: Подтвердить
 chunks:
@@ -17,3 +18,4 @@ menu:
   next: Далее
   publishOnlyTelegraph: Публиковать только в telegra.ph
   publishAll: Опубликовать всё
+  appConfig: Конфиг приложения
