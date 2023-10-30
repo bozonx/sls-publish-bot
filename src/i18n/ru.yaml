@@ -1,4 +1,5 @@
 links:
+  #home: Главная
   publicate: Публикация материала
   selectPost: Выберете пост
 headers:
@@ -19,3 +20,6 @@ menu:
   publishOnlyTelegraph: Публиковать только в telegra.ph
   publishAll: Опубликовать всё
   appConfig: Конфиг приложения
+details:
+  title: Название
+  lang: Язык
