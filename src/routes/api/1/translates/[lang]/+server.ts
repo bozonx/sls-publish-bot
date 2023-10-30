@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import yaml from 'yaml'
 import {ROOT_DIR} from '$lib/server/constants.server'
-import {SUPPORTED_LANGS, TEXTS_DIR, FILE_ENCODE} from '$lib/constants'
+import {SUPPORTED_LANGS, FILE_ENCODE} from '$lib/constants'
 
 
 export async function GET(event) {
@@ -16,7 +16,7 @@ export async function GET(event) {
 
   try {
     locYml = await fs.readFile(
-      path.join(ROOT_DIR, TEXTS_DIR, lang, `translation.yaml`),
+      path.join(ROOT_DIR, 'src', 'i18n', `${lang}.yaml`),
       FILE_ENCODE
     )
   }

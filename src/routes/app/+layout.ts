@@ -1,9 +1,11 @@
 import type { LayoutLoad } from './$types'
 import {tStore} from '$lib/store/t';
+import {DEFAULT_LANG} from '$lib/constants';
 
 
 export const load: LayoutLoad = async (event) => {
-  const translateResp = await event.fetch(`/api/1/translates/${langStr}`, {
+  const lang = DEFAULT_LANG
+  const translateResp = await event.fetch(`/api/1/translates/${lang}`, {
     method: 'GET',
     headers: { 'content-type': 'application/json' },
   })

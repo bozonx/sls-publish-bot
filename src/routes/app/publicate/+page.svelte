@@ -1,11 +1,11 @@
 <script>
-import {Header} from 'flowbite-svelte'
-import {t} from '$lib/store/t.js'
+import {Heading} from 'flowbite-svelte'
+import {t} from '$lib/store/t'
 
 let data
 </script>
 
-<Header tag="h1"></Header>
+<Heading tag="h1"></Heading>
 
 <div>
   publicate
