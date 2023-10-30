@@ -4,5 +4,13 @@ links:
 headers:
   allBlogs: Все блоги
   postDetails: Детали поста
+  confirm: Подтвердить
 chunks:
   blog: Блог
+menu:
+  viewText: Посмотреть текст
+  changeDate: Изменить дату публикации
+  changeTime: Изменить время публикации
+  changeSN: Изменить соц сети для публикации
+  next: Далее
+  #publish: Опубликовать

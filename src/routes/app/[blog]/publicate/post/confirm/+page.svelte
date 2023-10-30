@@ -9,23 +9,8 @@ import PublicationMenu from '$lib/components/PublicationMenu.svelte'
 export let data
 </script>
 
-<Heading tag="h1">{data.post.result.meta.title}</Heading>
+<Heading tag="h1">{$t('headers.confirm')}</Heading>
 
 <div>
-  <div>
-    <Heading tag="h4">{$t('chunks.blog')}</Heading>
-
-    <BlogDetails item={data.blog} />
-  </div>
-
-  <div>
-    <Heading tag="h4">{$t('headers.postDetails')}</Heading>
-
-    <PostDetails item={data.post} />
-  </div>
-
-  <div>
-    <PublicationMenu />
-  </div>
 
 </div>
