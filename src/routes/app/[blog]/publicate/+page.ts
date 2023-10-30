@@ -4,6 +4,7 @@ import {squidletAppApi} from '$lib/squidletAppApi';
 
 export const load: PageLoad = async (event) => {
   return {
-    blog: await squidletAppApi.loadBlogData(event.params.blog)
+    blog: await squidletAppApi.loadBlogData(event.params.blog),
+    postResp: await squidletAppApi.loadBlogPosts(event.params.blog),
   }
 }

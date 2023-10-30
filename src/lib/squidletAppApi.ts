@@ -1,6 +1,7 @@
 import type {BlogMeta} from '$lib/types/BlogMeta';
 import type {ListResponse} from '$lib/types/ListResponse';
 import type {PostResult} from '$lib/types/PostResult';
+import type {ItemResponse} from '$lib/types/ItemResponse';
 
 
 const testData = {
@@ -48,7 +49,11 @@ export const squidletAppApi = {
     return testData.blog
   },
 
-  async loadBlogPost(): Promise<ListResponse<PostResult>> {
+  async loadBlogPosts(blogName: string): Promise<ListResponse<PostResult>> {
     return testData.posts
-  }
+  },
+
+  async loadBlogPostItem(blogName: string, postFileName: string): Promise<ItemResponse<PostResult>> {
+    return {result: testData.posts.result[0]}
+  },
 }

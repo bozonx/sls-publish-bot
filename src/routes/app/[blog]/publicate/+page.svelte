@@ -12,7 +12,7 @@ export let data
 <div>
   <BlogDetails details={data.blog} />
 
-  <SelectPost postResp={data.posts} />
+  <SelectPost postResp={data.postResp} />
 
   <pre>
     * + выбираем блог (из левого меню)

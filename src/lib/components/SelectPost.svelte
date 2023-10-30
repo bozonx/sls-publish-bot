@@ -13,6 +13,8 @@ export let postResp
 
 <ul>
   {#each postResp.result as item}
-    <SelectPostItem {item} />
+    <li>
+      <SelectPostItem {item} />
+    </li>
   {/each}
 </ul>

@@ -1,9 +1,9 @@
 <script>
-export let blogName
+import { page } from '$app/stores'
+
 export let item
 </script>
 
-<li>
-  <a href="/app/publicate/post?blog={blogName}&item={item.meta.name}">{item.meta.title}</a>
-  <div>{item.meta.title}</div>
-</li>
+<a href="/app/{$page.params.blog}/publicate/post?item={item.meta.fileName}">
+  {item.meta.title}
+</a>
