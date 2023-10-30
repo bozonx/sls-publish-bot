@@ -2,6 +2,26 @@ import type {BlogMeta} from '$lib/types/BlogMeta';
 import type {ListResponse} from '$lib/types/ListResponse';
 import type {PostResult} from '$lib/types/PostResult';
 import type {ItemResponse} from '$lib/types/ItemResponse';
+import { UiApiMain } from './squidletUi/squidletAppApiConnection';
+import {browser} from '$app/environment';
+
+
+// TODO: get from squildlet
+const DEFAULT_HOST = 'localhost'
+// TODO: get from squildlet
+const DEFAULT_PORT = 42181
+let squidletUi: UiApiMain | undefined
+
+if (browser) {
+  const WsClass: new (url: string, protocol: string) => WebSocket = WebSocket
+  // TODO: может лучше из env брать
+  // @ts-ignore
+  const wsHost = window.SQUIDLET_API_HOST || DEFAULT_HOST
+  // @ts-ignore
+  const wsPort = window.SQUIDLET_API_PORT || DEFAULT_PORT
+
+  squidletUi = new UiApiMain(wsHost, wsPort, WsClass)
+}
 
 
 const testData = {

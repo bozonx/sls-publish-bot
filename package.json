@@ -26,6 +26,7 @@
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
     "vite": "^4.4.2",
+    "squidlet-lib": "file:../squidlet",
     "yaml": "^2.3.3"
   },
   "devDependencies": {
