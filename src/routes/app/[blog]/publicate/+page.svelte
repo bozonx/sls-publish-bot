@@ -10,7 +10,7 @@ export let data
 <Heading tag="h1">{$t('links.publicate')}</Heading>
 
 <div>
-  <BlogDetails details={data.blog} />
+  <BlogDetails item={data.blog} />
 
   <SelectPost postResp={data.postResp} />
 

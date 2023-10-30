@@ -1,8 +1,8 @@
 <script>
-export let details
+export let item
 </script>
 
 <div>
-  <div>title: {details.title}</div>
-  <div>lang: {details.lang}</div>
+  <div>title: {item.title}</div>
+  <div>lang: {item.lang}</div>
 </div>

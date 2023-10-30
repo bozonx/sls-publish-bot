@@ -3,3 +3,6 @@ links:
   selectPost: Выберете пост
 headers:
   allBlogs: Все блоги
+  postDetails: Детали поста
+chunks:
+  blog: Блог
