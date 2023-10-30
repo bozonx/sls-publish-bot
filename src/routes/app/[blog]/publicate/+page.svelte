@@ -1,8 +1,16 @@
 <script>
 import {Heading} from 'flowbite-svelte'
 import {t} from '$lib/store/t'
+import { page } from '$app/stores'
 import BlogDetails from '$lib/components/BlogDetails.svelte'
 import SelectPost from '$lib/components/SelectPost.svelte'
+import {breadcrumbs} from '$lib/store/breadcrumbs'
+
+
+breadcrumbs.set([
+  {href: `/app/${$page.params.blog}`, title: $page.params.blog},
+  {title: 'publicate'}
+])
 
 export let data
 </script>
