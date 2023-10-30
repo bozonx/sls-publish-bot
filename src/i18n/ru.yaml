@@ -12,5 +12,8 @@ menu:
   changeDate: Изменить дату публикации
   changeTime: Изменить время публикации
   changeSN: Изменить соц сети для публикации
+  changeTags: Изменить тэги
+  viewZen: Открыть данные для копирования в Dzen
   next: Далее
-  #publish: Опубликовать
+  publishOnlyTelegraph: Публиковать только в telegra.ph
+  publishAll: Опубликовать всё
