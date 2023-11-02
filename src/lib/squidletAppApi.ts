@@ -9,20 +9,25 @@ import {browser} from '$app/environment';
 // TODO: get from squildlet
 const DEFAULT_HOST = 'localhost'
 // TODO: get from squildlet
-const DEFAULT_PORT = 42181
+const DEFAULT_PORT = 41811
 let squidletUi: UiApiMain | undefined
 
-if (browser) {
-  const WsClass: new (url: string, protocol: string) => WebSocket = WebSocket
-  // TODO: может лучше из env брать
-  // @ts-ignore
-  const wsHost = window.SQUIDLET_API_HOST || DEFAULT_HOST
-  // @ts-ignore
-  const wsPort = window.SQUIDLET_API_PORT || DEFAULT_PORT
 
-  squidletUi = new UiApiMain(wsHost, wsPort, WsClass)
-}
 
+(async () => {
+  if (browser) {
+    const WsClass: new (url: string, protocol: string) => WebSocket = WebSocket
+    // TODO: может лучше из env брать
+    // @ts-ignore
+    const wsHost = window.SQUIDLET_API_HOST || DEFAULT_HOST
+    // @ts-ignore
+    const wsPort = window.SQUIDLET_API_PORT || DEFAULT_PORT
+
+    squidletUi = new UiApiMain(wsHost, wsPort, WsClass)
+
+    //await squidletUi?.start()
+  }
+})()
 
 const testData = {
   allBlogs: {
@@ -62,6 +67,14 @@ const testData = {
 
 export const squidletAppApi = {
   async loadAllBlogs(): Promise<ListResponse<BlogMeta>> {
+
+    // TODO: do it
+    const resp = await squidletUi?.send({
+      requestId: 'req',
+    })
+
+    console.log(444, resp)
+
     return testData.allBlogs
   },
 

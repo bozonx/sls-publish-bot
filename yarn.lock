@@ -1090,11 +1090,6 @@ source-map-js@^1.0.1, source-map-js@^1.0.2:
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-squidlet-lib@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/squidlet-lib/-/squidlet-lib-0.1.6.tgz#7961a134dd4ce4af2f98edac855cc253c44f6ecb"
-  integrity sha512-zjWxlecflWNtDkdJ0sRFWVs9AKpCESiBTJ9OTD2yV2oO5cMbb252VAdXacVhHOCZ3RFFjlGdDiEAo54Kt0xG8A==
-
 strip-indent@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/strip-indent/-/strip-indent-3.0.0.tgz#c32e1cee940b6b3432c771bc2c54bcce73cd3001"
