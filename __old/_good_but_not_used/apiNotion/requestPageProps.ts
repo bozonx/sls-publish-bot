@@ -1,6 +1,6 @@
 // @ts-ignore
 import {PageObjectResponse} from '@notionhq/client/build/src/api-endpoints';
-import NotionApi from './NotionApi';
+import NotionApi from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiNotion/NotionApi';
 
 
 export async function requestPageProps(

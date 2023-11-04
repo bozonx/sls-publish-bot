@@ -2,7 +2,7 @@
 // TODO: refactor
 
 
-import {PublicationType} from '../types/publicationType';
+import {PublicationType} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/publicationType';
 
 const dict = {
   menu: {

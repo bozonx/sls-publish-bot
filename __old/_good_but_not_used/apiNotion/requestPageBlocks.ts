@@ -1,5 +1,5 @@
-import {NotionBlocks} from '../types/notion';
-import NotionApi from './NotionApi';
+import {NotionBlocks} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
+import NotionApi from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiNotion/NotionApi';
 
 
 export async function requestPageBlocks(
