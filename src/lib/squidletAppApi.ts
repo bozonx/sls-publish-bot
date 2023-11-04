@@ -1,4 +1,4 @@
-import {SquidletAppApiConnection} from 'squidlet/SquidletAppApiConnection.js'
+import {SquidletAppApiConnection, APP_API_WS_PORT} from 'squidlet/SquidletAppApiConnection.js'
 import {pathJoin} from 'squidlet-lib'
 import {error} from '@sveltejs/kit'
 import yaml from 'yaml'
@@ -7,18 +7,16 @@ import type {ListResponse} from '$lib/types/ListResponse'
 import type {PostResult} from '$lib/types/PostResult'
 import type {ItemResponse} from '$lib/types/ItemResponse'
 import {browser} from '$app/environment'
+import {BLOG_YAML} from '$lib/constants';
 
 
 // TODO: откуда её брать???
 // TODO: нужен ли / ???
 const TO_PUBLISH_ROOT_DIR = '/publisher'
-// TODO: перенести
-const BLOG_YAML = 'blog.yaml'
 
 // TODO: get from squildlet
-const DEFAULT_HOST = 'localhost'
-// TODO: get from squildlet
-const DEFAULT_PORT = 41811
+const DEFAULT_API_HOST = 'localhost'
+const DEFAULT_PORT = APP_API_WS_PORT
 let squidletUi: SquidletAppApiConnection | undefined
 
 
@@ -28,7 +26,7 @@ let squidletUi: SquidletAppApiConnection | undefined
     const WsClass: new (url: string, protocol: string) => WebSocket = WebSocket
     // TODO: может лучше из env брать
     // @ts-ignore
-    const wsHost = window.SQUIDLET_API_HOST || DEFAULT_HOST
+    const wsHost = window.SQUIDLET_API_HOST || DEFAULT_API_HOST
     // @ts-ignore
     const wsPort = window.SQUIDLET_API_PORT || DEFAULT_PORT
 
@@ -85,6 +83,7 @@ export const squidletAppApi = {
     if (resp.errorStatus) {
       throw error(resp.errorStatus, resp.errorMessage)
     }
+
 
     for (const dirName of resp.data) {
       const blogYamlPath = pathJoin(TO_PUBLISH_ROOT_DIR, dirName, BLOG_YAML)
