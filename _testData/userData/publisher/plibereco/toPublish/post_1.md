@@ -16,16 +16,16 @@ tags:
     - tag1
     - tag2
   tg:
-    - !COMON!
+    - '!COMON!'
     - tg_tag1
   insta:
-    - !COMON!
+    - '!COMON!'
     - someinstatag
   podcast:
-    - !COMON!
+    - '!COMON!'
     - somepodcasttag
   youtube:
-    - !COMON!
+    - '!COMON!'
     - someyoutubetag
 tg:
   preview: true

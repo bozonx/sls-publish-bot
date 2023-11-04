@@ -9,8 +9,8 @@
       <excludeFolder url="file://$MODULE_DIR$/_testData" />
       <excludeFolder url="file://$MODULE_DIR$/docker-test" />
       <excludeFolder url="file://$MODULE_DIR$/_testMD" />
-      <excludeFolder url="file://$MODULE_DIR$/microserviceTelegramBot/_testData" />
       <excludeFolder url="file://$MODULE_DIR$/__old" />
+      <excludeFolder url="file://$MODULE_DIR$/__old/microserviceTelegramBot/_testData" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
