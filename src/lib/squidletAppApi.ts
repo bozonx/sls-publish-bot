@@ -1,8 +1,8 @@
+import {SquidletAppApiConnection} from 'squidlet/SquidletAppApiConnection.js'
 import type {BlogMeta} from '$lib/types/BlogMeta';
 import type {ListResponse} from '$lib/types/ListResponse';
 import type {PostResult} from '$lib/types/PostResult';
 import type {ItemResponse} from '$lib/types/ItemResponse';
-import { UiApiMain } from './squidletUi/squidletAppApiConnection';
 import {browser} from '$app/environment';
 
 
@@ -10,7 +10,7 @@ import {browser} from '$app/environment';
 const DEFAULT_HOST = 'localhost'
 // TODO: get from squildlet
 const DEFAULT_PORT = 41811
-let squidletUi: UiApiMain | undefined
+let squidletUi: SquidletAppApiConnection | undefined
 
 
 
@@ -23,7 +23,7 @@ let squidletUi: UiApiMain | undefined
     // @ts-ignore
     const wsPort = window.SQUIDLET_API_PORT || DEFAULT_PORT
 
-    squidletUi = new UiApiMain(wsHost, wsPort, WsClass)
+    squidletUi = new SquidletAppApiConnection(wsHost, wsPort, WsClass)
 
     //await squidletUi?.start()
   }
