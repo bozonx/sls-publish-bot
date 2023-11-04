@@ -7,12 +7,13 @@ import type {ListResponse} from '$lib/types/ListResponse'
 import type {PostResult} from '$lib/types/PostResult'
 import type {ItemResponse} from '$lib/types/ItemResponse'
 import {browser} from '$app/environment'
-import {BLOG_YAML} from '$lib/constants';
+import {BLOG_YAML, TO_PUBLISH_DIR} from '$lib/constants';
+import {splitMdAndMeta} from '$lib/helpers';
 
 
 // TODO: откуда её брать???
 // TODO: нужен ли / ???
-const TO_PUBLISH_ROOT_DIR = '/publisher'
+const PUBLISHER_ROOT_DIR = '/publisher'
 
 // TODO: get from squildlet
 const DEFAULT_API_HOST = 'localhost'
@@ -54,21 +55,21 @@ const testData = {
   //   title: 'Система Личной Свободы RU',
   //   lang: 'ru',
   // },
-  posts: {
-    result: [
-      {
-        meta: {
-          fileName: 'post_1.md',
-          title: 'Post 1',
-          urlName: 'post-1',
-        },
-        md: 'post content',
-      },
-    ],
-    pageNum: 1,
-    perPage: 10,
-    totalPages: 1,
-  },
+  // posts: {
+  //   result: [
+  //     {
+  //       meta: {
+  //         fileName: 'post_1.md',
+  //         title: 'Post 1',
+  //         urlName: 'post-1',
+  //       },
+  //       md: 'post content',
+  //     },
+  //   ],
+  //   pageNum: 1,
+  //   perPage: 10,
+  //   totalPages: 1,
+  // },
 }
 
 
@@ -77,7 +78,7 @@ export const squidletAppApi = {
     const result = []
     const resp = await squidletUi?.send({
       method: 'ctx.userData.readDir',
-      arguments: [TO_PUBLISH_ROOT_DIR],
+      arguments: [PUBLISHER_ROOT_DIR],
     })
 
     if (resp.errorStatus) {
@@ -86,7 +87,7 @@ export const squidletAppApi = {
 
 
     for (const dirName of resp.data) {
-      const blogYamlPath = pathJoin(TO_PUBLISH_ROOT_DIR, dirName, BLOG_YAML)
+      const blogYamlPath = pathJoin(PUBLISHER_ROOT_DIR, dirName, BLOG_YAML)
       const blogResp = await squidletUi?.send({
         method: 'ctx.userData.readTextFile',
         arguments: [blogYamlPath],
@@ -121,7 +122,7 @@ export const squidletAppApi = {
   },
 
   async loadBlogData(blogName: string): Promise<BlogMeta> {
-    const blogYamlPath = pathJoin(TO_PUBLISH_ROOT_DIR, blogName, BLOG_YAML)
+    const blogYamlPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, BLOG_YAML)
     const blogResp = await squidletUi?.send({
       method: 'ctx.userData.readTextFile',
       arguments: [blogYamlPath],
@@ -148,10 +149,96 @@ export const squidletAppApi = {
   },
 
   async loadBlogPosts(blogName: string): Promise<ListResponse<PostResult>> {
-    return testData.posts
+    const result = []
+    const toPublishDirPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, TO_PUBLISH_DIR)
+    const resp = await squidletUi?.send({
+      method: 'ctx.userData.readDir',
+      arguments: [toPublishDirPath],
+    })
+
+    if (resp.errorStatus) {
+      throw error(resp.errorStatus, resp.errorMessage)
+    }
+    
+    const filtered = resp.data.filter((item: string) => item.match(/\.md$/))
+    
+    for (const mdFileName of filtered) {
+      const mdFilePath = pathJoin(toPublishDirPath, mdFileName)
+      const mdFileResp = await squidletUi?.send({
+        method: 'ctx.userData.readTextFile',
+        arguments: [mdFilePath],
+      })
+
+      if (mdFileResp.errorStatus) {
+        throw error(mdFileResp.errorStatus, mdFileResp.errorMessage)
+      }
+
+      let meta: any
+      let md: string
+
+      try {
+        [meta, md] = await splitMdAndMeta(mdFileResp.data)
+      }
+      catch (e) {
+        throw error(500, `Error parsing yaml of "${mdFilePath}": ${e}`)
+      }
+
+      result.push({
+        meta: {
+          fileName: mdFileName,
+          ...meta,
+        },
+        md,
+      })
+    }
+
+    // TODO: add pagination
+    return {
+      result,
+      pageNum: 1,
+      perPage: 10,
+      totalPages: 1,
+    }
+    
+    //return testData.posts
   },
 
   async loadBlogPostItem(blogName: string, postFileName: string): Promise<ItemResponse<PostResult>> {
-    return {result: testData.posts.result[0]}
+    const mdFilePath = pathJoin(
+      PUBLISHER_ROOT_DIR,
+      blogName,
+      TO_PUBLISH_DIR,
+      postFileName
+    )
+    const mdFileResp = await squidletUi?.send({
+      method: 'ctx.userData.readTextFile',
+      arguments: [mdFilePath],
+    })
+
+    if (mdFileResp.errorStatus) {
+      throw error(mdFileResp.errorStatus, mdFileResp.errorMessage)
+    }
+
+    let meta: any
+    let md: string
+
+    try {
+      [meta, md] = await splitMdAndMeta(mdFileResp.data)
+    }
+    catch (e) {
+      throw error(500, `Error parsing yaml of "${mdFilePath}": ${e}`)
+    }
+
+    return {
+      result: {
+        meta: {
+          fileName: postFileName,
+          ...meta,
+        },
+        md,
+      }
+    }
+
+    //return {result: testData.posts.result[0]}
   },
 }
