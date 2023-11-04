@@ -1,4 +1,4 @@
-import {Main} from '../Main.js';
+import {Main} from '../Main';
 
 
 export class BotStatusStorage {

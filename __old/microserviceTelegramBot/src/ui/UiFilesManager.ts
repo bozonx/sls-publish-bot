@@ -1,4 +1,4 @@
-import {Main} from '../Main.js';
+import {Main} from '../Main';
 import {WindowConfig} from '../../../../squidlet-ui-builder/src/AbstractUi/interfaces/WindowConfig.js';
 
 

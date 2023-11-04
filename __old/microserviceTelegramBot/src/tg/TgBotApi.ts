@@ -1,13 +1,13 @@
-import {IndexedEventEmitter, lastItem} from 'squidlet-lib';
+import {IndexedEventEmitter, lastItem} from '../../../../../../../../../mnt/disk2/workspace/squidlet-lib';
 import {Context, Telegraf, Format, Types} from 'telegraf';
 import {Message, PhotoSize, Video} from 'typegram/message';
-import {Main} from '../Main.js';
+import {Main} from '../Main';
 import MessageEventBase, {
   PhotoMessageEvent,
   PollMessageEvent,
   TextMessageEvent,
   VideoMessageEvent
-} from '../types/MessageEvent.js';
+} from '../types/MessageEvent';
 
 
 export enum TG_BOT_EVENT {

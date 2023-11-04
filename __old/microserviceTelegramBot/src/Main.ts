@@ -1,14 +1,14 @@
-import {ConsoleLogger} from 'squidlet-lib';
-import {ChatsManager} from './tg/ChatsManager.js';
-import {UiFilesManager} from './ui/UiFilesManager.js';
-import {TgBotApi} from './tg/TgBotApi.js';
-import {TgBotConfig} from './types/TgBotConfig.js';
-import {ChatStorage} from './storage/ChatStorage.js';
-import {BotStatusStorage} from './storage/BotStatusStorage.js';
-import {UiFilesStorage} from './storage/UiFilesStorage.js';
-import {SqliteDb} from './storage/SqliteDb.js';
-import {DbStorage} from './types/DbStorage.js';
-import {LONG_DB_NAME} from './types/constants.js';
+import {ConsoleLogger} from '../../../../../../../../mnt/disk2/workspace/squidlet-lib';
+import {ChatsManager} from './tg/ChatsManager';
+import {UiFilesManager} from './ui/UiFilesManager';
+import {TgBotApi} from './tg/TgBotApi';
+import {TgBotConfig} from './types/TgBotConfig';
+import {ChatStorage} from './storage/ChatStorage';
+import {BotStatusStorage} from './storage/BotStatusStorage';
+import {UiFilesStorage} from './storage/UiFilesStorage';
+import {SqliteDb} from './storage/SqliteDb';
+import {DbStorage} from './types/DbStorage';
+import {LONG_DB_NAME} from './types/constants';
 
 
 export class Main {

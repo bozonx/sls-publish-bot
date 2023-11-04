@@ -1,4 +1,4 @@
-import {TgReplyButton} from '../../../__old/src/types/TgReplyButton.js';
+import {TgReplyButton} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/TgReplyButton';
 import {Document} from '../../../../squidlet-ui-builder/src/AbstractUi/Document.js';
 
 

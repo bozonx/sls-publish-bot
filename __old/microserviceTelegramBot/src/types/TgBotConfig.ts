@@ -1,4 +1,4 @@
-import {LogLevel} from 'squidlet-lib';
+import {LogLevel} from '../../../../../../../../../mnt/disk2/workspace/squidlet-lib';
 
 
 export interface TgBotConfig {

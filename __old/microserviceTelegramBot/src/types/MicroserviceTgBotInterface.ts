@@ -1,4 +1,4 @@
-import {BotStatus} from './BotStatus.js';
+import {BotStatus} from './BotStatus';
 
 
 export interface MicroserviceTgBotInterface {

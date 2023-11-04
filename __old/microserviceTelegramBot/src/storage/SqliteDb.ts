@@ -1,11 +1,11 @@
 import fs from 'node:fs/promises';
-import {pathJoin, mkdirPLogic, omitObj} from 'squidlet-lib';
+import {pathJoin, mkdirPLogic, omitObj} from '../../../../../../../../../mnt/disk2/workspace/squidlet-lib';
 import sqlite3 from 'sqlite3'
 import { open, Database } from 'sqlite'
-import {DbStorage} from '../types/DbStorage.js';
-import {Main} from '../Main.js';
-import {isFileOrDirExists} from '../helpers/common.js';
-import {CREATED_COL, DB_BOTS_COLS, DB_CHATS_COLS, DB_TABLES, UPDATED_COL} from '../types/dbTypes.js';
+import {DbStorage} from '../types/DbStorage';
+import {Main} from '../Main';
+import {isFileOrDirExists} from '../helpers/common';
+import {CREATED_COL, DB_BOTS_COLS, DB_CHATS_COLS, DB_TABLES, UPDATED_COL} from '../types/dbTypes';
 
 
 const SQLITE_DB_DIR = 'sqliteDBs'

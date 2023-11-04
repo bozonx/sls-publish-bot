@@ -1,7 +1,7 @@
 {
-  "name": "microservice-logger",
+  "name": "microservice-notify",
   "version": "0.0.1",
-  "description": "It collects system logs",
+  "description": "It notifies user",
   "exports": "./src/index.js",
   "type": "module",
   "repository": "https://github.com/bozonx/sls-publish-bot.git",
@@ -9,8 +9,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "ts-node-esm ./src/index.ts",
-    "prod": "yarn ts-node --esm ./src/index.ts",
+    "dev": "ts-node-esm src/index.ts",
+    "prod": "yarn ts-node --esm src/index.ts",
     "build": "tsc",
     "container": "yarn install --prod && yarn prod"
   },

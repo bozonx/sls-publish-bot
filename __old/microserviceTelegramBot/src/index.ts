@@ -1,9 +1,9 @@
 import path from 'path';
-import {Main} from './Main.js';
-import {TgBotConfig} from './types/TgBotConfig.js';
-import {ServiceInterface} from './ServiceInterface.js';
-import {DevServer} from '../../__old/src/callMicroService/DevServer.js';
-import {DevClient} from '../../__old/src/callMicroService/DevClient.js';
+import {Main} from './Main';
+import {TgBotConfig} from './types/TgBotConfig';
+import {ServiceInterface} from './ServiceInterface';
+import {DevServer} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/callMicroService/DevServer';
+import {DevClient} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/callMicroService/DevClient';
 
 
 const config: Partial<TgBotConfig> = {

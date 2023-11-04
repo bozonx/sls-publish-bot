@@ -1,5 +1,5 @@
-import {Main} from '../Main.js';
-import {BotStorageInfo, ChatStorageInfo, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes.js';
+import {Main} from '../Main';
+import {BotStorageInfo, ChatStorageInfo, DB_CHATS_COLS, DB_TABLES} from '../types/dbTypes';
 
 
 // TODO: сделать небольшой кэш для данных из бд

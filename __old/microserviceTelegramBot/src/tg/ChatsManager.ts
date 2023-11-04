@@ -1,9 +1,9 @@
-import {TgChat} from './TgChat.js';
-import {Main} from '../Main.js';
-import {makeBotId} from '../../../__old/src/helpers/makeBotId.js';
-import {BotStatus} from '../types/BotStatus.js';
-import {BotStorageInfo} from '../types/dbTypes.js';
-import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent.js';
+import {TgChat} from './TgChat';
+import {Main} from '../Main';
+import {makeBotId} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/makeBotId';
+import {BotStatus} from '../types/BotStatus';
+import {BotStorageInfo} from '../types/dbTypes';
+import {PhotoMessageEvent, PollMessageEvent, TextMessageEvent, VideoMessageEvent} from '../types/MessageEvent';
 
 
 export class ChatsManager {

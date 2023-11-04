@@ -1,4 +1,4 @@
-import {TgEntity} from '../../../__old/src/types/TgEntity.js';
+import {TgEntity} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/TgEntity';
 
 
 export interface PhotoUrlData {

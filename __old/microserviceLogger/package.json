@@ -1,7 +1,7 @@
 {
-  "name": "microservice-telegram-bot",
+  "name": "microservice-logger",
   "version": "0.0.1",
-  "description": "It talks to user using AbstractUi",
+  "description": "It collects system logs",
   "exports": "./src/index.js",
   "type": "module",
   "repository": "https://github.com/bozonx/sls-publish-bot.git",
@@ -9,20 +9,16 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "ts-node-esm ./src/index.ts",
-    "prod": "yarn ts-node --esm ./src/index.ts",
+    "dev": "ts-node-esm src/index.ts",
+    "prod": "yarn ts-node --esm src/index.ts",
     "build": "tsc",
     "container": "yarn install --prod && yarn prod"
   },
   "dependencies": {
-    "sqlite": "^4.2.0",
-    "sqlite3": "^5.1.6",
-    "squidlet-lib": "^0.1.3",
-    "telegraf": "^4.12.2"
+    "@types/node": "^20.1.1",
+    "squidlet-lib": "^0.1.3"
   },
   "devDependencies": {
-    "@types/node": "^20.1.1",
-    "@types/sqlite3": "^3.1.8",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   }
