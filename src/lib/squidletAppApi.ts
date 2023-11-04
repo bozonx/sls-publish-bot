@@ -1,10 +1,19 @@
 import {SquidletAppApiConnection} from 'squidlet/SquidletAppApiConnection.js'
-import type {BlogMeta} from '$lib/types/BlogMeta';
-import type {ListResponse} from '$lib/types/ListResponse';
-import type {PostResult} from '$lib/types/PostResult';
-import type {ItemResponse} from '$lib/types/ItemResponse';
-import {browser} from '$app/environment';
+import {pathJoin} from 'squidlet-lib'
+import {error} from '@sveltejs/kit'
+import yaml from 'yaml'
+import type {BlogMeta} from '$lib/types/BlogMeta'
+import type {ListResponse} from '$lib/types/ListResponse'
+import type {PostResult} from '$lib/types/PostResult'
+import type {ItemResponse} from '$lib/types/ItemResponse'
+import {browser} from '$app/environment'
 
+
+// TODO: откуда её брать???
+// TODO: нужен ли / ???
+const TO_PUBLISH_ROOT_DIR = '/publisher'
+// TODO: перенести
+const BLOG_YAML = 'blog.yaml'
 
 // TODO: get from squildlet
 const DEFAULT_HOST = 'localhost'
@@ -30,23 +39,23 @@ let squidletUi: SquidletAppApiConnection | undefined
 })()
 
 const testData = {
-  allBlogs: {
-    result: [
-      {
-        name: 'plibereco',
-        title: 'Система Личной Свободы RU',
-        lang: 'ru',
-      },
-    ],
-    pageNum: 1,
-    perPage: 10,
-    totalPages: 1,
-  },
-  blog: {
-    name: 'plibereco',
-    title: 'Система Личной Свободы RU',
-    lang: 'ru',
-  },
+  // allBlogs: {
+  //   result: [
+  //     {
+  //       name: 'plibereco',
+  //       title: 'Система Личной Свободы RU',
+  //       lang: 'ru',
+  //     },
+  //   ],
+  //   pageNum: 1,
+  //   perPage: 10,
+  //   totalPages: 1,
+  // },
+  // blog: {
+  //   name: 'plibereco',
+  //   title: 'Система Личной Свободы RU',
+  //   lang: 'ru',
+  // },
   posts: {
     result: [
       {
@@ -67,19 +76,76 @@ const testData = {
 
 export const squidletAppApi = {
   async loadAllBlogs(): Promise<ListResponse<BlogMeta>> {
-
-    // TODO: do it
+    const result = []
     const resp = await squidletUi?.send({
-      requestId: 'req',
+      method: 'ctx.userData.readDir',
+      arguments: [TO_PUBLISH_ROOT_DIR],
     })
 
-    console.log(444, resp)
+    if (resp.errorStatus) {
+      throw error(resp.errorStatus, resp.errorMessage)
+    }
 
-    return testData.allBlogs
+    for (const dirName of resp.data) {
+      const blogYamlPath = pathJoin(TO_PUBLISH_ROOT_DIR, dirName, BLOG_YAML)
+      const blogResp = await squidletUi?.send({
+        method: 'ctx.userData.readTextFile',
+        arguments: [blogYamlPath],
+      })
+
+      if (blogResp.errorStatus) {
+        throw error(blogResp.errorStatus, blogResp.errorMessage)
+      }
+
+      let yamlData: any
+
+      try {
+        yamlData = yaml.parse(blogResp.data)
+      }
+      catch (e) {
+        throw error(500, `Error parsing yaml of "${blogYamlPath}": ${e}`)
+      }
+
+      result.push({
+        name: dirName,
+        ...yamlData,
+      })
+    }
+
+    // TODO: add pagination
+    return {
+      result,
+      pageNum: 1,
+      perPage: 10,
+      totalPages: 1,
+    }
   },
 
   async loadBlogData(blogName: string): Promise<BlogMeta> {
-    return testData.blog
+    const blogYamlPath = pathJoin(TO_PUBLISH_ROOT_DIR, blogName, BLOG_YAML)
+    const blogResp = await squidletUi?.send({
+      method: 'ctx.userData.readTextFile',
+      arguments: [blogYamlPath],
+    })
+
+    if (blogResp.errorStatus) {
+      throw error(blogResp.errorStatus, blogResp.errorMessage)
+    }
+
+    let yamlData: any
+
+    try {
+      yamlData = yaml.parse(blogResp.data)
+    }
+    catch (e) {
+      throw error(500, `Error parsing yaml of "${blogYamlPath}": ${e}`)
+    }
+
+    // TODO: add {result: {...}}
+    return {
+      name: blogName,
+      ...yamlData,
+    }
   },
 
   async loadBlogPosts(blogName: string): Promise<ListResponse<PostResult>> {
