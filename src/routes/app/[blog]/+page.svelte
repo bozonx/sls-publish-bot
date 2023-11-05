@@ -17,6 +17,9 @@ breadcrumbs.set([{title: data.blog.title}])
       <MenuItem href="/app/{$page.params.blog}/publicate">
         {$t('links.publicate')}
       </MenuItem>
+      <MenuItem href="/app/{$page.params.blog}/telegraph">
+        {$t('links.telegraphCrtl')}
+      </MenuItem>
     </li>
   </MenuWrapper>
 </div>
