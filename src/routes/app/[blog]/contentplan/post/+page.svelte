@@ -12,7 +12,7 @@ export let data
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
-  {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.publicate')},
+  {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.contentPlan')},
   {title: data.post.result.meta.title},
 ])
 </script>

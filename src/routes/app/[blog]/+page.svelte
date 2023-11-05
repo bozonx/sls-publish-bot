@@ -32,6 +32,9 @@ breadcrumbs.set([{title: data.blog.title}])
       <MenuItem href="/app/{$page.params.blog}/archive">
         {$t('links.archiveView')}
       </MenuItem>
+      <MenuItem href="/app/{$page.params.blog}/config">
+        {$t('links.blogConfig')}
+      </MenuItem>
     </li>
   </MenuWrapper>
 </div>

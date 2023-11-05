@@ -121,7 +121,7 @@ export const squidletAppApi = {
     }
   },
 
-  async loadBlogData(blogName: string): Promise<BlogMeta> {
+  async loadBlogData(blogName: string): Promise<ItemResponse<BlogMeta>> {
     const blogYamlPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, BLOG_YAML)
     const blogResp = await squidletUi?.send({
       method: 'ctx.userData.readTextFile',
@@ -141,10 +141,11 @@ export const squidletAppApi = {
       throw error(500, `Error parsing yaml of "${blogYamlPath}": ${e}`)
     }
 
-    // TODO: add {result: {...}}
     return {
-      name: blogName,
-      ...yamlData,
+      result: {
+        name: blogName,
+        ...yamlData,
+      },
     }
   },
 

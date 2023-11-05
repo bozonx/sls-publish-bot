@@ -8,6 +8,7 @@ links:
   contentPlan: Контент план
   archiveView: Архив
   createRecord: Создать запись
+  blogConfig: Настройки блога
 headers:
   allBlogs: Все блоги
   menu: Меню
