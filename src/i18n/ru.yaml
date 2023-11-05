@@ -3,6 +3,12 @@ links:
   publicate: Публикация материала
   selectPost: Выберете пост
   telegraphCrtl: Управление Telegra.ph
+  tasksCrtl: Управление заданиями в Tg bot
+  buyAd: Рекламировать
+  sellAdPlace: Продать рекламное место
+  createPost: Создать материал
+  viewContentPlan: Смотреть контент план
+  archiveView: Архив
 headers:
   allBlogs: Все блоги
   menu: Меню
