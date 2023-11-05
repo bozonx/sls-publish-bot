@@ -1,7 +1,7 @@
 <script>
 import { Label, Helper } from 'flowbite-svelte'
 
-export let label
+export let label = ''
 // success text
 export let success = ''
 // error text
