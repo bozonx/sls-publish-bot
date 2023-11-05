@@ -32,24 +32,37 @@ breadcrumbs.set([
   </div>
 
   <div class="mt-7">
+    <SectionHeader>{$t('headers.preview')}</SectionHeader>
+
     <MenuWrapper>
       <li>
-        <MenuItem>{$t('menu.viewText')}</MenuItem>
+        <MenuItem>{$t('menu.previewArticle')}</MenuItem>
       </li>
       <li>
-        <MenuItem>{$t('menu.changeDate')}</MenuItem>
+        <MenuItem>{$t('menu.previewPost')}</MenuItem>
       </li>
       <li>
-        <MenuItem>{$t('menu.changeTime')}</MenuItem>
+        <MenuItem>{$t('menu.previewTgPost')}</MenuItem>
       </li>
+    </MenuWrapper>
+  </div>
+
+  <div class="mt-7">
+    <SectionHeader>{$t('headers.publish')}</SectionHeader>
+
+    <MenuWrapper>
+      <li>
+        <MenuItem>{$t('menu.publishZen')}</MenuItem>
+      </li>
+      <li>
+        <MenuItem>{$t('menu.publishOnlyTelegraph')}</MenuItem>
+      </li>
+
       <li>
         <MenuItem>{$t('menu.changeSN')}</MenuItem>
       </li>
       <li>
-        <MenuItem>{$t('menu.changeTags')}</MenuItem>
-      </li>
-      <li>
-        <MenuItem href="/app/{$page.params.blog}/contentplan/post/confirm?item={$page.url.searchParams.get('item')}">{$t('menu.next')}</MenuItem>
+        <MenuItem>{$t('menu.publishAll')}</MenuItem>
       </li>
     </MenuWrapper>
   </div>

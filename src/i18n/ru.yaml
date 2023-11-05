@@ -13,17 +13,19 @@ headers:
   allBlogs: Все блоги
   menu: Меню
   postDetails: Детали поста
-  confirm: Подтвердить
+  preview: Предпросмотр
+  publish: Опубликовать
 chunks:
   blog: Блог
 menu:
-  viewText: Посмотреть текст
+  previewArticle: Предпросмотр статьи
+  previewPost: Предпросмотр поста
+  previewTgPost: Предпросмотр в Telegram боте
   changeDate: Изменить дату публикации
   changeTime: Изменить время публикации
   changeSN: Изменить соц сети для публикации
   changeTags: Изменить тэги
-  viewZen: Открыть данные для копирования в Dzen
-  next: Далее
+  publishZen: Публикация в Dzen
   publishOnlyTelegraph: Публиковать только в telegra.ph
   publishAll: Опубликовать всё
   appConfig: Конфиг приложения

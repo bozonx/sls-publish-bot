@@ -11,6 +11,8 @@ export let item
   <DetailItem label="fileName">{item.result.meta.fileName}</DetailItem>
   <DetailItem label={$t('details.title')}>{item.result.meta.title}</DetailItem>
   <DetailItem label="urlName">{item.result.meta.urlName}</DetailItem>
+  <DetailItem label="type">{item.result.meta.type}</DetailItem>
+  <DetailItem label="descr">{item.result.meta.descr}</DetailItem>
 
   <SectionHeader>articleFooter</SectionHeader>
   <DetailItem label="common">{item.result.meta.articleFooter.common}</DetailItem>

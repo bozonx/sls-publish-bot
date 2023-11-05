@@ -9,13 +9,13 @@ export interface PostMeta {
   // URL compatible transliterated name of post or article
   urlName: string
   type: PostTypes
-  pubDate: string
-  pubTime: string
+  descr?: string
+
+  images?: string[]
   articleFooter?: {
     common: string
     [index: string]: string
   }
-  images?: string[]
   publication: {
     common: string
     [index: string]: string
