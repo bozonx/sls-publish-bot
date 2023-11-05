@@ -19,6 +19,6 @@ breadcrumbs.set([
   <div>
     <SectionHeader>{$t('links.blogConfig')}</SectionHeader>
 
-    <BlogConfigForm />
+    <BlogConfigForm config={data.blog.config} />
   </div>
 </div>

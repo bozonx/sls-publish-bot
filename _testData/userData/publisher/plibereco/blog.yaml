@@ -1,2 +1,4 @@
 title: Система Личной Свободы RU
 lang: ru
+config:
+  telegraphToken: some

@@ -9,6 +9,7 @@ import type {ItemResponse} from '$lib/types/ItemResponse'
 import {browser} from '$app/environment'
 import {BLOG_YAML, TO_PUBLISH_DIR} from '$lib/constants';
 import {splitMdAndMeta} from '$lib/helpers';
+import type {BlogConfig} from '$lib/types/BlogConfig';
 
 
 // TODO: откуда её брать???
@@ -148,6 +149,14 @@ export const squidletAppApi = {
       },
     }
   },
+
+  // async loadBlogConfig(blogName: string): Promise<ItemResponse<BlogConfig>> {
+  //   const blogConfigPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, TO_PUBLISH_DIR)
+  //   const resp = await squidletUi?.send({
+  //     method: 'ctx.userData.readDir',
+  //     arguments: [toPublishDirPath],
+  //   })
+  // },
 
   async loadBlogPosts(blogName: string): Promise<ListResponse<PostResult>> {
     const result = []

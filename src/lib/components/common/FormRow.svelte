@@ -23,8 +23,8 @@ export let name
         {invalidMsg}
       </div>
     {/if}
-    <div>
+    <!--<div>
       success
-    </div>
+    </div>-->
   </FktInput>
 </div>
