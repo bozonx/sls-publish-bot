@@ -23,6 +23,6 @@ import MenuItem from '$lib/components/MenuItem.svelte'
     <MenuItem>{$t('menu.changeTags')}</MenuItem>
   </li>
   <li>
-    <MenuItem href="/app/{$page.params.blog}/publicate/post/confirm?item={$page.url.searchParams.get('item')}">{$t('menu.next')}</MenuItem>
+    <MenuItem href="/app/{$page.params.blog}/contentplan/post/confirm?item={$page.url.searchParams.get('item')}">{$t('menu.next')}</MenuItem>
   </li>
 </MenuWrapper>

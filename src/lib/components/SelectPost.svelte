@@ -12,7 +12,7 @@ export let postResp
 <MenuWrapper>
   {#each postResp.result as item}
     <li>
-      <MenuItem href="/app/{$page.params.blog}/publicate/post?item={item.meta.fileName}">
+      <MenuItem href="/app/{$page.params.blog}/contentplan/post?item={item.meta.fileName}">
         {item.meta.title}
       </MenuItem>
     </li>

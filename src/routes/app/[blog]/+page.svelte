@@ -14,14 +14,8 @@ breadcrumbs.set([{title: data.blog.title}])
 <div>
   <MenuWrapper>
     <li>
-      <MenuItem href="/app/{$page.params.blog}/create">
-        {$t('links.createPost')}
-      </MenuItem>
       <MenuItem href="/app/{$page.params.blog}/contentplan">
-        {$t('links.viewContentPlan')}
-      </MenuItem>
-      <MenuItem href="/app/{$page.params.blog}/publicate">
-        {$t('links.publicate')}
+        {$t('links.contentPlan')}
       </MenuItem>
       <MenuItem href="/app/{$page.params.blog}/buyad">
         {$t('links.buyAd')}

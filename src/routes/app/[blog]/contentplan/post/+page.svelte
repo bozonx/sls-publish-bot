@@ -3,7 +3,7 @@ import {t} from '$lib/store/t'
 import { page } from '$app/stores'
 import BlogDetails from '$lib/components/BlogDetails.svelte'
 import PostDetails from '$lib/components/PostDetails.svelte'
-import ConfirmMenu from '$lib/components/ConfirmMenu.svelte'
+import PublicationMenu from '$lib/components/PublicationMenu.svelte'
 import SectionHeader from '$lib/components/SectionHeader.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 
@@ -12,9 +12,8 @@ export let data
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
-  {href: `/app/${$page.params.blog}/publicate`, title: $t('links.publicate')},
-  {href: `/app/${$page.params.blog}/publicate/post?item=${$page.url.searchParams.get('item')}`, title: data.post.result.meta.title},
-  {title: $t('headers.confirm')},
+  {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.publicate')},
+  {title: data.post.result.meta.title},
 ])
 </script>
 
@@ -32,7 +31,7 @@ breadcrumbs.set([
   </div>
 
   <div class="mt-7">
-    <ConfirmMenu />
+    <PublicationMenu />
   </div>
 
 </div>

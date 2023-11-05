@@ -1,14 +1,13 @@
 links:
   home: Главная
-  publicate: Публикация материала
   selectPost: Выберете пост
   telegraphCrtl: Управление Telegra.ph
   tasksCrtl: Управление заданиями в Tg bot
   buyAd: Рекламировать
   sellAdPlace: Продать рекламное место
-  createPost: Создать материал
-  viewContentPlan: Смотреть контент план
+  contentPlan: Контент план
   archiveView: Архив
+  createRecord: Создать запись
 headers:
   allBlogs: Все блоги
   menu: Меню
