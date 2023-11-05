@@ -2,7 +2,10 @@
 title: Post 1
 urlName: post-1
 
-articleCustomFooter: custom footer for article
+articleFooter:
+  common: custom footer for article
+  tg: custom footer for article tg
+  dzen: custom footer for article dzen
 #images:
 #  - ./img.avif
 publication:

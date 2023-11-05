@@ -11,21 +11,18 @@ export interface PostMeta {
   type: PostTypes
   pubDate: string
   pubTime: string
-  articleCustomFooter?: string
+  articleFooter?: {
+    common: string
+    [index: string]: string
+  }
   images?: string[]
   publication: {
-    common?: string
-    tg?: string
-    dzen?: string
-    podcast?: string
-    youtube?: string
+    common: string
+    [index: string]: string
   }
   tags?: {
-    common?: string[]
-    tg?: string[]
-    insta?: string[]
-    podcast?: string[]
-    youtube?: string[]
+    common: string[]
+    [index: string]: string[]
   }
   tg: {
     preview?: boolean
