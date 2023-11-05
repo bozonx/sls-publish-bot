@@ -5,10 +5,11 @@ import FktInput from '$lib/components/common/FkInput.svelte'
 export let label = ''
 export let form
 export let name
+export let initial = null
 </script>
 
 <div>
-  <FktInput {form} {name} let:valid let:invalidMsg let:field>
+  <FktInput {form} {name} {initial} let:valid let:invalidMsg let:field>
     <Label for={name} class="block mb-2">{label}</Label>
     <div>
       <slot {field} />

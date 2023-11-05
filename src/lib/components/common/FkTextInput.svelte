@@ -8,7 +8,7 @@ export let field
 export let placeholder = null
 export let readonly = null
 
-let value = null
+let value = field.value
 
 const resolveColor = (valid) => {
   if (!valid) color = 'red'

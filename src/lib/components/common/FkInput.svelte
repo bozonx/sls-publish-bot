@@ -8,11 +8,12 @@ export let handleMount = null
 export let field = null
 export let form = null
 export let name = null
+export let initial = null
 export let schema = {}
 
 const resolvedField = (field)
   ? field
-  : form.getOrRegisterField(name, schema)
+  : form.getOrRegisterField(name, {...schema, initial})
 
 let savedValue = resolvedField.savedValue
 let editedValue = resolvedField.editedValue
