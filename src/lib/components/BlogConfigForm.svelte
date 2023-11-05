@@ -1,20 +1,13 @@
 <script>
 import FormRow from '$lib/components/common/FormRow.svelte'
-import TextInput from '$lib/components/common/TextInput.svelte'
-// import {Form} from 'formkit'
-//
-//
-// const formConfig = {}
-// const form = formkit.newForm(formConfig)
-// form.init(['id', 'name'])
-//
-// console.log(111, form)
+import FkForm from '$lib/components/common/FkForm.svelte'
+import FkTextInput from '$lib/components/common/FkTextInput.svelte'
+
 </script>
 
 
-<div>
-  <FormRow label="Telegra.ph token">
-    <TextInput />
+<FkForm let:form>
+  <FormRow label="Telegra.ph token" {form} name="tg-token">
+    <FkTextInput {form} name="tg-token" />
   </FormRow>
-
-</div>
+</FkForm>

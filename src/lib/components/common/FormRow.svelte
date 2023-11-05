@@ -1,26 +1,30 @@
 <script>
 import { Label, Helper } from 'flowbite-svelte'
+import FktInput from '$lib/components/common/FkInput.svelte'
 
 export let label = ''
-// success text
-export let success = ''
-// error text
-export let error = ''
-export let forId
+export let form
+export let name
 </script>
 
 <div>
-  <Label for={forId} class="block mb-2">{label}</Label>
-  <div>
-    <slot />
-  </div>
-  <Helper class="text-sm mt-2">
-    <slot name="helper" />
-  </Helper>
-  <div>
-    {error}
-  </div>
-  <div>
-    {success}
-  </div>
+  <FktInput {form} {name} let:valid let:invalidMsg let:field>
+    <Label for={name} class="block mb-2">{label}</Label>
+    <div>
+      <slot {field} />
+    </div>
+    {#if $$slots.helper}
+      <Helper class="text-sm mt-2">
+        <slot name="helper" />
+      </Helper>
+    {/if}
+    {#if !valid}
+      <div>
+        {invalidMsg}
+      </div>
+    {/if}
+    <div>
+      success
+    </div>
+  </FktInput>
 </div>
