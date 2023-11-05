@@ -5,14 +5,11 @@ import FkTextInput from '$lib/components/common/FkTextInput.svelte'
 
 
 export let config
-
-const handleSave = async (values) => {
-  console.log(444, values)
-}
+export let handleSave = null
 </script>
 
 
-<FkForm let:form on:save={handleSave} let:dirty>
+<FkForm let:form {handleSave}>
   <FormRow
     label="Telegra.ph token"
     {form}
@@ -22,6 +19,4 @@ const handleSave = async (values) => {
   >
     <FkTextInput {field} />
   </FormRow>
-
-  {dirty}
 </FkForm>

@@ -251,4 +251,22 @@ export const squidletAppApi = {
 
     //return {result: testData.posts.result[0]}
   },
+
+  async saveBlogConfig(blogName: string, config: BlogConfig): Promise<void> {
+    const blogYamlPath = pathJoin(
+      PUBLISHER_ROOT_DIR,
+      blogName,
+      BLOG_YAML,
+    )
+    const yamlStr = yaml.stringify(config)
+    const mdFileResp = await squidletUi?.send({
+      method: 'ctx.userData.writeFile',
+      arguments: [blogYamlPath, yamlStr],
+    })
+
+    if (mdFileResp.errorStatus) {
+      throw error(mdFileResp.errorStatus, mdFileResp.errorMessage)
+    }
+  }
+
 }

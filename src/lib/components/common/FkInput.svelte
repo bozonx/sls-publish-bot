@@ -1,6 +1,7 @@
 <script>
 import {Label, Helper, Input} from 'flowbite-svelte'
 import { onMount } from 'svelte'
+import {isNil} from 'squidlet-lib'
 import {FieldEvent} from 'formkit'
 
 
@@ -13,7 +14,7 @@ export let schema = {}
 
 const resolvedField = (field)
   ? field
-  : form.getOrRegisterField(name, {...schema, initial})
+  : form.getOrRegisterField(name, (isNil(initial)) ? schema : {...schema, initial})
 
 let savedValue = resolvedField.savedValue
 let editedValue = resolvedField.editedValue

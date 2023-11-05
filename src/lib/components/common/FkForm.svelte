@@ -1,11 +1,13 @@
 <script>
 import {newForm, FormEvent} from 'formkit'
-import { createEventDispatcher } from 'svelte'
-
-const dispatch = createEventDispatcher()
+// import { createEventDispatcher } from 'svelte'
+//
+// const dispatch = createEventDispatcher()
 
 export let formConfig = {}
 export let initFields = {}
+export let handleSave = null
+export let handleSubmit = null
 
 const form = newForm(formConfig)
 
@@ -42,12 +44,14 @@ form.on(FormEvent.change, () => {
   invalidMessages = form.invalidMessages
 })
 
-form.onSave((values) => {
-  dispatch('save', values)
+form.onSave(async (values) => {
+  //dispatch('save', values)
+  await handleSave?.(values)
 })
 
-form.onSubmit((values) => {
-  dispatch('submit', values)
+form.onSubmit(async (values) => {
+  //dispatch('submit', values)
+  await handleSubmit?.(values)
 })
 
 </script>
