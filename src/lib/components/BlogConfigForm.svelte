@@ -16,8 +16,10 @@ const handleSave = async (values) => {
 </script>
 
 
-<FkForm let:form {initFields} on:save={handleSave} let:touched>
+<FkForm let:form {initFields} on:save={handleSave} let:dirty>
   <FormRow label="Telegra.ph token" {form} name="telegraphToken" let:field>
     <FkTextInput {field} />
   </FormRow>
+
+  {dirty}
 </FkForm>
