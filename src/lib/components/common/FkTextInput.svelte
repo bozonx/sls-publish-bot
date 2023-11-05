@@ -4,10 +4,9 @@ import FktInput from '$lib/components/common/FkInput.svelte'
 import {FieldEvent} from "formkit"
 
 
-export let form
-export let name
-export let placeholder
-export let readonly
+export let field
+export let placeholder = null
+export let readonly = null
 
 let value = null
 
@@ -17,7 +16,7 @@ const resolveColor = (valid) => {
   else return null
 }
 
-const handleInputMount = (form, field) => {
+const handleInputMount = (field) => {
   field.on(FieldEvent.change, (data) => {
     value = data.value
   })
@@ -33,7 +32,7 @@ const handleInputMount = (form, field) => {
 
 </script>
 
-<FktInput {form} {name} let:disabled let:valid let:field handleMount={handleInputMount}>
+<FktInput {field} let:disabled let:valid handleMount={handleInputMount}>
   <Input
     on:change={(event) => field.handleChange(event.target.value)}
     on:focus={() => field.handleFocusIn()}

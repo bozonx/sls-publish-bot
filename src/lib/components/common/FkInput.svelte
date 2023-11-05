@@ -1,50 +1,54 @@
 <script>
 import {Label, Helper, Input} from 'flowbite-svelte'
-import { onMount } from 'svelte';
+import { onMount } from 'svelte'
 import {FieldEvent} from 'formkit'
 
+
 export let handleMount = null
-export let form
-export let name
+export let field = null
+export let form = null
+export let name = null
 export let schema = {}
 
-const field = form.getOrRegisterField(name, schema)
+const resolvedField = (field)
+  ? field
+  : form.getOrRegisterField(name, schema)
 
-let savedValue = field.savedValue
-let editedValue = field.editedValue
-let value = field.value
-let fullName = field.fullName
-let dirty = field.dirty
-let touched = field.touched
-let valid = field.valid
-let invalidMsg = field.invalidMsg
-let saving = field.saving
-let focused = field.focused
-let disabled = field.disabled
-let defaultValue = field.defaultValue
+let savedValue = resolvedField.savedValue
+let editedValue = resolvedField.editedValue
+let value = resolvedField.value
+let fullName = resolvedField.fullName
+let dirty = resolvedField.dirty
+let touched = resolvedField.touched
+let valid = resolvedField.valid
+let invalidMsg = resolvedField.invalidMsg
+let saving = resolvedField.saving
+let focused = resolvedField.focused
+let disabled = resolvedField.disabled
+let defaultValue = resolvedField.defaultValue
 
-field.on(FieldEvent.change, (data) => {
-  savedValue = field.savedValue
-  editedValue = field.editedValue
-  value = field.value
-  fullName = field.fullName
-  dirty = field.dirty
-  touched = field.touched
-  valid = field.valid
-  invalidMsg = field.invalidMsg
-  saving = field.saving
-  focused = field.focused
-  disabled = field.disabled
-  defaultValue = field.defaultValue
+resolvedField.on(FieldEvent.change, (data) => {
+  savedValue = resolvedField.savedValue
+  editedValue = resolvedField.editedValue
+  value = resolvedField.value
+  fullName = resolvedField.fullName
+  dirty = resolvedField.dirty
+  touched = resolvedField.touched
+  valid = resolvedField.valid
+  invalidMsg = resolvedField.invalidMsg
+  saving = resolvedField.saving
+  focused = resolvedField.focused
+  disabled = resolvedField.disabled
+  defaultValue = resolvedField.defaultValue
 })
 
 onMount(() => {
-  if (handleMount) handleMount(form, field)
+  if (handleMount) handleMount(resolvedField)
 })
 </script>
 
 <slot
-  {field}
+  field={resolvedField}
   {savedValue}
   {editedValue}
   {value}

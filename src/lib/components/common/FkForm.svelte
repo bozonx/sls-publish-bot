@@ -40,6 +40,10 @@ form.on(FormEvent.change, () => {
   invalidMessages = form.invalidMessages
 })
 
+form.on(FormEvent.saveEnd, (a,b) => {
+  console.log(a,b)
+})
+
 </script>
 
 <form on:submit|preventDefault={() => form.handleSubmit()}>
