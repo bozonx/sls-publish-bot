@@ -62,7 +62,9 @@ const handleSnSave = async (values) => {
     <MenuWrapper>
       {#if data.post.result.meta.sns.includes('dzen')}
         <li>
-          <MenuItem>{$t('menu.pubDataZen')}</MenuItem>
+          <MenuItem
+            href="/app/{$page.params.blog}/contentplan/post/fordzen?item={data.post.result.meta.fileName}"
+          >{$t('menu.pubDataZen')}</MenuItem>
         </li>
       {/if}
       {#if arraySimilar(data.post.result.meta.sns, ['spotifyForPodcasters', 'mave']).length}

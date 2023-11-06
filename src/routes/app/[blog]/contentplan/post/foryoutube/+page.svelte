@@ -13,30 +13,31 @@ import {convertCommonMdToCommonHtml} from "$lib/convert/convertCommonMdToCommonH
 
 export let data
 
+const meta = data.post.result.meta
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
   {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.contentPlan')},
   {
-    href: `/app/${$page.params.blog}/contentplan/post?item=${data.post.result.meta.fileName}`,
-    title: data.post.result.meta.title
+    href: `/app/${$page.params.blog}/contentplan/post?item=${meta.fileName}`,
+    title: meta.title
   },
   {title: $t('menu.pubDataYoutube')},
 ])
 
 let tags = makeStrHashTags(
-  data.post.result.meta.youtube?.tags,
-  data.post.result.meta.common?.tags
+  meta.youtube?.tags,
+  meta.common?.tags
 )
-let links = convertCommonMdToCleanText(data.post.result.meta.youtube?.contentLinks || data.post.result.meta.common?.contentLinks || '').trim()
+let links = convertCommonMdToCleanText(meta.youtube?.contentLinks || meta.common?.contentLinks || '').trim()
 let result = simpleTemplate(
-  replaceLineBreak(data.post.result.meta.youtube?.template || data.post.result.meta.common?.postTemplate),
+  replaceLineBreak(meta.youtube?.template || meta.common?.postTemplate),
   {
-    DESCR: (data.post.result.meta.descr || '').trim(),
-    TIME_CODES: (data.post.result.meta.timeCodes || '').trim(),
+    DESCR: (meta.descr || '').trim(),
+    TIME_CODES: (meta.timeCodes || '').trim(),
     LINKS: links,
     FOOTER: simpleTemplate(
-      replaceLineBreak(data.post.result.meta.youtube?.footer || data.post.result.meta.common?.postFooter),
+      replaceLineBreak(meta.youtube?.postFooter || meta.common?.postFooter),
         {
           LINKS: links,
           TAGS: tags,
@@ -50,13 +51,18 @@ let result = simpleTemplate(
 
 <div>
   <div class="mb-7">
-    {#if !data.post.result.meta.descr}
+    {#if !meta.descr}
       <Alert color="red">{$t('messages.postNoDesrc')}</Alert>
     {/if}
-    {#if !data.post.result.meta.timeCodes}
+    {#if !meta.timeCodes}
       <Alert color="red">{$t('messages.postNoTimeCodes')}</Alert>
     {/if}
   </div>
+
+  <section>
+    <SectionHeader>{$t('headers.reminder')}</SectionHeader>
+    <RenderHtml html={convertCommonMdToCommonHtml($t('texts.youtubeHint').trim())} />
+  </section>
 
   <section>
     <SectionHeader>{$t('headers.descr')}</SectionHeader>
@@ -67,11 +73,7 @@ let result = simpleTemplate(
   <section>
     <SectionHeader>{$t('headers.tags')}</SectionHeader>
 
-    <pre>{makeTags(data.post.result.meta.youtube?.tags, data.post.result.meta.common?.tags).join(', ')}</pre>
+    <pre>{makeTags(meta.youtube?.tags, meta.common?.tags).join(', ')}</pre>
   </section>
 
-  <section>
-    <SectionHeader>{$t('headers.reminder')}</SectionHeader>
-    <RenderHtml html={convertCommonMdToCommonHtml($t('texts.youtubeHint').trim())} />
-  </section>
 </div>

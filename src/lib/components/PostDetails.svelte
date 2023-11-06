@@ -14,28 +14,35 @@ export let item
   <DetailItem label="type">{item.result.meta.type}</DetailItem>
   <DetailItem label="descr">{item.result.meta.descr}</DetailItem>
 
-  <SectionHeader>articleFooter</SectionHeader>
-  <DetailItem label="common">{item.result.meta.articleFooter.common}</DetailItem>
-  <DetailItem label="tg">{item.result.meta.articleFooter.tg}</DetailItem>
-  <DetailItem label="dzen">{item.result.meta.articleFooter.dzen}</DetailItem>
+  {#if item.result.meta.common}
+    <SectionHeader>common</SectionHeader>
+    <DetailItem label="preview">{item.result.meta.common.tags?.join(', ')}</DetailItem>
+    <DetailItem label="postTemplate">{item.result.meta.common.postTemplate}</DetailItem>
+    <DetailItem label="contentLinks">{item.result.meta.common.contentLinks}</DetailItem>
+    <DetailItem label="footer">{item.result.meta.common.postFooter}</DetailItem>
+    <DetailItem label="pubDateTime">{item.result.meta.common.pubDateTime}</DetailItem>
+  {/if}
 
-  <SectionHeader>publication time</SectionHeader>
-  <DetailItem label="common">{item.result.meta.publication.common}</DetailItem>
-  <DetailItem label="tg">{item.result.meta.publication.tg}</DetailItem>
-  <DetailItem label="dzen">{item.result.meta.publication.dzen}</DetailItem>
-  <DetailItem label="podcast">{item.result.meta.publication.podcast}</DetailItem>
-  <DetailItem label="youtube">{item.result.meta.publication.youtube}</DetailItem>
-
-  <SectionHeader>tags</SectionHeader>
-  <DetailItem label="common">{item.result.meta.tags.common.join(', ')}</DetailItem>
-  <DetailItem label="tg">{item.result.meta.tags.tg.join(', ')}</DetailItem>
-  <DetailItem label="insta">{item.result.meta.tags.insta.join(', ')}</DetailItem>
-  <DetailItem label="podcast">{item.result.meta.tags.podcast.join(', ')}</DetailItem>
-  <DetailItem label="youtube">{item.result.meta.tags.youtube.join(', ')}</DetailItem>
-
-  <SectionHeader>tg</SectionHeader>
+  {#if item.result.meta.tg}
+  <SectionHeader>{$t('sns.telegram')}</SectionHeader>
   <DetailItem label="preview">{item.result.meta.tg.preview}</DetailItem>
   <DetailItem label="urlButton">{item.result.meta.tg.urlButton}</DetailItem>
   <DetailItem label="autoRemove">{item.result.meta.tg.autoRemove}</DetailItem>
-  <DetailItem label="postCustomFooter">{item.result.meta.tg.postCustomFooter}</DetailItem>
+
+  <DetailItem label="preview">{item.result.meta.tg.tags?.join(', ')}</DetailItem>
+  <DetailItem label="postTemplate">{item.result.meta.tg.postTemplate}</DetailItem>
+  <DetailItem label="contentLinks">{item.result.meta.tg.contentLinks}</DetailItem>
+  <DetailItem label="footer">{item.result.meta.tg.postFooter}</DetailItem>
+  <DetailItem label="pubDateTime">{item.result.meta.tg.pubDateTime}</DetailItem>
+  {/if}
+
+  {#if item.result.meta.youtube}
+  <SectionHeader>{$t('sns.youtube')}</SectionHeader>
+  <DetailItem label="preview">{item.result.meta.youtube?.tags?.join(', ')}</DetailItem>
+  <DetailItem label="postTemplate">{item.result.meta.youtube?.postTemplate}</DetailItem>
+  <DetailItem label="contentLinks">{item.result.meta.youtube?.contentLinks}</DetailItem>
+  <DetailItem label="footer">{item.result.meta.youtube?.postFooter}</DetailItem>
+  <DetailItem label="pubDateTime">{item.result.meta.youtube?.pubDateTime}</DetailItem>
+  {/if}
+
 </div>

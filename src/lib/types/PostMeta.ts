@@ -16,25 +16,36 @@ export interface PostMeta {
   // TODO: наверное убрать
   sns: (keyof typeof ALL_SNS)[]
   common: {
+    tags: string[]
     postTemplate: string
     // links which were mentioned in content
     contentLinks: string
-    tags: string[]
     postFooter: string
+    pubDateTime: string
   },
   tg?: {
-    tags: string[]
     preview?: boolean
     urlButton?: string
     autoRemove?: string
-    postCustomFooter?: string
-    pubDateTime: string
+
+    tags?: string[]
+    postTemplate?: string
+    contentLinks?: string
+    postFooter?: string
+    pubDateTime?: string
   },
   youtube?: {
-    postTemplate: string
-    contentLinks: string
     tags: string[]
-    footer: string
-    pubDateTime: string
+    postTemplate?: string
+    contentLinks?: string
+    postFooter?: string
+    pubDateTime?: string
+  },
+  dzen?: {
+    tags: string[]
+    postTemplate?: string
+    contentLinks?: string
+    postFooter?: string
+    pubDateTime?: string
   },
 }

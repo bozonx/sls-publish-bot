@@ -25,10 +25,13 @@ common:
   postFooter: common footer
   pubDateTime: 2023-11-10T13:00Z
 tg:
+  tags:
+    - '!COMON!'
+    - somethtag
   preview: true
   urlButton: https://ya.ru
   autoRemove: 2023-11-14
-  footer: 'custom fuuter string\n${TAGS}'
+  postFooter: 'custom fuuter string\n${TAGS}'
   pubDateTime: 2023-11-10T13:00Z
 youtube:
   template: '${DESCR}\n\n${TIME_CODES}\n\n${LINKS}\n${FOOTER}\n\n${TAGS}'
@@ -37,7 +40,11 @@ youtube:
   tags:
     - '!COMON!'
     - someyoutubetag
-  footer: 'yt footer'
+  postFooter: 'yt footer'
+  pubDateTime: 2023-11-10T13:00Z
+dzen:
+  template: '${CONTENT}\n\n${FOOTER}'
+  footer: 'dzen footer'
   pubDateTime: 2023-11-10T13:00Z
 ---
 

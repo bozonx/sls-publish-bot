@@ -18,6 +18,8 @@ headers:
   publish: Опубликовать
   publishData: Сформировать материал публикации
   descr: Описание
+  header: Заголовок
+  post: Пост
   tags: Тэги
   reminder: Незабудьте
 chunks:
@@ -51,6 +53,9 @@ messages:
   postNoDesrc: Пост не имеет короткого описания
   postNoTimeCodes: Пост не имеет тайм кодов
 texts:
+  dzenHint: |
+    - Загрузить картинку
+    - Установить дату публикации
   youtubeHint: |
     - Загрузить картинку
     - Установить дату публикации
