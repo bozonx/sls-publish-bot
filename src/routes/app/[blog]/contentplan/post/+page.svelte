@@ -1,4 +1,5 @@
 <script>
+import { arraySimilar } from 'squidlet-lib'
 import {t} from '$lib/store/t'
 import { page } from '$app/stores'
 import BlogDetails from '$lib/components/BlogDetails.svelte'
@@ -59,15 +60,21 @@ const handleSnSave = async (values) => {
     <SectionHeader>{$t('headers.publishData')}</SectionHeader>
 
     <MenuWrapper>
-      <li>
-        <MenuItem>{$t('menu.pubDataZen')}</MenuItem>
-      </li>
+      {#if data.post.result.meta.sns.includes('dzen')}
+        <li>
+          <MenuItem>{$t('menu.pubDataZen')}</MenuItem>
+        </li>
+      {/if}
+      {#if arraySimilar(data.post.result.meta.sns, ['spotifyForPodcasters', 'mave']).length}
       <li>
         <MenuItem>{$t('menu.pubDataPodcast')}</MenuItem>
       </li>
-      <li>
-        <MenuItem>{$t('menu.pubDataYoutube')}</MenuItem>
-      </li>
+      {/if}
+      {#if data.post.result.meta.sns.includes('youtube')}
+        <li>
+          <MenuItem>{$t('menu.pubDataYoutube')}</MenuItem>
+        </li>
+      {/if}
     </MenuWrapper>
   </div>
 
