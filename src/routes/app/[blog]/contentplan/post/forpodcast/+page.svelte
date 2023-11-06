@@ -7,7 +7,6 @@ import {breadcrumbs} from '$lib/store/breadcrumbs'
 import {makeStrHashTags, makeTags} from "$lib/helpers"
 import SectionHeader from "$lib/components/SectionHeader.svelte"
 import RenderHtml from "$lib/components/common/RenderHtml.svelte"
-import {convertCommonMdToCleanText} from "$lib/convert/convertCommonMdToCleanText"
 import {convertCommonMdToCommonHtml} from "$lib/convert/convertCommonMdToCommonHtml";
 import CopyToClipboardButton from "$lib/components/common/CopyToClipboardButton.svelte";
 
@@ -23,22 +22,22 @@ breadcrumbs.set([
     href: `/app/${$page.params.blog}/contentplan/post?item=${meta.fileName}`,
     title: meta.title
   },
-  {title: $t('menu.pubDataYoutube')},
+  {title: $t('menu.pubDataPodcast')},
 ])
 
-let tags = makeStrHashTags(meta.youtube?.tags, meta.common?.tags)
-let result = simpleTemplate(
-  replaceLineBreak(meta.youtube?.template || meta.common?.postTemplate),
+let tags = makeStrHashTags(meta.podcast?.tags, meta.common?.tags)
+let descr = simpleTemplate(
+  meta.podcast?.template || meta.common?.postTemplate,
   {
-    DESCR: (meta.descr || '').trim(),
-    TIME_CODES: (meta.timeCodes || '').trim(),
-    LINKS: convertCommonMdToCleanText(meta.youtube?.contentLinks || meta.common?.contentLinks || '').trim(),
-    FOOTER: simpleTemplate(
-      replaceLineBreak(meta.youtube?.postFooter || meta.common?.postFooter),
+    DESCR: convertCommonMdToCommonHtml(meta.descr?.trim()),
+    TIME_CODES: convertCommonMdToCommonHtml(meta.timeCodes?.trim()),
+    LINKS: convertCommonMdToCommonHtml((meta.podcast?.contentLinks || meta.common?.contentLinks || '').trim()),
+    FOOTER: convertCommonMdToCommonHtml(simpleTemplate(
+      replaceLineBreak(meta.podcast?.footer || meta.common?.postFooter),
         {
           TAGS: tags,
         }
-      ),
+      )),
     TAGS: tags,
   }
 )
@@ -57,23 +56,17 @@ let result = simpleTemplate(
 
   <section>
     <SectionHeader>{$t('headers.reminder')}</SectionHeader>
-    <RenderHtml html={convertCommonMdToCommonHtml($t('texts.youtubeHint').trim())} />
+    <RenderHtml html={convertCommonMdToCommonHtml($t('texts.podcastHint').trim())} />
   </section>
 
   <section>
     <SectionHeader>{$t('headers.descr')}</SectionHeader>
 
-    <CopyToClipboardButton elementId="youtube-descr">{$t('links.copyToClipboard')}</CopyToClipboardButton>
+    <CopyToClipboardButton elementId="podcast-descr">{$t('links.copyToClipboard')}</CopyToClipboardButton>
 
-    <pre id="youtube-descr">{result}</pre>
-  </section>
-
-  <section>
-    <SectionHeader>{$t('headers.tags')}</SectionHeader>
-
-    <CopyToClipboardButton elementId="youtube-tags">{$t('links.copyToClipboard')}</CopyToClipboardButton>
-
-    <pre id="youtube-tags">{makeTags(meta.youtube?.tags, meta.common?.tags).join(', ')}</pre>
+    <pre>
+      <code id="podcast-descr" class="block">{descr}</code>
+    </pre>
   </section>
 
 </div>

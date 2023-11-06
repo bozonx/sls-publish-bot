@@ -9,6 +9,7 @@ import SectionHeader from "$lib/components/SectionHeader.svelte"
 import RenderHtml from "$lib/components/common/RenderHtml.svelte"
 import CopyToClipboardButton from "$lib/components/common/CopyToClipboardButton.svelte"
 import {convertCommonMdToCommonHtml} from "$lib/convert/convertCommonMdToCommonHtml"
+import {POST_TYPES} from "$lib/constants"
 
 
 export let data
@@ -29,10 +30,13 @@ let post = simpleTemplate(
   replaceLineBreak(meta.dzen?.template || meta.common?.postTemplate),
   {
     CONTENT: convertCommonMdToCommonHtml((data.post.result.md || '').trim()),
-
-    // TODO: post или article footer ????
-
-    FOOTER: convertCommonMdToCommonHtml((meta.dzen?.footer || meta.common?.postFooter || '').trim()),
+    FOOTER: convertCommonMdToCommonHtml((
+      meta.dzen?.footer
+      || ((meta.type === POST_TYPES.article)
+        ? meta.common?.articleFooter
+        : meta.common?.postFooter)
+      || ''
+    ).trim()),
   }
 )
 </script>

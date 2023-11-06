@@ -69,7 +69,9 @@ const handleSnSave = async (values) => {
       {/if}
       {#if arraySimilar(data.post.result.meta.sns, ['spotifyForPodcasters', 'mave']).length}
       <li>
-        <MenuItem>{$t('menu.pubDataPodcast')}</MenuItem>
+        <MenuItem
+          href="/app/{$page.params.blog}/contentplan/post/forpodcast?item={data.post.result.meta.fileName}"
+        >{$t('menu.pubDataPodcast')}</MenuItem>
       </li>
       {/if}
       {#if data.post.result.meta.sns.includes('youtube')}

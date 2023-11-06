@@ -21,6 +21,7 @@ export interface PostMeta {
     // links which were mentioned in content
     contentLinks: string
     postFooter: string
+    articleFooter: string
     pubDateTime: string
   },
   tg?: {
@@ -48,4 +49,11 @@ export interface PostMeta {
     postFooter?: string
     pubDateTime?: string
   },
+  podcast?: {
+    tags: string[]
+    postTemplate?: string
+    contentLinks?: string
+    footer?: string
+    pubDateTime?: string
+  }
 }

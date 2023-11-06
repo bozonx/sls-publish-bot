@@ -42,6 +42,15 @@ youtube:
     - someyoutubetag
   postFooter: 'yt footer'
   pubDateTime: 2023-11-10T13:00Z
+podcast:
+  template: '<p>${DESCR}</p><p><br /></p><p>${TIME_CODES}</p><p><br /></p><p>${LINKS}${FOOTER}</p><p><br /></p><p>${TAGS}</p>'
+  contentLinks: |
+    * [some link](https://ya.ru)
+  tags:
+    - '!COMON!'
+    - somepodcasttag
+  postFooter: 'podcast footer'
+  pubDateTime: 2023-11-10T13:00Z
 dzen:
   template: '${CONTENT}\n\n${FOOTER}'
   footer: 'dzen footer'
