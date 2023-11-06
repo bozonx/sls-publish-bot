@@ -4,6 +4,14 @@ export const SUPPORTED_LANGS = ['ru']
 export const BLOG_YAML = 'blog.yaml'
 export const APP_CONFIG_YAML = 'app.yaml'
 export const TO_PUBLISH_DIR = 'toPublish'
+export const ALL_SNS = {
+  telegram: 'telegram',
+  dzen: 'dzen',
+  youtube: 'youtube',
+  spotifyForPodcasters: 'spotifyForPodcasters',
+  mave: 'mave',
+  site: 'site',
+}
 export const POST_TYPES = {
   article: 'article',
   image: 'image',

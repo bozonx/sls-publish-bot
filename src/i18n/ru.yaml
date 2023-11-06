@@ -16,6 +16,7 @@ headers:
   postDetails: Детали поста
   preview: Предпросмотр
   publish: Опубликовать
+  publishData: Сформировать материал публикации
 chunks:
   blog: Блог
 menu:
@@ -24,11 +25,22 @@ menu:
   previewTgPost: Предпросмотр в Telegram боте
   changeDate: Изменить дату публикации
   changeTime: Изменить время публикации
-  changeSN: Изменить соц сети для публикации
+  #changeSN: Изменить соц сети для публикации
   changeTags: Изменить тэги
-  publishZen: Публикация в Dzen
-  publishOnlyTelegraph: Публиковать только в telegra.ph
+  pubDataZen: Для Дзен
+  pubDataYoutube: Для youtube
+  pubDataPodcast: Для podcast
+  publishOnlyTelegraph: Опубликовать только в telegra.ph
+  publishSite: Опубликовать только на сайте
+  publishYoutube: Опубликовать в youtube
   publishAll: Опубликовать всё
 details:
   title: Название
   lang: Язык
+sns:
+  telegram: Telegram
+  dzen: Дзен
+  youtube: Youtube
+  spotifyForPodcasters: Spotify for podcasters
+  mave: Mave
+  site: Сайт

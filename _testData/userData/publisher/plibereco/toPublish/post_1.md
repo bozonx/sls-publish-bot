@@ -6,6 +6,13 @@ descr: some little description
 
 #images:
 #  - ./img.avif
+sns:
+  - telegram
+  - dzen
+  - youtube
+  - spotifyForPodcasters
+  - mave
+  - site
 articleFooter:
   common: custom footer for article
   tg: custom footer for article tg

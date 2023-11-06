@@ -1,4 +1,4 @@
-import type {PostTypes} from '$lib/constants';
+import type {PostTypes, ALL_SNS} from '$lib/constants';
 
 
 export interface PostMeta {
@@ -12,6 +12,7 @@ export interface PostMeta {
   descr?: string
 
   images?: string[]
+  sns: (keyof typeof ALL_SNS)[]
   articleFooter?: {
     common: string
     [index: string]: string

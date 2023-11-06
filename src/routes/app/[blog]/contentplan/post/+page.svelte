@@ -7,15 +7,23 @@ import SectionHeader from '$lib/components/SectionHeader.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 import MenuWrapper from "$lib/components/MenuWrapper.svelte";
 import MenuItem from "$lib/components/MenuItem.svelte";
+import FkForm from "$lib/components/common/FkForm.svelte";
+import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte";
 
 
 export let data
+
+let publishSns = data.post.result.meta.sns
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
   {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.contentPlan')},
   {title: data.post.result.meta.title},
 ])
+
+const handleSnSave = async (values) => {
+  publishSns = Object.keys(values).filter((key) => values[key])
+}
 </script>
 
 <div>
@@ -48,22 +56,59 @@ breadcrumbs.set([
   </div>
 
   <div class="mt-7">
-    <SectionHeader>{$t('headers.publish')}</SectionHeader>
+    <SectionHeader>{$t('headers.publishData')}</SectionHeader>
 
     <MenuWrapper>
       <li>
-        <MenuItem>{$t('menu.publishZen')}</MenuItem>
+        <MenuItem>{$t('menu.pubDataZen')}</MenuItem>
       </li>
       <li>
-        <MenuItem>{$t('menu.publishOnlyTelegraph')}</MenuItem>
+        <MenuItem>{$t('menu.pubDataPodcast')}</MenuItem>
       </li>
+      <li>
+        <MenuItem>{$t('menu.pubDataYoutube')}</MenuItem>
+      </li>
+    </MenuWrapper>
+  </div>
 
-      <li>
-        <MenuItem>{$t('menu.changeSN')}</MenuItem>
-      </li>
-      <li>
-        <MenuItem>{$t('menu.publishAll')}</MenuItem>
-      </li>
+  <div class="mt-7">
+    <SectionHeader>{$t('headers.publish')}</SectionHeader>
+
+    <FkForm formConfig={{debounceTime: 0}} let:form handleSave={handleSnSave}>
+      {#each data.post.result.meta.sns as item}
+        <FkCheckBoxInput
+          field={form.getOrRegisterField(item, {initial: true})}
+        >
+          {$t(`sns.${item}`)}
+        </FkCheckBoxInput>
+      {/each}
+    </FkForm>
+
+    <MenuWrapper>
+      {#if publishSns.length}
+        <li>
+          <MenuItem>
+            <span>{$t('menu.publishAll')} </span>
+            ({publishSns.map(item => $t(`sns.${item}`)).join(', ')})
+          </MenuItem>
+        </li>
+      {/if}
+
+      {#if data.post.result.meta.sns.includes('telegram')}
+        <li>
+          <MenuItem>{$t('menu.publishOnlyTelegraph')}</MenuItem>
+        </li>
+      {/if}
+      {#if data.post.result.meta.sns.includes('site')}
+        <li>
+          <MenuItem>{$t('menu.publishSite')}</MenuItem>
+        </li>
+      {/if}
+      {#if data.post.result.meta.sns.includes('youtube')}
+        <li>
+          <MenuItem>{$t('menu.publishYoutube')}</MenuItem>
+        </li>
+      {/if}
     </MenuWrapper>
   </div>
 
