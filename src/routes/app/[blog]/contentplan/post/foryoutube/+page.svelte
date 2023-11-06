@@ -34,7 +34,7 @@ let result = simpleTemplate(
     TIME_CODES: (meta.timeCodes || '').trim(),
     LINKS: convertCommonMdToCleanText(meta.youtube?.contentLinks || meta.common?.contentLinks || '').trim(),
     FOOTER: simpleTemplate(
-      replaceLineBreak(meta.youtube?.postFooter || meta.common?.postFooter),
+      replaceLineBreak(meta.youtube?.footer || meta.common?.postFooter),
         {
           TAGS: tags,
         }

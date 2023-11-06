@@ -9,17 +9,20 @@ import {breadcrumbs} from '$lib/store/breadcrumbs'
 import MenuWrapper from "$lib/components/MenuWrapper.svelte";
 import MenuItem from "$lib/components/MenuItem.svelte";
 import FkForm from "$lib/components/common/FkForm.svelte";
-import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte";
+import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte"
+import {ALL_SNS} from '$lib/constants'
 
 
 export let data
 
-let publishSns = data.post.result.meta.sns
+const meta = data.post.result.meta
+let allAllowedSns = arraySimilar(Object.keys(meta), Object.keys(ALL_SNS))
+let publishSns = [...allAllowedSns]
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
   {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.contentPlan')},
-  {title: data.post.result.meta.title},
+  {title: meta.title},
 ])
 
 const handleSnSave = async (values) => {
@@ -60,24 +63,24 @@ const handleSnSave = async (values) => {
     <SectionHeader>{$t('headers.publishData')}</SectionHeader>
 
     <MenuWrapper>
-      {#if data.post.result.meta.sns.includes('dzen')}
+      {#if meta.dzen}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/fordzen?item={data.post.result.meta.fileName}"
+            href="/app/{$page.params.blog}/contentplan/post/fordzen?item={meta.fileName}"
           >{$t('menu.pubDataZen')}</MenuItem>
         </li>
       {/if}
-      {#if arraySimilar(data.post.result.meta.sns, ['spotifyForPodcasters', 'mave']).length}
-      <li>
-        <MenuItem
-          href="/app/{$page.params.blog}/contentplan/post/forpodcast?item={data.post.result.meta.fileName}"
-        >{$t('menu.pubDataPodcast')}</MenuItem>
-      </li>
-      {/if}
-      {#if data.post.result.meta.sns.includes('youtube')}
+      {#if meta.podcast}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/foryoutube?item={data.post.result.meta.fileName}"
+            href="/app/{$page.params.blog}/contentplan/post/forpodcast?item={meta.fileName}"
+          >{$t('menu.pubDataPodcast')}</MenuItem>
+        </li>
+      {/if}
+      {#if meta.youtube}
+        <li>
+          <MenuItem
+            href="/app/{$page.params.blog}/contentplan/post/foryoutube?item={meta.fileName}"
           >{$t('menu.pubDataYoutube')}</MenuItem>
         </li>
       {/if}
@@ -88,7 +91,7 @@ const handleSnSave = async (values) => {
     <SectionHeader>{$t('headers.publish')}</SectionHeader>
 
     <FkForm formConfig={{debounceTime: 0}} let:form handleSave={handleSnSave}>
-      {#each data.post.result.meta.sns as item}
+      {#each allAllowedSns as item}
         <FkCheckBoxInput
           field={form.getOrRegisterField(item, {initial: true})}
         >
@@ -107,17 +110,17 @@ const handleSnSave = async (values) => {
         </li>
       {/if}
 
-      {#if data.post.result.meta.sns.includes('telegram')}
+      {#if meta.telegram}
         <li>
           <MenuItem>{$t('menu.publishOnlyTelegraph')}</MenuItem>
         </li>
       {/if}
-      {#if data.post.result.meta.sns.includes('site')}
+      {#if meta.site}
         <li>
           <MenuItem>{$t('menu.publishSite')}</MenuItem>
         </li>
       {/if}
-      {#if data.post.result.meta.sns.includes('youtube')}
+      {#if meta.youtube}
         <li>
           <MenuItem>{$t('menu.publishYoutube')}</MenuItem>
         </li>

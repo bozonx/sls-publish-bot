@@ -33,7 +33,7 @@ let post = simpleTemplate(
     FOOTER: convertCommonMdToCommonHtml((
       meta.dzen?.footer
       || ((meta.type === POST_TYPES.article)
-        ? meta.common?.articleFooter
+        ? meta.common?.footer
         : meta.common?.postFooter)
       || ''
     ).trim()),
@@ -60,7 +60,7 @@ let post = simpleTemplate(
 
     <CopyToClipboardButton elementId="dzen-content">{$t('links.copyToClipboard')}</CopyToClipboardButton>
 
-    <pre id="dzen-content">{post}</pre>
+    <RenderHtml id="dzen-content" html={post}></RenderHtml>
   </section>
 
 </div>

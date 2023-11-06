@@ -1,4 +1,4 @@
-import type {PostTypes, ALL_SNS} from '$lib/constants';
+import type {PostTypes} from '$lib/constants';
 
 
 export interface PostMeta {
@@ -13,47 +13,46 @@ export interface PostMeta {
   timeCodes?: string
 
   images?: string[]
-  // TODO: наверное убрать
-  sns: (keyof typeof ALL_SNS)[]
   common: {
     tags: string[]
     postTemplate: string
+    articleTemplate: string
     // links which were mentioned in content
     contentLinks: string
     postFooter: string
     articleFooter: string
     pubDateTime: string
   },
-  tg?: {
+  telegram?: {
     preview?: boolean
     urlButton?: string
     autoRemove?: string
 
     tags?: string[]
     postTemplate?: string
+    articleTemplate?: string
     contentLinks?: string
     postFooter?: string
+    articleFooter?: string
     pubDateTime?: string
   },
   youtube?: {
-    tags: string[]
-    postTemplate?: string
-    contentLinks?: string
-    postFooter?: string
-    pubDateTime?: string
-  },
-  dzen?: {
-    tags: string[]
-    postTemplate?: string
-    contentLinks?: string
-    postFooter?: string
-    pubDateTime?: string
-  },
-  podcast?: {
-    tags: string[]
-    postTemplate?: string
+    tags?: string[]
+    template?: string
     contentLinks?: string
     footer?: string
     pubDateTime?: string
-  }
+  },
+  podcast?: {
+    tags?: string[]
+    template?: string
+    contentLinks?: string
+    footer?: string
+    pubDateTime?: string
+  },
+  dzen?: {
+    template?: string
+    footer?: string
+    pubDateTime?: string
+  },
 }

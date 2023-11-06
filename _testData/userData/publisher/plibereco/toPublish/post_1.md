@@ -8,30 +8,31 @@ timeCodes: |
 
 #images:
 #  - ./img.avif
-sns:
-  - telegram
-  - dzen
-  - youtube
-  - spotifyForPodcasters
-  - mave
-  - site
 common:
-  template: ''
+  postTemplate: ''
+  articleTemplate: ''
   contentLinks: |
     * [some link](https://ya.ru)
   tags:
     - tag1
     - tag2
-  postFooter: common footer
+  postFooter: common post footer
+  articleFooter: common article footer
   pubDateTime: 2023-11-10T13:00Z
-tg:
-  tags:
-    - '!COMON!'
-    - somethtag
+telegram:
   preview: true
   urlButton: https://ya.ru
   autoRemove: 2023-11-14
-  postFooter: 'custom fuuter string\n${TAGS}'
+
+  tags:
+    - '!COMON!'
+    - somethtag
+  postTemplate: '${DESCR}\n\n${TIME_CODES}\n\n${LINKS}\n${FOOTER}\n\n${TAGS}'
+  articleTemplate: '${DESCR}\n\n${TIME_CODES}\n\n${LINKS}\n${FOOTER}\n\n${TAGS}'
+  contentLinks: |
+    * [some link](https://ya.ru)
+  postFooter: 'post footer\n${TAGS}'
+  articleFooter: 'article footer\n${TAGS}'
   pubDateTime: 2023-11-10T13:00Z
 youtube:
   template: '${DESCR}\n\n${TIME_CODES}\n\n${LINKS}\n${FOOTER}\n\n${TAGS}'
@@ -49,7 +50,7 @@ podcast:
   tags:
     - '!COMON!'
     - somepodcasttag
-  postFooter: 'podcast footer'
+  footer: 'podcast footer'
   pubDateTime: 2023-11-10T13:00Z
 dzen:
   template: '${CONTENT}\n\n${FOOTER}'

@@ -2,7 +2,7 @@
 let className = ''
 
 export { className as class }
-export let id
+export let id = null
 export let html
 export let tag = 'div'
 </script>
