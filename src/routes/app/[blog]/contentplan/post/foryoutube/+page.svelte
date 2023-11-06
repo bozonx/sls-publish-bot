@@ -6,6 +6,7 @@ import { page } from '$app/stores'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 import {makeStrHashTags, makeTags} from "$lib/helpers"
 import SectionHeader from "$lib/components/SectionHeader.svelte"
+import RenderHtml from "$lib/components/common/RenderHtml.svelte"
 import {convertCommonMdToCleanText} from "$lib/convert/convertCommonMdToCleanText"
 import {convertCommonMdToCommonHtml} from "$lib/convert/convertCommonMdToCommonHtml";
 
@@ -71,6 +72,6 @@ let result = simpleTemplate(
 
   <section>
     <SectionHeader>{$t('headers.reminder')}</SectionHeader>
-    <pre>{@html convertCommonMdToCommonHtml($t('texts.youtubeHint').trim())}</pre>
+    <RenderHtml html={convertCommonMdToCommonHtml($t('texts.youtubeHint').trim())} />
   </section>
 </div>
