@@ -72,7 +72,9 @@ const handleSnSave = async (values) => {
       {/if}
       {#if data.post.result.meta.sns.includes('youtube')}
         <li>
-          <MenuItem>{$t('menu.pubDataYoutube')}</MenuItem>
+          <MenuItem
+            href="/app/{$page.params.blog}/contentplan/post/foryoutube?item={data.post.result.meta.fileName}"
+          >{$t('menu.pubDataYoutube')}</MenuItem>
         </li>
       {/if}
     </MenuWrapper>
