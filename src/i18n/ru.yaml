@@ -9,6 +9,7 @@ links:
   archiveView: Архив
   createRecord: Создать запись
   blogConfig: Настройки блога
+  appConfig: Конфиг приложения
 headers:
   allBlogs: Все блоги
   menu: Меню
@@ -28,7 +29,6 @@ menu:
   publishZen: Публикация в Dzen
   publishOnlyTelegraph: Публиковать только в telegra.ph
   publishAll: Опубликовать всё
-  appConfig: Конфиг приложения
 details:
   title: Название
   lang: Язык

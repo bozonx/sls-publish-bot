@@ -3,7 +3,7 @@ title: Система Личной Свободы RU
 lang: ru
 config:
   telegram:
-    channelId: '-1005000387104'
+    channelId: "-1005000387104"
     supportedTypes:
       - article
       - image
@@ -28,4 +28,4 @@ config:
       href="https://dzen.ru/sls_freedom">Система Личной Свободы</a></p>'
     articleFooter: '<p>—</p><p>Автор: Айван Кей, <a
       href="https://dzen.ru/sls_freedom">Система Личной Свободы</a></p>'
-  telegraphToken: 421d14812d16d80c4e5eaf0a96bf4684874ebc8d118e6f4d3048001eac75
+  telegraphToken: 421d14812d16d80c4e5eaf0a96bf4684874ebc8d118e6f4d3048001eac75 d

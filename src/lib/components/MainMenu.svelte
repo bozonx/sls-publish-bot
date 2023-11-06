@@ -7,6 +7,6 @@
 
 <MenuWrapper>
   <li>
-    <MenuItem href="/app/config">{$t('menu.appConfig')}</MenuItem>
+    <MenuItem href="/app/config">{$t('links.appConfig')}</MenuItem>
   </li>
 </MenuWrapper>

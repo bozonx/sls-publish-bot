@@ -7,9 +7,11 @@ import type {ListResponse} from '$lib/types/ListResponse'
 import type {PostResult} from '$lib/types/PostResult'
 import type {ItemResponse} from '$lib/types/ItemResponse'
 import {browser} from '$app/environment'
-import {BLOG_YAML, TO_PUBLISH_DIR} from '$lib/constants';
+import {APP_CONFIG_YAML, BLOG_YAML, TO_PUBLISH_DIR} from '$lib/constants';
 import {splitMdAndMeta} from '$lib/helpers';
 import type {BlogConfig} from '$lib/types/BlogConfig';
+import type {AppConfig} from '$lib/types/AppConfig';
+import {APP_CONFIG_DEFAULTS} from '$lib/types/AppConfig';
 
 
 // TODO: откуда её брать???
@@ -267,6 +269,72 @@ export const squidletAppApi = {
     if (mdFileResp.errorStatus) {
       throw error(mdFileResp.errorStatus, mdFileResp.errorMessage)
     }
+  },
+
+  /**
+   * Load app config. It creates it if it not exists
+   */
+  async loadAppConfig(): Promise<ItemResponse<AppConfig>> {
+    const existsResp = await squidletUi?.send({
+      method: 'ctx.cfg.isExists',
+      arguments: [APP_CONFIG_YAML],
+    })
+
+    if (existsResp.errorStatus) throw error(existsResp.errorStatus, existsResp.errorMessage)
+
+    if (existsResp.data === false) {
+
+      // TODO: может это в squidlet делать ???
+
+      // make config for Publisher app
+      const mkdirpResp = await squidletUi?.send({
+        method: 'ctx.cfg.mkDirP',
+        arguments: ['/'],
+      })
+
+      if (mkdirpResp.errorStatus) throw error(mkdirpResp.errorStatus, mkdirpResp.errorMessage)
+
+      const createResp = await squidletUi?.send({
+        method: 'ctx.cfg.writeFile',
+        arguments: [APP_CONFIG_YAML, yaml.stringify(APP_CONFIG_DEFAULTS)],
+      })
+
+      if (createResp.errorStatus) throw error(createResp.errorStatus, createResp.errorMessage)
+
+      return {
+        result: APP_CONFIG_DEFAULTS,
+      }
+    }
+
+    const loadResp = await squidletUi?.send({
+      method: 'ctx.cfg.readTextFile',
+      arguments: [APP_CONFIG_YAML],
+    })
+
+    if (loadResp.errorStatus) throw error(loadResp.errorStatus, loadResp.errorMessage)
+
+    let yamlData: any
+
+    try {
+      yamlData = yaml.parse(loadResp.data)
+    }
+    catch (e) {
+      throw error(500, `Error parsing yaml of "${APP_CONFIG_YAML}": ${e}`)
+    }
+
+    return {
+      result: yamlData,
+    }
+  },
+
+  async saveAppConfig(config: AppConfig): Promise<void> {
+    const yamlStr = yaml.stringify(config)
+    const writeResp = await squidletUi?.send({
+      method: 'ctx.cfg.writeFile',
+      arguments: [APP_CONFIG_YAML, yamlStr],
+    })
+
+    if (writeResp.errorStatus) throw error(writeResp.errorStatus, writeResp.errorMessage)
   }
 
 }
