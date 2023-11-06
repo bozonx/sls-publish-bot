@@ -5,6 +5,7 @@ type: article
 descr: some little description
 timeCodes: |
   00:00 Начало
+  01:00 Продолжение
 
 #images:
 #  - ./img.avif
@@ -41,7 +42,7 @@ youtube:
   tags:
     - '!COMON!'
     - someyoutubetag
-  postFooter: 'yt footer'
+  footer: 'yt footer'
   pubDateTime: 2023-11-10T13:00Z
 podcast:
   template: '<p>${DESCR}</p><p><br /></p><p>${TIME_CODES}</p><p><br /></p><p>${LINKS}${FOOTER}</p><p><br /></p><p>${TAGS}</p>'

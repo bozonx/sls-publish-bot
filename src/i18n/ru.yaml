@@ -40,6 +40,8 @@ menu:
   publishSite: Опубликовать на сайте
   publishYoutube: Опубликовать в youtube
   publishAll: Опубликовать всё
+  edit: Редактировать
+  toArchive: Переместить в архив
 details:
   title: Название
   lang: Язык

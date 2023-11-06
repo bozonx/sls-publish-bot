@@ -30,7 +30,7 @@ let tags = makeStrHashTags(meta.youtube?.tags, meta.common?.tags)
 let result = simpleTemplate(
   replaceLineBreak(meta.youtube?.template || meta.common?.postTemplate),
   {
-    DESCR: (meta.descr || '').trim(),
+    DESCR: convertCommonMdToCleanText(meta.descr).trim(),
     TIME_CODES: (meta.timeCodes || '').trim(),
     LINKS: convertCommonMdToCleanText(meta.youtube?.contentLinks || meta.common?.contentLinks || '').trim(),
     FOOTER: simpleTemplate(

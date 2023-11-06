@@ -30,7 +30,7 @@ let descr = simpleTemplate(
   meta.podcast?.template || meta.common?.postTemplate,
   {
     DESCR: convertCommonMdToCommonHtml(meta.descr?.trim()),
-    TIME_CODES: convertCommonMdToCommonHtml(meta.timeCodes?.trim()),
+    TIME_CODES: (meta.timeCodes || '').trim().replace(/\n/g, '<br />'),
     LINKS: convertCommonMdToCommonHtml((meta.podcast?.contentLinks || meta.common?.contentLinks || '').trim()),
     FOOTER: convertCommonMdToCommonHtml(simpleTemplate(
       replaceLineBreak(meta.podcast?.footer || meta.common?.postFooter),

@@ -44,6 +44,17 @@ const handleSnSave = async (values) => {
   </div>
 
   <div class="mt-7">
+    <MenuWrapper>
+      <li>
+        <MenuItem>{$t('menu.edit')}</MenuItem>
+      </li>
+      <li>
+        <MenuItem>{$t('menu.toArchive')}</MenuItem>
+      </li>
+    </MenuWrapper>
+  </div>
+
+  <div class="mt-7">
     <SectionHeader>{$t('headers.preview')}</SectionHeader>
 
     <MenuWrapper>
