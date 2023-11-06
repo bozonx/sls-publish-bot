@@ -3,6 +3,8 @@ title: Post 1
 urlName: post-1
 type: article
 descr: some little description
+timeCodes: |
+  00:00 Начало
 
 #images:
 #  - ./img.avif
@@ -13,37 +15,29 @@ sns:
   - spotifyForPodcasters
   - mave
   - site
-articleFooter:
-  common: custom footer for article
-  tg: custom footer for article tg
-  dzen: custom footer for article dzen
-publication:
-  common: 2023-11-10T13:00Z
-  tg: 2023-11-10T13:00Z
-  dzen: 2023-11-10T13:00Z
-  podcast: 2023-11-10T13:00Z
-  youtube: 2023-11-10T13:00Z
-tags:
-  common:
+common:
+  contentLinks: |
+    * [some link](https://ya.ru)
+  tags:
     - tag1
     - tag2
-  tg:
-    - '!COMON!'
-    - tg_tag1
-  insta:
-    - '!COMON!'
-    - someinstatag
-  podcast:
-    - '!COMON!'
-    - somepodcasttag
-  youtube:
-    - '!COMON!'
-    - someyoutubetag
+  postFooter: common footer
+  pubDateTime: 2023-11-10T13:00Z
 tg:
   preview: true
   urlButton: https://ya.ru
   autoRemove: 2023-11-14
-  postCustomFooter: custom fuuter string
+  footer: 'custom fuuter string\n${TAGS}'
+  pubDateTime: 2023-11-10T13:00Z
+youtube:
+  template: '${DESCR}\n\n${TIME_CODES}\n\n${LINKS}${FOOTER}\n\n${TAGS}'
+  contentLinks: |
+    * [some link](https://ya.ru)
+  tags:
+    - '!COMON!'
+    - someyoutubetag
+  footer: '${LINKS}yt footer\n${TAGS}'
+  pubDateTime: 2023-11-10T13:00Z
 ---
 
 # md header

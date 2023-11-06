@@ -3,6 +3,7 @@ import remarkStringify from 'remark-stringify'
 import remarkParse from 'remark-parse';
 import remarkFrontmatter from 'remark-frontmatter'
 import yaml from 'yaml';
+import {COMMON_TAGS_MARK} from '$lib/constants';
 
 
 // TODO: the same as in sls-site
@@ -28,4 +29,23 @@ export async function splitMdAndMeta(rawMdContent: string): Promise<[Record<stri
   const rawMetaData = yaml.parse(yamlMetaStr)
 
   return [rawMetaData, md]
+}
+
+export function makeStrHashTags(tags: string[] = [], common: string[] = []): string {
+  const allTags: string[] = []
+
+  for (const item of tags) {
+    if (item === COMMON_TAGS_MARK) {
+      for (const commonItem of common) {
+        allTags.push(commonItem)
+      }
+    }
+    else {
+      allTags.push(item)
+    }
+  }
+
+  return allTags
+    .map((el: string) => `#${el}`)
+    .join(' ')
 }

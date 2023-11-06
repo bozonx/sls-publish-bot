@@ -10,25 +10,29 @@ export interface PostMeta {
   urlName: string
   type: PostTypes
   descr?: string
+  timeCodes?: string
 
   images?: string[]
+  // TODO: наверное убрать
   sns: (keyof typeof ALL_SNS)[]
-  articleFooter?: {
-    common: string
-    [index: string]: string
-  }
-  publication: {
-    common: string
-    [index: string]: string
-  }
-  tags?: {
-    common: string[]
-    [index: string]: string[]
-  }
-  tg: {
+  common: {
+    // links which were mentioned in content
+    contentLinks: string
+    tags: string[]
+    postFooter: string
+  },
+  tg?: {
+    tags: string[]
     preview?: boolean
     urlButton?: string
     autoRemove?: string
     postCustomFooter?: string
-  }
+    pubDateTime: string
+  },
+  youtube?: {
+    contentLinks: string
+    tags: string[]
+    footer: string
+    pubDateTime: string
+  },
 }

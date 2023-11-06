@@ -44,3 +44,6 @@ sns:
   spotifyForPodcasters: Spotify for podcasters
   mave: Mave
   site: Сайт
+messages:
+  postNoDesrc: Пост не имеет короткого описания
+  postNoTimeCodes: Пост не имеет тайм кодов
