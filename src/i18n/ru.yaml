@@ -10,6 +10,7 @@ links:
   createRecord: Создать запись
   blogConfig: Настройки блога
   appConfig: Конфиг приложения
+  copyToClipboard: Скопировать в буфер обмена
 headers:
   allBlogs: Все блоги
   menu: Меню

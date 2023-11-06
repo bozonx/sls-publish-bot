@@ -1,9 +1,9 @@
-import {registerTgPost} from '../helpers/registerTgPost';
+import {registerTgPost} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/registerTgPost';
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
-import {AD_FORMATS, AD_SELL_TYPES, MediaGroupItem} from '../types/types';
-import TgChat from '../apiTg/TgChat';
-import {TgReplyBtnUrl} from '../types/TgReplyButton';
-import {addHorsInDate, makeIsoDateTimeStr} from '../helpers/helpers';
+import {AD_FORMATS, AD_SELL_TYPES, MediaGroupItem} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/types';
+import TgChat from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiTg/TgChat';
+import {TgReplyBtnUrl} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/TgReplyButton';
+import {addHorsInDate, makeIsoDateTimeStr} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/helpers';
 import {convertHtmlToNotionRichText} from '../helpers/convertHtmlToNotionRichText';
 
 

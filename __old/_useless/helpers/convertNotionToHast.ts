@@ -1,9 +1,9 @@
 import {Element, Root} from 'hast'
 import {toHtml} from 'hast-util-to-html'
-import {NotionBlocks} from '../types/notion';
-import {NOTION_BLOCK_TYPES} from '../types/notion';
-import {richTextToPlainText} from './convertHelpers';
-import {richTextToHastElements} from './convertHelpersHast';
+import {NotionBlocks} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
+import {NOTION_BLOCK_TYPES} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
+import {richTextToPlainText} from '../../src/helpers/convertHelpers';
+import {richTextToHastElements} from '../../src/helpers/convertHelpersHast';
 
 
 export async function convertNotionToHtml(

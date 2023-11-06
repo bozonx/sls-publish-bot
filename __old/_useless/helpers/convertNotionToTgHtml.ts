@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import {html as htmlFormat} from 'telegram-format'
-import {NOTION_BLOCK_TYPES} from '../types/notion'
-import {NotionBlocks} from '../types/notion'
-import {richTextToPlainText} from './convertHelpers'
+import {NOTION_BLOCK_TYPES} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion'
+import {NotionBlocks} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion'
+import {richTextToPlainText} from '../../src/helpers/convertHelpers'
 import {richTextToHtml, richTextToHtmlCodeBlock} from './convertHelpersHtml';
 
 

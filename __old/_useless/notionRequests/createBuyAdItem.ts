@@ -1,6 +1,6 @@
 import {CreatePageParameters} from '@notionhq/client/build/src/api-endpoints.js';
-import TgChat from '../apiTg/TgChat';
-import {AD_BUY_TYPES, AD_FORMATS} from '../types/types';
+import TgChat from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiTg/TgChat';
+import {AD_BUY_TYPES, AD_FORMATS} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/types';
 import {convertHtmlToNotionRichText} from '../helpers/convertHtmlToNotionRichText';
 
 

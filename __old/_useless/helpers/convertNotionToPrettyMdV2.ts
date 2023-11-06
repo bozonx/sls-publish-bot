@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import {NOTION_BLOCK_TYPES} from '../types/notion';
-import {NotionBlocks} from '../types/notion';
-import {richTextToPlainText} from './convertHelpers';
-import {richTextToMdV2, richTextToMdV2CodeBlock} from './convertHelpersMdV2';
-import {makeMdImageString} from './convertHelpers';
+import {NOTION_BLOCK_TYPES} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
+import {NotionBlocks} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
+import {richTextToPlainText} from '../../src/helpers/convertHelpers';
+import {richTextToMdV2, richTextToMdV2CodeBlock} from '../../src/helpers/convertHelpersMdV2';
+import {makeMdImageString} from '../../src/helpers/convertHelpers';
 
 
 export function convertNotionToPrettyMdV2(notionBlocks: NotionBlocks, skipImage = false): string {

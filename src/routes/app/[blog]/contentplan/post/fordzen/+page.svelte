@@ -7,8 +7,8 @@ import {breadcrumbs} from '$lib/store/breadcrumbs'
 import {makeStrHashTags} from "$lib/helpers"
 import SectionHeader from "$lib/components/SectionHeader.svelte"
 import RenderHtml from "$lib/components/common/RenderHtml.svelte"
-import {convertCommonMdToCleanText} from "$lib/convert/convertCommonMdToCleanText"
-import {convertCommonMdToCommonHtml} from "$lib/convert/convertCommonMdToCommonHtml";
+import CopyToClipboardButton from "$lib/components/common/CopyToClipboardButton.svelte"
+import {convertCommonMdToCommonHtml} from "$lib/convert/convertCommonMdToCommonHtml"
 
 
 export let data
@@ -28,14 +28,11 @@ breadcrumbs.set([
 let post = simpleTemplate(
   replaceLineBreak(meta.dzen?.template || meta.common?.postTemplate),
   {
-    // TODO: to html
-    
-    CONTENT: (data.post.result.md || '').trim(),
+    CONTENT: convertCommonMdToCommonHtml((data.post.result.md || '').trim()),
 
     // TODO: post или article footer ????
-    // TODO: to html
 
-    FOOTER: meta.dzen?.footer || meta.common?.postFooter || '',
+    FOOTER: convertCommonMdToCommonHtml((meta.dzen?.footer || meta.common?.postFooter || '').trim()),
   }
 )
 </script>
@@ -49,13 +46,17 @@ let post = simpleTemplate(
   <section>
     <SectionHeader>{$t('headers.header')}</SectionHeader>
 
-    <pre>{meta.title}</pre>
+    <CopyToClipboardButton elementId="dzen-header">{$t('links.copyToClipboard')}</CopyToClipboardButton>
+
+    <pre id="dzen-header">{meta.title}</pre>
   </section>
 
   <section>
     <SectionHeader>{$t('headers.post')}</SectionHeader>
 
-    <pre>{post}</pre>
+    <CopyToClipboardButton elementId="dzen-content">{$t('links.copyToClipboard')}</CopyToClipboardButton>
+
+    <pre id="dzen-content">{post}</pre>
   </section>
 
 </div>

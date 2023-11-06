@@ -2,8 +2,8 @@ import * as https from 'https';
 import * as http from 'http';
 import _ from 'lodash';
 import express, {NextFunction} from 'express'
-import System from '../System';
-import {ZEN_DATA_TMPL} from './zenDataTmpl';
+import System from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/System';
+import {ZEN_DATA_TMPL} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiWebServer/zenDataTmpl';
 import * as core from 'express-serve-static-core';
 
 

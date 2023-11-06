@@ -9,6 +9,7 @@ import SectionHeader from "$lib/components/SectionHeader.svelte"
 import RenderHtml from "$lib/components/common/RenderHtml.svelte"
 import {convertCommonMdToCleanText} from "$lib/convert/convertCommonMdToCleanText"
 import {convertCommonMdToCommonHtml} from "$lib/convert/convertCommonMdToCommonHtml";
+import CopyToClipboardButton from "$lib/components/common/CopyToClipboardButton.svelte";
 
 
 export let data
@@ -67,13 +68,17 @@ let result = simpleTemplate(
   <section>
     <SectionHeader>{$t('headers.descr')}</SectionHeader>
 
-    <pre>{result}</pre>
+    <CopyToClipboardButton elementId="youtube-descr">{$t('links.copyToClipboard')}</CopyToClipboardButton>
+
+    <pre id="youtube-descr">{result}</pre>
   </section>
 
   <section>
     <SectionHeader>{$t('headers.tags')}</SectionHeader>
 
-    <pre>{makeTags(meta.youtube?.tags, meta.common?.tags).join(', ')}</pre>
+    <CopyToClipboardButton elementId="youtube-tags">{$t('links.copyToClipboard')}</CopyToClipboardButton>
+
+    <pre id="youtube-tags">{makeTags(meta.youtube?.tags, meta.common?.tags).join(', ')}</pre>
   </section>
 
 </div>

@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import TgChat from '../../apiTg/TgChat';
-import {ContentItemState} from './startPublicationMenu';
-import ContentItem from '../../types/ContentItem';
-import {NotionBlocks} from '../../types/notion';
-import {trimPageBlocks} from '../../helpers/convertHelpers';
+import TgChat from '../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiTg/TgChat';
+import {ContentItemState} from '../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/askUser/publishContentPlan/startPublicationMenu';
+import ContentItem from '../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/ContentItem';
+import {NotionBlocks} from '../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
+import {trimPageBlocks} from '../src/helpers/convertHelpers';
 import {convertNotionToHtml} from '../../helpers/convertNotionToHast';
 
 
