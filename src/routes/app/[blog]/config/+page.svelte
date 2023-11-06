@@ -18,7 +18,10 @@ breadcrumbs.set([
 const saveBlogConfigHandler = async (values) => {
   await squidletAppApi.saveBlogConfig(data.blog.name, {
     ...data.blog,
-    config: values
+    config: {
+      ...data.blog.config,
+      ...values,
+    }
   })
 }
 
