@@ -1,7 +1,7 @@
-import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../types/notion';
+import {NOTION_RICH_TEXT_TYPES, NotionAnnotation} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
 import {html as htmlFormat} from 'telegram-format/dist/source/html.js';
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {richTextToPlainText} from './convertHelpers';
+import {richTextToPlainText} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/convertHelpers';
 
 
 export function richTextToHtml(richText?: TextRichTextItemResponse[]): string {

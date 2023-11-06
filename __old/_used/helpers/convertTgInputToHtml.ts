@@ -1,5 +1,5 @@
-import {TgEntity} from '../types/TgEntity'
-import {EntityMessage} from '../apiTg/EntityMessage';
+import {TgEntity} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/TgEntity'
+import {EntityMessage} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiTg/EntityMessage';
 
 
 /**

@@ -1,7 +1,7 @@
 import {fromHtml} from 'hast-util-from-html'
 import {toMdast} from 'hast-util-to-mdast'
 import {MdastNode} from 'hast-util-to-mdast/lib';
-import {convertMdastToCleanText} from './convertMdastToCleanText';
+import {convertMdastToCleanText} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/convertMdastToCleanText';
 
 
 export function convertHtmlToCleanText(htmlStr?: string): string | undefined {

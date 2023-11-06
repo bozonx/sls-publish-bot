@@ -16,6 +16,7 @@ export interface PostMeta {
   // TODO: наверное убрать
   sns: (keyof typeof ALL_SNS)[]
   common: {
+    postTemplate: string
     // links which were mentioned in content
     contentLinks: string
     tags: string[]
@@ -30,6 +31,7 @@ export interface PostMeta {
     pubDateTime: string
   },
   youtube?: {
+    postTemplate: string
     contentLinks: string
     tags: string[]
     footer: string

@@ -8,10 +8,10 @@ import type {PostResult} from '$lib/types/PostResult'
 import type {ItemResponse} from '$lib/types/ItemResponse'
 import {browser} from '$app/environment'
 import {APP_CONFIG_YAML, BLOG_YAML, TO_PUBLISH_DIR} from '$lib/constants';
-import {splitMdAndMeta} from '$lib/helpers';
-import type {BlogConfig} from '$lib/types/BlogConfig';
-import type {AppConfig} from '$lib/types/AppConfig';
-import {APP_CONFIG_DEFAULTS} from '$lib/types/AppConfig';
+import type {BlogConfig} from '$lib/types/BlogConfig'
+import type {AppConfig} from '$lib/types/AppConfig'
+import {APP_CONFIG_DEFAULTS} from '$lib/types/AppConfig'
+import {splitMetaMd} from '$lib/convert/splitMetaMd'
 
 
 // TODO: откуда её брать???
@@ -189,7 +189,7 @@ export const squidletAppApi = {
       let md: string
 
       try {
-        [meta, md] = await splitMdAndMeta(mdFileResp.data)
+        [meta, md] = await splitMetaMd(mdFileResp.data)
       }
       catch (e) {
         throw error(500, `Error parsing yaml of "${mdFilePath}": ${e}`)
@@ -235,7 +235,7 @@ export const squidletAppApi = {
     let md: string
 
     try {
-      [meta, md] = await splitMdAndMeta(mdFileResp.data)
+      [meta, md] = await splitMetaMd(mdFileResp.data)
     }
     catch (e) {
       throw error(500, `Error parsing yaml of "${mdFilePath}": ${e}`)

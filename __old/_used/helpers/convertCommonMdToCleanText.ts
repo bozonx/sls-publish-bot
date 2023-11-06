@@ -1,5 +1,5 @@
 import {fromMarkdown} from 'mdast-util-from-markdown'
-import {convertMdastToCleanText} from './convertMdastToCleanText';
+import {convertMdastToCleanText} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/convertMdastToCleanText';
 
 
 /**

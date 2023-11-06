@@ -16,6 +16,7 @@ sns:
   - mave
   - site
 common:
+  template: ''
   contentLinks: |
     * [some link](https://ya.ru)
   tags:
@@ -30,13 +31,13 @@ tg:
   footer: 'custom fuuter string\n${TAGS}'
   pubDateTime: 2023-11-10T13:00Z
 youtube:
-  template: '${DESCR}\n\n${TIME_CODES}\n\n${LINKS}${FOOTER}\n\n${TAGS}'
+  template: '${DESCR}\n\n${TIME_CODES}\n\n${LINKS}\n${FOOTER}\n\n${TAGS}'
   contentLinks: |
     * [some link](https://ya.ru)
   tags:
     - '!COMON!'
     - someyoutubetag
-  footer: '${LINKS}yt footer\n${TAGS}'
+  footer: 'yt footer'
   pubDateTime: 2023-11-10T13:00Z
 ---
 

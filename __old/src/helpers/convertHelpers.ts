@@ -1,5 +1,5 @@
 import {TextRichTextItemResponse} from '@notionhq/client/build/src/api-endpoints.js';
-import {NotionBlocks} from '../types/notion';
+import {NotionBlocks} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/notion';
 
 
 /**
