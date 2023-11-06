@@ -46,7 +46,9 @@ const handleSnSave = async (values) => {
   <div class="mt-7">
     <MenuWrapper>
       <li>
-        <MenuItem>{$t('menu.edit')}</MenuItem>
+        <MenuItem
+          href="/app/{$page.params.blog}/contentplan/edit?item={meta.fileName}"
+        >{$t('menu.edit')}</MenuItem>
       </li>
       <li>
         <MenuItem>{$t('menu.toArchive')}</MenuItem>
