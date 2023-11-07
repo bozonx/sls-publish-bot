@@ -45,6 +45,16 @@ menu:
 details:
   title: Название
   lang: Язык
+  type: Тип
+postTypes:
+  article: Статья
+  image: Картинка
+  gallery: Галерея
+  text: Текст
+  short: Short
+  audio: Аудио
+  video: Видео
+  poll: Опрос
 sns:
   telegram: Telegram
   dzen: Дзен

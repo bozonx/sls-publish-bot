@@ -25,7 +25,6 @@ export const POST_TYPES = {
   video: 'video',
   poll: 'poll',
 }
-export const POST_TYPES_KEYS = Object.keys(POST_TYPES)
 export type PostTypes = keyof typeof POST_TYPES
 
 export const CONTENT_VIEW = {

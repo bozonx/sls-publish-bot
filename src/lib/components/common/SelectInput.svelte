@@ -1,15 +1,28 @@
 <script>
-  import { Label, Select } from 'flowbite-svelte';
-  let selected;
+import { Select } from 'flowbite-svelte'
+import FktInput from '$lib/components/common/FkInput.svelte'
+import {FieldEvent} from "formkit"
+import { createEventDispatcher } from 'svelte'
 
-  let countries = [
-    { value: 'us', name: 'United States' },
-    { value: 'ca', name: 'Canada' },
-    { value: 'fr', name: 'France' }
-  ];
+const dispatch = createEventDispatcher()
+
+export let selected
+export let placeholder = ''
+
+export let disabled
+export let items
+
+const handleChange = (event) => {
+  dispatch('select', event.target.value)
+}
 </script>
 
-<Label>
-  Select an option
-  <Select class="mt-2" items={countries} bind:value={selected} />
-</Label>
+<Select
+  {items}
+  bind:value={selected}
+  on:change={handleChange}
+  on:focus
+  on:blur
+  {placeholder}
+  {disabled}
+/>
