@@ -80,8 +80,10 @@ export const squidletAppApi = {
   async loadAllBlogs(): Promise<ListResponse<BlogMeta>> {
     const result = []
     const resp = await squidletUi?.send({
-      method: 'ctx.userData.readDir',
-      arguments: [PUBLISHER_ROOT_DIR],
+      data: {
+        method: 'ctx.userData.readDir',
+        arguments: [PUBLISHER_ROOT_DIR],
+      },
     })
 
     if (resp.errorStatus) {
@@ -92,8 +94,10 @@ export const squidletAppApi = {
     for (const dirName of resp.data) {
       const blogYamlPath = pathJoin(PUBLISHER_ROOT_DIR, dirName, BLOG_YAML)
       const blogResp = await squidletUi?.send({
-        method: 'ctx.userData.readTextFile',
-        arguments: [blogYamlPath],
+        data: {
+          method: 'ctx.userData.readTextFile',
+          arguments: [blogYamlPath],
+        }
       })
 
       if (blogResp.errorStatus) {
@@ -127,8 +131,10 @@ export const squidletAppApi = {
   async loadBlogData(blogName: string): Promise<ItemResponse<BlogMeta>> {
     const blogYamlPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, BLOG_YAML)
     const blogResp = await squidletUi?.send({
-      method: 'ctx.userData.readTextFile',
-      arguments: [blogYamlPath],
+      data: {
+        method: 'ctx.userData.readTextFile',
+        arguments: [blogYamlPath],
+      }
     })
 
     if (blogResp.errorStatus) {
@@ -164,8 +170,10 @@ export const squidletAppApi = {
     const result = []
     const toPublishDirPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, TO_PUBLISH_DIR)
     const resp = await squidletUi?.send({
-      method: 'ctx.userData.readDir',
-      arguments: [toPublishDirPath],
+      data: {
+        method: 'ctx.userData.readDir',
+        arguments: [toPublishDirPath],
+      },
     })
 
     if (resp.errorStatus) {
@@ -177,8 +185,10 @@ export const squidletAppApi = {
     for (const mdFileName of filtered) {
       const mdFilePath = pathJoin(toPublishDirPath, mdFileName)
       const mdFileResp = await squidletUi?.send({
-        method: 'ctx.userData.readTextFile',
-        arguments: [mdFilePath],
+        data: {
+          method: 'ctx.userData.readTextFile',
+          arguments: [mdFilePath],
+        }
       })
 
       if (mdFileResp.errorStatus) {
@@ -223,8 +233,10 @@ export const squidletAppApi = {
       postFileName
     )
     const mdFileResp = await squidletUi?.send({
-      method: 'ctx.userData.readTextFile',
-      arguments: [mdFilePath],
+      data: {
+        method: 'ctx.userData.readTextFile',
+        arguments: [mdFilePath],
+      },
     })
 
     if (mdFileResp.errorStatus) {
@@ -262,8 +274,10 @@ export const squidletAppApi = {
     )
     const yamlStr = yaml.stringify(config)
     const mdFileResp = await squidletUi?.send({
-      method: 'ctx.userData.writeFile',
-      arguments: [blogYamlPath, yamlStr],
+      data: {
+        method: 'ctx.userData.writeFile',
+        arguments: [blogYamlPath, yamlStr],
+      },
     })
 
     if (mdFileResp.errorStatus) {
@@ -276,8 +290,10 @@ export const squidletAppApi = {
    */
   async loadAppConfig(): Promise<ItemResponse<AppConfig>> {
     const existsResp = await squidletUi?.send({
-      method: 'ctx.cfg.isExists',
-      arguments: [APP_CONFIG_YAML],
+      data: {
+        method: 'ctx.cfg.isExists',
+        arguments: [APP_CONFIG_YAML],
+      }
     })
 
     if (existsResp.errorStatus) throw error(existsResp.errorStatus, existsResp.errorMessage)
@@ -288,15 +304,19 @@ export const squidletAppApi = {
 
       // make config for Publisher app
       const mkdirpResp = await squidletUi?.send({
-        method: 'ctx.cfg.mkDirP',
-        arguments: ['/'],
+        data: {
+          method: 'ctx.cfg.mkDirP',
+          arguments: ['/'],
+        }
       })
 
       if (mkdirpResp.errorStatus) throw error(mkdirpResp.errorStatus, mkdirpResp.errorMessage)
 
       const createResp = await squidletUi?.send({
-        method: 'ctx.cfg.writeFile',
-        arguments: [APP_CONFIG_YAML, yaml.stringify(APP_CONFIG_DEFAULTS)],
+        data: {
+          method: 'ctx.cfg.writeFile',
+          arguments: [APP_CONFIG_YAML, yaml.stringify(APP_CONFIG_DEFAULTS)],
+        }
       })
 
       if (createResp.errorStatus) throw error(createResp.errorStatus, createResp.errorMessage)
@@ -307,8 +327,10 @@ export const squidletAppApi = {
     }
 
     const loadResp = await squidletUi?.send({
-      method: 'ctx.cfg.readTextFile',
-      arguments: [APP_CONFIG_YAML],
+      data: {
+        method: 'ctx.cfg.readTextFile',
+        arguments: [APP_CONFIG_YAML],
+      }
     })
 
     if (loadResp.errorStatus) throw error(loadResp.errorStatus, loadResp.errorMessage)
@@ -330,8 +352,10 @@ export const squidletAppApi = {
   async saveAppConfig(config: AppConfig): Promise<void> {
     const yamlStr = yaml.stringify(config)
     const writeResp = await squidletUi?.send({
-      method: 'ctx.cfg.writeFile',
-      arguments: [APP_CONFIG_YAML, yamlStr],
+      data: {
+        method: 'ctx.cfg.writeFile',
+        arguments: [APP_CONFIG_YAML, yamlStr],
+      }
     })
 
     if (writeResp.errorStatus) throw error(writeResp.errorStatus, writeResp.errorMessage)

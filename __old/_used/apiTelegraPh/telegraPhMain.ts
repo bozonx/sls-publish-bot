@@ -1,6 +1,6 @@
-import System from '../System';
+import System from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/System';
 import {Account, PageList, Telegraph, upload, NodeElement} from "better-telegraph";
-import {makeTelegraPhUrl} from '../helpers/helpers';
+import {makeTelegraPhUrl} from '../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/helpers';
 
 
 export default class TelegraPhMain {
