@@ -46,6 +46,7 @@ details:
   title: Название
   lang: Язык
   type: Тип
+  descr: Короткое описание статьи
 postTypes:
   article: Статья
   image: Картинка

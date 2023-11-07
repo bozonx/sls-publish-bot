@@ -2,8 +2,10 @@
 import FkForm from '$lib/components/common/FkForm.svelte'
 import {t} from '$lib/store/t'
 import FkTextInput from "$lib/components/common/FkTextInput.svelte"
+import FkTextArea from "$lib/components/common/FkTextArea.svelte"
 import SelectPostType from "$lib/components/SelectPostType.svelte"
 import FormRow from "$lib/components/common/FormRow.svelte"
+import {POST_TYPES} from "$lib/constants"
 
 
 export let handleSave = null
@@ -11,7 +13,6 @@ export let item
 
 const meta = item.result.meta
 
-console.log(111, meta)
 </script>
 
 <FkForm let:form {handleSave}>
@@ -42,4 +43,17 @@ console.log(111, meta)
   >
     <SelectPostType {field} />
   </FormRow>
+
+  {#if meta.type === POST_TYPES.article}
+    <FormRow
+      label={$t('details.descr')}
+      {form}
+      name="descr"
+      initial={meta.descr}
+      let:field
+    >
+      <FkTextArea {field} />
+    </FormRow>
+  {/if}
+
 </FkForm>
