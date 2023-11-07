@@ -13,11 +13,6 @@ let selected = field.value
 let items = Object.keys(POST_TYPES).map((item) => {
   return { value: item, name: $t(`postTypes.${item}`) }
 })
-//   [
-//   { value: 'us', name: 'United States' },
-//   { value: 'ca', name: 'Canada' },
-//   { value: 'fr', name: 'France' }
-// ];
 
 const handleSelect = (event) => {
   console.log(222, event.detail)
