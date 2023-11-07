@@ -1,7 +1,7 @@
 import {Page} from 'better-telegraph/src/types.js';
-import TgChat from '../../apiTg/TgChat';
-import {askTelegraphList} from './askTelegraphList';
-import {askConfirm} from '../common/askConfirm';
+import TgChat from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiTg/TgChat';
+import {askTelegraphList} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/askUser/telegraph/askTelegraphList';
+import {askConfirm} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/askUser/common/askConfirm';
 
 
 export async function startTelegraphList(tgChat: TgChat) {

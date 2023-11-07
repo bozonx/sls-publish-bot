@@ -1,7 +1,7 @@
-import TgChat from '../../apiTg/TgChat';
-import {addSimpleStep} from '../../helpers/helpers';
-import {TgReplyButton} from '../../types/TgReplyButton';
-import {CANCEL_BTN_CALLBACK} from '../../helpers/buttons';
+import TgChat from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiTg/TgChat';
+import {addSimpleStep} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/helpers';
+import {TgReplyButton} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/TgReplyButton';
+import {CANCEL_BTN_CALLBACK} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/buttons';
 
 
 export type TelegraphMenu = 'TELEGRAPH_LIST';

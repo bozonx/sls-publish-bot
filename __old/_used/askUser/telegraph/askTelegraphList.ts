@@ -1,10 +1,10 @@
 import {PageList, Page} from 'better-telegraph';
-import {compactUndefined} from 'squidlet-lib';
-import TgChat from '../../apiTg/TgChat';
-import {addSimpleStep} from '../../helpers/helpers';
-import {TgReplyButton} from '../../types/TgReplyButton';
-import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../helpers/buttons';
-import {Pagination} from '../../helpers/Pagination';
+import {compactUndefined} from '../../../../../../../../../mnt/disk2/workspace/squidlet-lib';
+import TgChat from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/apiTg/TgChat';
+import {addSimpleStep} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/helpers';
+import {TgReplyButton} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/types/TgReplyButton';
+import {BACK_BTN_CALLBACK, CANCEL_BTN_CALLBACK, makeBackBtn, makeCancelBtn} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/buttons';
+import {Pagination} from '../../../../../../../../../mnt/disk2/workspace/sls-publish-bot/__old/src/helpers/Pagination';
 
 
 export const TELEGRAPH_LIST_MENU = {
