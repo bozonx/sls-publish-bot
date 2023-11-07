@@ -20,7 +20,11 @@ let publishSns = [...allAllowedSns]
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
   {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.contentPlan')},
-  {title: meta.title},
+  {
+    href: `/app/${$page.params.blog}/contentplan/post?item=${meta.fileName}`,
+    title: meta.title
+  },
+  {title: $t('menu.edit')},
 ])
 
 const handleSnSave = async (values) => {

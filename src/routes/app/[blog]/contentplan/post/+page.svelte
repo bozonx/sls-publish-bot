@@ -10,7 +10,7 @@ import MenuWrapper from "$lib/components/MenuWrapper.svelte";
 import MenuItem from "$lib/components/MenuItem.svelte";
 import FkForm from "$lib/components/common/FkForm.svelte";
 import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte"
-import {ALL_SNS} from '$lib/constants'
+import {ALL_SNS, POST_TYPES} from '$lib/constants'
 
 
 export let data
@@ -60,15 +60,25 @@ const handleSnSave = async (values) => {
     <SectionHeader>{$t('headers.preview')}</SectionHeader>
 
     <MenuWrapper>
-      <li>
-        <MenuItem>{$t('menu.previewArticle')}</MenuItem>
-      </li>
-      <li>
-        <MenuItem>{$t('menu.previewPost')}</MenuItem>
-      </li>
-      <li>
-        <MenuItem>{$t('menu.previewTgPost')}</MenuItem>
-      </li>
+      {#if meta.type === POST_TYPES.article}
+        <li>
+          <MenuItem
+            href="/app/{$page.params.blog}/contentplan/post/preview-article?item={meta.fileName}"
+          >{$t('menu.previewArticle')}</MenuItem>
+        </li>
+      {:else}
+        <li>
+          <MenuItem
+            href="/app/{$page.params.blog}/contentplan/post/preview-post?item={meta.fileName}"
+          >{$t('menu.previewPost')}</MenuItem>
+        </li>
+      {/if}
+
+      {#if meta.telegram}
+        <li>
+          <MenuItem>{$t('menu.previewTgPost')}</MenuItem>
+        </li>
+      {/if}
     </MenuWrapper>
   </div>
 
