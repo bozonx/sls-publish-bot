@@ -5,6 +5,7 @@ export const COMMON_TAGS_MARK = '!COMON!'
 export const BLOG_YAML = 'blog.yaml'
 export const APP_CONFIG_YAML = 'app.yaml'
 export const TO_PUBLISH_DIR = 'toPublish'
+export const TELEGRAPH_PER_PAGE = 10
 export const ALL_SNS = {
   telegram: 'telegram',
   dzen: 'dzen',

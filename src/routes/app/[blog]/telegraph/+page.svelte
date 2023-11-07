@@ -4,6 +4,8 @@ import { page } from '$app/stores'
 import SectionHeader from '$lib/components/SectionHeader.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 import DetailItem from "$lib/components/DetailItem.svelte"
+import TelegraphItem from "$lib/components/TelegraphItem.svelte"
+import {TELEGRAPH_PER_PAGE} from "$lib/constants"
 
 
 export let data
@@ -16,6 +18,7 @@ breadcrumbs.set([
 
 let accountInfo
 let pages
+//let currentPage = $page.url.searchParams.get('page') || 1
 
 const loadInfo = async () => {
   const resp = await fetch(
@@ -41,7 +44,7 @@ const loadPages = async (limit, offset) => {
 }
 
 loadInfo()
-loadPages(2, 0)
+loadPages(TELEGRAPH_PER_PAGE, 0)
 
 </script>
 
@@ -64,15 +67,7 @@ loadPages(2, 0)
       <ul>
         {#each pages.pages as item}
           <li>
-            <a href={item.url} class="block">
-              <h4>{item.title}</h4>
-              <div>
-                <span>can edit: {item.can_edit}</span>
-                <span>views: {item.views}</span>
-              </div>
-              <img src={item.image_url} />
-              <p>{item.description}</p>
-            </a>
+            <TelegraphItem {item} />
           </li>
         {/each}
       </ul>
