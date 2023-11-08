@@ -18,10 +18,8 @@ headers:
   preview: Предпросмотр
   publish: Опубликовать
   publishData: Сформировать материал публикации
-  descr: Описание
   header: Заголовок
   post: Пост
-  tags: Тэги
   reminder: Незабудьте
 chunks:
   blog: Блог
@@ -43,10 +41,24 @@ menu:
   edit: Редактировать
   toArchive: Переместить в архив
 details:
+  fileName: Имя файла
   title: Название
   lang: Язык
   type: Тип
   descr: Короткое описание статьи
+  timeCodes: Тайм коды
+  preview: Показывать превью ссылки
+  urlButton: URL кнопка
+  articleTemplate: Темплейт статьи
+  postTemplate: Темплейт поста
+  template: Темплейт
+  articleFooter: Футер статьи (MD формат)
+  postFooter: Футер поста (MD формат)
+  footer: Футер (MD формат)
+  contentLinks: Ссылки на которые ссылаются в контенте (MD формат)
+  autoRemove: Время авто удаления поста
+  tags: Тэги
+  pubDateTime: Время публикации
 postTypes:
   article: Статья
   image: Картинка
@@ -79,4 +91,3 @@ texts:
   podcastHint: |
     - Загрузить картинку
     - Установить дату публикации
-

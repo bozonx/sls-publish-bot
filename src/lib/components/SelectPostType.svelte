@@ -14,9 +14,6 @@ let items = Object.keys(POST_TYPES).map((item) => {
   return { value: item, name: $t(`postTypes.${item}`) }
 })
 
-const handleSelect = (event) => {
-  console.log(222, event.detail)
-}
 
 const handleInputMount = (field) => {
   field.on(FieldEvent.change, (data) => {
@@ -29,7 +26,7 @@ const handleInputMount = (field) => {
 <FktInput {field} let:disabled handleMount={handleInputMount}>
   <SelectInput
     {items}
-    on:select={handleSelect}
+    on:select={(event) => field.handleChange(event.detail)}
     on:focus={() => field.handleFocusIn()}
     on:blur={() => field.handleBlur()}
     bind:selected

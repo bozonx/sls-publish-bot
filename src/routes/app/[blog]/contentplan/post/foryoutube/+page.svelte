@@ -61,7 +61,7 @@ let result = simpleTemplate(
   </section>
 
   <section>
-    <SectionHeader>{$t('headers.descr')}</SectionHeader>
+    <SectionHeader>{$t('details.descr')}</SectionHeader>
 
     <CopyToClipboardButton elementId="youtube-descr">{$t('links.copyToClipboard')}</CopyToClipboardButton>
 
@@ -69,7 +69,7 @@ let result = simpleTemplate(
   </section>
 
   <section>
-    <SectionHeader>{$t('headers.tags')}</SectionHeader>
+    <SectionHeader>{$t('details.tags')}</SectionHeader>
 
     <CopyToClipboardButton elementId="youtube-tags">{$t('links.copyToClipboard')}</CopyToClipboardButton>
 

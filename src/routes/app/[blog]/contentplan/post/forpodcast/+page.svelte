@@ -60,7 +60,7 @@ let descr = simpleTemplate(
   </section>
 
   <section>
-    <SectionHeader>{$t('headers.descr')}</SectionHeader>
+    <SectionHeader>{$t('details.descr')}</SectionHeader>
 
     <CopyToClipboardButton elementId="podcast-descr">{$t('links.copyToClipboard')}</CopyToClipboardButton>
 
