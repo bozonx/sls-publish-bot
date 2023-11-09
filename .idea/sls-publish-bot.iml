@@ -6,11 +6,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/_useless" />
-      <excludeFolder url="file://$MODULE_DIR$/_testData" />
       <excludeFolder url="file://$MODULE_DIR$/docker-test" />
       <excludeFolder url="file://$MODULE_DIR$/_testMD" />
       <excludeFolder url="file://$MODULE_DIR$/__old" />
       <excludeFolder url="file://$MODULE_DIR$/__old/microserviceTelegramBot/_testData" />
+      <excludeFolder url="file://$MODULE_DIR$/_testData-old" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

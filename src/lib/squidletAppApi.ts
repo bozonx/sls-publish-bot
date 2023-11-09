@@ -16,13 +16,12 @@ import {splitMetaMd} from '$lib/convert/splitMetaMd'
 
 // TODO: откуда её брать???
 // TODO: нужен ли / ???
-const PUBLISHER_ROOT_DIR = '/publisher'
+const PUBLISHER_ROOT_DIR = '/_Apps/publisher'
 
 // TODO: get from squildlet
 const DEFAULT_API_HOST = 'localhost'
 const DEFAULT_PORT = APP_API_WS_PORT
 let squidletUi: SquidletAppApiConnection | undefined
-
 
 
 (async () => {
@@ -81,10 +80,12 @@ export const squidletAppApi = {
     const result = []
     const resp = await squidletUi?.send({
       data: {
-        method: 'ctx.userData.readDir',
+        method: 'ctx.home.readDir',
         arguments: [PUBLISHER_ROOT_DIR],
       },
     })
+
+    console.log(111, PUBLISHER_ROOT_DIR, resp)
 
     if (resp.errorStatus) {
       throw error(resp.errorStatus, resp.errorMessage)
@@ -95,7 +96,7 @@ export const squidletAppApi = {
       const blogYamlPath = pathJoin(PUBLISHER_ROOT_DIR, dirName, BLOG_YAML)
       const blogResp = await squidletUi?.send({
         data: {
-          method: 'ctx.userData.readTextFile',
+          method: 'ctx.home.readTextFile',
           arguments: [blogYamlPath],
         }
       })
@@ -132,7 +133,7 @@ export const squidletAppApi = {
     const blogYamlPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, BLOG_YAML)
     const blogResp = await squidletUi?.send({
       data: {
-        method: 'ctx.userData.readTextFile',
+        method: 'ctx.home.readTextFile',
         arguments: [blogYamlPath],
       }
     })
@@ -161,7 +162,7 @@ export const squidletAppApi = {
   // async loadBlogConfig(blogName: string): Promise<ItemResponse<BlogConfig>> {
   //   const blogConfigPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, TO_PUBLISH_DIR)
   //   const resp = await squidletUi?.send({
-  //     method: 'ctx.userData.readDir',
+  //     method: 'ctx.home.readDir',
   //     arguments: [toPublishDirPath],
   //   })
   // },
@@ -171,7 +172,7 @@ export const squidletAppApi = {
     const toPublishDirPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, TO_PUBLISH_DIR)
     const resp = await squidletUi?.send({
       data: {
-        method: 'ctx.userData.readDir',
+        method: 'ctx.home.readDir',
         arguments: [toPublishDirPath],
       },
     })
@@ -186,7 +187,7 @@ export const squidletAppApi = {
       const mdFilePath = pathJoin(toPublishDirPath, mdFileName)
       const mdFileResp = await squidletUi?.send({
         data: {
-          method: 'ctx.userData.readTextFile',
+          method: 'ctx.home.readTextFile',
           arguments: [mdFilePath],
         }
       })
@@ -234,7 +235,7 @@ export const squidletAppApi = {
     )
     const mdFileResp = await squidletUi?.send({
       data: {
-        method: 'ctx.userData.readTextFile',
+        method: 'ctx.home.readTextFile',
         arguments: [mdFilePath],
       },
     })
@@ -275,7 +276,7 @@ export const squidletAppApi = {
     const yamlStr = yaml.stringify(config)
     const mdFileResp = await squidletUi?.send({
       data: {
-        method: 'ctx.userData.writeFile',
+        method: 'ctx.home.writeFile',
         arguments: [blogYamlPath, yamlStr],
       },
     })
@@ -291,7 +292,7 @@ export const squidletAppApi = {
   async loadAppConfig(): Promise<ItemResponse<AppConfig>> {
     const existsResp = await squidletUi?.send({
       data: {
-        method: 'ctx.cfg.isExists',
+        method: 'ctx.cfgSynced.isExists',
         arguments: [APP_CONFIG_YAML],
       }
     })
@@ -305,7 +306,7 @@ export const squidletAppApi = {
       // make config for Publisher app
       const mkdirpResp = await squidletUi?.send({
         data: {
-          method: 'ctx.cfg.mkDirP',
+          method: 'ctx.cfgSynced.mkDirP',
           arguments: ['/'],
         }
       })
@@ -314,7 +315,7 @@ export const squidletAppApi = {
 
       const createResp = await squidletUi?.send({
         data: {
-          method: 'ctx.cfg.writeFile',
+          method: 'ctx.cfgSynced.writeFile',
           arguments: [APP_CONFIG_YAML, yaml.stringify(APP_CONFIG_DEFAULTS)],
         }
       })
@@ -328,7 +329,7 @@ export const squidletAppApi = {
 
     const loadResp = await squidletUi?.send({
       data: {
-        method: 'ctx.cfg.readTextFile',
+        method: 'ctx.cfgSynced.readTextFile',
         arguments: [APP_CONFIG_YAML],
       }
     })
@@ -353,7 +354,7 @@ export const squidletAppApi = {
     const yamlStr = yaml.stringify(config)
     const writeResp = await squidletUi?.send({
       data: {
-        method: 'ctx.cfg.writeFile',
+        method: 'ctx.cfgSynced.writeFile',
         arguments: [APP_CONFIG_YAML, yamlStr],
       }
     })
