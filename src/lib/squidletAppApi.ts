@@ -85,8 +85,6 @@ export const squidletAppApi = {
       },
     })
 
-    console.log(111, PUBLISHER_ROOT_DIR, resp)
-
     if (resp.errorStatus) {
       throw error(resp.errorStatus, resp.errorMessage)
     }

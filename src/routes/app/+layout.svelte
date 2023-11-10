@@ -4,25 +4,35 @@ import "../../styles/styles.css"
 import {page} from '$app/stores'
 import BreadCrumbs from '$lib/components/layout/BreadCrumbs.svelte'
 import TopBar from '$lib/components/layout/TopBar.svelte'
+import SideBar from '$lib/components/layout/SideBar.svelte'
 </script>
 
-<div>
-  <header>
-    <TopBar />
-  </header>
-
+<div class="min-h-screen lg:flex w-full dark:bg-gray-900 text-gray-900 dark:text-gray-200 text-lg">
+  <!--  left col-->
   <div>
-    <div>
-      <!--sidebar-->
+    <div
+      id="app-drawer"
+      class="w-80 lg:w-72 max-lg:overflow-y-auto max-lg:overflow-x-clip max-lg:fixed lg:h-fit"
+    >
+      <SideBar />
     </div>
-    <div class="pt-2">
-      <div class="mb-5">
-        <BreadCrumbs />
-      </div>
+    <div id="app-drawer-backdrop" class="hidden"></div>
+  </div>
+  <!-- right col-->
+  <div class="flex-1">
+    <header>
+      <TopBar />
+    </header>
 
-      <main>
+    <div class="lg:flex justify-center">
+      <main id="app-page" class="mt-4 px-4 sm:px-8">
+        <div class="mb-6">
+          <BreadCrumbs />
+        </div>
+
         <slot />
       </main>
+
     </div>
 
   </div>
