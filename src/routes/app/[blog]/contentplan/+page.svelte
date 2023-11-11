@@ -1,7 +1,6 @@
 <script>
 import {t} from '$lib/store/t'
 import { page } from '$app/stores'
-import BlogDetails from '$lib/components/BlogDetails.svelte'
 import SelectPost from '$lib/components/SelectPost.svelte'
 import SectionHeader from '$lib/components/SectionHeader.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
@@ -19,7 +18,6 @@ breadcrumbs.set([
 </script>
 
 <div>
-  <BlogDetails item={data.blog} />
 
   <MenuWrapper>
     <li>
