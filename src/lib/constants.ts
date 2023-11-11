@@ -1,3 +1,5 @@
+export const APP_NAME = 'bozonx.publisher'
+// TODO: get from squidlet
 export const FILE_ENCODE = 'utf8'
 export const DEFAULT_LANG = 'ru'
 export const SUPPORTED_LANGS = ['ru']
