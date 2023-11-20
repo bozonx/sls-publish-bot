@@ -29,7 +29,7 @@ export let handleSave = null
     {form}
     let:field
   >
-    <FkTextInput {field} />
+    <FkTextInput {field} disabled />
   </FormRow>
 
   <FormRow

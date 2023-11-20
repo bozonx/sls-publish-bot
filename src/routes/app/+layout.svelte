@@ -1,4 +1,5 @@
 <script>
+import { Toast } from 'flowbite-svelte'
 import { onMount } from 'svelte'
 import "../../app.postcss"
 import "../../styles/styles.css"
@@ -6,6 +7,8 @@ import {page} from '$app/stores'
 import BreadCrumbs from '$lib/components/layout/BreadCrumbs.svelte'
 import TopBar from '$lib/components/layout/TopBar.svelte'
 import SideBar from '$lib/components/layout/SideBar.svelte'
+import NotifyItem from '$lib/components/NotifyItem.svelte'
+import {toasts} from '$lib/store/toasts'
 
 
 let drawerOpen = true
@@ -67,4 +70,10 @@ $: {
 
   </div>
 
+</div>
+
+<div id="toast-container">
+  {#each $toasts as item}
+    <NotifyItem {item} />
+  {/each}
 </div>

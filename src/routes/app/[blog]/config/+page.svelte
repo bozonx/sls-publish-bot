@@ -6,9 +6,17 @@ import SectionHeader from '$lib/components/SectionHeader.svelte'
 import BlogConfigForm from '$lib/components/BlogConfigForm.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 import {squidletAppApi} from '$lib/squidletAppApi'
+import {pushToast} from "$lib/store/toasts"
 
+
+pushToast({
+  text: 'aaa',
+  purpose: 'log',
+})
 
 export let data
+
+let blogView = data.blog
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
@@ -16,16 +24,24 @@ breadcrumbs.set([
 ])
 
 const saveBlogConfigHandler = async (values) => {
-  await squidletAppApi.saveBlogConfig(data.blog.name, {
-    ...data.blog,
-    config: deepMerge(values, data.blog.config)
-  })
+  const newData = deepMerge(values, blogView)
+
+  // TODO: а что если поменялось имя - надо переименовать папку
+
+  try {
+    await squidletAppApi.saveBlogConfig(newData.name, newData)
+  }
+  catch (e) {
+    // TODO: если не прошо сохранение то надо поднять notify
+    console.error(e)
+
+
+    return
+  }
+
+  dataView = newData
 }
 
 </script>
 
-<div>
-  <SectionHeader>{$t('links.blogConfig')}</SectionHeader>
-
-  <BlogConfigForm blog={data.blog} handleSave={saveBlogConfigHandler} />
-</div>
+<BlogConfigForm blog={blogView} handleSave={saveBlogConfigHandler} />

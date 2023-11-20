@@ -50,6 +50,15 @@ button {
 	outline: 0;
 }
 
+/******** Toast */
+
+#toast-container {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
 /******** App Drawer */
 
 #app-drawer {
