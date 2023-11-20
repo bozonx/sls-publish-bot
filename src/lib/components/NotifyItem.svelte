@@ -7,17 +7,29 @@ import {
   InfoCircleSolid,
   AnnotationSolid,
 } from "flowbite-svelte-icons"
+import { slide } from 'svelte/transition';
+import { quintOut } from 'svelte/easing';
 import {PURPOSE, PURPOSE_TO_COLOR} from '$lib/types/Purpose'
 
 export let item
 
+const duration = 300
+//position="bottom-right"
+
+const onClose = () => {
+  setTimeout(() => {
+    item.$onclose()
+  }, duration)
+}
 </script>
 
+
 <Toast
+  transition={slide}
+  params={{ duration: duration, easing: quintOut }}
   color={PURPOSE_TO_COLOR[item.purpose]}
-  dismissable={item.dismissable}
-  position="bottom-right"
-  on:close={item.$onclose}
+  dismissable={true}
+  on:close={onClose}
 >
   <svelte:fragment slot="icon">
     {#if item.purpose === PURPOSE.error}

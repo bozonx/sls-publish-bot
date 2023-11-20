@@ -73,7 +73,11 @@ $: {
 </div>
 
 <div id="toast-container">
-  {#each $toasts as item}
-    <NotifyItem {item} />
+  {#each $toasts.reverse() as item}
+    {#key item.id}
+      <div class="mr-5 mb-2 toast-wrapper">
+        <NotifyItem {item} />
+      </div>
+    {/key}
   {/each}
 </div>

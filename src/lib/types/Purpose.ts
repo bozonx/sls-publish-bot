@@ -3,7 +3,7 @@ export const PURPOSE_TO_COLOR = {
   error: 'red',
   warn: 'orange',
   info: 'blue',
-  log: undefined,
+  log: null,
 }
 
 export const PURPOSE = {

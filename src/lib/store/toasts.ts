@@ -12,6 +12,8 @@ let toastId = 0
 export function pushToast(item: ToastType) {
   const id = toastId
 
+  toastId++
+
   toasts.set([...get(toasts), {
     ...TOAST_DEFAULTS,
     ...item,
@@ -22,13 +24,8 @@ export function pushToast(item: ToastType) {
 
       if (index >= 0) {
         newValue.splice(index, 1)
-
         toasts.set(newValue)
       }
     }
   }])
-
-  toastId++
-
-  // TODO: set timeout
 }

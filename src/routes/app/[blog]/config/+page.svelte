@@ -13,6 +13,11 @@ pushToast({
   text: 'aaa',
   purpose: 'log',
 })
+pushToast({
+  text: 'bbb',
+  purpose: 'error',
+})
+
 
 export let data
 

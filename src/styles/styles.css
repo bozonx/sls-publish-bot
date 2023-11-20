@@ -55,9 +55,19 @@ button {
 #toast-container {
 	position: fixed;
 	bottom: 0;
-	left: 0;
 	right: 0;
 }
+
+.toast-wrapper {
+	min-width: 20rem;
+}
+
+@media (max-width: 1200px) {
+	.toast-wrapper {
+		max-width: 40rem;
+	}
+}
+
 
 /******** App Drawer */
 
