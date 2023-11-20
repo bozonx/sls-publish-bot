@@ -21,6 +21,7 @@ headers:
   header: Заголовок
   post: Пост
   reminder: Незабудьте
+  config: Настройки
 chunks:
   blog: Блог
 menu:
@@ -43,6 +44,7 @@ menu:
 details:
   fileName: Имя файла
   title: Название
+  safeName: URL безопасное имя блога
   lang: Язык
   type: Тип
   descr: Короткое описание статьи
@@ -50,6 +52,7 @@ details:
   preview: Показывать превью ссылки
   urlButton: URL кнопка
   articleTemplate: Темплейт статьи
+  articlePostTmpl: Темплейт поста в канал для статьи
   postTemplate: Темплейт поста
   template: Темплейт
   articleFooter: Футер статьи (MD формат)
@@ -59,6 +62,11 @@ details:
   autoRemove: Время авто удаления поста
   tags: Тэги
   pubDateTime: Время публикации
+  controlledChannelId: ID управляемого (публичного) канала, в виде цифр
+  supportedTypes: Поддерживаемые типы постов в этом блоге
+  telegraphToken: Токен аккаунта telegraph
+  authorName: Имя автора в свободном формате
+  authorUrl: URL автора
 postTypes:
   article: Статья
   image: Картинка

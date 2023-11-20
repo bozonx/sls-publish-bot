@@ -8,7 +8,7 @@ export let name
 export let initial = null
 </script>
 
-<div>
+<div class="mb-5">
   <FktInput {form} {name} {initial} let:valid let:invalidMsg let:field>
     <Label for={name} class="block mb-2">{label}</Label>
     <div>

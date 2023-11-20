@@ -1,14 +1,35 @@
 <script>
-  import { MultiSelect } from 'flowbite-svelte';
+  import {MultiSelect, Select} from 'flowbite-svelte';
+import { createEventDispatcher } from 'svelte'
 
-  let selected = [];
-  let countries = [
-    { value: 'us', name: 'United States' },
-    { value: 'ca', name: 'Canada' },
-    { value: 'fr', name: 'France' },
-    { value: 'jp', name: 'Japan' },
-    { value: 'en', name: 'England' }
-  ];
+const dispatch = createEventDispatcher()
+
+export let selected
+export let placeholder = ''
+
+export let disabled
+export let items
+
+console.log(222, selected)
+
+const handleChange = (event) => {
+  console.log(111, event)
+
+  //dispatch('select', event.target.value)
+}
+
+/*
+  bind:value={selected}
+  on:change={handleChange}
+  on:input={handleChange}
+ */
 </script>
 
-<MultiSelect items={countries} bind:value={selected} />
+<MultiSelect
+  {items}
+
+  on:focus
+  on:blur
+  {placeholder}
+  {disabled}
+/>

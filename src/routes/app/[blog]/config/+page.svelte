@@ -27,5 +27,5 @@ const saveBlogConfigHandler = async (values) => {
 <div>
   <SectionHeader>{$t('links.blogConfig')}</SectionHeader>
 
-  <BlogConfigForm config={data.blog.config} handleSave={saveBlogConfigHandler} />
+  <BlogConfigForm blog={data.blog} handleSave={saveBlogConfigHandler} />
 </div>
