@@ -11,6 +11,7 @@ export const TO_PUBLISH_DIR = 'toPublish'
 export const ARCHIVE_DIR = 'archive'
 export const TELEGRAPH_PER_PAGE = 10
 export const PAGE_ID_LENGTH = 8
+export const TOAST_AUTO_CLOSE_TIMEOUT_SEC = 30
 export const ALL_SNS = {
   telegram: 'telegram',
   dzen: 'dzen',
