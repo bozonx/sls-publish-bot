@@ -23,7 +23,7 @@ const handleCreate = () => {
   (async () => {
     const pageId = await squidletAppApi.createToPublishPost($page.params.blog)
 
-    goto(`/app/${$page.params.blog}/contentplan/post?item=pageId`)
+    goto(`/app/${$page.params.blog}/contentplan/edit?postid=${pageId}`)
   })()
     .catch((e) => pushToast({
       text: `Can't save: ${e}`,

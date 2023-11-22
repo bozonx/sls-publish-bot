@@ -12,8 +12,8 @@ export let postResp
 <MenuWrapper>
   {#each postResp.result as item}
     <li>
-      <MenuItem href="/app/{$page.params.blog}/contentplan/post?item={item.meta.postId}">
-        {item.meta.title}
+      <MenuItem href="/app/{$page.params.blog}/contentplan/post?postid={item.meta.postId}">
+        {item.meta.title || item.meta.postId}
       </MenuItem>
     </li>
   {/each}

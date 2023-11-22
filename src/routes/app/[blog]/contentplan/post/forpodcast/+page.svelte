@@ -19,8 +19,8 @@ breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
   {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.contentPlan')},
   {
-    href: `/app/${$page.params.blog}/contentplan/post?item=${meta.postId}`,
-    title: meta.title
+    href: `/app/${$page.params.blog}/contentplan/post?postid=${meta.postId}`,
+    title: meta.title || meta.postId
   },
   {title: $t('menu.pubDataPodcast')},
 ])

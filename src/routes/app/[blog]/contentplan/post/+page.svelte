@@ -22,7 +22,7 @@ let publishSns = [...allAllowedSns]
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
   {href: `/app/${$page.params.blog}/contentplan`, title: $t('links.contentPlan')},
-  {title: meta.title},
+  {title: meta.title || meta.postId},
 ])
 
 const handleSnSave = async (values) => {
@@ -47,7 +47,7 @@ const handleSnSave = async (values) => {
     <MenuWrapper>
       <li>
         <MenuItem
-          href="/app/{$page.params.blog}/contentplan/edit?item={meta.postId}"
+          href="/app/{$page.params.blog}/contentplan/edit?postid={meta.postId}"
         >{$t('menu.edit')}</MenuItem>
       </li>
       <li>
@@ -63,13 +63,13 @@ const handleSnSave = async (values) => {
       {#if meta.type === POST_TYPES.article}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/preview-article?item={meta.postId}"
+            href="/app/{$page.params.blog}/contentplan/post/preview-article?postid={meta.postId}"
           >{$t('menu.previewArticle')}</MenuItem>
         </li>
       {:else}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/preview-post?item={meta.postId}"
+            href="/app/{$page.params.blog}/contentplan/post/preview-post?postid={meta.postId}"
           >{$t('menu.previewPost')}</MenuItem>
         </li>
       {/if}
@@ -89,21 +89,21 @@ const handleSnSave = async (values) => {
       {#if meta.dzen}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/fordzen?item={meta.postId}"
+            href="/app/{$page.params.blog}/contentplan/post/fordzen?postid={meta.postId}"
           >{$t('menu.pubDataZen')}</MenuItem>
         </li>
       {/if}
       {#if meta.podcast}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/forpodcast?item={meta.postId}"
+            href="/app/{$page.params.blog}/contentplan/post/forpodcast?postid={meta.postId}"
           >{$t('menu.pubDataPodcast')}</MenuItem>
         </li>
       {/if}
       {#if meta.youtube}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/foryoutube?item={meta.postId}"
+            href="/app/{$page.params.blog}/contentplan/post/foryoutube?postid={meta.postId}"
           >{$t('menu.pubDataYoutube')}</MenuItem>
         </li>
       {/if}

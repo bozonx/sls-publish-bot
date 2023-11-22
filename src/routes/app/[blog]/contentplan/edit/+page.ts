@@ -7,7 +7,7 @@ export const load: PageLoad = async (event) => {
     blog: (await squidletAppApi.loadBlogData(event.params.blog)).result,
     post: await squidletAppApi.loadBlogPostItem(
       event.params.blog,
-      event.url.searchParams.get('item')
+      event.url.searchParams.get('postid')
     ),
   }
 }

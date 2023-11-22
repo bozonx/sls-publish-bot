@@ -236,9 +236,9 @@ class SquidletAppApi {
     await this.squidletUi.app.ctx.home.mkdir(blogPath)
     await this.squidletUi.app.ctx.home.mkdir(pathJoin(blogPath, TO_PUBLISH_DIR))
     await this.squidletUi.app.ctx.home.mkdir(pathJoin(blogPath, ARCHIVE_DIR))
-    await this.squidletUi.app.ctx.cfgSynced.writeFile(
+    await this.squidletUi.app.ctx.home.writeFile(
       pathJoin(blogPath, BLOG_YAML),
-      `name: ${blogSafeName}\n`
+      `name: ${blogSafeName}\ntitle: ${blogSafeName}\n`
     )
   }
 

@@ -1,11 +1,11 @@
 <script>
-  import FormRow from '$lib/components/common/FormRow.svelte'
-  import FkForm from '$lib/components/common/FkForm.svelte'
-  import FkTextInput from '$lib/components/common/FkTextInput.svelte'
+import FormRow from '$lib/components/common/FormRow.svelte'
+import FkForm from '$lib/components/common/FkForm.svelte'
+import FkTextInput from '$lib/components/common/FkTextInput.svelte'
 
 
-  export let config
-  export let handleSave = null
+export let config
+export let handleSave = null
 </script>
 
 

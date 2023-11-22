@@ -7,6 +7,7 @@ links:
   sellAdPlace: Продать рекламное место
   contentPlan: Контент план
   archiveView: Архив
+  createBlog: Создать блог
   createRecord: Создать запись
   blogConfig: Настройки блога
   appConfig: Конфиг приложения
@@ -24,6 +25,8 @@ headers:
   config: Настройки
 chunks:
   blog: Блог
+  blogName: Имя блога
+  create: Создать
 menu:
   previewArticle: Предпросмотр статьи
   previewPost: Предпросмотр поста
