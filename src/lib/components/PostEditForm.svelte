@@ -23,13 +23,13 @@ let selectedSns = ['telegram', 'youtube', 'dzen', 'mave']
 
 <FkForm let:form {handleSave}>
   <FormRow
-    label={$t('details.fileName')}
+    label={$t('details.postId')}
     {form}
-    name="fileName"
-    initial={meta.fileName}
+    name="postId"
+    initial={meta.postId}
     let:value
   >
-    {meta.urlName}
+    {meta.postId}
   </FormRow>
   <FormRow
     label="urlName"

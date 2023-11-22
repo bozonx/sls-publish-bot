@@ -16,7 +16,7 @@ import {
   ARCHIVE_DIR,
   BLOG_YAML,
   PAGE_ID_LENGTH,
-  POST_INDEX_YAML,
+  POST_INDEX_MD,
   TO_PUBLISH_DIR
 } from '$lib/constants';
 import type {BlogConfig} from '$lib/types/BlogConfig'
@@ -107,11 +107,10 @@ class SquidletAppApi {
   async loadBlogPosts(blogName: string): Promise<ListResponse<PostResult>> {
     const result = []
     const toPublishDirPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, TO_PUBLISH_DIR)
-    const {data: blogsArr} = await this.squidletUi.app.ctx.home.readDir(toPublishDirPath)
-    const filtered = blogsArr.filter((item: string) => item.match(/\.md$/))
-    
-    for (const mdFileName of filtered) {
-      const mdFilePath = pathJoin(toPublishDirPath, mdFileName)
+    const {data: postsDirs} = await this.squidletUi.app.ctx.home.readDir(toPublishDirPath)
+
+    for (const postDir of postsDirs) {
+      const mdFilePath = pathJoin(toPublishDirPath, postDir, POST_INDEX_MD)
       const {data: yamlStr} = await this.squidletUi.app.ctx.home.readTextFile(mdFilePath)
       let meta: any
       let md: string
@@ -125,7 +124,8 @@ class SquidletAppApi {
 
       result.push({
         meta: {
-          fileName: mdFileName,
+          //fileName: `${postDir}/${POST_INDEX_MD}`,
+          postId: postDir,
           ...meta,
         },
         md,
@@ -143,12 +143,13 @@ class SquidletAppApi {
     //return testData.posts
   }
 
-  async loadBlogPostItem(blogName: string, postFileName: string): Promise<ItemResponse<PostResult>> {
+  async loadBlogPostItem(blogName: string, postId: string): Promise<ItemResponse<PostResult>> {
     const mdFilePath = pathJoin(
       PUBLISHER_ROOT_DIR,
       blogName,
       TO_PUBLISH_DIR,
-      postFileName
+      postId,
+      POST_INDEX_MD
     )
     const {data: mdStr} = await this.squidletUi.app.ctx.home.readTextFile(mdFilePath)
 
@@ -165,7 +166,8 @@ class SquidletAppApi {
     return {
       result: {
         meta: {
-          fileName: postFileName,
+          postId,
+          //fileName: postFileName,
           ...meta,
         },
         md,
@@ -240,14 +242,14 @@ class SquidletAppApi {
     )
   }
 
-  async createToPublishPost(): Promise<string> {
+  async createToPublishPost(blogName: string): Promise<string> {
     const id = makeUniqId(PAGE_ID_LENGTH)
-    const toPublishPath = pathJoin(PUBLISHER_ROOT_DIR, TO_PUBLISH_DIR, id)
+    const toPublishPath = pathJoin(PUBLISHER_ROOT_DIR, blogName, TO_PUBLISH_DIR, id)
     const content = `---\n---\n`
 
     await this.squidletUi.app.ctx.home.mkdir(toPublishPath)
-    await this.squidletUi.app.ctx.cfgSynced.writeFile(
-      pathJoin(toPublishPath, POST_INDEX_YAML),
+    await this.squidletUi.app.ctx.home.writeFile(
+      pathJoin(toPublishPath, POST_INDEX_MD),
       content
     )
 

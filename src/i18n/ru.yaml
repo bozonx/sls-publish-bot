@@ -42,7 +42,7 @@ menu:
   edit: Редактировать
   toArchive: Переместить в архив
 details:
-  fileName: Имя файла
+  #fileName: Имя файла
   title: Название
   safeName: URL безопасное имя блога
   lang: Язык
@@ -86,6 +86,7 @@ sns:
 messages:
   postNoDesrc: Пост не имеет короткого описания
   postNoTimeCodes: Пост не имеет тайм кодов
+  cantSave: Не удалось сохранить
 texts:
   dzenHint: |
     - Загрузить картинку

@@ -9,16 +9,6 @@ import {squidletAppApi} from '$lib/squidletAppApi'
 import {pushToast} from "$lib/store/toasts"
 
 
-pushToast({
-  text: 'aaa',
-  purpose: 'log',
-})
-pushToast({
-  text: 'bbb',
-  purpose: 'error',
-})
-
-
 export let data
 
 let blogView = data.blog
@@ -37,11 +27,10 @@ const saveBlogConfigHandler = async (values) => {
     await squidletAppApi.saveBlogConfig(newData.name, newData)
   }
   catch (e) {
-    // TODO: если не прошо сохранение то надо поднять notify
-    console.error(e)
-
-
-    return
+    return pushToast({
+      text: $t('messages.cantSave'),
+      purpose: 'error',
+    })
   }
 
   dataView = newData

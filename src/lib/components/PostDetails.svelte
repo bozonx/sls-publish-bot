@@ -9,7 +9,7 @@ export let item
 </script>
 
 <div>
-  <DetailItem label="fileName">{item.result.meta.fileName}</DetailItem>
+  <DetailItem label="postId">{item.result.meta.postId}</DetailItem>
   <DetailItem label={$t('details.title')}>
     <div id="post-title">{item.result.meta.title}</div>
     <CopyToClipboardButton elementId="post-title">{$t('links.copyToClipboard')}</CopyToClipboardButton>

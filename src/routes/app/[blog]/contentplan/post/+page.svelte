@@ -47,7 +47,7 @@ const handleSnSave = async (values) => {
     <MenuWrapper>
       <li>
         <MenuItem
-          href="/app/{$page.params.blog}/contentplan/edit?item={meta.fileName}"
+          href="/app/{$page.params.blog}/contentplan/edit?item={meta.postId}"
         >{$t('menu.edit')}</MenuItem>
       </li>
       <li>
@@ -63,13 +63,13 @@ const handleSnSave = async (values) => {
       {#if meta.type === POST_TYPES.article}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/preview-article?item={meta.fileName}"
+            href="/app/{$page.params.blog}/contentplan/post/preview-article?item={meta.postId}"
           >{$t('menu.previewArticle')}</MenuItem>
         </li>
       {:else}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/preview-post?item={meta.fileName}"
+            href="/app/{$page.params.blog}/contentplan/post/preview-post?item={meta.postId}"
           >{$t('menu.previewPost')}</MenuItem>
         </li>
       {/if}
@@ -89,21 +89,21 @@ const handleSnSave = async (values) => {
       {#if meta.dzen}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/fordzen?item={meta.fileName}"
+            href="/app/{$page.params.blog}/contentplan/post/fordzen?item={meta.postId}"
           >{$t('menu.pubDataZen')}</MenuItem>
         </li>
       {/if}
       {#if meta.podcast}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/forpodcast?item={meta.fileName}"
+            href="/app/{$page.params.blog}/contentplan/post/forpodcast?item={meta.postId}"
           >{$t('menu.pubDataPodcast')}</MenuItem>
         </li>
       {/if}
       {#if meta.youtube}
         <li>
           <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/foryoutube?item={meta.fileName}"
+            href="/app/{$page.params.blog}/contentplan/post/foryoutube?item={meta.postId}"
           >{$t('menu.pubDataYoutube')}</MenuItem>
         </li>
       {/if}
