@@ -1,6 +1,7 @@
 import type { LayoutLoad } from './$types'
 import {tStore} from '$lib/store/t';
 import {DEFAULT_LANG} from '$lib/constants';
+import {squidletAppApi} from '$lib/squidletAppApi';
 
 
 export const load: LayoutLoad = async (event) => {
@@ -15,5 +16,6 @@ export const load: LayoutLoad = async (event) => {
 
   return {
     translates,
+    allBlogs: await squidletAppApi.loadAllBlogs()
   }
 }

@@ -1,5 +1,6 @@
 <script>
 import {t} from '$lib/store/t'
+import {getContext} from "svelte";
 import AllBlogs from '$lib/components/AllBlogs.svelte'
 import MainMenu from '$lib/components/MainMenu.svelte'
 import SectionHeader from '$lib/components/SectionHeader.svelte'
@@ -10,23 +11,19 @@ import {squidletAppApi} from "$lib/squidletAppApi";
 import {page} from "$app/stores";
 import {goto} from "$app/navigation";
 import {pushToast} from "$lib/store/toasts"
+import {ALL_BLOGS_CONTEXT} from "$lib/constants";
 
 
 breadcrumbs.set([])
-export let data
 
+const allBlogs = getContext(ALL_BLOGS_CONTEXT)
 
 </script>
 
 <div>
-
-  <MenuWrapper>
-
-  </MenuWrapper>
-
   <div>
     <SectionHeader>{$t('headers.allBlogs')}</SectionHeader>
-    <AllBlogs items={data.allBlogs} />
+    <AllBlogs items={allBlogs} />
   </div>
 
   <div class="mt-5">

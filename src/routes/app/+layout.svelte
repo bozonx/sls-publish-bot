@@ -1,6 +1,6 @@
 <script>
 import { Toast } from 'flowbite-svelte'
-import { onMount } from 'svelte'
+import {onMount, setContext} from 'svelte'
 import "../../app.postcss"
 import "../../styles/styles.css"
 import {page} from '$app/stores'
@@ -9,8 +9,10 @@ import TopBar from '$lib/components/layout/TopBar.svelte'
 import SideBar from '$lib/components/layout/SideBar.svelte'
 import NotifyItem from '$lib/components/NotifyItem.svelte'
 import {toasts} from '$lib/store/toasts'
+import {ALL_BLOGS_CONTEXT} from "$lib/constants";
 
 
+export let data
 let drawerOpen = true
 let showBackdrop = false
 let windowWidth = 0
@@ -19,6 +21,8 @@ const toggleDrawer = () => {
   drawerOpen = !drawerOpen
   showBackdrop = windowWidth <= breakPoint && drawerOpen
 }
+
+setContext(ALL_BLOGS_CONTEXT, data.allBlogs)
 
 onMount(() => {
 })
@@ -47,7 +51,7 @@ $: {
       hidden={!drawerOpen}
       class="w-80 lg:w-72 max-lg:overflow-y-auto max-lg:overflow-x-clip max-lg:fixed lg:h-fit"
     >
-      <SideBar />
+      <SideBar allBlogs={data.allBlogs} />
     </div>
     <div id="app-drawer-backdrop" hidden={!showBackdrop} on:click={toggleDrawer}></div>
   </div>
