@@ -10,6 +10,7 @@ import SectionHeader from '$lib/components/SectionHeader.svelte'
 import FkForm from "$lib/components/common/FkForm.svelte";
 import FkTextInput from "$lib/components/common/FkTextInput.svelte";
 import FormRow from "$lib/components/common/FormRow.svelte";
+import FkSubmitButton from "$lib/components/common/FkSubmitButton.svelte";
 import {pushToast} from "$lib/store/toasts"
 import {goto} from '$app/navigation'
 
@@ -52,7 +53,7 @@ const validateCb = (errors, {blogName}) => {
       <FkTextInput {field} />
     </FormRow>
 
-    <Button on:click={form.handleSubmit()}>{$t('chunks.create')}</Button>
+    <FkSubmitButton {form}>{$t('chunks.create')}</FkSubmitButton>
   </FkForm>
 
 </div>

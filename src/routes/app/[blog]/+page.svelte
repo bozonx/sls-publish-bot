@@ -20,21 +20,33 @@ breadcrumbs.set([{title: data.blog.title}])
       <MenuItem href="/app/{$page.params.blog}/contentplan">
         {$t('links.contentPlan')}
       </MenuItem>
+    </li>
+    <li>
       <MenuItem href="/app/{$page.params.blog}/buyad">
         {$t('links.buyAd')}
       </MenuItem>
+    </li>
+    <li>
       <MenuItem href="/app/{$page.params.blog}/selladplace">
         {$t('links.sellAdPlace')}
       </MenuItem>
+    </li>
+    <li>
       <MenuItem href="/app/{$page.params.blog}/telegraph">
         {$t('links.telegraphCrtl')}
       </MenuItem>
+    </li>
+    <li>
       <MenuItem>
         {$t('links.tasksCrtl')}
       </MenuItem>
+    </li>
+    <li>
       <MenuItem href="/app/{$page.params.blog}/archive">
         {$t('links.archiveView')}
       </MenuItem>
+    </li>
+    <li>
       <MenuItem href="/app/{$page.params.blog}/config">
         {$t('links.blogConfig')}
       </MenuItem>
