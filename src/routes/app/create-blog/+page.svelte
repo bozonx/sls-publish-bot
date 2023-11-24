@@ -30,20 +30,22 @@ const handleSubmit = ({blogName}) => {
     }))
 }
 
-// TODO: add hint - только safe символы
-// TODO: validate
+const validateCb = (errors, {blogName}) => {
+  if (!blogName) errors.blogName = $t('messages.emptyField')
+  else if (blogName.match(/[\s\-_.()\[\]]/)) errors.blogName = $t('messages.wrongSymbols')
+}
 
 </script>
 
 <div>
   <SectionHeader>{$t('links.createBlog')}</SectionHeader>
 
-  <FkForm let:form {handleSubmit}>
+  <FkForm let:form {handleSubmit} {validateCb}>
     <FormRow
-      label={$t('chunks.blogName')}
       {form}
       name="blogName"
       let:field
+      label={$t('chunks.blogName')}
       hint={$t('hints.blogName')}
       placeholder={$t('placeholders.blogName')}
     >

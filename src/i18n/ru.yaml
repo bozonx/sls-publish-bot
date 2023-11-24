@@ -90,6 +90,8 @@ messages:
   postNoDesrc: Пост не имеет короткого описания
   postNoTimeCodes: Пост не имеет тайм кодов
   cantSave: Не удалось сохранить
+  wrongSymbols: Недопустимые символы
+  emptyField: Поле не может быть пустым
 texts:
   dzenHint: |
     - Загрузить картинку

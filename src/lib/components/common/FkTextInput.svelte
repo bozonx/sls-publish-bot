@@ -14,7 +14,7 @@ let value = field.value
 if (typeof disabled !== 'undefined') field.setDisabled(disabled)
 
 const resolveColor = (valid) => {
-  if (!valid) color = 'red'
+  if (!valid) return 'red'
   //else if (error) color = 'green'
   else return null
 }
@@ -27,8 +27,8 @@ const handleInputMount = (field) => {
 
 
 // TODO: событие на on:input на каждое изменение с дебаунсом
-// TODO: add placeholder
-// TODO: add label
+
+// border-gray-200 dark:border-gray-600
 
 </script>
 
@@ -45,7 +45,7 @@ const handleInputMount = (field) => {
     {readonly}
     color={resolveColor(valid)}
     size="lg"
-    class="w-full rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:placeholder-gray-400 dark:text-white border border-gray-200 dark:border-gray-600 p-2.5 text-sm focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+    class="w-full rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:placeholder-gray-400 dark:text-white border p-2.5 text-sm focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500"
   >
     <!--<EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />-->
   </Input>

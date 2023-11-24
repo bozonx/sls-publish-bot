@@ -8,10 +8,11 @@ export let formConfig = {}
 export let initFields = {}
 export let handleSave = null
 export let handleSubmit = null
+export let validateCb = undefined
 
 const form = newForm(formConfig)
 
-form.init(initFields)
+form.init(initFields, validateCb)
 
 let finalFormConfig = form.config
 let values = form.values
