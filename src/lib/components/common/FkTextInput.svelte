@@ -5,12 +5,12 @@ import {FieldEvent} from "formkit"
 
 
 export let field
-export let placeholder = null
 export let readonly = null
-export let disabled
+export let disabled = undefined
 
 let value = field.value
 
+// TODO: перенести в FormRow
 if (typeof disabled !== 'undefined') field.setDisabled(disabled)
 
 const resolveColor = (valid) => {
@@ -28,14 +28,11 @@ const handleInputMount = (field) => {
 
 // TODO: событие на on:input на каждое изменение с дебаунсом
 // TODO: add placeholder
-// TODO: add hint
 // TODO: add label
-// TODO: add readonly
-// TODO: add custom field data
 
 </script>
 
-<FktInput {field} let:disabled let:valid handleMount={handleInputMount}>
+<FktInput {field} let:disabled let:valid let:placeholder handleMount={handleInputMount}>
   <Input
     on:change={(event) => field.handleChange(event.target.value)}
     on:focus={() => field.handleFocusIn()}

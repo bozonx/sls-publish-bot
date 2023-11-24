@@ -1,6 +1,6 @@
 <script>
 import { Toast } from 'flowbite-svelte'
-import {onMount, setContext} from 'svelte'
+import {setContext} from 'svelte'
 import "../../app.postcss"
 import "../../styles/styles.css"
 import {page} from '$app/stores'
@@ -23,9 +23,6 @@ const toggleDrawer = () => {
 }
 
 setContext(ALL_BLOGS_CONTEXT, data.allBlogs)
-
-onMount(() => {
-})
 
 $: {
   if (windowWidth >= breakPoint) {

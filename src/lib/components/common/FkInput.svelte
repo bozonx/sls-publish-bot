@@ -27,6 +27,10 @@ let invalidMsg = resolvedField.invalidMsg
 let saving = resolvedField.saving
 let focused = resolvedField.focused
 let disabled = resolvedField.disabled
+let hint = resolvedField.hint
+let success = resolvedField.success
+let placeholder = resolvedField.placeholder
+let custom = resolvedField.custom
 let defaultValue = resolvedField.defaultValue
 
 resolvedField.on(FieldEvent.change, (data) => {
@@ -41,6 +45,10 @@ resolvedField.on(FieldEvent.change, (data) => {
   saving = resolvedField.saving
   focused = resolvedField.focused
   disabled = resolvedField.disabled
+  hintMsg = resolvedField.hint
+  success = resolvedField.success
+  placeholder = resolvedField.placeholder
+  custom = resolvedField.custom
   defaultValue = resolvedField.defaultValue
 })
 
@@ -63,4 +71,8 @@ onMount(() => {
   {focused}
   {disabled}
   {defaultValue}
+  {hint}
+  {success}
+  {placeholder}
+  {custom}
 />

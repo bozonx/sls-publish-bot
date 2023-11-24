@@ -1,15 +1,29 @@
 <script>
 import { Label, Helper } from 'flowbite-svelte'
+import {onMount} from 'svelte'
 import FktInput from '$lib/components/common/FkInput.svelte'
 
 export let label = ''
+export let hint = undefined
+export let success = undefined
+export let placeholder = undefined
+export let custom = undefined
 export let form
 export let name
 export let initial = null
+
+// TODO: а если уже созданно? то не установится получается
+const schema = {
+  hint,
+  success,
+  placeholder,
+  custom,
+}
+
 </script>
 
 <div class="mb-5">
-  <FktInput {form} {name} {initial} let:valid let:invalidMsg let:field>
+  <FktInput {form} {name} {initial} {schema} let:valid let:invalidMsg let:field let:hint>
     <Label for={name} class="block mb-2">{label}</Label>
     <div>
       <slot {field} />
@@ -24,8 +38,11 @@ export let initial = null
         {invalidMsg}
       </div>
     {/if}
-    <!--<div>
-      success
-    </div>-->
+    {#if success}
+      <div class="mt-1 text-sm text-green-500">{success}</div>
+    {/if}
+    {#if hint}
+      <div class="mt-1 text-sm text-gray-400 dark:text-gray-600">{hint}</div>
+    {/if}
   </FktInput>
 </div>

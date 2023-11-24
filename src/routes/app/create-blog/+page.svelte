@@ -44,6 +44,8 @@ const handleSubmit = ({blogName}) => {
       {form}
       name="blogName"
       let:field
+      hint={$t('hints.blogName')}
+      placeholder={$t('placeholders.blogName')}
     >
       <FkTextInput {field} />
     </FormRow>
