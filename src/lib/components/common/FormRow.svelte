@@ -1,7 +1,12 @@
 <script>
 import { Label, Helper } from 'flowbite-svelte'
 import {onMount} from 'svelte'
+import {FieldEvent} from "formkit"
+import { createEventDispatcher } from 'svelte'
 import FktInput from '$lib/components/common/FkInput.svelte'
+
+const dispatch = createEventDispatcher()
+
 
 export let label = undefined
 export let hint = undefined
@@ -21,6 +26,13 @@ const schema = {
   custom,
 }
 
+
+const handleMount = (field) => {
+  field.on(FieldEvent.change, ({value, prevValue}) => {
+    dispatch('change', {field: form.fields[name],value, prevValue})
+  })
+}
+
 </script>
 
 <div class="mb-5">
@@ -29,6 +41,7 @@ const schema = {
     {name}
     {initial}
     {schema}
+    {handleMount}
     let:valid
     let:invalidMsg
     let:field

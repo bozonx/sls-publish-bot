@@ -1,11 +1,13 @@
 <script>
 import { arraySimilar } from 'squidlet-lib'
-import {Button, Modal, Textarea} from 'flowbite-svelte'
+import slug from 'slug'
+import {Button, Modal, Textarea, Checkbox} from 'flowbite-svelte'
 import FkForm from '$lib/components/common/FkForm.svelte'
 import {t} from '$lib/store/t'
 import FkTextInput from "$lib/components/common/FkTextInput.svelte"
 import FkTextArea from "$lib/components/common/FkTextArea.svelte"
 import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte"
+import FkStaticTextInput from "$lib/components/common/FkStaticTextInput.svelte"
 import SelectPostType from "$lib/components/SelectPostType.svelte"
 import FormRow from "$lib/components/common/FormRow.svelte"
 import {ALL_SNS, POST_TYPES} from "$lib/constants"
@@ -15,6 +17,7 @@ import SectionHeader from "$lib/components/SectionHeader.svelte";
 export let handleSave = null
 export let item
 
+let customUrlName = false
 let parseTimecodeModalOpen = false
 let parseTimecodeValue = ''
 let timecodeParseResult = ''
@@ -23,6 +26,12 @@ const meta = item.result.meta
 
 // TODO: add select
 let selectedSns = ['telegram', 'youtube', 'dzen', 'mave']
+
+const validateCb = (errors, values) => {
+  if (!values.title) errors.title = $t('messages.emptyField')
+  if (!values.urlName) errors.urlName = $t('messages.emptyField')
+  else if (!values.urlName.match(/^[a-zA-Z\d\-]+$/)) errors.urlName = $t('messages.wrongSymbols')
+}
 
 const handleTimecodeParse = () => {
   const arr = [...(parseTimecodeValue || '').matchAll(/^#{1,4}\s+(\d\d\:\d\d)\s+(.+)$/gm)]
@@ -43,33 +52,54 @@ const handleTimecodeInsert = (field) => {
   parseTimecodeModalOpen = false
 }
 
+const handleTitleChange = ({detail}) => {
+  if (customUrlName) return
+
+  // TODO: где взять язык ???
+
+  const converted = slug(detail.value, { locale: 'ru' })
+
+  detail.field.form.fields['urlName'].handleChange(converted)
+}
+
 </script>
 
-<FkForm let:form {handleSave}>
+<FkForm let:form {handleSave} {validateCb}>
   <FormRow
-    label={$t('details.postId')}
+    label="postId"
     {form}
     name="postId"
     initial={meta.postId}
-    let:value
+    let:field
   >
-    {meta.postId}
+    <FkStaticTextInput {field} />
   </FormRow>
+
   <FormRow
     label="urlName"
     {form}
     name="urlName"
     initial={meta.urlName}
-    let:value
+    let:field
   >
-    {meta.urlName}
+    {#if customUrlName}
+      <FkTextInput {field} />
+    {:else}
+      <FkStaticTextInput {field} />
+    {/if}
+
+    <div class="mt-3">
+      <Checkbox bind:checked={customUrlName}>{$t('chunks.typeCustomName')}</Checkbox>
+    </div>
   </FormRow>
+
   <FormRow
     label={$t('details.title')}
     {form}
     name="title"
     initial={meta.title}
     let:field
+    on:change={(value) => handleTitleChange(value)}
   >
     <FkTextInput {field} />
   </FormRow>

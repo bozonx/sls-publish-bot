@@ -1,9 +1,11 @@
 <script>
 import {newForm, FormEvent} from 'formkit'
+import {onMount} from "svelte"
 // import { createEventDispatcher } from 'svelte'
 //
 // const dispatch = createEventDispatcher()
 
+export let handleMount = null
 export let formConfig = {}
 export let initFields = {}
 export let handleSave = null
@@ -53,6 +55,10 @@ form.onSave(async (values) => {
 form.onSubmit(async (values) => {
   //dispatch('submit', values)
   await handleSubmit?.(values)
+})
+
+onMount(() => {
+  if (handleMount) handleMount(form)
 })
 
 </script>

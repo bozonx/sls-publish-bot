@@ -29,6 +29,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",
+    "slug": "^8.2.3",
     "squidlet": "file:../squidlet",
     "squidlet-lib": "file:../squidlet-lib",
     "svelte": "^4.0.5",

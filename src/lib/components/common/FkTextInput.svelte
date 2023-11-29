@@ -2,7 +2,9 @@
 import { Input } from 'flowbite-svelte'
 import FktInput from '$lib/components/common/FkInput.svelte'
 import {FieldEvent} from "formkit"
+import { createEventDispatcher } from 'svelte'
 
+const dispatch = createEventDispatcher()
 
 export let field
 export let readonly = null
@@ -25,6 +27,26 @@ const handleInputMount = (field) => {
   })
 }
 
+const onChange = (field, event) => {
+  field.handleChange(event.target.value)
+  dispatch('change', event.target.value)
+}
+
+const onKeyPress = (field, event) => {
+  event.code === 'Enter' && field.handleEndEditing()
+  dispatch('keypress', event)
+}
+
+const onFocus = (field) => {
+  field.handleFocusIn()
+  dispatch('focus')
+}
+
+const onBlur = (field) => {
+  field.handleBlur()
+  dispatch('blur')
+}
+
 
 // TODO: событие на on:input на каждое изменение с дебаунсом
 
@@ -34,10 +56,10 @@ const handleInputMount = (field) => {
 
 <FktInput {field} let:disabled let:valid let:placeholder handleMount={handleInputMount}>
   <Input
-    on:change={(event) => field.handleChange(event.target.value)}
-    on:focus={() => field.handleFocusIn()}
-    on:blur={() => field.handleBlur()}
-    on:keypress={(event) => event.code === 'Enter' && field.handleEndEditing()}
+    on:change={(event) => onChange(field, event)}
+    on:focus={() => onFocus(field)}
+    on:blur={() => onBlur(field)}
+    on:keypress={(event) => onKeyPress(field, event)}
     bind:value
     {name}
     {placeholder}

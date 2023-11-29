@@ -33,7 +33,7 @@ const handleSubmit = ({blogName}) => {
 
 const validateCb = (errors, {blogName}) => {
   if (!blogName) errors.blogName = $t('messages.emptyField')
-  else if (blogName.match(/[\s\-_.()\[\]]/)) errors.blogName = $t('messages.wrongSymbols')
+  else if (!blogName.match(/^[a-zA-Z\d\-_.()\[\]]+$/)) errors.blogName = $t('messages.wrongSymbols')
 }
 
 </script>

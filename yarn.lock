@@ -3500,7 +3500,7 @@ formidable@^1.2.1:
   version "1.1.6"
   dependencies:
     immutable "^5.0.0-beta.4"
-    squidlet-lib "file:../../../../home/ivan/.cache/yarn/v6/npm-formkit-1.1.6-d56b8bd0-1faa-4277-935c-cb67f0220fa5-1699387177604/node_modules/squidlet-lib"
+    squidlet-lib "file:../../../../home/ivan/.cache/yarn/v6/npm-formkit-1.1.6-ee3ad452-a03b-460c-9875-b1237f441fe0-1701287860110/node_modules/squidlet-lib"
 
 fraction.js@^4.3.6:
   version "4.3.7"
@@ -7604,6 +7604,11 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
+slug@^8.2.3:
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/slug/-/slug-8.2.3.tgz#9aa33e532ae9ccddaf55a42abd9bf6a89d5e44d2"
+  integrity sha512-fXjhAZszNecz855GUNIwW0+sFPi9WV4bMiEKDOCA4wcq1ts1UnUVNy/F78B0Aat7/W3rA+se//33ILKNMrbeYQ==
+
 smart-buffer@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
@@ -7741,7 +7746,7 @@ split@^1.0.0, split@~1.0.1:
   dependencies:
     axios "^1.6.0"
     nativescript "^8.6.1"
-    squidlet-lib "file:../../../../home/ivan/.cache/yarn/v6/npm-squidlet-1.0.1-cfcd8f1d-7649-4495-a4ef-23643c0f80d6-1699387177637/node_modules/squidlet-lib"
+    squidlet-lib "file:../../../../home/ivan/.cache/yarn/v6/npm-squidlet-1.0.1-489e14e9-7d6c-4cbd-b6c2-9a4050f6cea0-1701287860146/node_modules/squidlet-lib"
     web-ext "^7.8.0"
     ws "^8.14.2"
     yaml "^2.3.4"

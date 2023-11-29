@@ -33,6 +33,7 @@ chunks:
   insertTimeCodesFromHeaders: Вставить таймкоды из заголовков статьи
   parse: Распарсить
   insert: Вставить
+  typeCustomName: Ввести кастомное имя
 menu:
   previewArticle: Предпросмотр статьи
   previewPost: Предпросмотр поста
