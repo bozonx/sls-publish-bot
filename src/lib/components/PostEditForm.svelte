@@ -13,6 +13,7 @@ import FormRow from "$lib/components/common/FormRow.svelte"
 import {ALL_SNS, POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
 import SelectSns from "$lib/components/SelectSns.svelte";
+import PostEditTelegramSection from "$lib/components/PostEditTelegramSection.svelte";
 
 
 export let handleSave = null
@@ -164,115 +165,13 @@ const handleTitleChange = ({detail}) => {
       initialChecked={meta.sns || []}
       on:change={({detail}) => selectedSns = detail}
     />
-
-    {selectedSns.join()}
   </div>
 
   {#if selectedSns.includes(ALL_SNS.telegram)}
     <div>
       <SectionHeader>{$t('sns.telegram')}</SectionHeader>
 
-      <FormRow
-        label={$t('details.preview')}
-        {form}
-        name="telegram.preview"
-        initial={meta.telegram.preview}
-        let:field
-      >
-        <FkCheckBoxInput {field} />
-      </FormRow>
-      <FormRow
-        label={$t('details.urlButton')}
-        {form}
-        name="telegram.urlButton"
-        initial={meta.telegram.urlButton}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.autoRemove')}
-        {form}
-        name="telegram.autoRemove"
-        initial={meta.telegram.autoRemove}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.tags')}
-        {form}
-        name="telegram.tags"
-        initial={meta.telegram.tags}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
-
-      {#if meta.type === POST_TYPES.article}
-        <FormRow
-          label={$t('details.articleTemplate')}
-          {form}
-          name="telegram.articleTemplate"
-          initial={meta.telegram.articleTemplate}
-          let:field
-        >
-          <FkTextArea {field} />
-        </FormRow>
-      {:else}
-        <FormRow
-          label={$t('details.postTemplate')}
-          {form}
-          name="telegram.postTemplate"
-          initial={meta.telegram.postTemplate}
-          let:field
-        >
-          <FkTextArea {field} />
-        </FormRow>
-      {/if}
-      {#if meta.type === POST_TYPES.article}
-        <FormRow
-          label={$t('details.articleFooter')}
-          {form}
-          name="telegram.articleFooter"
-          initial={meta.telegram.articleFooter}
-          let:field
-        >
-          <FkTextArea {field} />
-        </FormRow>
-      {:else}
-        <FormRow
-          label={$t('details.postFooter')}
-          {form}
-          name="telegram.postFooter"
-          initial={meta.telegram.postFooter}
-          let:field
-        >
-          <FkTextArea {field} />
-        </FormRow>
-      {/if}
-
-      <FormRow
-        label={$t('details.contentLinks')}
-        {form}
-        name="telegram.contentLinks"
-        initial={meta.telegram.contentLinks}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.pubDateTime')}
-        {form}
-        name="telegram.pubDateTime"
-        initial={meta.telegram.pubDateTime}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
+      <PostEditTelegramSection {meta} {form} />
     </div>
   {/if}
 
@@ -284,7 +183,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.tags')}
         {form}
         name="youtube.tags"
-        initial={meta.youtube.tags}
+        initial={meta.youtube?.tags}
         let:field
       >
         <FkTextInput {field} />
@@ -294,7 +193,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.template')}
         {form}
         name="youtube.template"
-        initial={meta.youtube.template}
+        initial={meta.youtube?.template}
         let:field
       >
         <FkTextArea {field} />
@@ -304,7 +203,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.footer')}
         {form}
         name="youtube.footer"
-        initial={meta.youtube.footer}
+        initial={meta.youtube?.footer}
         let:field
       >
         <FkTextArea {field} />
@@ -314,7 +213,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.contentLinks')}
         {form}
         name="youtube.contentLinks"
-        initial={meta.youtube.contentLinks}
+        initial={meta.youtube?.contentLinks}
         let:field
       >
         <FkTextArea {field} />
@@ -324,7 +223,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.pubDateTime')}
         {form}
         name="youtube.pubDateTime"
-        initial={meta.youtube.pubDateTime}
+        initial={meta.youtube?.pubDateTime}
         let:field
       >
         <FkTextInput {field} />
@@ -340,7 +239,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.template')}
         {form}
         name="dzen.template"
-        initial={meta.dzen.template}
+        initial={meta.dzen?.template}
         let:field
       >
         <FkTextArea {field} />
@@ -350,7 +249,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.footer')}
         {form}
         name="dzen.footer"
-        initial={meta.dzen.footer}
+        initial={meta.dzen?.footer}
         let:field
       >
         <FkTextArea {field} />
@@ -360,7 +259,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.pubDateTime')}
         {form}
         name="dzen.pubDateTime"
-        initial={meta.dzen.pubDateTime}
+        initial={meta.dzen?.pubDateTime}
         let:field
       >
         <FkTextInput {field} />
@@ -376,7 +275,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.tags')}
         {form}
         name="podcast.tags"
-        initial={meta.podcast.tags}
+        initial={meta.podcast?.tags}
         let:field
       >
         <FkTextInput {field} />
@@ -386,7 +285,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.template')}
         {form}
         name="podcast.template"
-        initial={meta.podcast.template}
+        initial={meta.podcast?.template}
         let:field
       >
         <FkTextArea {field} />
@@ -396,7 +295,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.footer')}
         {form}
         name="podcast.footer"
-        initial={meta.podcast.footer}
+        initial={meta.podcast?.footer}
         let:field
       >
         <FkTextArea {field} />
@@ -406,7 +305,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.contentLinks')}
         {form}
         name="podcast.contentLinks"
-        initial={meta.podcast.contentLinks}
+        initial={meta.podcast?.contentLinks}
         let:field
       >
         <FkTextArea {field} />
@@ -416,7 +315,7 @@ const handleTitleChange = ({detail}) => {
         label={$t('details.pubDateTime')}
         {form}
         name="podcast.pubDateTime"
-        initial={meta.podcast.pubDateTime}
+        initial={meta.podcast?.pubDateTime}
         let:field
       >
         <FkTextInput {field} />
