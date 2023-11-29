@@ -12,9 +12,11 @@ import SelectPostType from "$lib/components/SelectPostType.svelte"
 import FormRow from "$lib/components/common/FormRow.svelte"
 import {ALL_SNS, POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
+import SelectSns from "$lib/components/SelectSns.svelte";
 
 
 export let handleSave = null
+export let blog
 export let item
 
 let customUrlName = false
@@ -24,8 +26,7 @@ let timecodeParseResult = ''
 
 const meta = item.result.meta
 
-// TODO: add select
-let selectedSns = ['telegram', 'youtube', 'dzen', 'mave']
+let selectedSns = meta.sns || []
 
 const validateCb = (errors, values) => {
   if (!values.title) errors.title = $t('messages.emptyField')
@@ -35,7 +36,10 @@ const validateCb = (errors, values) => {
 
 const handleTimecodeParse = () => {
   const arr = [...(parseTimecodeValue || '').matchAll(/^#{1,4}\s+(\d\d\:\d\d)\s+(.+)$/gm)]
-  const resArr = []
+  const resArr = [
+    // TODO: взять из конфига
+    '00:00 Начало'
+  ]
 
   for (const [fullStr, timeCode, header] of arr) {
 
@@ -55,9 +59,7 @@ const handleTimecodeInsert = (field) => {
 const handleTitleChange = ({detail}) => {
   if (customUrlName) return
 
-  // TODO: где взять язык ???
-
-  const converted = slug(detail.value, { locale: 'ru' })
+  const converted = slug(detail.value, { locale: blog.lang })
 
   detail.field.form.fields['urlName'].handleChange(converted)
 }
@@ -81,6 +83,7 @@ const handleTitleChange = ({detail}) => {
     name="urlName"
     initial={meta.urlName}
     let:field
+    hint={$t('hints.urlName')}
   >
     {#if customUrlName}
       <FkTextInput {field} />
@@ -88,7 +91,7 @@ const handleTitleChange = ({detail}) => {
       <FkStaticTextInput {field} />
     {/if}
 
-    <div class="mt-3">
+    <div class="mt-2">
       <Checkbox bind:checked={customUrlName}>{$t('chunks.typeCustomName')}</Checkbox>
     </div>
   </FormRow>
@@ -99,10 +102,12 @@ const handleTitleChange = ({detail}) => {
     name="title"
     initial={meta.title}
     let:field
+    hint={$t('hints.onlyPlainText')}
     on:change={(value) => handleTitleChange(value)}
   >
     <FkTextInput {field} />
   </FormRow>
+
   <FormRow
     label={$t('details.type')}
     {form}
@@ -119,8 +124,9 @@ const handleTitleChange = ({detail}) => {
     name="descr"
     initial={meta.descr}
     let:field
+    hint={$t('hints.mdFormatSupported')}
   >
-    <FkTextArea {field} />
+    <FkTextArea rows={5} {field} />
   </FormRow>
 
   {#if meta.type === POST_TYPES.video}
@@ -130,8 +136,9 @@ const handleTitleChange = ({detail}) => {
       name="timeCodes"
       initial={meta.timeCodes}
       let:field
+      hint={$t('hints.onlyPlainText')}
     >
-      <FkTextArea {field} />
+      <FkTextArea rows={10} {field} />
       <Button on:click={() => (parseTimecodeModalOpen = true)}>{$t('chunks.insertTimeCodesFromHeaders')}</Button>
       <Modal title={$t('chunks.insertTimeCodesFromHeaders')} bind:open={parseTimecodeModalOpen}>
         <Textarea bind:value={parseTimecodeValue} />
@@ -149,6 +156,17 @@ const handleTitleChange = ({detail}) => {
       </Modal>
     </FormRow>
   {/if}
+
+  <div>
+    <SectionHeader>{$t('headers.selectSN')}</SectionHeader>
+
+    <SelectSns
+      initialChecked={meta.sns || []}
+      on:change={({detail}) => selectedSns = detail}
+    />
+
+    {selectedSns.join()}
+  </div>
 
   {#if selectedSns.includes(ALL_SNS.telegram)}
     <div>

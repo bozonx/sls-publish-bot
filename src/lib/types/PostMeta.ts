@@ -1,4 +1,5 @@
 import type {PostTypes} from '$lib/constants';
+import type {ALL_SNS} from '$lib/constants';
 
 
 export interface PostMeta {
@@ -10,6 +11,7 @@ export interface PostMeta {
   type: PostTypes
   descr?: string
   timeCodes?: string
+  sns: (keyof typeof ALL_SNS)[]
 
   images?: string[]
   common: {

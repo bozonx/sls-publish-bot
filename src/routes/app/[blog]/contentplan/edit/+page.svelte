@@ -42,7 +42,7 @@ const handleSnSave = async (values) => {
   <div>
     <SectionHeader>{$t('headers.postDetails')}</SectionHeader>
 
-    <PostEditForm item={data.post} />
+    <PostEditForm item={data.post} blog={data.blog} />
   </div>
 
   <div class="mt-7">

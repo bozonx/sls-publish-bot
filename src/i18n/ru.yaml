@@ -24,6 +24,7 @@ headers:
   reminder: Незабудьте
   config: Настройки
   renameBlog: Переименовать блог
+  selectSN: Выберете соц сети для публикации
 chunks:
   blog: Блог
   blogName: Имя блога
@@ -40,7 +41,6 @@ menu:
   previewTgPost: Предпросмотр в Telegram боте
   changeDate: Изменить дату публикации
   changeTime: Изменить время публикации
-  #changeSN: Изменить соц сети для публикации
   changeTags: Изменить тэги
   pubDataZen: Для Дзен
   pubDataYoutube: Для youtube
@@ -114,5 +114,8 @@ texts:
     - Установить дату публикации
 hints:
   blogName: 'Используйте только безопасные для файлов символы, не исползуйте пробел: -_.()[]'
+  urlName: Имя записи в url пути сайта. URL формат
+  onlyPlainText: Поддерживается только простой текст
+  mdFormatSupported: Поддерживается MD формат
 placeholders:
   blogName: 'Например my-blog'
