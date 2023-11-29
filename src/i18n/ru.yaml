@@ -23,10 +23,16 @@ headers:
   post: Пост
   reminder: Незабудьте
   config: Настройки
+  renameBlog: Переименовать блог
 chunks:
   blog: Блог
   blogName: Имя блога
   create: Создать
+  rename: Переименовать
+  cancel: Отменить
+  insertTimeCodesFromHeaders: Вставить таймкоды из заголовков статьи
+  parse: Распарсить
+  insert: Вставить
 menu:
   previewArticle: Предпросмотр статьи
   previewPost: Предпросмотр поста
@@ -47,7 +53,7 @@ menu:
 details:
   #fileName: Имя файла
   title: Название
-  safeName: URL безопасное имя блога
+  safeName: Безопасное имя блога
   lang: Язык
   type: Тип
   descr: Короткое описание статьи

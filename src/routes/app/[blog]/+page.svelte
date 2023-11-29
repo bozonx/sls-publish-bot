@@ -37,7 +37,7 @@ breadcrumbs.set([{title: data.blog.title}])
       </MenuItem>
     </li>
     <li>
-      <MenuItem>
+      <MenuItem href="/app/{$page.params.blog}/tg-tasks">
         {$t('links.tasksCrtl')}
       </MenuItem>
     </li>

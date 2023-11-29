@@ -10,7 +10,7 @@ export let allBlogs
 
 
 <div>
-  <MenuWrapper>
+  <MenuWrapper class="mb-0.5">
     <li>
       <MenuItem href="/app">{$t('links.home')}</MenuItem>
     </li>

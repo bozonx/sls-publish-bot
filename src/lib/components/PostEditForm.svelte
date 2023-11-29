@@ -1,5 +1,6 @@
 <script>
 import { arraySimilar } from 'squidlet-lib'
+import {Button, Modal, Textarea} from 'flowbite-svelte'
 import FkForm from '$lib/components/common/FkForm.svelte'
 import {t} from '$lib/store/t'
 import FkTextInput from "$lib/components/common/FkTextInput.svelte"
@@ -14,10 +15,33 @@ import SectionHeader from "$lib/components/SectionHeader.svelte";
 export let handleSave = null
 export let item
 
+let parseTimecodeModalOpen = false
+let parseTimecodeValue = ''
+let timecodeParseResult = ''
+
 const meta = item.result.meta
 
 // TODO: add select
 let selectedSns = ['telegram', 'youtube', 'dzen', 'mave']
+
+const handleTimecodeParse = () => {
+  const arr = [...(parseTimecodeValue || '').matchAll(/^#{1,4}\s+(\d\d\:\d\d)\s+(.+)$/gm)]
+  const resArr = []
+
+  for (const [fullStr, timeCode, header] of arr) {
+
+    resArr.push(`${timeCode} ${header}`)
+  }
+
+  timecodeParseResult = resArr.join('\n')
+}
+
+const handleTimecodeInsert = (field) => {
+  field.handleChange(timecodeParseResult)
+  parseTimecodeValue = ''
+  timecodeParseResult = ''
+  parseTimecodeModalOpen = false
+}
 
 </script>
 
@@ -59,17 +83,15 @@ let selectedSns = ['telegram', 'youtube', 'dzen', 'mave']
     <SelectPostType {field} />
   </FormRow>
 
-  {#if meta.type === POST_TYPES.article}
-    <FormRow
-      label={$t('details.descr')}
-      {form}
-      name="descr"
-      initial={meta.descr}
-      let:field
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  {/if}
+  <FormRow
+    label={$t('details.descr')}
+    {form}
+    name="descr"
+    initial={meta.descr}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
 
   {#if meta.type === POST_TYPES.video}
     <FormRow
@@ -80,6 +102,21 @@ let selectedSns = ['telegram', 'youtube', 'dzen', 'mave']
       let:field
     >
       <FkTextArea {field} />
+      <Button on:click={() => (parseTimecodeModalOpen = true)}>{$t('chunks.insertTimeCodesFromHeaders')}</Button>
+      <Modal title={$t('chunks.insertTimeCodesFromHeaders')} bind:open={parseTimecodeModalOpen}>
+        <Textarea bind:value={parseTimecodeValue} />
+        <pre>{timecodeParseResult}</pre>
+        <svelte:fragment slot="footer">
+          <div class="w-full text-right">
+            <Button color="alternative" on:click={() => (parseTimecodeModalOpen = false)}>{$t('chunks.cancel')}</Button>
+            {#if timecodeParseResult}
+              <Button on:click={() => handleTimecodeInsert(field)}>{$t('chunks.insert')}</Button>
+            {:else}
+              <Button on:click={handleTimecodeParse}>{$t('chunks.parse')}</Button>
+            {/if}
+          </div>
+        </svelte:fragment>
+      </Modal>
     </FormRow>
   {/if}
 

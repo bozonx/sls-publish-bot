@@ -1,8 +1,10 @@
 <script>
+import { Button, Modal } from 'flowbite-svelte'
 import {t} from '$lib/store/t'
 import FormRow from '$lib/components/common/FormRow.svelte'
 import FkForm from '$lib/components/common/FkForm.svelte'
 import FkTextInput from '$lib/components/common/FkTextInput.svelte'
+import FkStaticTextInput from '$lib/components/common/FkStaticTextInput.svelte'
 import FkTextArea from '$lib/components/common/FkTextArea.svelte'
 import SectionHeader from '$lib/components/SectionHeader.svelte'
 import SelectPostType from '$lib/components/SelectPostType.svelte'
@@ -11,6 +13,7 @@ import SelectPostType from '$lib/components/SelectPostType.svelte'
 export let blog
 export let handleSave = null
 
+let changeNameModalOpen = false
 
 // TODO: Валидация безопасного имени блога
 // TODO: мультиселект типа post
@@ -29,7 +32,19 @@ export let handleSave = null
     {form}
     let:field
   >
-    <FkTextInput {field} disabled />
+    <div class="flex gap-x-2">
+      <FkStaticTextInput {field} />
+      <Button on:click={() => (changeNameModalOpen = true)}>{$t('chunks.rename')}</Button>
+    </div>
+    <Modal title={$t('headers.renameBlog')} bind:open={changeNameModalOpen} autoclose>
+      <FkTextInput {field} />
+      <svelte:fragment slot="footer">
+        <div class="w-full text-right">
+          <Button color="alternative" on:click={() => (changeNameModalOpen = false)}>{$t('chunks.cancel')}</Button>
+          <Button on:click={() => alert('Handle "success"')}>{$t('chunks.rename')}</Button>
+        </div>
+      </svelte:fragment>
+    </Modal>
   </FormRow>
 
   <FormRow
@@ -59,7 +74,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.telegraphToken')}
     name='config.telegraph.token'
-    initial={blog.config.telegraph.token}
+    initial={blog.config?.telegraph.token}
     {form}
     let:field
   >
@@ -69,7 +84,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.authorName')}
     name='config.telegraph.authorName'
-    initial={blog.config.telegraph.authorName}
+    initial={blog.config?.telegraph.authorName}
     {form}
     let:field
   >
@@ -79,7 +94,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.authorUrl')}
     name='config.telegraph.authorUrl'
-    initial={blog.config.telegraph.authorUrl}
+    initial={blog.config?.telegraph.authorUrl}
     {form}
     let:field
   >
@@ -91,7 +106,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.controlledChannelId')}
     name='config.telegram.channelId'
-    initial={blog.config.telegram.channelId}
+    initial={blog.config?.telegram.channelId}
     {form}
     let:field
   >
@@ -101,7 +116,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.supportedTypes')}
     name='config.telegram.supportedTypes'
-    initial={blog.config.telegram.supportedTypes}
+    initial={blog.config?.telegram.supportedTypes}
     {form}
     let:field
   >
@@ -111,7 +126,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.articlePostTmpl')}
     name='config.telegram.articlePostTmpl'
-    initial={blog.config.telegram.articlePostTmpl}
+    initial={blog.config?.telegram.articlePostTmpl}
     {form}
     let:field
   >
@@ -121,7 +136,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.articleFooter')}
     name='config.telegram.articleFooter'
-    initial={blog.config.telegram.articleFooter}
+    initial={blog.config?.telegram.articleFooter}
     {form}
     let:field
   >
@@ -133,7 +148,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.postFooter')}
     name='config.dzen.postFooter'
-    initial={blog.config.dzen.postFooter}
+    initial={blog.config?.dzen.postFooter}
     {form}
     let:field
   >
@@ -143,7 +158,7 @@ export let handleSave = null
   <FormRow
     label={$t('details.articleFooter')}
     name='config.dzen.articleFooter'
-    initial={blog.config.dzen.articleFooter}
+    initial={blog.config?.dzen.articleFooter}
     {form}
     let:field
   >
