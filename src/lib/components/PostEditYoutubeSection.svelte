@@ -9,6 +9,7 @@ import FormRow from "$lib/components/common/FormRow.svelte"
 import {POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
 import CodeBlock from "$lib/components/common/CodeBlock.svelte";
+import ReplaceDefaultField from "$lib/components/ReplaceDefaultField.svelte";
 
 
 export let meta
@@ -47,72 +48,41 @@ export let form
   <FkTextArea {field} />
 </FormRow>
 
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomTemplate')}
   {form}
   name="youtube.useCustomTemplate"
   initial={meta.youtube?.useCustomTemplate}
-  let:field
-  let:value
+  defaultValue={blog.config.youtube?.template}
+  defaultValueLabel={$t('chunks.templateWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
+  <FormRow
+    label={$t('details.template')}
+    {form}
+    name="youtube.template"
+    initial={meta.youtube?.template}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
-  <div>
-    {#if !value}
-      {#if blog.config.youtube?.template}
-        <p>{$t('chunks.templateWillBeUsed')}:</p>
-        <CodeBlock>{blog.config.youtube?.template}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noTemplate')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      label={$t('details.template')}
-      {form}
-      name="youtube.template"
-      initial={meta.youtube?.template}
-      let:field
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-</FormRow>
-
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomFooter')}
   {form}
   name="youtube.useCustomFooter"
   initial={meta.youtube?.useCustomFooter}
-  let:field
-  let:value
+  defaultValue={blog.config.youtube?.footer}
+  defaultValueLabel={$t('chunks.footerWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
-
-  <div>
-    {#if !value}
-      {#if blog.config.youtube?.footer}
-        <p>{$t('chunks.footerWillBeUsed')}:</p>
-        <CodeBlock>{blog.config.youtube?.footer}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noFooter')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      label={$t('details.footer')}
-      {form}
-      name="youtube.footer"
-      initial={meta.youtube?.footer}
-      let:field
-      hint={$t('hints.footerField')}
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-
-</FormRow>
+  <FormRow
+    label={$t('details.footer')}
+    {form}
+    name="youtube.footer"
+    initial={meta.youtube?.footer}
+    let:field
+    hint={$t('hints.footerField')}
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>

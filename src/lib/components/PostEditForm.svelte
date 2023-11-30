@@ -194,7 +194,7 @@ const handleTitleChange = ({detail}) => {
     <PostEditDzenSection {meta} {blog} {form} />
   </div>
 
-  <div hidden={arraySimilar(selectedSns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters]).length}>
+  <div hidden={!arraySimilar(selectedSns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters]).length}>
     <SectionHeader>Podcast</SectionHeader>
 
     <PostEditPodcastSection {meta} {blog} {form} />

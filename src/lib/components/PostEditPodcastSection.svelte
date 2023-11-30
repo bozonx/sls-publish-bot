@@ -8,6 +8,7 @@ import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte"
 import FormRow from "$lib/components/common/FormRow.svelte"
 import {POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
+import ReplaceDefaultField from "$lib/components/ReplaceDefaultField.svelte";
 import CodeBlock from "$lib/components/common/CodeBlock.svelte";
 
 
@@ -47,71 +48,41 @@ export let form
   <FkTextInput {field} />
 </FormRow>
 
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomTemplate')}
   {form}
   name="podcast.useCustomTemplate"
   initial={meta.podcast?.useCustomTemplate}
-  let:field
-  let:value
+  defaultValue={blog.config.podcast?.template}
+  defaultValueLabel={$t('chunks.templateWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
+  <FormRow
+    label={$t('details.template')}
+    {form}
+    name="podcast.template"
+    initial={meta.podcast?.template}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
-  <div>
-    {#if !value}
-      {#if blog.config.podcast?.template}
-        <p>{$t('chunks.templateWillBeUsed')}:</p>
-        <CodeBlock>{blog.config.podcast?.template}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noTemplate')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      label={$t('details.template')}
-      {form}
-      name="podcast.template"
-      initial={meta.podcast?.template}
-      let:field
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-</FormRow>
-
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomFooter')}
   {form}
   name="podcast.useCustomFooter"
   initial={meta.podcast?.useCustomFooter}
-  let:field
-  let:value
+  defaultValue={blog.config.podcast?.footer}
+  defaultValueLabel={$t('chunks.footerWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
-
-  <div>
-    {#if !value}
-      {#if blog.config.podcast?.footer}
-        <p>{$t('chunks.footerWillBeUsed')}:</p>
-        <CodeBlock>{blog.config.podcast?.footer}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noFooter')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      label={$t('details.footer')}
-      {form}
-      name="podcast.footer"
-      initial={meta.podcast?.footer}
-      let:field
-      hint={$t('hints.footerField')}
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-</FormRow>
+  <FormRow
+    label={$t('details.footer')}
+    {form}
+    name="podcast.footer"
+    initial={meta.podcast?.footer}
+    let:field
+    hint={$t('hints.footerField')}
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
