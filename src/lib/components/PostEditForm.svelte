@@ -179,7 +179,7 @@ const handleTitleChange = ({detail}) => {
   <div hidden={selectedSns.includes(ALL_SNS.telegram)}>
     <SectionHeader>{$t('sns.telegram')}</SectionHeader>
 
-    <PostEditTelegramSection {meta} {form} />
+    <PostEditTelegramSection {meta} {blog} {form} />
   </div>
 
   <div hidden={!selectedSns.includes(ALL_SNS.youtube)}>

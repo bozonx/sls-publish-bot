@@ -2,6 +2,7 @@
 import { Badge, Input } from 'flowbite-svelte'
 import {spliceItem} from 'squidlet-lib'
 import {t} from '$lib/store/t'
+import FieldMsg from "$lib/components/common/FieldMsg.svelte"
 
 
 export let field
@@ -49,7 +50,7 @@ const onClose = (tag) => {
   />
 
   {#if invalidMessage}
-    <div class="mt-1 text-sm text-red-500">{invalidMessage}</div>
+    <FieldMsg error>{invalidMessage}</FieldMsg>
   {/if}
 
   <div class="space-x-1 mt-2">

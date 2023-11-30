@@ -36,6 +36,7 @@ chunks:
   insert: Вставить
   typeCustomName: Ввести кастомное имя
   useUrlButton: Использовать URL кнопку
+  footerWillBeUsed: Будет использован футер
 menu:
   previewArticle: Предпросмотр статьи
   previewPost: Предпросмотр поста
@@ -62,9 +63,9 @@ details:
   timeCodes: Тайм коды
   preview: Показывать превью ссылки
   urlButton: URL кнопка
-  articleTemplate: Темплейт статьи
-  articlePostTmpl: Темплейт поста в канал для статьи
-  postTemplate: Темплейт поста
+  articleTemplate: Темплейт статьи (MD формат)
+  articlePostTmpl: Темплейт поста в канал для статьи (MD формат)
+  postTemplate: Темплейт поста (MD формат)
   template: Темплейт (MD формат)
   articleFooter: Футер статьи (MD формат)
   postFooter: Футер поста (MD формат)
@@ -78,6 +79,8 @@ details:
   telegraphToken: Токен аккаунта telegraph
   authorName: Имя автора в свободном формате
   authorUrl: URL автора
+  useCustomTemplate: Использовать кастомный темплейт
+  useCustomFooter: Использовать кастомный футер
 postTypes:
   article: Статья
   image: Картинка

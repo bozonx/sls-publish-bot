@@ -16,13 +16,14 @@ export interface PostMeta {
   images?: string[]
   common: {
     tags: string[]
-    postTemplate: string
-    articleTemplate: string
     // links which were mentioned in content
     contentLinks: string
-    postFooter: string
-    articleFooter: string
     pubDateTime: string
+
+    //postTemplate: string
+    //articleTemplate: string
+    //postFooter: string
+    //articleFooter: string
   },
   telegram?: {
     preview?: boolean
@@ -30,15 +31,18 @@ export interface PostMeta {
       text: string
       url: string
     }
+    pubDateTime?: string
     autoRemove?: string
-
     tags?: string[]
+    contentLinks?: string
+
+    useCustomTemplate?: boolean
     postTemplate?: string
     articleTemplate?: string
-    contentLinks?: string
+
+    useCustomFooter?: boolean
     postFooter?: string
     articleFooter?: string
-    pubDateTime?: string
   },
   youtube?: {
     tags?: string[]

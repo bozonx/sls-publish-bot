@@ -4,6 +4,7 @@ import {onMount} from 'svelte'
 import {FieldEvent} from "formkit"
 import { createEventDispatcher } from 'svelte'
 import FktInput from '$lib/components/common/FkInput.svelte'
+import FieldMsg from '$lib/components/common/FieldMsg.svelte'
 
 const dispatch = createEventDispatcher()
 
@@ -16,6 +17,7 @@ export let custom = undefined
 export let form
 export let name
 export let initial = null
+export let hidden = false
 
 // TODO: а если уже созданно? то не установится получается
 const schema = {
@@ -35,23 +37,40 @@ const handleMount = (field) => {
 
 </script>
 
-<div class="mb-5">
+<div class="mb-5" {hidden}>
   <FktInput
     {form}
     {name}
     {initial}
     {schema}
     {handleMount}
-    let:valid
-    let:invalidMsg
+    let:value
     let:field
     let:label
     let:hint
     let:success
+    let:dirty
+    let:touched
+    let:valid
+    let:invalidMsg
+    let:saving
+    let:focused
+    let:disabled
+    let:custom
   >
     <Label for={name} class="block mb-2">{label}</Label>
     <div>
-      <slot {field} />
+      <slot
+        {field}
+        {value}
+        {touched}
+        {valid}
+        {invalidMsg}
+        {saving}
+        {focused}
+        {disabled}
+        {custom}
+      />
     </div>
     {#if $$slots.helper}
       <Helper class="text-sm mt-2">
@@ -59,13 +78,13 @@ const handleMount = (field) => {
       </Helper>
     {/if}
     {#if !valid}
-      <div class="mt-1 text-sm text-red-500">{invalidMsg}</div>
+      <FieldMsg error>{invalidMsg}</FieldMsg>
     {/if}
     {#if success}
-      <div class="mt-1 text-sm text-green-500">{success}</div>
+      <FieldMsg success>{success}</FieldMsg>
     {/if}
     {#if hint}
-      <div class="mt-1 text-sm text-gray-400 dark:text-gray-600">{hint}</div>
+      <FieldMsg hint>{hint}</FieldMsg>
     {/if}
   </FktInput>
 </div>
