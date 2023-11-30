@@ -24,4 +24,8 @@ export interface BlogConfig {
     postFooter: string
     articleFooter: string
   }
+  podcast: {
+    template: string
+    footer: string
+  }
 }

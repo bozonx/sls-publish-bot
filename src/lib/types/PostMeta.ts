@@ -53,15 +53,17 @@ export interface PostMeta {
     useCustomFooter?: boolean
     footer?: string
   },
-  podcast?: {
-    tags?: string[]
-    template?: string
-    contentLinks?: string
-    footer?: string
-    pubDateTime?: string
-  },
   dzen?: {
     pubDateTime?: string
+    useCustomTemplate?: boolean
+    template?: string
+    useCustomFooter?: boolean
+    footer?: string
+  },
+  podcast?: {
+    pubDateTime?: string
+    tags?: string[]
+    contentLinks?: string
     useCustomTemplate?: boolean
     template?: string
     useCustomFooter?: boolean

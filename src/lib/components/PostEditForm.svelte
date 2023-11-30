@@ -182,7 +182,7 @@ const handleTitleChange = ({detail}) => {
     <PostEditTelegramSection {meta} {blog} {form} />
   </div>
 
-  <div hidden={selectedSns.includes(ALL_SNS.youtube)}>
+  <div hidden={!selectedSns.includes(ALL_SNS.youtube)}>
     <SectionHeader>{$t('sns.youtube')}</SectionHeader>
 
     <PostEditYoutubeSection {meta} {blog} {form} />
@@ -194,10 +194,10 @@ const handleTitleChange = ({detail}) => {
     <PostEditDzenSection {meta} {blog} {form} />
   </div>
 
-  <div hidden={!arraySimilar(selectedSns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters]).length}>
+  <div hidden={arraySimilar(selectedSns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters]).length}>
     <SectionHeader>Podcast</SectionHeader>
 
-    <PostEditPodcastSection {meta} {form} />
+    <PostEditPodcastSection {meta} {blog} {form} />
   </div>
 
 </FkForm>
