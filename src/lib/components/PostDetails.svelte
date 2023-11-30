@@ -35,7 +35,7 @@ export let item
   {#if item.result.meta.telegram}
     <SectionHeader>{$t('sns.telegram')}</SectionHeader>
     <DetailItem label="preview">{item.result.meta.telegram.preview}</DetailItem>
-    <DetailItem label="urlButton">{item.result.meta.telegram.urlButton}</DetailItem>
+    <DetailItem label="urlButton">{item.result.meta.telegram.urlButton?.text} {item.result.meta.telegram.urlButton?.url}</DetailItem>
     <DetailItem label="autoRemove">{item.result.meta.telegram.autoRemove}</DetailItem>
 
     <DetailItem label="tags">{item.result.meta.telegram.tags?.join(', ')}</DetailItem>

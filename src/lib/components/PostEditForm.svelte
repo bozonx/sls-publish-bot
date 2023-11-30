@@ -1,5 +1,5 @@
 <script>
-import { arraySimilar } from 'squidlet-lib'
+import { arraySimilar, deepSet } from 'squidlet-lib'
 import slug from 'slug'
 import {Button, Modal, Textarea, Checkbox} from 'flowbite-svelte'
 import FkForm from '$lib/components/common/FkForm.svelte'
@@ -14,6 +14,9 @@ import {ALL_SNS, POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
 import SelectSns from "$lib/components/SelectSns.svelte";
 import PostEditTelegramSection from "$lib/components/PostEditTelegramSection.svelte";
+import PostEditYoutubeSection from "$lib/components/PostEditYoutubeSection.svelte";
+import PostEditDzenSection from "$lib/components/PostEditDzenSection.svelte";
+import PostEditPodcastSection from "$lib/components/PostEditPodcastSection.svelte";
 
 
 export let handleSave = null
@@ -33,6 +36,12 @@ const validateCb = (errors, values) => {
   if (!values.title) errors.title = $t('messages.emptyField')
   if (!values.urlName) errors.urlName = $t('messages.emptyField')
   else if (!values.urlName.match(/^[a-zA-Z\d\-]+$/)) errors.urlName = $t('messages.wrongSymbols')
+
+  // telegram
+  if (
+    values.telegram?.urlButton.url
+    && !values.telegram.urlButton.url.match(/^[a-zA-Z\d\-\:\/\@.\%]+$/)
+  ) deepSet(errors, 'telegram.urlButton.url', $t('messages.wrongSymbols'))
 }
 
 const handleTimecodeParse = () => {
@@ -179,55 +188,7 @@ const handleTitleChange = ({detail}) => {
     <div>
       <SectionHeader>{$t('sns.youtube')}</SectionHeader>
 
-      <FormRow
-        label={$t('details.tags')}
-        {form}
-        name="youtube.tags"
-        initial={meta.youtube?.tags}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.template')}
-        {form}
-        name="youtube.template"
-        initial={meta.youtube?.template}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.footer')}
-        {form}
-        name="youtube.footer"
-        initial={meta.youtube?.footer}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.contentLinks')}
-        {form}
-        name="youtube.contentLinks"
-        initial={meta.youtube?.contentLinks}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.pubDateTime')}
-        {form}
-        name="youtube.pubDateTime"
-        initial={meta.youtube?.pubDateTime}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
+      <PostEditYoutubeSection {meta} {form} />
     </div>
   {/if}
 
@@ -235,35 +196,7 @@ const handleTitleChange = ({detail}) => {
     <div>
       <SectionHeader>{$t('sns.dzen')}</SectionHeader>
 
-      <FormRow
-        label={$t('details.template')}
-        {form}
-        name="dzen.template"
-        initial={meta.dzen?.template}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.footer')}
-        {form}
-        name="dzen.footer"
-        initial={meta.dzen?.footer}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.pubDateTime')}
-        {form}
-        name="dzen.pubDateTime"
-        initial={meta.dzen?.pubDateTime}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
+      <PostEditDzenSection {meta} {form} />
     </div>
   {/if}
 
@@ -271,55 +204,7 @@ const handleTitleChange = ({detail}) => {
     <div>
       <SectionHeader>Podcast</SectionHeader>
 
-      <FormRow
-        label={$t('details.tags')}
-        {form}
-        name="podcast.tags"
-        initial={meta.podcast?.tags}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.template')}
-        {form}
-        name="podcast.template"
-        initial={meta.podcast?.template}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.footer')}
-        {form}
-        name="podcast.footer"
-        initial={meta.podcast?.footer}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.contentLinks')}
-        {form}
-        name="podcast.contentLinks"
-        initial={meta.podcast?.contentLinks}
-        let:field
-      >
-        <FkTextArea {field} />
-      </FormRow>
-
-      <FormRow
-        label={$t('details.pubDateTime')}
-        {form}
-        name="podcast.pubDateTime"
-        initial={meta.podcast?.pubDateTime}
-        let:field
-      >
-        <FkTextInput {field} />
-      </FormRow>
+      <PostEditPodcastSection {meta} {form} />
     </div>
   {/if}
 

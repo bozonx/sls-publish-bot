@@ -64,7 +64,7 @@ details:
   articleTemplate: Темплейт статьи
   articlePostTmpl: Темплейт поста в канал для статьи
   postTemplate: Темплейт поста
-  template: Темплейт
+  template: Темплейт (MD формат)
   articleFooter: Футер статьи (MD формат)
   postFooter: Футер поста (MD формат)
   footer: Футер (MD формат)
@@ -117,5 +117,6 @@ hints:
   urlName: Имя записи в url пути сайта. URL формат
   onlyPlainText: Поддерживается только простой текст
   mdFormatSupported: Поддерживается MD формат
+  footerField: 'Используйте вставки: ${TAGS} - хэштэги готовой строкой'
 placeholders:
   blogName: 'Например my-blog'

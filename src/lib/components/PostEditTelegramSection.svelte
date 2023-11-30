@@ -24,11 +24,22 @@ export let form
 >
   <FkCheckBoxInput {field} />
 </FormRow>
+
 <FormRow
-  label={$t('details.urlButton')}
+  label={$t('details.urlButton') + ' - text'}
   {form}
-  name="telegram.urlButton"
-  initial={meta.telegram?.urlButton}
+  name="telegram.urlButton.text"
+  initial={meta.telegram?.urlButton?.text}
+  let:field
+>
+  <FkTextInput {field} />
+</FormRow>
+
+<FormRow
+  label={$t('details.urlButton') + ' - URL'}
+  {form}
+  name="telegram.urlButton.url"
+  initial={meta.telegram?.urlButton?.url}
   let:field
 >
   <FkTextInput {field} />
@@ -82,6 +93,7 @@ export let form
     name="telegram.articleFooter"
     initial={meta.telegram?.articleFooter}
     let:field
+    hint={$t('hints.footerField')}
   >
     <FkTextArea {field} />
   </FormRow>
@@ -92,6 +104,7 @@ export let form
     name="telegram.postFooter"
     initial={meta.telegram?.postFooter}
     let:field
+    hint={$t('hints.footerField')}
   >
     <FkTextArea {field} />
   </FormRow>
