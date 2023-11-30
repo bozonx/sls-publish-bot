@@ -191,7 +191,7 @@ const handleTitleChange = ({detail}) => {
   <div hidden={!selectedSns.includes(ALL_SNS.dzen)}>
     <SectionHeader>{$t('sns.dzen')}</SectionHeader>
 
-    <PostEditDzenSection {meta} {form} />
+    <PostEditDzenSection {meta} {blog} {form} />
   </div>
 
   <div hidden={!arraySimilar(selectedSns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters]).length}>

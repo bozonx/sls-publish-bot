@@ -61,8 +61,10 @@ export interface PostMeta {
     pubDateTime?: string
   },
   dzen?: {
-    template?: string
-    footer?: string
     pubDateTime?: string
+    useCustomTemplate?: boolean
+    template?: string
+    useCustomFooter?: boolean
+    footer?: string
   },
 }

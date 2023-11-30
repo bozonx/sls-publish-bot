@@ -21,8 +21,12 @@ let configTmpl
 let configFooter
 
 $: {
-  configTmpl = (meta.type === POST_TYPES.article) ? blog.config.telegram.articleTemplate : blog.config.telegram.postTemplate
-  configFooter = (meta.type === POST_TYPES.article) ? blog.config.telegram.articleFooter : blog.config.telegram.postFooter
+  configTmpl = (meta.type === POST_TYPES.article)
+    ? blog.config.telegram.articleTemplate
+    : blog.config.telegram.postTemplate
+  configFooter = (meta.type === POST_TYPES.article)
+    ? blog.config.telegram.articleFooter
+    : blog.config.telegram.postFooter
 }
 
 </script>
@@ -116,7 +120,7 @@ $: {
   <div>
     {#if !value}
       {#if configTmpl}
-        <p>{$t('chunks.footerWillBeUsed')}:</p>
+        <p>{$t('chunks.templateWillBeUsed')}:</p>
         <CodeBlock>{configTmpl}</CodeBlock>
       {:else}
         <p>{$t('chunks.noTemplate')}</p>
@@ -135,7 +139,6 @@ $: {
     >
       <FkTextArea {field} />
     </FormRow>
-
     <FormRow
       hidden={meta.type === POST_TYPES.article}
       label={$t('details.postTemplate')}
@@ -173,7 +176,7 @@ $: {
 
   <div hidden={!value} class="mt-3">
     <FormRow
-      hidden={meta.type === POST_TYPES.article}
+      hidden={meta.type !== POST_TYPES.article}
       label={$t('details.articleFooter')}
       {form}
       name="telegram.articleFooter"
@@ -184,7 +187,7 @@ $: {
       <FkTextArea {field} />
     </FormRow>
     <FormRow
-      hidden={meta.type !== POST_TYPES.article}
+      hidden={meta.type === POST_TYPES.article}
       label={$t('details.postFooter')}
       {form}
       name="telegram.postFooter"

@@ -60,7 +60,7 @@ export let form
   <div>
     {#if !value}
       {#if blog.config.youtube?.template}
-        <p>{$t('chunks.footerWillBeUsed')}:</p>
+        <p>{$t('chunks.templateWillBeUsed')}:</p>
         <CodeBlock>{blog.config.youtube?.template}</CodeBlock>
       {:else}
         <p>{$t('chunks.noTemplate')}</p>

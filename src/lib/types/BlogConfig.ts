@@ -19,6 +19,8 @@ export interface BlogConfig {
     footer: string
   }
   dzen: {
+    articleTemplate: string
+    postTemplate: string
     postFooter: string
     articleFooter: string
   }
