@@ -29,16 +29,6 @@ export let form
 </FormRow>
 
 <FormRow
-  label={$t('details.contentLinks')}
-  {form}
-  name="podcast.contentLinks"
-  initial={meta.podcast?.contentLinks}
-  let:field
->
-  <FkTextArea {field} />
-</FormRow>
-
-<FormRow
   label={$t('details.pubDateTime')}
   {form}
   name="podcast.pubDateTime"
@@ -47,6 +37,23 @@ export let form
 >
   <FkTextInput {field} />
 </FormRow>
+
+<ReplaceDefaultField
+  label={$t('details.useCustomLinks')}
+  {form}
+  name="podcast.useCustomLinks"
+  initial={meta.podcast?.useCustomLinks}
+>
+  <FormRow
+    label={$t('details.contentLinks')}
+    {form}
+    name="podcast.contentLinks"
+    initial={meta.podcast?.contentLinks}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
 <ReplaceDefaultField
   label={$t('details.useCustomTemplate')}

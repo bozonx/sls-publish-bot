@@ -38,15 +38,22 @@ export let form
   <FkTextInput {field} />
 </FormRow>
 
-<FormRow
-  label={$t('details.contentLinks')}
+<ReplaceDefaultField
+  label={$t('details.useCustomLinks')}
   {form}
-  name="youtube.contentLinks"
-  initial={meta.youtube?.contentLinks}
-  let:field
+  name="youtube.useCustomLinks"
+  initial={meta.youtube?.useCustomLinks}
 >
-  <FkTextArea {field} />
-</FormRow>
+  <FormRow
+    label={$t('details.contentLinks')}
+    {form}
+    name="youtube.contentLinks"
+    initial={meta.youtube?.contentLinks}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
 <ReplaceDefaultField
   label={$t('details.useCustomTemplate')}

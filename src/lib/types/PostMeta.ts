@@ -19,11 +19,6 @@ export interface PostMeta {
     // links which were mentioned in content
     contentLinks: string
     pubDateTime: string
-
-    //postTemplate: string
-    //articleTemplate: string
-    //postFooter: string
-    //articleFooter: string
   },
   telegram?: {
     preview?: boolean
@@ -34,20 +29,21 @@ export interface PostMeta {
     pubDateTime?: string
     autoRemove?: string
     tags?: string[]
-    contentLinks?: string
 
+    useCustomLinks?: boolean
+    contentLinks?: string
     useCustomTemplate?: boolean
     postTemplate?: string
     articleTemplate?: string
-
     useCustomFooter?: boolean
     postFooter?: string
     articleFooter?: string
   },
   youtube?: {
     pubDateTime?: string
-    contentLinks?: string
     tags?: string[]
+    useCustomLinks?: boolean
+    contentLinks?: string
     useCustomTemplate?: boolean
     template?: string
     useCustomFooter?: boolean
@@ -63,6 +59,7 @@ export interface PostMeta {
   podcast?: {
     pubDateTime?: string
     tags?: string[]
+    useCustomLinks?: boolean
     contentLinks?: string
     useCustomTemplate?: boolean
     template?: string

@@ -17,6 +17,7 @@ import PostEditTelegramSection from "$lib/components/PostEditTelegramSection.sve
 import PostEditYoutubeSection from "$lib/components/PostEditYoutubeSection.svelte";
 import PostEditDzenSection from "$lib/components/PostEditDzenSection.svelte";
 import PostEditPodcastSection from "$lib/components/PostEditPodcastSection.svelte";
+import PostEditCommonSection from "$lib/components/PostEditCommonSection.svelte";
 
 
 export let handleSave = null
@@ -166,6 +167,12 @@ const handleTitleChange = ({detail}) => {
       </Modal>
     </FormRow>
   {/if}
+
+  <div>
+    <SectionHeader>{$t('headers.forAllSn')}</SectionHeader>
+
+    <PostEditCommonSection {meta} {blog} {form} />
+  </div>
 
   <div>
     <SectionHeader>{$t('headers.selectSN')}</SectionHeader>

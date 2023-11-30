@@ -25,6 +25,7 @@ headers:
   config: Настройки
   renameBlog: Переименовать блог
   selectSN: Выберете соц сети для публикации
+  forAllSn: Общее для всех соц сетей
 chunks:
   blog: Блог
   blogName: Имя блога
@@ -37,9 +38,7 @@ chunks:
   typeCustomName: Ввести кастомное имя
   useUrlButton: Использовать URL кнопку
   templateWillBeUsed: Будет использован темплейт
-  #noTemplate: Нет темплейта
   footerWillBeUsed: Будет использован футер
-  #noFooter: Нет футера
   empty: Пусто
 menu:
   previewArticle: Предпросмотр статьи
@@ -85,6 +84,7 @@ details:
   authorUrl: URL автора
   useCustomTemplate: Использовать кастомный темплейт
   useCustomFooter: Использовать кастомный футер
+  useCustomLinks: Переопределить ссылки на которые ссылается текст
 postTypes:
   article: Статья
   image: Картинка

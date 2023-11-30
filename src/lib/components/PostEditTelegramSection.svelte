@@ -18,18 +18,6 @@ export let blog
 export let form
 
 let useUrlButton = false
-// let configTmpl
-// let configFooter
-//
-// $: {
-//   configTmpl = (meta.type === POST_TYPES.article)
-//     ? blog.config.telegram.articleTemplate
-//     : blog.config.telegram.postTemplate
-//   configFooter = (meta.type === POST_TYPES.article)
-//     ? blog.config.telegram.articleFooter
-//     : blog.config.telegram.postFooter
-// }
-
 </script>
 
 <FormRow
@@ -98,15 +86,22 @@ let useUrlButton = false
   <FkTextInput {field} />
 </FormRow>
 
-<FormRow
-  label={$t('details.contentLinks')}
+<ReplaceDefaultField
+  label={$t('details.useCustomLinks')}
   {form}
-  name="telegram.contentLinks"
-  initial={meta.telegram?.contentLinks}
-  let:field
+  name="telegram.useCustomLinks"
+  initial={meta.telegram?.useCustomLinks}
 >
-  <FkTextArea {field} />
-</FormRow>
+  <FormRow
+    label={$t('details.contentLinks')}
+    {form}
+    name="telegram.contentLinks"
+    initial={meta.telegram?.contentLinks}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
 <ReplaceDefaultField
   label={$t('details.useCustomTemplate')}

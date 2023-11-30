@@ -11,7 +11,7 @@ export let form
 export let label
 export let initial
 export let defaultValue = undefined
-export let defaultValueLabel
+export let defaultValueLabel = undefined
 </script>
 
 <FormRow
@@ -24,7 +24,7 @@ export let defaultValueLabel
 >
   <FkCheckBoxInput {field} />
 
-  {#if !value}
+  {#if !value && defaultValueLabel}
     <div>
     {#if defaultValue}
       <p>{defaultValueLabel}</p>
