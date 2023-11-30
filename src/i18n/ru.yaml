@@ -35,6 +35,7 @@ chunks:
   parse: Распарсить
   insert: Вставить
   typeCustomName: Ввести кастомное имя
+  useUrlButton: Использовать URL кнопку
 menu:
   previewArticle: Предпросмотр статьи
   previewPost: Предпросмотр поста
@@ -120,3 +121,4 @@ hints:
   footerField: 'Используйте вставки: ${TAGS} - хэштэги готовой строкой'
 placeholders:
   blogName: 'Например my-blog'
+  tagsInput: Введите имя нового тэга и нажмите Enter

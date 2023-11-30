@@ -8,10 +8,13 @@ import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte"
 import FormRow from "$lib/components/common/FormRow.svelte"
 import {POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
+import SelectTags from "$lib/components/SelectTags.svelte";
 
 
 export let meta
 export let form
+
+let useUrlButton = false
 
 </script>
 
@@ -25,35 +28,31 @@ export let form
   <FkCheckBoxInput {field} />
 </FormRow>
 
-<FormRow
-  label={$t('details.urlButton') + ' - text'}
-  {form}
-  name="telegram.urlButton.text"
-  initial={meta.telegram?.urlButton?.text}
-  let:field
->
-  <FkTextInput {field} />
-</FormRow>
+<div class="mb-5 mt-7">
+  <Checkbox on:change={(event) => useUrlButton = event.target.checked}>{$t('chunks.useUrlButton')}</Checkbox>
+</div>
 
-<FormRow
-  label={$t('details.urlButton') + ' - URL'}
-  {form}
-  name="telegram.urlButton.url"
-  initial={meta.telegram?.urlButton?.url}
-  let:field
->
-  <FkTextInput {field} />
-</FormRow>
+<div hidden={!useUrlButton}>
+  <FormRow
+    label={$t('details.urlButton') + ' - text'}
+    {form}
+    name="telegram.urlButton.text"
+    initial={meta.telegram?.urlButton?.text}
+    let:field
+  >
+    <FkTextInput {field} />
+  </FormRow>
 
-<FormRow
-  label={$t('details.autoRemove')}
-  {form}
-  name="telegram.autoRemove"
-  initial={meta.telegram?.autoRemove}
-  let:field
->
-  <FkTextInput {field} />
-</FormRow>
+  <FormRow
+    label={$t('details.urlButton') + ' - URL'}
+    {form}
+    name="telegram.urlButton.url"
+    initial={meta.telegram?.urlButton?.url}
+    let:field
+  >
+    <FkTextInput {field} />
+  </FormRow>
+</div>
 
 <FormRow
   label={$t('details.tags')}
@@ -62,7 +61,7 @@ export let form
   initial={meta.telegram?.tags}
   let:field
 >
-  <FkTextInput {field} />
+  <SelectTags {field} />
 </FormRow>
 
 {#if meta.type === POST_TYPES.article}
@@ -125,6 +124,16 @@ export let form
   {form}
   name="telegram.pubDateTime"
   initial={meta.telegram?.pubDateTime}
+  let:field
+>
+  <FkTextInput {field} />
+</FormRow>
+
+<FormRow
+  label={$t('details.autoRemove')}
+  {form}
+  name="telegram.autoRemove"
+  initial={meta.telegram?.autoRemove}
   let:field
 >
   <FkTextInput {field} />

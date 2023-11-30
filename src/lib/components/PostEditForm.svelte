@@ -176,36 +176,28 @@ const handleTitleChange = ({detail}) => {
     />
   </div>
 
-  {#if selectedSns.includes(ALL_SNS.telegram)}
-    <div>
-      <SectionHeader>{$t('sns.telegram')}</SectionHeader>
+  <div hidden={selectedSns.includes(ALL_SNS.telegram)}>
+    <SectionHeader>{$t('sns.telegram')}</SectionHeader>
 
-      <PostEditTelegramSection {meta} {form} />
-    </div>
-  {/if}
+    <PostEditTelegramSection {meta} {form} />
+  </div>
 
-  {#if selectedSns.includes(ALL_SNS.youtube)}
-    <div>
-      <SectionHeader>{$t('sns.youtube')}</SectionHeader>
+  <div hidden={!selectedSns.includes(ALL_SNS.youtube)}>
+    <SectionHeader>{$t('sns.youtube')}</SectionHeader>
 
-      <PostEditYoutubeSection {meta} {form} />
-    </div>
-  {/if}
+    <PostEditYoutubeSection {meta} {form} />
+  </div>
 
-  {#if selectedSns.includes(ALL_SNS.dzen)}
-    <div>
-      <SectionHeader>{$t('sns.dzen')}</SectionHeader>
+  <div hidden={!selectedSns.includes(ALL_SNS.dzen)}>
+    <SectionHeader>{$t('sns.dzen')}</SectionHeader>
 
-      <PostEditDzenSection {meta} {form} />
-    </div>
-  {/if}
+    <PostEditDzenSection {meta} {form} />
+  </div>
 
-  {#if arraySimilar(selectedSns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters])}
-    <div>
-      <SectionHeader>Podcast</SectionHeader>
+  <div hidden={!arraySimilar(selectedSns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters]).length}>
+    <SectionHeader>Podcast</SectionHeader>
 
-      <PostEditPodcastSection {meta} {form} />
-    </div>
-  {/if}
+    <PostEditPodcastSection {meta} {form} />
+  </div>
 
 </FkForm>
