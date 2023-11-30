@@ -9,23 +9,12 @@ import FormRow from "$lib/components/common/FormRow.svelte"
 import {POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
 import CodeBlock from "$lib/components/common/CodeBlock.svelte";
+import ReplaceDefaultField from "$lib/components/ReplaceDefaultField.svelte";
 
 
 export let meta
 export let blog
 export let form
-
-let configTmpl
-let configFooter
-
-$: {
-  configTmpl = (meta.type === POST_TYPES.article)
-    ? blog.config.dzen.articleTemplate
-    : blog.config.dzen.postTemplate
-  configFooter = (meta.type === POST_TYPES.article)
-    ? blog.config.dzen.articleFooter
-    : blog.config.dzen.postFooter
-}
 </script>
 
 <FormRow
@@ -38,71 +27,45 @@ $: {
   <FkTextInput {field} />
 </FormRow>
 
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomTemplate')}
   {form}
   name="dzen.useCustomTemplate"
   initial={meta.dzen?.useCustomTemplate}
-  let:field
-  let:value
+  defaultValue={(meta.type === POST_TYPES.article)
+    ? blog.config.dzen.articleTemplate
+    : blog.config.dzen.postTemplate}
+  defaultValueLabel={$t('chunks.templateWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
+  <FormRow
+    label={$t('details.template')}
+    {form}
+    name="dzen.template"
+    initial={meta.dzen?.template}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
-  <div>
-    {#if !value}
-      {#if configTmpl}
-        <p>{$t('chunks.templateWillBeUsed')}:</p>
-        <CodeBlock>{configTmpl}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noTemplate')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      label={$t('details.template')}
-      {form}
-      name="dzen.template"
-      initial={meta.dzen?.template}
-      let:field
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-</FormRow>
-
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomFooter')}
   {form}
   name="dzen.useCustomFooter"
   initial={meta.dzen?.useCustomFooter}
-  let:field
-  let:value
+  defaultValue={(meta.type === POST_TYPES.article)
+    ? blog.config.dzen.articleFooter
+    : blog.config.dzen.postFooter}
+  defaultValueLabel={$t('chunks.footerWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
-
-  <div>
-    {#if !value}
-      {#if configFooter}
-        <p>{$t('chunks.footerWillBeUsed')}:</p>
-        <CodeBlock>{configFooter}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noFooter')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      label={$t('details.footer')}
-      {form}
-      name="dzen.footer"
-      initial={meta.dzen?.footer}
-      let:field
-      hint={$t('hints.footerField')}
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-</FormRow>
+  <FormRow
+    label={$t('details.footer')}
+    {form}
+    name="dzen.footer"
+    initial={meta.dzen?.footer}
+    let:field
+    hint={$t('hints.footerField')}
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>

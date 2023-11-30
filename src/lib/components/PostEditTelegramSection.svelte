@@ -10,6 +10,7 @@ import FormRow from "$lib/components/common/FormRow.svelte"
 import {POST_TYPES} from "$lib/constants"
 import SectionHeader from "$lib/components/SectionHeader.svelte";
 import SelectTags from "$lib/components/SelectTags.svelte";
+import ReplaceDefaultField from "$lib/components/ReplaceDefaultField.svelte";
 
 
 export let meta
@@ -17,17 +18,17 @@ export let blog
 export let form
 
 let useUrlButton = false
-let configTmpl
-let configFooter
-
-$: {
-  configTmpl = (meta.type === POST_TYPES.article)
-    ? blog.config.telegram.articleTemplate
-    : blog.config.telegram.postTemplate
-  configFooter = (meta.type === POST_TYPES.article)
-    ? blog.config.telegram.articleFooter
-    : blog.config.telegram.postFooter
-}
+// let configTmpl
+// let configFooter
+//
+// $: {
+//   configTmpl = (meta.type === POST_TYPES.article)
+//     ? blog.config.telegram.articleTemplate
+//     : blog.config.telegram.postTemplate
+//   configFooter = (meta.type === POST_TYPES.article)
+//     ? blog.config.telegram.articleFooter
+//     : blog.config.telegram.postFooter
+// }
 
 </script>
 
@@ -107,95 +108,68 @@ $: {
   <FkTextArea {field} />
 </FormRow>
 
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomTemplate')}
   {form}
   name="telegram.useCustomTemplate"
   initial={meta.telegram?.useCustomTemplate}
-  let:field
-  let:value
+  defaultValue={(meta.type === POST_TYPES.article)
+    ? blog.config.telegram.articleTemplate
+    : blog.config.telegram.postTemplate}
+  defaultValueLabel={$t('chunks.templateWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
+  <FormRow
+    hidden={meta.type !== POST_TYPES.article}
+    label={$t('details.articleTemplate')}
+    {form}
+    name="telegram.articleTemplate"
+    initial={meta.telegram?.articleTemplate}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+  <FormRow
+    hidden={meta.type === POST_TYPES.article}
+    label={$t('details.postTemplate')}
+    {form}
+    name="telegram.postTemplate"
+    initial={meta.telegram?.postTemplate}
+    let:field
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
-  <div>
-    {#if !value}
-      {#if configTmpl}
-        <p>{$t('chunks.templateWillBeUsed')}:</p>
-        <CodeBlock>{configTmpl}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noTemplate')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      hidden={meta.type !== POST_TYPES.article}
-      label={$t('details.articleTemplate')}
-      {form}
-      name="telegram.articleTemplate"
-      initial={meta.telegram?.articleTemplate}
-      let:field
-    >
-      <FkTextArea {field} />
-    </FormRow>
-    <FormRow
-      hidden={meta.type === POST_TYPES.article}
-      label={$t('details.postTemplate')}
-      {form}
-      name="telegram.postTemplate"
-      initial={meta.telegram?.postTemplate}
-      let:field
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-
-</FormRow>
-
-<FormRow
+<ReplaceDefaultField
   label={$t('details.useCustomFooter')}
   {form}
   name="telegram.useCustomFooter"
   initial={meta.telegram?.useCustomFooter}
-  let:field
-  let:value
+  defaultValue={(meta.type === POST_TYPES.article)
+    ? blog.config.telegram.articleFooter
+    : blog.config.telegram.postFooter}
+  defaultValueLabel={$t('chunks.footerWillBeUsed')}
 >
-  <FkCheckBoxInput {field} />
-
-  <div>
-    {#if !value}
-      {#if configFooter}
-        <p>{$t('chunks.footerWillBeUsed')}:</p>
-        <CodeBlock>{configFooter}</CodeBlock>
-      {:else}
-        <p>{$t('chunks.noFooter')}</p>
-      {/if}
-    {/if}
-  </div>
-
-  <div hidden={!value} class="mt-3">
-    <FormRow
-      hidden={meta.type !== POST_TYPES.article}
-      label={$t('details.articleFooter')}
-      {form}
-      name="telegram.articleFooter"
-      initial={meta.telegram?.articleFooter}
-      let:field
-      hint={$t('hints.footerField')}
-    >
-      <FkTextArea {field} />
-    </FormRow>
-    <FormRow
-      hidden={meta.type === POST_TYPES.article}
-      label={$t('details.postFooter')}
-      {form}
-      name="telegram.postFooter"
-      initial={meta.telegram?.postFooter}
-      let:field
-      hint={$t('hints.footerField')}
-    >
-      <FkTextArea {field} />
-    </FormRow>
-  </div>
-</FormRow>
+  <FormRow
+    hidden={meta.type !== POST_TYPES.article}
+    label={$t('details.articleFooter')}
+    {form}
+    name="telegram.articleFooter"
+    initial={meta.telegram?.articleFooter}
+    let:field
+    hint={$t('hints.footerField')}
+  >
+    <FkTextArea {field} />
+  </FormRow>
+  <FormRow
+    hidden={meta.type === POST_TYPES.article}
+    label={$t('details.postFooter')}
+    {form}
+    name="telegram.postFooter"
+    initial={meta.telegram?.postFooter}
+    let:field
+    hint={$t('hints.footerField')}
+  >
+    <FkTextArea {field} />
+  </FormRow>
+</ReplaceDefaultField>
