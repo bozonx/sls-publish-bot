@@ -37,7 +37,7 @@ const handleMount = (field) => {
 
 </script>
 
-<div class="mb-5" {hidden}>
+<div class="mb-5 lg:flex w-full" {hidden}>
   <FktInput
     {form}
     {name}
@@ -58,8 +58,8 @@ const handleMount = (field) => {
     let:disabled
     let:custom
   >
-    <Label for={name} class="block mb-2">{label}</Label>
-    <div>
+    <Label for={name} class="block mb-2 lg:w-40">{label}</Label>
+    <div class="flex-1">
       <slot
         {field}
         {value}
@@ -71,20 +71,21 @@ const handleMount = (field) => {
         {disabled}
         {custom}
       />
+
+      {#if $$slots.helper}
+        <Helper class="text-sm mt-2">
+          <slot name="helper" />
+        </Helper>
+      {/if}
+      {#if !valid}
+        <FieldMsg error>{invalidMsg}</FieldMsg>
+      {/if}
+      {#if success}
+        <FieldMsg success>{success}</FieldMsg>
+      {/if}
+      {#if hint}
+        <FieldMsg hint>{hint}</FieldMsg>
+      {/if}
     </div>
-    {#if $$slots.helper}
-      <Helper class="text-sm mt-2">
-        <slot name="helper" />
-      </Helper>
-    {/if}
-    {#if !valid}
-      <FieldMsg error>{invalidMsg}</FieldMsg>
-    {/if}
-    {#if success}
-      <FieldMsg success>{success}</FieldMsg>
-    {/if}
-    {#if hint}
-      <FieldMsg hint>{hint}</FieldMsg>
-    {/if}
   </FktInput>
 </div>

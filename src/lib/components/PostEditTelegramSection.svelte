@@ -17,7 +17,7 @@ export let meta
 export let blog
 export let form
 
-let useUrlButton = false
+//let useUrlButton = false
 </script>
 
 <FormRow
@@ -30,11 +30,12 @@ let useUrlButton = false
   <FkCheckBoxInput {field} />
 </FormRow>
 
-<div class="mb-5 mt-7">
-  <Checkbox bind:checked={useUrlButton}>{$t('chunks.useUrlButton')}</Checkbox>
-</div>
-
-<div hidden={!useUrlButton}>
+<ReplaceDefaultField
+  label={$t('details.useUrlButton')}
+  {form}
+  name="telegram.useUrlButton"
+  initial={meta.telegram?.useUrlButton}
+>
   <FormRow
     label={$t('details.urlButton') + ' - text'}
     {form}
@@ -54,7 +55,7 @@ let useUrlButton = false
   >
     <FkTextInput {field} />
   </FormRow>
-</div>
+</ReplaceDefaultField>
 
 <FormRow
   label={$t('details.tags')}
@@ -64,16 +65,6 @@ let useUrlButton = false
   let:field
 >
   <SelectTags {field} />
-</FormRow>
-
-<FormRow
-  label={$t('details.autoRemove')}
-  {form}
-  name="telegram.autoRemove"
-  initial={meta.telegram?.autoRemove}
-  let:field
->
-  <FkTextInput {field} />
 </FormRow>
 
 <ReplaceDefaultField
@@ -87,6 +78,23 @@ let useUrlButton = false
     {form}
     name="telegram.pubDateTime"
     initial={meta.telegram?.pubDateTime}
+    let:field
+  >
+    <FkTextInput {field} />
+  </FormRow>
+</ReplaceDefaultField>
+
+<ReplaceDefaultField
+  label={$t('details.useAutoRemove')}
+  {form}
+  name="telegram.useAutoRemove"
+  initial={meta.telegram?.useAutoRemove}
+>
+  <FormRow
+    label={$t('details.autoRemove')}
+    {form}
+    name="telegram.autoRemove"
+    initial={meta.telegram?.autoRemove}
     let:field
   >
     <FkTextInput {field} />

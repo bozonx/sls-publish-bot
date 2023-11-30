@@ -75,6 +75,10 @@ const handleTitleChange = ({detail}) => {
   detail.field.form.fields['urlName'].handleChange(converted)
 }
 
+
+// TODO: при выборе соц сетей - только поддреживаемые блогом
+// TODO: типы публикаций только поддреживаемые блогом
+
 </script>
 
 <FkForm let:form {handleSave} {validateCb}>

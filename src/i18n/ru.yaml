@@ -36,7 +36,6 @@ chunks:
   parse: Распарсить
   insert: Вставить
   typeCustomName: Ввести кастомное имя
-  useUrlButton: Использовать URL кнопку
   templateWillBeUsed: Будет использован темплейт
   footerWillBeUsed: Будет использован футер
   empty: Пусто
@@ -86,6 +85,8 @@ details:
   useCustomFooter: Использовать кастомный футер
   useCustomLinks: Переопределить ссылки на которые ссылается текст
   useCustomPubDate: Переопределить дату публикации
+  useUrlButton: Использовать URL кнопку
+  useAutoRemove: Использовать автоудаление поста
 postTypes:
   article: Статья
   image: Картинка

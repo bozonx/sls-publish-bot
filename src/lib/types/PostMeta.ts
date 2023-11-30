@@ -22,13 +22,16 @@ export interface PostMeta {
   },
   telegram?: {
     preview?: boolean
+    useUrlButton?: boolean
     urlButton?: {
       text: string
       url: string
     }
 
-    autoRemove?: string
     tags?: string[]
+
+    useAutoRemove?: boolean
+    autoRemove?: string
 
     useCustomPubDate?: boolean
     pubDateTime?: string
