@@ -19,16 +19,6 @@ export let form
 </script>
 
 <FormRow
-  label={$t('details.pubDateTime')}
-  {form}
-  name="youtube.pubDateTime"
-  initial={meta.youtube?.pubDateTime}
-  let:field
->
-  <FkTextInput {field} />
-</FormRow>
-
-<FormRow
   label={$t('details.tags')}
   {form}
   name="youtube.tags"
@@ -37,6 +27,23 @@ export let form
 >
   <FkTextInput {field} />
 </FormRow>
+
+<ReplaceDefaultField
+  label={$t('details.useCustomPubDate')}
+  {form}
+  name="youtube.useCustomPubDate"
+  initial={meta.youtube?.useCustomPubDate}
+>
+  <FormRow
+    label={$t('details.pubDateTime')}
+    {form}
+    name="youtube.pubDateTime"
+    initial={meta.youtube?.pubDateTime}
+    let:field
+  >
+    <FkTextInput {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
 <ReplaceDefaultField
   label={$t('details.useCustomLinks')}

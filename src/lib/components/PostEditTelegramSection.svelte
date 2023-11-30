@@ -67,16 +67,6 @@ let useUrlButton = false
 </FormRow>
 
 <FormRow
-  label={$t('details.pubDateTime')}
-  {form}
-  name="telegram.pubDateTime"
-  initial={meta.telegram?.pubDateTime}
-  let:field
->
-  <FkTextInput {field} />
-</FormRow>
-
-<FormRow
   label={$t('details.autoRemove')}
   {form}
   name="telegram.autoRemove"
@@ -85,6 +75,23 @@ let useUrlButton = false
 >
   <FkTextInput {field} />
 </FormRow>
+
+<ReplaceDefaultField
+  label={$t('details.useCustomPubDate')}
+  {form}
+  name="telegram.useCustomPubDate"
+  initial={meta.telegram?.useCustomPubDate}
+>
+  <FormRow
+    label={$t('details.pubDateTime')}
+    {form}
+    name="telegram.pubDateTime"
+    initial={meta.telegram?.pubDateTime}
+    let:field
+  >
+    <FkTextInput {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
 <ReplaceDefaultField
   label={$t('details.useCustomLinks')}

@@ -85,6 +85,7 @@ details:
   useCustomTemplate: Использовать кастомный темплейт
   useCustomFooter: Использовать кастомный футер
   useCustomLinks: Переопределить ссылки на которые ссылается текст
+  useCustomPubDate: Переопределить дату публикации
 postTypes:
   article: Статья
   image: Картинка

@@ -28,15 +28,22 @@ export let form
   <FkTextInput {field} />
 </FormRow>
 
-<FormRow
-  label={$t('details.pubDateTime')}
+<ReplaceDefaultField
+  label={$t('details.useCustomPubDate')}
   {form}
-  name="podcast.pubDateTime"
-  initial={meta.podcast?.pubDateTime}
-  let:field
+  name="podcast.useCustomPubDate"
+  initial={meta.podcast?.useCustomPubDate}
 >
-  <FkTextInput {field} />
-</FormRow>
+  <FormRow
+    label={$t('details.pubDateTime')}
+    {form}
+    name="podcast.pubDateTime"
+    initial={meta.podcast?.pubDateTime}
+    let:field
+  >
+    <FkTextInput {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
 <ReplaceDefaultField
   label={$t('details.useCustomLinks')}

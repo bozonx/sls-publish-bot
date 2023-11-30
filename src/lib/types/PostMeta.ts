@@ -26,10 +26,12 @@ export interface PostMeta {
       text: string
       url: string
     }
-    pubDateTime?: string
+
     autoRemove?: string
     tags?: string[]
 
+    useCustomPubDate?: boolean
+    pubDateTime?: string
     useCustomLinks?: boolean
     contentLinks?: string
     useCustomTemplate?: boolean
@@ -40,8 +42,9 @@ export interface PostMeta {
     articleFooter?: string
   },
   youtube?: {
-    pubDateTime?: string
     tags?: string[]
+    useCustomPubDate?: boolean
+    pubDateTime?: string
     useCustomLinks?: boolean
     contentLinks?: string
     useCustomTemplate?: boolean
@@ -50,6 +53,7 @@ export interface PostMeta {
     footer?: string
   },
   dzen?: {
+    useCustomPubDate?: boolean
     pubDateTime?: string
     useCustomTemplate?: boolean
     template?: string
@@ -57,8 +61,9 @@ export interface PostMeta {
     footer?: string
   },
   podcast?: {
-    pubDateTime?: string
     tags?: string[]
+    useCustomPubDate?: boolean
+    pubDateTime?: string
     useCustomLinks?: boolean
     contentLinks?: string
     useCustomTemplate?: boolean

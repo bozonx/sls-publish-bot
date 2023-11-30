@@ -17,15 +17,22 @@ export let blog
 export let form
 </script>
 
-<FormRow
-  label={$t('details.pubDateTime')}
+<ReplaceDefaultField
+  label={$t('details.useCustomPubDate')}
   {form}
-  name="dzen.pubDateTime"
-  initial={meta.dzen?.pubDateTime}
-  let:field
+  name="dzen.useCustomPubDate"
+  initial={meta.dzen?.useCustomPubDate}
 >
-  <FkTextInput {field} />
-</FormRow>
+  <FormRow
+    label={$t('details.pubDateTime')}
+    {form}
+    name="dzen.pubDateTime"
+    initial={meta.dzen?.pubDateTime}
+    let:field
+  >
+    <FkTextInput {field} />
+  </FormRow>
+</ReplaceDefaultField>
 
 <ReplaceDefaultField
   label={$t('details.useCustomTemplate')}
