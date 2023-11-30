@@ -1,6 +1,8 @@
+<script>
+export let id
+</script>
 
-
-<pre class="bg-gray-50 dark:bg-gray-800 px-2 py-3 overflow-x-auto"><slot /></pre>
+<pre {id} class="bg-gray-50 dark:bg-gray-800 px-2 py-3 overflow-x-auto"><slot /></pre>
 
 
 <style>

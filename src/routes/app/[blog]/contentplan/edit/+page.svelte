@@ -2,7 +2,6 @@
 import { arraySimilar } from 'squidlet-lib'
 import {t} from '$lib/store/t'
 import { page } from '$app/stores'
-import BlogDetails from '$lib/components/BlogDetails.svelte'
 import PostEditForm from '$lib/components/PostEditForm.svelte'
 import SectionHeader from '$lib/components/SectionHeader.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
@@ -34,14 +33,6 @@ const handleSnSave = async (values) => {
 
 <div>
   <div>
-    <SectionHeader>{$t('chunks.blog')}</SectionHeader>
-
-    <BlogDetails item={data.blog} />
-  </div>
-
-  <div>
-    <SectionHeader>{$t('headers.postDetails')}</SectionHeader>
-
     <PostEditForm item={data.post} blog={data.blog} />
   </div>
 

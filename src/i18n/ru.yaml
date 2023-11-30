@@ -87,6 +87,7 @@ details:
   useCustomPubDate: Переопределить дату публикации
   useUrlButton: Использовать URL кнопку
   useAutoRemove: Использовать автоудаление поста
+  pubSns: Соц сети для публикации
 postTypes:
   article: Статья
   image: Картинка
