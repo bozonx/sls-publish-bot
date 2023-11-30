@@ -36,7 +36,10 @@ chunks:
   insert: Вставить
   typeCustomName: Ввести кастомное имя
   useUrlButton: Использовать URL кнопку
+  templateWillBeUsed: Будет использован темплейт
+  noTemplate: Нет темплейта
   footerWillBeUsed: Будет использован футер
+  noFooter: Нет футера
 menu:
   previewArticle: Предпросмотр статьи
   previewPost: Предпросмотр поста

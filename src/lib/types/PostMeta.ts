@@ -45,11 +45,13 @@ export interface PostMeta {
     articleFooter?: string
   },
   youtube?: {
-    tags?: string[]
-    template?: string
-    contentLinks?: string
-    footer?: string
     pubDateTime?: string
+    contentLinks?: string
+    tags?: string[]
+    useCustomTemplate?: boolean
+    template?: string
+    useCustomFooter?: boolean
+    footer?: string
   },
   podcast?: {
     tags?: string[]

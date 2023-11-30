@@ -17,15 +17,13 @@ export let blog
 export let form
 
 let useUrlButton = false
-//let useCustomTemplate = Boolean(meta.telegram?.useCustomTemplate)
+let configTmpl
+let configFooter
 
-// const onCustomTmpl = (event) => {
-//   console.log(event.target.checked)
-//
-//   //form.fields.telegram.useCustomTemplate.handleChange()
-// }
-
-console.log(blog)
+$: {
+  configTmpl = (meta.type === POST_TYPES.article) ? blog.config.telegram.articleTemplate : blog.config.telegram.postTemplate
+  configFooter = (meta.type === POST_TYPES.article) ? blog.config.telegram.articleFooter : blog.config.telegram.postFooter
+}
 
 </script>
 
@@ -105,13 +103,6 @@ console.log(blog)
   <FkTextArea {field} />
 </FormRow>
 
-
-<!--
-<div class="mb-5 mt-7">
-  <Checkbox bind:checked={useCustomTemplate} on:change={onCustomTmpl}>{$t('chunks.useCustomTemplate')}</Checkbox>
-</div>
--->
-
 <FormRow
   label={$t('details.useCustomTemplate')}
   {form}
@@ -121,6 +112,17 @@ console.log(blog)
   let:value
 >
   <FkCheckBoxInput {field} />
+
+  <div>
+    {#if !value}
+      {#if configTmpl}
+        <p>{$t('chunks.footerWillBeUsed')}:</p>
+        <CodeBlock>{configTmpl}</CodeBlock>
+      {:else}
+        <p>{$t('chunks.noTemplate')}</p>
+      {/if}
+    {/if}
+  </div>
 
   <div hidden={!value} class="mt-3">
     <FormRow
@@ -158,9 +160,15 @@ console.log(blog)
 >
   <FkCheckBoxInput {field} />
 
-  <div hidden={value}>
-    <p>{$t('chunks.footerWillBeUsed')}:</p>
-    <CodeBlock>{(meta.type === POST_TYPES.article) ? blog.config.telegram.articleFooter : blog.config.telegram.postFooter}</CodeBlock>
+  <div>
+    {#if !value}
+      {#if configFooter}
+        <p>{$t('chunks.footerWillBeUsed')}:</p>
+        <CodeBlock>{configFooter}</CodeBlock>
+      {:else}
+        <p>{$t('chunks.noFooter')}</p>
+      {/if}
+    {/if}
   </div>
 
   <div hidden={!value} class="mt-3">

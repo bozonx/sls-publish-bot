@@ -8,8 +8,15 @@ export interface BlogConfig {
     channelId: string
     supportedTypes: string[]
     articlePostTmpl: string
+
+    articleTemplate: string
+    postTemplate: string
     postFooter: string
     articleFooter: string
+  }
+  youtube: {
+    template: string
+    footer: string
   }
   dzen: {
     postFooter: string
