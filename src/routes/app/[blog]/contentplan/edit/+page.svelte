@@ -14,7 +14,7 @@ export let data
 
 const meta = data.post.result.meta
 let allAllowedSns = arraySimilar(Object.keys(meta), Object.keys(ALL_SNS))
-let publishSns = [...allAllowedSns]
+//let publishSns = [...allAllowedSns]
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
@@ -27,7 +27,7 @@ breadcrumbs.set([
 ])
 
 const handleSnSave = async (values) => {
-  publishSns = Object.keys(values).filter((key) => values[key])
+  //publishSns = Object.keys(values).filter((key) => values[key])
 }
 </script>
 
@@ -42,9 +42,6 @@ const handleSnSave = async (values) => {
         <MenuItem
           href="/app/{$page.params.blog}/contentplan/post?postid={meta.postId}"
         >{$t('headers.publish')}</MenuItem>
-      </li>
-      <li>
-        <MenuItem>{$t('menu.toArchive')}</MenuItem>
       </li>
     </MenuWrapper>
   </div>

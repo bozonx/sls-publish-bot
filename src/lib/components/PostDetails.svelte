@@ -14,13 +14,13 @@ const meta = item.result.meta
 </script>
 
 <div>
+  <DetailItem label={$t('details.type')} unless={!meta.type}>{$t(`postTypes.${meta.type}`)}</DetailItem>
   <DetailItem label="postId">{meta.postId}</DetailItem>
   <DetailItem label="urlName" unless={!meta.urlName}>{meta.urlName}</DetailItem>
   <DetailItem label={$t('details.title')} unless={!meta.title}>
     <div id="post-title">{meta.title}</div>
     <CopyToClipboardButton elementId="post-title">{$t('links.copyToClipboard')}</CopyToClipboardButton>
   </DetailItem>
-  <DetailItem label={$t('details.type')} unless={!meta.type}>{$t(`postTypes.${meta.type}`)}</DetailItem>
   <DetailItem label={$t('details.descr')} unless={!meta.descr}>
     <div id="post-descr">{meta.descr}</div>
     <CopyToClipboardButton elementId="post-descr">{$t('links.copyToClipboard')}</CopyToClipboardButton>

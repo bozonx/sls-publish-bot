@@ -18,7 +18,6 @@ headers:
   postDetails: Детали поста
   preview: Предпросмотр
   publish: Опубликовать
-  publishData: Сформировать материал публикации
   header: Заголовок
   post: Пост
   reminder: Незабудьте
@@ -46,12 +45,13 @@ menu:
   changeDate: Изменить дату публикации
   changeTime: Изменить время публикации
   changeTags: Изменить тэги
-  pubDataZen: Для Дзен
-  pubDataYoutube: Для youtube
-  pubDataPodcast: Для podcast
+  previewZen: Предпросмотр для Дзен
+  previewYoutube: Предпросмотр для youtube
+  previewPodcast: Предпросмотр для podcast
   publishOnlyTelegraph: Опубликовать только в telegra.ph
-  publishSite: Опубликовать на сайте
-  publishYoutube: Опубликовать в youtube
+  publishOnlyTelegram: Опубликовать только в Telegram
+  publishOnlySite: Опубликовать только на сайте
+  publishOnlyYoutube: Опубликовать только в youtube
   publishAll: Опубликовать всё
   edit: Редактировать
   toArchive: Переместить в архив

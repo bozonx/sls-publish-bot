@@ -7,6 +7,7 @@ import SectionHeader from '$lib/components/SectionHeader.svelte'
 import {breadcrumbs} from '$lib/store/breadcrumbs'
 import MenuWrapper from "$lib/components/MenuWrapper.svelte";
 import MenuItem from "$lib/components/MenuItem.svelte";
+import SelectSns from "$lib/components/SelectSns.svelte";
 import FkForm from "$lib/components/common/FkForm.svelte";
 import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte"
 import {ALL_SNS, POST_TYPES} from '$lib/constants'
@@ -15,8 +16,8 @@ import {ALL_SNS, POST_TYPES} from '$lib/constants'
 export let data
 
 const meta = data.post.result.meta
-let allAllowedSns = arraySimilar(Object.keys(meta), Object.keys(ALL_SNS))
-let publishSns = [...allAllowedSns]
+let allAllowedSns = arraySimilar(meta.sns, Object.keys(ALL_SNS))
+let publishSns = allAllowedSns
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
@@ -24,17 +25,21 @@ breadcrumbs.set([
   {title: meta.title || meta.postId},
 ])
 
-const handleSnSave = async (values) => {
-  publishSns = Object.keys(values).filter((key) => values[key])
+const onSelectSnsChange = async ({detail}) => {
+  //publishSns = Object.keys(values).filter((key) => values[key])
+  publishSns = detail
 }
+
+const onMoveToArchive = () => {
+
+  // TODO: add
+
+  console.log(111)
+}
+
 </script>
 
 <div>
-  <div>
-    <SectionHeader>{$t('headers.postDetails')}</SectionHeader>
-
-    <PostDetails item={data.post} />
-  </div>
 
   <div class="mt-7">
     <MenuWrapper>
@@ -44,9 +49,15 @@ const handleSnSave = async (values) => {
         >{$t('menu.edit')}</MenuItem>
       </li>
       <li>
-        <MenuItem>{$t('menu.toArchive')}</MenuItem>
+        <MenuItem href="" on:click={onMoveToArchive}>{$t('menu.toArchive')}</MenuItem>
       </li>
     </MenuWrapper>
+  </div>
+
+  <div>
+    <SectionHeader>{$t('headers.postDetails')}</SectionHeader>
+
+    <PostDetails item={data.post} />
   </div>
 
   <div class="mt-7">
@@ -66,38 +77,30 @@ const handleSnSave = async (values) => {
           >{$t('menu.previewPost')}</MenuItem>
         </li>
       {/if}
-
-      {#if meta.telegram}
+      {#if meta.sns?.includes(ALL_SNS.telegram)}
         <li>
-          <MenuItem>{$t('menu.previewTgPost')}</MenuItem>
+          <MenuItem>!!! {$t('menu.previewTgPost')}</MenuItem>
         </li>
       {/if}
-    </MenuWrapper>
-  </div>
-
-  <div class="mt-7">
-    <SectionHeader>{$t('headers.publishData')}</SectionHeader>
-
-    <MenuWrapper>
-      {#if meta.dzen}
+      {#if meta.sns?.includes(ALL_SNS.dzen)}
         <li>
           <MenuItem
             href="/app/{$page.params.blog}/contentplan/post/fordzen?postid={meta.postId}"
-          >{$t('menu.pubDataZen')}</MenuItem>
+          >{$t('menu.previewZen')}</MenuItem>
         </li>
       {/if}
-      {#if meta.podcast}
-        <li>
-          <MenuItem
-            href="/app/{$page.params.blog}/contentplan/post/forpodcast?postid={meta.postId}"
-          >{$t('menu.pubDataPodcast')}</MenuItem>
-        </li>
-      {/if}
-      {#if meta.youtube}
+      {#if meta.sns?.includes(ALL_SNS.youtube)}
         <li>
           <MenuItem
             href="/app/{$page.params.blog}/contentplan/post/foryoutube?postid={meta.postId}"
-          >{$t('menu.pubDataYoutube')}</MenuItem>
+          >{$t('menu.previewYoutube')}</MenuItem>
+        </li>
+      {/if}
+      {#if meta.sns?.includes(ALL_SNS.podcast)}
+        <li>
+          <MenuItem
+            href="/app/{$page.params.blog}/contentplan/post/forpodcast?postid={meta.postId}"
+          >{$t('menu.previewPodcast')}</MenuItem>
         </li>
       {/if}
     </MenuWrapper>
@@ -106,15 +109,7 @@ const handleSnSave = async (values) => {
   <div class="mt-7">
     <SectionHeader>{$t('headers.publish')}</SectionHeader>
 
-    <FkForm formConfig={{debounceTime: 0}} let:form handleSave={handleSnSave}>
-      {#each allAllowedSns as item}
-        <FkCheckBoxInput
-          field={form.getOrRegisterField(item, {initial: true})}
-        >
-          {$t(`sns.${item}`)}
-        </FkCheckBoxInput>
-      {/each}
-    </FkForm>
+    <SelectSns class="mb-3" allowedSns={allAllowedSns} on:change={onSelectSnsChange} />
 
     <MenuWrapper>
       {#if publishSns.length}
@@ -126,19 +121,24 @@ const handleSnSave = async (values) => {
         </li>
       {/if}
 
-      {#if meta.telegram}
+      {#if meta.sns?.includes(ALL_SNS.telegram)}
+        {#if meta.type === POST_TYPES.article}
+          <li>
+            <MenuItem>!!! {$t('menu.publishOnlyTelegraph')}</MenuItem>
+          </li>
+        {/if}
         <li>
-          <MenuItem>{$t('menu.publishOnlyTelegraph')}</MenuItem>
+          <MenuItem>!!! {$t('menu.publishOnlyTelegram')}</MenuItem>
         </li>
       {/if}
-      {#if meta.site}
+      {#if meta.sns?.includes(ALL_SNS.site)}
         <li>
-          <MenuItem>{$t('menu.publishSite')}</MenuItem>
+          <MenuItem>!!! {$t('menu.publishOnlySite')}</MenuItem>
         </li>
       {/if}
-      {#if meta.youtube}
+      {#if meta.sns?.includes(ALL_SNS.youtube)}
         <li>
-          <MenuItem>{$t('menu.publishYoutube')}</MenuItem>
+          <MenuItem>!!! {$t('menu.publishOnlyYoutube')}</MenuItem>
         </li>
       {/if}
     </MenuWrapper>
