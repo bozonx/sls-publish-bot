@@ -256,6 +256,16 @@ class SquidletAppApi {
     return id
   }
 
+  async moveContentPlanPostToArchive(blogSafeName: string, postId: string): Promise<void> {
+    const blogPath = pathJoin(PUBLISHER_ROOT_DIR, blogSafeName)
+    const postDir = pathJoin(blogPath, TO_PUBLISH_DIR, postId)
+    const archiveDir = pathJoin(blogPath, ARCHIVE_DIR)
+
+    console.log(111, postDir, archiveDir)
+
+    await this.squidletUi.app.ctx.home.mv([postDir], archiveDir)
+  }
+
 }
 
 export const squidletAppApi = new SquidletAppApi()

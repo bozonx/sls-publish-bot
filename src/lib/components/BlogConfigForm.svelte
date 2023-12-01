@@ -36,7 +36,7 @@ let changeNameModalOpen = false
       <FkStaticTextInput {field} />
       <Button on:click={() => (changeNameModalOpen = true)}>{$t('chunks.rename')}</Button>
     </div>
-    <Modal title={$t('headers.renameBlog')} bind:open={changeNameModalOpen} autoclose>
+    <Modal title={$t('headers.renameBlog')} bind:open={changeNameModalOpen}>
       <FkTextInput {field} />
       <svelte:fragment slot="footer">
         <div class="w-full text-right">

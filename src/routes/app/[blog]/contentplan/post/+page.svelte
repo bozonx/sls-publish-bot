@@ -11,6 +11,11 @@ import SelectSns from "$lib/components/SelectSns.svelte";
 import FkForm from "$lib/components/common/FkForm.svelte";
 import FkCheckBoxInput from "$lib/components/common/FkCheckBoxInput.svelte"
 import {ALL_SNS, POST_TYPES} from '$lib/constants'
+import {pushToast} from "$lib/store/toasts";
+import {squidletAppApi} from "$lib/squidletAppApi";
+import {goto} from "$app/navigation";
+import {Button, Modal} from "flowbite-svelte";
+import FkTextInput from "$lib/components/common/FkTextInput.svelte";
 
 
 export let data
@@ -18,6 +23,7 @@ export let data
 const meta = data.post.result.meta
 let allAllowedSns = arraySimilar(meta.sns, Object.keys(ALL_SNS))
 let publishSns = allAllowedSns
+let toArchiveModalOpen = false
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
@@ -26,15 +32,19 @@ breadcrumbs.set([
 ])
 
 const onSelectSnsChange = async ({detail}) => {
-  //publishSns = Object.keys(values).filter((key) => values[key])
   publishSns = detail
 }
 
 const onMoveToArchive = () => {
+  (async () => {
+    await squidletAppApi.moveContentPlanPostToArchive($page.params.blog, meta.postId)
 
-  // TODO: add
-
-  console.log(111)
+    //goto(`/app/${$page.params.blog}/archive/post?postid=${meta.postId}`)
+  })()
+    .catch((e) => pushToast({
+      text: `Can't save: ${e}`,
+      purpose: 'error'
+    }))
 }
 
 </script>
@@ -49,7 +59,16 @@ const onMoveToArchive = () => {
         >{$t('menu.edit')}</MenuItem>
       </li>
       <li>
-        <MenuItem href="" on:click={onMoveToArchive}>{$t('menu.toArchive')}</MenuItem>
+        <MenuItem href="" on:click={() => toArchiveModalOpen = true}>{$t('menu.toArchive')}</MenuItem>
+        <Modal title={$t('menu.toArchive')} bind:open={toArchiveModalOpen}>
+          {$t('messages.reallyMoveToArchive')}
+          <svelte:fragment slot="footer">
+            <div class="w-full text-right">
+              <Button color="alternative" on:click={() => (toArchiveModalOpen = false)}>{$t('chunks.cancel')}</Button>
+              <Button on:click={onMoveToArchive}>{$t('chunks.move')}</Button>
+            </div>
+          </svelte:fragment>
+        </Modal>
       </li>
     </MenuWrapper>
   </div>
@@ -115,7 +134,7 @@ const onMoveToArchive = () => {
       {#if publishSns.length}
         <li>
           <MenuItem>
-            <span>{$t('menu.publishAll')} </span>
+            <span>!!! {$t('menu.publishAll')} </span>
             ({publishSns.map(item => $t(`sns.${item}`)).join(', ')})
           </MenuItem>
         </li>

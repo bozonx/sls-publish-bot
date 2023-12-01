@@ -30,6 +30,7 @@ chunks:
   blogName: Имя блога
   create: Создать
   rename: Переименовать
+  move: Переместить
   cancel: Отменить
   insertTimeCodesFromHeaders: Вставить таймкоды из заголовков статьи
   parse: Распарсить
@@ -110,6 +111,7 @@ messages:
   cantSave: Не удалось сохранить
   wrongSymbols: Недопустимые символы
   emptyField: Поле не может быть пустым
+  reallyMoveToArchive: Действительно хотите переместить пост в архив?
 texts:
   dzenHint: |
     - Загрузить картинку
