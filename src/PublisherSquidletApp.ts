@@ -1,5 +1,6 @@
 import {AppBase} from 'squidlet'
 import type {PackageIndex, PackageContext} from 'squidlet'
+import {APP_NAME} from './lib/constants.js'
 
 
 export function publisherAppPkg(): PackageIndex {
@@ -13,7 +14,7 @@ export function PublisherAppIndex() {
 }
 
 export class PublisherApp extends AppBase {
-  myName = 'Publisher'
+  myName = APP_NAME
 
 
   constructor() {

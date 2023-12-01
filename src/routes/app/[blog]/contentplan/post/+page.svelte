@@ -39,7 +39,7 @@ const onMoveToArchive = () => {
   (async () => {
     await squidletAppApi.moveContentPlanPostToArchive($page.params.blog, meta.postId)
 
-    //goto(`/app/${$page.params.blog}/archive/post?postid=${meta.postId}`)
+    goto(`/app/${$page.params.blog}/archive/post?postid=${meta.postId}`)
   })()
     .catch((e) => pushToast({
       text: `Can't save: ${e}`,

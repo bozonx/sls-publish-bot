@@ -6,6 +6,7 @@ links:
   buyAd: Рекламировать
   sellAdPlace: Продать рекламное место
   contentPlan: Контент план
+  archive: Архив
   archiveView: Архив
   createBlog: Создать блог
   createRecord: Создать запись
@@ -56,6 +57,7 @@ menu:
   publishAll: Опубликовать всё
   edit: Редактировать
   toArchive: Переместить в архив
+  toContentPlan: Переместить в контент план
 details:
   #fileName: Имя файла
   title: Название
@@ -112,6 +114,7 @@ messages:
   wrongSymbols: Недопустимые символы
   emptyField: Поле не может быть пустым
   reallyMoveToArchive: Действительно хотите переместить пост в архив?
+  reallyMoveToContentPlan: Действительно хотите переместить пост в контент план?
 texts:
   dzenHint: |
     - Загрузить картинку
