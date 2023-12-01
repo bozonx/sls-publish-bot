@@ -21,7 +21,7 @@ let toContentPlanModalOpen = false
 
 breadcrumbs.set([
   {href: `/app/${$page.params.blog}`, title: data.blog.title},
-  {href: `/app/${$page.params.blog}/archive`, title: $t('links.archive')},
+  {href: `/app/${$page.params.blog}/archive`, title: $t('links.archiveView')},
   {title: meta.title || meta.postId},
 ])
 

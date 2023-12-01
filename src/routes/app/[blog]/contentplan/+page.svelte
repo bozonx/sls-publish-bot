@@ -9,6 +9,7 @@ import MenuWrapper from "$lib/components/MenuWrapper.svelte"
 import MenuItem from "$lib/components/MenuItem.svelte"
 import {squidletAppApi} from "$lib/squidletAppApi"
 import {pushToast} from "$lib/store/toasts"
+import {TO_PUBLISH_DIR} from '$lib/constants'
 
 
 export let data
@@ -45,7 +46,7 @@ const handleCreate = () => {
   <div>
     <SectionHeader>{$t('links.selectPost')}</SectionHeader>
 
-    <SelectPost postResp={data.postResp} />
+    <SelectPost postResp={data.postResp} dir={TO_PUBLISH_DIR} />
   </div>
 
 </div>

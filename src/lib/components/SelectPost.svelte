@@ -6,13 +6,14 @@ import MenuItem from '$lib/components/MenuItem.svelte'
 import {page} from "$app/stores";
 
 
+export let dir
 export let postResp
 </script>
 
 <MenuWrapper>
   {#each postResp.result as item}
     <li>
-      <MenuItem href="/app/{$page.params.blog}/contentplan/post?postid={item.meta.postId}">
+      <MenuItem href="/app/{$page.params.blog}/{dir}/post?postid={item.meta.postId}">
         {item.meta.title || item.meta.postId}
       </MenuItem>
     </li>

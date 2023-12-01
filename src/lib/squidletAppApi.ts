@@ -105,9 +105,9 @@ class SquidletAppApi {
     }
   }
 
-  async loadBlogPosts(blogName: string): Promise<ListResponse<PostResult>> {
+  async loadBlogPosts(blogName: string, dir: string): Promise<ListResponse<PostResult>> {
     const result = []
-    const toPublishDirPath = pathJoin(BLOGS_DIR, blogName, TO_PUBLISH_DIR)
+    const toPublishDirPath = pathJoin(BLOGS_DIR, blogName, dir)
     const {data: postsDirs} = await this.squidletUi.app.ctx.appUserData.readDir(toPublishDirPath)
 
     for (const postDir of postsDirs) {
