@@ -1,6 +1,7 @@
 <script>
-  import {MultiSelect, Select} from 'flowbite-svelte';
+import {MultiSelect, Select} from 'flowbite-svelte';
 import { createEventDispatcher } from 'svelte'
+import { arrayDifference } from 'squidlet-lib'
 
 const dispatch = createEventDispatcher()
 
@@ -10,24 +11,16 @@ export let placeholder = ''
 export let disabled
 export let items
 
-console.log(222, selected)
+const onChange = ({detail}) => {
+  selected = detail.map((el) => el.value)
 
-const handleChange = (event) => {
-  console.log(111, event)
-
-  //dispatch('select', event.target.value)
+  dispatch('select', selected)
 }
-
-/*
-  bind:value={selected}
-  on:change={handleChange}
-  on:input={handleChange}
- */
 </script>
 
 <MultiSelect
   {items}
-
+  on:change={onChange}
   on:focus
   on:blur
   {placeholder}

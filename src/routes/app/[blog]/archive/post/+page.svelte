@@ -60,7 +60,6 @@ const onMoveToContentPlan = () => {
 
   <div>
     <SectionHeader>{$t('headers.postDetails')}</SectionHeader>
-
     <PostDetails item={data.post} />
   </div>
 

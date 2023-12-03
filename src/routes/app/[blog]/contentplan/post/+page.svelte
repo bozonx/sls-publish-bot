@@ -46,7 +46,6 @@ const onMoveToArchive = () => {
       purpose: 'error'
     }))
 }
-
 </script>
 
 <div>

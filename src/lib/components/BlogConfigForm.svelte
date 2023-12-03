@@ -8,6 +8,7 @@ import FkStaticTextInput from '$lib/components/common/FkStaticTextInput.svelte'
 import FkTextArea from '$lib/components/common/FkTextArea.svelte'
 import SectionHeader from '$lib/components/SectionHeader.svelte'
 import SelectPostType from '$lib/components/SelectPostType.svelte'
+import SelectLang from '$lib/components/SelectLang.svelte'
 
 
 export let blog
@@ -19,6 +20,8 @@ let changeNameModalOpen = false
 // TODO: мультиселект типа post
 // TODO: добавить hint для postFooter
 // TODO: добавить hint для telegraphToken - где взять
+// TODO: валидация полей
+// TODO: не сохраняются типы постов
 
 </script>
 
@@ -64,12 +67,12 @@ let changeNameModalOpen = false
     {form}
     let:field
   >
-    <FkTextInput {field} disabled />
+    <SelectLang {field} />
   </FormRow>
 
   <SectionHeader>{$t('headers.config')}</SectionHeader>
 
-  <SectionHeader>Telegraph</SectionHeader>
+  <SectionHeader>telegra.ph</SectionHeader>
 
   <FormRow
     label={$t('details.telegraphToken')}

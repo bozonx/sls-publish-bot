@@ -58,7 +58,7 @@ const handleMount = (field) => {
     let:disabled
     let:custom
   >
-    <Label for={name} class="block mb-2 lg:w-40">{label}</Label>
+    <Label for={name} class="block mb-2 lg:w-40 pr-1">{label}</Label>
     <div class="flex-1">
       <slot
         {field}

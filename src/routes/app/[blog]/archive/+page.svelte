@@ -17,10 +17,6 @@ breadcrumbs.set([
 </script>
 
 <div>
-
-  <div>
-    <SectionHeader>{$t('links.selectPost')}</SectionHeader>
-
-    <SelectPost postResp={data.postResp} dir={ARCHIVE_DIR} />
-  </div>
+  <SectionHeader>{$t('links.selectPost')}</SectionHeader>
+  <SelectPost postResp={data.postResp} dir={ARCHIVE_DIR} />
 </div>

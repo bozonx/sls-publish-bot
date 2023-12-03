@@ -40,3 +40,8 @@ export const CONTENT_VIEW = {
   html: 'html',
   clean: 'clean',
 }
+
+export const ALL_LANGS = {
+  ru: 'ru',
+  en: 'en',
+}

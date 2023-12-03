@@ -11,11 +11,11 @@ import {POST_TYPES} from "$lib/constants"
 export let field
 export let multi = false
 
-let selected = field.value
+// TODO: поидее надо брать просто value
+let selected = field.editedValue
 let items = Object.keys(POST_TYPES).map((item) => {
   return { value: item, name: $t(`postTypes.${item}`) }
 })
-
 
 const handleInputMount = (field) => {
   field.on(FieldEvent.change, (data) => {
