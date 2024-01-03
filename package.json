@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "@fontsource/fira-mono": "^5.0.8",
-    "@sveltejs/adapter-static": "^2.0.3",
-    "@sveltejs/kit": "^1.27.6",
+    "@sveltejs/adapter-static": "^3.0.0",
+    "@sveltejs/kit": "^2.0.1",
     "autoprefixer": "^10.4.16",
     "better-telegraph": "^2.1.1",
-    "flowbite": "^2.2.0",
+    "flowbite": "^2.2.1",
     "flowbite-svelte": "^0.44.20",
     "flowbite-svelte-icons": "^0.4.5",
     "formkit": "file:../formkit",
@@ -25,7 +25,7 @@
     "hast-util-to-mdast": "^10.1.0",
     "mdast-util-to-markdown": "^2.1.0",
     "postcss": "^8.4.32",
-    "postcss-load-config": "^5.0.0",
+    "postcss-load-config": "^5.0.2",
     "remark-frontmatter": "^5.0.0",
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",
@@ -34,16 +34,17 @@
     "squidlet-lib": "file:../squidlet-lib",
     "svelte": "^4.2.8",
     "svelte-check": "^3.6.2",
-    "tailwindcss": "^3.3.2",
+    "tailwindcss": "^3.3.6",
     "telegraph-wrapper": "^1.0.2",
     "tslib": "^2.4.1",
-    "typescript": "^5.3.2",
+    "typescript": "^5.3.3",
     "unified": "^11.0.4",
-    "vite": "^5.0.4",
+    "vite": "^5.0.10",
     "yaml": "^2.3.4"
   },
   "devDependencies": {
-    "@types/node": "^20.10.2",
-    "ts-node": "^10.9.1"
+    "@sveltejs/vite-plugin-svelte": "^3.0.1",
+    "@types/node": "^20.10.4",
+    "ts-node": "^10.9.2"
   }
 }

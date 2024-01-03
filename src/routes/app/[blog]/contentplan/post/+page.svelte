@@ -114,7 +114,7 @@ const onMoveToArchive = () => {
           >{$t('menu.previewYoutube')}</MenuItem>
         </li>
       {/if}
-      {#if meta.sns?.includes(ALL_SNS.podcast)}
+      {#if arraySimilar(meta.sns, [ALL_SNS.mave, ALL_SNS.spotifyForPodcasters]).length}
         <li>
           <MenuItem
             href="/app/{$page.params.blog}/contentplan/post/forpodcast?postid={meta.postId}"
