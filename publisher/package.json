@@ -1,19 +1,23 @@
 {
-  "name": "publisher",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
-    "test": "vitest"
-  },
-  "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.4.5",
-    "vitest": "1.5.0",
-    "wrangler": "^3.60.3"
-  },
-  "dependencies": {
-    "grammy": "^1.28.0"
-  }
+	"name": "publisher",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"devbot": "node ./src/localBotIndex.js",
+		"start": "wrangler dev",
+		"test": "vitest"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.4.5",
+		"vitest": "1.5.0",
+		"wrangler": "^3.60.3"
+	},
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"grammy": "^1.28.0",
+		"parse-url": "^9.2.0"
+	}
 }
