@@ -3,6 +3,7 @@ export default defineI18nConfig(() => ({
   locale: "en",
   messages: {
     en: {
+      appTitle: "Publicator",
       inbox: "Manage inbox",
       settings: "Settings",
       home: "Home",
@@ -30,6 +31,7 @@ export default defineI18nConfig(() => ({
       },
     },
     ru: {
+      appTitle: "Публикатор",
       inbox: "Управлять входящими",
       settings: "Настройки",
       home: "Главная",

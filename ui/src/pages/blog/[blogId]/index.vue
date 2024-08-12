@@ -11,6 +11,7 @@ definePageParams({
   title: blogConf.label,
 });
 </script>
+
 <template>
-  <ContentTypeMenu :blogId="route.params.blogId" />
+  <AppContentTypeMenu :blogId="route.params.blogId" />
 </template>

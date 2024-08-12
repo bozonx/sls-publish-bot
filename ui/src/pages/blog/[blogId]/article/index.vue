@@ -15,5 +15,5 @@ definePageParams({
 });
 </script>
 <template>
-  <SelectArticleContent :blogId="route.params.blogId" :nextStepUrl="`${route.path}/customize`" />
+  <ArticleSelectContent :blogId="route.params.blogId" :nextStepUrl="`${route.path}/customize`" />
 </template>

@@ -1,12 +1,14 @@
 <script setup>
 const userConfig = useState("userConfig");
+const { t } = useI18n();
+
 definePageParams({
   showHome: false,
-  title: "My home page",
+  title: t("appTitle"),
 });
 </script>
 
 <template>
-  <MainMenu class="mb-4" />
-  <BlogsList :blogs="userConfig.blogs" />
+  <AppBlogsList :blogs="userConfig.blogs" class="mb-4" />
+  <AppMainMenu />
 </template>
