@@ -6,11 +6,14 @@ const userConfig = useState("userConfig");
 const blogConf = userConfig.value.blogs.find(
   (item) => item.id === route.params.blogId,
 );
-
-definePageParams({
-  title: blogConf.label,
-});
+const breadCrumbs = [
+  {
+    label: blogConf?.label,
+  },
+];
 </script>
 <template>
-  <ContentTypeMenu :blogId="route.params.blogId" />
+  <AppBreadCrumb :items="breadCrumbs" />
+
+  <SocialMediaSelect :blogId="route.params.blogId" />
 </template>

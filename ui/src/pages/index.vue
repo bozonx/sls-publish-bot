@@ -1,7 +1,7 @@
 <script setup>
 const userConfig = useState("userConfig");
-
-definePageMeta({
+definePageParams({
+  showHome: false,
   title: "My home page",
 });
 </script>
