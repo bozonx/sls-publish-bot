@@ -3,10 +3,13 @@
 
 const userConfig = useState("userConfig");
 const { t } = useI18n();
-const props = defineProps(["blogId", "smList", "nextStepUrl"]);
-const blogConf = userConfig.value.blogs.find(
-  (item) => item.id === props.blogId,
-);
+const props = defineProps([
+  "blogId",
+  "articleContent",
+  "fetchError",
+  "nextStepUrl",
+]);
+const blogConf = getBlogConf(props.blogId);
 const dzenMenu = [{ label: t("generateFrorDzen") }];
 const tgMenu = [];
 
@@ -23,10 +26,7 @@ if (
 </script>
 
 <template>
-  <Fieldset
-    v-if="props.smList.includes('dzen')"
-    :legend="$t('socialMedia.dzen')"
-  >
+  <Fieldset v-if="blogConf.socialMedia.find((item) => item.use === 'dzen')" :legend="$t('socialMedia.dzen')">
     <div>select dzen template</div>
     <SmartMenu :items="dzenMenu" />
   </Fieldset>

@@ -4,7 +4,6 @@ const { t } = useI18n();
 const blogConf = getBlogConf(route.params.blogId);
 
 definePageParams({
-  backUrl: `/blog/${route.params.blogId}/article`,
   categoryTitle: blogConf.label,
   categoryUrl: `/blog/${route.params.blogId}`,
   title: t("contentSelect"),

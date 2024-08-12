@@ -13,9 +13,6 @@ const value = ref("");
   </div>
 
   <div>
-    <SmartButton
-      :to="`${props.nextStepUrl}&article=${encodeURIComponent(value)}`"
-      :label="$t('doSelect')"
-    />
+    <SmartButton :to="`${props.nextStepUrl}?article=${encodeURIComponent(value)}`" :label="$t('doSelect')" />
   </div>
 </template>

@@ -5,9 +5,7 @@ const props = defineProps(["blogId"]);
 const { t } = useI18n();
 const userConfig = useState("userConfig");
 
-const blogConf = userConfig.value.blogs.find(
-  (item) => item.id === props.blogId,
-);
+const blogConf = getBlogConf(props.blogId);
 const allTypes = {};
 
 for (const sm of blogConf.socialMedia) {
@@ -21,6 +19,7 @@ const items = Object.keys(allTypes).map((postType) => ({
   to: `/blog/${props.blogId}/pub-${postType}`,
 }));
 </script>
+
 <template>
   <Menu :model="items" class="w-full md:w-60">
     <template #item="{ item }">
