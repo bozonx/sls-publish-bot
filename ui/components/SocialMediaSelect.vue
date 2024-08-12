@@ -1,21 +1,24 @@
 <script setup>
-import { resolveSocialMediaId } from "../lib/helpers.js";
+import { resolveSocialMediaId, resolveSmTypes } from "../lib/helpers.js";
 
 const userConfig = useState("userConfig");
-const props = defineProps(["blogId"]);
+const props = defineProps(["blogId", "nextStepUrl", "postType"]);
 const { t } = useI18n();
 
 const blogConf = userConfig.value.blogs?.find(
   (item) => item.id === props.blogId,
 );
 const items = blogConf.socialMedia
-  .filter((item) => item.use !== "blog")
+  .filter(
+    (item) =>
+      item.use !== "blog" && resolveSmTypes(item).includes(props.postType),
+  )
   .map((item) => ({
     id: resolveSocialMediaId(item),
     use: item.use,
     label: item.label || t("socialMedia." + item.use),
   }));
-let selected = ref(items.map((item) => item.id));
+const selected = ref(items.map((item) => item.id));
 </script>
 
 <template>
@@ -26,5 +29,10 @@ let selected = ref(items.map((item) => item.id));
         {{ item.label }}
       </label>
     </div>
+  </div>
+
+  <div>
+    <SmartButton :to="`${props.nextStepUrl}?sm=${encodeURIComponent(JSON.stringify(selected))}`"
+      :label="$t('doSelect')" />
   </div>
 </template>

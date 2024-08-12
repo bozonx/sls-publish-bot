@@ -1,11 +1,17 @@
 <script setup>
-const props = defineProps(["item"]);
+const props = defineProps(["item", "label", "to"]);
+const label = ref(props.item?.label || props.label);
+const to = ref(props.item?.to || props.to);
+
+watchEffect(async () => {
+  to.value = props.item?.to || props.to;
+});
 </script>
 
 <template>
-  <NuxtLink v-if="props.item.to" :to="props.item.to">
+  <NuxtLink v-if="to" :to="to">
     <!-- <span :class="item.icon" /> -->
-    <span>{{ props.item.label }}</span>
+    <span>{{ label }}</span>
   </NuxtLink>
-  <Button v-else>{{ props.item.label }}</Button>
+  <Button v-else>{{ label }}</Button>
 </template>

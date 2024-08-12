@@ -15,9 +15,5 @@ const items = [
 ];
 </script>
 <template>
-  <Menu :model="items" class="w-full md:w-60">
-    <template #item="{ item }">
-      <SmartButton :item="item" />
-    </template>
-  </Menu>
+  <SmartMenu :items="items" />
 </template>

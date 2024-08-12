@@ -15,5 +15,5 @@ const breadCrumbs = [
 <template>
   <AppBreadCrumb :items="breadCrumbs" />
 
-  <ContentTypeMenu :blogId="route.params.blogId" />
+  <SocialMediaSelect :blogId="route.params.blogId" />
 </template>

@@ -5,21 +5,21 @@ export const SOCIAL_MEDIA_PARAMS = {
     types: ["article"],
   },
   dzen: {
-    types: ["article", "post", "shorts"],
+    types: ["article", "post", "short"],
   },
   telegram: {
     types: ["post"],
   },
   youtube: {
-    types: ["podcast", "video", "shorts"],
+    types: ["podcast", "video", "short"],
     podcastType: PODCAST_TYPE_VIDEO,
   },
   rutube: {
-    types: ["podcast", "video", "shorts"],
+    types: ["podcast", "video", "short"],
     podcastType: PODCAST_TYPE_VIDEO,
   },
   tiktok: {
-    types: ["shorts"],
+    types: ["short"],
   },
   spotify: {
     types: ["podcast"],
@@ -39,5 +39,5 @@ export const PUBLICATION_TYPES = [
   // horizontal video
   "video",
   // vertical video
-  "shorts",
+  "short",
 ];

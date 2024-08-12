@@ -3,6 +3,6 @@ const userConfig = useState("userConfig");
 </script>
 
 <template>
-  <MainMenu />
+  <MainMenu class="mb-4" />
   <BlogsList :blogs="userConfig.blogs" />
 </template>
