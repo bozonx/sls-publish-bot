@@ -24,12 +24,19 @@ const breadCrumbs = [
   },
 ];
 const sm = JSON.parse(route.query.sm);
+
+await callOnce(async () => {
+  // websiteConfig.value = await $fetch("https://my-cms.com/api/website-config");
+});
 </script>
 <template>
   <AppBreadCrumb :items="breadCrumbs" />
 
   <div>{{ sm.map((item) => $t(`socialMedia.${item}`)).join(", ") }}</div>
 
-  <CustomizeArticle :blogId="route.params.blogId" :smList="sm"
-    :nextStepUrl="`${route.path}/customize?sm=${encodeURIComponent(route.query.sm)}`" />
+  <CustomizeArticle
+    :blogId="route.params.blogId"
+    :smList="sm"
+    :nextStepUrl="`${route.path}/customize?sm=${encodeURIComponent(route.query.sm)}`"
+  />
 </template>

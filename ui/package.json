@@ -20,12 +20,11 @@
     "nuxt": "^3.12.4",
     "nuxt-snackbar": "^1.1.2",
     "primevue": "^4.0.4",
-    "vue": "latest"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-  "devDependencies": {
+    "vue": "latest",
     "@nuxtjs/color-mode": "^3.4.2",
     "@primevue/nuxt-module": "^4.0.4",
     "dayjs-nuxt": "^2.1.9"
-  }
+  },
+  "devDependencies": {},
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

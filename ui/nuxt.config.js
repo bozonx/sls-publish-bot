@@ -11,15 +11,16 @@ import { definePreset } from "@primevue/themes";
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
+  $production: {},
+  $development: {},
   modules: [
+    "@nuxtjs/color-mode",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/i18n",
-    "@nuxtjs/color-mode",
     "dayjs-nuxt",
     "nuxt-snackbar",
     "@vueuse/nuxt",
     "@vueform/nuxt",
-    // "",
     "@primevue/nuxt-module",
   ],
   i18n: {
@@ -35,8 +36,8 @@ export default defineNuxtConfig({
         preset: Aura,
         options: {
           prefix: "p",
-          // darkModeSelector: "system",
-          // cssLayer: false,
+          darkModeSelector: ".dark",
+          cssLayer: false,
         },
       },
     },
