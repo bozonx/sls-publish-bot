@@ -1,6 +1,6 @@
 <script setup>
 // import { parseYaml } from "./lib/helpers.js";
-import "./styles.css";
+// import "./styles.css";
 
 const userConfig = useUserConfig();
 // from app.config.js
@@ -12,7 +12,7 @@ await callOnce(async () => {
 </script>
 
 <template>
-  <TopBar />
+  <AppTopBar />
   <div class="mt-6">
     <NuxtPage />
   </div>

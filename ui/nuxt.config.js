@@ -9,11 +9,21 @@ import { definePreset } from "@primevue/themes";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false,
   srcDir: "./src",
+  // buildDir: 'nuxt-build'
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   $production: {},
   $development: {},
+  app: {
+    head: {
+      script: [
+        // { src: 'https://awesome-lib.js' }
+      ],
+    },
+  },
+  css: ["~/styles.css"],
   modules: [
     "@nuxtjs/color-mode",
     "@nuxtjs/tailwindcss",
