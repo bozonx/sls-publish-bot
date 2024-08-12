@@ -19,5 +19,5 @@ await callOnce(async () => {
 </script>
 <template>
   <ArticleCustomize :articleContent="articleContent" :fetchError="fetchError" :blogId="route.params.blogId"
-    :nextStepUrl="`${route.path}/confirm`" />
+    :nextStepUrl="`${route.path}/confirm?article=${encodeURIComponent(route.query.article)}`" />
 </template>

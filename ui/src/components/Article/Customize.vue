@@ -1,6 +1,4 @@
 <script setup>
-// import { resolveSocialMediaId } from "../lib/helpers.js";
-
 const userConfig = useState("userConfig");
 const { t } = useI18n();
 const props = defineProps([

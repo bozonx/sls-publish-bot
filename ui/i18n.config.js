@@ -10,6 +10,7 @@ export default defineI18nConfig(() => ({
       doSelect: "Select",
       contentSelect: "Content select",
       pubCustomize: "Customize",
+      pubConfirm: "Confirm",
       generateFrorDzen: "Generate for Dzen",
       generateTgPost: "Generate Telegram post",
       socialMedia: {
@@ -38,6 +39,7 @@ export default defineI18nConfig(() => ({
       doSelect: "Выбрать",
       contentSelect: "Выбрать контент",
       pubCustomize: "Модифицировать",
+      pubConfirm: "Подтвердить",
       generateFrorDzen: "Сгенерировать для Дзен",
       generateTgPost: "Сгенерировать пост в Telegram",
       socialMedia: {
