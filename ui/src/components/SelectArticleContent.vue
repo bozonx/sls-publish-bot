@@ -1,5 +1,5 @@
 <script setup>
-import { resolveSocialMediaId } from "../lib/helpers.js";
+// import { resolveSocialMediaId } from "../lib/helpers.js";
 
 const userConfig = useState("userConfig");
 const props = defineProps(["blogId", "nextStepUrl"]);
@@ -13,6 +13,9 @@ const value = ref("");
   </div>
 
   <div>
-    <SmartButton :to="`${props.nextStepUrl}&article=${encodeURIComponent(value)}`" :label="$t('doSelect')" />
+    <SmartButton
+      :to="`${props.nextStepUrl}&article=${encodeURIComponent(value)}`"
+      :label="$t('doSelect')"
+    />
   </div>
 </template>

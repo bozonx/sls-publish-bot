@@ -1,5 +1,9 @@
 <script setup>
 const userConfig = useState("userConfig");
+
+definePageMeta({
+  title: "My home page",
+});
 </script>
 
 <template>

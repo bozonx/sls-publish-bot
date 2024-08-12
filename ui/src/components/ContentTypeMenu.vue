@@ -1,5 +1,5 @@
 <script setup>
-import { resolveSmTypes } from "../lib/helpers.js";
+// import { resolveSmTypes } from "../lib/helpers.js";
 
 const props = defineProps(["blogId"]);
 const { t } = useI18n();

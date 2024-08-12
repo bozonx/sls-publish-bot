@@ -1,9 +1,8 @@
 <script setup>
-import { parseYaml } from "./lib/helpers.js";
-import defaultUserConfig from "./lib/defaultUserConfig.js";
+// import { parseYaml } from "./lib/helpers.js";
 import "./styles.css";
 
-const userConfig = useState("userConfig");
+const userConfig = useUserConfig();
 // from app.config.js
 const appConfig = useAppConfig();
 

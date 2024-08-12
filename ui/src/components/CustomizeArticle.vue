@@ -1,5 +1,5 @@
 <script setup>
-import { resolveSocialMediaId } from "../lib/helpers.js";
+// import { resolveSocialMediaId } from "../lib/helpers.js";
 
 const userConfig = useState("userConfig");
 const { t } = useI18n();
@@ -23,7 +23,10 @@ if (
 </script>
 
 <template>
-  <Fieldset v-if="props.smList.includes('dzen')" :legend="$t('socialMedia.dzen')">
+  <Fieldset
+    v-if="props.smList.includes('dzen')"
+    :legend="$t('socialMedia.dzen')"
+  >
     <div>select dzen template</div>
     <SmartMenu :items="dzenMenu" />
   </Fieldset>
