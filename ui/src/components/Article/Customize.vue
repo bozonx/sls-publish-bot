@@ -1,12 +1,8 @@
 <script setup>
-const userConfig = useState("userConfig");
+const props = defineProps(["blogId"]);
 const { t } = useI18n();
-const props = defineProps([
-  "blogId",
-  "articleContent",
-  "fetchError",
-  "nextStepUrl",
-]);
+// const userConfig = useState("userConfig");
+// const tmpState = useTmpState();
 const blogConf = getBlogConf(props.blogId);
 const dzenMenu = [{ label: t("generateFrorDzen") }];
 const tgMenu = [];
@@ -24,7 +20,10 @@ if (
 </script>
 
 <template>
-  <Fieldset v-if="blogConf.socialMedia.find((item) => item.use === 'dzen')" :legend="$t('socialMedia.dzen')">
+  <Fieldset
+    v-if="blogConf.socialMedia.find((item) => item.use === 'dzen')"
+    :legend="$t('socialMedia.dzen')"
+  >
     <div>select dzen template</div>
     <SmartMenu :items="dzenMenu" />
   </Fieldset>
@@ -32,8 +31,4 @@ if (
     <div>select tg template</div>
     <SmartMenu :items="tgMenu" />
   </Fieldset>
-
-  <div>
-    <SmartButton :to="`${props.nextStepUrl}`" :label="$t('doSelect')" />
-  </div>
 </template>

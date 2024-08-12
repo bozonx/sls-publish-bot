@@ -1,3 +1,34 @@
+:root {
+  --primary-hue: 213;
+  --layout-hue: 213;
+  --link-hue: 232;
+  --visited-hue: 287;
+  --gray-50: hsl(var(--layout-hue), 16%, 98%);
+  --gray-100: hsl(var(--layout-hue), 14.29%, 95.88%);
+  --gray-150: hsl(var(--layout-hue), 14%, 93%);
+  --gray-200: hsl(var(--layout-hue), 13.04%, 90.98%);
+  --gray-270: hsl(var(--layout-hue), 12.7%, 88%);
+  --gray-300: hsl(var(--layout-hue), 12.2%, 83.92%);
+  --gray-400: hsl(var(--layout-hue), 10.61%, 64.9%);
+  --gray-500: hsl(var(--layout-hue), 8.94%, 46.08%);
+  --gray-600: hsl(var(--layout-hue), 13.79%, 34.12%);
+  --gray-700: hsl(var(--layout-hue), 19.12%, 26.67%);
+  --gray-770: hsl(var(--layout-hue), 24%, 22%);
+  --gray-800: hsl(var(--layout-hue), 27.91%, 16.86%);
+  --gray-850: hsl(var(--layout-hue), 33%, 13.4%);
+  --gray-900: hsl(var(--layout-hue), 39.29%, 10.98%);
+  --gray-950: hsl(var(--layout-hue), 42%, 10%);
+
+  --smart-btn-bg: var(--gray-100);
+  --smart-btn-text: var(--gray-900);
+  --smart-btn-dark-bg: var(--gray-700);
+  --smart-btn-dark-text: var(--gray-100);
+  --smart-btn-disabled-bg: var(--gray-300);
+  --smart-btn-disabled-text: var(--gray-600);
+  --smart-btn-dark-disabled-bg: var(--gray-700);
+  --smart-btn-dark-disabled-text: var(--gray-500);
+}
+
 /* body { */
 /*   background-color: #fff; */
 /*   color: rgba(0, 0, 0, 0.8); */

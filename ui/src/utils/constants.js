@@ -1,3 +1,6 @@
+export const TMP_STATE_TYPES = {
+  articleFromSite: "articleFromSite",
+};
 export const PODCAST_TYPE_AUDIO = "audio";
 export const PODCAST_TYPE_VIDEO = "video";
 export const SOCIAL_MEDIAS = {
