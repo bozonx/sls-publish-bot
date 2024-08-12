@@ -1,5 +1,5 @@
 import yaml from "js-yaml";
-import { SOCIAL_MEDIA_PARAMS } from "./constants.js";
+// import { SOCIAL_MEDIA_PARAMS } from "./constants.js";
 
 export function parseYaml(str) {
   return yaml.load(str);
