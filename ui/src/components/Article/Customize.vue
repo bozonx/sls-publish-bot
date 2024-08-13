@@ -1,10 +1,11 @@
 <script setup>
-const props = defineProps(["blogId"]);
+const props = defineProps(["blogId", "currentPath"]);
 const { t } = useI18n();
-// const userConfig = useState("userConfig");
-// const tmpState = useTmpState();
+const tmpState = useTmpState();
 const blogConf = getBlogConf(props.blogId);
-const dzenMenu = [{ label: t("generateFrorDzen") }];
+const dzenMenu = [
+  { label: t("generateFrorDzen"), to: `${props.currentPath}/dzen` },
+];
 const tgMenu = [];
 
 if (
@@ -17,18 +18,29 @@ if (
     label: t("generateTgPost"),
   });
 }
+
+// TODO: select
+if (tmpState.value)
+  tmpState.value.template = blogConf.socialMedia.find(
+    (item) => item.use === SOCIAL_MEDIAS.dzen,
+  )?.templates[0][1];
 </script>
 
 <template>
-  <Fieldset
-    v-if="blogConf.socialMedia.find((item) => item.use === 'dzen')"
-    :legend="$t('socialMedia.dzen')"
-  >
-    <div>select dzen template</div>
-    <SmartMenu :items="dzenMenu" />
-  </Fieldset>
-  <Fieldset v-if="tgMenu.length" :legend="$t('socialMedia.telegram')">
-    <div>select tg template</div>
-    <SmartMenu :items="tgMenu" />
-  </Fieldset>
+  <Message v-if="!tmpState" severity="error">
+    {{ $t("stateLostMsg") }}
+  </Message>
+  <Message v-else-if="tmpState.type !== TMP_STATE_TYPES.articleToPublish" severity="error">
+    {{ $t("stateWrongMsg") }}
+  </Message>
+  <template v-else>
+    <Fieldset v-if="blogConf.socialMedia.find((item) => item.use === 'dzen')" :legend="$t('socialMedia.dzen')">
+      <div>select dzen template</div>
+      <SmartMenu :items="dzenMenu" />
+    </Fieldset>
+    <Fieldset v-if="tgMenu.length" :legend="$t('socialMedia.telegram')">
+      <div>select tg template</div>
+      <SmartMenu :items="tgMenu" />
+    </Fieldset>
+  </template>
 </template>

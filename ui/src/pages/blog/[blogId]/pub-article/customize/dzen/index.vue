@@ -4,12 +4,12 @@ const { t } = useI18n();
 const blogConf = getBlogConf(route.params.blogId);
 
 definePageParams({
-  backUrl: `/blog/${route.params.blogId}/pub-article/customize?article=${encodeURIComponent(route.query.article)}`,
+  backUrl: `/blog/${route.params.blogId}/pub-article/customize`,
   categoryTitle: blogConf.label,
   categoryUrl: `/blog/${route.params.blogId}`,
-  title: t("pubConfirm"),
+  title: t("copyToDzen"),
 });
 </script>
 <template>
-  <ArticleConfirm :blogId="route.params.blogId" />
+  <ArticleDzenCopy :blogId="route.params.blogId" />
 </template>

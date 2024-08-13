@@ -12,5 +12,5 @@ definePageParams({
 </script>
 
 <template>
-  <ArticleCustomize :blogId="route.params.blogId" />
+  <ArticleCustomize :blogId="route.params.blogId" :currentPath="route.path" />
 </template>

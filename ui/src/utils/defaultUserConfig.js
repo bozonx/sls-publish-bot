@@ -6,7 +6,8 @@ blogs:
       - use: dzen
         types: ["article"]
         templates:
-          - "some"
+          - ["Основной", "\${CONTENT}\n\n\nАвтор: [\${AUTHOR}](\${AUTHOR_URL})"]
+          - ["Запасной", "aaasdff\n\${CONTENT}\n\nАвтор: [\${AUTHOR}](\${AUTHOR_URL})"]
       - use: telegram
         channelId: ""
         templates:

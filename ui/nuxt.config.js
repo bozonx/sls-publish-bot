@@ -33,6 +33,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@vueform/nuxt",
     "@primevue/nuxt-module",
+    "nuxt-lodash",
   ],
   i18n: {
     vueI18n: "./i18n.config.js",

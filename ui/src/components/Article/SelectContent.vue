@@ -12,8 +12,7 @@ const state = reactive({
   articlePath: "",
   articleText: "",
   accordionValue: ACCORDION_SATES.remote,
-  // submitDisabled: true,
-  loadedContent: null,
+  loadedData: null,
   loadedError: null,
   loading: false,
 });
@@ -22,7 +21,7 @@ const allowSubmit = computed({
     if (
       state.accordionValue === ACCORDION_SATES.remote &&
       state.loading == false &&
-      state.loadedContent
+      state.loadedData
     ) {
       return true;
     } else if (
@@ -37,8 +36,6 @@ const allowSubmit = computed({
 });
 
 function loadArticle() {
-  // if (state.loading || !state.articlePath) return;
-
   state.loading = true;
   const postGitPath = blogConf.socialMedia.find(
     (item) => item.use === SOCIAL_MEDIAS.blog,
@@ -46,26 +43,46 @@ function loadArticle() {
 
   $fetch(`${postGitPath}/${state.articlePath}.md`)
     .then((res) => {
-      state.loadedContent = res;
+      const { content, frontmatter } = parseMdFile(res);
+      state.loadedData = {
+        content,
+        frontmatter,
+        meta: {
+          title: extractTitleFromMd(content) || frontmatter.title,
+          descr: frontmatter.previewText || frontmatter.description,
+        },
+      };
       state.loadedError = false;
       state.loading = false;
-      // state.submitDisabled = false;
     })
     .catch((e) => {
-      state.loadedContent = null;
+      state.loadedData = null;
       state.loadedError = true;
       state.loading = false;
-      // state.submitDisabled = true;
     });
 }
 
 function submit() {
-  // if (value) {
-  //   tmpState.value = {
-  //     type: TMP_STATE_TYPES.articleFromSite,
-  //     value: props.articleContent,
-  //   };
-  // }
+  let res;
+
+  if (state.accordionValue === ACCORDION_SATES.remote) {
+    res = state.loadedData;
+  } else {
+    res = {
+      content: state.articleText,
+      frontmatter: {},
+      meta: {},
+    };
+  }
+
+  tmpState.value = {
+    type: TMP_STATE_TYPES.articleToPublish,
+    ...res,
+  };
+
+  navigateTo({
+    path: props.nextStepUrl,
+  });
 }
 
 // watch(
@@ -98,11 +115,11 @@ function submit() {
           <Message v-if="state.loadedError" severity="error">{{
             $t("articleLoadErrorMsg")
           }}</Message>
-          <Message v-if="state.loadedContent" severity="success">{{
+          <Message v-if="state.loadedData" severity="success">{{
             $t("articleLoadSuccessMsg")
           }}</Message>
         </div>
-        <ArticleDetails :content="state.loadedContent" />
+        <ArticleDetails :data="state.loadedData" />
       </AccordionContent>
     </AccordionPanel>
     <AccordionPanel :value="ACCORDION_SATES.local">

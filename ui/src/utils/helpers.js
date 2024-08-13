@@ -18,3 +18,15 @@ export function getBlogConf(blogId) {
 
   return userConfig.value.blogs.find((item) => item.id === blogId);
 }
+
+export function extractTitleFromMd(mdNoFrontmatter) {
+  const firstTitleMatch = mdNoFrontmatter.trim().match(/^\#\s+(.+)$/m);
+
+  return firstTitleMatch ? firstTitleMatch[1].trim() : "";
+}
+
+// export function removeFrontmatter(rawMd) {
+//   const frontmatterRegex = /^---\n([\s\S]*?)\n---/
+//
+//   return rawMd.replace(frontmatterRegex, '')
+// }
