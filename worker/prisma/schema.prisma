@@ -1,0 +1,67 @@
+// add to the sql file
+//
+// DROP TABLE IF EXISTS Inbox;
+// DROP TABLE IF EXISTS Blog;
+// DROP TABLE IF EXISTS Workspace;
+// DROP TABLE IF EXISTS User;
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  tgUserId  String      @unique
+  tgChatId  String      @unique
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  cfg_yaml  String
+  Blog      Blog[]
+  Inbox     Inbox[]
+  Workspace Workspace[]
+}
+
+model Workspace {
+  id              Int      @id @default(autoincrement())
+  name            String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdByUser   User     @relation(fields: [createdByUserId], references: [id])
+  createdByUserId Int
+  cfg_yaml        String
+  Blog            Blog[]
+}
+
+model Blog {
+  id              Int       @id @default(autoincrement())
+  name            String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  workspace       Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId     Int
+  createdByUser   User      @relation(fields: [createdByUserId], references: [id])
+  createdByUserId Int
+  cfg_yaml        String
+}
+
+model Inbox {
+  id              Int      @id @default(autoincrement())
+  name            String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdByUser   User     @relation(fields: [createdByUserId], references: [id])
+  createdByUserId Int
+  dataJson        String?
+  // media
+}
+
+// enum Role {
+//   USER
+//   ADMIN
+// }
