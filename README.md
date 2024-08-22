@@ -9,6 +9,16 @@
 - `/api/blogs` - CRUD for blogs
 - `/api/inbox` - CRUD for inbox items
 
+## Deploy
+
+```
+npx wrangler d1 migrations apply publisher --remote
+yarn deploy
+
+# If you need to setup telegram webhook run
+crul https://publisher.ivank.workers.dev/api/bot/setwh
+```
+
 ## Dev initialize
 
 ```

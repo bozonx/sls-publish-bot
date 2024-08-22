@@ -18,8 +18,8 @@ compatibility_flags = ["nodejs_compat"]
 # - https://developers.cloudflare.com/workers/configuration/secrets/
 [vars]
 WORKER_HOST = "publisher.ivank.workers.dev"
-API_BASE_URL="publisher.ivank.workers.dev/api"
 WEB_APP_URL = "https://blog.p-libereco.org/ru/recent/1"
+
 
 [triggers]
 crons = ["0 */22 * * *"]

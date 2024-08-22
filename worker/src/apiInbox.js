@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './helpers.js';
+import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './crudLogic.js';
 // import { zValidator } from '@hono/zod-validator';
 // import { z } from 'zod';
 

@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { PrismaClient } from '@prisma/client';
 import { PrismaD1 } from '@prisma/adapter-d1';
-import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './helpers.js';
+import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './crudLogic.js';
 // import { zValidator } from '@hono/zod-validator';
 // import { z } from 'zod';
 
