@@ -20,7 +20,6 @@ compatibility_flags = ["nodejs_compat"]
 WORKER_HOST = "publisher.ivank.workers.dev"
 WEB_APP_URL = "https://blog.p-libereco.org/ru/recent/1"
 
-
 [triggers]
 crons = ["0 */22 * * *"]
 

@@ -8,7 +8,7 @@ import { TG_BOT_URL } from './constants.js';
 export default {
 	async fetch(request, env, ctx) {
 		if (request.method === 'POST' && parseUrl(request.url).pathname === TG_BOT_URL) {
-			const app = new BotIndex(env.TG_TOKEN, env.WEB_APP_URL, env.API_BASE_URL);
+			const app = new BotIndex(env.TG_TOKEN, env.WEB_APP_URL, env.DB);
 
 			await app.init();
 

@@ -20,15 +20,11 @@ export async function handleStart(ctx) {
 	const chatId = ctx.chatId;
 	const lang = ctx.from.language_code;
 
-	console.log(1111, apiUser);
-
-	ctx.reply(JSON.stringify(apiUser));
-
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrl, 'users', `/by-tg-id/${userId}`);
+	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', `/by-tg-id/${userId}`);
 
 	if (respGetUser.status === 404) {
 		// create user
-		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrl, 'users', '/', 'POST', {
+		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', '/', 'POST', {
 			tgUserId: String(userId),
 			tgChatId: String(chatId),
 			lang,
@@ -39,18 +35,21 @@ export async function handleStart(ctx) {
 			welcomeMsg = t(ctx, 'welcomeRegistered');
 			userData = respCreateUser.data;
 		} else {
-			return ctx.reply(`Can't create user in db. Status ${respCreateUser.status}, error: ${JSON.stringify(respCreateUser.data)}`);
+			return ctx.api.sendMessage(
+				chatId,
+				`Can't create user in db. Status ${respCreateUser.status}, error: ${JSON.stringify(respCreateUser.data)}`,
+			);
 		}
 	} else if (respGetUser.status === 200) {
 		userData = respGetUser.data;
 		welcomeMsg = t(ctx, 'welcomeAgain');
 	} else {
-		return ctx.reply(`Can't get user from db. Status ${respGetUser.status}, error: ${JSON.stringify(respGetUser.data)}`);
+		return ctx.api.sendMessage(chatId, `Can't get user from db. Status ${respGetUser.status}, error: ${JSON.stringify(respGetUser.data)}`);
 	}
 
 	ctx.session.userData = userData;
 
-	ctx.reply(welcomeMsg, {
+	return ctx.api.sendMessage(chatId, welcomeMsg, {
 		reply_markup: new InlineKeyboard().text(t(ctx, 'loginToSite'), LOGIN_TO_SITE_ACTION).webApp('web', ctx.config.webAppUrl),
 	});
 }
@@ -82,19 +81,22 @@ export async function handleMessage(ctx) {
 		// TODO: add other types
 		console.log(111, ctx);
 
-		return ctx.reply(`Can't recognize the message. Or unsupported type of message`);
+		return ctx.api.sendMessage(ctx.chatId, `Can't recognize the message. Or unsupported type of message`);
 	}
 
-	const respSaveItem = await requestWrapper(ctx.config.apiBaseUrl, 'inbox', '/', 'POST', {
+	const respSaveItem = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'inbox', '/', 'POST', {
 		createdByUserId: userData.id,
 		name: itemName,
 		dataJson: JSON.stringify(itemData),
 	});
 
 	if (respSaveItem.status === 201) {
-		ctx.reply(t(ctx, 'itemSavedToInbox'));
+		return ctx.api.sendMessage(ctx.chatId, t(ctx, 'itemSavedToInbox'));
 	} else {
-		return ctx.reply(`Can't save item to db. Status ${respSaveItem.status}, error: ${JSON.stringify(respSaveItem.data)}`);
+		return ctx.api.sendMessage(
+			ctx.chatId,
+			`Can't save item to db. Status ${respSaveItem.status}, error: ${JSON.stringify(respSaveItem.data)}`,
+		);
 	}
 }
 
@@ -103,21 +105,26 @@ export async function loadUserDataToSession(ctx) {
 
 	if (ctx.session.userData) return;
 
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrl, 'users', `/by-tg-id/${userId}`);
+	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', `/by-tg-id/${userId}`);
 
 	if (respGetUser.status === 200) {
 		ctx.session.userData = respGetUser.data;
 	} else {
-		return ctx.reply(`Can't get user from db. Status ${respGetUser.status}, error: ${JSON.stringify(respGetUser.data)}`);
+		return ctx.api.sendMessage(
+			ctx.chatId,
+			`Can't get user from db. Status ${respGetUser.status}, error: ${JSON.stringify(respGetUser.data)}`,
+		);
 	}
 }
 
-async function requestWrapper(devApiBaseUrl, table, pathTo, method, body) {
-	if (devApiBaseUrl) {
+async function requestWrapper(apiBaseUrlOrDb, table, pathTo, method, bodyObj) {
+	const body = bodyObj && JSON.stringify(bodyObj);
+
+	if (typeof apiBaseUrlOrDb === 'string') {
 		// dev - use remote request
-		const res = await fetch(`${devApiBaseUrl}/${table}${pathTo === '/' ? '' : pathTo}`, {
+		const res = await fetch(`${apiBaseUrlOrDb}/${table}${pathTo === '/' ? '' : pathTo}`, {
 			method,
-			body: body && JSON.stringify(body),
+			body,
 		});
 
 		return {
@@ -127,14 +134,12 @@ async function requestWrapper(devApiBaseUrl, table, pathTo, method, body) {
 	} else {
 		// prod - use local request
 		const apis = {
-			user: apiUser,
+			users: apiUser,
 			inbox: apiInbox,
 		};
 		const api = apis[table];
-		const res = await api.request(pathTo, {
-			method,
-			body: body && JSON.stringify(body),
-		});
+		const req = new Request(`http://localhost${pathTo}`, { method, body });
+		const res = await api.fetch(req, { DB: apiBaseUrlOrDb }, {});
 
 		return {
 			status: res.status,

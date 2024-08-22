@@ -6,13 +6,13 @@ import { handleStart, handleMessage, handleButtonCallback } from './BotLogic.js'
 export class BotIndex {
 	bot;
 
-	constructor(token, webAppUrl, apiBaseUrl) {
+	constructor(token, webAppUrl, apiBaseUrlOrDb) {
 		this.bot = new Bot(token);
 
 		this.bot.use(async (ctx, next) => {
 			ctx.config = {
 				webAppUrl,
-				apiBaseUrl,
+				apiBaseUrlOrDb,
 			};
 			// Run remaining handlers.
 			await next();
