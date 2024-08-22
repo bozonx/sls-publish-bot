@@ -3,6 +3,14 @@ import locales from './botLocales.js';
 
 // await bot.api.sendMessage(12345, "Hello!");
 
+function t(ctx, msg) {
+	let lang = ctx.session?.userData?.lang || ctx.from.language_code;
+
+	if (!(lang in locales)) lang = 'en';
+
+	return locales[lang][msg];
+}
+
 export class BotIndex {
 	bot;
 
@@ -47,24 +55,20 @@ export class BotIndex {
 					body: JSON.stringify({
 						tgUserId: String(userId),
 						tgChatId: String(chatId),
-						cfg_yaml: `lang: ${lang}`,
+						lang,
+						cfg_yaml: ``,
 					}),
 				});
 
 				if (respCreateUser.status === 201) {
-					// TODO: set lang
-
-					welcomeMsg = ctx.t('welcomeRegistered');
+					welcomeMsg = t(ctx, 'welcomeRegistered');
 					userData = await respCreateUser.json();
 				} else {
 					return ctx.reply(`Can't create user in db: ${await respCreateUser.text()}`);
 				}
 			} else if (respGetUser.status === 200) {
 				userData = await respGetUser.json();
-
-				// TODO: swith lang
-
-				welcomeMsg = ctx.t('welcomeAgain');
+				welcomeMsg = t(ctx, 'welcomeAgain');
 			} else {
 				return ctx.reply(`Can't get user from db: ${await respGetUser.text()}`);
 			}
@@ -121,7 +125,7 @@ export class BotIndex {
 			});
 
 			if (respSaveItem.status === 201) {
-				ctx.reply(`Item was saved to Inbox`);
+				ctx.reply(t(ctx, 'itemSavedToInbox'));
 			} else {
 				return ctx.reply(`Can't save item to db: ${await respSaveItem.text()}`);
 			}
@@ -140,14 +144,6 @@ export class BotIndex {
 		} else {
 			return ctx.reply(`Can't get user from db: ${await respGetUser.text()}`);
 		}
-	}
-
-	t(ctx) {
-		// TODO: add from message
-		// TODO: parse lang
-		const lang = ctx.session.userData || 'en';
-
-		return locales[lang];
 	}
 
 	/**

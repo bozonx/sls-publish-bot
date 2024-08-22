@@ -9,6 +9,7 @@ CREATE TABLE "User" (
     "tgChatId" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
+    "lang" TEXT NOT NULL,
     "cfg_yaml" TEXT NOT NULL
 );
 

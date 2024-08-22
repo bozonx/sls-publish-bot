@@ -21,6 +21,7 @@ model User {
   tgChatId  String      @unique
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+  lang      String
   cfg_yaml  String
   Blog      Blog[]
   Inbox     Inbox[]
