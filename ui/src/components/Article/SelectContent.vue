@@ -1,7 +1,5 @@
 <script setup>
-const props = defineProps(["blogId", "nextStepUrl"]);
-const userConfig = useState("userConfig");
-const blogConf = getBlogConf(props.blogId);
+const props = defineProps(["blogConf", "nextStepUrl"]);
 const tmpState = useTmpState();
 
 const ACCORDION_SATES = {
@@ -37,7 +35,7 @@ const allowSubmit = computed({
 
 function loadArticle() {
   state.loading = true;
-  const postGitPath = blogConf.socialMedia.find(
+  const postGitPath = props.blogConf.socialMedia.find(
     (item) => item.use === SOCIAL_MEDIAS.blog,
   )?.postGitPath;
 
@@ -101,23 +99,15 @@ function submit() {
       <AccordionHeader>{{ $t("loadArticleFromBlog") }}</AccordionHeader>
       <AccordionContent>
         <div>
-          <InputText
-            type="text"
-            v-model="state.articlePath"
-            :placeholder="$t('loadArticleInputPlaceholder')"
-          />
-          <SmartButton
-            :label="$t('doLoad')"
-            :pending="state.loading"
-            :disabled="state.loading || !state.articlePath"
-            @click="loadArticle"
-          />
+          <InputText type="text" v-model="state.articlePath" :placeholder="$t('loadArticleInputPlaceholder')" />
+          <SmartButton :label="$t('doLoad')" :pending="state.loading" :disabled="state.loading || !state.articlePath"
+            @click="loadArticle" />
           <Message v-if="state.loadedError" severity="error">{{
             $t("articleLoadErrorMsg")
-          }}</Message>
+            }}</Message>
           <Message v-if="state.loadedData" severity="success">{{
             $t("articleLoadSuccessMsg")
-          }}</Message>
+            }}</Message>
         </div>
         <ArticleDetails :data="state.loadedData" />
       </AccordionContent>
@@ -126,22 +116,13 @@ function submit() {
       <AccordionHeader>{{ $t("typeArticleText") }}</AccordionHeader>
       <AccordionContent>
         <div>
-          <Textarea
-            v-model="state.articleText"
-            rows="5"
-            cols="30"
-            :placeholder="$t('articleTextAreaPlaceholder')"
-          />
+          <Textarea v-model="state.articleText" rows="5" cols="30" :placeholder="$t('articleTextAreaPlaceholder')" />
         </div>
       </AccordionContent>
     </AccordionPanel>
   </Accordion>
 
   <div>
-    <SmartButton
-      :label="$t('doSelect')"
-      :disabled="!allowSubmit"
-      @click="submit"
-    />
+    <SmartButton :label="$t('doSelect')" :disabled="!allowSubmit" @click="submit" />
   </div>
 </template>

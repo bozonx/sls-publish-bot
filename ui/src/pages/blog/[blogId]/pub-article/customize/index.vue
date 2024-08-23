@@ -1,16 +1,18 @@
 <script setup>
 const route = useRoute();
 const { t } = useI18n();
-const blogConf = getBlogConf(route.params.blogId);
+
+const { data, status, error } = await useApiBlog(route.params.blogId);
+const blogConf = getBlogConf(data.value);
 
 definePageParams({
   backUrl: `/blog/${route.params.blogId}/pub-article`,
-  categoryTitle: blogConf.label,
+  categoryTitle: data.value.name,
   categoryUrl: `/blog/${route.params.blogId}`,
   title: t("pubCustomize"),
 });
 </script>
 
 <template>
-  <ArticleCustomize :blogId="route.params.blogId" :currentPath="route.path" />
+  <ArticleCustomize :blogConf="blogConf" :currentPath="route.path" />
 </template>
