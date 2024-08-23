@@ -7,8 +7,8 @@ watchEffect(async () => {
   to.value = props.item?.to || props.to;
 });
 
-const SmButton = resolveComponent("Button");
-const SmLink = resolveComponent("NuxtLink");
+// const SmButton = resolveComponent("Button");
+// const SmLink = resolveComponent("NuxtLink");
 const className = "rounded-md px-2 py-2 smart-btn";
 </script>
 

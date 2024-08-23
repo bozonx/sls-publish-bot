@@ -10,8 +10,11 @@ const breadCrumbs = [
 ];
 // console.log(colorMode.preference);
 </script>
+
 <template>
   <AppBreadCrumb :items="breadCrumbs" />
+
+  <AppConfigureWorkspaces />
 
   <div>
     <button @click="setLocale('en')">en</button>

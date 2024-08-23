@@ -12,6 +12,7 @@ await callOnce(async () => {
 </script>
 
 <template>
+  <NuxtLoadingIndicator />
   <LayoutTopBar />
   <div class="mt-6">
     <NuxtPage />

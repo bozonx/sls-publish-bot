@@ -8,7 +8,8 @@ import apiInbox from './apiInbox.js';
 
 const app = new Hono().basePath('/api');
 
-// app.use('/api/*', cors());
+// TODO: настроить - dev для всех, prod только указанный домен
+app.use('*', cors());
 
 app.route('/bot', apiTgBot);
 app.route('/users', apiUser);
