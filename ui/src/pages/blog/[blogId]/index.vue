@@ -1,13 +1,14 @@
 <script setup>
 const route = useRoute();
 const { t } = useI18n();
-const blogConf = getBlogConf(route.params.blogId);
+
+const { data, status, error } = await useApiBlog(route.params.blogId);
 
 definePageParams({
-  title: blogConf.label,
+  title: data.name,
 });
 </script>
 
 <template>
-  <AppContentTypeMenu :blogId="route.params.blogId" />
+  <AppContentTypeMenu :blog="data" />
 </template>

@@ -13,10 +13,11 @@ export function resolveSmTypes(sm) {
   return sm.types || SOCIAL_MEDIA_PARAMS[sm.use].types;
 }
 
-export function getBlogConf(blogId) {
-  const userConfig = useState("userConfig");
-
-  return userConfig.value.blogs.find((item) => item.id === blogId);
+export function getBlogConf(blog) {
+  return parseYaml(blog.cfg_yaml);
+  // const userConfig = useState("userConfig");
+  //
+  // return userConfig.value.blogs.find((item) => item.id === blogId);
 }
 
 export function extractTitleFromMd(mdNoFrontmatter) {

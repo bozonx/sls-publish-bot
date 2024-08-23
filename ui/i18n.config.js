@@ -12,6 +12,7 @@ export default defineI18nConfig(() => ({
       save: "Save",
       cancel: "Cancel",
       name: "Name",
+      blogs: "Blogs",
       doSelect: "Select",
       contentSelect: "Content select",
       pubCustomize: "Customize",
@@ -31,6 +32,7 @@ export default defineI18nConfig(() => ({
       stateWrongMsg: "Wrong state. Return to the previous step.",
       createWorkspace: "Create workspace",
       createWorkspaceModalHeader: "Create workspace",
+      createBlogModalHeader: "Create blog",
       socialMedia: {
         dzen: "Yandex Dzen",
         telegram: "Telegram",
@@ -59,6 +61,7 @@ export default defineI18nConfig(() => ({
       save: "Сохранить",
       cancel: "Отменить",
       name: "Название",
+      blogs: "Блоги",
       doSelect: "Выбрать",
       contentSelect: "Выбрать контент",
       pubCustomize: "Модифицировать",
@@ -78,6 +81,7 @@ export default defineI18nConfig(() => ({
       stateWrongMsg: "Не верный стейт. Вернитесь к предыдущему шагу.",
       createWorkspace: "Создать workspace",
       createWorkspaceModalHeader: "Создать workspace",
+      createBlogModalHeader: "Создать блог",
       socialMedia: {
         dzen: "Яндекс Дзен",
         telegram: "Telegram",

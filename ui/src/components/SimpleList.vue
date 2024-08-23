@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["value", "status"]);
+const props = defineProps(["data", "status"]);
 const pending = props.status === "pending";
 </script>
 
@@ -7,7 +7,7 @@ const pending = props.status === "pending";
   <div>
     <div v-if="pending">...</div>
     <ul v-else>
-      <li v-for="item in props.value">
+      <li v-for="item in props.data">
         <slot :item="item" name="item" />
       </li>
     </ul>

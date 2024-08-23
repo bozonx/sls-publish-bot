@@ -5,8 +5,7 @@ const props = defineProps(["data", "status", "error"]);
 <template>
   <SimpleList v-bind="props">
     <template #item="{ item }">
-      <ListItem :label="item.name" to="`/blog/${item.id}`" />
-      <!-- <AppBlogsList :blogs="userConfig.blogs" class="mb-4" /> -->
+      <AppWorkspaceItem :item="item" />
     </template>
   </SimpleList>
 </template>

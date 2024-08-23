@@ -1,11 +1,8 @@
 <script setup>
-// import { resolveSmTypes } from "../lib/helpers.js";
-
-const props = defineProps(["blogId"]);
+const props = defineProps(["blog"]);
 const { t } = useI18n();
-const userConfig = useState("userConfig");
+const blogConf = getBlogConf(props.blog);
 
-const blogConf = getBlogConf(props.blogId);
 const allTypes = {};
 
 for (const sm of blogConf.socialMedia) {

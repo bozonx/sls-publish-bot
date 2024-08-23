@@ -1,15 +1,16 @@
 const runtimeConfig = useRuntimeConfig();
 
-export async function formSubmitHelper(FormData, form$) {
-  const data = form$.data;
+export function formSubmitHelper(endpoint) {
+  return async (FormData, form$) => {
+    const data = form$.data;
 
-  form$.cancelToken = form$.$vueform.services.axios.CancelToken.source();
+    form$.cancelToken = form$.$vueform.services.axios.CancelToken.source();
 
-  return await form$.$vueform.services.axios.post(
-    runtimeConfig.public.apiBaseUrl + "/workspaces",
-    data,
-    {
+    return await form$.$vueform.services.axios({
+      url: runtimeConfig.public.apiBaseUrl + endpoint,
+      data,
+      method: form$.method || "post",
       cancelToken: form$.cancelToken.token,
-    },
-  );
+    });
+  };
 }

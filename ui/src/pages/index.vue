@@ -8,10 +8,7 @@ definePageParams({
   title: t("appTitle"),
 });
 
-const { data, status, error, refresh, clear } = await useAsyncData(
-  "workspaces",
-  () => $fetch(runtimeConfig.public.apiBaseUrl + "/workspaces"),
-);
+const { data, status, error, refresh, clear } = await useApiList("workspaces");
 </script>
 
 <template>

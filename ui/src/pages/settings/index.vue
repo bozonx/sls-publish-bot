@@ -17,8 +17,8 @@ const breadCrumbs = [
   <AppConfigureWorkspaces />
 
   <div>
-    <button @click="setLocale('en')">en</button>
-    <button @click="setLocale('ru')">ru</button>
+    <SmartButton @click="setLocale('en')" label="en" />
+    <SmartButton @click="setLocale('ru')" label="ru" />
   </div>
 
   <div>
