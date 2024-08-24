@@ -19,6 +19,7 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 WORKER_HOST = "publisher.ivank.workers.dev"
 WEB_APP_URL = "https://blog.p-libereco.org/ru/recent/1"
+CORS_ORIGIN = "https://publisher-ui-1zw.pages.dev"
 
 [triggers]
 crons = ["0 */22 * * *"]
