@@ -5,7 +5,7 @@ const createModalOpen = ref(false);
 const formModel = ref(null);
 
 const { data: user } = await useApiMe();
-const { data, status, error } = await useWorkspacesList();
+const { data, status, error } = await useApiListWorkspaces();
 
 const handleSave = () => {
   formModel.value?.submit();
