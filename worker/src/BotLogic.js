@@ -25,7 +25,7 @@ export async function handleStart(ctx) {
 
 	if (respGetUser.status === 404) {
 		// create user
-		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', `/?code=${API_CALL_LOCAL_CODE}`, 'POST', {
+		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', `/frombot?code=${API_CALL_LOCAL_CODE}`, 'POST', {
 			tgUserId: String(userId),
 			tgChatId: String(chatId),
 			lang,

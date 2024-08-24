@@ -21,13 +21,13 @@ app.get('/by-tg-id/:tgid', async (c) => {
 		return c.json({ message: 'Secured' });
 	}
 
-	const res = await getBase(tableName, { tgUserId: c.req.param().tgid });
+	const res = await getBase(c, tableName, { tgUserId: c.req.param().tgid });
 
-	if ('id' in res) return { id: res.id };
-	else return res;
+	if ('id' in res) return c.json({ id: res.id });
+	else return c.json(res);
 });
 
-app.post('/', (c) => {
+app.post('/frombot', async (c) => {
 	const { code } = c.req.query();
 
 	if (code !== API_CALL_LOCAL_CODE) {
@@ -36,12 +36,12 @@ app.post('/', (c) => {
 		return c.json({ message: 'Secured' });
 	}
 
-	return crudCreate(c, tableName, false);
+	return c.json(await createBase(c, tableName, await c.req.json()));
 });
 
 app.patch('/me', (c) => async (c) => {
 	// TODO: get from session
-	return updateBase(tableName, { id: 1 }, await c.req.json());
+	return updateBase(c, tableName, { id: 1 }, await c.req.json());
 });
 
 export default app;

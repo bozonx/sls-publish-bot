@@ -1,4 +1,4 @@
-import { camelCase } from 'lodash';
+import _ from 'lodash';
 import { TG_BOT_URL } from './constants.js';
 
 export async function setWebhook(env) {
@@ -11,7 +11,7 @@ export function keysToCammelCase(obj) {
 	const res = {};
 
 	for (const index of Object.keys(obj)) {
-		res[camelCase(index)] = obj[index];
+		res[_.camelCase(index)] = obj[index];
 	}
 
 	return res;

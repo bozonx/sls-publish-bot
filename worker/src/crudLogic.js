@@ -27,42 +27,32 @@ export async function crudList(c, tableName) {
 }
 
 export async function crudGet(c, tableName) {
-	return getBase(tableName, {
-		id: c.req.param().id,
-		// TODO: get from session
-		createdByUserId: 1,
-	});
+	return c.json(
+		await getBase(c, tableName, {
+			id: c.req.param().id,
+			// TODO: get from session
+			createdByUserId: 1,
+		}),
+	);
 }
 
-export async function crudCreate(c, tableName, secure = true) {
+export async function crudCreate(c, tableName) {
 	const { id, createdByUserId, data } = await c.req.json();
-	const adapter = new PrismaD1(c.env.DB);
-	const prisma = new PrismaClient({ adapter });
-	let result;
 
-	try {
-		result = await prisma[tableName].create({
-			data: {
-				...data,
-				// TODO: get from session
-				createdByUserId: secure ? 1 : undefined,
-			},
-		});
-	} catch (e) {
-		c.status(500);
-
-		return c.json({ error: String(e) });
-	}
-
-	c.status(201);
-
-	return c.json(result);
+	return c.json(
+		await createBase(c, tableName, {
+			...data,
+			// TODO: get from session
+			createdByUserId: 1,
+		}),
+	);
 }
 
 export async function crudUpdate(c, tableName) {
 	const rawData = await c.req.json();
 
 	return updateBase(
+		c,
 		tableName,
 		{
 			id: Number(rawData.id),
@@ -103,7 +93,7 @@ export async function crudDelete(c, tableName) {
 	return c.json(result);
 }
 
-export async function getBase(tableName, where) {
+export async function getBase(c, tableName, where) {
 	const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient({ adapter });
 	let result;
@@ -113,19 +103,37 @@ export async function getBase(tableName, where) {
 	} catch (e) {
 		c.status(500);
 
-		return c.json({ error: String(e) });
+		return { error: String(e) };
 	}
 
 	if (!result) {
 		c.status(404);
 
-		return c.json(NOT_FOUD_RESULT);
+		return NOT_FOUD_RESULT;
 	}
 
-	return c.json(result);
+	return result;
 }
 
-export async function updateBase(tableName, where, rawData) {
+export async function createBase(c, tableName, data) {
+	const adapter = new PrismaD1(c.env.DB);
+	const prisma = new PrismaClient({ adapter });
+	let result;
+
+	try {
+		result = await prisma[tableName].create({ data });
+	} catch (e) {
+		c.status(500);
+
+		return { error: String(e) };
+	}
+
+	c.status(201);
+
+	return result;
+}
+
+export async function updateBase(c, tableName, where, rawData) {
 	const { id, createdByUserId, data } = rawData;
 	const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient({ adapter });

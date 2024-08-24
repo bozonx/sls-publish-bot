@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './crudLogic.js';
+import { crudList, crudGet, crudCreate, crudUpdate, crudDelete, createBase } from './crudLogic.js';
 import { API_CALL_LOCAL_CODE } from './constants.js';
 // import { zValidator } from '@hono/zod-validator';
 // import { z } from 'zod';
@@ -13,7 +13,7 @@ app.post('/', (c) => crudCreate(c, tableName));
 app.patch('/', (c) => crudUpdate(c, tableName));
 app.delete('/:id', (c) => crudDelete(c, tableName));
 
-app.post('/frombot', (c) => {
+app.post('/frombot', async (c) => {
 	const { code } = c.req.query();
 
 	if (code !== API_CALL_LOCAL_CODE) {
@@ -22,7 +22,7 @@ app.post('/frombot', (c) => {
 		return c.json({ message: 'Secured' });
 	}
 
-	return crudCreate(c, tableName, false);
+	return c.json(await createBase(c, tableName, await c.req.json()));
 });
 
 export default app;
