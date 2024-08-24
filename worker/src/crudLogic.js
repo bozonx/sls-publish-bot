@@ -49,11 +49,11 @@ export async function crudCreate(c, tableName) {
 }
 
 export async function crudUpdate(c, tableName) {
-	const { id, createdByUserId, ...data } = await c.req.json();
+	const { createdByUserId, ...data } = await c.req.json();
 
 	return c.json(
 		await updateBase(c, tableName, data, {
-			id: Number(rawData.id),
+			id: Number(data.id),
 			// TODO: get from session
 			createdByUserId: 1,
 		}),

@@ -9,7 +9,7 @@ definePageParams({
 </script>
 
 <template>
-  <h2>{{ $t("workspaces") }}</h2>
+  <SectionHeader>{{ $t("workspaces") }}</SectionHeader>
 
   <AppConfigureWorkspaces />
 

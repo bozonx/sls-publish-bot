@@ -1425,6 +1425,14 @@
     "@primeuix/styled" "^0.0.5"
     "@primeuix/utils" "^0.0.5"
 
+"@primevue/core@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@primevue/core/-/core-4.0.5.tgz#0a46fe95b774b4bb010e8c1b9ab1e2e8433cdc62"
+  integrity sha512-DUCslDA93eUOVW0A1I3yoZgRLI4zmI2++loZQXbUF5jaXCwKiAza14+iyUU+cWH27VSq+jQnCEP9QJtPZiJJ0w==
+  dependencies:
+    "@primeuix/styled" "^0.0.5"
+    "@primeuix/utils" "^0.0.5"
+
 "@primevue/icons@4.0.4":
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/@primevue/icons/-/icons-4.0.4.tgz#d8e1101777ebec71a442fa106e4a609667771cb1"
@@ -1432,6 +1440,14 @@
   dependencies:
     "@primeuix/utils" "^0.0.5"
     "@primevue/core" "4.0.4"
+
+"@primevue/icons@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@primevue/icons/-/icons-4.0.5.tgz#aea8cf534917ea55e36b8a8ec5a38007ceacd843"
+  integrity sha512-ZxR9W1wlAE2fTtUhrHyeMx5t0jNyAgxDcHPm0cNXpX8q1XF95rSM/qb48QKXIBDBrJ/xs57BcyCNADP/VDPY4g==
+  dependencies:
+    "@primeuix/utils" "^0.0.5"
+    "@primevue/core" "4.0.5"
 
 "@primevue/metadata@4.0.4":
   version "4.0.4"
@@ -5748,7 +5764,7 @@ pretty-bytes@^6.1.1:
   resolved "https://registry.npmjs.org/pretty-bytes/-/pretty-bytes-6.1.1.tgz"
   integrity sha512-mQUvGU6aUFQ+rNvTIAcZuWGRT9a6f6Yrg9bHs4ImKF+HZCEK+plBvnAZYSIQztknZF2qnzNtr6F8s0+IuptdlQ==
 
-primevue@4.0.4, primevue@^4.0.4:
+primevue@4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/primevue/-/primevue-4.0.4.tgz#23d93efbb71ba04d99a03dbe86d5c3773fb51f69"
   integrity sha512-1moEddbczJ1+yEyfeYQk3xOQB64iCjjM//f+HSXs6YrKVVC0QjPFx9XPNXrr2JjHlp+6D7EpPZtsmcrfA9jWkA==
@@ -5757,6 +5773,16 @@ primevue@4.0.4, primevue@^4.0.4:
     "@primeuix/utils" "^0.0.5"
     "@primevue/core" "4.0.4"
     "@primevue/icons" "4.0.4"
+
+primevue@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/primevue/-/primevue-4.0.5.tgz#16d295157ce9938f9fcb430821b2610d833ffebc"
+  integrity sha512-MALszGIZ5SnEQy1XeZLBFhpMXQ1OS7D1U7H+l/JAX5U46RQ1vufo7NAiWbbV5/ADjPGw4uLplqMQxujkksNY2g==
+  dependencies:
+    "@primeuix/styled" "^0.0.5"
+    "@primeuix/utils" "^0.0.5"
+    "@primevue/core" "4.0.5"
+    "@primevue/icons" "4.0.5"
 
 printable-characters@^1.0.42:
   version "1.0.42"

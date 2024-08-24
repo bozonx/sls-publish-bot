@@ -3,11 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "prod": "nuxi build --dotenv=.env.production --preset=cloudflare_pages",
-    "deploy": "wrangler pages deploy --branch main --project-name publisher-ui dist/",
+    "build": "nuxi build --dotenv=.env.production --preset=cloudflare_pages",
+    "upload": "wrangler pages deploy --branch main --project-name publisher-ui dist/",
+    "deploy": "npm run build && npm run upload",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
@@ -25,7 +24,7 @@
     "nuxt": "^3.12.4",
     "nuxt-lodash": "^2.5.3",
     "nuxt-snackbar": "^1.1.2",
-    "primevue": "^4.0.4",
+    "primevue": "^4.0.5",
     "rehype-external-links": "^3.0.0",
     "rehype-stringify": "^10.0.0",
     "remark": "^15.0.1",
