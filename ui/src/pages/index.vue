@@ -7,7 +7,7 @@ definePageParams({
   title: t("appTitle"),
 });
 
-const { data, status } = await useWorkspacesList();
+const { data, status } = await useApiListWorkspaces();
 </script>
 
 <template>

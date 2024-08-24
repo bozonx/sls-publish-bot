@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps(["item"]);
 
-const { data, status } = await useApiBlogsList(props.item.id);
+const { data, status } = await useApiListBlogs(props.item.id);
 </script>
 
 <template>

@@ -29,7 +29,7 @@ export async function crudList(c, tableName) {
 export async function crudGet(c, tableName) {
 	return c.json(
 		await getBase(c, tableName, {
-			id: c.req.param().id,
+			id: Number(c.req.param().id),
 			// TODO: get from session
 			createdByUserId: 1,
 		}),

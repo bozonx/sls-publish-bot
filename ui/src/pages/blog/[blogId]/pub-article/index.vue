@@ -2,8 +2,8 @@
 const route = useRoute();
 const { t } = useI18n();
 
-const { data, status, error } = await useApiBlog(route.params.blogId);
-const blogConf = getBlogConf(data.value);
+const { data, status } = await useApiGetBlog(route.params.blogId);
+const blogConf = getItemConf(data.value);
 
 definePageParams({
   categoryTitle: data.value.name,

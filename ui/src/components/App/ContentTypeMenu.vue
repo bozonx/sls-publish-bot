@@ -1,7 +1,7 @@
 <script setup>
-const props = defineProps(["blog"]);
+const props = defineProps(["blog", "status"]);
 const { t } = useI18n();
-const blogConf = getBlogConf(props.blog);
+const blogConf = getItemConf(props.blog);
 
 const allTypes = {};
 
@@ -18,9 +18,6 @@ const items = Object.keys(allTypes).map((postType) => ({
 </script>
 
 <template>
-  <Menu :model="items" class="w-full md:w-60">
-    <template #item="{ item }">
-      <SmartButton :item="item" />
-    </template>
-  </Menu>
+  {{ props.status }}
+  <SmartMenu :items="items" />
 </template>

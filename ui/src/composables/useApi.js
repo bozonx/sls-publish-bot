@@ -1,20 +1,20 @@
 const runtimeConfig = useRuntimeConfig();
 
 export async function useApiMe() {
-  // by-tg-id/${runtimeConfig.public.devTgUserId}
   const url = `${runtimeConfig.public.apiBaseUrl}/users/me`;
+
   return await useAsyncData(url, () => $fetch(url));
 }
 
 ////// GET LISTS
 
-export async function useWorkspacesList() {
+export async function useApiListWorkspaces() {
   const url = `${runtimeConfig.public.apiBaseUrl}/workspaces`;
 
   return await useAsyncData(url, () => $fetch(url));
 }
 
-export async function useApiBlogsList(wpid) {
+export async function useApiListBlogs(wpid) {
   const url = `${runtimeConfig.public.apiBaseUrl}/blogs?workspace-id=${wpid}`;
 
   return await useAsyncData(url, () => $fetch(url));
@@ -22,13 +22,13 @@ export async function useApiBlogsList(wpid) {
 
 ////// GET ITEM
 
-export async function useApiWorkspace(id) {
+export async function useApiGetWorkspace(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/workspaces/${id}`;
 
   return await useAsyncData(url, () => $fetch(url));
 }
 
-export async function useApiBlog(id) {
+export async function useApiGetBlog(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/blogs/${id}`;
 
   return await useAsyncData(url, () => $fetch(url));

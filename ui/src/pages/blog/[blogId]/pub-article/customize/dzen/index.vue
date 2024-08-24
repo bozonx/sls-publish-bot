@@ -1,7 +1,9 @@
 <script setup>
 const route = useRoute();
 const { t } = useI18n();
-const blogConf = getBlogConf(route.params.blogId);
+
+const { data, status } = await useApiGetBlog(route.params.blogId);
+const blogConf = getItemConf(data);
 
 definePageParams({
   backUrl: `/blog/${route.params.blogId}/pub-article/customize`,
@@ -10,6 +12,7 @@ definePageParams({
   title: t("copyToDzen"),
 });
 </script>
+
 <template>
   <ArticleDzenCopy :blogId="route.params.blogId" />
 </template>
