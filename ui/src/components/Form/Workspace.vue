@@ -1,5 +1,11 @@
 <script setup>
-const props = defineProps(["modelValue", "loaded", "userId", "method"]);
+const props = defineProps([
+  "modelValue",
+  "loaded",
+  "userId",
+  "method",
+  "handleSuccess",
+]);
 const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
 
@@ -21,6 +27,7 @@ watchEffect(() => {
 
 <template>
   <div>
-    <Vueform :endpoint="formSubmitHelper('/workspaces')" :method="props.method" ref="form$" :schema="schema" />
+    <Vueform :endpoint="formSubmitHelper('/workspaces')" :method="props.method" ref="form$" :schema="schema"
+      @success="props.handleSuccess" />
   </div>
 </template>

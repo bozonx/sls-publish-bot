@@ -1,9 +1,10 @@
 <script setup>
-const route = useRoute();
 const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
 
 const { data: user } = await useApiMe();
-const { data } = await useApiWorkspace(route.params.wpId);
+const { data } = await useApiGetWorkspace(route.params.wsId);
 const { data: blogs, status, error } = await useApiBlogsList(data.id);
 const createModalOpen = ref(false);
 const formModel = ref(null);

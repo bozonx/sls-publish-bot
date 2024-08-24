@@ -1,5 +1,6 @@
 <script setup>
 const { t } = useI18n();
+const router = useRouter();
 
 const { data: user } = await useApiMe();
 const { data, status } = await useApiListWorkspaces();
@@ -8,10 +9,12 @@ const formModel = ref(null);
 
 const handleSave = () => {
   formModel.value?.submit();
+};
 
-  console.log(1111, formModel.value);
-  // TODO: go to item
-  // /settings/workspace-${item.id}
+const handleSuccess = (response, form$) => {
+  const id = response.data.id;
+
+  router.push(`/settings/workspace-${id}`);
 };
 </script>
 
@@ -27,6 +30,6 @@ const handleSave = () => {
   </div>
 
   <SimpleFormModal v-model="createModalOpen" :header="$t('createWorkspaceModalHeader')" @save="handleSave">
-    <FormWorkspace v-model="formModel" :userId="user.id" />
+    <FormWorkspace v-model="formModel" :userId="user.id" :handleSuccess="handleSuccess" />
   </SimpleFormModal>
 </template>
