@@ -1,6 +1,5 @@
 <script setup>
-const { locale, setLocale } = useI18n();
-const { t } = useI18n();
+const { locale, setLocale, t } = useI18n();
 const colorMode = useColorMode();
 
 definePageParams({
@@ -10,6 +9,8 @@ definePageParams({
 </script>
 
 <template>
+  <h2>{{ $t("workspaces") }}</h2>
+
   <AppConfigureWorkspaces />
 
   <div>

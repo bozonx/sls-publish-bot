@@ -9,7 +9,7 @@ const tableName = 'user';
 
 app.get('/me', async (c) => {
 	// TODO: get from session
-	return getBase(tableName, { id: 1 });
+	return c.json(await getBase(c, tableName, { id: 1 }));
 });
 
 app.get('/by-tg-id/:tgid', async (c) => {
@@ -39,8 +39,8 @@ app.post('/frombot', async (c) => {
 	return c.json(await createBase(c, tableName, await c.req.json()));
 });
 
-app.patch('/me', (c) => async (c) => {
-	const { id, data } = await c.req.json();
+app.patch('/me', async (c) => {
+	const { id, ...data } = await c.req.json();
 
 	// TODO: get from session
 	return c.json(await updateBase(c, tableName, { id: 1 }, data));

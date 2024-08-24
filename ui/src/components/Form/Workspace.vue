@@ -21,8 +21,6 @@ watchEffect(() => {
 
 <template>
   <div>
-    <!-- <div class="mb-8">Update your information.</div> -->
-
     <Vueform :endpoint="formSubmitHelper('/workspaces')" :method="props.method" ref="form$" :schema="schema" />
   </div>
 </template>

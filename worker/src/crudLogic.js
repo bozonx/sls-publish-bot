@@ -37,7 +37,7 @@ export async function crudGet(c, tableName) {
 }
 
 export async function crudCreate(c, tableName) {
-	const { id, createdByUserId, data } = await c.req.json();
+	const { id, createdByUserId, ...data } = await c.req.json();
 
 	return c.json(
 		await createBase(c, tableName, {
@@ -49,7 +49,7 @@ export async function crudCreate(c, tableName) {
 }
 
 export async function crudUpdate(c, tableName) {
-	const { id, createdByUserId, data } = await c.req.json();
+	const { id, createdByUserId, ...data } = await c.req.json();
 
 	return c.json(
 		await updateBase(c, tableName, data, {
