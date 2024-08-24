@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["modelValue", "loaded", "wpid", "method"]);
+const props = defineProps(["modelValue", "loaded", "userId", "wpid", "method"]);
 const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
 
@@ -8,8 +8,8 @@ const schema = ref({
   name: { type: "text", label: t("name") },
   cfg_yaml: { type: "textarea", default: "socialMedia: []" },
   workspaceId: { type: "hidden", default: props.wpid },
-  // TODO: add user id
-  createdByUserId: { type: "hidden", default: 1 },
+  // TODO:  better to use prepare
+  createdByUserId: { type: "hidden", default: props.userId },
 });
 
 onMounted(async () => {

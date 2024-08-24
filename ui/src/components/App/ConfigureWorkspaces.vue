@@ -4,7 +4,8 @@ const { t } = useI18n();
 const createModalOpen = ref(false);
 const formModel = ref(null);
 
-const { data, status, error } = await useApiList("workspaces");
+const { data: user } = await useApiMe();
+const { data, status, error } = await useWorkspacesList();
 
 const handleSave = () => {
   formModel.value?.submit();
@@ -14,7 +15,7 @@ const handleSave = () => {
 <template>
   <SimpleList :data="data" :status="status" :error="error">
     <template #item="{ item }">
-      <AppConfigWorkspaceItem :item="item" />
+      <SmartButton :label="item.name" :to="`/settings/workspace-${item.id}`" />
     </template>
   </SimpleList>
 
@@ -23,6 +24,6 @@ const handleSave = () => {
   </div>
 
   <SimpleFormModal v-model="createModalOpen" :header="$t('createWorkspaceModalHeader')" @save="handleSave">
-    <FormCreateWorkspace v-model="formModel" />
+    <FormWorkspace v-model="formModel" :userId="user.id" />
   </SimpleFormModal>
 </template>

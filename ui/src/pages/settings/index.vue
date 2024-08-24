@@ -3,17 +3,13 @@ const { locale, setLocale } = useI18n();
 const { t } = useI18n();
 const colorMode = useColorMode();
 
-const breadCrumbs = [
-  {
-    label: t("settings"),
-  },
-];
+definePageParams({
+  title: t("settings"),
+});
 // console.log(colorMode.preference);
 </script>
 
 <template>
-  <AppBreadCrumb :items="breadCrumbs" />
-
   <AppConfigureWorkspaces />
 
   <div>
