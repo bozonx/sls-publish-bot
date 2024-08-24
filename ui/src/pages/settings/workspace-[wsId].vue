@@ -1,7 +1,7 @@
 <script setup>
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
+// const router = useRouter();
 const confirm = useConfirm();
 // const toast = useToast();
 
@@ -50,7 +50,7 @@ const handleDeleteWorkspace = () => {
       );
 
       if (deleteStatus.value === "success") {
-        router.push(`/settings`);
+        navigateTo(`/settings`);
       }
 
       // toast.add({

@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.API_BASE_URL,
-      devTgUserId: process.env.DEV_TG_USER_ID,
+      // devTgUserId: process.env.DEV_TG_USER_ID,
     },
   },
   $production: {},

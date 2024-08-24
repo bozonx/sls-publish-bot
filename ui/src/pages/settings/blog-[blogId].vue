@@ -1,7 +1,7 @@
 <script setup>
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
+// const router = useRouter();
 const confirm = useConfirm();
 
 const { data: user } = await useApiMe();
@@ -34,7 +34,8 @@ const handleDelete = () => {
       const { status: deleteStatus } = await useApiDeleteBlog(data.value.id);
 
       if (deleteStatus.value === "success") {
-        router.push(`/settings/workspace-${data.value.workspaceId}`);
+        // router.push(`/settings/workspace-${data.value.workspaceId}`);
+        navigateTo(`/settings/workspace-${data.value.workspaceId}`);
       }
 
       // toast.add({

@@ -18,6 +18,16 @@ export function definePageParams(newParams) {
     ...newParams,
   };
 
+  definePageMeta({
+    middleware: [
+      function(to, from) {
+        // Custom inline middleware
+        console.log(2222, to, from);
+      },
+      "auth",
+    ],
+  });
+
   useHead({
     title: pageParams.value.title,
   });

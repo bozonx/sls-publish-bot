@@ -5,6 +5,7 @@
 // await callOnce(async () => {
 //   userConfig.value = parseYaml(defaultUserConfig);
 // });
+window.Telegram?.WebApp.ready();
 </script>
 
 <template>

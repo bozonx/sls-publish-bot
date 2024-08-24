@@ -1,5 +1,17 @@
 const runtimeConfig = useRuntimeConfig();
 
+export async function useAuthorizeViaBot() {
+  const tgUserId = useTgWebAppUserId();
+  const url = `${runtimeConfig.public.apiBaseUrl}/users/auth-via-bot`;
+
+  return await useAsyncData(url, () =>
+    $fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ tgUserId }),
+    }),
+  );
+}
+
 export async function useApiMe() {
   const url = `${runtimeConfig.public.apiBaseUrl}/users/me`;
 
