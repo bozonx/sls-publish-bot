@@ -13,15 +13,18 @@ export function resolveSmTypes(sm) {
   return sm.types || SOCIAL_MEDIA_PARAMS[sm.use].types;
 }
 
-export function getBlogConf(blog) {
-  return parseYaml(blog.cfg_yaml);
-  // const userConfig = useState("userConfig");
-  //
-  // return userConfig.value.blogs.find((item) => item.id === blogId);
+// export function replaceLineBreak() { }
+
+export function runTemplate(tmpl, data) {
+  return useTemplate(tmpl)(data);
 }
 
-export function extractTitleFromMd(mdNoFrontmatter) {
-  const firstTitleMatch = mdNoFrontmatter.trim().match(/^\#\s+(.+)$/m);
+export function getItemConf(wsOrBlog) {
+  return parseYaml(wsOrBlog.cfg_yaml);
+}
+
+export function extractTitleFromMd(mdWithoutFrontmatter) {
+  const firstTitleMatch = mdWithoutFrontmatter.trim().match(/^\#\s+(.+)$/m);
 
   return firstTitleMatch ? firstTitleMatch[1].trim() : "";
 }

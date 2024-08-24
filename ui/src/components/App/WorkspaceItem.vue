@@ -1,16 +1,14 @@
 <script setup>
 const props = defineProps(["item"]);
 
-const { data, status, error } = await useApiList(
-  `blogs?workspace-id=${props.item.id}`,
-);
+const { data, status } = await useApiBlogsList(props.item.id);
 </script>
 
 <template>
   <Card class="mb-2">
     <template #title>{{ props.item.name }}</template>
     <template #content>
-      <SimpleList :data="data" :status="status" :error="error">
+      <SimpleList :data="data" :status="status">
         <template #item="{ item }">
           <ListItem :label="item.name" :to="`/blog/${item.id}`" />
         </template>

@@ -1,6 +1,25 @@
 export const TMP_STATE_TYPES = {
   articleToPublish: "articleToPublish",
 };
+
+export const BLOG_DEFAULT_CONFIG = `
+socialMedia:
+  - use: dzen
+    types: ["article"]
+    templates:
+      - ["Main", "\${CONTENT}\n\n\nAuthor: [\${AUTHOR}](\${AUTHOR_URL})"]
+  - use: telegram
+    channelId: ""
+    templates:
+      - "some"
+    postForArticleTemplates:
+      - "some tg"
+  - use: youtube
+    types: ["podcast"]
+  - use: blog
+    postGitPath: "https://raw.githubusercontent.com/..."
+`;
+
 export const PODCAST_TYPE_AUDIO = "audio";
 export const PODCAST_TYPE_VIDEO = "video";
 export const SOCIAL_MEDIAS = {

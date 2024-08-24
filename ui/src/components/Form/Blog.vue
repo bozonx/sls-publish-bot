@@ -8,8 +8,7 @@ const schema = ref({
   name: { type: "text", label: t("name") },
   cfg_yaml: { type: "textarea", default: "socialMedia: []" },
   workspaceId: { type: "hidden", default: props.wpid },
-  // TODO:  better to use prepare
-  createdByUserId: { type: "hidden", default: props.userId },
+  id: { type: "hidden", default: props.loaded?.id },
 });
 
 onMounted(async () => {
@@ -25,7 +24,6 @@ watchEffect(() => {
   <div>
     <!-- <div class="mb-8">Update your information.</div> -->
 
-    <Vueform :endpoint="formSubmitHelper('/blogs', `/blogs/${loaded.id}`)" :method="props.method" ref="form$"
-      :schema="schema" />
+    <Vueform :endpoint="formSubmitHelper('/blogs')" :method="props.method" ref="form$" :schema="schema" />
   </div>
 </template>

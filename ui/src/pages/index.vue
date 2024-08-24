@@ -1,17 +1,21 @@
 <script setup>
 const userConfig = useState("userConfig");
 const { t } = useI18n();
-const runtimeConfig = useRuntimeConfig();
 
 definePageParams({
   showHome: false,
   title: t("appTitle"),
 });
 
-const { data, status, error, refresh, clear } = await useApiList("workspaces");
+const { data, status } = await useWorkspacesList();
 </script>
 
 <template>
-  <AppWorkspacesBlogsList :status="status" :error="error" :data="data" />
+  <SimpleList :data="data" :status="status">
+    <template #item="{ item }">
+      <AppWorkspaceItem :item="item" />
+    </template>
+  </SimpleList>
+
   <AppMainMenu />
 </template>

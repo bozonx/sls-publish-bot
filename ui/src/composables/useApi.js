@@ -1,17 +1,12 @@
 const runtimeConfig = useRuntimeConfig();
 
 export async function useApiMe() {
-  const url = `${runtimeConfig.public.apiBaseUrl}/users/by-tg-id/${runtimeConfig.public.devTgUserId}`;
-
+  // by-tg-id/${runtimeConfig.public.devTgUserId}
+  const url = `${runtimeConfig.public.apiBaseUrl}/users/me`;
   return await useAsyncData(url, () => $fetch(url));
 }
 
-// TODO: remove
-export async function useApiList(pathTo) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/${pathTo}`;
-
-  return await useAsyncData(url, () => $fetch(url));
-}
+////// GET LISTS
 
 export async function useWorkspacesList() {
   const url = `${runtimeConfig.public.apiBaseUrl}/workspaces`;
@@ -25,14 +20,30 @@ export async function useApiBlogsList(wpid) {
   return await useAsyncData(url, () => $fetch(url));
 }
 
-export async function useApiBlog(blogId) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/blogs/${blogId}`;
+////// GET ITEM
+
+export async function useApiWorkspace(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/workspaces/${id}`;
 
   return await useAsyncData(url, () => $fetch(url));
 }
 
-export async function useApiWorkspace(wpId) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/workspaces/${wpId}`;
+export async function useApiBlog(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/blogs/${id}`;
 
   return await useAsyncData(url, () => $fetch(url));
+}
+
+////// DELETE ITEM
+
+export async function useApiDeleteWorkspace(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/workspaces/${id}`;
+
+  return await useAsyncData(url, () => $fetch(url, { method: "DELETE" }));
+}
+
+export async function useApiDeleteBlog(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/blogs/${id}`;
+
+  return await useAsyncData(url, () => $fetch(url, { method: "DELETE" }));
 }

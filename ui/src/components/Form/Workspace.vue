@@ -7,8 +7,7 @@ const form$ = ref(null);
 const schema = ref({
   name: { type: "text", label: t("name") },
   cfg_yaml: { type: "hidden", default: "" },
-  // TODO:  better to use prepare
-  createdByUserId: { type: "hidden", default: props.userId },
+  id: { type: "hidden", default: props.loaded?.id },
 });
 
 onMounted(async () => {
@@ -24,7 +23,6 @@ watchEffect(() => {
   <div>
     <!-- <div class="mb-8">Update your information.</div> -->
 
-    <Vueform :endpoint="formSubmitHelper('/workspaces', `/workspaces/${loaded.id}`)" :method="props.method" ref="form$"
-      :schema="schema" />
+    <Vueform :endpoint="formSubmitHelper('/workspaces')" :method="props.method" ref="form$" :schema="schema" />
   </div>
 </template>

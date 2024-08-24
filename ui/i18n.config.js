@@ -13,6 +13,7 @@ export default defineI18nConfig(() => ({
       cancel: "Cancel",
       name: "Name",
       blogs: "Blogs",
+      inbox: "Inbox",
       doSelect: "Select",
       contentSelect: "Content select",
       pubCustomize: "Customize",
@@ -33,6 +34,7 @@ export default defineI18nConfig(() => ({
       createWorkspace: "Create workspace",
       createWorkspaceModalHeader: "Create workspace",
       createBlogModalHeader: "Create blog",
+      emptyListMsg: "Empty",
       socialMedia: {
         dzen: "Yandex Dzen",
         telegram: "Telegram",
@@ -62,6 +64,7 @@ export default defineI18nConfig(() => ({
       cancel: "Отменить",
       name: "Название",
       blogs: "Блоги",
+      inbox: "Входящие",
       doSelect: "Выбрать",
       contentSelect: "Выбрать контент",
       pubCustomize: "Модифицировать",
@@ -82,6 +85,7 @@ export default defineI18nConfig(() => ({
       createWorkspace: "Создать workspace",
       createWorkspaceModalHeader: "Создать workspace",
       createBlogModalHeader: "Создать блог",
+      emptyListMsg: "Пусто",
       socialMedia: {
         dzen: "Яндекс Дзен",
         telegram: "Telegram",

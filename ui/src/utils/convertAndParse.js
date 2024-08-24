@@ -1,4 +1,6 @@
 import { remark } from "remark";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkFrontmatterYaml from "remark-frontmatter-yaml";
 // import strip from "strip-markdown";
 import remarkRehype from "remark-rehype";
 import rehypeExternalLinks from "rehype-external-links";
@@ -19,4 +21,16 @@ export function mdToHtml(mdContent) {
     .use(html)
     .processSync(mdContent)
     .toString();
+}
+
+export function parseMdFile(rawContent) {
+  const file = remark()
+    .use(remarkFrontmatter)
+    .use(remarkFrontmatterYaml)
+    .processSync(rawContent);
+
+  return {
+    frontmatter: file.data.frontmatter,
+    content: file.value,
+  };
 }

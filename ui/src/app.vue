@@ -1,14 +1,10 @@
 <script setup>
-// import { parseYaml } from "./lib/helpers.js";
-// import "./styles.css";
-
-const userConfig = useUserConfig();
 // from app.config.js
-const appConfig = useAppConfig();
+// const appConfig = useAppConfig();
 
-await callOnce(async () => {
-  userConfig.value = parseYaml(defaultUserConfig);
-});
+// await callOnce(async () => {
+//   userConfig.value = parseYaml(defaultUserConfig);
+// });
 </script>
 
 <template>
