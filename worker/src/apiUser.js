@@ -40,8 +40,10 @@ app.post('/frombot', async (c) => {
 });
 
 app.patch('/me', (c) => async (c) => {
+	const { id, data } = await c.req.json();
+
 	// TODO: get from session
-	return updateBase(c, tableName, { id: 1 }, await c.req.json());
+	return c.json(await updateBase(c, tableName, { id: 1 }, data));
 });
 
 export default app;

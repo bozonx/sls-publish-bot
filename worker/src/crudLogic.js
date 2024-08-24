@@ -49,17 +49,14 @@ export async function crudCreate(c, tableName) {
 }
 
 export async function crudUpdate(c, tableName) {
-	const rawData = await c.req.json();
+	const { id, createdByUserId, data } = await c.req.json();
 
-	return updateBase(
-		c,
-		tableName,
-		{
+	return c.json(
+		await updateBase(c, tableName, data, {
 			id: Number(rawData.id),
 			// TODO: get from session
 			createdByUserId: 1,
-		},
-		rawData,
+		}),
 	);
 }
 
@@ -133,8 +130,7 @@ export async function createBase(c, tableName, data) {
 	return result;
 }
 
-export async function updateBase(c, tableName, where, rawData) {
-	const { id, createdByUserId, data } = rawData;
+export async function updateBase(c, tableName, data, where) {
 	const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient({ adapter });
 	let result;
@@ -149,13 +145,13 @@ export async function updateBase(c, tableName, where, rawData) {
 			// not found
 			c.status(404);
 
-			return c.json(NOT_FOUD_RESULT);
+			return NOT_FOUD_RESULT;
 		}
 
 		c.status(500);
 
-		return c.json({ error: String(e) });
+		return { error: String(e) };
 	}
 
-	return c.json(result);
+	return result;
 }
