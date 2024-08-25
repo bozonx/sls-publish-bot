@@ -22,6 +22,12 @@ export async function useApiTgAuthFromWeb(body) {
   return $fetch(url, { method: "post", body });
 }
 
+export async function useApiDevLogin() {
+  const url = `${runtimeConfig.public.apiBaseUrl}/dev-login`;
+
+  return $fetch(url, { method: "post", body: {} });
+}
+
 ////// GET LISTS
 
 export async function useApiListWorkspaces() {

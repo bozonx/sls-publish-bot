@@ -9,26 +9,6 @@ export async function crudList(c, tableName) {
 	const prisma = new PrismaClient({ adapter });
 	let result;
 
-	// const session = c.get('session');
-	//
-	// if (session.get('counter')) {
-	// 	session.set('counter', session.get('counter') + 1);
-	// } else {
-	// 	session.set('counter', 1);
-	// }
-	//
-	// console.log(11111, session.get('counter'));
-
-	// let userId = session.get('userId');
-	//
-	// console.log(222, userId);
-	//
-	// if (!userId) {
-	// 	userId = 1;
-	//
-	// 	session.set('userId', userId);
-	// }
-
 	try {
 		result = await prisma[tableName].findMany({
 			where: {
