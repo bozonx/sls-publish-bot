@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { TG_BOT_URL } from './constants.js';
+import { sign } from 'hono/jwt';
+import { setCookie } from 'hono/cookie';
+import { TG_BOT_URL, JWT_COOKIE_NAME } from './constants.js';
 
 export async function setWebhook(env) {
 	const url = `https://api.telegram.org/bot${env.TG_TOKEN}/setWebhook?url=https://${env.WORKER_HOST}${TG_BOT_URL}`;
@@ -25,4 +27,14 @@ export function normalizeNumbers(obj) {
 	}
 
 	return res;
+}
+
+export async function createJwtToken(c, tgUserId) {
+	const jwtToken = await sign({ sub: tgUserId }, c.env.JWT_SECRET);
+
+	// TODO: check tgUserId
+
+	setCookie(c, JWT_COOKIE_NAME, jwtToken);
+
+	return jwtToken;
 }

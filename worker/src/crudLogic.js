@@ -9,15 +9,15 @@ export async function crudList(c, tableName) {
 	const prisma = new PrismaClient({ adapter });
 	let result;
 
-	const session = c.get('session');
-
-	if (session.get('counter')) {
-		session.set('counter', session.get('counter') + 1);
-	} else {
-		session.set('counter', 1);
-	}
-
-	console.log(11111, session.get('counter'));
+	// const session = c.get('session');
+	//
+	// if (session.get('counter')) {
+	// 	session.set('counter', session.get('counter') + 1);
+	// } else {
+	// 	session.set('counter', 1);
+	// }
+	//
+	// console.log(11111, session.get('counter'));
 
 	// let userId = session.get('userId');
 	//

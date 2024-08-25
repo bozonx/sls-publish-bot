@@ -31,7 +31,9 @@ export async function authorizeViaBot(apiBaseUrl) {
 }
 
 export async function makeAuthHeaders() {
-  const jwtToken = (await window.cookieStore.get("apisessid")).value;
+  const jwtToken = (await window.cookieStore.get("apisessid"))?.value;
+
+  if (!jwtToken) return {};
 
   return {
     Authorization: `Bearer ${jwtToken}`,

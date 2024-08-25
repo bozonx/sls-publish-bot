@@ -5,7 +5,10 @@
 // await callOnce(async () => {
 //   userConfig.value = parseYaml(defaultUserConfig);
 // });
-window.Telegram?.WebApp.ready();
+if (isInsideTgBot()) {
+  window.Telegram.WebApp.ready();
+  window.Telegram.WebApp.expand();
+}
 </script>
 
 <template>

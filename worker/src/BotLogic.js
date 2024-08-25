@@ -21,6 +21,8 @@ export async function handleStart(ctx) {
 	const chatId = ctx.chatId;
 	const lang = ctx.from.language_code;
 
+	console.log(111, ctx);
+
 	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/users/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
 
 	if (respGetUser.status === 404) {
@@ -52,7 +54,8 @@ export async function handleStart(ctx) {
 
 	return ctx.api.sendMessage(chatId, welcomeMsg, {
 		reply_markup: new InlineKeyboard()
-			.loginUrl({ url: 'http://localhost:8787/api/botlogin' })
+			// .login('login', 'https://p-libereco.org')
+			.url('login', 'https://p-libereco.org')
 			.text(t(ctx, 'loginToSite'), LOGIN_TO_SITE_ACTION)
 			.webApp('web', ctx.config.webAppUrl),
 	});

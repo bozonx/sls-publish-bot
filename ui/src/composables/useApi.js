@@ -16,6 +16,12 @@ export async function useApiLogin(tgUserId) {
   );
 }
 
+export async function useApiTgAuthFromWeb(body) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/tg-auth-from-web`;
+
+  return $fetch(url, { method: "post", body });
+}
+
 ////// GET LISTS
 
 export async function useApiListWorkspaces() {
