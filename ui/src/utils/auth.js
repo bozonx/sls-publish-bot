@@ -1,5 +1,3 @@
-// const runtimeConfig = useRuntimeConfig();
-
 export function isAuthenticated() {
   // TODO: check cookie
 
@@ -10,7 +8,7 @@ export function isInsideTgBot() {
   return Boolean(window.Telegram?.WebApp.initData);
 }
 
-export function useTgWebAppUserId() {
+export function getTgWebAppUserId() {
   // TODO: check hashsum
   if (window.Telegram?.WebApp.initDataUnsafe.user) {
     return window.Telegram.WebApp.initDataUnsafe.user.id;
@@ -18,4 +16,16 @@ export function useTgWebAppUserId() {
 
   // dev user id or undefined
   // return runtimeConfig.public.devTgUserId;
+}
+
+export async function authorizeViaBot(apiBaseUrl) {
+  const tgUserId = getTgWebAppUserId();
+  const url = `${apiBaseUrl}/users/auth-via-bot`;
+
+  const res = await $fetch(url, {
+    method: "POST",
+    body: JSON.stringify({ tgUserId }),
+  });
+
+  return res.status === 200;
 }

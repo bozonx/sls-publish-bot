@@ -46,4 +46,11 @@ app.patch('/me', async (c) => {
 	return c.json(await updateBase(c, tableName, { id: 1 }, data));
 });
 
+// authenficate from UI which is run under TgWebApp
+app.post('/auth-via-bot', async (c) => {
+	c.status(200);
+
+	return c.json({});
+});
+
 export default app;
