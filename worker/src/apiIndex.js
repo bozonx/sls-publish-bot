@@ -12,7 +12,7 @@ const app = new Hono().basePath('/api');
 let store;
 
 app.use('*', (c, next) => {
-	if (!store) store = new CloudflareD1Store();
+	if (!store) store = new CloudflareD1Store('session');
 
 	store.db = c.env.DB;
 
