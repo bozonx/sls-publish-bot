@@ -906,6 +906,19 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
+hono-sessions@^0.5.8:
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/hono-sessions/-/hono-sessions-0.5.8.tgz#8c124ef6b44902e3abcd2cf955a68168ff6c879e"
+  integrity sha512-RTPVnjVaB+JcENp+gKi7olhJhsxRa2gaB6cpLtt7uZf51+JeZH3FNealY9nIBxle+SwKtAQJkAjdcOmYGShaIg==
+  dependencies:
+    hono "^4.0.0"
+    iron-webcrypto "0.10.1"
+
+hono@^4.0.0:
+  version "4.5.8"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.5.8.tgz#212ee54b214cd90ecc44904b6f00ee58a9af32b8"
+  integrity sha512-pqpSlcdqGkpTTRpLYU1PnCz52gVr0zVR9H5GzMyJWuKQLLEBQxh96q45QizJ2PPX8NATtz2mu31/PKW/Jt+90Q==
+
 hono@^4.5.7:
   version "4.5.7"
   resolved "https://registry.yarnpkg.com/hono/-/hono-4.5.7.tgz#f8b3162bb13288a7af4626dc82dc54542f483c82"
@@ -915,6 +928,11 @@ human-signals@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-5.0.0.tgz#42665a284f9ae0dade3ba41ebc37eb4b852f3a28"
   integrity sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==
+
+iron-webcrypto@0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/iron-webcrypto/-/iron-webcrypto-0.10.1.tgz#cab8636a468685533a8521bfd7f06b19b7174809"
+  integrity sha512-QGOS8MRMnj/UiOa+aMIgfyHcvkhqNUsUxb1XzskENvbo+rEfp6TOwqd1KPuDzXC4OnGHcMSVxDGRoilqB8ViqA==
 
 is-binary-path@~2.1.0:
   version "2.1.0"
