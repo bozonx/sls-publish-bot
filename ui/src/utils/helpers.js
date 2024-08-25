@@ -28,7 +28,6 @@ export function extractTitleFromMd(mdWithoutFrontmatter) {
 
   return firstTitleMatch ? firstTitleMatch[1].trim() : "";
 }
-
 // export function removeFrontmatter(rawMd) {
 //   const frontmatterRegex = /^---\n([\s\S]*?)\n---/
 //

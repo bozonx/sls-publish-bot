@@ -21,11 +21,11 @@ export async function handleStart(ctx) {
 	const chatId = ctx.chatId;
 	const lang = ctx.from.language_code;
 
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', `/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
+	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/users/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
 
 	if (respGetUser.status === 404) {
 		// create user
-		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', `/frombot?code=${API_CALL_LOCAL_CODE}`, 'POST', {
+		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/users?code=${API_CALL_LOCAL_CODE}`, 'POST', {
 			tgUserId: String(userId),
 			tgChatId: String(chatId),
 			lang,
@@ -51,7 +51,10 @@ export async function handleStart(ctx) {
 	ctx.session.userData = userData;
 
 	return ctx.api.sendMessage(chatId, welcomeMsg, {
-		reply_markup: new InlineKeyboard().text(t(ctx, 'loginToSite'), LOGIN_TO_SITE_ACTION).webApp('web', ctx.config.webAppUrl),
+		reply_markup: new InlineKeyboard()
+			.loginUrl({ url: 'http://localhost:8787/api/botlogin' })
+			.text(t(ctx, 'loginToSite'), LOGIN_TO_SITE_ACTION)
+			.webApp('web', ctx.config.webAppUrl),
 	});
 }
 
@@ -85,7 +88,7 @@ export async function handleMessage(ctx) {
 		return ctx.api.sendMessage(ctx.chatId, `Can't recognize the message. Or unsupported type of message`);
 	}
 
-	const respSaveItem = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'inbox', `/frombot?code=${API_CALL_LOCAL_CODE}`, 'POST', {
+	const respSaveItem = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/inbox?code=${API_CALL_LOCAL_CODE}`, 'POST', {
 		createdByUserId: userData.id,
 		name: itemName,
 		dataJson: JSON.stringify(itemData),
@@ -106,7 +109,7 @@ export async function loadUserDataToSession(ctx) {
 
 	if (ctx.session.userData) return;
 
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'users', `/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
+	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/users/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
 
 	if (respGetUser.status === 200) {
 		ctx.session.userData = respGetUser.data;

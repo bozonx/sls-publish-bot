@@ -27,7 +27,7 @@ watchEffect(() => {
 
 <template>
   <div>
-    <Vueform :endpoint="formSubmitHelper('/workspaces')" :method="props.method" ref="form$" :schema="schema"
+    <Vueform :endpoint="formSubmitHelper('/auth/workspaces')" :method="props.method" ref="form$" :schema="schema"
       @success="props.handleSuccess" />
   </div>
 </template>

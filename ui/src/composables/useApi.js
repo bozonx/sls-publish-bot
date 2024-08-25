@@ -1,49 +1,71 @@
 const runtimeConfig = useRuntimeConfig();
 
 export async function useApiMe() {
-  const url = `${runtimeConfig.public.apiBaseUrl}/users/me`;
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/users/me`;
 
-  return await useAsyncData(url, () => $fetch(url));
+  return await useAsyncData(url, async () =>
+    $fetch(url, { headers: await makeAuthHeaders() }),
+  );
+}
+
+export async function useApiLogin(tgUserId) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/login`;
+
+  return await useAsyncData(url, async () =>
+    $fetch(url, { method: "post", body: { tgUserId } }),
+  );
 }
 
 ////// GET LISTS
 
 export async function useApiListWorkspaces() {
-  const url = `${runtimeConfig.public.apiBaseUrl}/workspaces`;
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces`;
 
-  return await useAsyncData(url, () => $fetch(url));
+  return await useAsyncData(url, async () =>
+    $fetch(url, { headers: await makeAuthHeaders() }),
+  );
 }
 
 export async function useApiListBlogs(wpid) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/blogs?workspace-id=${wpid}`;
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs?workspace-id=${wpid}`;
 
-  return await useAsyncData(url, () => $fetch(url));
+  return await useAsyncData(url, async () =>
+    $fetch(url, { headers: await makeAuthHeaders() }),
+  );
 }
 
 ////// GET ITEM
 
 export async function useApiGetWorkspace(id) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/workspaces/${id}`;
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
 
-  return await useAsyncData(url, () => $fetch(url));
+  return await useAsyncData(url, async () =>
+    $fetch(url, { headers: await makeAuthHeaders() }),
+  );
 }
 
 export async function useApiGetBlog(id) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/blogs/${id}`;
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
 
-  return await useAsyncData(url, () => $fetch(url));
+  return await useAsyncData(url, async () =>
+    $fetch(url, { headers: await makeAuthHeaders() }),
+  );
 }
 
 ////// DELETE ITEM
 
 export async function useApiDeleteWorkspace(id) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/workspaces/${id}`;
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
 
-  return await useAsyncData(url, () => $fetch(url, { method: "DELETE" }));
+  return await useAsyncData(url, async () =>
+    $fetch(url, { method: "DELETE", headers: await makeAuthHeaders() }),
+  );
 }
 
 export async function useApiDeleteBlog(id) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/blogs/${id}`;
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
 
-  return await useAsyncData(url, () => $fetch(url, { method: "DELETE" }));
+  return await useAsyncData(url, async () =>
+    $fetch(url, { method: "DELETE", headers: await makeAuthHeaders() }),
+  );
 }

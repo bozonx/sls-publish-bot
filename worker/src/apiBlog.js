@@ -1,7 +1,5 @@
 import { Hono } from 'hono';
 import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './crudLogic.js';
-// import { zValidator } from '@hono/zod-validator';
-// import { z } from 'zod';
 
 const app = new Hono();
 const tableName = 'blog';
