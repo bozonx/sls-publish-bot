@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { crudList, crudGet, crudCreate, crudUpdate, crudDelete, createBase } from './crudLogic.js';
+import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './crudLogic.js';
 
 const app = new Hono();
 const tableName = 'inbox';

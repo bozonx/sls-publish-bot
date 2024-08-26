@@ -1,8 +1,6 @@
 import { Hono } from 'hono';
-import { getBase, crudCreate, updateBase } from './crudLogic.js';
+import { getBase, updateBase } from './crudLogic.js';
 import { SESSION_PARAM } from './constants.js';
-// import { zValidator } from '@hono/zod-validator';
-// import { z } from 'zod';
 
 const app = new Hono();
 const tableName = 'user';
@@ -15,7 +13,7 @@ app.get('/me', async (c) => {
 
 app.patch('/me', async (c) => {
 	const { userId } = c.get(SESSION_PARAM);
-	const { id, ...data } = await c.req.json();
+	const { id: excludedId, ...data } = await c.req.json();
 
 	return c.json(await updateBase(c, tableName, { id: userId }, data));
 });

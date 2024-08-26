@@ -1,6 +1,6 @@
 import { jwt } from 'hono/jwt';
 import crypto from 'node:crypto';
-import { SESSION_PARAM } from './constants.js';
+import { SESSION_PARAM, JWT_COOKIE_NAME } from './constants.js';
 import { setCookieJwtToken } from './helpers.js';
 
 export function authMiddleware() {
@@ -12,9 +12,10 @@ export function authMiddleware() {
 		// TODO: надо возвращать json при ошибке
 		return jwt({
 			secret: c.env.JWT_SECRET,
-			// cookie: JWT_COOKIE_NAME,
+			cookie: JWT_COOKIE_NAME,
 		})(c, async () => {
 			const payload = c.get('jwtPayload');
+
 			c.set(SESSION_PARAM, {
 				userId: payload.sub,
 				tgUserId: payload.azp,

@@ -30,12 +30,12 @@ export async function authorizeViaBot(apiBaseUrl) {
   return res.status === 200;
 }
 
-export async function makeAuthHeaders() {
-  const jwtToken = (await window.cookieStore.get("apisessid"))?.value;
-
-  if (!jwtToken) return {};
-
-  return {
-    Authorization: `Bearer ${jwtToken}`,
-  };
-}
+// export async function makeAuthHeaders() {
+//   const jwtToken = (await window.cookieStore.get("apisessid"))?.value;
+//
+//   if (!jwtToken) return {};
+//
+//   return {
+//     Authorization: `Bearer ${jwtToken}`,
+//   };
+// }

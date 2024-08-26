@@ -24,7 +24,7 @@ window.onTelegramAuth = async function (user) {
 const handleDevLogin = async () => {
   const res = await useApiDevLogin();
   // save to cookie
-  await cookieStore.set(JWT_COOKIE_NAME, res.token);
+  // await cookieStore.set(JWT_COOKIE_NAME, res.token);
   // go to main page
   navigateTo(`/`);
 };

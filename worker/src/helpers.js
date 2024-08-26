@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { sign } from 'hono/jwt';
 import { setCookie } from 'hono/cookie';
 import { TG_BOT_URL, JWT_COOKIE_NAME, AUTH_COOKIE_BASE_PARAMS } from './constants.js';
-import { getBase } from './crudLogic.js';
 
 export async function setWebhook(env) {
 	const url = `https://api.telegram.org/bot${env.TG_TOKEN}/setWebhook?url=https://${env.WORKER_HOST}${TG_BOT_URL}`;
@@ -30,29 +29,21 @@ export function normalizeNumbers(obj) {
 	return res;
 }
 
-export async function createJwtToken(c, tgUserId) {
-	const res = await getBase(c, 'user', { tgUserId });
-
-	if (!('id' in res)) {
-		c.status(404);
-
-		return c.json({ message: `Can't find user` });
-	}
-
-	// TODO: add exp 	Expiration Time
-	return await sign({ sub: res.id, azp: tgUserId }, c.env.JWT_SECRET);
-}
-
 export async function setCookieJwtToken(c, payloadObj) {
-	// TODO: add exp 	Expiration Time
-	const jwtToken = await sign(payloadObj, c.env.JWT_SECRET);
+	const maxAgeSeconds = c.env.AUTH_MAX_AGE_DAYS * 24 * 60 * 60;
+
+	const jwtToken = await sign(
+		{
+			...payloadObj,
+			exp: Math.floor(Date.now() / 1000) + maxAgeSeconds,
+		},
+		c.env.JWT_SECRET,
+	);
 
 	setCookie(c, JWT_COOKIE_NAME, jwtToken, {
 		...AUTH_COOKIE_BASE_PARAMS,
+		maxAge: maxAgeSeconds,
 		// domain: 'localhost',
-		// maxAge: 10000,
-		// TODO: add
-		// expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900)),
 	});
 
 	return jwtToken;
