@@ -7,15 +7,16 @@ const app = new Hono();
 const tableName = 'user';
 
 app.get('/me', async (c) => {
-	// TODO: get from session
-	return c.json(await getBase(c, tableName, { id: 1 }));
+	const { sub: userId } = c.get('jwtPayload');
+
+	return c.json(await getBase(c, tableName, { id: userId }));
 });
 
 app.patch('/me', async (c) => {
+	const { sub: userId } = c.get('jwtPayload');
 	const { id, ...data } = await c.req.json();
 
-	// TODO: get from session
-	return c.json(await updateBase(c, tableName, { id: 1 }, data));
+	return c.json(await updateBase(c, tableName, { id: userId }, data));
 });
 
 export default app;

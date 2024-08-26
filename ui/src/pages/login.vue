@@ -13,17 +13,20 @@ window.onTelegramAuth = async function (user) {
     res = await useApiTgAuthFromWeb(user);
   } catch (e) {
     console.error(e);
+
+    return;
   }
 
-  console.log(2222, res);
-
-  // navigateTo(`/`);
+  await cookieStore.set(JWT_COOKIE_NAME, res.token);
+  navigateTo(`/`);
 };
 
 const handleDevLogin = async () => {
-  await useApiDevLogin();
-
-  // navigateTo(`/`);
+  const res = await useApiDevLogin();
+  // save to cookie
+  await cookieStore.set(JWT_COOKIE_NAME, res.token);
+  // go to main page
+  navigateTo(`/`);
 };
 
 // TODO: show dev button only on dev env

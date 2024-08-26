@@ -1,3 +1,4 @@
+export const JWT_COOKIE_NAME = "apisessid";
 export const TMP_STATE_TYPES = {
   articleToPublish: "articleToPublish",
 };

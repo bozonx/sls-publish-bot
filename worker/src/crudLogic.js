@@ -5,6 +5,7 @@ import { keysToCammelCase, normalizeNumbers } from './helpers.js';
 const NOT_FOUD_RESULT = { message: 'Not found' };
 
 export async function crudList(c, tableName) {
+	const { sub: userId } = c.get('jwtPayload');
 	const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient({ adapter });
 	let result;
@@ -13,8 +14,7 @@ export async function crudList(c, tableName) {
 		result = await prisma[tableName].findMany({
 			where: {
 				...keysToCammelCase(normalizeNumbers(c.req.query())),
-				// TODO: get from session
-				createdByUserId: 1,
+				createdByUserId: userId,
 			},
 		});
 	} catch (e) {
@@ -27,40 +27,43 @@ export async function crudList(c, tableName) {
 }
 
 export async function crudGet(c, tableName) {
+	const { sub: userId } = c.get('jwtPayload');
+
 	return c.json(
 		await getBase(c, tableName, {
 			id: Number(c.req.param().id),
 			// TODO: get from session
-			createdByUserId: 1,
+			createdByUserId: userId,
 		}),
 	);
 }
 
 export async function crudCreate(c, tableName) {
+	const { sub: userId } = c.get('jwtPayload');
 	const { id, createdByUserId, ...data } = await c.req.json();
 
 	return c.json(
 		await createBase(c, tableName, {
 			...data,
-			// TODO: get from session
-			createdByUserId: 1,
+			createdByUserId: userId,
 		}),
 	);
 }
 
 export async function crudUpdate(c, tableName) {
+	const { sub: userId } = c.get('jwtPayload');
 	const { createdByUserId, ...data } = await c.req.json();
 
 	return c.json(
 		await updateBase(c, tableName, data, {
 			id: Number(data.id),
-			// TODO: get from session
-			createdByUserId: 1,
+			createdByUserId: userId,
 		}),
 	);
 }
 
 export async function crudDelete(c, tableName) {
+	const { sub: userId } = c.get('jwtPayload');
 	const { id } = c.req.param();
 	const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient({ adapter });
@@ -70,8 +73,7 @@ export async function crudDelete(c, tableName) {
 		result = await prisma[tableName].delete({
 			where: {
 				id: Number(id),
-				// TODO: get from session
-				createdByUserId: 1,
+				createdByUserId: userId,
 			},
 		});
 	} catch (e) {

@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { jwt } from 'hono/jwt';
+import { jwt, sign } from 'hono/jwt';
 import crypto from 'node:crypto';
-import { createJwtToken } from './helpers.js';
 import apiTgBot from './apiTgBot.js';
 import apiUser from './apiUser.js';
 import apiWorkspace from './apiWorkspace.js';
 import apiBlog from './apiBlog.js';
 import apiInbox from './apiInbox.js';
+import { getBase } from './crudLogic.js';
 
 const app = new Hono().basePath('/api');
 
@@ -22,6 +22,7 @@ app.use(
 
 app.use('/auth/*', (c, next) => {
 	// TODO: надо возвращать json
+
 	return jwt({
 		secret: c.env.JWT_SECRET,
 		// cookie: JWT_COOKIE_NAME,
@@ -39,7 +40,7 @@ app.post('/tg-auth-from-web', async (c) => {
 
 	console.log(111111, payload);
 
-	await createJwtToken(c, payload.id);
+	const token = await createJwtToken(c, payload.id);
 
 	/*
 		{
@@ -69,7 +70,7 @@ app.post('/tg-auth-from-web', async (c) => {
 	// }
 	// const user = payload.user;
 
-	return c.json({ message: 'success' });
+	return c.json({ message: 'success', token });
 });
 
 app.post('/dev-login', async (c) => {
@@ -79,16 +80,24 @@ app.post('/dev-login', async (c) => {
 		return c.json({ message: 'Not allowed in production' });
 	}
 
-	await createJwtToken(c, c.env.DEV_TG_USER_ID);
+	const token = await createJwtToken(c, c.env.DEV_TG_USER_ID);
 
-	return c.json({ message: 'success' });
+	return c.json({ message: 'success', token });
 });
 
+async function createJwtToken(c, tgUserId) {
+	const res = await getBase(c, 'user', { tgUserId });
+
+	if (!('id' in res)) {
+		c.status(404);
+
+		return c.json({ message: `Can't find user` });
+	}
+
+	// TODO: add exp 	Expiration Time
+	const jwtToken = await sign({ sub: res.id, azp: tgUserId }, c.env.JWT_SECRET);
+
+	return jwtToken;
+}
+
 export default app;
-// app.get('/auth/page', async (c) => {
-// 	const payload = c.get('jwtPayload');
-//
-// 	console.log(1111, payload);
-//
-// 	return c.json(payload);
-// });
