@@ -34,7 +34,14 @@ export async function useApiListWorkspaces() {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces`;
 
   return await useAsyncData(url, async () =>
-    $fetch(url, { headers: await makeAuthHeaders() }),
+    $fetch(url, {
+      // credentials: "same-origin",
+      credentials: "include",
+      headers: {
+        ...(await makeAuthHeaders()),
+        // Origin: "http://localhost:8787",
+      },
+    }),
   );
 }
 

@@ -12,13 +12,17 @@ import { SESSION_PARAM } from './constants.js';
 
 const app = new Hono().basePath('/api');
 
-app.use(
-	'*',
+app.use('/auth/*', (c, next) =>
+	cors({
+		origin: c.env.CORS_ORIGIN,
+		credentials: true,
+	})(c, next),
+);
+// all other are allowed without credentials
+app.use('/', (c, next) =>
 	cors({
 		origin: '*',
-		// TODO: use it
-		// origin: process.env.CORS_ORIGIN,
-	}),
+	})(c, next),
 );
 
 app.use('/auth/*', (c, next) => {

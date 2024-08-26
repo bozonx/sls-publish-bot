@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaD1 } from '@prisma/adapter-d1';
 import { keysToCammelCase, normalizeNumbers } from './helpers.js';
 import { SESSION_PARAM } from './constants.js';
+import { setCookie } from 'hono/cookie';
 
 const NOT_FOUD_RESULT = { message: 'Not found' };
 
@@ -23,6 +24,19 @@ export async function crudList(c, tableName) {
 
 		return c.json({ error: String(e) });
 	}
+
+	setCookie(c, 'test', '123', {
+		// path: '/api/auth',
+		// secure: true,
+		// domain: 'http://localhost:8787',
+		// domain: 'localhost:3000',
+		// domain: 'localhost:3000',
+		domain: 'localhost',
+		// httpOnly: true,
+		maxAge: 10000,
+		// expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900)),
+		sameSite: 'Strict',
+	});
 
 	return c.json(result);
 }
