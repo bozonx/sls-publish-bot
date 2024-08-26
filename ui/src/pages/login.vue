@@ -17,7 +17,7 @@ window.onTelegramAuth = async function (user) {
     return;
   }
 
-  await cookieStore.set(JWT_COOKIE_NAME, res.token);
+  // await cookieStore.set(JWT_COOKIE_NAME, res.token);
   navigateTo(`/`);
 };
 

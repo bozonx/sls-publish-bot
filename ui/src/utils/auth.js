@@ -1,7 +1,5 @@
-export function isAuthenticated() {
-  // TODO: check cookie
-
-  return true;
+export async function isAuthenticated() {
+  return Boolean(await cookieStore.get(JWT_COOKIE_NAME));
 }
 
 export function isInsideTgBot() {
