@@ -1,14 +1,12 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { jwt, sign } from 'hono/jwt';
-import crypto from 'node:crypto';
 import apiTgBot from './apiTgBot.js';
 import apiUser from './apiUser.js';
 import apiWorkspace from './apiWorkspace.js';
 import apiBlog from './apiBlog.js';
 import apiInbox from './apiInbox.js';
-import { getBase } from './crudLogic.js';
-import { SESSION_PARAM } from './constants.js';
+import { authMiddleware } from './authMiddleware.js';
+import { createJwtToken } from './helpers.js';
 
 const app = new Hono().basePath('/api');
 
@@ -25,21 +23,7 @@ app.use('/', (c, next) =>
 	})(c, next),
 );
 
-app.use('/auth/*', (c, next) => {
-	// TODO: 	authorize via tg
-
-	// console.log(1111, c.req);
-
-	// TODO: надо возвращать json при ошибке
-	return jwt({
-		secret: c.env.JWT_SECRET,
-		// cookie: JWT_COOKIE_NAME,
-	})(c, () => {
-		c.set(SESSION_PARAM, c.get('jwtPayload'));
-
-		return next();
-	});
-});
+app.use('/auth/*', authMiddleware());
 
 app.route('/bot', apiTgBot);
 app.route('/auth/users', apiUser);
@@ -96,20 +80,5 @@ app.post('/dev-login', async (c) => {
 
 	return c.json({ message: 'success', token });
 });
-
-async function createJwtToken(c, tgUserId) {
-	const res = await getBase(c, 'user', { tgUserId });
-
-	if (!('id' in res)) {
-		c.status(404);
-
-		return c.json({ message: `Can't find user` });
-	}
-
-	// TODO: add exp 	Expiration Time
-	const jwtToken = await sign({ sub: res.id, azp: tgUserId }, c.env.JWT_SECRET);
-
-	return jwtToken;
-}
 
 export default app;
