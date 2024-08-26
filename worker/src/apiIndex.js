@@ -8,6 +8,7 @@ import apiWorkspace from './apiWorkspace.js';
 import apiBlog from './apiBlog.js';
 import apiInbox from './apiInbox.js';
 import { getBase } from './crudLogic.js';
+import { SESSION_PARAM } from './constants.js';
 
 const app = new Hono().basePath('/api');
 
@@ -21,12 +22,19 @@ app.use(
 );
 
 app.use('/auth/*', (c, next) => {
-	// TODO: надо возвращать json
+	// TODO: 	authorize via tg
 
+	// console.log(1111, c.req);
+
+	// TODO: надо возвращать json при ошибке
 	return jwt({
 		secret: c.env.JWT_SECRET,
 		// cookie: JWT_COOKIE_NAME,
-	})(c, next);
+	})(c, () => {
+		c.set(SESSION_PARAM, c.get('jwtPayload'));
+
+		return next();
+	});
 });
 
 app.route('/bot', apiTgBot);

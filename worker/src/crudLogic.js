@@ -1,11 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaD1 } from '@prisma/adapter-d1';
 import { keysToCammelCase, normalizeNumbers } from './helpers.js';
+import { SESSION_PARAM } from './constants.js';
 
 const NOT_FOUD_RESULT = { message: 'Not found' };
 
 export async function crudList(c, tableName) {
-	const { sub: userId } = c.get('jwtPayload');
+	const { sub: userId } = c.get(SESSION_PARAM);
 	const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient({ adapter });
 	let result;
@@ -27,7 +28,7 @@ export async function crudList(c, tableName) {
 }
 
 export async function crudGet(c, tableName) {
-	const { sub: userId } = c.get('jwtPayload');
+	const { sub: userId } = c.get(SESSION_PARAM);
 
 	return c.json(
 		await getBase(c, tableName, {
@@ -39,7 +40,7 @@ export async function crudGet(c, tableName) {
 }
 
 export async function crudCreate(c, tableName) {
-	const { sub: userId } = c.get('jwtPayload');
+	const { sub: userId } = c.get(SESSION_PARAM);
 	const { id, createdByUserId, ...data } = await c.req.json();
 
 	return c.json(
@@ -51,7 +52,7 @@ export async function crudCreate(c, tableName) {
 }
 
 export async function crudUpdate(c, tableName) {
-	const { sub: userId } = c.get('jwtPayload');
+	const { sub: userId } = c.get(SESSION_PARAM);
 	const { createdByUserId, ...data } = await c.req.json();
 
 	return c.json(
@@ -63,7 +64,7 @@ export async function crudUpdate(c, tableName) {
 }
 
 export async function crudDelete(c, tableName) {
-	const { sub: userId } = c.get('jwtPayload');
+	const { sub: userId } = c.get(SESSION_PARAM);
 	const { id } = c.req.param();
 	const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient({ adapter });
