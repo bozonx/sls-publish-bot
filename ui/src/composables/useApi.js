@@ -1,6 +1,7 @@
 const runtimeConfig = useRuntimeConfig();
 const fetchOptions = {
   credentials: "include",
+  headers: makeTgAuthHeaders(),
   async onResponseError({ request, response }) {
     if (response.status === 401) {
       return navigateTo("/login");

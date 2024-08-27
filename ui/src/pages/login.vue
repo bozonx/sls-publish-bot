@@ -29,6 +29,8 @@ const handleDevLogin = async () => {
   navigateTo(`/`);
 };
 
+const tg = window.Telegram;
+
 // TODO: show dev button only on dev env
 </script>
 
@@ -40,5 +42,7 @@ const handleDevLogin = async () => {
     <div>
       <Button @click="handleDevLogin">Dev login</Button>
     </div>
+
+    <pre>{{ tg?.WebApp }}</pre>
   </div>
 </template>

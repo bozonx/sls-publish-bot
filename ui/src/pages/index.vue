@@ -17,4 +17,6 @@ const { data, status } = await useApiListWorkspaces();
   </SimpleList>
 
   <AppMainMenu />
+
+  <NuxtLink to="/login">login</NuxtLink>
 </template>

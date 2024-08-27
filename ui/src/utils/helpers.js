@@ -1,5 +1,4 @@
 import yaml from "js-yaml";
-// import { SOCIAL_MEDIA_PARAMS } from "./constants.js";
 
 export function parseYaml(str) {
   return yaml.load(str);
@@ -27,6 +26,18 @@ export function extractTitleFromMd(mdWithoutFrontmatter) {
   const firstTitleMatch = mdWithoutFrontmatter.trim().match(/^\#\s+(.+)$/m);
 
   return firstTitleMatch ? firstTitleMatch[1].trim() : "";
+}
+
+export function isInsideTgBot() {
+  return Boolean(window.Telegram?.WebApp.initData);
+}
+
+export function makeTgAuthHeaders() {
+  if (!isInsideTgBot()) return {};
+
+  return {
+    Authorization: `Bearer ${window.Telegram.WebApp.initData}`,
+  };
 }
 
 // export function removeFrontmatter(rawMd) {
