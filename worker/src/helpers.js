@@ -32,19 +32,26 @@ export function normalizeNumbers(obj) {
 export async function setCookieJwtToken(c, payloadObj) {
 	const maxAgeSeconds = c.env.AUTH_MAX_AGE_DAYS * 24 * 60 * 60;
 
+	console.log(6666, maxAgeSeconds);
+
+	// TODO: тут происходит ошика на продакшене
 	const jwtToken = await sign(
 		{
 			...payloadObj,
-			exp: Math.floor(Date.now() / 1000) + maxAgeSeconds,
+			// exp: Math.floor(Date.now() / 1000) + maxAgeSeconds,
 		},
 		c.env.JWT_SECRET,
 	);
+
+	console.log(7777, jwtToken);
 
 	setCookie(c, JWT_COOKIE_NAME, jwtToken, {
 		...AUTH_COOKIE_BASE_PARAMS,
 		maxAge: maxAgeSeconds,
 		// domain: 'localhost',
 	});
+
+	console.log(8888888);
 
 	return jwtToken;
 }

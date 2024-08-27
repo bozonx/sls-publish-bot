@@ -4,6 +4,7 @@ import { getCookie } from 'hono/cookie';
 import crypto from 'node:crypto';
 import { SESSION_PARAM, JWT_COOKIE_NAME } from './constants.js';
 import { setCookieJwtToken } from './helpers.js';
+import { getBase } from './crudLogic.js';
 
 // const testData =
 // 'query_id=AAHthjMbAAAAAO2GMxtBR4uf&user=%7B%22id%22%3A456361709%2C%22first_name%22%3A%22Ivan%20K%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22ivan_k_freedom%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1724709158&hash=91f97d9bc32282b06bc1880ff1c8fc71fa881bb3501f7e3e278546db3989992e';
@@ -61,15 +62,15 @@ export function authMiddleware() {
 			// create new JWT token - means first time in Telegram WebApp
 			const parts = tgAuth.split(/\s+/);
 
-			console.log(111, parts);
+			console.log(111, tgAuth, parts);
 
 			if (parts.length !== 2) {
 				throw rise401Error(`Unauthorized: Invalid Authorization header`);
 			}
 
-			const userDataStr = parts[1];
+			const telegramInitData = parts[1];
 
-			if (validateTgUserData(tgToken, userDataStr)) {
+			if (validateTgUserData(c.env.TG_TOKEN, telegramInitData)) {
 				throw rise401Error(`Unauthorized: Invalid Telegram WebApp data`);
 			}
 
@@ -78,7 +79,7 @@ export function authMiddleware() {
 			console.log(2222, tgUserId);
 
 			// load iser from db
-			const res = await getBase(c, 'user', { tgUserId });
+			const res = await getBase(c, 'user', { tgUserId: String(tgUserId) });
 
 			console.log(3333, res);
 
@@ -90,7 +91,7 @@ export function authMiddleware() {
 
 			payload = {
 				sub: res.id,
-				azp: tgUserId,
+				azp: String(tgUserId),
 			};
 		} else {
 			// parse jwtToken from cookie
@@ -106,7 +107,11 @@ export function authMiddleware() {
 			tgUserId: payload.azp,
 		});
 
+		console.log(4444, payload);
+
 		await setCookieJwtToken(c, payload);
+
+		console.log(555, payload);
 
 		return next();
 
@@ -117,6 +122,7 @@ export function authMiddleware() {
 		// console.log(1111, c.req);
 
 		// TODO: надо возвращать json при ошибке
+		//
 		// return jwt({
 		// 	secret: c.env.JWT_SECRET,
 		// 	cookie: JWT_COOKIE_NAME,

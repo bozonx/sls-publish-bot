@@ -93,5 +93,5 @@ async function createJwtTokenByTgUserId(c, tgUserId) {
 		return c.json({ message: `Can't find user` });
 	}
 
-	return setCookieJwtToken(c, { sub: res.id, azp: tgUserId });
+	return setCookieJwtToken(c, { sub: res.id, azp: String(tgUserId) });
 }
