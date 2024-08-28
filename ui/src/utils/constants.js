@@ -23,6 +23,7 @@ socialMedia:
 
 export const PODCAST_TYPE_AUDIO = "audio";
 export const PODCAST_TYPE_VIDEO = "video";
+// do not change values - they are keys in db
 export const SOCIAL_MEDIAS = {
   blog: "blog",
   dzen: "dzen",

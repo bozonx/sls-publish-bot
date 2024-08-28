@@ -22,10 +22,11 @@ model User {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   lang      String
-  cfg_yaml  String
+  cfg   String
   Blog      Blog[]
   Inbox     Inbox[]
   Workspace Workspace[]
+  Tag       Tag[]
 }
 
 model Workspace {
@@ -35,7 +36,7 @@ model Workspace {
   updatedAt       DateTime @updatedAt
   createdByUser   User     @relation(fields: [createdByUserId], references: [id])
   createdByUserId Int
-  cfg_yaml        String
+  cfg         String
   Blog            Blog[]
 }
 
@@ -48,7 +49,20 @@ model Blog {
   workspaceId     Int
   createdByUser   User      @relation(fields: [createdByUserId], references: [id])
   createdByUserId Int
-  cfg_yaml        String
+  cfg         String
+  Tag             Tag[]
+}
+
+model Tag {
+  id              Int      @id @default(autoincrement())
+  name            String
+  socialMedia     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  blog            Blog     @relation(fields: [blogId], references: [id])
+  blogId          Int
+  createdByUser   User     @relation(fields: [createdByUserId], references: [id])
+  createdByUserId Int
 }
 
 model Inbox {
@@ -61,13 +75,3 @@ model Inbox {
   dataJson        String?
   // media
 }
-
-model Session {
-  id   String
-  data String
-}
-
-// enum Role {
-//   USER
-//   ADMIN
-// }
