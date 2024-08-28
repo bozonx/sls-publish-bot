@@ -60,7 +60,7 @@ const handleDelete = () => {
 <template>
   <FormBlog v-model="formModel" :loaded="data" method="patch" :userId="user.id" />
 
-  <div>
+  <div class="flex gap-x-2">
     <SmartButton :label="$t('save')" @click="handleSave" />
     <SmartButton :label="$t('deleteBlog')" @click="handleDelete" />
   </div>

@@ -19,16 +19,24 @@ export async function handleStart(ctx) {
 	const chatId = ctx.chatId;
 	const lang = ctx.from.language_code;
 
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/users/by-tg-id/${userId}?code=${ctx.config.apiCallLocalCode}`);
+	const respGetUser = await requestWrapper(
+		ctx.config.apiBaseUrlOrDb,
+		`/users/by-tg-id/${userId}?code=${ctx.config.apiCallLocalCode}`,
+	);
 
 	if (respGetUser.status === 404) {
 		// create user
-		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/users?code=${ctx.config.apiCallLocalCode}`, 'POST', {
-			tgUserId: String(userId),
-			tgChatId: String(chatId),
-			lang,
-			cfg_yaml: ``,
-		});
+		const respCreateUser = await requestWrapper(
+			ctx.config.apiBaseUrlOrDb,
+			`/users?code=${ctx.config.apiCallLocalCode}`,
+			'POST',
+			{
+				tgUserId: String(userId),
+				tgChatId: String(chatId),
+				lang,
+				cfg: '',
+			},
+		);
 
 		if (respCreateUser.status === 201) {
 			welcomeMsg = t(ctx, 'welcomeRegistered');
@@ -43,7 +51,10 @@ export async function handleStart(ctx) {
 		userData = respGetUser.data;
 		welcomeMsg = t(ctx, 'welcomeAgain');
 	} else {
-		return ctx.api.sendMessage(chatId, `Can't get user from db. Status ${respGetUser.status}, error: ${JSON.stringify(respGetUser.data)}`);
+		return ctx.api.sendMessage(
+			chatId,
+			`Can't get user from db. Status ${respGetUser.status}, error: ${JSON.stringify(respGetUser.data)}`,
+		);
 	}
 
 	ctx.session.userData = userData;
@@ -84,14 +95,22 @@ export async function handleMessage(ctx) {
 		// TODO: add other types
 		console.log(111, ctx);
 
-		return ctx.api.sendMessage(ctx.chatId, `Can't recognize the message. Or unsupported type of message`);
+		return ctx.api.sendMessage(
+			ctx.chatId,
+			`Can't recognize the message. Or unsupported type of message`,
+		);
 	}
 
-	const respSaveItem = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/inbox?code=${ctx.config.apiCallLocalCode}`, 'POST', {
-		createdByUserId: userData.id,
-		name: itemName,
-		dataJson: JSON.stringify(itemData),
-	});
+	const respSaveItem = await requestWrapper(
+		ctx.config.apiBaseUrlOrDb,
+		`/inbox?code=${ctx.config.apiCallLocalCode}`,
+		'POST',
+		{
+			createdByUserId: userData.id,
+			name: itemName,
+			dataJson: JSON.stringify(itemData),
+		},
+	);
 
 	if (respSaveItem.status === 201) {
 		return ctx.api.sendMessage(ctx.chatId, t(ctx, 'itemSavedToInbox'));
@@ -108,7 +127,10 @@ export async function loadUserDataToSession(ctx) {
 
 	if (ctx.session.userData) return;
 
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/users/by-tg-id/${userId}?code=${ctx.config.apiCallLocalCode}`);
+	const respGetUser = await requestWrapper(
+		ctx.config.apiBaseUrlOrDb,
+		`/users/by-tg-id/${userId}?code=${ctx.config.apiCallLocalCode}`,
+	);
 
 	if (respGetUser.status === 200) {
 		ctx.session.userData = respGetUser.data;
@@ -125,10 +147,13 @@ async function requestWrapper(apiBaseUrlOrDb, pathTo, method, bodyObj) {
 
 	if (typeof apiBaseUrlOrDb === 'string') {
 		// dev - use remote request
-		const res = await fetch(`${apiBaseUrlOrDb}/bot/${pathTo === '/' ? '' : pathTo}`, {
-			method,
-			body,
-		});
+		const res = await fetch(
+			`${apiBaseUrlOrDb}/bot${pathTo === '/' ? '' : pathTo}`,
+			{
+				method,
+				body,
+			},
+		);
 
 		return {
 			status: res.status,

@@ -13,7 +13,7 @@ const { t } = useI18n();
 const form$ = ref(null);
 const schema = ref({
   name: { type: "text", label: t("name") },
-  cfg_yaml: { type: "textarea", default: BLOG_DEFAULT_CONFIG },
+  cfg: { type: "textarea", default: BLOG_DEFAULT_CONFIG },
   workspaceId: { type: "hidden", default: props.wpid },
   id: { type: "hidden", default: props.loaded?.id },
 });

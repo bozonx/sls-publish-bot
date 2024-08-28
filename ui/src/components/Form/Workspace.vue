@@ -12,7 +12,7 @@ const { t } = useI18n();
 const form$ = ref(null);
 const schema = ref({
   name: { type: "text", label: t("name") },
-  cfg_yaml: { type: "hidden", default: "" },
+  cfg: { type: "hidden", default: "" },
   id: { type: "hidden", default: props.loaded?.id },
 });
 

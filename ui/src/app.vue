@@ -2,19 +2,19 @@
 // from app.config.js
 // const appConfig = useAppConfig();
 
-// await callOnce(async () => {
-//   userConfig.value = parseYaml(defaultUserConfig);
-// });
-if (isInsideTgBot()) {
-  window.Telegram.WebApp.ready();
-  window.Telegram.WebApp.expand();
-}
+await callOnce(async () => {
+  if (isInsideTgBot()) {
+    window.Telegram.WebApp.ready();
+    window.Telegram.WebApp.expand();
+  }
+  // userConfig.value = parseYaml(defaultUserConfig);
+});
 </script>
 
 <template>
   <NuxtLoadingIndicator />
-  <LayoutTopBar />
-  <div class="mt-6">
+  <LayoutTopBar class="px-4" />
+  <div class="pt-2 pb-12 px-4">
     <NuxtPage />
   </div>
 </template>

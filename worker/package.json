@@ -6,7 +6,7 @@
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
-		"devbot": "node ./src/localBotIndex.js",
+		"devbot": "node ./src/localBotIndex.js dotenv_config_path=.dev.vars",
 		"start": "wrangler dev",
 		"test": "vitest"
 	},

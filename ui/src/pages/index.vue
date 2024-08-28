@@ -10,7 +10,7 @@ const { data, status } = await useApiListWorkspaces();
 </script>
 
 <template>
-  <SimpleList :data="data" :status="status">
+  <SimpleList :data="data" :status="status" class="mb-4">
     <template #item="{ item }">
       <AppWorkspaceItem :item="item" />
     </template>

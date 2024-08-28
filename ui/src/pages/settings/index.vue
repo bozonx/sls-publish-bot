@@ -9,11 +9,11 @@ definePageParams({
 </script>
 
 <template>
-  <SectionHeader>{{ $t("workspaces") }}</SectionHeader>
+  <Fieldset :legend="$t('workspaces')">
+    <AppConfigureWorkspaces />
+  </Fieldset>
 
-  <AppConfigureWorkspaces />
-
-  <div>
+  <div class="mt-6">
     <SmartButton @click="setLocale('en')" label="en" />
     <SmartButton @click="setLocale('ru')" label="ru" />
   </div>

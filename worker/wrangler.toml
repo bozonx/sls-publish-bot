@@ -26,7 +26,7 @@ crons = ["0 */22 * * *"]
 [[ d1_databases ]]
 binding = "DB" # available in your Worker on `env.DB`
 database_name = "publisher"
-database_id = "e71b6117-6d5f-4c8c-bbb6-8dea9d425d15"
+database_id = "36880bf7-044e-4bad-b91b-6694f4eac0ad"
 # migrations_dir = "src/migrations"
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network

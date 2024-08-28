@@ -11,6 +11,9 @@ export function formSubmitHelper(endpoint) {
       data,
       method: form$.method || "post",
       cancelToken: form$.cancelToken.token,
+      withCredentials: true,
+      headers: makeTgAuthHeaders(),
+      // TODO: handle 401 response
     });
   };
 }

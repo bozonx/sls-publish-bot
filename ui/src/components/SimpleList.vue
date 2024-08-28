@@ -9,7 +9,7 @@ const { t } = useI18n();
     <div v-else-if="props.status === 'success' && !props.data?.length">
       <Message severity="secondary">{{ $t("emptyListMsg") }}</Message>
     </div>
-    <ul v-else>
+    <ul v-else class="space-y-1">
       <li v-for="item in props.data || []">
         <slot :item="item" name="item" />
       </li>

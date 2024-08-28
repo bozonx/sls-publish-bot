@@ -21,7 +21,7 @@ const handleSuccess = (response, form$) => {
 <template>
   <SimpleList :data="data" :status="status">
     <template #item="{ item }">
-      <ListItem :label="item.name" :to="`/settings/workspace-${item.id}`" />
+      <SmartListItem :label="item.name" :to="`/settings/workspace-${item.id}`" />
     </template>
   </SimpleList>
 

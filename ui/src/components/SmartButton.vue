@@ -9,38 +9,40 @@ watchEffect(async () => {
 
 // const SmButton = resolveComponent("Button");
 // const SmLink = resolveComponent("NuxtLink");
-const className = "rounded-md px-2 py-2 smart-btn";
+// const className = "rounded-md px-2 py-2 smart-btn";
 </script>
 
 <template>
   <!-- <component :is="clickable ? MyButton : 'div'" /> -->
-  <NuxtLink v-if="to" :to="to" :class="className">
+  <NuxtLink v-if="to" :to="to" class="smart-btn">
     <!-- <span :class="item.icon" /> -->
     <span>{{ label }}</span>
   </NuxtLink>
-  <button v-else :class="className" :disabled="props.disabled">
+  <button v-else class="smart-btn" :disabled="props.disabled">
     <span>{{ label }}</span>
   </button>
 </template>
 
 <style>
 .smart-btn {
-  background: var(--smart-btn-bg);
-  color: var(--smart-btn-text);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--gray-100);
+  color: var(--gray-900);
 }
 
 .dark .smart-btn {
-  background: var(--smart-btn-dark-bg);
-  color: var(--smart-btn-dark-text);
+  background: var(--gray-700);
+  color: var(--gray-100);
 }
 
 .smart-btn[disabled] {
-  background: var(--smart-btn-disabled-bg);
-  color: var(--smart-btn-dark-disabled-text);
+  background: var(--gray-300);
+  color: var(--gray-600);
 }
 
 .dark .smart-btn[disabled] {
-  background: var(--smart-btn-dark-disabled-bg);
-  color: var(--smart-btn-dark-disabled-text);
+  background: var(--gray-700);
+  color: var(--gray-500);
 }
 </style>

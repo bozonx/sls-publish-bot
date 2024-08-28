@@ -28,7 +28,7 @@ const handleCreateBlogSave = () => {
 const handleBlogSuccess = (response, form$) => {
   const id = response.data.id;
 
-  router.push(`/settings/blog-${id}`);
+  navigateTo(`/settings/blog-${id}`);
 };
 
 const handleDeleteWorkspace = () => {
@@ -75,22 +75,22 @@ const handleDeleteWorkspace = () => {
 <template>
   <FormWorkspace v-model="wsFormModel" :loaded="workspace" method="patch" :userId="user.id" />
 
-  <div>
+  <div class="flex gap-x-2 mb-6">
     <SmartButton :label="$t('save')" @click="handleWorkspaceSave" />
     <SmartButton :label="$t('deleteWorkspace')" @click="handleDeleteWorkspace" :disabled="blogs?.length" />
   </div>
 
-  <SectionHeader>{{ $t("blogsOfWorkspace") }}</SectionHeader>
+  <Fieldset :legend="$t('blogsOfWorkspace')">
+    <SimpleList :data="blogs" :status="status">
+      <template #item="{ item }">
+        <SmartListItem :label="item.name" :to="`/settings/blog-${item.id}`" />
+      </template>
+    </SimpleList>
 
-  <SimpleList :data="blogs" :status="status">
-    <template #item="{ item }">
-      <ListItem :label="item.name" :to="`/settings/blog-${item.id}`" />
-    </template>
-  </SimpleList>
-
-  <div>
-    <SmartButton label="+" @click="createBlogModalOpen = true" />
-  </div>
+    <div class="mt-4">
+      <SmartButton :label="$t('createBlog')" @click="createBlogModalOpen = true" />
+    </div>
+  </Fieldset>
 
   <SimpleFormModal v-model="createBlogModalOpen" :header="$t('createBlogModalHeader')" @save="handleCreateBlogSave">
     <FormBlog v-model="blogFormModel" :wpid="workspace.id" :handleSuccess="handleBlogSuccess" />
