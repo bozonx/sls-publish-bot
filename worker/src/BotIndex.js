@@ -1,20 +1,25 @@
 import { Bot, session } from 'grammy';
-import { handleStart, handleMessage, handleButtonCallback } from './BotLogic.js';
+import {
+	handleStart,
+	handleMessage,
+	handleButtonCallback,
+} from './BotLogic.js';
 
 // await bot.api.sendMessage(12345, "Hello!");
 
 export class BotIndex {
 	bot;
 
-	constructor(token, webAppUrl, apiBaseUrlOrDb) {
+	constructor(token, webAppUrl, apiCallLocalCode, apiBaseUrlOrDb) {
 		this.bot = new Bot(token);
 
 		this.bot.use(async (ctx, next) => {
 			ctx.config = {
 				webAppUrl,
 				apiBaseUrlOrDb,
+				apiCallLocalCode,
 			};
-			// Run remaining handlers.
+
 			await next();
 		});
 	}

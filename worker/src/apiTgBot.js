@@ -1,7 +1,6 @@
 import { Hono } from 'hono';
 import { setWebhook } from './helpers.js';
 import { getBase, createBase } from './crudLogic.js';
-import { API_CALL_LOCAL_CODE } from './constants.js';
 
 const app = new Hono();
 
@@ -16,7 +15,7 @@ app.get('/setwh', async (c) => {
 app.get('/users/by-tg-id/:tgid', async (c) => {
 	const { code } = c.req.query();
 
-	if (code !== API_CALL_LOCAL_CODE) {
+	if (code !== c.env.API_CALL_LOCAL_CODE) {
 		c.status(403);
 
 		return c.json({ message: 'Secured' });
@@ -31,7 +30,7 @@ app.get('/users/by-tg-id/:tgid', async (c) => {
 app.post('/users', async (c) => {
 	const { code } = c.req.query();
 
-	if (code !== API_CALL_LOCAL_CODE) {
+	if (code !== c.env.API_CALL_LOCAL_CODE) {
 		c.status(403);
 
 		return c.json({ message: 'Secured' });
@@ -43,7 +42,7 @@ app.post('/users', async (c) => {
 app.post('/inbox', async (c) => {
 	const { code } = c.req.query();
 
-	if (code !== API_CALL_LOCAL_CODE) {
+	if (code !== c.env.API_CALL_LOCAL_CODE) {
 		c.status(403);
 
 		return c.json({ message: 'Secured' });

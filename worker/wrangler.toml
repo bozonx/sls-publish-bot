@@ -16,7 +16,7 @@ WORKER_HOST = "publisher.ivank.workers.dev"
 WEB_APP_URL = "https://publisher-ui-1zw.pages.dev"
 CORS_ORIGIN = "https://publisher-ui-1zw.pages.dev"
 AUTH_MAX_AGE_DAYS=30
-# JWT_SECRET and TG_TOKEN are secrets in wrangler (see cloudflare dashboard)
+# TG_TOKEN, JWT_SECRET and API_CALL_LOCAL_CODE are secrets in wrangler (see cloudflare dashboard)
 
 [triggers]
 crons = ["0 */22 * * *"]

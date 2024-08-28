@@ -9,6 +9,3 @@ export const AUTH_COOKIE_BASE_PARAMS = {
 	// sameSite: 'Lax',
 	sameSite: 'None',
 };
-// TODO: move to secrets
-// code for calling from tg bot to secure api
-export const API_CALL_LOCAL_CODE = 'cp29t9kerg3rxsfqb';

@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { authMiddleware } from './authMiddleware.js';
+import { getBase } from './crudLogic.js';
+import { setCookieJwtToken, riseError } from './helpers.js';
 import apiTgBot from './apiTgBot.js';
 import apiUser from './apiUser.js';
 import apiWorkspace from './apiWorkspace.js';
 import apiBlog from './apiBlog.js';
 import apiInbox from './apiInbox.js';
-import { authMiddleware } from './authMiddleware.js';
-import { getBase } from './crudLogic.js';
-import { setCookieJwtToken, riseError } from './helpers.js';
 
 const app = new Hono().basePath('/api');
 
@@ -33,12 +33,13 @@ app.route('/auth/blogs', apiBlog);
 app.route('/auth/inbox', apiInbox);
 
 app.post('/tg-auth-from-web', async (c) => {
-	const payload = await c.req.json();
+	const { id: tgUserId } = await c.req.json();
 
-	console.log(111111, payload);
+	await createJwtTokenByTgUserId(c, tgUserId);
 
-	await createJwtTokenByTgUserId(c, payload.id);
+	// TODO: check hash
 
+	return c.json({ message: 'success' });
 	/*
 		{
 			auth_date: 1724501227
@@ -49,25 +50,6 @@ app.post('/tg-auth-from-web', async (c) => {
 			username: "ivan_k_freedom"
 		}
 	*/
-
-	// TODO: check hash
-
-	// const { hash } = c.req.query();
-	//
-	// console.log(111, hash);
-	//
-	// // const payload = JSON.parse(Buffer.from(queryParams.payload, 'base64').toString());
-	//
-	// const secretKey = crypto.createHash('sha256').update(c.env.TG_TOKEN).digest();
-	// const checkHash = crypto.createHmac('sha256', secretKey).update(payload).digest('hex');
-	//
-	// if (hash !== checkHash) {
-	// 	res.status(400).send('Invalid hash');
-	// 	return;
-	// }
-	// const user = payload.user;
-
-	return c.json({ message: 'success' });
 });
 
 app.post('/dev-login', async (c) => {
