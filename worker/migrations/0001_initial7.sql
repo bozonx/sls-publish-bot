@@ -1,7 +1,9 @@
--- DROP TABLE IF EXISTS Inbox;
--- DROP TABLE IF EXISTS Blog;
--- DROP TABLE IF EXISTS Workspace;
--- DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Inbox;
+DROP TABLE IF EXISTS Blog;
+DROP TABLE IF EXISTS Workspace;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Tag;
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -10,7 +12,7 @@ CREATE TABLE "User" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "lang" TEXT NOT NULL,
-    "cfg_yaml" TEXT NOT NULL
+    "cfg" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -20,7 +22,7 @@ CREATE TABLE "Workspace" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "createdByUserId" INTEGER NOT NULL,
-    "cfg_yaml" TEXT NOT NULL,
+    "cfg" TEXT NOT NULL,
     CONSTRAINT "Workspace_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -30,11 +32,24 @@ CREATE TABLE "Blog" (
     "name" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "workspaceId" INTEGER NOT NULL,
     "createdByUserId" INTEGER NOT NULL,
-    "cfg_yaml" TEXT NOT NULL,
-    CONSTRAINT "Blog_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "Workspace" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Blog_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "workspaceId" INTEGER NOT NULL,
+    "cfg" TEXT NOT NULL,
+    CONSTRAINT "Blog_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Blog_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "Workspace" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Tag" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "socialMedia" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "createdByUserId" INTEGER NOT NULL,
+    "blogId" INTEGER NOT NULL,
+    CONSTRAINT "Tag_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Tag_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
