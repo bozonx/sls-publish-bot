@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["blogId"]);
+const props = defineProps(["blogConf"]);
 const tmpState = useTmpState();
 
 /*
@@ -40,32 +40,30 @@ const contentHtml = ref(
   <Message v-else-if="tmpState.type !== TMP_STATE_TYPES.articleToPublish" severity="error">
     {{ $t("stateWrongMsg") }}
   </Message>
-  <template v-else>
-    <div>
-      <!-- <section> -->
-      <!--   <h2>{$t('headers.reminder')}</h2> -->
-      <!--   <RenderHtml html={convertCommonMdToCommonHtml($t('texts.dzenHint').trim())} /> -->
-      <!-- </section> -->
+  <div v-else>
+    <!-- <section> -->
+    <!--   <h2>{$t('headers.reminder')}</h2> -->
+    <!--   <RenderHtml html={convertCommonMdToCommonHtml($t('texts.dzenHint').trim())} /> -->
+    <!-- </section> -->
 
-      <section v-if="tmpState.meta.title">
-        <h2>{{ $t("header") }}</h2>
+    <section v-if="tmpState.meta.title">
+      <h2>{{ $t("header") }}</h2>
 
-        <CopyToClipboardButton elementId="dzen-header">
-          {{ $t("copyToClipboard") }}
-        </CopyToClipboardButton>
+      <CopyToClipboardButton elementId="dzen-header">
+        {{ $t("copyToClipboard") }}
+      </CopyToClipboardButton>
 
-        <div id="dzen-header">{{ tmpState.meta.title }}</div>
-      </section>
+      <div id="dzen-header">{{ tmpState.meta.title }}</div>
+    </section>
 
-      <section>
-        <h2>{{ $t("text") }}</h2>
+    <section>
+      <h2>{{ $t("text") }}</h2>
 
-        <CopyToClipboardButton elementId="dzen-content">
-          {{ $t("copyToClipboard") }}
-        </CopyToClipboardButton>
+      <CopyToClipboardButton elementId="dzen-content">
+        {{ $t("copyToClipboard") }}
+      </CopyToClipboardButton>
 
-        <div id="dzen-content" v-html="contentHtml"></div>
-      </section>
-    </div>
-  </template>
+      <div id="dzen-content" v-html="contentHtml"></div>
+    </section>
+  </div>
 </template>

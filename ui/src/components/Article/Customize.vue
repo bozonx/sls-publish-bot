@@ -8,7 +8,7 @@ const dzenMenu = [
 const tgMenu = [];
 
 if (
-  props.blogConf.socialMedia
+  props.blogConf.yaml.socialMedia
     .filter((item) => item.use === "telegram")
     .map((item) => Boolean(item.postForArticleTemplates))
     .includes(true)
@@ -20,7 +20,7 @@ if (
 
 // TODO: select
 if (tmpState.value)
-  tmpState.value.template = props.blogConf.socialMedia.find(
+  tmpState.value.template = props.blogConf.yaml.socialMedia.find(
     (item) => item.use === SOCIAL_MEDIAS.dzen,
   )?.templates[0][1];
 </script>
@@ -33,7 +33,8 @@ if (tmpState.value)
     {{ $t("stateWrongMsg") }}
   </Message>
   <template v-else>
-    <Fieldset v-if="props.blogConf.socialMedia.find((item) => item.use === 'dzen')" :legend="$t('socialMedia.dzen')">
+    <Fieldset v-if="props.blogConf.yaml.socialMedia.find((item) => item.use === 'dzen')"
+      :legend="$t('socialMedia.dzen')">
       <div>select dzen template</div>
       <SmartMenu :items="dzenMenu" />
     </Fieldset>

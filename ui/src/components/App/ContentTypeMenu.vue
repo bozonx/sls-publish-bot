@@ -5,7 +5,7 @@ const blogConf = getItemConf(props.blog);
 
 const allTypes = {};
 
-for (const sm of blogConf.socialMedia) {
+for (const sm of blogConf.yaml.socialMedia) {
   const smTypes = resolveSmTypes(sm);
 
   for (const item of smTypes) allTypes[item] = true;
@@ -18,6 +18,5 @@ const items = Object.keys(allTypes).map((postType) => ({
 </script>
 
 <template>
-  {{ props.status }}
   <SmartMenu :items="items" />
 </template>

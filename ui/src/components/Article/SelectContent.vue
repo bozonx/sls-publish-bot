@@ -35,7 +35,7 @@ const allowSubmit = computed({
 
 function loadArticle() {
   state.loading = true;
-  const postGitPath = props.blogConf.socialMedia.find(
+  const postGitPath = props.blogConf.yaml.socialMedia.find(
     (item) => item.use === SOCIAL_MEDIAS.blog,
   )?.postGitPath;
 
@@ -100,8 +100,12 @@ function submit() {
       <AccordionContent>
         <div>
           <InputText type="text" v-model="state.articlePath" :placeholder="$t('loadArticleInputPlaceholder')" />
+        </div>
+        <div class="mt-4">
           <SmartButton :label="$t('doLoad')" :pending="state.loading" :disabled="state.loading || !state.articlePath"
             @click="loadArticle" />
+        </div>
+        <div class="mt-4">
           <Message v-if="state.loadedError" severity="error">{{
             $t("articleLoadErrorMsg")
             }}</Message>
@@ -122,7 +126,7 @@ function submit() {
     </AccordionPanel>
   </Accordion>
 
-  <div>
+  <div class="mt-4">
     <SmartButton :label="$t('doSelect')" :disabled="!allowSubmit" @click="submit" />
   </div>
 </template>

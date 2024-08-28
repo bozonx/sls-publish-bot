@@ -2,7 +2,7 @@
 const route = useRoute();
 const { t } = useI18n();
 
-const { data, status, error } = await useApiGetBlog(route.params.blogId);
+const { data, status } = await useApiGetBlog(route.params.blogId);
 const blogConf = getItemConf(data.value);
 
 definePageParams({

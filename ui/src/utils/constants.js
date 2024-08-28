@@ -3,7 +3,7 @@ export const TMP_STATE_TYPES = {
   articleToPublish: "articleToPublish",
 };
 
-export const BLOG_DEFAULT_CONFIG = `
+export const BLOG_DEFAULT_YAML_CONFIG = `
 socialMedia:
   - use: dzen
     types: ["article"]

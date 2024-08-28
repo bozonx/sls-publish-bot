@@ -18,8 +18,13 @@ export function runTemplate(tmpl, data) {
   return useTemplate(tmpl)(data);
 }
 
-export function getItemConf(wsOrBlog) {
-  return parseYaml(wsOrBlog.cfg_yaml);
+export function getItemConf(item) {
+  const parsed = JSON.parse(item.cfg);
+
+  return {
+    ...parsed,
+    yaml: parseYaml(parsed.yaml),
+  };
 }
 
 export function extractTitleFromMd(mdWithoutFrontmatter) {
