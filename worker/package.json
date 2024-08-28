@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@prisma/adapter-d1": "^5.18.0",
 		"@prisma/client": "^5.18.0",
+		"dotenv": "^16.4.5",
 		"grammy": "^1.29.0",
 		"hono": "^4.5.8",
 		"lodash": "^4.17.21",

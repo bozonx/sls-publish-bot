@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { sign } from 'hono/jwt';
+import { HTTPException } from 'hono/http-exception';
 import { setCookie } from 'hono/cookie';
 import { TG_BOT_URL, JWT_COOKIE_NAME, AUTH_COOKIE_BASE_PARAMS } from './constants.js';
 
@@ -32,8 +33,6 @@ export function normalizeNumbers(obj) {
 export async function setCookieJwtToken(c, payloadObj) {
 	const maxAgeSeconds = c.env.AUTH_MAX_AGE_DAYS * 24 * 60 * 60;
 
-	console.log(6666, maxAgeSeconds);
-
 	// TODO: тут происходит ошика на продакшене
 	const jwtToken = await sign(
 		{
@@ -43,15 +42,25 @@ export async function setCookieJwtToken(c, payloadObj) {
 		c.env.JWT_SECRET,
 	);
 
-	console.log(7777, jwtToken);
-
 	setCookie(c, JWT_COOKIE_NAME, jwtToken, {
 		...AUTH_COOKIE_BASE_PARAMS,
 		maxAge: maxAgeSeconds,
-		// domain: 'localhost',
+		// domain: 'publisher.ivank.workers.dev',
 	});
 
-	console.log(8888888);
-
 	return jwtToken;
+}
+
+export function riseError(status, message) {
+	return new HTTPException(401, {
+		message: message,
+		res: {
+			body: JSON.stringify({ message }),
+			status,
+			statusText: 'Unauthorized',
+			headers: {
+				ContentType: 'aplication/json',
+			},
+		},
+	});
 }

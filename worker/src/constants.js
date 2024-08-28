@@ -5,7 +5,9 @@ export const AUTH_COOKIE_BASE_PARAMS = {
 	path: '/api/auth',
 	secure: true,
 	httpOnly: true,
-	sameSite: 'Strict',
+	// better to use Strict
+	// sameSite: 'Lax',
+	sameSite: 'None',
 };
 // TODO: move to secrets
 // code for calling from tg bot to secure api

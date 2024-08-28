@@ -7,7 +7,7 @@ import apiBlog from './apiBlog.js';
 import apiInbox from './apiInbox.js';
 import { authMiddleware } from './authMiddleware.js';
 import { getBase } from './crudLogic.js';
-import { setCookieJwtToken } from './helpers.js';
+import { setCookieJwtToken, riseError } from './helpers.js';
 
 const app = new Hono().basePath('/api');
 
@@ -71,11 +71,7 @@ app.post('/tg-auth-from-web', async (c) => {
 });
 
 app.post('/dev-login', async (c) => {
-	if (!c.env.DEV_TG_USER_ID) {
-		c.status(403);
-
-		return c.json({ message: 'Not allowed in production' });
-	}
+	if (!c.env.DEV_TG_USER_ID) throw riseError(403, `Not allowed in production`);
 
 	await createJwtTokenByTgUserId(c, c.env.DEV_TG_USER_ID);
 
@@ -85,12 +81,12 @@ app.post('/dev-login', async (c) => {
 export default app;
 
 async function createJwtTokenByTgUserId(c, tgUserId) {
-	const res = await getBase(c, 'user', { tgUserId });
+	const res = await getBase(c, 'user', { tgUserId: String(tgUserId) });
 
 	if (!('id' in res)) {
-		c.status(404);
-
-		return c.json({ message: `Can't find user` });
+		throw riseError(404, `Can't find user`);
+		// c.status(404);
+		// return c.json({ message: `Can't find user` });
 	}
 
 	return setCookieJwtToken(c, { sub: res.id, azp: String(tgUserId) });

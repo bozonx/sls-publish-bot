@@ -1,6 +1,5 @@
 import { InlineKeyboard } from 'grammy';
-import apiUser from './apiUser.js';
-import apiInbox from './apiInbox.js';
+import apiTgBot from './apiTgBot.js';
 import locales from './botLocales.js';
 import { API_CALL_LOCAL_CODE } from './constants.js';
 
@@ -21,13 +20,11 @@ export async function handleStart(ctx) {
 	const chatId = ctx.chatId;
 	const lang = ctx.from.language_code;
 
-	console.log(111, ctx);
-
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/users/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
+	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/users/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
 
 	if (respGetUser.status === 404) {
 		// create user
-		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/users?code=${API_CALL_LOCAL_CODE}`, 'POST', {
+		const respCreateUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/users?code=${API_CALL_LOCAL_CODE}`, 'POST', {
 			tgUserId: String(userId),
 			tgChatId: String(chatId),
 			lang,
@@ -91,7 +88,7 @@ export async function handleMessage(ctx) {
 		return ctx.api.sendMessage(ctx.chatId, `Can't recognize the message. Or unsupported type of message`);
 	}
 
-	const respSaveItem = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/inbox?code=${API_CALL_LOCAL_CODE}`, 'POST', {
+	const respSaveItem = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/inbox?code=${API_CALL_LOCAL_CODE}`, 'POST', {
 		createdByUserId: userData.id,
 		name: itemName,
 		dataJson: JSON.stringify(itemData),
@@ -112,7 +109,7 @@ export async function loadUserDataToSession(ctx) {
 
 	if (ctx.session.userData) return;
 
-	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, 'bot', `/users/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
+	const respGetUser = await requestWrapper(ctx.config.apiBaseUrlOrDb, `/users/by-tg-id/${userId}?code=${API_CALL_LOCAL_CODE}`);
 
 	if (respGetUser.status === 200) {
 		ctx.session.userData = respGetUser.data;
@@ -124,12 +121,12 @@ export async function loadUserDataToSession(ctx) {
 	}
 }
 
-async function requestWrapper(apiBaseUrlOrDb, table, pathTo, method, bodyObj) {
+async function requestWrapper(apiBaseUrlOrDb, pathTo, method, bodyObj) {
 	const body = bodyObj && JSON.stringify(bodyObj);
 
 	if (typeof apiBaseUrlOrDb === 'string') {
 		// dev - use remote request
-		const res = await fetch(`${apiBaseUrlOrDb}/${table}${pathTo === '/' ? '' : pathTo}`, {
+		const res = await fetch(`${apiBaseUrlOrDb}/bot/${pathTo === '/' ? '' : pathTo}`, {
 			method,
 			body,
 		});
@@ -140,13 +137,14 @@ async function requestWrapper(apiBaseUrlOrDb, table, pathTo, method, bodyObj) {
 		};
 	} else {
 		// prod - use local request
-		const apis = {
-			users: apiUser,
-			inbox: apiInbox,
-		};
-		const api = apis[table];
+
+		// const apis = {
+		// 	users: apiUser,
+		// 	inbox: apiInbox,
+		// };
+		// const api = apis[table];
 		const req = new Request(`http://localhost${pathTo}`, { method, body });
-		const res = await api.fetch(req, { DB: apiBaseUrlOrDb }, {});
+		const res = await apiTgBot.fetch(req, { DB: apiBaseUrlOrDb }, {});
 
 		return {
 			status: res.status,
