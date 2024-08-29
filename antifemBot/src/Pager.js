@@ -64,11 +64,11 @@ export class Pager {
 		return next();
 	};
 
-	_handleQueryData = (c) => {
+	_handleQueryData = async (c) => {
 		const data = c.update.callback_query.data;
 		const [pager, pathTo, rowIndex, btnIndex] = data.split('|');
 
-		this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](c);
+		await this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](c);
 	};
 
 	_handleMessage = async (c) => {

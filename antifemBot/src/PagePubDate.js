@@ -14,8 +14,8 @@ export class PagePubDate extends PageBase {
 		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectDate')}`;
 
 		const dayHandler = (plusDay) => {
-			return (c) => {
-				c.pager.go('pub-hour', {
+			return async (c) => {
+				await c.pager.go('pub-hour', {
 					...payload,
 					date: nowPlusDay(plusDay),
 				});
@@ -49,10 +49,8 @@ export class PagePubDate extends PageBase {
 
 	async message(c) {
 		//
-		console.log(1111, c);
-
-		await c.pager.go('pub-hour', this.payload);
-
+		// console.log(1111, c);
+		// await c.pager.go('pub-hour', this.payload);
 		// await c.reply(t(c, 'textAccepted'))
 	}
 }
