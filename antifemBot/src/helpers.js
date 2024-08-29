@@ -14,7 +14,22 @@ export function t(c, msg) {
 
 	const lang = 'ru';
 
-	return locales[lang][msg];
+	const res = locales[lang][msg];
+
+	return res || msg;
+}
+
+export function makePayloadPreview(c, payload = {}) {
+	let postType = 'text';
+
+	if (payload.photo) postType = 'photo';
+	else if (payload.video) postType = 'video';
+
+	let res = `${t(c, 'postType')}: ${postType}\n`;
+
+	if (payload.author) res += `${t(c, 'author')}: ${payload.author}\n`;
+
+	return res;
 }
 
 // export async function prepareSession(c) {

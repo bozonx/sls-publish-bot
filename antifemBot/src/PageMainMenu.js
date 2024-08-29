@@ -28,9 +28,9 @@ export class PageMainMenu extends PageBase {
 		if (isMainAdmin) {
 			this.menu.push([
 				[
-					t(c, 'editConfig'),
+					t(c, 'editConfigBtn'),
 					(c) => {
-						c.reply('edit config');
+						c.pager.go('config');
 					},
 				],
 			]);

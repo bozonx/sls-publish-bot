@@ -1,13 +1,17 @@
 import { t } from './helpers.js';
 import { PageBase } from './Pager.js';
+import { makePayloadPreview } from './helpers.js';
 
 export class PagePubTags extends PageBase {
+	payload;
+
 	async init() {
 		// only first time init on app start
 	}
 
 	async mount(c, payload) {
-		this.text = t(c, 'selectTags');
+		this.payload = payload;
+		this.text = `${makePayloadPreview(payload)}\n\n${t(c, 'selectTags')}`;
 
 		this.menu = [
 			// row
@@ -30,7 +34,7 @@ export class PagePubTags extends PageBase {
 				[
 					t(c, 'back'),
 					(c) => {
-						c.pager.go('pub-author');
+						c.pager.go('pub-author', payload);
 					},
 				],
 			],
@@ -45,7 +49,7 @@ export class PagePubTags extends PageBase {
 		//
 		console.log(1111, c);
 
-		await c.pager.go('pub-date');
+		await c.pager.go('pub-date', this.payload);
 
 		// await c.reply(t(c, 'textAccepted'))
 	}

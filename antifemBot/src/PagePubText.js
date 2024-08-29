@@ -7,9 +7,6 @@ export class PagePubText extends PageBase {
 	}
 
 	async mount(c, payload) {
-		const isMainAdmin =
-			c.msg.from.id === Number(c.config.MAIN_ADMIN_TG_USER_ID);
-
 		this.text = t(c, 'giveMeText');
 
 		this.menu = [
@@ -31,10 +28,31 @@ export class PagePubText extends PageBase {
 	}
 
 	async message(c) {
-		await c.pager.go('pub-author', {
-			text: c.msg.text,
-		});
+		let payload;
 
-		// await c.reply(t(c, 'textAccepted'))
+		console.log(2222, c.msg);
+
+		// TODO: captions parse to md with entities
+		// TODO: media group
+
+		if (c.msg.video) {
+			payload = {
+				text: c.msg.caption,
+				video: c.msg.video,
+			};
+		} else if (c.msg.photo) {
+			payload = {
+				text: c.msg.caption,
+				photo: c.msg.photo,
+			};
+		} else if (c.msg.text) {
+			payload = {
+				text: c.msg.text,
+			};
+		} else {
+			return c.reply('ERROR: Wrong type of post');
+		}
+
+		await c.pager.go('pub-author', payload);
 	}
 }

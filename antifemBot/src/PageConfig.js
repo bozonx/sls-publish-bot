@@ -1,5 +1,7 @@
+import yaml from 'js-yaml';
 import { t } from './helpers.js';
 import { PageBase } from './Pager.js';
+import { KV_CONFIG } from './constants.js';
 
 export class PageConfig extends PageBase {
 	async init() {
@@ -8,9 +10,14 @@ export class PageConfig extends PageBase {
 
 	async mount(c, payload) {
 		const isMainAdmin =
-			c.msg.from.id === Number(c.config.MAIN_ADMIN_TG_USER_ID);
+			c.msg.chat.id === Number(c.config.MAIN_ADMIN_TG_USER_ID);
 
-		this.text = t(c, 'configEdit');
+		if (!isMainAdmin) {
+			// TODO: написать сообщение
+			c.pager.go('home');
+		}
+
+		this.text = t(c, 'editConfigMenuText');
 
 		this.menu = [
 			// row
@@ -24,6 +31,8 @@ export class PageConfig extends PageBase {
 				],
 			],
 		];
+
+		await c.api.sendMessage(c.chatId, yaml.dump(c.config.appCfg));
 	}
 
 	async unmount(c) {
@@ -31,7 +40,23 @@ export class PageConfig extends PageBase {
 	}
 
 	async message(c) {
-		//
-		console.log(1111, c);
+		const rawText = c.msg.text;
+		let obj;
+
+		try {
+			obj = yaml.load(rawText);
+		} catch (e) {
+			c.reply(`ERROR: ${e}`);
+		}
+
+		try {
+			await c.config.KV.put(KV_CONFIG, JSON.stringify(obj));
+		} catch (e) {
+			c.reply(`ERROR: ${e}`);
+		}
+
+		c.reply(`Success`);
+
+		c.pager.go('home');
 	}
 }

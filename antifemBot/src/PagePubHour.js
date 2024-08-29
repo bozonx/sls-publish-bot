@@ -1,13 +1,17 @@
 import { t } from './helpers.js';
 import { PageBase } from './Pager.js';
+import { makePayloadPreview } from './helpers.js';
 
 export class PagePubHour extends PageBase {
+	payload;
+
 	async init() {
 		// only first time init on app start
 	}
 
 	async mount(c, payload) {
-		this.text = t(c, 'selectHour');
+		this.payload = payload;
+		this.text = `${makePayloadPreview(payload)}\n\n${t(c, 'selectHour')}`;
 
 		this.menu = [
 			// row
@@ -22,7 +26,7 @@ export class PagePubHour extends PageBase {
 				[
 					t(c, 'back'),
 					(c) => {
-						c.pager.go('pub-date');
+						c.pager.go('pub-date', payload);
 					},
 				],
 			],
@@ -37,7 +41,7 @@ export class PagePubHour extends PageBase {
 		//
 		console.log(1111, c);
 
-		await c.pager.go('pub-confirm');
+		await c.pager.go('pub-confirm', this.payload);
 
 		// await c.reply(t(c, 'textAccepted'))
 	}

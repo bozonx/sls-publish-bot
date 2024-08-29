@@ -12,6 +12,7 @@
 	"dependencies": {
 		"dotenv": "^16.4.5",
 		"grammy": "^1.29.0",
+		"js-yaml": "^4.1.0",
 		"parse-url": "^9.2.0"
 	},
 	"devDependencies": {
