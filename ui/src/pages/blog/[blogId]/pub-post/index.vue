@@ -13,5 +13,5 @@ definePageParams({
 </script>
 
 <template>
-  <PostForm />
+  <FormPost />
 </template>
