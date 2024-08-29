@@ -1,6 +1,6 @@
 import { t } from './helpers.js';
 import { PageBase } from './Pager.js';
-import { makePayloadPreview } from './helpers.js';
+import { makePayloadPreview, nowPlusDay } from './helpers.js';
 
 export class PagePubDate extends PageBase {
 	payload;
@@ -13,16 +13,26 @@ export class PagePubDate extends PageBase {
 		this.payload = payload;
 		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectDate')}`;
 
+		const dayHandler = (plusDay) => {
+			return (c) => {
+				c.pager.go('pub-hour', {
+					...payload,
+					date: nowPlusDay(plusDay),
+				});
+			};
+		};
+
 		this.menu = [
+			[
+				[t(c, 'today'), dayHandler(0)],
+				[t(c, 'tomorrow'), dayHandler(1)],
+				[t(c, 'afterTomorrow'), dayHandler(2)],
+			],
+			// TODO: add days of week
 			// row
 			[
 				// button
-				[
-					t(c, 'toHome'),
-					(c) => {
-						c.pager.go('home');
-					},
-				],
+				[t(c, 'toHome'), dayHandler(0)],
 				[
 					t(c, 'back'),
 					(c) => {

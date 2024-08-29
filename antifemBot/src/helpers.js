@@ -1,5 +1,6 @@
+import dayjs from 'dayjs';
 import locales from './botLocales.js';
-import { TG_BOT_URL, KV_CONFIG, APP_INITIAL_CONFIG } from './constants.js';
+import { TG_BOT_URL, KV_TAGS, APP_INITIAL_CONFIG } from './constants.js';
 
 export async function setWebhook(env) {
 	const url = `https://api.telegram.org/bot${env.TG_TOKEN}/setWebhook?url=https://${env.WORKER_HOST}${TG_BOT_URL}`;
@@ -29,8 +30,57 @@ export function makePayloadPreview(c, payload = {}) {
 
 	if (payload.author) res += `${t(c, 'author')}: ${payload.author}\n`;
 	if (payload.tags) res += `${t(c, 'tags')}: ${payload.tags.join(', ')}\n`;
+	// TODO: преобразовать
+	if (payload.date) res += `${t(c, 'date')}: ${payload.date}\n`;
 
 	return res;
+}
+
+export async function loadTags(c) {
+	let tagsStr;
+
+	try {
+		tagsStr = await c.config.KV.get(KV_TAGS);
+	} catch (e) {
+		return;
+	}
+
+	return tagsStr ? JSON.parse(tagsStr) : [];
+}
+
+export function generateTagsButtons(c, tags, cb) {
+	const menu = [];
+
+	for (const tagIndex in tags) {
+		// TODO: split to rows
+		menu.push([[tags[tagIndex], cb]]);
+	}
+
+	return menu;
+}
+
+export function parseTagsFromInput(rawStr = '') {
+	return rawStr.split(',').map(
+		(i) =>
+			i
+				.trim()
+				.toLowerCase()
+				.replace(/[\-\s]/g, '_')
+				.replace(
+					/[\#\!\~\`\@\$\%\^\№\:\"\'\;\&\?\*\.\,\(\)\[\]\{\}\=\+\<\>\/\\\|]/g,
+					'',
+				),
+		// .replace(/[^\w\d\_]/g, '');
+		// .replace(new RegExp('[^\\w\\d_]', 'ug'), '');
+	);
+}
+
+export function nowPlusDay(plusday) {
+	const date = dayjs().add(plusday, 'day');
+
+	// TODO: MOSCOW
+
+	return date.format('YYYY-MM-DD');
 }
 
 // export async function prepareSession(c) {

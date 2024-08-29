@@ -26,8 +26,14 @@ export default {
 		author: 'Автор',
 		postType: 'Тип поста',
 		tags: 'Тэги',
+		next: 'Далее',
+		date: 'Дата',
 		manageTagsBtn: 'Управлять тэгами',
 		manageTags:
 			'Выберете тэги которые нужно удалить. Чтобы добавить новый тэг - напишите его. Он будет переведён в snake_case. Символ # не нужен',
+		cleartags: 'Сбросить тэги',
+		today: 'Сегодня',
+		tomorrow: 'Завтра',
+		afterTomorrow: 'Послезавтра',
 	},
 };
