@@ -1,5 +1,5 @@
 import { t } from './helpers.js';
-import { PageBase } from './pageMiddleware.js';
+import { PageBase } from './Pager.js';
 
 export class PagePubText extends PageBase {
 	async init() {
@@ -31,10 +31,9 @@ export class PagePubText extends PageBase {
 	}
 
 	async message(c) {
-		//
-		console.log(1111, c);
-
-		await c.pager.go('pub-author');
+		await c.pager.go('pub-author', {
+			text: c.msg.text,
+		});
 
 		// await c.reply(t(c, 'textAccepted'))
 	}

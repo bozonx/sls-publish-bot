@@ -1,5 +1,5 @@
 import { t } from './helpers.js';
-import { PageBase } from './pageMiddleware.js';
+import { PageBase } from './Pager.js';
 
 export class PageConfig extends PageBase {
 	async init() {

@@ -1,22 +1,19 @@
 import { t } from './helpers.js';
 import { PageBase } from './Pager.js';
 
-export class PagePubAuthor extends PageBase {
+export class PagePubTags extends PageBase {
 	async init() {
 		// only first time init on app start
 	}
 
 	async mount(c, payload) {
-		const isMainAdmin =
-			c.msg.from.id === Number(c.config.MAIN_ADMIN_TG_USER_ID);
-
-		this.text = t(c, 'selectAuthor');
+		this.text = t(c, 'selectTags');
 
 		this.menu = [
 			// row
 			[
 				[
-					t(c, 'noAuthor'),
+					t(c, 'noTags'),
 					(c) => {
 						// c.pager.go('home');
 					},
@@ -33,7 +30,7 @@ export class PagePubAuthor extends PageBase {
 				[
 					t(c, 'back'),
 					(c) => {
-						c.pager.go('pub-text');
+						c.pager.go('pub-author');
 					},
 				],
 			],
@@ -48,7 +45,7 @@ export class PagePubAuthor extends PageBase {
 		//
 		console.log(1111, c);
 
-		await c.pager.go('pub-tags');
+		await c.pager.go('pub-date');
 
 		// await c.reply(t(c, 'textAccepted'))
 	}

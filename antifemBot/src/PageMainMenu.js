@@ -1,5 +1,5 @@
 import { t } from './helpers.js';
-import { PageBase } from './pageMiddleware.js';
+import { PageBase } from './Pager.js';
 
 export class PageMainMenu extends PageBase {
 	async init() {
@@ -43,7 +43,6 @@ export class PageMainMenu extends PageBase {
 
 	async message(c) {
 		//
-		console.log(1111, c);
 	}
 }
 

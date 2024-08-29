@@ -6,6 +6,10 @@ import { PageMainMenu } from './PageMainMenu.js';
 import { PageConfig } from './PageConfig.js';
 import { PagePubText } from './PagePubText.js';
 import { PagePubAuthor } from './PagePubAuthor.js';
+import { PagePubTags } from './PagePubTags.js';
+import { PagePubDate } from './PagePubDate.js';
+import { PagePubHour } from './PagePubHour.js';
+import { PagePubConfirm } from './PagePubConfirm.js';
 
 export class BotIndex {
 	bot;
@@ -52,6 +56,10 @@ export class BotIndex {
 			'pub-text': PagePubText,
 			config: PageConfig,
 			'pub-author': PagePubAuthor,
+			'pub-tags': PagePubTags,
+			'pub-date': PagePubDate,
+			'pub-hour': PagePubHour,
+			'pub-confirm': PagePubConfirm,
 		});
 
 		await pager.init();
