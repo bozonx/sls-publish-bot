@@ -2,7 +2,14 @@ import { t } from './helpers.js';
 import { PageBase } from './pageMiddleware.js';
 
 export class MainMenuPage extends PageBase {
-	async init(c, payload) {
+	async init() {
+		// only first time init on app start
+	}
+
+	async mount(c, payload) {
+		const isMainAdmin =
+			c.msg.chat.id === Number(c.config.MAIN_ADMIN_TG_USER_ID);
+
 		this.text = t(c, 'mainMenu');
 
 		this.menu = [
@@ -10,16 +17,24 @@ export class MainMenuPage extends PageBase {
 			[
 				// button
 				[
-					'test',
-					(c, payload) => {
-						//
-						console.log(5555, 'in btn handler');
-
-						c.reply('eeeerrttyy');
+					t(c, 'publishPost'),
+					(c) => {
+						c.pager.go('pub-text');
 					},
 				],
 			],
 		];
+
+		if (isMainAdmin) {
+			this.menu.push([
+				[
+					t(c, 'editConfig'),
+					(c) => {
+						c.reply('edit config');
+					},
+				],
+			]);
+		}
 	}
 
 	async unmount(c) {

@@ -188,16 +188,6 @@
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.1.tgz#b9da6a878a371829a0502c9b6c1c143ef6663f4d"
   integrity sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==
 
-"@grammyjs/menu@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@grammyjs/menu/-/menu-1.2.2.tgz#ecd6ce1a6439c90c30aea31d7d5e10a8f2e90593"
-  integrity sha512-qrlGn9KFoy9ivVkC4wQnuCpgWc59VzDdj7r7szt432UnddKPk8NZDwVE1HDiaNnuyDV0K58OCp165dXrijmLWw==
-
-"@grammyjs/router@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@grammyjs/router/-/router-2.0.0.tgz#da3a9191d5997d438f7e1cadc2d570d755cd3fc5"
-  integrity sha512-xJ3HRNj3mVojLtkFmV+GvKpOWOnS0CGdAIdvpaq+j+8dic1wM1OhOukaotkKzAWZ6bb9QyzUUgVFN6xfZDO5VA==
-
 "@grammyjs/types@3.13.0":
   version "3.13.0"
   resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-3.13.0.tgz#3316a809b4faf6cc61cff0c7d7a5a671ec0bd776"

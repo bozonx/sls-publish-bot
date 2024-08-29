@@ -1,25 +1,15 @@
-import grammyRouter from '@grammyjs/router';
 import { Bot, session } from 'grammy';
-import { Menu } from '@grammyjs/menu';
-import {
-	handleStart,
-	handleMessage,
-	handleButtonCallback,
-} from './BotLogic.js';
+import { handleStart } from './BotLogic.js';
 import { KV_CONFIG, APP_INITIAL_CONFIG } from './constants.js';
-import { MainMenuPage } from './screenMainMenu.js';
-import { Pager } from './pageMiddleware.js';
+import { Pager } from './Pager.js';
+import { MainMenuPage } from './pageMainMenu.js';
+import { PubTextPage } from './pagePubText.js';
 
 export class BotIndex {
 	bot;
 
 	constructor(TG_TOKEN, MAIN_ADMIN_TG_USER_ID, KV) {
 		this.bot = new Bot(TG_TOKEN);
-
-		// const menu = new Menu('index').text('^', (ctx) => ctx.reply('Forward!'));
-
-		// this.bot.use(menu);
-
 		this.bot.use(async (c, next) => {
 			const appCfgJson = await KV.get(KV_CONFIG);
 			let appCfg;
@@ -32,8 +22,6 @@ export class BotIndex {
 				await KV.put(KV_CONFIG, JSON.stringify(appCfg));
 			}
 
-			// c.menu = menu;
-
 			c.config = {
 				MAIN_ADMIN_TG_USER_ID,
 				KV,
@@ -42,22 +30,6 @@ export class BotIndex {
 
 			await next();
 		});
-
-		// this.bot.use(async (c, next) => {
-		// 	const menu = new Menu('movements')
-		// 		.text('^', (ctx) => ctx.reply('Forward!'))
-		// 		.row()
-		// 		.text('<', (ctx) => ctx.reply('Left!'))
-		// 		.text('>', (ctx) => ctx.reply('Right!'))
-		// 		.row()
-		// 		.text('v', (ctx) => ctx.reply('Backwards!'));
-		//
-		// 	c.menu = menu;
-		//
-		// 	console.log(111111111, 'once', menu);
-		//
-		// 	return menu(c, next);
-		// });
 	}
 
 	async init() {
@@ -74,8 +46,11 @@ export class BotIndex {
 		);
 
 		const pager = new Pager({
-			'/': MainMenuPage,
+			home: MainMenuPage,
+			'pub-text': PubTextPage,
 		});
+
+		await pager.init();
 
 		this.bot.use(pager.middleware);
 
