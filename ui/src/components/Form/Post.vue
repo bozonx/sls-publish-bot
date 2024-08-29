@@ -30,7 +30,7 @@ const handleSubmit = async (form$, FormData) => {
 <template>
   <div>
     <Vueform ref="form$" :endpoint="false" @submit="handleSubmit">
-      <TextElement name="text" :label="$t('text')" />
+      <TextareaElement name="text" :label="$t('text')" />
     </Vueform>
   </div>
 </template>

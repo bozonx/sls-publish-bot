@@ -4,6 +4,7 @@ const { t } = useI18n();
 
 const { data, status } = await useApiGetBlog(route.params.blogId);
 const blogConf = getItemConf(data.value);
+const postModel = ref(null);
 
 definePageParams({
   categoryTitle: data.value.name,
@@ -13,5 +14,5 @@ definePageParams({
 </script>
 
 <template>
-  <FormPost />
+  <FormPost v-model="postModel" />
 </template>
