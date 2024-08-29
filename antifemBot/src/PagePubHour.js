@@ -11,7 +11,7 @@ export class PagePubHour extends PageBase {
 
 	async mount(c, payload) {
 		this.payload = payload;
-		this.text = `${makePayloadPreview(payload)}\n\n${t(c, 'selectHour')}`;
+		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectHour')}`;
 
 		this.menu = [
 			// row

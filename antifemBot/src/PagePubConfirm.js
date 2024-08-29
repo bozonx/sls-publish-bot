@@ -11,7 +11,7 @@ export class PagePubConfirm extends PageBase {
 
 	async mount(c, payload) {
 		this.payload = payload;
-		this.text = `${makePayloadPreview(payload)}\n\n${t(c, 'pubConfirm')}`;
+		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'pubConfirm')}`;
 
 		this.menu = [
 			// row

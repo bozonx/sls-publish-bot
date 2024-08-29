@@ -11,7 +11,7 @@ export class PagePubDate extends PageBase {
 
 	async mount(c, payload) {
 		this.payload = payload;
-		this.text = `${makePayloadPreview(payload)}\n\n${t(c, 'selectDate')}`;
+		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectDate')}`;
 
 		this.menu = [
 			// row

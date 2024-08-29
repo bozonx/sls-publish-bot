@@ -10,8 +10,10 @@ export class PagePubTags extends PageBase {
 	}
 
 	async mount(c, payload) {
+		console.log(1111, payload);
+
 		this.payload = payload;
-		this.text = `${makePayloadPreview(payload)}\n\n${t(c, 'selectTags')}`;
+		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectTags')}`;
 
 		this.menu = [
 			// row
