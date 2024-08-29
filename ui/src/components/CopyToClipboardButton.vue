@@ -1,5 +1,7 @@
 <script setup>
 const props = defineProps(["elementId"]);
+const { t } = useI18n();
+
 function handleClick() {
   window.getSelection().removeAllRanges();
 
@@ -13,7 +15,7 @@ function handleClick() {
 </script>
 
 <template>
-  <button @click="handleClick">
+  <SmartButton @click="handleClick" :label="$t('copyToClipboard')">
     <slot />
-  </button>
+  </SmartButton>
 </template>

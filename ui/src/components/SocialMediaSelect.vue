@@ -1,6 +1,8 @@
 <script setup>
 // import { resolveSocialMediaId, resolveSmTypes } from "../lib/helpers.js";
 
+// ??? useless
+
 const userConfig = useState("userConfig");
 const props = defineProps(["blogId", "nextStepUrl", "postType"]);
 const { t } = useI18n();

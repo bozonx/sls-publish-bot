@@ -1,4 +1,5 @@
 <script setup>
+const { t } = useI18n();
 const props = defineProps(["blogConf"]);
 const tmpState = useTmpState();
 
@@ -46,24 +47,20 @@ const contentHtml = ref(
     <!--   <RenderHtml html={convertCommonMdToCommonHtml($t('texts.dzenHint').trim())} /> -->
     <!-- </section> -->
 
-    <section v-if="tmpState.meta.title">
-      <h2>{{ $t("header") }}</h2>
-
-      <CopyToClipboardButton elementId="dzen-header">
-        {{ $t("copyToClipboard") }}
-      </CopyToClipboardButton>
+    <Fieldset v-if="tmpState.meta.title" :legend="$t('header')">
+      <div class="mb-4">
+        <CopyToClipboardButton elementId="dzen-header" />
+      </div>
 
       <div id="dzen-header">{{ tmpState.meta.title }}</div>
-    </section>
+    </Fieldset>
 
-    <section>
-      <h2>{{ $t("text") }}</h2>
+    <Fieldset :legend="$t('text')">
+      <div class="mb-4">
+        <CopyToClipboardButton elementId="dzen-content" />
+      </div>
 
-      <CopyToClipboardButton elementId="dzen-content">
-        {{ $t("copyToClipboard") }}
-      </CopyToClipboardButton>
-
-      <div id="dzen-content" v-html="contentHtml"></div>
-    </section>
+      <div id="dzen-content" v-html="contentHtml" class="whitespace-normal"></div>
+    </Fieldset>
   </div>
 </template>

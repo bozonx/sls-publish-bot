@@ -18,7 +18,7 @@ socialMedia:
   - use: youtube
     types: ["podcast"]
   - use: blog
-    postGitPath: "https://raw.githubusercontent.com/..."
+    postGitPath: "https://raw.githubusercontent.com/<githubUser>/<blog>/main/src/ru/post"
 `;
 
 export const PODCAST_TYPE_AUDIO = "audio";

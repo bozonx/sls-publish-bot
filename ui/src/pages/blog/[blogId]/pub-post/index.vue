@@ -1,19 +1,17 @@
 <script setup>
 const route = useRoute();
 const { t } = useI18n();
-const userConfig = useState("userConfig");
 
-const blogConf = userConfig.value.blogs.find(
-  (item) => item.id === route.params.blogId,
-);
-const breadCrumbs = [
-  {
-    label: blogConf?.label,
-  },
-];
+const { data, status } = await useApiGetBlog(route.params.blogId);
+const blogConf = getItemConf(data.value);
+
+definePageParams({
+  categoryTitle: data.value.name,
+  categoryUrl: `/blog/${route.params.blogId}`,
+  title: t("contentSelect"),
+});
 </script>
-<template>
-  <AppBreadCrumb :items="breadCrumbs" />
 
-  <SocialMediaSelect :blogId="route.params.blogId" />
+<template>
+  <PostForm />
 </template>
