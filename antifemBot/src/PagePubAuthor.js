@@ -13,6 +13,7 @@ export class PagePubAuthor extends PageBase {
 	async mount(c, payload) {
 		this.payload = payload;
 		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectAuthor')}`;
+		this.menu = [];
 
 		const authors = c.config.appCfg[APP_CONFIG_KEYS.AUTHORS];
 

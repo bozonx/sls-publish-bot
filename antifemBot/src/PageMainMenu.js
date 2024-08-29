@@ -23,6 +23,14 @@ export class PageMainMenu extends PageBase {
 					},
 				],
 			],
+			[
+				[
+					t(c, 'manageTagsBtn'),
+					(c) => {
+						c.pager.go('tag-manager');
+					},
+				],
+			],
 		];
 
 		if (isMainAdmin) {

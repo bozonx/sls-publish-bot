@@ -46,13 +46,13 @@ export class PageConfig extends PageBase {
 		try {
 			obj = yaml.load(rawText);
 		} catch (e) {
-			c.reply(`ERROR: ${e}`);
+			return c.reply(`ERROR: ${e}`);
 		}
 
 		try {
 			await c.config.KV.put(KV_CONFIG, JSON.stringify(obj));
 		} catch (e) {
-			c.reply(`ERROR: ${e}`);
+			return c.reply(`ERROR: ${e}`);
 		}
 
 		c.reply(`Success`);

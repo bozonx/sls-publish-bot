@@ -28,6 +28,7 @@ export function makePayloadPreview(c, payload = {}) {
 	let res = `${t(c, 'postType')}: ${postType}\n`;
 
 	if (payload.author) res += `${t(c, 'author')}: ${payload.author}\n`;
+	if (payload.tags) res += `${t(c, 'tags')}: ${payload.tags.join(', ')}\n`;
 
 	return res;
 }

@@ -4,6 +4,7 @@ import { KV_CONFIG, APP_INITIAL_CONFIG } from './constants.js';
 import { Pager } from './Pager.js';
 import { PageMainMenu } from './PageMainMenu.js';
 import { PageConfig } from './PageConfig.js';
+import { PageTagManager } from './PageTagManager.js';
 import { PagePubText } from './PagePubText.js';
 import { PagePubAuthor } from './PagePubAuthor.js';
 import { PagePubTags } from './PagePubTags.js';
@@ -55,6 +56,7 @@ export class BotIndex {
 			home: PageMainMenu,
 			'pub-text': PagePubText,
 			config: PageConfig,
+			'tag-manager': PageTagManager,
 			'pub-author': PagePubAuthor,
 			'pub-tags': PagePubTags,
 			'pub-date': PagePubDate,
