@@ -2,8 +2,10 @@ import { Bot, session } from 'grammy';
 import { handleStart } from './BotLogic.js';
 import { KV_CONFIG, APP_INITIAL_CONFIG } from './constants.js';
 import { Pager } from './Pager.js';
-import { MainMenuPage } from './pageMainMenu.js';
-import { PubTextPage } from './pagePubText.js';
+import { PageMainMenu } from './PageMainMenu.js';
+import { PageConfig } from './PageConfig.js';
+import { PagePubText } from './PagePubText.js';
+import { PagePubAuthor } from './PagePubAuthor.js';
 
 export class BotIndex {
 	bot;
@@ -46,8 +48,10 @@ export class BotIndex {
 		);
 
 		const pager = new Pager({
-			home: MainMenuPage,
-			'pub-text': PubTextPage,
+			home: PageMainMenu,
+			'pub-text': PagePubText,
+			config: PageConfig,
+			'pub-author': PagePubAuthor,
 		});
 
 		await pager.init();

@@ -1,7 +1,7 @@
 import { t } from './helpers.js';
 import { PageBase } from './pageMiddleware.js';
 
-export class MainMenuPage extends PageBase {
+export class PageMainMenu extends PageBase {
 	async init() {
 		// only first time init on app start
 	}

@@ -1,7 +1,7 @@
 import { t } from './helpers.js';
 import { PageBase } from './pageMiddleware.js';
 
-export class PubTextPage extends PageBase {
+export class PagePubText extends PageBase {
 	async init() {
 		// only first time init on app start
 	}
@@ -33,5 +33,9 @@ export class PubTextPage extends PageBase {
 	async message(c) {
 		//
 		console.log(1111, c);
+
+		await c.pager.go('pub-author');
+
+		// await c.reply(t(c, 'textAccepted'))
 	}
 }
