@@ -1,0 +1,23 @@
+{
+	"name": "antifem-bot",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"devbot": "node ./src/localBotIndex.js dotenv_config_path=.dev.vars",
+		"start": "wrangler dev"
+	},
+	"dependencies": {
+		"@grammyjs/menu": "^1.2.2",
+		"@grammyjs/router": "^2.0.0",
+		"dotenv": "^16.4.5",
+		"grammy": "^1.29.0",
+		"parse-url": "^9.2.0"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.4.25",
+		"wrangler": "^3.72.2"
+	}
+}
