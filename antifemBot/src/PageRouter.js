@@ -119,13 +119,17 @@ class PageRouter {
 		if (marker !== QUERY_MARKER) return;
 
 		const normalPayload = JSON.parse(payloadRest.join('|'));
-		const menu = this.pages[pathTo]?.menu || [];
+		const menu = this.pages[pathTo]?.menu;
+
+		if (!menu) return c.reply(`ERROR: No menu`);
+
+		// TODO: set payload to this.pages[pathTo]
 
 		for (const row of menu) {
 			for (const { id, cb } of row) {
-				if (String(id) === btnId) continue;
+				if (String(id) !== btnId) continue;
 				// run menu button handler
-				return cb(normalPayload);
+				return cb(id);
 			}
 		}
 
