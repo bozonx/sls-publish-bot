@@ -2,9 +2,9 @@ import yaml from 'js-yaml';
 import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
 import { CTX_KEYS, KV_KEYS } from './constants.js';
-import { isAdminUser } from './helpers.js';
+import { isAdminUser, saveDataToKv } from './helpers.js';
 
-export class PageConfig extends PageBase {
+export class ConfigManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 		const isAdmin = isAdminUser(c.msg.chat.id);
@@ -29,14 +29,8 @@ export class PageConfig extends PageBase {
 			return c.reply(`ERROR: ${e}`);
 		}
 
-		try {
-			await c.ctx[CTX_KEYS.KV].put(KV_KEYS.CONFIG, JSON.stringify(obj));
-		} catch (e) {
-			return c.reply(`ERROR: ${e}`);
-		}
-
+		await saveDataToKv(this.c, KV_KEYS.CONFIG, obj);
 		await c.reply(`Success`);
-
 		// TODO: после реплай будет работать???
 		await c.pager.go('home');
 	}

@@ -14,8 +14,8 @@ export class PageHome extends PageBase {
 		if (isAdmin) {
 			this.menu = [
 				...this.menu,
-				[t(c, 'editConfigBtn'), () => this.pager.go('config')],
-				[t(c, 'manageUsersBtn'), () => this.pager.go('users')],
+				[t(c, 'editConfigBtn'), () => this.pager.go('config-manager')],
+				[t(c, 'manageUsersBtn'), () => this.pager.go('user-manager')],
 			];
 		}
 	}

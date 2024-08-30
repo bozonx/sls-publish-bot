@@ -2,7 +2,7 @@ import { Bot, session } from 'grammy';
 import { handleStart, prepareKvAndConfig } from './botLogic.js';
 import { makeRouter } from './PageRouter.js';
 import { PageHome } from './pages/Home.js';
-import { PageConfig } from './pages/Config.js';
+import { ConfigManager } from './pages/ConfigManager.js';
 import { PageTagManager } from './pages/TagManager.js';
 // import { PagePubText } from './PagePubText.js';
 import { PagePubAuthor } from './pages/PubAuthor.js';
@@ -10,7 +10,7 @@ import { PagePubTags } from './pages/PubTags.js';
 import { PagePubDate } from './pages/PubDate.js';
 import { PagePubHour } from './pages/PubHour.js';
 import { PagePubConfirm } from './pages/PubConfirm.js';
-import { PageUsers } from './pages/Users.js';
+import { UserManager } from './pages/UserManager.js';
 
 export class BotIndex {
 	bot;
@@ -40,8 +40,8 @@ export class BotIndex {
 		const router = makeRouter({
 			home: PageHome,
 			// 'pub-text': PagePubText,
-			config: PageConfig,
-			users: PageUsers,
+			'config-manager': ConfigManager,
+			'user-manager': UserManager,
 			'tag-manager': PageTagManager,
 			'pub-author': PagePubAuthor,
 			'pub-tags': PagePubTags,
