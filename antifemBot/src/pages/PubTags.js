@@ -1,12 +1,12 @@
 import _ from 'lodash';
-import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
 import {
-	makePayloadPreview,
+	t,
+	makeStatePreview,
 	generateTagsButtons,
 	parseTagsFromInput,
-} from './helpers.js';
-import { KV_KEYS } from './constants.js';
+} from '../helpers.js';
+import { KV_KEYS } from '../constants.js';
 
 export class PubTags extends PageBase {
 	// all the tags from storage
@@ -17,7 +17,7 @@ export class PubTags extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 
-		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectTags')}`;
+		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectTags')}`;
 		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
 		this.tagsButtons = this.tags.filter(
 			(i) => !this.payload.state?.tags?.includes(i),
@@ -39,7 +39,7 @@ export class PubTags extends PageBase {
 		}
 	}
 
-	async message(c) {
+	async message() {
 		const c = this.pager.c;
 
 		if (!c.msg.text) return c.reply('No text');

@@ -1,4 +1,5 @@
 import { Bot, session } from 'grammy';
+import { CTX_KEYS } from './constants.js';
 import { handleStart, prepareKvAndConfig } from './botLogic.js';
 import { makeRouter } from './PageRouter.js';
 import { Home } from './pages/Home.js';
@@ -8,9 +9,9 @@ import { UsersManager } from './pages/UsersManager.js';
 import { PubContent } from './pages/PubContent.js';
 import { PubAuthor } from './pages/PubAuthor.js';
 import { PubTags } from './pages/PubTags.js';
-import { PubDate } from './pages/PubDate.js';
-import { PubHour } from './pages/PubHour.js';
-import { PubConfirm } from './pages/PubConfirm.js';
+// import { PubDate } from './pages/PubDate.js';
+// import { PubHour } from './pages/PubHour.js';
+// import { PubConfirm } from './pages/PubConfirm.js';
 
 export class BotIndex {
 	bot;
@@ -18,7 +19,11 @@ export class BotIndex {
 	constructor(TG_TOKEN, MAIN_ADMIN_TG_USER_ID, KV) {
 		this.bot = new Bot(TG_TOKEN);
 		this.bot.use(async (c, next) => {
-			c.ctx = await prepareKvAndConfig(MAIN_ADMIN_TG_USER_ID, KV);
+			c.ctx = { [CTX_KEYS.KV]: KV };
+			c.ctx = {
+				...c.ctx,
+				...(await prepareKvAndConfig(c, MAIN_ADMIN_TG_USER_ID)),
+			};
 
 			await next();
 		});
@@ -37,7 +42,7 @@ export class BotIndex {
 		// 	}),
 		// );
 
-		const router = makeRouter({
+		const router = await makeRouter({
 			home: Home,
 			'config-manager': ConfigManager,
 			'users-manager': UsersManager,
@@ -45,9 +50,9 @@ export class BotIndex {
 			'pub-content': PubContent,
 			'pub-author': PubAuthor,
 			'pub-tags': PubTags,
-			'pub-date': PubDate,
-			'pub-hour': PubHour,
-			'pub-confirm': PubConfirm,
+			// 'pub-date': PubDate,
+			// 'pub-hour': PubHour,
+			// 'pub-confirm': PubConfirm,
 		});
 
 		this.bot.use(router.middleware);

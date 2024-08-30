@@ -1,14 +1,13 @@
-import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
-import { CTX_KEYS, APP_CFG_KEYS } from './constants.js';
-import { makePayloadPreview } from './helpers.js';
+import { CTX_KEYS, APP_CFG_KEYS } from '../constants.js';
+import { t, makeStatePreview } from '../helpers.js';
 
-export class PagePubAuthor extends PageBase {
+export class PubAuthor extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 		const authors = c.ctx[CTX_KEYS.APP_CFG][APP_CFG_KEYS.AUTHORS];
 
-		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectAuthorDescr')}`;
+		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectAuthorDescr')}`;
 		this.menu = [];
 
 		if (authors?.length) {
@@ -25,7 +24,7 @@ export class PagePubAuthor extends PageBase {
 		];
 	}
 
-	async message(c) {
+	async message() {
 		const c = this.pager.c;
 
 		if (!c.msg.text) return;

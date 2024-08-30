@@ -1,6 +1,5 @@
-import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
-import { makeContentState } from './helpers.js';
+import { t, makeContentState } from '../helpers.js';
 
 export class PubContent extends PageBase {
 	async mount() {

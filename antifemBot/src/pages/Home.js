@@ -1,11 +1,10 @@
-import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
-import { isAdminUser, makeContentState } from './helpers.js';
+import { t, isAdminUser, makeContentState } from '../helpers.js';
 
 export class Home extends PageBase {
 	async mount() {
 		const c = this.pager.c;
-		const isAdmin = isAdminUser(c.msg.chat.id);
+		const isAdmin = isAdminUser(c, c.msg.chat.id);
 
 		this.text = t(c, 'homeDescr');
 
@@ -16,8 +15,8 @@ export class Home extends PageBase {
 		if (isAdmin) {
 			this.menu = [
 				...this.menu,
-				[t(c, 'editConfigBtn'), () => this.pager.go('config-manager')],
-				[t(c, 'manageUsersBtn'), () => this.pager.go('users-manager')],
+				[[t(c, 'editConfigBtn'), () => this.pager.go('config-manager')]],
+				[[t(c, 'manageUsersBtn'), () => this.pager.go('users-manager')]],
 			];
 		}
 	}

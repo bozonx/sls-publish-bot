@@ -33,7 +33,7 @@ export class PageBase {
 }
 
 export async function makeRouter(initialPages) {
-	const router = new SimpleRouter(initialPages);
+	const router = new PageRouter(initialPages);
 
 	await router.init();
 
@@ -46,7 +46,7 @@ class PageRouter {
 	currentPage;
 
 	get currentPath() {
-		return this.currentPath?.path;
+		return this.currentPage?.path;
 	}
 
 	constructor(initialPages) {
@@ -64,10 +64,9 @@ class PageRouter {
 	// TODO: как передать prevMenuMsgId ???
 	async go(pathTo, newPartialState) {
 		if (!pathTo) return this.c.reply('No path');
-		else if (!this.currentPage) return this.c.reply('No current page');
 
-		const { state: oldState } = this.currentPage.payload;
 		let newPayload;
+		const oldPayload = this.currentPage?.payload || {};
 
 		await this.currentPage?.unmount();
 
@@ -80,7 +79,7 @@ class PageRouter {
 		} else {
 			newPayload = {
 				state: {
-					...(oldState || {}),
+					...(oldPayload?.state || {}),
 					...(newPartialState || {}),
 				},
 			};
@@ -89,9 +88,9 @@ class PageRouter {
 		this.currentPage.setPayload(newPayload);
 		await this.currentPage.mount();
 		// remove prev menu message
-		if (prevMenuMsgId) {
-			await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
-		}
+		// if (prevMenuMsgId) {
+		// 	await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
+		// }
 
 		await this._renderMenu(newPayload);
 
@@ -117,9 +116,9 @@ class PageRouter {
 
 		if (marker !== QUERY_MARKER) return;
 
-		const payload = (state?.length && JSON.parse(payloadRest.join('|'))) || [];
+		const normalPayload = JSON.parse(payloadRest.join('|'));
 		// run menu button handler
-		return this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](payload);
+		return this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](normalPayload);
 	};
 
 	_handleMessage = (c) => {

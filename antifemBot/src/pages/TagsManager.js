@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
 import {
+	t,
 	loadDataFromKv,
 	saveDataToKv,
 	parseTagsFromInput,
 	generateTagsButtons,
-} from './helpers.js';
-import { KV_KEYS } from './constants.js';
+} from '../helpers.js';
+import { KV_KEYS } from '../constants.js';
 
 export class TagsManager extends PageBase {
 	tags;

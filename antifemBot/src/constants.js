@@ -33,8 +33,8 @@ const footer =
 	'[Антифеминизм | Маскулизм. подписывайся](https://t.me/antifem_battle) | [донат](https://t.me/antifem_battle/78)';
 
 export const APP_INITIAL_CONFIG = {
-	[APP_CONFIG_KEYS.AUTHORS]: ['Айван Кей'],
-	[APP_CONFIG_KEYS.TEMPLATES]: {
+	[APP_CFG_KEYS.AUTHORS]: ['Айван Кей'],
+	[APP_CFG_KEYS.TEMPLATES]: {
 		[TEMPLATE_NAMES.common]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
 		[TEMPLATE_NAMES.byFollower]: [
 			'От подписчика ${AUTHOR}:',

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import locales from './botLocales.js';
-import { TG_BOT_URL, KV_KEYS, CTX_KEYS, USER_KEYS } from './constants.js';
+import locales from './i18n.js';
+import { TG_BOT_URL, CTX_KEYS, USER_KEYS } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
 	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
@@ -18,7 +18,7 @@ export function t(c, msg) {
 	return locales[lang][msg] || msg;
 }
 
-export function makePayloadPreview(c, state = {}) {
+export function makeStatePreview(c, state = {}) {
 	let postType = 'text';
 	let mediaCount = 0;
 	// TODO: если мд то очистить

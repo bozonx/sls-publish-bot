@@ -1,11 +1,12 @@
-import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
-import { saveDataToKv } from './helpers.js';
-import { KV_KEYS } from './constants.js';
+import { t, saveDataToKv } from '../helpers.js';
+import { KV_KEYS } from '../constants.js';
 
 export class UsersManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
+
+		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home', null);
 
 		this.text = t(c, 'usersManagerDescr');
 

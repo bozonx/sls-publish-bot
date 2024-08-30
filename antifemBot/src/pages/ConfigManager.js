@@ -1,15 +1,13 @@
 import yaml from 'js-yaml';
-import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
-import { CTX_KEYS, KV_KEYS } from './constants.js';
-import { isAdminUser, saveDataToKv } from './helpers.js';
+import { CTX_KEYS, KV_KEYS } from '../constants.js';
+import { t, isAdminUser, saveDataToKv } from '../helpers.js';
 
 export class ConfigManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
-		const isAdmin = isAdminUser(c.msg.chat.id);
 
-		if (!isAdmin) return this.pager.go('home');
+		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home', null);
 
 		this.text = t(c, 'editConfigDescr');
 		this.menu = [[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]]];
