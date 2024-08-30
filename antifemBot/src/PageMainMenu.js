@@ -14,8 +14,8 @@ export class PageMainMenu extends PageBase {
 				// button
 				[
 					t(c, 'publishPost'),
-					(c) => {
-						c.pager.go('pub-text');
+					async (c, state) => {
+						await c.pager.go('pub-text', state);
 					},
 				],
 			],

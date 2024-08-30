@@ -1,5 +1,7 @@
 import { InlineKeyboard } from 'grammy';
 
+const QUERY_MARKER = 'PageRouter';
+
 export class PageBase {
 	pager;
 	path;
@@ -11,10 +13,10 @@ export class PageBase {
 		this.path = path;
 	}
 
-	// It runs only first time init on app start
+	// It runs only first time init on app start. It means for all the users
 	async init() {}
 
-	// It runs when a route has been changed
+	// It runs when a route of certain user has been changed
 	async mount(c, payload) {}
 
 	// It runs when a route is changing
@@ -51,48 +53,52 @@ class PageRouter {
 		}
 	}
 
-	async go(pathTo, payload) {
+	async go(pathTo, state) {
 		await this.currentPage?.unmount(this.c);
 
-		this.currentPage = undefined;
-		this.currentPath = undefined;
+		if (!this.pages[pathTo]) return this.c.reply(`Wrong path "${pathTo}"`);
+
+		this.currentPath = pathTo;
+		this.currentPage = this.pages[pathTo];
+
+		await this.currentPage.mount(this.c, payload);
 
 		// remove prev menu message
 		if (this.prevMenuMessageId) {
+			// TODO: Это должно быть по сессиям !!!!
 			await this.c.api.deleteMessage(this.c.chatId, this.prevMenuMessageId);
 		}
 
-		this.currentPath = pathTo;
+		await this._renderMenu();
 
-		if (this.pages[pathTo]) {
-			this.currentPage = this.pages[pathTo];
-
-			await this.currentPage.mount(this.c, payload);
-			await this._renderMenu();
-		} else {
-			await this.c.reply(`Wrong path "${pathTo}"`);
-		}
+		// The end of request
 	}
 
 	middleware = async (c, next) => {
 		this.c = c;
-		// it runs on every request
-		c.pager ??= this;
+		c.pager = this;
 
 		return next();
 	};
 
 	_handleQueryData = async (c) => {
+		// The start of request
 		const data = c.update.callback_query.data;
-		const [pager, pathTo, rowIndex, btnIndex] = data.split('|');
+		const [marker, pathTo, rowIndex, btnIndex, ...stateRest] = data.split('|');
 
-		await this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](c);
+		if (marker !== QUERY_MARKER) return;
+
+		const state = (state?.length && JSON.parse(stateRest.join('|'))) || [];
+
+		await this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](c, state);
 	};
 
+	// TODO: remake!!!!
 	_handleMessage = async (c) => {
 		await this.currentPage?.message?.(c);
 	};
 
+	// TODO: remake!!!!
 	async _renderMenu() {
 		const menu = this.currentPage?.menu;
 
@@ -104,7 +110,10 @@ class PageRouter {
 			for (const btnIndex in menu[rowIndex]) {
 				const [text] = menu[rowIndex][btnIndex];
 
-				kb.text(text, `pager|${this.currentPath}|${rowIndex}|${btnIndex}`);
+				kb.text(
+					text,
+					`${QUERY_MARKER}|${this.currentPath}|${rowIndex}|${btnIndex}`,
+				);
 			}
 
 			kb.row();
