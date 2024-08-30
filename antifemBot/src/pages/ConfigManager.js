@@ -13,7 +13,7 @@ export class ConfigManager extends PageBase {
 		this.menu = [[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]]];
 
 		// TODO: put it into code tag
-		return c.reply(yaml.dump(c.ctx[CTX_KEYS.CONFIG]));
+		return c.reply(yaml.dump(c.ctx[CTX_KEYS.APP_CFG]));
 	}
 
 	async message() {
@@ -27,7 +27,7 @@ export class ConfigManager extends PageBase {
 			return c.reply(`ERROR: ${e}`);
 		}
 
-		await saveDataToKv(this.c, KV_KEYS.CONFIG, obj);
+		await saveDataToKv(c, KV_KEYS.CONFIG, obj);
 		await c.reply(`Success`);
 		// TODO: после реплай будет работать???
 		await c.pager.reload();

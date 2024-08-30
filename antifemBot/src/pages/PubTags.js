@@ -47,7 +47,7 @@ export class PubTags extends PageBase {
 		const newTags = parseTagsFromInput(c.msg.text);
 		const megedAllTags = _.uniq([...this.tags, ...newTags]).sort();
 		// save new tags to storage
-		await saveDataToKv(this.c, KV_KEYS.TAGS, megedAllTags);
+		await saveDataToKv(c, KV_KEYS.TAGS, megedAllTags);
 
 		const mergedSelectedTags = _.uniq([
 			...(this.payload.tags || {}),

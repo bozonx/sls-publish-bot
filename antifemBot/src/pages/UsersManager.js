@@ -1,6 +1,6 @@
 import { PageBase } from '../PageRouter.js';
-import { t, saveDataToKv } from '../helpers.js';
-import { KV_KEYS } from '../constants.js';
+import { t, saveDataToKv, isAdminUser } from '../helpers.js';
+import { KV_KEYS, CTX_KEYS, USER_KEYS } from '../constants.js';
 
 export class UsersManager extends PageBase {
 	async mount() {
@@ -15,7 +15,7 @@ export class UsersManager extends PageBase {
 		this.menu = [
 			...users.map((item, index) => [
 				[
-					`${item.name} | ${item.id}${item.isAdmin ? ' (admin)' : ''}`,
+					`${item[USER_KEYS.NAME]} | ${item[USER_KEYS.ID]}${item[USER_KEYS.IS_ADMIN] ? ' (admin)' : ''}`,
 					this.userRemoveCallback(index),
 				],
 			]),
@@ -38,7 +38,10 @@ export class UsersManager extends PageBase {
 		// await this.pager.reload();
 	}
 
+	// TODO: не передавать индекс
 	userRemoveCallback(index) {
+		const c = this.pager.c;
+
 		return async () => {
 			const users = c.ctx[CTX_KEYS.USERS];
 			// remove selected tag
@@ -46,7 +49,7 @@ export class UsersManager extends PageBase {
 
 			prepared.splice(index, 1);
 
-			await saveDataToKv(this.c, KV_KEYS.USERS, prepared);
+			await saveDataToKv(c, KV_KEYS.USERS, prepared);
 			await c.pager.reload();
 		};
 	}

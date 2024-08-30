@@ -31,7 +31,7 @@ export class TagsManager extends PageBase {
 		const tags = parseTagsFromInput(c.msg.text);
 		const megedTags = _.uniq([...this.tags, ...tags]).sort();
 
-		await saveDataToKv(this.c, KV_KEYS.TAGS, megedTags);
+		await saveDataToKv(c, KV_KEYS.TAGS, megedTags);
 		await this.pager.reload();
 	}
 
