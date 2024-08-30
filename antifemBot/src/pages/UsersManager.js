@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { t, saveDataToKv, isAdminUser } from '../helpers.js';
+import { t, saveDataToKv, isAdminUser, defineMenu } from '../helpers.js';
 import { KV_KEYS, CTX_KEYS, USER_KEYS } from '../constants.js';
 
 export class UsersManager extends PageBase {
@@ -12,15 +12,22 @@ export class UsersManager extends PageBase {
 
 		const users = c.ctx[CTX_KEYS.USERS];
 
-		this.menu = [
+		this.menu = defineMenu([
 			...users.map((item, index) => [
-				[
-					`${item[USER_KEYS.NAME]} | ${item[USER_KEYS.ID]}${item[USER_KEYS.IS_ADMIN] ? ' (admin)' : ''}`,
-					this.userRemoveCallback(index),
-				],
+				{
+					id: String(item[USER_KEYS.ID]),
+					label: `${item[USER_KEYS.NAME]} | ${item[USER_KEYS.ID]}${item[USER_KEYS.IS_ADMIN] ? ' (admin)' : ''}`,
+					cb: this.userRemoveCallback(index),
+				},
 			]),
-			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
-		];
+			[
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.pager.go('home', null),
+				},
+			],
+		]);
 	}
 
 	async message() {

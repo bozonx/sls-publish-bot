@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { t, makeContentState } from '../helpers.js';
+import { t, makeContentState, defineMenu } from '../helpers.js';
 
 export class PubContent extends PageBase {
 	async mount() {
@@ -7,12 +7,23 @@ export class PubContent extends PageBase {
 
 		this.text = t(c, 'uploadContentDescr');
 
-		this.menu = [
-			// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
-			// TODO: либо вобще ничего нет
-			[[t(c, 'next'), () => this.pager.go('pub-author')]],
+		this.menu = defineMenu([
 			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
-		];
+			[
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.pager.go('home', null),
+				},
+				// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
+				// TODO: либо вобще ничего нет
+				{
+					id: 'next',
+					label: t(c, 'next'),
+					cb: () => this.pager.go('pub-author'),
+				},
+			],
+		]);
 	}
 
 	async message() {

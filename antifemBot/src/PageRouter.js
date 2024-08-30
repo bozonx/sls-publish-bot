@@ -2,6 +2,9 @@ import { InlineKeyboard } from 'grammy';
 
 const QUERY_MARKER = 'PageRouter';
 
+/**
+ * Do not store state in class between requests
+ */
 export class PageBase {
 	pager;
 	path;
@@ -111,14 +114,22 @@ class PageRouter {
 	_handleQueryData = async (c) => {
 		// The start of request
 		const data = c.update.callback_query.data;
-		const [marker, pathTo, rowIndex, btnIndex, ...payloadRest] =
-			data.split('|');
+		const [marker, pathTo, btnId, ...payloadRest] = data.split('|');
 
 		if (marker !== QUERY_MARKER) return;
 
 		const normalPayload = JSON.parse(payloadRest.join('|'));
-		// run menu button handler
-		return this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](normalPayload);
+		const menu = this.pages[pathTo]?.menu || [];
+
+		for (const row of menu) {
+			for (const { id, cb } of row) {
+				if (String(id) === btnId) continue;
+				// run menu button handler
+				return cb(normalPayload);
+			}
+		}
+
+		// return this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](normalPayload);
 	};
 
 	_handleMessage = (c) => {
@@ -132,15 +143,13 @@ class PageRouter {
 
 		const keyboard = new InlineKeyboard();
 
-		for (const rowIndex in menu) {
-			for (const btnIndex in menu[rowIndex]) {
-				const [text] = menu[rowIndex][btnIndex];
-				// TODO: как передать message_id ???
+		for (const row of menu) {
+			for (const { id, label } of row) {
 				const payloadStr = JSON.stringify(payload);
 
 				keyboard.text(
-					text,
-					`${QUERY_MARKER}|${this.currentPath}|${rowIndex}|${btnIndex}|${payloadStr}`,
+					label,
+					`${QUERY_MARKER}|${this.currentPath}|${id}|${payloadStr}`,
 				);
 			}
 

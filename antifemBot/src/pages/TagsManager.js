@@ -6,21 +6,28 @@ import {
 	saveDataToKv,
 	parseTagsFromInput,
 	generateTagsButtons,
+	defineMenu,
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
 
-export class TagsManager extends PageBase {
-	tags;
+const TAG_ID_PREFIX = 'TAG-';
 
+export class TagsManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 
 		this.text = t(c, 'tagsManagerDescr');
 		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
-		this.menu = [
-			...generateTagsButtons(this.tags, this.tagRemoveCallback),
-			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
-		];
+		this.menu = defineMenu([
+			...generateTagsButtons(this.tags, this.tagRemoveCallback, TAG_ID_PREFIX),
+			[
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.pager.go('home', null),
+				},
+			],
+		]);
 	}
 
 	async message() {
@@ -35,15 +42,13 @@ export class TagsManager extends PageBase {
 		await this.pager.reload();
 	}
 
-	tagRemoveCallback = (index) => {
-		return async () => {
-			// remove selected tag
-			const prepared = [...this.tags];
+	tagRemoveCallback = async () => {
+		// remove selected tag
+		const prepared = [...this.tags];
 
-			prepared.splice(index, 1);
+		// prepared.splice(index, 1);
 
-			await saveDataToKv(this.c, KV_KEYS.TAGS, prepared);
-			await c.pager.reload();
-		};
+		await saveDataToKv(this.c, KV_KEYS.TAGS, prepared);
+		await c.pager.reload();
 	};
 }

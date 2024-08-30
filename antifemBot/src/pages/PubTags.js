@@ -5,8 +5,11 @@ import {
 	makeStatePreview,
 	generateTagsButtons,
 	parseTagsFromInput,
+	defineMenu,
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
+
+const TAG_ID_PREFIX = 'TAG-';
 
 export class PubTags extends PageBase {
 	// all the tags from storage
@@ -23,20 +26,43 @@ export class PubTags extends PageBase {
 			(i) => !this.payload.state?.tags?.includes(i),
 		);
 
-		this.menu = [
-			...generateTagsButtons(c, this.tagsButtons, this.tagSelectCallback),
+		this.menu = defineMenu([
+			...generateTagsButtons(
+				this.tagsButtons,
+				this.tagSelectCallback,
+				TAG_ID_PREFIX,
+			),
 			[
-				[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
-				[[t(c, 'back'), () => this.pager.go('pub-author')]],
-				[[t(c, 'next'), () => this.pager.go('pub-date')]],
+				[
+					{
+						id: 'toHomeBtn',
+						label: t(c, 'toHomeBtn'),
+						cb: () => this.pager.go('home', null),
+					},
+				],
+				[
+					{
+						id: 'back',
+						label: t(c, 'back'),
+						cb: () => this.pager.go('pub-author'),
+					},
+				],
+				[
+					{
+						id: 'next',
+						label: t(c, 'next'),
+						cb: () => this.pager.go('pub-date'),
+					},
+				],
 			],
-		];
-
-		if (this.payload.state?.tags?.length) {
-			this.menu.push([
-				[t(c, 'clearTagsBtn'), () => c.pager.go('pub-tags', { tags: null })],
-			]);
-		}
+			this.payload.state?.tags?.length && [
+				{
+					id: 'clearTagsBtn',
+					label: t(c, 'clearTagsBtn'),
+					cb: () => c.pager.go('pub-tags', { tags: null }),
+				},
+			],
+		]);
 	}
 
 	async message() {

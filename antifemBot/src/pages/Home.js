@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { t, isAdminUser, makeContentState } from '../helpers.js';
+import { t, isAdminUser, makeContentState, defineMenu } from '../helpers.js';
 
 export class Home extends PageBase {
 	async mount() {
@@ -8,17 +8,29 @@ export class Home extends PageBase {
 
 		this.text = t(c, 'homeDescr');
 
-		this.menu = [
-			[[t(c, 'manageTagsBtn'), () => this.pager.go('tags-manager')]],
-		];
-
-		if (isAdmin) {
-			this.menu = [
-				...this.menu,
-				[[t(c, 'editConfigBtn'), () => this.pager.go('config-manager')]],
-				[[t(c, 'manageUsersBtn'), () => this.pager.go('users-manager')]],
-			];
-		}
+		this.menu = defineMenu([
+			[
+				{
+					id: 'manageTagsBtn',
+					label: t(c, 'manageTagsBtn'),
+					cb: () => this.pager.go('tags-manager'),
+				},
+			],
+			isAdmin && [
+				{
+					id: 'editConfigBtn',
+					label: t(c, 'editConfigBtn'),
+					cb: () => this.pager.go('config-manager'),
+				},
+			],
+			isAdmin && [
+				{
+					id: 'manageUsersBtn',
+					label: t(c, 'manageUsersBtn'),
+					cb: () => this.pager.go('users-manager'),
+				},
+			],
+		]);
 	}
 
 	async message() {

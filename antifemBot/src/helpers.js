@@ -79,9 +79,9 @@ export async function saveDataToKv(c, key, value) {
 export function generateTagsButtons(tags, cb) {
 	const menu = [];
 
-	for (const tagIndex in tags) {
+	for (const tag of tags) {
 		// TODO: split to rows
-		menu.push([[tags[tagIndex], cb(tagIndex)]]);
+		menu.push([{ id: tag, label: tag, cb }]);
 	}
 
 	return menu;
@@ -164,6 +164,27 @@ export function makeContentState(c) {
 	}
 
 	return state;
+}
+
+// remove undefined and false items
+export function defineMenu(menu = []) {
+	const res = [];
+
+	for (const row of menu) {
+		if (!row) continue;
+
+		const rowArr = [];
+
+		for (const btn of row) {
+			if (!btn) continue;
+
+			rowArr.push(btn);
+		}
+
+		res.push(rowArr);
+	}
+
+	return res;
 }
 
 // export async function prepareSession(c) {

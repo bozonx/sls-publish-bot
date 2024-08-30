@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
 import { CTX_KEYS, KV_KEYS } from '../constants.js';
-import { t, isAdminUser, saveDataToKv } from '../helpers.js';
+import { t, isAdminUser, saveDataToKv, defineMenu } from '../helpers.js';
 
 export class ConfigManager extends PageBase {
 	async mount() {
@@ -10,7 +10,15 @@ export class ConfigManager extends PageBase {
 		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home', null);
 
 		this.text = t(c, 'editConfigDescr');
-		this.menu = [[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]]];
+		this.menu = defineMenu([
+			[
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.pager.go('home', null),
+				},
+			],
+		]);
 
 		// TODO: put it into code tag
 		return c.reply(yaml.dump(c.ctx[CTX_KEYS.APP_CFG]));
