@@ -1,32 +1,27 @@
 import { t } from './helpers.js';
-import { PageBase } from './PageRouter.js';
+import { PageBase } from '../PageRouter.js';
 import { isAdminUser } from './helpers.js';
 
 export class PageHome extends PageBase {
-	async mount(c, state) {
+	async mount() {
+		const c = this.pager.c;
 		const isAdmin = isAdminUser(c.msg.chat.id);
 
 		this.text = t(c, 'homeDescr');
 
-		this.menu = [
-			[
-				[
-					t(c, 'manageTagsBtn'),
-					(c, payload) => c.pager.go('tag-manager', payload),
-				],
-			],
-		];
+		this.menu = [[[t(c, 'manageTagsBtn'), () => c.pager.go('tag-manager')]]];
 
 		if (isAdmin) {
 			this.menu = [
 				...this.menu,
-				[t(c, 'editConfigBtn'), (c, payload) => c.pager.go('config', payload)],
-				[t(c, 'manageUsersBtn'), (c, payload) => c.pager.go('users', payload)],
+				[t(c, 'editConfigBtn'), () => c.pager.go('config')],
+				[t(c, 'manageUsersBtn'), () => c.pager.go('users')],
 			];
 		}
 	}
 
-	async message(c) {
+	async message() {
+		const c = this.pager.c;
 		let state;
 
 		// console.log(2222, c.msg);

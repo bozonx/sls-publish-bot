@@ -5,6 +5,7 @@ const QUERY_MARKER = 'PageRouter';
 export class PageBase {
 	pager;
 	path;
+	payload;
 	// description of menu
 	text;
 	menu = [];
@@ -12,6 +13,10 @@ export class PageBase {
 	constructor(pager, path) {
 		this.pager = pager;
 		this.path = path;
+	}
+
+	setPayload(payload) {
+		this.payload = payload;
 	}
 
 	// It runs only first time init on app start. It means for all the users
@@ -57,20 +62,31 @@ class PageRouter {
 	}
 
 	// TODO: как передать prevMenuMsgId ???
-	async go(pathTo, { prevMenuMsgId, state }) {
-		await this.currentPage?.unmount(this.c);
+	async go(pathTo, newPartialState) {
+		if (!this.currentPage) return this.c.reply('No current page');
+
+		const { prevMenuMsgId, state: oldState } = this.currentPage.payload;
+		await this.currentPage?.unmount();
 
 		if (!this.pages[pathTo]) return this.c.reply(`Wrong path "${pathTo}"`);
 
 		this.currentPage = this.pages[pathTo];
 
-		await this.currentPage.mount(this.c, state);
+		const newPayload = {
+			state: {
+				...(oldState || {}),
+				...(newPartialState || {}),
+			},
+		};
+
+		this.currentPage.setPayload(newPayload);
+		await this.currentPage.mount();
 		// remove prev menu message
 		if (prevMenuMsgId) {
 			await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
 		}
 
-		await this._renderMenu(state);
+		await this._renderMenu(newPayload);
 
 		// The end of request
 	}
@@ -92,14 +108,14 @@ class PageRouter {
 
 		const payload = (state?.length && JSON.parse(payloadRest.join('|'))) || [];
 		// run menu button handler
-		return this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](c, payload);
+		return this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](payload);
 	};
 
 	_handleMessage = (c) => {
-		return this.currentPage?.message?.(c);
+		return this.currentPage?.message?.();
 	};
 
-	async _renderMenu(state) {
+	async _renderMenu(payload) {
 		const menu = this.currentPage?.menu;
 
 		if (!menu) return;
@@ -110,7 +126,7 @@ class PageRouter {
 			for (const btnIndex in menu[rowIndex]) {
 				const [text] = menu[rowIndex][btnIndex];
 				// TODO: как передать message_id ???
-				const payloadStr = JSON.stringify({ state });
+				const payloadStr = JSON.stringify(payload);
 
 				keyboard.text(
 					text,

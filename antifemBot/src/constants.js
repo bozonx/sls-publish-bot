@@ -15,7 +15,7 @@ export const USER_KEYS = {
 	NAME: 'NAME',
 	IS_ADMIN: 'IS_ADMIN',
 };
-export const APP_CONFIG_KEYS = {
+export const APP_CFG_KEYS = {
 	AUTHORS: 'AUTHORS',
 	TEMPLATES: 'TEMPLATES',
 };
