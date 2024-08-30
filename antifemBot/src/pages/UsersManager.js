@@ -13,11 +13,11 @@ export class UsersManager extends PageBase {
 		const users = c.ctx[CTX_KEYS.USERS];
 
 		this.menu = defineMenu([
-			...users.map((item, index) => [
+			...users.map((i) => [
 				{
-					id: String(item[USER_KEYS.ID]),
-					label: `${item[USER_KEYS.NAME]} | ${item[USER_KEYS.ID]}${item[USER_KEYS.IS_ADMIN] ? ' (admin)' : ''}`,
-					cb: this.userRemoveCallback(index),
+					id: String(i[USER_KEYS.ID]),
+					label: `${i[USER_KEYS.NAME]} | ${i[USER_KEYS.ID]}${i[USER_KEYS.IS_ADMIN] ? ' (admin)' : ''}`,
+					cb: this.userRemoveCallback,
 				},
 			]),
 			[
@@ -45,19 +45,19 @@ export class UsersManager extends PageBase {
 		// await this.pager.reload();
 	}
 
-	// TODO: не передавать индекс
-	userRemoveCallback(index) {
+	userRemoveCallback = async (btnId) => {
 		const c = this.pager.c;
+		const users = c.ctx[CTX_KEYS.USERS];
+		// remove selected tag
+		const prepared = [...users];
 
-		return async () => {
-			const users = c.ctx[CTX_KEYS.USERS];
-			// remove selected tag
-			const prepared = [...users];
+		const index = prepared.findIndex((i) => i[USER_KEYS.ID] === Number(btnId));
 
-			prepared.splice(index, 1);
+		if (index < 0) return c.reply(`ERROR: Can't find user ${btnId}`);
 
-			await saveDataToKv(c, KV_KEYS.USERS, prepared);
-			await c.pager.reload();
-		};
-	}
+		prepared.splice(index, 1);
+
+		await saveDataToKv(c, KV_KEYS.USERS, prepared);
+		await c.pager.reload();
+	};
 }
