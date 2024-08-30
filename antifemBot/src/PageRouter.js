@@ -32,7 +32,7 @@ export async function makeRouter(initialPages) {
 	return router;
 }
 
-class SimpleRouter {
+class PageRouter {
 	c;
 	pages = {};
 	currentPath;

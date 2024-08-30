@@ -1,6 +1,6 @@
 import { Bot, session } from 'grammy';
 import { handleStart, prepareKvAndConfig } from './botLogic.js';
-import { makeRouter } from './SimpleRouter.js';
+import { makeRouter } from './PageRouter.js';
 import { PageMainMenu } from './PageMainMenu.js';
 import { PageConfig } from './PageConfig.js';
 import { PageTagManager } from './PageTagManager.js';

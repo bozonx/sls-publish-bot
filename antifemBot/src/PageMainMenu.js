@@ -1,5 +1,5 @@
 import { t } from './helpers.js';
-import { PageBase } from './SimpleRouter.js';
+import { PageBase } from './PageRouter.js';
 
 export class PageMainMenu extends PageBase {
 	async mount(c, payload) {
