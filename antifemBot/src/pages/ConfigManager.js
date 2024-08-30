@@ -12,7 +12,7 @@ export class ConfigManager extends PageBase {
 		if (!isAdmin) return this.pager.go('home');
 
 		this.text = t(c, 'editConfigMenuText');
-		this.menu = [[[t(c, 'toHome'), () => this.pager.go('home')]]];
+		this.menu = [[[t(c, 'toHome'), () => this.pager.go('home', null)]]];
 
 		// TODO: put it into code tag
 		return c.reply(yaml.dump(c.ctx[CTX_KEYS.CONFIG]));

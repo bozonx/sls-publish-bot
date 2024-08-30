@@ -1,14 +1,10 @@
-// TODO: remove
-
 import { t } from './helpers.js';
-import { PageBase } from './Pager.js';
+import { PageBase } from '../PageRouter.js';
 
-export class PagePubText extends PageBase {
-	async init() {
-		// only first time init on app start
-	}
-
-	async mount(c, payload) {
+export class PubContent extends PageBase {
+	async mount() {
+		const c = this.pager.c;
+		// const { state } = this.payload;
 		this.text = t(c, 'giveMeText');
 
 		this.menu = [
@@ -25,11 +21,7 @@ export class PagePubText extends PageBase {
 		];
 	}
 
-	async unmount(c) {
-		//
-	}
-
-	async message(c) {
+	async message() {
 		let payload;
 
 		console.log(2222, c.msg);

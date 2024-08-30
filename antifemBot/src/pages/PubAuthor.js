@@ -21,7 +21,7 @@ export class PagePubAuthor extends PageBase {
 		this.menu = [
 			...this.menu,
 			[[t(c, 'noAuthor'), () => this.pager.go('pub-tags')]],
-			[[t(c, 'toHome'), () => this.pager.go('home')]],
+			[[t(c, 'toHome'), () => this.pager.go('home', null)]],
 		];
 	}
 

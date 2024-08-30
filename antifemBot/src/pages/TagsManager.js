@@ -18,7 +18,7 @@ export class TagsManager extends PageBase {
 		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
 		this.menu = [
 			...generateTagsButtons(this.tags, this.tagRemoveCallback),
-			[[t(c, 'toHome'), () => this.pager.go('home')]],
+			[[t(c, 'toHome'), () => this.pager.go('home', null)]],
 		];
 	}
 

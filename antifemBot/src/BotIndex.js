@@ -5,7 +5,7 @@ import { Home } from './pages/Home.js';
 import { ConfigManager } from './pages/ConfigManager.js';
 import { TagsManager } from './pages/TagsManager.js';
 import { UsersManager } from './pages/UsersManager.js';
-// import { PubText } from './PagePubText.js';
+import { PubContent } from './pages/PubContent.js';
 import { PubAuthor } from './pages/PubAuthor.js';
 import { PubTags } from './pages/PubTags.js';
 import { PubDate } from './pages/PubDate.js';
@@ -39,10 +39,10 @@ export class BotIndex {
 
 		const router = makeRouter({
 			home: Home,
-			// 'pub-text': PagePubText,
 			'config-manager': ConfigManager,
 			'users-manager': UsersManager,
 			'tags-manager': TagsManager,
+			'pub-content': PubContent,
 			'pub-author': PubAuthor,
 			'pub-tags': PubTags,
 			'pub-date': PubDate,

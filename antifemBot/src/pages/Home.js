@@ -49,6 +49,6 @@ export class Home extends PageBase {
 			return c.reply('ERROR: Wrong type of post');
 		}
 
-		return c.pager.go('pub-author', state);
+		return c.pager.go('pub-content', state);
 	}
 }

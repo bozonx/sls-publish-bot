@@ -66,19 +66,25 @@ class PageRouter {
 		if (!pathTo) return this.c.reply('No path');
 		else if (!this.currentPage) return this.c.reply('No current page');
 
-		const { prevMenuMsgId, state: oldState } = this.currentPage.payload;
+		const { state: oldState } = this.currentPage.payload;
+		let newPayload;
+
 		await this.currentPage?.unmount();
 
 		if (!this.pages[pathTo]) return this.c.reply(`Wrong path "${pathTo}"`);
 
 		this.currentPage = this.pages[pathTo];
 
-		const newPayload = {
-			state: {
-				...(oldState || {}),
-				...(newPartialState || {}),
-			},
-		};
+		if (newPartialState === null) {
+			newPayload = {};
+		} else {
+			newPayload = {
+				state: {
+					...(oldState || {}),
+					...(newPartialState || {}),
+				},
+			};
+		}
 
 		this.currentPage.setPayload(newPayload);
 		await this.currentPage.mount();

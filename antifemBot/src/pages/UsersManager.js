@@ -8,7 +8,6 @@ export class UsersManager extends PageBase {
 
 	async mount() {
 		const c = this.pager.c;
-		// const { state } = this.payload;
 
 		this.text = t(c, 'manageUsersDescr');
 
@@ -20,7 +19,7 @@ export class UsersManager extends PageBase {
 					`${item.name} | ${item.id}${item.isAdmin ? ' (admin)' : ''}`,
 					this.userRemoveCallback(index),
 				],
-			])[[t(c, 'toHome'), () => this.pager.go('home')]],
+			])[[t(c, 'toHome'), () => this.pager.go('home', null)]],
 		];
 	}
 
