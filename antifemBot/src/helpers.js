@@ -106,7 +106,7 @@ export function nowPlusDay(plusday) {
 	return date.format('YYYY-MM-DD');
 }
 
-export function isAdmin(c, userId) {
+export function isAdminUser(c, userId) {
 	const users = c.ctx[CTX_KEYS.USERS];
 	const found = users?.find(
 		(i) => i[USER_KEYS.IS_ADMIN] && i[USER_KEYS.ID] === userId,
