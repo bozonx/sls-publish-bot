@@ -15,11 +15,12 @@ const TAG_ID_PREFIX = 'TAG-';
 export class TagsManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
+		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
 
 		this.text = t(c, 'tagsManagerDescr');
-		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+
 		this.menu = defineMenu([
-			...generateTagsButtons(this.tags, this.tagRemoveCallback, TAG_ID_PREFIX),
+			...generateTagsButtons(allTags, this.tagRemoveCallback, TAG_ID_PREFIX),
 			[
 				{
 					id: 'toHomeBtn',
@@ -36,19 +37,23 @@ export class TagsManager extends PageBase {
 		if (!c.msg.text) return c.reply('No text');
 
 		const tags = parseTagsFromInput(c.msg.text);
-		const megedTags = _.uniq([...this.tags, ...tags]).sort();
+		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const megedTags = _.uniq([...allTags, ...tags]).sort();
 
 		await saveDataToKv(c, KV_KEYS.TAGS, megedTags);
 		await this.pager.reload();
 	}
 
-	tagRemoveCallback = async () => {
+	tagRemoveCallback = async (btnId) => {
+		const c = this.pager.c;
+		const tagName = btnId.substring(TAG_ID_PREFIX.length);
+		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const indexOfTag = allTags.indexOf(tagName);
+
 		// remove selected tag
-		const prepared = [...this.tags];
+		allTags.splice(indexOfTag, 1);
 
-		// prepared.splice(index, 1);
-
-		await saveDataToKv(this.c, KV_KEYS.TAGS, prepared);
+		await saveDataToKv(c, KV_KEYS.TAGS, allTags);
 		await c.pager.reload();
 	};
 }

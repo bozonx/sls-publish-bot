@@ -76,12 +76,12 @@ export async function saveDataToKv(c, key, value) {
 	}
 }
 
-export function generateTagsButtons(tags, cb) {
+export function generateTagsButtons(tags, cb, idPrefix) {
 	const menu = [];
 
 	for (const tag of tags) {
 		// TODO: split to rows
-		menu.push([{ id: tag, label: tag, cb }]);
+		menu.push([{ id: idPrefix + tag, label: tag, cb }]);
 	}
 
 	return menu;
