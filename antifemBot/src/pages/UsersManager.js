@@ -4,12 +4,10 @@ import { saveDataToKv } from './helpers.js';
 import { KV_KEYS } from './constants.js';
 
 export class UsersManager extends PageBase {
-	tags;
-
 	async mount() {
 		const c = this.pager.c;
 
-		this.text = t(c, 'manageUsersDescr');
+		this.text = t(c, 'usersManagerDescr');
 
 		const users = c.ctx[CTX_KEYS.USERS];
 
@@ -19,7 +17,8 @@ export class UsersManager extends PageBase {
 					`${item.name} | ${item.id}${item.isAdmin ? ' (admin)' : ''}`,
 					this.userRemoveCallback(index),
 				],
-			])[[t(c, 'toHome'), () => this.pager.go('home', null)]],
+			]),
+			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
 		];
 	}
 

@@ -1,52 +1,28 @@
 import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
+import { makeContentState } from './helpers.js';
 
 export class PubContent extends PageBase {
 	async mount() {
 		const c = this.pager.c;
-		// const { state } = this.payload;
-		this.text = t(c, 'giveMeText');
+
+		this.text = t(c, 'uploadContentDescr');
 
 		this.menu = [
-			// row
-			[
-				// button
-				[
-					t(c, 'toHome'),
-					(c) => {
-						c.pager.go('home');
-					},
-				],
-			],
+			// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
+			// TODO: либо вобще ничего нет
+			[[t(c, 'next'), () => this.pager.go('pub-author')]],
+			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
 		];
 	}
 
 	async message() {
-		let payload;
+		const c = this.pager.c;
 
-		console.log(2222, c.msg);
+		const state = makeContentState(c);
 
-		// TODO: captions parse to md with entities
-		// TODO: media group
+		if (!state) return c.reply('ERROR: Wrong type of post');
 
-		if (c.msg.video) {
-			payload = {
-				text: c.msg.caption,
-				video: c.msg.video,
-			};
-		} else if (c.msg.photo) {
-			payload = {
-				text: c.msg.caption,
-				photo: c.msg.photo,
-			};
-		} else if (c.msg.text) {
-			payload = {
-				text: c.msg.text,
-			};
-		} else {
-			return c.reply('ERROR: Wrong type of post');
-		}
-
-		await c.pager.go('pub-author', payload);
+		return this.pager.go('pub-author', state);
 	}
 }

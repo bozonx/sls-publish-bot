@@ -8,7 +8,7 @@ export class PagePubAuthor extends PageBase {
 		const c = this.pager.c;
 		const authors = c.ctx[CTX_KEYS.APP_CFG][APP_CFG_KEYS.AUTHORS];
 
-		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectAuthor')}`;
+		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectAuthorDescr')}`;
 		this.menu = [];
 
 		if (authors?.length) {
@@ -20,8 +20,8 @@ export class PagePubAuthor extends PageBase {
 
 		this.menu = [
 			...this.menu,
-			[[t(c, 'noAuthor'), () => this.pager.go('pub-tags')]],
-			[[t(c, 'toHome'), () => this.pager.go('home', null)]],
+			[[t(c, 'withoutAuthorBtn'), () => this.pager.go('pub-tags')]],
+			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
 		];
 	}
 

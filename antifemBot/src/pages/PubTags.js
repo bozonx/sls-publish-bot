@@ -1,97 +1,75 @@
+import _ from 'lodash';
 import { t } from './helpers.js';
-import { PageBase } from './Pager.js';
+import { PageBase } from '../PageRouter.js';
 import {
 	makePayloadPreview,
-	loadTags,
 	generateTagsButtons,
 	parseTagsFromInput,
 } from './helpers.js';
-import { KV_TAGS } from './constants.js';
+import { KV_KEYS } from './constants.js';
 
-export class PagePubTags extends PageBase {
+export class PubTags extends PageBase {
+	// all the tags from storage
 	tags;
-	payload;
+	// tags which are shown on buttons
+	tagsButtons;
 
-	async init() {
-		// only first time init on app start
-	}
+	async mount() {
+		const c = this.pager.c;
 
-	async mount(c, payload) {
-		this.payload = payload;
 		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectTags')}`;
-		this.tags = await loadTags(c);
-
-		if (typeof this.tags === 'undefined') {
-			return c.reply(`ERROR: Can't read tags. ${e}`);
-		}
+		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		this.tagsButtons = this.tags.filter(
+			(i) => !this.payload.state?.tags?.includes(i),
+		);
 
 		this.menu = [
-			// TODO: exclude selected in payload
-			...generateTagsButtons(c, this.tags, (tagIndex) => async (c) => {
-				c.pager.go('pub-tags', {
-					...payload,
-					tags: [...(payload.tags || []), c.msg.text],
-				});
-			}),
+			...generateTagsButtons(c, this.tagsButtons, this.tagSelectCallback),
 			[
-				// button
-				[
-					t(c, 'toHome'),
-					(c) => {
-						c.pager.go('home');
-					},
-				],
-				[
-					t(c, 'back'),
-					(c) => {
-						c.pager.go('pub-author', payload);
-					},
-				],
-
-				[
-					t(c, 'next'),
-					(c) => {
-						c.pager.go('pub-date', payload);
-					},
-				],
+				[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
+				[[t(c, 'back'), () => this.pager.go('pub-author')]],
+				[[t(c, 'next'), () => this.pager.go('pub-date')]],
 			],
 		];
 
-		if (payload.tags) {
+		if (this.payload.state?.tags?.length) {
 			this.menu.push([
-				[
-					t(c, 'cleartags'),
-					(c) => {
-						const { tags, ...restPayload } = payload;
-
-						c.pager.go('pub-tags', restPayload);
-					},
-				],
+				[t(c, 'clearTagsBtn'), () => c.pager.go('pub-tags', { tags: null })],
 			]);
 		}
 	}
 
-	async unmount(c) {
-		//
-	}
-
 	async message(c) {
+		const c = this.pager.c;
+
 		if (!c.msg.text) return c.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
-		// TODO: exclude deplicates
-		const allTags = [...this.tags, ...newTags].sort();
-		const tagsStr = JSON.stringify(allTags);
+		const megedAllTags = _.uniq([...this.tags, ...newTags]).sort();
+		// save new tags to storage
+		await saveDataToKv(this.c, KV_KEYS.TAGS, megedAllTags);
 
-		try {
-			await c.config.KV.put(KV_TAGS, tagsStr);
-		} catch (e) {
-			return c.reply(`ERROR: Can't save tags. ${e}`);
-		}
+		const mergedSelectedTags = _.uniq([
+			...(this.payload.tags || {}),
+			...newTags,
+		]).sort();
 
 		await c.pager.go('pub-date', {
-			...this.payload,
-			tags: allTags,
+			tags: mergedSelectedTags,
 		});
 	}
+
+	tagSelectCallback = (index) => {
+		return async () => {
+			const c = this.pager.c;
+			const megedAllTags = _.uniq([
+				...(this.payload.tags || {}),
+				...newTags,
+			]).sort();
+
+			c.pager.reload({
+				tags: megedAllTags,
+			});
+		};
+	};
 }

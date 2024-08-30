@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
 import {
@@ -14,11 +15,11 @@ export class TagsManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 
-		this.text = t(c, 'manageTags');
+		this.text = t(c, 'tagsManagerDescr');
 		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
 		this.menu = [
 			...generateTagsButtons(this.tags, this.tagRemoveCallback),
-			[[t(c, 'toHome'), () => this.pager.go('home', null)]],
+			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
 		];
 	}
 
@@ -28,7 +29,7 @@ export class TagsManager extends PageBase {
 		if (!c.msg.text) return c.reply('No text');
 
 		const tags = parseTagsFromInput(c.msg.text);
-		const megedTags = [...this.tags, ...tags].sort();
+		const megedTags = _.uniq([...this.tags, ...tags]).sort();
 
 		await saveDataToKv(this.c, KV_KEYS.TAGS, megedTags);
 		await this.pager.reload();
