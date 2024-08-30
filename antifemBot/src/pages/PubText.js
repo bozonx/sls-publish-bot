@@ -1,3 +1,5 @@
+// TODO: remove
+
 import { t } from './helpers.js';
 import { PageBase } from './Pager.js';
 

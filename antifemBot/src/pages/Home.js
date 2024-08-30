@@ -25,4 +25,33 @@ export class PageHome extends PageBase {
 			];
 		}
 	}
+
+	async message(c) {
+		let state;
+
+		// console.log(2222, c.msg);
+
+		// TODO: captions parse to md with entities
+		// TODO: media group
+
+		if (c.msg.video) {
+			state = {
+				text: c.msg.caption,
+				video: c.msg.video,
+			};
+		} else if (c.msg.photo) {
+			state = {
+				text: c.msg.caption,
+				photo: c.msg.photo,
+			};
+		} else if (c.msg.text) {
+			state = {
+				text: c.msg.text,
+			};
+		} else {
+			return c.reply('ERROR: Wrong type of post');
+		}
+
+		return c.pager.go('pub-author', state);
+	}
 }
