@@ -30,10 +30,22 @@ export function makePayloadPreview(c, payload = {}) {
 
 	if (payload.author) res += `${t(c, 'author')}: ${payload.author}\n`;
 	if (payload.tags) res += `${t(c, 'tags')}: ${payload.tags.join(', ')}\n`;
-	// TODO: преобразовать
-	if (payload.date) res += `${t(c, 'date')}: ${payload.date}\n`;
+	if (payload.date)
+		res += `${t(c, 'date')}: ${dayjs(payload.date).format('DD.MM.YYYY')}\n`;
 
-	return res;
+	if (payload.hour) {
+		const hour = payload.hour < 10 ? `0{payload.hour}` : payload.hour;
+
+		res += `${t(c, 'time')}: ${hour}:00 (${t(c, 'msk')})\n`;
+	}
+
+	if (payload.template)
+		res += `${t(c, 'template')}: ${t(c, 'template-' + payload.template)}\n`;
+
+	if (typeof payload.preview !== 'undefined')
+		res += `${t(c, 'urlPreview')}: ${payload.preview ? '✅' : '❌'}\n`;
+
+	return res.trim();
 }
 
 export async function loadTags(c) {

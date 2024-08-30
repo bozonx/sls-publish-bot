@@ -27,7 +27,7 @@ export class PagePubTags extends PageBase {
 
 		this.menu = [
 			// TODO: exclude selected in payload
-			...generateTagsButtons(c, this.tags, async (c) => {
+			...generateTagsButtons(c, this.tags, (tagIndex) => async (c) => {
 				c.pager.go('pub-tags', {
 					...payload,
 					tags: [...(payload.tags || []), c.msg.text],

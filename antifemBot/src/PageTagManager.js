@@ -1,6 +1,10 @@
 import { t } from './helpers.js';
 import { PageBase } from './Pager.js';
-import { loadTags, parseTagsFromInput } from './helpers.js';
+import {
+	loadTags,
+	parseTagsFromInput,
+	generateTagsButtons,
+} from './helpers.js';
 import { KV_TAGS } from './constants.js';
 
 export class PageTagManager extends PageBase {
@@ -20,9 +24,9 @@ export class PageTagManager extends PageBase {
 		}
 
 		this.menu = [
-			...generateTagsButtons(c, this.tags, async (c) => {
+			...generateTagsButtons(c, this.tags, (tagIndex) => async (c) => {
 				// remove selected tag
-				const preparedTags = [...tags];
+				const preparedTags = [...this.tags];
 
 				preparedTags.splice(tagIndex, 1);
 
@@ -32,7 +36,7 @@ export class PageTagManager extends PageBase {
 					return c.reply(`ERROR: Can't save tag. ${e}`);
 				}
 
-				c.pager.go('pub-author', payload);
+				await c.pager.go('pub-author', payload);
 			}),
 			// row
 			[

@@ -28,6 +28,7 @@ export default {
 		tags: 'Тэги',
 		next: 'Далее',
 		date: 'Дата',
+		time: 'Время',
 		manageTagsBtn: 'Управлять тэгами',
 		manageTags:
 			'Выберете тэги которые нужно удалить. Чтобы добавить новый тэг - напишите его. Он будет переведён в snake_case. Символ # не нужен',
@@ -35,5 +36,14 @@ export default {
 		today: 'Сегодня',
 		tomorrow: 'Завтра',
 		afterTomorrow: 'Послезавтра',
+		'template-default': 'Стандартный шаблон',
+		'template-byFollower': 'Шаблон "От подписчика"',
+		'template-noFooter': 'Без футера',
+		previewOff: 'Выключить link preview',
+		previewOn: 'Включить link preview',
+		template: 'Шаблон',
+		urlPreview: 'Предпросмотр ссылки',
+		msk: 'МСК',
+		pubPlan: 'Запланировать публикацию',
 	},
 };

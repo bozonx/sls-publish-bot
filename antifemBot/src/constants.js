@@ -6,6 +6,15 @@ export const APP_CONFIG_KEYS = {
 	AUTHORS: 'AUTHORS',
 	TEMPLATES: 'TEMPLATES',
 };
+export const TEMPLATE_NAMES = {
+	default: 'default',
+	byFollower: 'byFollower',
+	noFooter: 'noFooter',
+};
+export const DEFAULT_STATE = {
+	preview: true,
+	template: TEMPLATE_NAMES.default,
+};
 
 const footer = '[Антифеминизм | Маскулизм. подписывайся]() | [донат]()';
 
@@ -13,8 +22,13 @@ export const APP_INITIAL_CONFIG = {
 	[APP_CONFIG_KEYS.ALLOWED_USER_IDS]: [],
 	[APP_CONFIG_KEYS.AUTHORS]: ['Айван Кей'],
 	[APP_CONFIG_KEYS.TEMPLATES]: {
-		common: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
-		byFollower: ['От подписчика ${AUTHOR}:', '${CONTENT}', '${TAGS}', footer],
-		noFooter: ['${CONTENT}', '${AUTHOR}', '${TAGS}'],
+		[TEMPLATE_NAMES.common]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
+		[TEMPLATE_NAMES.byFollower]: [
+			'От подписчика ${AUTHOR}:',
+			'${CONTENT}',
+			'${TAGS}',
+			footer,
+		],
+		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}', '${AUTHOR}', '${TAGS}'],
 	},
 };
