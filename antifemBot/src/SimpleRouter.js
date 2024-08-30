@@ -2,15 +2,37 @@ import { InlineKeyboard } from 'grammy';
 
 export class PageBase {
 	pager;
+	path;
 	text;
 	menu = [];
 
-	constructor(pager) {
+	constructor(pager, path) {
 		this.pager = pager;
+		this.path = path;
 	}
+
+	// It runs only first time init on app start
+	async init() {}
+
+	// It runs when a route has been changed
+	async mount(c, payload) {}
+
+	// It runs when a route is changing
+	async unmount(c) {}
+
+	// It runs on each income message while this page is active
+	async message(c) {}
 }
 
-export class Pager {
+export async function makeRouter(initialPages) {
+	const router = new SimpleRouter(initialPages);
+
+	await router.init();
+
+	return router;
+}
+
+class SimpleRouter {
 	c;
 	pages = {};
 	currentPath;
@@ -19,7 +41,7 @@ export class Pager {
 
 	constructor(initialPages) {
 		for (const pathTo of Object.keys(initialPages)) {
-			this.pages[pathTo] = new initialPages[pathTo](this);
+			this.pages[pathTo] = new initialPages[pathTo](this, pathTo);
 		}
 	}
 
@@ -27,10 +49,6 @@ export class Pager {
 		for (const pathTo of Object.keys(this.pages)) {
 			await this.pages[pathTo].init();
 		}
-	}
-
-	register(pathTo, page) {
-		this.pages[pathTo] = page;
 	}
 
 	async go(pathTo, payload) {

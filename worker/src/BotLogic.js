@@ -9,7 +9,7 @@ export function t(ctx, msg) {
 
 	if (!(lang in locales)) lang = 'en';
 
-	return locales[lang][msg];
+	return locales[lang][msg] || msg;
 }
 
 export async function handleStart(ctx) {

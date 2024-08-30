@@ -1,3 +1,4 @@
+// for webhook
 export const TG_BOT_URL = '/bot';
 export const SESSION_PARAM = 'SESSION_PARAM';
 export const JWT_COOKIE_NAME = 'apisessid';

@@ -10,24 +10,22 @@ export default {
 			request.method === 'POST' &&
 			parseUrl(request.url).pathname === TG_BOT_URL
 		) {
+			// webhook request from Telegram - pass it to Grammy
 			const app = new BotIndex(env.TG_TOKEN, env.MAIN_ADMIN_TG_USER_ID, env.KV);
 
 			await app.init();
 
 			return webhookCallback(app.bot, 'cloudflare-mod')(request);
 		} else {
-			if (parseUrl(request.url).pathname === '/setwh') {
-				const res = await setWebhook(c.env);
-				const jsonBody = await res.json();
+			// manually set webhook
+			if (parseUrl(request.url).pathname === '/api/setwh') {
+				const res = await setWebhook(env);
 
-				return new Response(jsonBody);
+				return new Response(await res.text());
 			}
 		}
 
-		return new Response({
-			body: 'Not found',
-			status: 404,
-		});
+		return new Response('Not found', { status: 404 });
 	},
 
 	async scheduled(event, env, ctx) {

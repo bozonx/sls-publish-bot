@@ -1,12 +1,8 @@
 export default {
 	ru: {
-		// appNotConfigured: 'Приложение не сконфигурировано',
-		// welcomeRegistered: 'Вы только что были зарегистрированы. Добро пожаловать!',
 		welcomeAgain: 'И снова здравствуйте!',
 		youAreNotRegistered:
 			'Вы не зарегистрированы, перешлите это сообщение админу',
-		// itemSavedToInbox: 'Сохранено во входящие',
-		// loginToSite: 'Войти на сайт',
 		publishPost: 'Опубликовать пост',
 		editConfigBtn: 'Редактирование конфига',
 		editConfigMenuText:
@@ -36,8 +32,8 @@ export default {
 		today: 'Сегодня',
 		tomorrow: 'Завтра',
 		afterTomorrow: 'Послезавтра',
-		'template-default': 'Стандартный шаблон',
-		'template-byFollower': 'Шаблон "От подписчика"',
+		'template-default': 'Основной',
+		'template-byFollower': 'От подписчика',
 		'template-noFooter': 'Без футера',
 		previewOff: 'Выключить link preview',
 		previewOn: 'Включить link preview',
@@ -45,5 +41,7 @@ export default {
 		urlPreview: 'Предпросмотр ссылки',
 		msk: 'МСК',
 		pubPlan: 'Запланировать публикацию',
+		mediaCount: 'Кол. медиа файлов',
+		textLength: 'Кол. символов текста',
 	},
 };

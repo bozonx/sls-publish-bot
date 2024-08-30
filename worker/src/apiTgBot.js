@@ -7,9 +7,8 @@ const app = new Hono();
 // manually set tg webhook
 app.get('/setwh', async (c) => {
 	const res = await setWebhook(c.env);
-	const jsonBody = await res.json();
 
-	return c.json(jsonBody);
+	return c.json(await res.text());
 });
 
 app.get('/users/by-tg-id/:tgid', async (c) => {

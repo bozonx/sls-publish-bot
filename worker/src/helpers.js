@@ -2,10 +2,14 @@ import _ from 'lodash';
 import { sign } from 'hono/jwt';
 import { HTTPException } from 'hono/http-exception';
 import { setCookie } from 'hono/cookie';
-import { TG_BOT_URL, JWT_COOKIE_NAME, AUTH_COOKIE_BASE_PARAMS } from './constants.js';
+import {
+	TG_BOT_URL,
+	JWT_COOKIE_NAME,
+	AUTH_COOKIE_BASE_PARAMS,
+} from './constants.js';
 
-export async function setWebhook(env) {
-	const url = `https://api.telegram.org/bot${env.TG_TOKEN}/setWebhook?url=https://${env.WORKER_HOST}${TG_BOT_URL}`;
+export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
+	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
 
 	return fetch(url);
 }
@@ -24,7 +28,9 @@ export function normalizeNumbers(obj) {
 	const res = {};
 
 	for (const index of Object.keys(obj)) {
-		res[index] = Number.isNaN(Number(obj[index])) ? obj[index] : Number(obj[index]);
+		res[index] = Number.isNaN(Number(obj[index]))
+			? obj[index]
+			: Number(obj[index]);
 	}
 
 	return res;

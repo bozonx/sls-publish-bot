@@ -1,8 +1,21 @@
+// for webhook
 export const TG_BOT_URL = '/bot';
-export const KV_CONFIG = 'config';
-export const KV_TAGS = 'tags';
+export const KV_KEYS = {
+	USERS: 'USERS',
+	TAGS: 'TAGS',
+	CONFIG: 'CONFIG',
+};
+export const CTX_KEYS = {
+	APP_CFG: 'APP_CFG',
+	USERS: 'USERS',
+	KV: 'KV',
+};
+export const USER_KEYS = {
+	ID: 'ID',
+	NAME: 'NAME',
+	IS_ADMIN: 'IS_ADMIN',
+};
 export const APP_CONFIG_KEYS = {
-	ALLOWED_USER_IDS: 'ALLOWED_USER_IDS',
 	AUTHORS: 'AUTHORS',
 	TEMPLATES: 'TEMPLATES',
 };
@@ -16,10 +29,10 @@ export const DEFAULT_STATE = {
 	template: TEMPLATE_NAMES.default,
 };
 
-const footer = '[Антифеминизм | Маскулизм. подписывайся]() | [донат]()';
+const footer =
+	'[Антифеминизм | Маскулизм. подписывайся](https://t.me/antifem_battle) | [донат](https://t.me/antifem_battle/78)';
 
 export const APP_INITIAL_CONFIG = {
-	[APP_CONFIG_KEYS.ALLOWED_USER_IDS]: [],
 	[APP_CONFIG_KEYS.AUTHORS]: ['Айван Кей'],
 	[APP_CONFIG_KEYS.TEMPLATES]: {
 		[TEMPLATE_NAMES.common]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
