@@ -1,16 +1,16 @@
 import { Bot, session } from 'grammy';
 import { handleStart, prepareKvAndConfig } from './botLogic.js';
 import { makeRouter } from './PageRouter.js';
-import { PageHome } from './pages/Home.js';
+import { Home } from './pages/Home.js';
 import { ConfigManager } from './pages/ConfigManager.js';
-import { PageTagManager } from './pages/TagManager.js';
-// import { PagePubText } from './PagePubText.js';
-import { PagePubAuthor } from './pages/PubAuthor.js';
-import { PagePubTags } from './pages/PubTags.js';
-import { PagePubDate } from './pages/PubDate.js';
-import { PagePubHour } from './pages/PubHour.js';
-import { PagePubConfirm } from './pages/PubConfirm.js';
-import { UserManager } from './pages/UserManager.js';
+import { TagsManager } from './pages/TagsManager.js';
+import { UsersManager } from './pages/UsersManager.js';
+// import { PubText } from './PagePubText.js';
+import { PubAuthor } from './pages/PubAuthor.js';
+import { PubTags } from './pages/PubTags.js';
+import { PubDate } from './pages/PubDate.js';
+import { PubHour } from './pages/PubHour.js';
+import { PubConfirm } from './pages/PubConfirm.js';
 
 export class BotIndex {
 	bot;
@@ -38,16 +38,16 @@ export class BotIndex {
 		// );
 
 		const router = makeRouter({
-			home: PageHome,
+			home: Home,
 			// 'pub-text': PagePubText,
 			'config-manager': ConfigManager,
-			'user-manager': UserManager,
-			'tag-manager': PageTagManager,
-			'pub-author': PagePubAuthor,
-			'pub-tags': PagePubTags,
-			'pub-date': PagePubDate,
-			'pub-hour': PagePubHour,
-			'pub-confirm': PagePubConfirm,
+			'users-manager': UsersManager,
+			'tags-manager': TagsManager,
+			'pub-author': PubAuthor,
+			'pub-tags': PubTags,
+			'pub-date': PubDate,
+			'pub-hour': PubHour,
+			'pub-confirm': PubConfirm,
 		});
 
 		this.bot.use(router.middleware);

@@ -8,14 +8,14 @@ import {
 } from './helpers.js';
 import { KV_KEYS } from './constants.js';
 
-export class UserManager extends PageBase {
+export class TagsManager extends PageBase {
 	tags;
 
 	async mount() {
 		const c = this.pager.c;
 		// const { state } = this.payload;
 
-		this.text = t(c, 'manageUsersDescr');
+		this.text = t(c, 'manageTags');
 		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
 		this.menu = [
 			...generateTagsButtons(this.tags, this.tagRemoveCallback),

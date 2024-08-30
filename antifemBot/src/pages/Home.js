@@ -2,20 +2,22 @@ import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
 import { isAdminUser } from './helpers.js';
 
-export class PageHome extends PageBase {
+export class Home extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 		const isAdmin = isAdminUser(c.msg.chat.id);
 
 		this.text = t(c, 'homeDescr');
 
-		this.menu = [[[t(c, 'manageTagsBtn'), () => this.pager.go('tag-manager')]]];
+		this.menu = [
+			[[t(c, 'manageTagsBtn'), () => this.pager.go('tags-manager')]],
+		];
 
 		if (isAdmin) {
 			this.menu = [
 				...this.menu,
 				[t(c, 'editConfigBtn'), () => this.pager.go('config-manager')],
-				[t(c, 'manageUsersBtn'), () => this.pager.go('user-manager')],
+				[t(c, 'manageUsersBtn'), () => this.pager.go('users-manager')],
 			];
 		}
 	}
