@@ -9,13 +9,13 @@ export class PageHome extends PageBase {
 
 		this.text = t(c, 'homeDescr');
 
-		this.menu = [[[t(c, 'manageTagsBtn'), () => c.pager.go('tag-manager')]]];
+		this.menu = [[[t(c, 'manageTagsBtn'), () => this.pager.go('tag-manager')]]];
 
 		if (isAdmin) {
 			this.menu = [
 				...this.menu,
-				[t(c, 'editConfigBtn'), () => c.pager.go('config')],
-				[t(c, 'manageUsersBtn'), () => c.pager.go('users')],
+				[t(c, 'editConfigBtn'), () => this.pager.go('config')],
+				[t(c, 'manageUsersBtn'), () => this.pager.go('users')],
 			];
 		}
 	}

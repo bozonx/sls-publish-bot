@@ -13,22 +13,16 @@ export async function handleStart(c) {
 }
 
 export async function prepareKvAndConfig(MAIN_ADMIN_TG_USER_ID, KV) {
-	const appCfgJson = await KV.get(KV_KEYS.CONFIG);
-	const usersJson = await KV.get(KV_KEYS.USERS);
-	let appCfg;
-	let users;
+	let appCfg = await loadDataFromKv(c, KV_KEYS.CONFIG, APP_INITIAL_CONFIG);
+	let users = await loadDataFromKv(c, KV_KEYS.USERS);
 
-	if (appCfgJson) {
-		appCfg = JSON.parse(appCfgJson);
-	} else {
+	if (!appCfg) {
 		appCfg = APP_INITIAL_CONFIG;
 
 		await KV.put(KV_KEYS.CONFIG, JSON.stringify(appCfg));
 	}
 
-	if (usersJson) {
-		users = JSON.parse(appCfgJson);
-	} else {
+	if (!users) {
 		users = [
 			{
 				[USER_KEYS.ID]: MAIN_ADMIN_TG_USER_ID,

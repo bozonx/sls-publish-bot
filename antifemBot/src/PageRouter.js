@@ -63,7 +63,8 @@ class PageRouter {
 
 	// TODO: как передать prevMenuMsgId ???
 	async go(pathTo, newPartialState) {
-		if (!this.currentPage) return this.c.reply('No current page');
+		if (!pathTo) return this.c.reply('No path');
+		else if (!this.currentPage) return this.c.reply('No current page');
 
 		const { prevMenuMsgId, state: oldState } = this.currentPage.payload;
 		await this.currentPage?.unmount();
@@ -89,6 +90,10 @@ class PageRouter {
 		await this._renderMenu(newPayload);
 
 		// The end of request
+	}
+
+	async reload(newPartialState) {
+		this.go(this.currentPage?.path, newPartialState);
 	}
 
 	middleware = async (c, next) => {

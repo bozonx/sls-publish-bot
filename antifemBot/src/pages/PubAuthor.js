@@ -4,33 +4,32 @@ import { CTX_KEYS, APP_CFG_KEYS } from './constants.js';
 import { makePayloadPreview } from './helpers.js';
 
 export class PagePubAuthor extends PageBase {
-	async mount(state) {
+	async mount() {
 		const c = this.pager.c;
 		const authors = c.ctx[CTX_KEYS.APP_CFG][APP_CFG_KEYS.AUTHORS];
 
-		this.state = state;
 		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectAuthor')}`;
 		this.menu = [];
 
 		if (authors?.length) {
 			// TODO: разбить по 2 шт на строку
 			for (const author of authors) {
-				this.menu.push([
-					[author, (p) => c.pager.go(p, 'pub-tags', { author })],
-				]);
+				this.menu.push([[author, () => this.pager.go('pub-tags', { author })]]);
 			}
 		}
 
 		this.menu = [
 			...this.menu,
-			[[t(c, 'noAuthor'), (p) => c.pager.go(p, 'pub-tags')]],
-			[[t(c, 'toHome'), (p) => c.pager.go(p, 'home')]],
+			[[t(c, 'noAuthor'), () => this.pager.go('pub-tags')]],
+			[[t(c, 'toHome'), () => this.pager.go('home')]],
 		];
 	}
 
 	async message(c) {
-		await c.pager.go({ state: this.state }, 'pub-tags', {
-			author: c.msg.text,
-		});
+		const c = this.pager.c;
+
+		if (!c.msg.text) return;
+
+		await this.pager.go('pub-tags', { author: c.msg.text.trim() });
 	}
 }

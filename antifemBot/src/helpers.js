@@ -56,21 +56,27 @@ export function makePayloadPreview(c, state = {}) {
 	return res.trim();
 }
 
-// TODO: review
-export async function loadTags(c) {
+export async function loadDataFromKv(c, key, defaultValue) {
 	let tagsStr;
 
 	try {
-		tagsStr = await c.config.KV.get(KV_KEYS.TAGS);
+		tagsStr = await c.ctx[CTX_KEYS.KV].get(key);
 	} catch (e) {
-		return;
+		throw new Error(`ERROR: Can't load value of "${key}": ${e}`);
 	}
 
-	return tagsStr ? JSON.parse(tagsStr) : [];
+	return tagsStr ? JSON.parse(tagsStr) : defaultValue;
 }
 
-// TODO: review
-export function generateTagsButtons(c, tags, cb) {
+export async function saveDataToKv(c, key, value) {
+	try {
+		await c.ctx[CTX_KEYS.KV].put(key, JSON.stringify(value));
+	} catch (e) {
+		throw new Error(`ERROR: Can't save value of "${key}": ${e}`);
+	}
+}
+
+export function generateTagsButtons(tags, cb) {
 	const menu = [];
 
 	for (const tagIndex in tags) {

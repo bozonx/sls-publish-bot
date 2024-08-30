@@ -1,72 +1,55 @@
 import { t } from './helpers.js';
-import { PageBase } from './Pager.js';
+import { PageBase } from '../PageRouter.js';
 import {
-	loadTags,
+	loadDataFromKv,
+	saveDataToKv,
 	parseTagsFromInput,
 	generateTagsButtons,
 } from './helpers.js';
-import { KV_TAGS } from './constants.js';
+import { KV_KEYS, CTX_KEYS } from './constants.js';
 
 export class PageTagManager extends PageBase {
 	tags;
 
-	async init() {
-		// only first time init on app start
-	}
+	async mount() {
+		const c = this.pager.c;
+		// const { state } = this.payload;
 
-	async mount(c, payload) {
 		this.text = t(c, 'manageTags');
-		this.menu = [];
-		this.tags = await loadTags(c);
-
-		if (typeof this.tags === 'undefined') {
-			return c.reply(`ERROR: Can't read tags. ${e}`);
-		}
-
+		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
 		this.menu = [
-			...generateTagsButtons(c, this.tags, (tagIndex) => async (c) => {
-				// remove selected tag
-				const preparedTags = [...this.tags];
-
-				preparedTags.splice(tagIndex, 1);
-
-				try {
-					await c.config.KV.put(KV_TAGS, JSON.stringify(preparedTags));
-				} catch (e) {
-					return c.reply(`ERROR: Can't save tag. ${e}`);
-				}
-
-				await c.pager.go('pub-author', payload);
-			}),
-			// row
-			[
-				// button
-				[
-					t(c, 'toHome'),
-					(c) => {
-						c.pager.go('home');
-					},
-				],
-			],
+			...generateTagsButtons(this.tags, this.tagRemoveCallback),
+			[[t(c, 'toHome'), () => this.pager.go('home')]],
 		];
 	}
 
-	async unmount(c) {
-		//
-	}
+	async message() {
+		const c = this.pager.c;
 
-	async message(c) {
 		if (!c.msg.text) return c.reply('No text');
 
 		const tags = parseTagsFromInput(c.msg.text);
-		const tagsStr = JSON.stringify([...this.tags, ...tags].sort());
+		const megedTags = [...this.tags, ...tags].sort();
+		const tagsStr = JSON.stringify(megedTags);
 
 		try {
-			await c.config.KV.put(KV_TAGS, tagsStr);
+			await c.ctx[CTX_KEYS.KV].put(KV_KEYS.TAGS, tagsStr);
 		} catch (e) {
 			return c.reply(`ERROR: Can't save tags. ${e}`);
 		}
 
-		await c.pager.go('tag-manager');
+		await this.pager.reload();
 	}
+
+	tagRemoveCallback = (tagIndex) => {
+		return async () => {
+			// remove selected tag
+			const preparedTags = [...this.tags];
+
+			preparedTags.splice(tagIndex, 1);
+
+			await saveDataToKv(this.c, KV_KEYS.TAGS, preparedTags);
+			await c.pager.go('pub-author', payload);
+		};
+	};
 }
