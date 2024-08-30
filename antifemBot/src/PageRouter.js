@@ -5,6 +5,7 @@ const QUERY_MARKER = 'PageRouter';
 export class PageBase {
 	pager;
 	path;
+	// description of menu
 	text;
 	menu = [];
 
@@ -37,9 +38,11 @@ export async function makeRouter(initialPages) {
 class PageRouter {
 	c;
 	pages = {};
-	currentPath;
 	currentPage;
-	prevMenuMessageId;
+
+	get currentPath() {
+		return this.currentPath?.path;
+	}
 
 	constructor(initialPages) {
 		for (const pathTo of Object.keys(initialPages)) {
@@ -53,23 +56,21 @@ class PageRouter {
 		}
 	}
 
-	async go(pathTo, state) {
+	// TODO: как передать prevMenuMsgId ???
+	async go(pathTo, { prevMenuMsgId, state }) {
 		await this.currentPage?.unmount(this.c);
 
 		if (!this.pages[pathTo]) return this.c.reply(`Wrong path "${pathTo}"`);
 
-		this.currentPath = pathTo;
 		this.currentPage = this.pages[pathTo];
 
-		await this.currentPage.mount(this.c, payload);
-
+		await this.currentPage.mount(this.c, state);
 		// remove prev menu message
-		if (this.prevMenuMessageId) {
-			// TODO: Это должно быть по сессиям !!!!
-			await this.c.api.deleteMessage(this.c.chatId, this.prevMenuMessageId);
+		if (prevMenuMsgId) {
+			await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
 		}
 
-		await this._renderMenu();
+		await this._renderMenu(state);
 
 		// The end of request
 	}
@@ -84,45 +85,47 @@ class PageRouter {
 	_handleQueryData = async (c) => {
 		// The start of request
 		const data = c.update.callback_query.data;
-		const [marker, pathTo, rowIndex, btnIndex, ...stateRest] = data.split('|');
+		const [marker, pathTo, rowIndex, btnIndex, ...payloadRest] =
+			data.split('|');
 
 		if (marker !== QUERY_MARKER) return;
 
-		const state = (state?.length && JSON.parse(stateRest.join('|'))) || [];
-
-		await this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](c, state);
+		const payload = (state?.length && JSON.parse(payloadRest.join('|'))) || [];
+		// run menu button handler
+		return this.pages[pathTo]?.menu?.[rowIndex]?.[btnIndex]?.[1](c, payload);
 	};
 
-	// TODO: remake!!!!
-	_handleMessage = async (c) => {
-		await this.currentPage?.message?.(c);
+	_handleMessage = (c) => {
+		return this.currentPage?.message?.(c);
 	};
 
-	// TODO: remake!!!!
-	async _renderMenu() {
+	async _renderMenu(state) {
 		const menu = this.currentPage?.menu;
 
 		if (!menu) return;
 
-		const kb = new InlineKeyboard();
+		const keyboard = new InlineKeyboard();
 
 		for (const rowIndex in menu) {
 			for (const btnIndex in menu[rowIndex]) {
 				const [text] = menu[rowIndex][btnIndex];
+				// TODO: как передать message_id ???
+				const payloadStr = JSON.stringify({ state });
 
-				kb.text(
+				keyboard.text(
 					text,
-					`${QUERY_MARKER}|${this.currentPath}|${rowIndex}|${btnIndex}`,
+					`${QUERY_MARKER}|${this.currentPath}|${rowIndex}|${btnIndex}|${payloadStr}`,
 				);
 			}
 
-			kb.row();
+			keyboard.row();
 		}
 
 		const { message_id } = await this.c.reply(this.currentPage.text, {
-			reply_markup: kb,
+			reply_markup: keyboard,
 		});
 
-		this.prevMenuMessageId = message_id;
+		// TODO: как передать message_id ???
+		// this.prevMenuMessageId = message_id;
 	}
 }

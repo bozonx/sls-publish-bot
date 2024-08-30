@@ -2,7 +2,7 @@ import { t } from './helpers.js';
 import { PageBase } from './PageRouter.js';
 
 export class PageMainMenu extends PageBase {
-	async mount(c, payload) {
+	async mount(c, state) {
 		const isMainAdmin =
 			c.msg.chat.id === Number(c.config.MAIN_ADMIN_TG_USER_ID);
 
@@ -14,8 +14,8 @@ export class PageMainMenu extends PageBase {
 				// button
 				[
 					t(c, 'publishPost'),
-					async (c, state) => {
-						await c.pager.go('pub-text', state);
+					async (c, payload) => {
+						await c.pager.go('pub-text', payload);
 					},
 				],
 			],
