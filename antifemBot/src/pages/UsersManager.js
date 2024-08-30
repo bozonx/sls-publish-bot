@@ -1,11 +1,6 @@
 import { t } from './helpers.js';
 import { PageBase } from '../PageRouter.js';
-import {
-	loadDataFromKv,
-	saveDataToKv,
-	parseTagsFromInput,
-	generateTagsButtons,
-} from './helpers.js';
+import { saveDataToKv } from './helpers.js';
 import { KV_KEYS } from './constants.js';
 
 export class UsersManager extends PageBase {
@@ -16,10 +11,16 @@ export class UsersManager extends PageBase {
 		// const { state } = this.payload;
 
 		this.text = t(c, 'manageUsersDescr');
-		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+
+		const users = c.ctx[CTX_KEYS.USERS];
+
 		this.menu = [
-			...generateTagsButtons(this.tags, this.tagRemoveCallback),
-			[[t(c, 'toHome'), () => this.pager.go('home')]],
+			...users.map((item, index) => [
+				[
+					`${item.name} | ${item.id}${item.isAdmin ? ' (admin)' : ''}`,
+					this.userRemoveCallback(index),
+				],
+			])[[t(c, 'toHome'), () => this.pager.go('home')]],
 		];
 	}
 
@@ -28,22 +29,26 @@ export class UsersManager extends PageBase {
 
 		if (!c.msg.text) return c.reply('No text');
 
-		const tags = parseTagsFromInput(c.msg.text);
-		const megedTags = [...this.tags, ...tags].sort();
+		// TODO: add read from special message
+		// TODO: read from YAML
 
-		await saveDataToKv(this.c, KV_KEYS.TAGS, megedTags);
-		await this.pager.reload();
+		// const tags = parseTagsFromInput(c.msg.text);
+		// const megedTags = [...this.tags, ...tags].sort();
+		//
+		// await saveDataToKv(this.c, KV_KEYS.TAGS, megedTags);
+		// await this.pager.reload();
 	}
 
-	tagRemoveCallback = (tagIndex) => {
+	userRemoveCallback(index) {
 		return async () => {
+			const users = c.ctx[CTX_KEYS.USERS];
 			// remove selected tag
-			const preparedTags = [...this.tags];
+			const prepared = [...users];
 
-			preparedTags.splice(tagIndex, 1);
+			prepared.splice(index, 1);
 
-			await saveDataToKv(this.c, KV_KEYS.TAGS, preparedTags);
-			await c.pager.go('pub-author', payload);
+			await saveDataToKv(this.c, KV_KEYS.USERS, prepared);
+			await c.pager.reload();
 		};
-	};
+	}
 }

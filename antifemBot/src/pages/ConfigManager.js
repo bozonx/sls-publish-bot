@@ -32,6 +32,6 @@ export class ConfigManager extends PageBase {
 		await saveDataToKv(this.c, KV_KEYS.CONFIG, obj);
 		await c.reply(`Success`);
 		// TODO: после реплай будет работать???
-		await c.pager.go('home');
+		await c.pager.reload();
 	}
 }

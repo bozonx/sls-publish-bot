@@ -13,7 +13,6 @@ export class TagsManager extends PageBase {
 
 	async mount() {
 		const c = this.pager.c;
-		// const { state } = this.payload;
 
 		this.text = t(c, 'manageTags');
 		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
@@ -35,15 +34,15 @@ export class TagsManager extends PageBase {
 		await this.pager.reload();
 	}
 
-	tagRemoveCallback = (tagIndex) => {
+	tagRemoveCallback = (index) => {
 		return async () => {
 			// remove selected tag
-			const preparedTags = [...this.tags];
+			const prepared = [...this.tags];
 
-			preparedTags.splice(tagIndex, 1);
+			prepared.splice(index, 1);
 
-			await saveDataToKv(this.c, KV_KEYS.TAGS, preparedTags);
-			await c.pager.go('pub-author', payload);
+			await saveDataToKv(this.c, KV_KEYS.TAGS, prepared);
+			await c.pager.reload();
 		};
 	};
 }
