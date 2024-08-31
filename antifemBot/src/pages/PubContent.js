@@ -1,7 +1,7 @@
-import { PageBase } from '../PageRouter.js';
+import { PubPageBase } from '../PubPageBase.js';
 import { t, makeContentState, defineMenu } from '../helpers.js';
 
-export class PubContent extends PageBase {
+export class PubContent extends PubPageBase {
 	async mount() {
 		const c = this.pager.c;
 
@@ -31,6 +31,6 @@ export class PubContent extends PageBase {
 
 		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
-		return this.pager.go('pub-author', { pub: pubState });
+		return this.pager.go('pub-author', pubState);
 	}
 }

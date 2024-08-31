@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { PageBase } from '../PageRouter.js';
+import { PubPageBase } from '../PubPageBase.js';
 import {
 	t,
 	makeStatePreview,
@@ -13,7 +13,7 @@ import { KV_KEYS } from '../constants.js';
 
 const TAG_ID_PREFIX = 'TAG-';
 
-export class PubTags extends PageBase {
+export class PubTags extends PubPageBase {
 	async mount() {
 		const c = this.pager.c;
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
@@ -34,24 +34,24 @@ export class PubTags extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home'),
+					cb: () => this.go('home'),
 				},
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.pager.go('pub-author'),
+					cb: () => this.go('pub-author'),
 				},
 				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.pager.go('pub-date'),
+					cb: () => this.go('pub-date'),
 				},
 			],
 			this.payload.state?.tags?.length && [
 				{
 					id: 'clearTagsBtn',
 					label: t(c, 'clearTagsBtn'),
-					cb: () => c.pager.go('pub-tags', { pub: { tags: null } }),
+					cb: () => this.go('pub-tags', { tags: null }),
 				},
 			],
 		]);
@@ -86,8 +86,6 @@ export class PubTags extends PageBase {
 		// TODO: review
 		const megedAllTags = _.uniq([...(this.payload.tags || {}), tagName]).sort();
 
-		c.pager.reload({
-			tags: megedAllTags,
-		});
+		return c.reload({ tags: megedAllTags });
 	};
 }

@@ -11,7 +11,7 @@ const STATE_CACHE_NAME = 'pageState';
  * Do not store andy state inside your page class between requests
  */
 export class PageBase {
-	pager;
+	router;
 	// path of this page
 	path;
 	// Put here the description of menu
@@ -22,12 +22,12 @@ export class PageBase {
 
 	// state which is passed between pages using cache
 	get state() {
-		return this.pager.state;
+		return this.router.state;
 	}
 
 	// It runs when a route of certain user has been changed
-	constructor(pager, path) {
-		this.pager = pager;
+	constructor(router, path) {
+		this.router = router;
 		this.path = path;
 	}
 
@@ -88,17 +88,21 @@ class PageRouter {
 		// }
 	}
 
-	// TODO: будет автоматом сохранен
-	async setState(newStateToReplace) {
-		// await saveToCache(
-		// 	this.c,
-		// 	STATE_CACHE_NAME,
-		// 	newStateToReplace,
-		// 	CACHE_STATE_TTL_SEC,
-		// );
-
-		this._state = newStateToReplace;
+	resetState() {
+		//
 	}
+
+	// // TODO: будет автоматом сохранен
+	// async setState(newStateToReplace) {
+	// 	// await saveToCache(
+	// 	// 	this.c,
+	// 	// 	STATE_CACHE_NAME,
+	// 	// 	newStateToReplace,
+	// 	// 	CACHE_STATE_TTL_SEC,
+	// 	// );
+	//
+	// 	this._state = newStateToReplace;
+	// }
 
 	async reload(newPartialState, replaceState) {
 		this.go(this.currentPage?.path, newPartialState, replaceState);
@@ -108,13 +112,13 @@ class PageRouter {
 	 * @param {object|null} newPartialState - state which will be merged with the main state. Null means totally clear state
 	 * @param {boolean} [replaceState=false] - if set then the main state will be replaced with newPartialState
 	 */
-	async go(pathTo, newPartialState, replaceState = false) {
+	async go(pathTo) {
 		const c = this.c;
 
 		console.log('-----go', pathTo);
 
 		try {
-			await this._switchPage(pathTo, newPartialState, replaceState);
+			await this._switchPage(pathTo);
 		} catch (e) {
 			return c.reply(String(e));
 		}
@@ -123,7 +127,7 @@ class PageRouter {
 
 		await this._sendMenu(keyboard);
 
-		// The end of request
+		return this._theEndOfRequest();
 	}
 
 	middleware = async (c, next) => {
@@ -142,7 +146,9 @@ class PageRouter {
 			return c.reply(String(e));
 		}
 
-		return this.currentPage.onMessage?.();
+		await this.currentPage.onMessage?.();
+
+		return this._theEndOfRequest();
 	};
 
 	_handleQueryData = async (c) => {
@@ -150,7 +156,7 @@ class PageRouter {
 
 		// The start of request
 		const data = c.update.callback_query.data;
-		const [marker, pathTo, btnId, ...bntPayloadRest] = data.split('|');
+		const [marker, btnId, ...bntPayloadRest] = data.split('|');
 
 		if (marker !== QUERY_MARKER) return;
 
@@ -159,7 +165,7 @@ class PageRouter {
 			: undefined;
 
 		try {
-			await this._switchPage(pathTo);
+			await this._switchPage();
 		} catch (e) {
 			return c.reply(String(e));
 		}
@@ -172,21 +178,29 @@ class PageRouter {
 			for (const { id, cb } of row) {
 				if (String(id) !== btnId) continue;
 				// run menu button handler
-				return cb(id, btnPayload);
+				await cb(id, btnPayload);
+
+				return this._theEndOfRequest();
 			}
 		}
 
 		return c.reply(`ERROR: Can't find button. ${data}`);
 	};
 
-	async _switchPage(pathTo, newPartialState, replaceState) {
-		if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
-
+	async _switchPage(newPath) {
 		await this.currentPage?.unmount();
+		await this._loadState();
+
+		let pathTo = newPath || this.state.currentPath;
+
+		if (!pathTo)
+			if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
+
+		// configure state after it has been loaded before page initializing
+		// await cb?.();
+
 		// make current page instance
 		this.currentPage = new this.pages[pathTo](this, pathTo);
-		// load from cache state and update it
-		await this._setupState(newPartialState, replaceState);
 		await this.currentPage.mount();
 	}
 
@@ -214,6 +228,9 @@ class PageRouter {
 
 	async _sendMenu(keyboard) {
 		const c = this.c;
+
+		// TODO: сохранять в стейте ???
+
 		const prevMenuMsgId = await loadFromCache(c, PREV_MENU_MSG_ID_CACHE_NAME);
 		// remove prev menu message
 		if (prevMenuMsgId) {
@@ -236,39 +253,22 @@ class PageRouter {
 		);
 	}
 
-	async _setupState(newPartialState, replaceState) {
-		const c = this.c;
-		let loadedState;
+	async _loadState() {
+		// in case switching page is run on /start command
+		if (this.state) return;
 
-		// TODO: может всегда надо загружать???
+		this._loadedState = await loadFromCache(this.c, STATE_CACHE_NAME);
+		this._state = this._loadedState || {};
+	}
 
-		// if (!this.state) {
-		// load it from cache
-		loadedState = await loadFromCache(c, STATE_CACHE_NAME);
+	async _theEndOfRequest() {
+		// in case it has been run from .go()
+		if (this.state) return;
 
-		// TODO: если кэш протух то что?
-
-		this._state = _.cloneDeep(loadedState);
-		// }
-
-		if (!this.state) this._state = {};
-
-		if (newPartialState === null) {
-			this._state = {};
-		} else {
-			if (replaceState) {
-				this._state = newPartialState || {};
-			} else {
-				this._state = _.defaultsDeep(
-					_.cloneDeep(newPartialState || {}),
-					this.state,
-				);
-			}
+		if (!_.isEqual(this._loadedState, this.state)) {
+			await saveToCache(c, STATE_CACHE_NAME, this.state, CACHE_STATE_TTL_SEC);
 		}
 
-		// TODO: а если не был загружен
-		// if (!_.isEqual(loadedState, this.state)) {
-		await saveToCache(c, STATE_CACHE_NAME, this.state, CACHE_STATE_TTL_SEC);
-		// }
+		this._state = undefined;
 	}
 }

@@ -1,8 +1,8 @@
-import { PageBase } from '../PageRouter.js';
+import { PubPageBase } from '../PubPageBase.js';
 import { CTX_KEYS, APP_CFG_KEYS, STATE_KEYS } from '../constants.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 
-export class PubAuthor extends PageBase {
+export class PubAuthor extends PubPageBase {
 	async mount() {
 		const c = this.pager.c;
 		const authors = c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.AUTHORS];
