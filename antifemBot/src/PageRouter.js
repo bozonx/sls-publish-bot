@@ -99,7 +99,9 @@ class PageRouter {
 		const prevMenuMsgId = await this._getFromCache(PREV_MENU_MSG_ID_CACHE_NAME);
 		// remove prev menu message
 		if (prevMenuMsgId) {
-			await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
+			try {
+				await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
+			} catch (e) {}
 		}
 
 		await this._renderMenu(newPayload);

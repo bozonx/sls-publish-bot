@@ -8,7 +8,6 @@ export class PubContent extends PageBase {
 		this.text = t(c, 'uploadContentDescr');
 
 		this.menu = defineMenu([
-			[[t(c, 'toHomeBtn'), () => this.pager.go('home', null)]],
 			[
 				{
 					id: 'toHomeBtn',

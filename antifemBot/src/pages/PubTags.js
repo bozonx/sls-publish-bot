@@ -6,23 +6,21 @@ import {
 	generateTagsButtons,
 	parseTagsFromInput,
 	defineMenu,
+	loadDataFromKv,
+	saveDataToKv,
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
 
 const TAG_ID_PREFIX = 'TAG-';
 
 export class PubTags extends PageBase {
-	// all the tags from storage
-	tags;
-	// tags which are shown on buttons
-	tagsButtons;
-
 	async mount() {
 		const c = this.pager.c;
+		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
 
-		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectTags')}`;
-		this.tags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
-		this.tagsButtons = this.tags.filter(
+		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectTagsDescr')}`;
+		// TODO: review
+		this.tagsButtons = allTags.filter(
 			(i) => !this.payload.state?.tags?.includes(i),
 		);
 
@@ -33,27 +31,21 @@ export class PubTags extends PageBase {
 				TAG_ID_PREFIX,
 			),
 			[
-				[
-					{
-						id: 'toHomeBtn',
-						label: t(c, 'toHomeBtn'),
-						cb: () => this.pager.go('home', null),
-					},
-				],
-				[
-					{
-						id: 'back',
-						label: t(c, 'back'),
-						cb: () => this.pager.go('pub-author'),
-					},
-				],
-				[
-					{
-						id: 'next',
-						label: t(c, 'next'),
-						cb: () => this.pager.go('pub-date'),
-					},
-				],
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.pager.go('home', null),
+				},
+				{
+					id: 'back',
+					label: t(c, 'back'),
+					cb: () => this.pager.go('pub-author'),
+				},
+				{
+					id: 'next',
+					label: t(c, 'next'),
+					cb: () => this.pager.go('pub-date'),
+				},
 			],
 			this.payload.state?.tags?.length && [
 				{
@@ -71,31 +63,31 @@ export class PubTags extends PageBase {
 		if (!c.msg.text) return c.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
-		const megedAllTags = _.uniq([...this.tags, ...newTags]).sort();
+		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const megedAllTags = _.uniq([...allTags, ...newTags]).sort();
 		// save new tags to storage
 		await saveDataToKv(c, KV_KEYS.TAGS, megedAllTags);
 
 		const mergedSelectedTags = _.uniq([
+			// TODO: review
 			...(this.payload.tags || {}),
 			...newTags,
 		]).sort();
 
 		await c.pager.go('pub-date', {
+			// TODO: лучше передавать полностью
 			tags: mergedSelectedTags,
 		});
 	}
 
-	tagSelectCallback = (index) => {
-		return async () => {
-			const c = this.pager.c;
-			const megedAllTags = _.uniq([
-				...(this.payload.tags || {}),
-				...newTags,
-			]).sort();
+	tagSelectCallback = async (btnId) => {
+		const c = this.pager.c;
+		const tagName = btnId.substring(TAG_ID_PREFIX.length);
+		// TODO: review
+		const megedAllTags = _.uniq([...(this.payload.tags || {}), tagName]).sort();
 
-			c.pager.reload({
-				tags: megedAllTags,
-			});
-		};
+		c.pager.reload({
+			tags: megedAllTags,
+		});
 	};
 }

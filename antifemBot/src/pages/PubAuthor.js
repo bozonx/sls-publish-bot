@@ -10,11 +10,13 @@ export class PubAuthor extends PageBase {
 		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectAuthorDescr')}`;
 		this.menu = defineMenu([
 			// TODO: разбить по 2 шт на строку
-			...authors.map((author) => ({
-				id: author,
-				label: author,
-				cb: this.pager.go('pub-tags', { author }),
-			})),
+			...authors.map((author) => [
+				{
+					id: author,
+					label: author,
+					cb: this.pager.go('pub-tags', { author }),
+				},
+			]),
 			[
 				{
 					id: 'withoutAuthorBtn',
