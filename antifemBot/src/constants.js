@@ -9,7 +9,7 @@ export const KV_KEYS = {
 	CONFIG: 'CONFIG',
 };
 export const CTX_KEYS = {
-	APP_CFG: 'APP_CFG',
+	CONFIG: 'CONFIG',
 	USERS: 'USERS',
 	KV: 'KV',
 };
@@ -27,6 +27,7 @@ export const TEMPLATE_NAMES = {
 	byFollower: 'byFollower',
 	noFooter: 'noFooter',
 };
+// TODO: review
 export const DEFAULT_STATE = {
 	preview: true,
 	template: TEMPLATE_NAMES.default,
