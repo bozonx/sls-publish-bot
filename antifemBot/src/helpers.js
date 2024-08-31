@@ -65,15 +65,15 @@ export function makeStatePreview(c, state = {}) {
 }
 
 export async function loadFromKv(c, key, defaultValue) {
-	let tagsStr;
+	let resStr;
 
 	try {
-		tagsStr = await c.ctx[CTX_KEYS.KV].get(key);
+		resStr = await c.ctx[CTX_KEYS.KV].get(key);
 	} catch (e) {
 		throw new Error(`ERROR: Can't load value of "${key}": ${e}`);
 	}
 
-	return tagsStr ? JSON.parse(tagsStr) : defaultValue;
+	return resStr ? JSON.parse(resStr) : defaultValue;
 }
 
 export async function saveToKv(c, key, value) {
@@ -86,19 +86,33 @@ export async function saveToKv(c, key, value) {
 	}
 }
 
-export function loadFromCache(c, key) {
+export async function loadFromCache(c, key) {
 	const fullKey = `${CACHE_PREFIX}|${c.msg.chat.id}|${key}`;
+	let resStr;
 
-	return c.ctx[CTX_KEYS.KV].get(fullKey);
+	try {
+		resStr = await c.ctx[CTX_KEYS.KV].get(fullKey);
+	} catch (e) {
+		throw new Error(`ERROR: Can't load value from cache "${key}": ${e}`);
+	}
+
+	return resStr && JSON.parse(resStr);
 }
 
 // on expire the key-value pair will be deleted
-export function saveToCache(c, key, value, expireFromNowSec) {
+export async function saveToCache(c, key, value, expireFromNowSec) {
 	const fullKey = `${CACHE_PREFIX}|${c.msg.chat.id}|${key}`;
+	const valueStr = JSON.stringify(value);
 
-	return c.ctx[CTX_KEYS.KV].put(fullKey, value, {
-		expirationTtl: expireFromNowSec,
-	});
+	try {
+		return c.ctx[CTX_KEYS.KV].put(fullKey, valueStr, {
+			expirationTtl: expireFromNowSec,
+		});
+	} catch (e) {
+		throw new Error(
+			`ERROR: Can't save cache value ${valueStr} of "${key}": ${e}`,
+		);
+	}
 }
 
 export function isAdminUser(c, userId) {
@@ -174,12 +188,13 @@ export function defineMenu(menu = []) {
 	return res;
 }
 
-export function generateTagsButtons(tags, cb, idPrefix) {
+export function generateTagsButtons(tags, cb) {
+	const idPrefix = 'TAG-';
 	const menu = [];
 
 	for (const tag of tags) {
 		// TODO: split to rows
-		menu.push([{ id: idPrefix + tag, label: tag, cb }]);
+		menu.push([{ id: idPrefix + tag, label: tag, payload: tag, cb }]);
 	}
 
 	return menu;

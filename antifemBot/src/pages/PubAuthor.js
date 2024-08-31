@@ -7,7 +7,7 @@ export class PubAuthor extends PubPageBase {
 		const c = this.router.c;
 		const authors = c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.AUTHORS];
 
-		this.text = `${makeStatePreview(c, this.state)}\n\n${t(c, 'selectAuthorDescr')}`;
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectAuthorDescr')}`;
 		this.menu = defineMenu([
 			// TODO: разбить по 2 шт на строку
 			// TODO: использовать payload
@@ -15,7 +15,7 @@ export class PubAuthor extends PubPageBase {
 				{
 					id: author,
 					label: author,
-					cb: this.go('pub-tags', { [STATE_KEYS.author]: author }),
+					cb: () => this.go('pub-tags', { [STATE_KEYS.author]: author }),
 				},
 			]),
 			[

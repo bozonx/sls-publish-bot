@@ -53,5 +53,5 @@ export async function handleStart(c) {
 
 	await c.reply(t(c, 'welcomeAgain'));
 	// show home page on start command
-	return c.pager.go('home');
+	return c.router.go('home');
 }

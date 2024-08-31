@@ -1,4 +1,4 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 import { PageBase } from './PageRouter.js';
 
 export class PubPageBase extends PageBase {
@@ -17,6 +17,13 @@ export class PubPageBase extends PageBase {
 	_updateState(newPubPartial) {
 		if (!newPubPartial) return;
 
-		this._state = _.defaultsDeep(_.cloneDeep(newPubPartial || {}), this.state);
+		this.state.pub = {
+			...(newPubPartial || {}),
+			...this.state.pub,
+		};
+
+		// const partial = _.cloneDeep(newPubPartial || {});
+		//
+		// this.state.pub = _.defaultsDeep(partial, this.state.pub);
 	}
 }

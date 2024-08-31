@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import yaml from 'js-yaml';
-import { PageBase } from '../routerouter.js';
+import { PageBase } from '../PageRouter.js';
 import {
 	t,
 	saveToKv,

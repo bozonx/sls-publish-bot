@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import { PageBase } from '../routerouter.js';
+import { PageBase } from '../PageRouter.js';
 import { CTX_KEYS, KV_KEYS } from '../constants.js';
 import { t, isAdminUser, saveToKv, defineMenu } from '../helpers.js';
 

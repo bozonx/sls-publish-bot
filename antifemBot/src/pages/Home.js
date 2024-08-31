@@ -1,13 +1,13 @@
-import _ from 'lodash';
-import { PageBase } from '../routerouter.js';
+// import _ from 'lodash';
+import { PageBase } from '../PageRouter.js';
 import { t, isAdminUser, makeContentState, defineMenu } from '../helpers.js';
 
 export class Home extends PageBase {
 	async mount() {
 		const c = this.router.c;
 		const isAdmin = isAdminUser(c, c.msg.chat.id);
-		// clear state
-		if (!_.isEmpty(this.state)) await this.router.resetState();
+		// clear pub state
+		this.state.pub = {};
 
 		this.text = t(c, 'homeDescr');
 		this.menu = defineMenu([
@@ -42,6 +42,8 @@ export class Home extends PageBase {
 
 		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
-		return this.router.go('pub-content', { pub: pubState });
+		this.state.pub = { pub: pubState };
+
+		return this.router.go('pub-content');
 	}
 }

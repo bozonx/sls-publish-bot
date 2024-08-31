@@ -1,6 +1,6 @@
 import { Bot } from 'grammy';
 import { handleStart, makeContext } from './botLogic.js';
-import { makeRouter } from './PageRouter.js';
+import { PageRouter } from './PageRouter.js';
 import { Home } from './pages/Home.js';
 import { ConfigManager } from './pages/ConfigManager.js';
 import { TagsManager } from './pages/TagsManager.js';
@@ -22,7 +22,7 @@ export class BotIndex {
 	}
 
 	async init() {
-		const router = await makeRouter({
+		const router = new PageRouter({
 			home: Home,
 			'config-manager': ConfigManager,
 			'users-manager': UsersManager,

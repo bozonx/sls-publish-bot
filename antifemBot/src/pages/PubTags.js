@@ -11,25 +11,20 @@ import {
 } from '../helpers.js';
 import { KV_KEYS, STATE_KEYS } from '../constants.js';
 
-const TAG_ID_PREFIX = 'TAG-';
+// const TAG_ID_PREFIX = 'TAG-';
 
 export class PubTags extends PubPageBase {
 	async mount() {
 		const c = this.router.c;
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 
-		// TODO: review
 		const tagsButtons = allTags.filter(
-			(i) => !this.payload.state?.tags?.includes(i),
+			(i) => !this.state.pub.tags?.includes(i),
 		);
 
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
 		this.menu = defineMenu([
-			...generateTagsButtons(
-				this.tagsButtons,
-				this.tagSelectCallback,
-				TAG_ID_PREFIX,
-			),
+			...generateTagsButtons(tagsButtons, this.tagSelectCallback),
 			[
 				{
 					id: 'toHomeBtn',
@@ -47,7 +42,7 @@ export class PubTags extends PubPageBase {
 					cb: () => this.go('pub-date'),
 				},
 			],
-			this.payload.state?.tags?.length && [
+			this.state.pub?.tags?.length && [
 				{
 					id: 'clearTagsBtn',
 					label: t(c, 'clearTagsBtn'),
@@ -69,19 +64,16 @@ export class PubTags extends PubPageBase {
 		await saveToKv(c, KV_KEYS.TAGS, megedAllTags);
 
 		const mergedSelectedTags = _.uniq([
-			// TODO: review
-			...(this.state.pub.tags || {}),
+			...(this.state.pub?.tags || []),
 			...newTags,
 		]).sort();
 
-		// TODO: лучше передавать полностью
 		await this.go('pub-date', { [STATE_KEYS.tags]: mergedSelectedTags });
 	}
 
-	tagSelectCallback = async (btnId) => {
-		const tagName = btnId.substring(TAG_ID_PREFIX.length);
-		// TODO: review
-		const megedAllTags = _.uniq([...(this.payload.tags || {}), tagName]).sort();
+	tagSelectCallback = async (btnId, payload) => {
+		// const tagName = btnId.substring(TAG_ID_PREFIX.length);
+		const megedAllTags = _.uniq([...(this.payload.tags || {}), payload]).sort();
 
 		return this.reload({ [STATE_KEYS.tags]: megedAllTags });
 	};

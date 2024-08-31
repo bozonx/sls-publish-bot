@@ -44,16 +44,16 @@ export class PageBase {
 	async onMessage() {}
 }
 
-export async function makeRouter(initialPages) {
-	const router = new PageRouter(initialPages);
+// export async function makeRouter(initialPages) {
+// 	const router = new PageRouter(initialPages);
+//
+// 	// TODO: useless
+// 	await router.init();
+//
+// 	return router;
+// }
 
-	// TODO: useless
-	await router.init();
-
-	return router;
-}
-
-class PageRouter {
+export class PageRouter {
 	c;
 	// not initialized pages
 	pages = {};
@@ -88,17 +88,18 @@ class PageRouter {
 		// }
 	}
 
-	resetState() {
-		this._state = {};
-	}
+	// resetState() {
+	// 	this._state = {};
+	// }
 
 	async reload() {
 		if (!this.currentPath)
 			return this.c.reply(
-				`ERROR: can't reload because there isn't current page`,
+				`ERROR: Can't reload because there isn't current page`,
 			);
 
-		this.go(this.currentPath);
+		// TODO: в принципе не обязательно передавать страницу, он всеравно возмёт из стейта
+		return this.go(this.currentPath);
 	}
 
 	/**
@@ -125,7 +126,7 @@ class PageRouter {
 
 	middleware = async (c, next) => {
 		this.c = c;
-		c.pager = this;
+		c.router = this;
 
 		return next();
 	};
@@ -147,6 +148,12 @@ class PageRouter {
 	_handleQueryData = async (c) => {
 		console.log('-----_handleQueryData', c.update.callback_query.data);
 
+		try {
+			await this._switchPage();
+		} catch (e) {
+			return c.reply(String(e));
+		}
+
 		// The start of request
 		const data = c.update.callback_query.data;
 		const [marker, btnId, ...bntPayloadRest] = data.split('|');
@@ -156,12 +163,6 @@ class PageRouter {
 		const btnPayload = bntPayloadRest.length
 			? JSON.parse(bntPayloadRest.join('|'))
 			: undefined;
-
-		try {
-			await this._switchPage();
-		} catch (e) {
-			return c.reply(String(e));
-		}
 
 		const menu = this.currentPage.menu;
 
@@ -184,12 +185,16 @@ class PageRouter {
 		await this.currentPage?.unmount();
 		await this._loadState();
 
-		let pathTo = newPath || this.state.currentPath;
+		// TODO: если идёт переход не на home и нет стейта то он протух
+		// написать сообщение и отправить на главную
 
-		this.state.currentPath = pathTo;
+		const pathTo = newPath || this.state.currentPath;
 
-		if (!pathTo)
-			if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
+		console.log(3333, this.state, newPath);
+
+		this._state.currentPath = pathTo;
+
+		if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
 
 		// make current page instance
 		this.currentPage = new this.pages[pathTo](this, pathTo);
@@ -205,7 +210,7 @@ class PageRouter {
 
 		for (const row of menu) {
 			for (const { id, label, payload } of row) {
-				let query = `${QUERY_MARKER}|${this.currentPath}|${id}`;
+				let query = `${QUERY_MARKER}|${id}`;
 
 				if (payload) query += `|${JSON.stringify(payload)}`;
 
@@ -246,20 +251,31 @@ class PageRouter {
 	}
 
 	async _loadState() {
-		// in case switching page is run on /start command
+		// in case switching page on .go()
 		if (this.state) return;
 
 		this._loadedState = await loadFromCache(this.c, STATE_CACHE_NAME);
+
+		console.log(22222, this._loadedState);
+
 		this._state = this._loadedState || {};
 	}
 
 	async _theEndOfRequest() {
 		// in case it has been run from .go()
-		if (this.state) return;
+		// TODO: ?????
+		if (!this.state) return;
 
-		if (!_.isEqual(this._loadedState, this.state)) {
-			await saveToCache(c, STATE_CACHE_NAME, this.state, CACHE_STATE_TTL_SEC);
-		}
+		console.log(11111, this.state);
+
+		// if (!_.isEqual(this._loadedState, this.state)) {
+		await saveToCache(
+			this.c,
+			STATE_CACHE_NAME,
+			this.state,
+			CACHE_STATE_TTL_SEC,
+		);
+		// }
 
 		this._state = undefined;
 	}
