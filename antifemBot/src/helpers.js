@@ -1,6 +1,11 @@
 import dayjs from 'dayjs';
 import locales from './i18n.js';
-import { TG_BOT_URL, CTX_KEYS, USER_KEYS } from './constants.js';
+import {
+	TG_BOT_URL,
+	CTX_KEYS,
+	USER_KEYS,
+	USER_SENT_TO_ADMIN_MSG_DELIMITER,
+} from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
 	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
@@ -88,20 +93,23 @@ export function generateTagsButtons(tags, cb, idPrefix) {
 }
 
 export function parseTagsFromInput(rawStr = '') {
-	return rawStr.split(',').map(
-		(i) =>
-			i
-				.trim()
-				.toLowerCase()
-				.replace(/[\-\s]/g, '_')
-				.replace(/[^\p{L}\p{N}_]/gu, ''),
-		// .replace(
-		// 	/[\#\!\~\`\@\$\%\^\№\:\"\'\;\&\?\*\.\,\(\)\[\]\{\}\=\+\<\>\/\\\|]/g,
-		// 	'',
-		// ),
-		// TODO: better to remove all not letters
-		// .replace(new RegExp('[^\\w\\d_]', 'ug'), '');
-	);
+	return rawStr
+		.split(',')
+		.map(
+			(i) =>
+				i
+					.trim()
+					.toLowerCase()
+					.replace(/[\-\s]/g, '_')
+					.replace(/[^\p{L}\p{N}_]/gu, ''),
+			// .replace(
+			// 	/[\#\!\~\`\@\$\%\^\№\:\"\'\;\&\?\*\.\,\(\)\[\]\{\}\=\+\<\>\/\\\|]/g,
+			// 	'',
+			// ),
+			// TODO: better to remove all not letters
+			// .replace(new RegExp('[^\\w\\d_]', 'ug'), '');
+		)
+		.filter((i) => i);
 }
 
 export function nowPlusDay(plusday) {
@@ -134,7 +142,7 @@ export function makeUnregisteredMsg(c) {
 		[USER_KEYS.NAME]: c.msg.from.first_name || c.msg.from.username,
 	});
 
-	return `${t(c, 'youAreNotRegistered')}.\n-----\n${dataStr}`;
+	return `${t(c, 'youAreNotRegistered')}.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`;
 }
 
 export function makeContentState(c) {

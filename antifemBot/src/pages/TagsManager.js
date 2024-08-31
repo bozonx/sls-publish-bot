@@ -41,6 +41,7 @@ export class TagsManager extends PageBase {
 		const megedTags = _.uniq([...allTags, ...tags]).sort();
 
 		await saveDataToKv(c, KV_KEYS.TAGS, megedTags);
+		await c.reply(`${t(c, 'tagWasAdded')}: ${tags.join(', ')}`);
 		await this.pager.reload();
 	}
 
@@ -54,6 +55,7 @@ export class TagsManager extends PageBase {
 		allTags.splice(indexOfTag, 1);
 
 		await saveDataToKv(c, KV_KEYS.TAGS, allTags);
+		await c.reply(`${t(c, 'tagWasDeleted')}: ${tagName}`);
 		await c.pager.reload();
 	};
 }

@@ -1,6 +1,12 @@
 import { InlineKeyboard } from 'grammy';
+import {
+	CTX_KEYS,
+	CACHE_PREFIX,
+	CACHE_MENU_MSG_ID_TTL_SEC,
+} from './constants.js';
 
 const QUERY_MARKER = 'PageRouter';
+const PREV_MENU_MSG_ID_CACHE_NAME = 'prevMsgId';
 
 /**
  * Do not store state in class between requests
@@ -64,7 +70,6 @@ class PageRouter {
 		}
 	}
 
-	// TODO: как передать prevMenuMsgId ???
 	async go(pathTo, newPartialState) {
 		if (!pathTo) return this.c.reply('No path');
 
@@ -90,10 +95,12 @@ class PageRouter {
 
 		this.currentPage.setPayload(newPayload);
 		await this.currentPage.mount();
+
+		const prevMenuMsgId = await this._getFromCache(PREV_MENU_MSG_ID_CACHE_NAME);
 		// remove prev menu message
-		// if (prevMenuMsgId) {
-		// 	await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
-		// }
+		if (prevMenuMsgId) {
+			await this.c.api.deleteMessage(this.c.chatId, prevMenuMsgId);
+		}
 
 		await this._renderMenu(newPayload);
 
@@ -110,6 +117,20 @@ class PageRouter {
 
 		return next();
 	};
+
+	async _getFromCache(key) {
+		const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+
+		return this.c.ctx[CTX_KEYS.KV].get(fullKey);
+	}
+
+	async _setToCache(key, value) {
+		const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+
+		return this.c.ctx[CTX_KEYS.KV].put(fullKey, value, {
+			expirationTtl: CACHE_MENU_MSG_ID_TTL_SEC,
+		});
+	}
 
 	_handleQueryData = async (c) => {
 		// The start of request
@@ -164,7 +185,6 @@ class PageRouter {
 			reply_markup: keyboard,
 		});
 
-		// TODO: как передать message_id ???
-		// this.prevMenuMessageId = message_id;
+		await this._setToCache(PREV_MENU_MSG_ID_CACHE_NAME, message_id);
 	}
 }

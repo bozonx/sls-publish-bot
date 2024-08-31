@@ -1,4 +1,4 @@
-import { Bot, session } from 'grammy';
+import { Bot } from 'grammy';
 import { CTX_KEYS } from './constants.js';
 import { handleStart, prepareKvAndConfig } from './botLogic.js';
 import { makeRouter } from './PageRouter.js';
@@ -30,18 +30,6 @@ export class BotIndex {
 	}
 
 	async init() {
-		// this.bot.use(
-		// 	session({
-		// 		// Stores data per user.
-		// 		getSessionKey: (ctx) => {
-		// 			// Give every user their personal session storage
-		// 			// (will be shared across groups and in their private chat)
-		// 			return ctx.from?.id.toString();
-		// 		},
-		// 		initial: () => ({ route: null }),
-		// 	}),
-		// );
-
 		const router = await makeRouter({
 			home: Home,
 			'config-manager': ConfigManager,

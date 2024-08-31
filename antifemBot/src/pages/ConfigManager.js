@@ -32,7 +32,7 @@ export class ConfigManager extends PageBase {
 		try {
 			obj = yaml.load(rawText);
 		} catch (e) {
-			return c.reply(`ERROR: ${e}`);
+			return c.reply(`ERROR: Can't parse yaml. ${e}`);
 		}
 
 		await saveDataToKv(c, KV_KEYS.CONFIG, obj);

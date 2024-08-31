@@ -1,6 +1,19 @@
+import _ from 'lodash';
+import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import { t, saveDataToKv, isAdminUser, defineMenu } from '../helpers.js';
-import { KV_KEYS, CTX_KEYS, USER_KEYS } from '../constants.js';
+import {
+	t,
+	saveDataToKv,
+	isAdminUser,
+	defineMenu,
+	loadDataFromKv,
+} from '../helpers.js';
+import {
+	KV_KEYS,
+	CTX_KEYS,
+	USER_KEYS,
+	USER_SENT_TO_ADMIN_MSG_DELIMITER,
+} from '../constants.js';
 
 export class UsersManager extends PageBase {
 	async mount() {
@@ -32,25 +45,44 @@ export class UsersManager extends PageBase {
 
 	async message() {
 		const c = this.pager.c;
+		const text = c.msg.text;
+		let obj;
 
-		if (!c.msg.text) return c.reply('No text');
+		if (!text) return c.reply('No text');
 
-		// TODO: add read from special message
-		// TODO: read from YAML
+		if (text.indexOf(USER_SENT_TO_ADMIN_MSG_DELIMITER) > 0) {
+			const [useless, dataJson] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
 
-		// const tags = parseTagsFromInput(c.msg.text);
-		// const megedTags = [...this.tags, ...tags].sort();
-		//
-		// await saveDataToKv(this.c, KV_KEYS.TAGS, megedTags);
-		// await this.pager.reload();
+			try {
+				obj = JSON.parse(dataJson.trim());
+			} catch (e) {
+				return c.reply(`ERROR: can't parse json`);
+			}
+		} else {
+			// try to parse YAML
+			try {
+				obj = yaml.load(text.trim());
+			} catch (e) {
+				return c.reply(`ERROR: Can't parse yaml. ${e}`);
+			}
+		}
+
+		if (typeof obj[USER_KEYS.ID] !== 'number') {
+			return c.reply(`ERROR: wrong data`);
+		}
+
+		const allUsers = await loadDataFromKv(c, KV_KEYS.USERS);
+		const merged = [...allUsers, obj];
+
+		await saveDataToKv(c, KV_KEYS.USERS, merged);
+		await c.reply(`User was saved\n\n${yaml.dump(obj)}`);
+		await this.pager.reload();
 	}
 
 	userRemoveCallback = async (btnId) => {
 		const c = this.pager.c;
 		const users = c.ctx[CTX_KEYS.USERS];
-		// remove selected tag
 		const prepared = [...users];
-
 		const index = prepared.findIndex((i) => i[USER_KEYS.ID] === Number(btnId));
 
 		if (index < 0) return c.reply(`ERROR: Can't find user ${btnId}`);
@@ -58,6 +90,7 @@ export class UsersManager extends PageBase {
 		prepared.splice(index, 1);
 
 		await saveDataToKv(c, KV_KEYS.USERS, prepared);
+		await c.reply(`User was deleted\n\n${yaml.dump(users[index])}`);
 		await c.pager.reload();
 	};
 }

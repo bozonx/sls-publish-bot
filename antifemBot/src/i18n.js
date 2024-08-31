@@ -56,5 +56,9 @@ export default {
 		selectHour: 'Выберете час. (минуты будут установлены в 00)',
 		selectTags: 'Выберете тэги',
 		pubConfirm: 'Проверьте и подтвердите публикацию',
+
+		// Messages
+		tagWasAdded: 'Тэги были добавлены',
+		tagWasDeleted: 'Тэг был удалён',
 	},
 };
