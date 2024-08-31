@@ -59,9 +59,9 @@ export class PubTags extends PubPageBase {
 
 		const newTags = parseTagsFromInput(c.msg.text);
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
-		const megedAllTags = _.uniq([...allTags, ...newTags]).sort();
+		const mergedAllTags = _.uniq([...allTags, ...newTags]).sort();
 		// save new tags to storage
-		await saveToKv(c, KV_KEYS.TAGS, megedAllTags);
+		await saveToKv(c, KV_KEYS.TAGS, mergedAllTags);
 
 		const mergedSelectedTags = _.uniq([
 			...(this.state.pub?.tags || []),
@@ -73,8 +73,11 @@ export class PubTags extends PubPageBase {
 
 	tagSelectCallback = async (btnId, payload) => {
 		// const tagName = btnId.substring(TAG_ID_PREFIX.length);
-		const megedAllTags = _.uniq([...(this.payload.tags || {}), payload]).sort();
+		const mergedAllTags = _.uniq([
+			...(this.payload.tags || {}),
+			payload,
+		]).sort();
 
-		return this.reload({ [STATE_KEYS.tags]: megedAllTags });
+		return this.reload({ [STATE_KEYS.tags]: mergedAllTags });
 	};
 }

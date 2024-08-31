@@ -37,9 +37,9 @@ export class TagsManager extends PageBase {
 
 		const newTags = parseTagsFromInput(c.msg.text);
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
-		const megedAllTags = _.uniq([...allTags, ...newTags]).sort();
+		const mergedAllTags = _.uniq([...allTags, ...newTags]).sort();
 		// save new tags to storage
-		await saveToKv(c, KV_KEYS.TAGS, megedAllTags);
+		await saveToKv(c, KV_KEYS.TAGS, mergedAllTags);
 
 		await c.reply(`${t(c, 'tagWasAdded')}: ${newTags.join(', ')}`);
 		await this.router.reload();
