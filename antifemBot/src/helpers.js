@@ -73,8 +73,6 @@ export function generatePostText(c, pubState) {
 			pubState[STATE_KEYS.template]
 		];
 
-	console.log(1111, template, c.ctx[CTX_KEYS.CONFIG], pubState);
-
 	const tmplData = {
 		CONTENT: pubState[STATE_KEYS.text],
 		AUTHOR: pubState[STATE_KEYS.author],

@@ -48,7 +48,7 @@ const footer =
 export const APP_INITIAL_CONFIG = {
 	[APP_CFG_KEYS.AUTHORS]: ['Айван Кей'],
 	[APP_CFG_KEYS.TEMPLATES]: {
-		[TEMPLATE_NAMES.common]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
+		[TEMPLATE_NAMES.default]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
 		[TEMPLATE_NAMES.byFollower]: [
 			'От подписчика ${AUTHOR}:',
 			'${CONTENT}',

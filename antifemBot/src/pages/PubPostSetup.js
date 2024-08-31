@@ -95,6 +95,8 @@ export class PubPostSetup extends PubPageBase {
 			text,
 			this.state.pub[STATE_KEYS.preview],
 		);
+
+		return this.reload();
 	};
 
 	_finalPublication = async () => {
