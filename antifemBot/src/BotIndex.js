@@ -1,6 +1,5 @@
 import { Bot } from 'grammy';
-import { CTX_KEYS } from './constants.js';
-import { handleStart, prepareKvAndConfig } from './botLogic.js';
+import { handleStart, makeContext } from './botLogic.js';
 import { makeRouter } from './PageRouter.js';
 import { Home } from './pages/Home.js';
 import { ConfigManager } from './pages/ConfigManager.js';
@@ -18,15 +17,8 @@ export class BotIndex {
 
 	constructor(TG_TOKEN, MAIN_ADMIN_TG_USER_ID, KV) {
 		this.bot = new Bot(TG_TOKEN);
-		this.bot.use(async (c, next) => {
-			c.ctx = { [CTX_KEYS.KV]: KV };
-			c.ctx = {
-				...c.ctx,
-				...(await prepareKvAndConfig(c, MAIN_ADMIN_TG_USER_ID)),
-			};
 
-			await next();
-		});
+		this.bot.use(makeContext(MAIN_ADMIN_TG_USER_ID, KV));
 	}
 
 	async init() {
@@ -44,7 +36,6 @@ export class BotIndex {
 		});
 
 		this.bot.use(router.middleware);
-
 		this.bot.command('start', handleStart);
 		this.bot.on('callback_query:data', router._handleQueryData);
 		this.bot.on('message', router._handleMessage);

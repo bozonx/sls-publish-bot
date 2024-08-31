@@ -74,22 +74,44 @@ export async function loadDataFromKv(c, key, defaultValue) {
 }
 
 export async function saveDataToKv(c, key, value) {
+	const valueStr = JSON.stringify(value);
+
 	try {
-		await c.ctx[CTX_KEYS.KV].put(key, JSON.stringify(value));
+		await c.ctx[CTX_KEYS.KV].put(key, valueStr);
 	} catch (e) {
-		throw new Error(`ERROR: Can't save value of "${key}": ${e}`);
+		throw new Error(`ERROR: Can't save value ${valueStr} of "${key}": ${e}`);
 	}
 }
 
-export function generateTagsButtons(tags, cb, idPrefix) {
-	const menu = [];
+export function isAdminUser(c, userId) {
+	if (!userId && !['string', 'number'].includes(typeof userId))
+		throw new Error(`ERROR: isAdminUser. Wrong userId - ${typeof userId}`);
 
-	for (const tag of tags) {
-		// TODO: split to rows
-		menu.push([{ id: idPrefix + tag, label: tag, cb }]);
-	}
+	const found = c.ctx[CTX_KEYS.USERS]?.find(
+		(i) => i[USER_KEYS.IS_ADMIN] && Number(i[USER_KEYS.ID]) === Number(userId),
+	);
 
-	return menu;
+	return Boolean(found);
+}
+
+export function isRegisteredUser(c, userId) {
+	if (!userId && !['string', 'number'].includes(typeof userId))
+		throw new Error(`ERROR: isRegisteredUser. Wrong userId - ${typeof userId}`);
+
+	const found = c.ctx[CTX_KEYS.USERS]?.find(
+		(i) => Number(i[USER_KEYS.ID]) === Number(userId),
+	);
+
+	return Boolean(found);
+}
+
+export function makeUnregisteredMsg(c) {
+	const dataStr = JSON.stringify({
+		[USER_KEYS.ID]: c.msg.from.id,
+		[USER_KEYS.NAME]: c.msg.from.first_name || c.msg.from.username,
+	});
+
+	return `${t(c, 'youAreNotRegistered')}.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`;
 }
 
 export function parseTagsFromInput(rawStr = '') {
@@ -106,10 +128,45 @@ export function parseTagsFromInput(rawStr = '') {
 			// 	/[\#\!\~\`\@\$\%\^\№\:\"\'\;\&\?\*\.\,\(\)\[\]\{\}\=\+\<\>\/\\\|]/g,
 			// 	'',
 			// ),
-			// TODO: better to remove all not letters
 			// .replace(new RegExp('[^\\w\\d_]', 'ug'), '');
 		)
-		.filter((i) => i);
+		.filter(Boolean);
+}
+
+// remove undefined and false items in menu
+export function defineMenu(menu = []) {
+	const res = [];
+
+	for (const row of menu) {
+		if (row) res.push(row.filter(Boolean));
+
+		// if (!row) continue;
+		//
+		// const rowArr = [];
+		//
+		// for (const btn of row) {
+		// 	if (!btn) continue;
+		//
+		// 	rowArr.push(btn);
+		// }
+		//
+		// res.push(rowArr);
+	}
+
+	return res;
+}
+
+//////////////////////// review
+
+export function generateTagsButtons(tags, cb, idPrefix) {
+	const menu = [];
+
+	for (const tag of tags) {
+		// TODO: split to rows
+		menu.push([{ id: idPrefix + tag, label: tag, cb }]);
+	}
+
+	return menu;
 }
 
 export function nowPlusDay(plusday) {
@@ -118,31 +175,6 @@ export function nowPlusDay(plusday) {
 	// TODO: MOSCOW
 
 	return date.format('YYYY-MM-DD');
-}
-
-export function isAdminUser(c, userId) {
-	const users = c.ctx[CTX_KEYS.USERS];
-	const found = users?.find(
-		(i) => i[USER_KEYS.IS_ADMIN] && i[USER_KEYS.ID] === userId,
-	);
-
-	return Boolean(found);
-}
-
-export function isRegisteredUser(c, userId) {
-	const users = c.ctx[CTX_KEYS.USERS];
-	const found = users?.find((i) => i[USER_KEYS.ID] === userId);
-
-	return Boolean(found);
-}
-
-export function makeUnregisteredMsg(c) {
-	const dataStr = JSON.stringify({
-		[USER_KEYS.ID]: c.msg.from.id,
-		[USER_KEYS.NAME]: c.msg.from.first_name || c.msg.from.username,
-	});
-
-	return `${t(c, 'youAreNotRegistered')}.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`;
 }
 
 export function makeContentState(c) {
@@ -172,27 +204,6 @@ export function makeContentState(c) {
 	}
 
 	return state;
-}
-
-// remove undefined and false items
-export function defineMenu(menu = []) {
-	const res = [];
-
-	for (const row of menu) {
-		if (!row) continue;
-
-		const rowArr = [];
-
-		for (const btn of row) {
-			if (!btn) continue;
-
-			rowArr.push(btn);
-		}
-
-		res.push(rowArr);
-	}
-
-	return res;
 }
 
 // export async function prepareSession(c) {
