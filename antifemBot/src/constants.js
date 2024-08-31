@@ -2,6 +2,7 @@
 export const TG_BOT_URL = '/bot';
 export const CACHE_PREFIX = 'CACHE';
 export const CACHE_MENU_MSG_ID_TTL_SEC = 80;
+export const CACHE_STATE_TTL_SEC = 80;
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const KV_KEYS = {
 	USERS: 'USERS',

@@ -5,9 +5,10 @@ export class Home extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 		const isAdmin = isAdminUser(c, c.msg.chat.id);
+		// clear state
+		await this.pager.setState({});
 
 		this.text = t(c, 'homeDescr');
-
 		this.menu = defineMenu([
 			[
 				{
@@ -36,10 +37,10 @@ export class Home extends PageBase {
 	async onMessage() {
 		const c = this.pager.c;
 
-		const state = makeContentState(c);
+		const pubState = makeContentState(c);
 
-		if (!state) return c.reply('ERROR: Wrong type of post');
+		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
-		return this.pager.go('pub-content', state);
+		return this.pager.go('pub-content', { pub: state });
 	}
 }
