@@ -5,7 +5,7 @@ import { t, makeStatePreview, defineMenu } from '../helpers.js';
 export class PubAuthor extends PageBase {
 	async mount() {
 		const c = this.pager.c;
-		const authors = c.ctx[CTX_KEYS.APP_CFG][APP_CFG_KEYS.AUTHORS];
+		const authors = c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.AUTHORS];
 
 		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectAuthorDescr')}`;
 		this.menu = defineMenu([

@@ -85,14 +85,14 @@ export async function saveToKv(c, key, value) {
 }
 
 export function loadFromCache(c, key) {
-	const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+	const fullKey = `${CACHE_PREFIX}|${c.msg.chat.id}|${key}`;
 
 	return c.ctx[CTX_KEYS.KV].get(fullKey);
 }
 
 // on expire the key-value pair will be deleted
 export function saveToCache(c, key, value, expireFromNowSec) {
-	const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+	const fullKey = `${CACHE_PREFIX}|${c.msg.chat.id}|${key}`;
 
 	return c.ctx[CTX_KEYS.KV].put(fullKey, value, {
 		expirationTtl: expireFromNowSec,

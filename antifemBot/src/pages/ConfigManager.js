@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
 import { CTX_KEYS, KV_KEYS } from '../constants.js';
-import { t, isAdminUser, saveDataToKv, defineMenu } from '../helpers.js';
+import { t, isAdminUser, saveToKv, defineMenu } from '../helpers.js';
 
 export class ConfigManager extends PageBase {
 	async mount() {
@@ -21,7 +21,7 @@ export class ConfigManager extends PageBase {
 		]);
 
 		// TODO: put it into code tag
-		return c.reply(yaml.dump(c.ctx[CTX_KEYS.APP_CFG]));
+		return c.reply(yaml.dump(c.ctx[CTX_KEYS.CONFIG]));
 	}
 
 	async onMessage() {
@@ -35,7 +35,7 @@ export class ConfigManager extends PageBase {
 			return c.reply(`ERROR: Can't parse yaml. ${e}`);
 		}
 
-		await saveDataToKv(c, KV_KEYS.CONFIG, obj);
+		await saveToKv(c, KV_KEYS.CONFIG, obj);
 		await c.reply(`Success`);
 		// TODO: после реплай будет работать???
 		await c.pager.reload();

@@ -6,8 +6,8 @@ import {
 	generateTagsButtons,
 	parseTagsFromInput,
 	defineMenu,
-	loadDataFromKv,
-	saveDataToKv,
+	loadFromKv,
+	saveToKv,
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
 
@@ -16,7 +16,7 @@ const TAG_ID_PREFIX = 'TAG-';
 export class PubTags extends PageBase {
 	async mount() {
 		const c = this.pager.c;
-		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 
 		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectTagsDescr')}`;
 		// TODO: review
@@ -63,10 +63,10 @@ export class PubTags extends PageBase {
 		if (!c.msg.text) return c.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
-		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 		const megedAllTags = _.uniq([...allTags, ...newTags]).sort();
 		// save new tags to storage
-		await saveDataToKv(c, KV_KEYS.TAGS, megedAllTags);
+		await saveToKv(c, KV_KEYS.TAGS, megedAllTags);
 
 		const mergedSelectedTags = _.uniq([
 			// TODO: review

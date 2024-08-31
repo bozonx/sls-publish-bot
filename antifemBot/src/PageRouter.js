@@ -1,10 +1,7 @@
 import { InlineKeyboard } from 'grammy';
+import _ from 'lodash';
 import { loadFromCache, saveToCache } from './helpers.js';
-import {
-	CTX_KEYS,
-	CACHE_MENU_MSG_ID_TTL_SEC,
-	CACHE_STATE_TTL_SEC,
-} from './constants.js';
+import { CACHE_MENU_MSG_ID_TTL_SEC, CACHE_STATE_TTL_SEC } from './constants.js';
 
 const QUERY_MARKER = 'PageRouter';
 const PREV_MENU_MSG_ID_CACHE_NAME = 'prevMsgId';
@@ -89,7 +86,12 @@ class PageRouter {
 	}
 
 	async setState(newStateToReplace) {
-		await saveToCache(STATE_CACHE_NAME, newStateToReplace, CACHE_STATE_TTL_SEC);
+		await saveToCache(
+			this.c,
+			STATE_CACHE_NAME,
+			newStateToReplace,
+			CACHE_STATE_TTL_SEC,
+		);
 
 		this._state = newStateToReplace;
 	}
@@ -103,16 +105,13 @@ class PageRouter {
 
 		console.log('-----go', pathTo);
 
-		if (!pathTo) return c.reply('No path');
-
-		await this.currentPage?.unmount();
-
 		if (!this.pages[pathTo]) return c.reply(`Wrong path "${pathTo}"`);
-		// make current page instance
-		this.currentPage = new this.pages[pathTo](this, pathTo);
-		// load from cache state and update it
-		await this._setupState(newPartialState, replaceState);
-		await this.currentPage.mount();
+
+		try {
+			await _switchPage(pathTo, newPartialState, replaceState);
+		} catch (e) {
+			return c.reply(String(e));
+		}
 
 		const keyboard = this._renderMenuKeyboard();
 
@@ -145,10 +144,17 @@ class PageRouter {
 
 		if (marker !== QUERY_MARKER) return;
 
-		const btnPayload = JSON.parse(bntPayloadRest.join('|'));
+		const btnPayload = bntPayloadRest.length
+			? JSON.parse(bntPayloadRest.join('|'))
+			: undefined;
 
-		// TODO: наверное должно создаться меню
-		const menu = this.pages[pathTo]?.menu;
+		try {
+			await _switchPage(pathTo);
+		} catch (e) {
+			return c.reply(String(e));
+		}
+
+		const menu = this.currentPage.menu;
 
 		if (!menu?.length) return c.reply(`ERROR: No menu`);
 
@@ -163,6 +169,17 @@ class PageRouter {
 		return c.reply(`ERROR: Can't find button. ${data}`);
 	};
 
+	async _switchPage(pathTo, newPartialState, replaceState) {
+		if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
+
+		await this.currentPage?.unmount();
+		// make current page instance
+		this.currentPage = new this.pages[pathTo](this, pathTo);
+		// load from cache state and update it
+		await this._setupState(newPartialState, replaceState);
+		await this.currentPage.mount();
+	}
+
 	_renderMenuKeyboard() {
 		const menu = this.currentPage?.menu;
 
@@ -172,10 +189,11 @@ class PageRouter {
 
 		for (const row of menu) {
 			for (const { id, label, payload } of row) {
-				keyboard.text(
-					label,
-					`${QUERY_MARKER}|${this.currentPath}|${id}|${JSON.stringify(payload)}`,
-				);
+				let query = `${QUERY_MARKER}|${this.currentPath}|${id}`;
+
+				if (payload) query += `|${JSON.stringify(payload)}`;
+
+				keyboard.text(label, query);
 			}
 
 			keyboard.row();
@@ -209,21 +227,41 @@ class PageRouter {
 	}
 
 	async _setupState(newPartialState, replaceState) {
-		return;
+		let loadedState;
 
-		// TODO: если кэш протух то что?
-		if (newPartialState === null) {
-			newPayload = {};
-		} else {
-			// TODO: deep merge
-			newPayload = {
-				state: {
-					...(oldPayload?.state || {}),
-					...(newPartialState || {}),
-				},
-			};
+		if (!this.state) {
+			// load it from cache
+			loadedState = await loadFromCache(c, STATE_CACHE_NAME);
+
+			this._state = _.cloneDeep(loadedState);
 		}
 
-		this.currentPage.setPayload(newPayload);
+		if (!this.state) {
+			// TODO: если кэш протух то что?
+
+			this.state = {};
+		}
+
+		if (newPartialState === null) {
+			this.state = {};
+		} else {
+			if (replaceState) {
+				this.state = newPartialState || {};
+			} else {
+				this.state = _.defaultsDeep(
+					_.cloneDeep(newPartialState || {}),
+					this.state,
+				);
+			}
+		}
+
+		if (!_.isEqual(loadedState, this.state)) {
+			await saveToCache(
+				this.c,
+				STATE_CACHE_NAME,
+				this.state,
+				CACHE_STATE_TTL_SEC,
+			);
+		}
 	}
 }

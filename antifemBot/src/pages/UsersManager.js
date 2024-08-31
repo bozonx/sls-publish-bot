@@ -3,10 +3,10 @@ import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
 import {
 	t,
-	saveDataToKv,
+	saveToKv,
 	isAdminUser,
 	defineMenu,
-	loadDataFromKv,
+	loadFromKv,
 } from '../helpers.js';
 import {
 	KV_KEYS,
@@ -71,10 +71,10 @@ export class UsersManager extends PageBase {
 			return c.reply(`ERROR: wrong data`);
 		}
 
-		const allUsers = await loadDataFromKv(c, KV_KEYS.USERS);
+		const allUsers = await loadFromKv(c, KV_KEYS.USERS);
 		const merged = [...allUsers, obj];
 
-		await saveDataToKv(c, KV_KEYS.USERS, merged);
+		await saveToKv(c, KV_KEYS.USERS, merged);
 		await c.reply(`User was saved\n\n${yaml.dump(obj)}`);
 		await this.pager.reload();
 	}
@@ -89,7 +89,7 @@ export class UsersManager extends PageBase {
 
 		prepared.splice(index, 1);
 
-		await saveDataToKv(c, KV_KEYS.USERS, prepared);
+		await saveToKv(c, KV_KEYS.USERS, prepared);
 		await c.reply(`User was deleted\n\n${yaml.dump(users[index])}`);
 		await c.pager.reload();
 	};

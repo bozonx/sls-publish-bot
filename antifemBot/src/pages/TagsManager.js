@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
 import {
 	t,
-	loadDataFromKv,
-	saveDataToKv,
+	loadFromKv,
+	saveToKv,
 	parseTagsFromInput,
 	generateTagsButtons,
 	defineMenu,
@@ -15,7 +15,7 @@ const TAG_ID_PREFIX = 'TAG-';
 export class TagsManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
-		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 
 		this.text = t(c, 'tagsManagerDescr');
 
@@ -37,10 +37,10 @@ export class TagsManager extends PageBase {
 		if (!c.msg.text) return c.reply('No text');
 
 		const tags = parseTagsFromInput(c.msg.text);
-		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 		const megedTags = _.uniq([...allTags, ...tags]).sort();
 
-		await saveDataToKv(c, KV_KEYS.TAGS, megedTags);
+		await saveToKv(c, KV_KEYS.TAGS, megedTags);
 		await c.reply(`${t(c, 'tagWasAdded')}: ${tags.join(', ')}`);
 		await this.pager.reload();
 	}
@@ -48,13 +48,13 @@ export class TagsManager extends PageBase {
 	tagRemoveCallback = async (btnId) => {
 		const c = this.pager.c;
 		const tagName = btnId.substring(TAG_ID_PREFIX.length);
-		const allTags = await loadDataFromKv(c, KV_KEYS.TAGS, []);
+		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 		const indexOfTag = allTags.indexOf(tagName);
 
 		// remove selected tag
 		allTags.splice(indexOfTag, 1);
 
-		await saveDataToKv(c, KV_KEYS.TAGS, allTags);
+		await saveToKv(c, KV_KEYS.TAGS, allTags);
 		await c.reply(`${t(c, 'tagWasDeleted')}: ${tagName}`);
 		await c.pager.reload();
 	};
