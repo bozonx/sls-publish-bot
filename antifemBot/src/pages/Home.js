@@ -42,7 +42,7 @@ export class Home extends PageBase {
 
 		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
-		this.state.pub = { pub: pubState };
+		this.state.pub = pubState;
 
 		return this.router.go('pub-content');
 	}

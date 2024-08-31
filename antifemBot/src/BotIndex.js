@@ -8,9 +8,9 @@ import { UsersManager } from './pages/UsersManager.js';
 import { PubContent } from './pages/PubContent.js';
 import { PubAuthor } from './pages/PubAuthor.js';
 import { PubTags } from './pages/PubTags.js';
-// import { PubDate } from './pages/PubDate.js';
-// import { PubHour } from './pages/PubHour.js';
-// import { PubConfirm } from './pages/PubConfirm.js';
+import { PubDate } from './pages/PubDate.js';
+import { PubHour } from './pages/PubHour.js';
+import { PubPostSetup } from './pages/PubPostSetup.js';
 
 export class BotIndex {
 	bot;
@@ -30,9 +30,9 @@ export class BotIndex {
 			'pub-content': PubContent,
 			'pub-author': PubAuthor,
 			'pub-tags': PubTags,
-			// 'pub-date': PubDate,
-			// 'pub-hour': PubHour,
-			// 'pub-confirm': PubConfirm,
+			'pub-date': PubDate,
+			'pub-hour': PubHour,
+			'pub-post-setup': PubPostSetup,
 		});
 
 		this.bot.use(router.middleware);

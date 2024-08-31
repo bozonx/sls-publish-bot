@@ -10,19 +10,20 @@ export class PubAuthor extends PubPageBase {
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectAuthorDescr')}`;
 		this.menu = defineMenu([
 			// TODO: разбить по 2 шт на строку
-			// TODO: использовать payload
 			...authors.map((author) => [
 				{
 					id: author,
 					label: author,
-					cb: () => this.go('pub-tags', { [STATE_KEYS.author]: author }),
+					payload: author,
+					cb: (payload) =>
+						this.go('pub-tags', { [STATE_KEYS.author]: payload }),
 				},
 			]),
 			[
 				{
 					id: 'withoutAuthorBtn',
 					label: t(c, 'withoutAuthorBtn'),
-					cb: () => this.go('pub-tags'),
+					cb: () => this.go('pub-tags', { [STATE_KEYS.author]: null }),
 				},
 			],
 			[
@@ -30,6 +31,11 @@ export class PubAuthor extends PubPageBase {
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
 					cb: () => this.go('home'),
+				},
+				{
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
+					cb: () => this.go('pub-tags'),
 				},
 			],
 		]);

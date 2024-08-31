@@ -18,8 +18,8 @@ export class PubPageBase extends PageBase {
 		if (!newPubPartial) return;
 
 		this.state.pub = {
-			...(newPubPartial || {}),
 			...this.state.pub,
+			...(newPubPartial || {}),
 		};
 
 		// const partial = _.cloneDeep(newPubPartial || {});

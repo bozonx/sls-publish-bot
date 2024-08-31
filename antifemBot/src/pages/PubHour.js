@@ -1,70 +1,51 @@
-import { t } from './helpers.js';
-import { PageBase } from './Pager.js';
-import { makePayloadPreview } from './helpers.js';
+import { PubPageBase } from '../PubPageBase.js';
+import { t, makeStatePreview, defineMenu } from '../helpers.js';
 
-export class PagePubHour extends PageBase {
-	payload;
+export class PubHour extends PubPageBase {
+	async mount() {
+		const c = this.router.c;
 
-	async init() {
-		// only first time init on app start
-	}
-
-	async mount(c, payload) {
-		this.payload = payload;
-		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectHour')}`;
-
-		const hourHandler = (hour) => {
-			return async (c) => {
-				await c.pager.go('pub-confirm', {
-					...payload,
-					hour,
-				});
-			};
-		};
-
-		this.menu = [
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectHour')}`;
+		this.menu = defineMenu([
 			[
-				['7', hourHandler(7)],
-				['8', hourHandler(8)],
-				['9', hourHandler(9)],
-				['10', hourHandler(10)],
-				['11', hourHandler(11)],
+				this._makeHourBtn(7),
+				this._makeHourBtn(8),
+				this._makeHourBtn(9),
+				this._makeHourBtn(10),
+				this._makeHourBtn(11),
 			],
 			[
-				['12', hourHandler(12)],
-				['13', hourHandler(13)],
-				['14', hourHandler(14)],
-				['15', hourHandler(15)],
-				['16', hourHandler(16)],
+				this._makeHourBtn(12),
+				this._makeHourBtn(13),
+				this._makeHourBtn(14),
+				this._makeHourBtn(15),
+				this._makeHourBtn(16),
 			],
 			[
-				['17', hourHandler(17)],
-				['18', hourHandler(18)],
-				['19', hourHandler(19)],
-				['20', hourHandler(20)],
-				['21', hourHandler(21)],
+				this._makeHourBtn(17),
+				this._makeHourBtn(18),
+				this._makeHourBtn(19),
+				this._makeHourBtn(20),
+				this._makeHourBtn(21),
 			],
-			// row
 			[
-				// button
-				[
-					t(c, 'toHome'),
-					(c) => {
-						c.pager.go('home');
-					},
-				],
-				[
-					t(c, 'back'),
-					(c) => {
-						c.pager.go('pub-date', payload);
-					},
-				],
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.go('home'),
+				},
+				{
+					id: 'backBtn',
+					label: t(c, 'backBtn'),
+					cb: () => this.go('pub-date'),
+				},
+				typeof this.state.pub?.hour === 'number' && {
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
+					cb: () => this.go('pub-post-setup'),
+				},
 			],
-		];
-	}
-
-	async unmount(c) {
-		//
+		]);
 	}
 
 	async message(c) {
@@ -73,4 +54,17 @@ export class PagePubHour extends PageBase {
 		// await c.pager.go('pub-confirm', this.payload);
 		// await c.reply(t(c, 'textAccepted'))
 	}
+
+	_makeHourBtn(hour) {
+		return {
+			id: hour,
+			label: String(hour),
+			payload: hour,
+			cb: this._selectHourHandler,
+		};
+	}
+
+	_selectHourHandler = (btnId, payload) => {
+		return this.go('pub-post-setup', { hour: Number(payload) });
+	};
 }

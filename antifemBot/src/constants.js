@@ -29,14 +29,17 @@ export const TEMPLATE_NAMES = {
 	noFooter: 'noFooter',
 };
 export const STATE_KEYS = {
+	text: 'text',
 	author: 'author',
 	tags: 'tags',
+	template: 'template',
+	preview: 'preview',
 	// TODO: add more
 };
 // TODO: review
 export const DEFAULT_STATE = {
-	preview: true,
-	template: TEMPLATE_NAMES.default,
+	[STATE_KEYS.preview]: true,
+	[STATE_KEYS.template]: TEMPLATE_NAMES.default,
 };
 
 const footer =

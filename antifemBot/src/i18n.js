@@ -30,6 +30,8 @@ export default {
 		manageTagsBtn: 'Управлять тэгами',
 		withoutAuthorBtn: 'Без автора',
 		clearTagsBtn: 'Сбросить тэги',
+		useTemplateBtn: 'Использовать шаблон',
+		previewBtn: 'Посмотреть результат',
 
 		previewOff: 'Выключить link preview',
 		previewOn: 'Включить link preview',

@@ -1,56 +1,61 @@
-import { t } from './helpers.js';
-import { PageBase } from './Pager.js';
-import { makePayloadPreview, nowPlusDay } from './helpers.js';
+import { PubPageBase } from '../PubPageBase.js';
+import { t, makeStatePreview, nowPlusDay, defineMenu } from '../helpers.js';
 
-export class PagePubDate extends PageBase {
-	payload;
+export class PubDate extends PubPageBase {
+	async mount() {
+		const c = this.router.c;
 
-	async init() {
-		// only first time init on app start
-	}
-
-	async mount(c, payload) {
-		this.payload = payload;
-		this.text = `${makePayloadPreview(c, payload)}\n\n${t(c, 'selectDate')}`;
-
-		const dayHandler = (plusDay) => {
-			return async (c) => {
-				await c.pager.go('pub-hour', {
-					...payload,
-					date: nowPlusDay(plusDay),
-				});
-			};
-		};
-
-		this.menu = [
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectDate')}`;
+		this.menu = defineMenu([
 			[
-				[t(c, 'today'), dayHandler(0)],
-				[t(c, 'tomorrow'), dayHandler(1)],
-				[t(c, 'afterTomorrow'), dayHandler(2)],
+				{
+					id: 'today',
+					label: t(c, 'today'),
+					payload: 0,
+					cb: this._selectDayHandler,
+				},
+				{
+					id: 'tomorrow',
+					label: t(c, 'tomorrow'),
+					payload: 1,
+					cb: this._selectDayHandler,
+				},
+				{
+					id: 'afterTomorrow',
+					label: t(c, 'afterTomorrow'),
+					payload: 2,
+					cb: this._selectDayHandler,
+				},
 			],
 			// TODO: add days of week
-			// row
 			[
-				// button
-				[t(c, 'toHome'), dayHandler(0)],
-				[
-					t(c, 'back'),
-					(c) => {
-						c.pager.go('pub-tags', payload);
-					},
-				],
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.go('home'),
+				},
+				{
+					id: 'backBtn',
+					label: t(c, 'backBtn'),
+					cb: () => this.go('pub-tags'),
+				},
+				this.state.pub?.date && {
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
+					cb: () => this.go('pub-hour'),
+				},
 			],
-		];
+		]);
 	}
 
-	async unmount(c) {
-		//
-	}
-
-	async message(c) {
+	async message() {
 		//
 		// console.log(1111, c);
 		// await c.pager.go('pub-hour', this.payload);
 		// await c.reply(t(c, 'textAccepted'))
 	}
+
+	_selectDayHandler = (btnId, payload) => {
+		return this.go('pub-hour', { date: nowPlusDay(Number(payload)) });
+	};
 }

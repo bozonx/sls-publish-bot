@@ -11,8 +11,6 @@ import {
 } from '../helpers.js';
 import { KV_KEYS, STATE_KEYS } from '../constants.js';
 
-// const TAG_ID_PREFIX = 'TAG-';
-
 export class PubTags extends PubPageBase {
 	async mount() {
 		const c = this.router.c;
@@ -25,6 +23,13 @@ export class PubTags extends PubPageBase {
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
 		this.menu = defineMenu([
 			...generateTagsButtons(tagsButtons, this.tagSelectCallback),
+			this.state.pub?.tags?.length && [
+				{
+					id: 'clearTagsBtn',
+					label: t(c, 'clearTagsBtn'),
+					cb: () => this.go('pub-tags', { [STATE_KEYS.tags]: null }),
+				},
+			],
 			[
 				{
 					id: 'toHomeBtn',
@@ -40,13 +45,6 @@ export class PubTags extends PubPageBase {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 					cb: () => this.go('pub-date'),
-				},
-			],
-			this.state.pub?.tags?.length && [
-				{
-					id: 'clearTagsBtn',
-					label: t(c, 'clearTagsBtn'),
-					cb: () => this.go('pub-tags', { [STATE_KEYS.tags]: null }),
 				},
 			],
 		]);
@@ -72,11 +70,7 @@ export class PubTags extends PubPageBase {
 	}
 
 	tagSelectCallback = async (btnId, payload) => {
-		// const tagName = btnId.substring(TAG_ID_PREFIX.length);
-		const mergedAllTags = _.uniq([
-			...(this.payload.tags || {}),
-			payload,
-		]).sort();
+		const mergedAllTags = _.uniq([...(this.state.tags || []), payload]).sort();
 
 		return this.reload({ [STATE_KEYS.tags]: mergedAllTags });
 	};
