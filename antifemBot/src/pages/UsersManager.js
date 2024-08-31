@@ -1,13 +1,7 @@
 import _ from 'lodash';
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import {
-	t,
-	saveToKv,
-	isAdminUser,
-	defineMenu,
-	loadFromKv,
-} from '../helpers.js';
+import { t, saveToKv, isAdminUser, defineMenu } from '../helpers.js';
 import {
 	KV_KEYS,
 	CTX_KEYS,
@@ -27,8 +21,9 @@ export class UsersManager extends PageBase {
 		this.menu = defineMenu([
 			...users.map((i) => [
 				{
-					id: String(i[USER_KEYS.ID]),
+					id: `USER-${i[USER_KEYS.ID]}`,
 					label: `${i[USER_KEYS.NAME]} | ${i[USER_KEYS.ID]}${i[USER_KEYS.IS_ADMIN] ? ' (admin)' : ''}`,
+					payload: i[USER_KEYS.ID],
 					cb: this.userRemoveCallback,
 				},
 			]),
@@ -79,18 +74,21 @@ export class UsersManager extends PageBase {
 		await this.router.reload();
 	}
 
-	userRemoveCallback = async (btnId) => {
+	userRemoveCallback = async (btnId, payload) => {
 		const c = this.router.c;
 		const users = c.ctx[CTX_KEYS.USERS];
 		const prepared = [...users];
-		const index = prepared.findIndex((i) => i[USER_KEYS.ID] === Number(btnId));
+		const index = prepared.findIndex(
+			(i) => i[USER_KEYS.ID] === Number(payload),
+		);
 
-		if (index < 0) return c.reply(`ERROR: Can't find user ${btnId}`);
+		if (index < 0) return c.reply(`ERROR: Can't find user ${payload}`);
 
 		prepared.splice(index, 1);
 
 		await saveToKv(c, KV_KEYS.USERS, prepared);
 		await c.reply(`User was deleted\n\n${yaml.dump(users[index])}`);
-		await c.router.reload();
+
+		return c.router.reload();
 	};
 }

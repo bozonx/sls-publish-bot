@@ -127,7 +127,7 @@ export function isAdminUser(c, userId) {
 }
 
 export function isRegisteredUser(c, userId) {
-	if (!userId && !['string', 'number'].includes(typeof userId))
+	if (!userId || !['string', 'number'].includes(typeof userId))
 		throw new Error(`ERROR: isRegisteredUser. Wrong userId - ${typeof userId}`);
 
 	const found = c.ctx[CTX_KEYS.USERS]?.find(

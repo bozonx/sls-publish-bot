@@ -38,6 +38,6 @@ export class ConfigManager extends PageBase {
 		await saveToKv(c, KV_KEYS.CONFIG, obj);
 		await c.reply(`Success`);
 		// TODO: после реплай будет работать???
-		await c.router.reload();
+		return this.router.reload();
 	}
 }

@@ -24,7 +24,7 @@ export class TagsManager extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
+					cb: () => this.router.go('home'),
 				},
 			],
 		]);
@@ -58,6 +58,7 @@ export class TagsManager extends PageBase {
 
 		await saveToKv(c, KV_KEYS.TAGS, allTags);
 		await c.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
-		await this.router.reload();
+
+		return this.router.reload();
 	};
 }
