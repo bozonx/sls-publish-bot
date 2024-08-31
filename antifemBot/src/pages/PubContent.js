@@ -3,7 +3,7 @@ import { t, makeContentState, defineMenu } from '../helpers.js';
 
 export class PubContent extends PubPageBase {
 	async mount() {
-		const c = this.pager.c;
+		const c = this.router.c;
 
 		this.text = t(c, 'uploadContentDescr');
 		this.menu = defineMenu([
@@ -11,26 +11,26 @@ export class PubContent extends PubPageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home'),
+					cb: () => this.router.go('home'),
 				},
 				// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
 				// TODO: либо вобще ничего нет
 				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.pager.go('pub-author'),
+					cb: () => this.router.go('pub-author'),
 				},
 			],
 		]);
 	}
 
 	async onMessage() {
-		const c = this.pager.c;
+		const c = this.router.c;
 
 		const pubState = makeContentState(c);
 
 		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
-		return this.pager.go('pub-author', pubState);
+		return this.router.go('pub-author', pubState);
 	}
 }

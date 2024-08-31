@@ -15,7 +15,7 @@ const TAG_ID_PREFIX = 'TAG-';
 
 export class PubTags extends PubPageBase {
 	async mount() {
-		const c = this.pager.c;
+		const c = this.router.c;
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 
 		// TODO: review
@@ -58,7 +58,7 @@ export class PubTags extends PubPageBase {
 	}
 
 	async onMessage() {
-		const c = this.pager.c;
+		const c = this.router.c;
 
 		if (!c.msg.text) return c.reply('No text');
 
@@ -74,14 +74,14 @@ export class PubTags extends PubPageBase {
 			...newTags,
 		]).sort();
 
-		await c.pager.go('pub-date', {
+		await c.router.go('pub-date', {
 			// TODO: лучше передавать полностью
 			tags: mergedSelectedTags,
 		});
 	}
 
 	tagSelectCallback = async (btnId) => {
-		const c = this.pager.c;
+		const c = this.router.c;
 		const tagName = btnId.substring(TAG_ID_PREFIX.length);
 		// TODO: review
 		const megedAllTags = _.uniq([...(this.payload.tags || {}), tagName]).sort();

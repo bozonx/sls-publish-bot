@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { PageBase } from '../PageRouter.js';
+import { PageBase } from '../routerouter.js';
 import {
 	t,
 	loadFromKv,
@@ -14,7 +14,7 @@ const TAG_ID_PREFIX = 'TAG-';
 
 export class TagsManager extends PageBase {
 	async mount() {
-		const c = this.pager.c;
+		const c = this.router.c;
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 
 		this.text = t(c, 'tagsManagerDescr');
@@ -24,14 +24,14 @@ export class TagsManager extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home'),
+					cb: () => this.router.go('home'),
 				},
 			],
 		]);
 	}
 
 	async onMessage() {
-		const c = this.pager.c;
+		const c = this.router.c;
 
 		if (!c.msg.text) return c.reply('No text');
 
@@ -41,13 +41,13 @@ export class TagsManager extends PageBase {
 
 		await saveToKv(c, KV_KEYS.TAGS, megedTags);
 		await c.reply(`${t(c, 'tagWasAdded')}: ${tags.join(', ')}`);
-		await this.pager.reload();
+		await this.router.reload();
 	}
 
 	tagRemoveCallback = async (btnId, payload) => {
 		console.log(1111, payload);
 
-		const c = this.pager.c;
+		const c = this.router.c;
 		const tagName = btnId.substring(TAG_ID_PREFIX.length);
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 		const indexOfTag = allTags.indexOf(tagName);
@@ -59,6 +59,6 @@ export class TagsManager extends PageBase {
 
 		await saveToKv(c, KV_KEYS.TAGS, allTags);
 		await c.reply(`${t(c, 'tagWasDeleted')}: ${tagName}`);
-		await c.pager.reload();
+		await c.router.reload();
 	};
 }

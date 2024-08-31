@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import yaml from 'js-yaml';
-import { PageBase } from '../PageRouter.js';
+import { PageBase } from '../routerouter.js';
 import {
 	t,
 	saveToKv,
@@ -17,9 +17,9 @@ import {
 
 export class UsersManager extends PageBase {
 	async mount() {
-		const c = this.pager.c;
+		const c = this.router.c;
 
-		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home');
+		if (!isAdminUser(c, c.msg.chat.id)) return this.router.go('home');
 
 		const users = c.ctx[CTX_KEYS.USERS];
 
@@ -36,14 +36,14 @@ export class UsersManager extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home'),
+					cb: () => this.router.go('home'),
 				},
 			],
 		]);
 	}
 
 	async onMessage() {
-		const c = this.pager.c;
+		const c = this.router.c;
 		const text = c.msg.text;
 		let obj;
 
@@ -76,11 +76,11 @@ export class UsersManager extends PageBase {
 
 		await saveToKv(c, KV_KEYS.USERS, merged);
 		await c.reply(`User was saved\n\n${yaml.dump(obj)}`);
-		await this.pager.reload();
+		await this.router.reload();
 	}
 
 	userRemoveCallback = async (btnId) => {
-		const c = this.pager.c;
+		const c = this.router.c;
 		const users = c.ctx[CTX_KEYS.USERS];
 		const prepared = [...users];
 		const index = prepared.findIndex((i) => i[USER_KEYS.ID] === Number(btnId));
@@ -91,6 +91,6 @@ export class UsersManager extends PageBase {
 
 		await saveToKv(c, KV_KEYS.USERS, prepared);
 		await c.reply(`User was deleted\n\n${yaml.dump(users[index])}`);
-		await c.pager.reload();
+		await c.router.reload();
 	};
 }

@@ -4,7 +4,7 @@ import { t, makeStatePreview, defineMenu } from '../helpers.js';
 
 export class PubAuthor extends PubPageBase {
 	async mount() {
-		const c = this.pager.c;
+		const c = this.router.c;
 		const authors = c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.AUTHORS];
 
 		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectAuthorDescr')}`;
@@ -14,32 +14,32 @@ export class PubAuthor extends PubPageBase {
 				{
 					id: author,
 					label: author,
-					cb: this.pager.go('pub-tags', { author }),
+					cb: this.router.go('pub-tags', { author }),
 				},
 			]),
 			[
 				{
 					id: 'withoutAuthorBtn',
 					label: t(c, 'withoutAuthorBtn'),
-					cb: () => this.pager.go('pub-tags'),
+					cb: () => this.router.go('pub-tags'),
 				},
 			],
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home', null),
+					cb: () => this.router.go('home', null),
 				},
 			],
 		]);
 	}
 
 	async onMessage() {
-		const c = this.pager.c;
+		const c = this.router.c;
 
 		if (!c.msg.text) return;
 
-		await this.pager.go('pub-tags', {
+		await this.router.go('pub-tags', {
 			pub: { [STATE_KEYS.author]: c.msg.text.trim() },
 		});
 	}

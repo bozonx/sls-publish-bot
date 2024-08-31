@@ -1,13 +1,13 @@
 import yaml from 'js-yaml';
-import { PageBase } from '../PageRouter.js';
+import { PageBase } from '../routerouter.js';
 import { CTX_KEYS, KV_KEYS } from '../constants.js';
 import { t, isAdminUser, saveToKv, defineMenu } from '../helpers.js';
 
 export class ConfigManager extends PageBase {
 	async mount() {
-		const c = this.pager.c;
+		const c = this.router.c;
 
-		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home');
+		if (!isAdminUser(c, c.msg.chat.id)) return this.router.go('home');
 
 		this.text = t(c, 'editConfigDescr');
 		this.menu = defineMenu([
@@ -15,7 +15,7 @@ export class ConfigManager extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home'),
+					cb: () => this.router.go('home'),
 				},
 			],
 		]);
@@ -25,7 +25,7 @@ export class ConfigManager extends PageBase {
 	}
 
 	async onMessage() {
-		const c = this.pager.c;
+		const c = this.router.c;
 		const rawText = c.msg.text;
 		let obj;
 
@@ -38,6 +38,6 @@ export class ConfigManager extends PageBase {
 		await saveToKv(c, KV_KEYS.CONFIG, obj);
 		await c.reply(`Success`);
 		// TODO: после реплай будет работать???
-		await c.pager.reload();
+		await c.router.reload();
 	}
 }
