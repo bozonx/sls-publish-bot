@@ -6,8 +6,8 @@ import {
 } from './constants.js';
 import {
 	t,
-	loadDataFromKv,
-	saveDataToKv,
+	loadFromKv,
+	saveToKv,
 	makeUnregisteredMsg,
 	isRegisteredUser,
 } from './helpers.js';
@@ -16,13 +16,13 @@ export function makeContext(MAIN_ADMIN_TG_USER_ID, KV) {
 	return async (c, next) => {
 		c.ctx = { [CTX_KEYS.KV]: KV };
 
-		let appCfg = await loadDataFromKv(c, KV_KEYS.CONFIG);
-		let users = await loadDataFromKv(c, KV_KEYS.USERS);
+		let appCfg = await loadFromKv(c, KV_KEYS.CONFIG);
+		let users = await loadFromKv(c, KV_KEYS.USERS);
 
 		if (!appCfg) {
 			appCfg = APP_INITIAL_CONFIG;
 			// save initial config to DB on first time app start
-			await saveDataToKv(c, KV_KEYS.CONFIG, appCfg);
+			await saveToKv(c, KV_KEYS.CONFIG, appCfg);
 		}
 
 		if (!users) {
@@ -34,7 +34,7 @@ export function makeContext(MAIN_ADMIN_TG_USER_ID, KV) {
 				},
 			];
 			// save Owner user on first time app start
-			await saveDataToKv(c, KV_KEYS.USERS, users);
+			await saveToKv(c, KV_KEYS.USERS, users);
 		}
 
 		c.ctx = {

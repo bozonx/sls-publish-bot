@@ -31,7 +31,7 @@ export class TagsManager extends PageBase {
 		]);
 	}
 
-	async message() {
+	async onMessage() {
 		const c = this.pager.c;
 
 		if (!c.msg.text) return c.reply('No text');

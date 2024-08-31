@@ -43,7 +43,7 @@ export class UsersManager extends PageBase {
 		]);
 	}
 
-	async message() {
+	async onMessage() {
 		const c = this.pager.c;
 		const text = c.msg.text;
 		let obj;

@@ -3,6 +3,7 @@ import locales from './i18n.js';
 import {
 	TG_BOT_URL,
 	CTX_KEYS,
+	CACHE_PREFIX,
 	USER_KEYS,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
 } from './constants.js';
@@ -61,7 +62,7 @@ export function makeStatePreview(c, state = {}) {
 	return res.trim();
 }
 
-export async function loadDataFromKv(c, key, defaultValue) {
+export async function loadFromKv(c, key, defaultValue) {
 	let tagsStr;
 
 	try {
@@ -73,7 +74,7 @@ export async function loadDataFromKv(c, key, defaultValue) {
 	return tagsStr ? JSON.parse(tagsStr) : defaultValue;
 }
 
-export async function saveDataToKv(c, key, value) {
+export async function saveToKv(c, key, value) {
 	const valueStr = JSON.stringify(value);
 
 	try {
@@ -81,6 +82,21 @@ export async function saveDataToKv(c, key, value) {
 	} catch (e) {
 		throw new Error(`ERROR: Can't save value ${valueStr} of "${key}": ${e}`);
 	}
+}
+
+export function loadFromCache(c, key) {
+	const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+
+	return c.ctx[CTX_KEYS.KV].get(fullKey);
+}
+
+// on expire the key-value pair will be deleted
+export function saveToCache(c, key, value, expireFromNowSec) {
+	const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+
+	return c.ctx[CTX_KEYS.KV].put(fullKey, value, {
+		expirationTtl: expireFromNowSec,
+	});
 }
 
 export function isAdminUser(c, userId) {

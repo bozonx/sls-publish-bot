@@ -24,7 +24,7 @@ export class ConfigManager extends PageBase {
 		return c.reply(yaml.dump(c.ctx[CTX_KEYS.APP_CFG]));
 	}
 
-	async message() {
+	async onMessage() {
 		const c = this.pager.c;
 		const rawText = c.msg.text;
 		let obj;

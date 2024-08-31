@@ -1,44 +1,43 @@
 import { InlineKeyboard } from 'grammy';
-import {
-	CTX_KEYS,
-	CACHE_PREFIX,
-	CACHE_MENU_MSG_ID_TTL_SEC,
-} from './constants.js';
+import { loadFromCache, saveToCache } from './helpers.js';
+import { CTX_KEYS, CACHE_MENU_MSG_ID_TTL_SEC } from './constants.js';
 
 const QUERY_MARKER = 'PageRouter';
 const PREV_MENU_MSG_ID_CACHE_NAME = 'prevMsgId';
 
 /**
- * Do not store state in class between requests
+ * Do not store andy state inside your page class between requests
  */
 export class PageBase {
 	pager;
+	// path of this page
 	path;
-	payload;
-	// description of menu
+	// Put here the description of menu
 	text;
+	// Put here menu rows and buttons here
 	menu = [];
+
+	// state which is passed between pages using cache
+	get state() {
+		return this.pager.state;
+	}
 
 	constructor(pager, path) {
 		this.pager = pager;
 		this.path = path;
 	}
 
-	setPayload(payload) {
-		this.payload = payload;
-	}
-
 	// It runs only first time init on app start. It means for all the users
 	async init() {}
 
 	// It runs when a route of certain user has been changed
-	async mount(c, payload) {}
+	async mount() {}
 
 	// It runs when a route is changing
-	async unmount(c) {}
+	async unmount() {}
 
 	// It runs on each income message while this page is active
-	async message(c) {}
+	async onMessage() {}
 }
 
 export async function makeRouter(initialPages) {
@@ -53,6 +52,7 @@ class PageRouter {
 	c;
 	pages = {};
 	currentPage;
+	state;
 
 	get currentPath() {
 		return this.currentPage?.path;
@@ -120,19 +120,19 @@ class PageRouter {
 		return next();
 	};
 
-	async _getFromCache(key) {
-		const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
-
-		return this.c.ctx[CTX_KEYS.KV].get(fullKey);
-	}
-
-	async _setToCache(key, value) {
-		const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
-
-		return this.c.ctx[CTX_KEYS.KV].put(fullKey, value, {
-			expirationTtl: CACHE_MENU_MSG_ID_TTL_SEC,
-		});
-	}
+	// async _getFromCache(key) {
+	// 	const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+	//
+	// 	return this.c.ctx[CTX_KEYS.KV].get(fullKey);
+	// }
+	//
+	// async _setToCache(key, value) {
+	// 	const fullKey = `${CACHE_PREFIX}|${this.c.msg.chat.id}|${key}`;
+	//
+	// 	return this.c.ctx[CTX_KEYS.KV].put(fullKey, value, {
+	// 		expirationTtl: CACHE_MENU_MSG_ID_TTL_SEC,
+	// 	});
+	// }
 
 	_handleQueryData = async (c) => {
 		// The start of request
@@ -160,7 +160,7 @@ class PageRouter {
 	};
 
 	_handleMessage = (c) => {
-		return this.currentPage?.message?.();
+		return this.currentPage?.onMessage?.();
 	};
 
 	async _renderMenu(payload) {

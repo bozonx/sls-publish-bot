@@ -25,7 +25,7 @@ export class PubContent extends PageBase {
 		]);
 	}
 
-	async message() {
+	async onMessage() {
 		const c = this.pager.c;
 
 		const state = makeContentState(c);
