@@ -18,12 +18,12 @@ export class PubTags extends PageBase {
 		const c = this.pager.c;
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 
-		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectTagsDescr')}`;
 		// TODO: review
-		this.tagsButtons = allTags.filter(
+		const tagsButtons = allTags.filter(
 			(i) => !this.payload.state?.tags?.includes(i),
 		);
 
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
 		this.menu = defineMenu([
 			...generateTagsButtons(
 				this.tagsButtons,
@@ -34,7 +34,7 @@ export class PubTags extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home', null),
+					cb: () => this.pager.go('home'),
 				},
 				{
 					id: 'backBtn',
@@ -51,7 +51,7 @@ export class PubTags extends PageBase {
 				{
 					id: 'clearTagsBtn',
 					label: t(c, 'clearTagsBtn'),
-					cb: () => c.pager.go('pub-tags', { tags: null }),
+					cb: () => c.pager.go('pub-tags', { pub: { tags: null } }),
 				},
 			],
 		]);

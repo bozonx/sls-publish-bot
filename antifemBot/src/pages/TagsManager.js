@@ -18,14 +18,13 @@ export class TagsManager extends PageBase {
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 
 		this.text = t(c, 'tagsManagerDescr');
-
 		this.menu = defineMenu([
 			...generateTagsButtons(allTags, this.tagRemoveCallback, TAG_ID_PREFIX),
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home', null),
+					cb: () => this.pager.go('home'),
 				},
 			],
 		]);
@@ -45,11 +44,15 @@ export class TagsManager extends PageBase {
 		await this.pager.reload();
 	}
 
-	tagRemoveCallback = async (btnId) => {
+	tagRemoveCallback = async (btnId, payload) => {
+		console.log(1111, payload);
+
 		const c = this.pager.c;
 		const tagName = btnId.substring(TAG_ID_PREFIX.length);
 		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
 		const indexOfTag = allTags.indexOf(tagName);
+
+		if (indexOfTag < 0) return c.reply(`ERROR: Can't find tag`);
 
 		// remove selected tag
 		allTags.splice(indexOfTag, 1);

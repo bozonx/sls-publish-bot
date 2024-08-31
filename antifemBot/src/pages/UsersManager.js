@@ -19,12 +19,11 @@ export class UsersManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 
-		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home', null);
-
-		this.text = t(c, 'usersManagerDescr');
+		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home');
 
 		const users = c.ctx[CTX_KEYS.USERS];
 
+		this.text = t(c, 'usersManagerDescr');
 		this.menu = defineMenu([
 			...users.map((i) => [
 				{
@@ -37,7 +36,7 @@ export class UsersManager extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home', null),
+					cb: () => this.pager.go('home'),
 				},
 			],
 		]);
@@ -68,11 +67,12 @@ export class UsersManager extends PageBase {
 		}
 
 		if (typeof obj[USER_KEYS.ID] !== 'number') {
-			return c.reply(`ERROR: wrong data`);
+			return c.reply(`ERROR: wrong data. Id is not number`);
 		}
 
-		const allUsers = await loadFromKv(c, KV_KEYS.USERS);
-		const merged = [...allUsers, obj];
+		// const allUsers = await loadFromKv(c, KV_KEYS.USERS);
+		const users = c.ctx[CTX_KEYS.USERS];
+		const merged = [...users, obj];
 
 		await saveToKv(c, KV_KEYS.USERS, merged);
 		await c.reply(`User was saved\n\n${yaml.dump(obj)}`);

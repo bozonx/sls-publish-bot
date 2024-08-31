@@ -6,13 +6,12 @@ export class PubContent extends PageBase {
 		const c = this.pager.c;
 
 		this.text = t(c, 'uploadContentDescr');
-
 		this.menu = defineMenu([
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home', null),
+					cb: () => this.pager.go('home'),
 				},
 				// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
 				// TODO: либо вобще ничего нет
@@ -28,10 +27,10 @@ export class PubContent extends PageBase {
 	async onMessage() {
 		const c = this.pager.c;
 
-		const state = makeContentState(c);
+		const pubState = makeContentState(c);
 
-		if (!state) return c.reply('ERROR: Wrong type of post');
+		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
-		return this.pager.go('pub-author', state);
+		return this.pager.go('pub-author', { pub: pubState });
 	}
 }

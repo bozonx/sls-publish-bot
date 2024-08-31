@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { CTX_KEYS, APP_CFG_KEYS } from '../constants.js';
+import { CTX_KEYS, APP_CFG_KEYS, STATE_KEYS } from '../constants.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 
 export class PubAuthor extends PageBase {
@@ -39,6 +39,8 @@ export class PubAuthor extends PageBase {
 
 		if (!c.msg.text) return;
 
-		await this.pager.go('pub-tags', { author: c.msg.text.trim() });
+		await this.pager.go('pub-tags', {
+			pub: { [STATE_KEYS.author]: c.msg.text.trim() },
+		});
 	}
 }

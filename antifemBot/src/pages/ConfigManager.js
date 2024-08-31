@@ -7,7 +7,7 @@ export class ConfigManager extends PageBase {
 	async mount() {
 		const c = this.pager.c;
 
-		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home', null);
+		if (!isAdminUser(c, c.msg.chat.id)) return this.pager.go('home');
 
 		this.text = t(c, 'editConfigDescr');
 		this.menu = defineMenu([
@@ -15,7 +15,7 @@ export class ConfigManager extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.pager.go('home', null),
+					cb: () => this.pager.go('home'),
 				},
 			],
 		]);

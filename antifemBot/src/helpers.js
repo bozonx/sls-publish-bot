@@ -172,8 +172,6 @@ export function defineMenu(menu = []) {
 	return res;
 }
 
-//////////////////////// review
-
 export function generateTagsButtons(tags, cb, idPrefix) {
 	const menu = [];
 

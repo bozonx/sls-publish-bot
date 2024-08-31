@@ -28,6 +28,10 @@ export const TEMPLATE_NAMES = {
 	byFollower: 'byFollower',
 	noFooter: 'noFooter',
 };
+export const STATE_KEYS = {
+	author: 'author',
+	// TODO: add more
+};
 // TODO: review
 export const DEFAULT_STATE = {
 	preview: true,

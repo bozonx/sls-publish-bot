@@ -61,6 +61,8 @@ class PageRouter {
 	currentPage;
 	// readonly state
 	_state;
+	// state which is loaded from DB on request start
+	_loadedState;
 
 	get state() {
 		return this._state;
@@ -73,6 +75,7 @@ class PageRouter {
 	constructor(initialPages) {
 		this.pages = initialPages;
 		// TODO: but why?
+
 		// for (const pathTo of Object.keys(initialPages)) {
 		// 	this.pages[pathTo] = new initialPages[pathTo](this, pathTo);
 		// }
@@ -85,15 +88,20 @@ class PageRouter {
 		// }
 	}
 
+	// TODO: будет автоматом сохранен
 	async setState(newStateToReplace) {
-		await saveToCache(
-			this.c,
-			STATE_CACHE_NAME,
-			newStateToReplace,
-			CACHE_STATE_TTL_SEC,
-		);
+		// await saveToCache(
+		// 	this.c,
+		// 	STATE_CACHE_NAME,
+		// 	newStateToReplace,
+		// 	CACHE_STATE_TTL_SEC,
+		// );
 
 		this._state = newStateToReplace;
+	}
+
+	async reload(newPartialState, replaceState) {
+		this.go(this.currentPage?.path, newPartialState, replaceState);
 	}
 
 	/**
@@ -105,10 +113,8 @@ class PageRouter {
 
 		console.log('-----go', pathTo);
 
-		if (!this.pages[pathTo]) return c.reply(`Wrong path "${pathTo}"`);
-
 		try {
-			await _switchPage(pathTo, newPartialState, replaceState);
+			await this._switchPage(pathTo, newPartialState, replaceState);
 		} catch (e) {
 			return c.reply(String(e));
 		}
@@ -120,10 +126,6 @@ class PageRouter {
 		// The end of request
 	}
 
-	async reload(newPartialState) {
-		this.go(this.currentPage?.path, newPartialState);
-	}
-
 	middleware = async (c, next) => {
 		this.c = c;
 		c.pager = this;
@@ -131,8 +133,16 @@ class PageRouter {
 		return next();
 	};
 
-	_handleMessage = (c) => {
-		return this.currentPage?.onMessage?.();
+	_handleMessage = async (c) => {
+		console.log('-----_handleMessage', c.msg);
+
+		try {
+			await this._switchPage();
+		} catch (e) {
+			return c.reply(String(e));
+		}
+
+		return this.currentPage.onMessage?.();
 	};
 
 	_handleQueryData = async (c) => {
@@ -149,7 +159,7 @@ class PageRouter {
 			: undefined;
 
 		try {
-			await _switchPage(pathTo);
+			await this._switchPage(pathTo);
 		} catch (e) {
 			return c.reply(String(e));
 		}
@@ -227,41 +237,38 @@ class PageRouter {
 	}
 
 	async _setupState(newPartialState, replaceState) {
+		const c = this.c;
 		let loadedState;
 
-		if (!this.state) {
-			// load it from cache
-			loadedState = await loadFromCache(c, STATE_CACHE_NAME);
+		// TODO: может всегда надо загружать???
 
-			this._state = _.cloneDeep(loadedState);
-		}
+		// if (!this.state) {
+		// load it from cache
+		loadedState = await loadFromCache(c, STATE_CACHE_NAME);
 
-		if (!this.state) {
-			// TODO: если кэш протух то что?
+		// TODO: если кэш протух то что?
 
-			this.state = {};
-		}
+		this._state = _.cloneDeep(loadedState);
+		// }
+
+		if (!this.state) this._state = {};
 
 		if (newPartialState === null) {
-			this.state = {};
+			this._state = {};
 		} else {
 			if (replaceState) {
-				this.state = newPartialState || {};
+				this._state = newPartialState || {};
 			} else {
-				this.state = _.defaultsDeep(
+				this._state = _.defaultsDeep(
 					_.cloneDeep(newPartialState || {}),
 					this.state,
 				);
 			}
 		}
 
-		if (!_.isEqual(loadedState, this.state)) {
-			await saveToCache(
-				this.c,
-				STATE_CACHE_NAME,
-				this.state,
-				CACHE_STATE_TTL_SEC,
-			);
-		}
+		// TODO: а если не был загружен
+		// if (!_.isEqual(loadedState, this.state)) {
+		await saveToCache(c, STATE_CACHE_NAME, this.state, CACHE_STATE_TTL_SEC);
+		// }
 	}
 }
