@@ -30,6 +30,7 @@ export const TEMPLATE_NAMES = {
 };
 export const STATE_KEYS = {
 	author: 'author',
+	tags: 'tags',
 	// TODO: add more
 };
 // TODO: review

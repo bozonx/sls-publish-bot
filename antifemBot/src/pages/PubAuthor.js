@@ -7,28 +7,29 @@ export class PubAuthor extends PubPageBase {
 		const c = this.router.c;
 		const authors = c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.AUTHORS];
 
-		this.text = `${makeStatePreview(c, this.payload.state)}\n\n${t(c, 'selectAuthorDescr')}`;
+		this.text = `${makeStatePreview(c, this.state)}\n\n${t(c, 'selectAuthorDescr')}`;
 		this.menu = defineMenu([
 			// TODO: разбить по 2 шт на строку
+			// TODO: использовать payload
 			...authors.map((author) => [
 				{
 					id: author,
 					label: author,
-					cb: this.router.go('pub-tags', { author }),
+					cb: this.go('pub-tags', { [STATE_KEYS.author]: author }),
 				},
 			]),
 			[
 				{
 					id: 'withoutAuthorBtn',
 					label: t(c, 'withoutAuthorBtn'),
-					cb: () => this.router.go('pub-tags'),
+					cb: () => this.go('pub-tags'),
 				},
 			],
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.router.go('home', null),
+					cb: () => this.go('home'),
 				},
 			],
 		]);
@@ -39,8 +40,6 @@ export class PubAuthor extends PubPageBase {
 
 		if (!c.msg.text) return;
 
-		await this.router.go('pub-tags', {
-			pub: { [STATE_KEYS.author]: c.msg.text.trim() },
-		});
+		await this.go('pub-tags', { [STATE_KEYS.author]: c.msg.text.trim() });
 	}
 }

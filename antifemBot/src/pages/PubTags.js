@@ -9,7 +9,7 @@ import {
 	loadFromKv,
 	saveToKv,
 } from '../helpers.js';
-import { KV_KEYS } from '../constants.js';
+import { KV_KEYS, STATE_KEYS } from '../constants.js';
 
 const TAG_ID_PREFIX = 'TAG-';
 
@@ -51,7 +51,7 @@ export class PubTags extends PubPageBase {
 				{
 					id: 'clearTagsBtn',
 					label: t(c, 'clearTagsBtn'),
-					cb: () => this.go('pub-tags', { tags: null }),
+					cb: () => this.go('pub-tags', { [STATE_KEYS.tags]: null }),
 				},
 			],
 		]);
@@ -70,22 +70,19 @@ export class PubTags extends PubPageBase {
 
 		const mergedSelectedTags = _.uniq([
 			// TODO: review
-			...(this.payload.tags || {}),
+			...(this.state.pub.tags || {}),
 			...newTags,
 		]).sort();
 
-		await c.router.go('pub-date', {
-			// TODO: лучше передавать полностью
-			tags: mergedSelectedTags,
-		});
+		// TODO: лучше передавать полностью
+		await this.go('pub-date', { [STATE_KEYS.tags]: mergedSelectedTags });
 	}
 
 	tagSelectCallback = async (btnId) => {
-		const c = this.router.c;
 		const tagName = btnId.substring(TAG_ID_PREFIX.length);
 		// TODO: review
 		const megedAllTags = _.uniq([...(this.payload.tags || {}), tagName]).sort();
 
-		return c.reload({ tags: megedAllTags });
+		return this.reload({ [STATE_KEYS.tags]: megedAllTags });
 	};
 }

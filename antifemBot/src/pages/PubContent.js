@@ -11,14 +11,14 @@ export class PubContent extends PubPageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.router.go('home'),
+					cb: () => this.go('home'),
 				},
 				// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
 				// TODO: либо вобще ничего нет
 				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.router.go('pub-author'),
+					cb: () => this.go('pub-author'),
 				},
 			],
 		]);
@@ -31,6 +31,6 @@ export class PubContent extends PubPageBase {
 
 		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
-		return this.router.go('pub-author', pubState);
+		return this.go('pub-author', pubState);
 	}
 }

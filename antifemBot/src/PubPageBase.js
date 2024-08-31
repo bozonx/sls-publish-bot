@@ -1,38 +1,22 @@
+import _ from 'lodash';
 import { PageBase } from './PageRouter.js';
 
 export class PubPageBase extends PageBase {
-	async reload() {
-		//
+	async reload(newPubPartial) {
+		this._updateState(newPubPartial);
+
+		return this.router.reload();
 	}
 
-	async go(newPubPartial) {
-		const c = this.c;
-		let loadedState;
+	async go(pathTo, newPubPartial) {
+		this._updateState(newPubPartial);
 
-		// TODO: может всегда надо загружать???
+		return this.router.go(pathTo);
+	}
 
-		// if (!this.state) {
-		// load it from cache
-		loadedState = await loadFromCache(c, STATE_CACHE_NAME);
+	_updateState(newPubPartial) {
+		if (!newPubPartial) return;
 
-		// TODO: если кэш протух то что?
-
-		this._state = _.cloneDeep(loadedState);
-		// }
-
-		if (!this.state) this._state = {};
-
-		if (newPartialState === null) {
-			this._state = {};
-		} else {
-			if (replaceState) {
-				this._state = newPartialState || {};
-			} else {
-				this._state = _.defaultsDeep(
-					_.cloneDeep(newPartialState || {}),
-					this.state,
-				);
-			}
-		}
+		this._state = _.defaultsDeep(_.cloneDeep(newPubPartial || {}), this.state);
 	}
 }

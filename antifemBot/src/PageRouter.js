@@ -89,23 +89,16 @@ class PageRouter {
 	}
 
 	resetState() {
-		//
+		this._state = {};
 	}
 
-	// // TODO: будет автоматом сохранен
-	// async setState(newStateToReplace) {
-	// 	// await saveToCache(
-	// 	// 	this.c,
-	// 	// 	STATE_CACHE_NAME,
-	// 	// 	newStateToReplace,
-	// 	// 	CACHE_STATE_TTL_SEC,
-	// 	// );
-	//
-	// 	this._state = newStateToReplace;
-	// }
+	async reload() {
+		if (!this.currentPath)
+			return this.c.reply(
+				`ERROR: can't reload because there isn't current page`,
+			);
 
-	async reload(newPartialState, replaceState) {
-		this.go(this.currentPage?.path, newPartialState, replaceState);
+		this.go(this.currentPath);
 	}
 
 	/**
@@ -193,11 +186,10 @@ class PageRouter {
 
 		let pathTo = newPath || this.state.currentPath;
 
+		this.state.currentPath = pathTo;
+
 		if (!pathTo)
 			if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
-
-		// configure state after it has been loaded before page initializing
-		// await cb?.();
 
 		// make current page instance
 		this.currentPage = new this.pages[pathTo](this, pathTo);

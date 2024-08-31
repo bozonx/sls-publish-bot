@@ -30,6 +30,8 @@ export function makeStatePreview(c, state = {}) {
 	// TODO: если мд то очистить
 	let textLength = state.text?.length || 0;
 
+	// TODO: add STATE_KEYS
+
 	if (state.photo) {
 		postType = 'photo';
 		mediaCount = state.photo.length;
@@ -198,6 +200,8 @@ export function makeContentState(c) {
 
 	// TODO: captions parse to md with entities
 	// TODO: media group
+
+	// TODO: add STATE_KEYS
 
 	if (c.msg.video) {
 		state = {
