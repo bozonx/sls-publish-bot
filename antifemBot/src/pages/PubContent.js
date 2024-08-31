@@ -17,8 +17,8 @@ export class PubContent extends PageBase {
 				// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
 				// TODO: либо вобще ничего нет
 				{
-					id: 'next',
-					label: t(c, 'next'),
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
 					cb: () => this.pager.go('pub-author'),
 				},
 			],

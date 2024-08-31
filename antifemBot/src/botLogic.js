@@ -22,7 +22,6 @@ export async function handleStart(c) {
 }
 
 export async function prepareKvAndConfig(c, MAIN_ADMIN_TG_USER_ID) {
-	const mainAdminUserIdNumber = Number(MAIN_ADMIN_TG_USER_ID);
 	let appCfg = await loadDataFromKv(c, KV_KEYS.CONFIG, APP_INITIAL_CONFIG);
 	let users = await loadDataFromKv(c, KV_KEYS.USERS);
 
@@ -35,7 +34,7 @@ export async function prepareKvAndConfig(c, MAIN_ADMIN_TG_USER_ID) {
 	if (!users) {
 		users = [
 			{
-				[USER_KEYS.ID]: mainAdminUserIdNumber,
+				[USER_KEYS.ID]: Number(MAIN_ADMIN_TG_USER_ID),
 				[USER_KEYS.NAME]: 'Owner',
 				[USER_KEYS.IS_ADMIN]: true,
 			},

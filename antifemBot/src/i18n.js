@@ -1,15 +1,8 @@
 export default {
 	ru: {
-		welcomeAgain: 'И снова здравствуйте!',
-		youAreNotRegistered:
-			'Вы не зарегистрированы, перешлите это сообщение админу',
-		author: 'Автор',
-		postType: 'Тип поста',
 		today: 'Сегодня',
 		tomorrow: 'Завтра',
 		afterTomorrow: 'Послезавтра',
-		template: 'Шаблон',
-		urlPreview: 'Предпросмотр ссылки',
 		msk: 'МСК',
 
 		// Template names
@@ -18,23 +11,26 @@ export default {
 		'template-noFooter': 'Без футера',
 
 		// State keys
-		mediaCount: 'Кол. медиа файлов',
-		textLength: 'Кол. символов текста',
-		tags: 'Тэги',
-		date: 'Дата',
-		time: 'Время',
-		next: 'Далее',
-		back: 'Назад',
+		statePostType: 'Тип поста',
+		stateTextLength: 'Кол. символов текста',
+		stateMediaCount: 'Кол. медиа файлов',
+		stateAuthor: 'Автор',
+		stateTags: 'Тэги',
+		stateDate: 'Дата',
+		stateTime: 'Время',
+		stateTemplate: 'Шаблон',
+		stateUrlPreview: 'Предпросмотр ссылки',
 
 		// Button texts
 		toHomeBtn: 'На главную',
+		backBtn: 'Назад',
+		nextBtn: 'Далее',
 		editConfigBtn: 'Редактирование конфига',
 		manageUsersBtn: 'Управление пользователями',
 		manageTagsBtn: 'Управлять тэгами',
 		withoutAuthorBtn: 'Без автора',
 		clearTagsBtn: 'Сбросить тэги',
 
-		noTags: 'Без тэгов',
 		previewOff: 'Выключить link preview',
 		previewOn: 'Включить link preview',
 		pubPlan: 'Запланировать публикацию',
@@ -51,13 +47,16 @@ export default {
 			'Выберeте одного из постоянных авторов или введите другое имя автора',
 		uploadContentDescr:
 			'Проверьте отображение текста и медиа(если есть). Замените/добавьте текст и медиа',
+		selectTagsDescr: 'Выберете тэги',
 
 		selectDate: 'Выберете дату',
 		selectHour: 'Выберете час. (минуты будут установлены в 00)',
-		selectTags: 'Выберете тэги',
 		pubConfirm: 'Проверьте и подтвердите публикацию',
 
 		// Messages
+		welcomeAgain: 'И снова здравствуйте!',
+		youAreNotRegistered:
+			'Вы не зарегистрированы, перешлите это сообщение админу',
 		tagWasAdded: 'Тэги были добавлены',
 		tagWasDeleted: 'Тэг был удалён',
 	},

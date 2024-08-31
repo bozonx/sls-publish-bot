@@ -37,13 +37,13 @@ export class PubTags extends PageBase {
 					cb: () => this.pager.go('home', null),
 				},
 				{
-					id: 'back',
-					label: t(c, 'back'),
+					id: 'backBtn',
+					label: t(c, 'backBtn'),
 					cb: () => this.pager.go('pub-author'),
 				},
 				{
-					id: 'next',
-					label: t(c, 'next'),
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
 					cb: () => this.pager.go('pub-date'),
 				},
 			],

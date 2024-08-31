@@ -37,26 +37,26 @@ export function makeStatePreview(c, state = {}) {
 		mediaCount = state.video.length;
 	}
 
-	let res = `${t(c, 'postType')}: ${postType}\n`;
+	let res = `${t(c, 'statePostType')}: ${postType}\n`;
 
-	if (textLength) res += `${t(c, 'textLength')}: ${textLength}\n`;
-	if (mediaCount) res += `${t(c, 'mediaCount')}: ${mediaCount}\n`;
-	if (state.author) res += `${t(c, 'author')}: ${state.author}\n`;
-	if (state.tags) res += `${t(c, 'tags')}: ${state.tags.join(', ')}\n`;
+	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
+	if (mediaCount) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
+	if (state.author) res += `${t(c, 'stateAuthor')}: ${state.author}\n`;
+	if (state.tags) res += `${t(c, 'stateTags')}: ${state.tags.join(', ')}\n`;
 	if (state.date)
-		res += `${t(c, 'date')}: ${dayjs(state.date).format('DD.MM.YYYY')}\n`;
+		res += `${t(c, 'stateDate')}: ${dayjs(state.date).format('DD.MM.YYYY')}\n`;
 
 	if (state.hour) {
 		const hour = state.hour < 10 ? `0${state.hour}` : state.hour;
 
-		res += `${t(c, 'time')}: ${hour}:00 (${t(c, 'msk')})\n`;
+		res += `${t(c, 'stateTime')}: ${hour}:00 (${t(c, 'msk')})\n`;
 	}
 
 	if (state.template)
-		res += `${t(c, 'template')}: ${t(c, 'template-' + state.template)}\n`;
+		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state.template)}\n`;
 
 	if (typeof state.preview !== 'undefined')
-		res += `${t(c, 'urlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
+		res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
 
 	return res.trim();
 }
