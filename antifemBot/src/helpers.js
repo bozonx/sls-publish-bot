@@ -61,7 +61,8 @@ export function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state.template)}\n`;
 
 	if (typeof state.preview !== 'undefined')
-		res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
+		// res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
+		res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✔' : '𐄂'}\n`;
 
 	return res.trim();
 }
@@ -82,7 +83,7 @@ export async function saveToKv(c, key, value) {
 	const valueStr = JSON.stringify(value);
 
 	try {
-		await c.ctx[CTX_KEYS.KV].put(key, valueStr);
+		return c.ctx[CTX_KEYS.KV].put(key, valueStr);
 	} catch (e) {
 		throw new Error(`ERROR: Can't save value ${valueStr} of "${key}": ${e}`);
 	}
@@ -98,7 +99,7 @@ export async function loadFromCache(c, key) {
 		throw new Error(`ERROR: Can't load value from cache "${key}": ${e}`);
 	}
 
-	return resStr && JSON.parse(resStr);
+	return JSON.parse(resStr);
 }
 
 // on expire the key-value pair will be deleted
@@ -118,11 +119,11 @@ export async function saveToCache(c, key, value, expireFromNowSec) {
 }
 
 export function isAdminUser(c, userId) {
-	if (!userId && !['string', 'number'].includes(typeof userId))
+	if (!userId || !['string', 'number'].includes(typeof userId))
 		throw new Error(`ERROR: isAdminUser. Wrong userId - ${typeof userId}`);
 
-	const found = c.ctx[CTX_KEYS.USERS]?.find(
-		(i) => i[USER_KEYS.IS_ADMIN] && Number(i[USER_KEYS.ID]) === Number(userId),
+	const found = c.ctx[CTX_KEYS.users]?.find(
+		(i) => i[USER_KEYS.isAdmin] && Number(i[USER_KEYS.id]) === Number(userId),
 	);
 
 	return Boolean(found);
@@ -132,8 +133,8 @@ export function isRegisteredUser(c, userId) {
 	if (!userId || !['string', 'number'].includes(typeof userId))
 		throw new Error(`ERROR: isRegisteredUser. Wrong userId - ${typeof userId}`);
 
-	const found = c.ctx[CTX_KEYS.USERS]?.find(
-		(i) => Number(i[USER_KEYS.ID]) === Number(userId),
+	const found = c.ctx[CTX_KEYS.users]?.find(
+		(i) => Number(i[USER_KEYS.id]) === Number(userId),
 	);
 
 	return Boolean(found);
@@ -141,8 +142,9 @@ export function isRegisteredUser(c, userId) {
 
 export function makeUnregisteredMsg(c) {
 	const dataStr = JSON.stringify({
-		[USER_KEYS.ID]: c.msg.from.id,
-		[USER_KEYS.NAME]: c.msg.from.first_name || c.msg.from.username,
+		[USER_KEYS.id]: c.msg.from.id,
+		// TODO: add last name
+		[USER_KEYS.name]: c.msg.from.first_name || c.msg.from.username,
 	});
 
 	return `${t(c, 'youAreNotRegistered')}.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`;
@@ -151,18 +153,12 @@ export function makeUnregisteredMsg(c) {
 export function parseTagsFromInput(rawStr = '') {
 	return rawStr
 		.split(',')
-		.map(
-			(i) =>
-				i
-					.trim()
-					.toLowerCase()
-					.replace(/[\-\s]/g, '_')
-					.replace(/[^\p{L}\p{N}_]/gu, ''),
-			// .replace(
-			// 	/[\#\!\~\`\@\$\%\^\№\:\"\'\;\&\?\*\.\,\(\)\[\]\{\}\=\+\<\>\/\\\|]/g,
-			// 	'',
-			// ),
-			// .replace(new RegExp('[^\\w\\d_]', 'ug'), '');
+		.map((i) =>
+			i
+				.trim()
+				.toLowerCase()
+				.replace(/[\-\s]/g, '_')
+				.replace(/[^\p{L}\p{N}_]/gu, ''),
 		)
 		.filter(Boolean);
 }
@@ -173,18 +169,6 @@ export function defineMenu(menu = []) {
 
 	for (const row of menu) {
 		if (row) res.push(row.filter(Boolean));
-
-		// if (!row) continue;
-		//
-		// const rowArr = [];
-		//
-		// for (const btn of row) {
-		// 	if (!btn) continue;
-		//
-		// 	rowArr.push(btn);
-		// }
-		//
-		// res.push(rowArr);
 	}
 
 	return res;

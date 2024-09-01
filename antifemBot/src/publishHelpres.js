@@ -1,12 +1,6 @@
 import _ from 'lodash';
 import { toMarkdownV2 } from '@telegraf/entity';
-// import telegramifyMarkdown from 'telegramify-markdown';
 import { CTX_KEYS, APP_CFG_KEYS, STATE_KEYS } from './constants.js';
-
-export function convertMarkDownV1ToTgMdV2(markdownV1) {
-	return markdownV1;
-	// return telegramifyMarkdown(markdownV1).replace(/\\([\{\}])/g, '$1');
-}
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
@@ -14,7 +8,7 @@ export function convertTgEntitiesToTgMdV2(text, entities) {
 
 export function generatePostText(c, pubState) {
 	const template =
-		c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.TEMPLATES][
+		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][
 			pubState[STATE_KEYS.template]
 		];
 	const contentMdV2 = pubState[STATE_KEYS.text]
@@ -31,25 +25,20 @@ export function generatePostText(c, pubState) {
 	};
 
 	const text = template
-		.map((i) => {
-			const tgMdV2Str = convertMarkDownV1ToTgMdV2(i);
-
-			return _.template(tgMdV2Str)(tmplData);
-		})
+		.map((i) => _.template(i)(tmplData))
 		.filter((i) => i.trim())
 		.join('\n\n');
 
 	return text;
 }
 
-export async function publishFinalPost(c, chatId, text, usePreview) {
+export async function publishFinalPost(c, chatId, text, usePreview = true) {
 	await c.api.sendMessage(chatId, text, {
 		link_preview_options: {
 			is_disabled: !usePreview,
+			// TODO: add certain url
 		},
 		parse_mode: 'MarkdownV2',
-		// reply_markup: {
-		// },
 	});
 }
 

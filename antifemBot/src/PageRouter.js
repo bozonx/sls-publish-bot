@@ -1,7 +1,7 @@
 import { InlineKeyboard } from 'grammy';
 import _ from 'lodash';
 import { loadFromCache, saveToCache } from './helpers.js';
-import { CACHE_MENU_MSG_ID_TTL_SEC, CACHE_STATE_TTL_SEC } from './constants.js';
+import { KV_KEYS, SESSION_STATE_TTL_SEC } from './constants.js';
 
 const QUERY_MARKER = 'PageRouter';
 const PREV_MENU_MSG_ID_CACHE_NAME = 'prevMsgId';
@@ -23,6 +23,18 @@ export class PageBase {
 	// state which is passed between pages using cache
 	get state() {
 		return this.router.state;
+	}
+
+	get users() {
+		return this.router.users;
+	}
+
+	get config() {
+		return this.router.config;
+	}
+
+	get KV() {
+		return this.router.KV;
 	}
 
 	// It runs when a route of certain user has been changed
@@ -70,6 +82,18 @@ export class PageRouter {
 
 	get currentPath() {
 		return this.currentPage?.path;
+	}
+
+	get users() {
+		return this.c.ctx[CTX_KEYS.users];
+	}
+
+	get config() {
+		return this.c.ctx[CTX_KEYS.config];
+	}
+
+	get KV() {
+		return this.c.ctx[CTX_KEYS.KV];
 	}
 
 	constructor(initialPages) {
@@ -273,7 +297,7 @@ export class PageRouter {
 			this.c,
 			STATE_CACHE_NAME,
 			this.state,
-			CACHE_STATE_TTL_SEC,
+			SESSION_STATE_TTL_SEC,
 		);
 		// }
 

@@ -1,13 +1,17 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { TEMPLATE_NAMES, STATE_KEYS, DEFAULT_STATE } from '../constants.js';
+import {
+	TEMPLATE_NAMES,
+	STATE_KEYS,
+	DEFAULT_SETUP_STATE,
+} from '../constants.js';
 
 export class PubPostSetup extends PubPageBase {
 	async mount() {
 		const c = this.router.c;
 
 		this.state.pub = {
-			...DEFAULT_STATE,
+			...DEFAULT_SETUP_STATE,
 			...(this.state.pub || {}),
 		};
 
