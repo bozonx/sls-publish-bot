@@ -9,7 +9,7 @@ export class PubContent extends PubPageBase {
 	async mount() {
 		const c = this.router.c;
 
-		this.text = t(c, 'uploadContentDescr');
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'uploadContentDescr')}`;
 		this.menu = defineMenu([
 			[
 				{
