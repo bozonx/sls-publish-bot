@@ -163,7 +163,7 @@ export class PageRouter {
 			for (const { id, cb } of row) {
 				if (String(id) !== btnId) continue;
 				// run menu button handler
-				await cb(id, btnPayload);
+				await cb(btnPayload, id);
 
 				return this._theEndOfRequest();
 			}
@@ -210,7 +210,7 @@ export class PageRouter {
 
 		const pathTo = newPath || this.state.currentPath;
 
-		console.log(3333, this.state, newPath);
+		console.log(11111, this.state, newPath);
 
 		this._state.currentPath = pathTo;
 
@@ -221,35 +221,37 @@ export class PageRouter {
 		await this.currentPage.mount();
 	}
 
-	// TODO: review
 	async _loadState() {
 		// in case switching page on .go()
 		if (this.state) return;
+		else if (this.state === null) {
+			throw new Error(`ERROR: Request has been already finished`);
+		}
 
-		this._loadedState = await loadFromCache(this.c, STATE_CACHE_NAME);
+		this._loadedState = await loadFromCache(this.c, SESSION_CACHE_NAME);
 
-		console.log(22222, this._loadedState);
+		console.log('========== _loadState', this._loadedState);
 
 		this._state = this._loadedState || {};
 	}
 
-	// TODO: review
 	async _theEndOfRequest() {
 		// in case it has been run from .go()
 		// TODO: ?????
 		if (!this.state) return;
 
-		console.log(11111, this.state);
+		console.log('============ _theEndOfRequest', this.state);
 
-		// if (!_.isEqual(this._loadedState, this.state)) {
-		await saveToCache(
-			this.c,
-			SESSION_CACHE_NAME,
-			this.state,
-			SESSION_STATE_TTL_SEC,
-		);
-		// }
+		// TODO: review
+		if (!_.isEqual(this._loadedState, this.state)) {
+			await saveToCache(
+				this.c,
+				SESSION_CACHE_NAME,
+				this.state,
+				SESSION_STATE_TTL_SEC,
+			);
+		}
 
-		this._state = undefined;
+		this._state = null;
 	}
 }

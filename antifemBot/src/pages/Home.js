@@ -1,4 +1,3 @@
-// import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
 import { t, isAdminUser, makeContentState, defineMenu } from '../helpers.js';
 

@@ -9,6 +9,7 @@ import {
 	USER_KEYS,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
 	QUERY_MARKER,
+	PUB_KEYS,
 } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -31,40 +32,41 @@ export function makeStatePreview(c, state = {}) {
 	let postType = 'text';
 	let mediaCount = 0;
 	// TODO: если мд то очистить
-	let textLength = state.text?.length || 0;
+	let textLength = state[PUB_KEYS.text]?.length || 0;
 
-	// TODO: add STATE_KEYS
-
-	if (state.photo) {
-		postType = 'photo';
-		mediaCount = state.photo.length;
-	} else if (state.video) {
-		postType = 'video';
-		mediaCount = state.video.length;
+	if (state[PUB_KEYS.photo]) {
+		postType = PUB_KEYS.photo;
+		mediaCount = state[PUB_KEYS.photo].length;
+	} else if (state[PUB_KEYS.video]) {
+		postType = PUB_KEYS.video;
+		mediaCount = state[PUB_KEYS.video].length;
 	}
 
 	let res = '';
 
-	if (state.text) res += `${t(c, 'statePostType')}: ${postType}\n`;
+	if (state[PUB_KEYS.text]) res += `${t(c, 'statePostType')}: ${postType}\n`;
 	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
 	if (mediaCount) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
-	if (state.author) res += `${t(c, 'stateAuthor')}: ${state.author}\n`;
-	if (state.tags) res += `${t(c, 'stateTags')}: ${state.tags.join(', ')}\n`;
-	if (state.date)
-		res += `${t(c, 'stateDate')}: ${dayjs(state.date).format('DD.MM.YYYY')}\n`;
+	if (state[PUB_KEYS.author])
+		res += `${t(c, 'stateAuthor')}: ${state[PUB_KEYS.author]}\n`;
+	if (state[PUB_KEYS.tags])
+		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
+	if (state[PUB_KEYS.date])
+		res += `${t(c, 'stateDate')}: ${dayjs(state[PUB_KEYS.date]).format('DD.MM.YYYY')}\n`;
 
-	if (state.hour) {
-		const hour = state.hour < 10 ? `0${state.hour}` : state.hour;
+	if (state[PUB_KEYS.hour]) {
+		const hour =
+			state.hour < 10 ? `0${state[PUB_KEYS.hour]}` : state[PUB_KEYS.hour];
 
 		res += `${t(c, 'stateTime')}: ${hour}:00 (${t(c, 'msk')})\n`;
 	}
 
-	if (state.template)
-		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state.template)}\n`;
+	if (state[PUB_KEYS.template])
+		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
 
-	if (typeof state.preview !== 'undefined')
+	if (typeof state[PUB_KEYS.preview] !== 'undefined')
 		// res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
-		res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✔' : '𐄂'}\n`;
+		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✔' : '𐄂'}\n`;
 
 	return res.trim();
 }
