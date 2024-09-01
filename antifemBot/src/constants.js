@@ -48,7 +48,7 @@ export const DEFAULT_SETUP_STATE = {
 };
 
 const footer =
-	'[Антифеминизм \\| Маскулизм. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
+	'[Антифеминизм \\| Маскулизм\\. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
 
 export const APP_INITIAL_CONFIG = {
 	[APP_CFG_KEYS.authors]: ['Айван Кей'],

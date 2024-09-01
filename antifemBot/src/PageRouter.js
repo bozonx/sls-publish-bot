@@ -5,7 +5,7 @@ import {
 	saveToCache,
 	renderMenuKeyboard,
 } from './helpers.js';
-import { SESSION_STATE_TTL_SEC, CTX_KEYS } from './constants.js';
+import { SESSION_STATE_TTL_SEC, CTX_KEYS, QUERY_MARKER } from './constants.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
 const SESSION_CACHE_NAME = 'pageState';
@@ -65,6 +65,8 @@ export class PageRouter {
 	pages = {};
 	// current initialized page
 	currentPage;
+	// path of previous page which was changed while handling request
+	prevPath;
 	// readonly state
 	_state;
 	// state which is loaded from DB on request start
@@ -121,7 +123,7 @@ export class PageRouter {
 		}
 
 		await this._sendMenu(renderMenuKeyboard(this.currentPage.menu));
-
+		// really the end of request
 		return this._theEndOfRequest();
 	}
 
@@ -142,8 +144,9 @@ export class PageRouter {
 		}
 
 		await this.currentPage.onMessage?.();
-
-		return this._theEndOfRequest();
+		// the end of request only if there has been called .go()
+		// if (this.prevPath) await this._theEndOfRequest();
+		await this._theEndOfRequest();
 	};
 
 	// TODO: review
@@ -175,45 +178,26 @@ export class PageRouter {
 				if (String(id) !== btnId) continue;
 				// run menu button handler
 				await cb(btnPayload, id);
+				// the end of request only if there has been called .go()
+				// if (this.prevPath) await this._theEndOfRequest();
+				await this._theEndOfRequest();
 
-				return this._theEndOfRequest();
+				return;
 			}
 		}
 
 		return c.reply(`ERROR: Can't find button. ${data}`);
 	};
 
-	async _sendMenu(keyboard) {
-		const c = this.c;
-
-		// const prevMenuMsgId = await loadFromCache(c, PREV_MENU_MSG_ID_CACHE_NAME);
-
-		// remove prev menu message
-		if (this.state[PREV_MENU_MSG_ID_STATE_NAME]) {
-			try {
-				await c.api.deleteMessage(c.chatId, prevMenuMsgId);
-			} catch (e) {
-				// skip error
-			}
-		}
-
-		const { message_id } = await c.reply(this.currentPage.text, {
-			reply_markup: keyboard,
-		});
-
-		this.state[PREV_MENU_MSG_ID_STATE_NAME] = message_id;
-
-		// await saveToCache(
-		// 	c,
-		// 	PREV_MENU_MSG_ID_CACHE_NAME,
-		// 	message_id,
-		// 	CACHE_MENU_MSG_ID_TTL_SEC,
-		// );
-	}
-
 	// TODO: review
 	async _switchPage(newPath) {
-		await this.currentPage?.unmount();
+		if (this.currentPage) {
+			// save previous path
+			this.prevPath = this.currentPage.path;
+
+			await this.currentPage.unmount();
+		}
+
 		await this._loadState();
 
 		// TODO: если идёт переход не на home и нет стейта то он протух
@@ -247,8 +231,6 @@ export class PageRouter {
 	}
 
 	async _theEndOfRequest() {
-		// in case it has been run from .go()
-		// TODO: ?????
 		if (!this.state) return;
 
 		console.log('============ _theEndOfRequest', this.state);
@@ -263,6 +245,37 @@ export class PageRouter {
 			);
 		}
 
-		this._state = null;
+		// this._state = null;
+	}
+
+	async _sendMenu(keyboard) {
+		const c = this.c;
+
+		// const prevMenuMsgId = await loadFromCache(c, PREV_MENU_MSG_ID_CACHE_NAME);
+
+		// remove prev menu message
+		if (this.state[PREV_MENU_MSG_ID_STATE_NAME]) {
+			try {
+				await c.api.deleteMessage(
+					c.chatId,
+					this.state[PREV_MENU_MSG_ID_STATE_NAME],
+				);
+			} catch (e) {
+				// skip error
+			}
+		}
+
+		const { message_id } = await c.reply(this.currentPage.text, {
+			reply_markup: keyboard,
+		});
+
+		this.state[PREV_MENU_MSG_ID_STATE_NAME] = message_id;
+
+		// await saveToCache(
+		// 	c,
+		// 	PREV_MENU_MSG_ID_CACHE_NAME,
+		// 	message_id,
+		// 	CACHE_MENU_MSG_ID_TTL_SEC,
+		// );
 	}
 }

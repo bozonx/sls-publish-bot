@@ -66,7 +66,7 @@ export function makeStatePreview(c, state = {}) {
 
 	if (typeof state[PUB_KEYS.preview] !== 'undefined')
 		// res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
-		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✔' : '𐄂'}\n`;
+		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
 
 	return res.trim();
 }
