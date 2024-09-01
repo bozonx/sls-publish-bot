@@ -11,7 +11,13 @@ export default {
 			parseUrl(request.url).pathname === TG_BOT_URL
 		) {
 			// webhook request from Telegram - pass it to Grammy
-			const app = new BotIndex(env.TG_TOKEN, env.MAIN_ADMIN_TG_USER_ID, env.KV);
+			const app = new BotIndex(
+				env.TG_TOKEN,
+				env.MAIN_ADMIN_TG_USER_ID,
+				env.CHAT_OF_ADMINS_ID,
+				env.DESTINATION_CHANNEL_ID,
+				env.KV,
+			);
 
 			await app.init();
 

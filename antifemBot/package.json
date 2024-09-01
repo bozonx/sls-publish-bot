@@ -16,7 +16,8 @@
 		"grammy": "^1.29.0",
 		"js-yaml": "^4.1.0",
 		"lodash": "^4.17.21",
-		"parse-url": "^9.2.0"
+		"parse-url": "^9.2.0",
+		"short-unique-id": "^5.2.0"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.4.25",

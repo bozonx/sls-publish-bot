@@ -12,14 +12,29 @@ import { PubDate } from './pages/PubDate.js';
 import { PubHour } from './pages/PubHour.js';
 import { PubPostSetup } from './pages/PubPostSetup.js';
 import { PubConfirm } from './pages/PubConfirm.js';
+import { ScheduledList } from './pages/ScheduledList.js';
+import { ScheduledItem } from './pages/ScheduledItem.js';
 
 export class BotIndex {
 	bot;
 
-	constructor(TG_TOKEN, MAIN_ADMIN_TG_USER_ID, KV) {
+	constructor(
+		TG_TOKEN,
+		MAIN_ADMIN_TG_USER_ID,
+		CHAT_OF_ADMINS_ID,
+		DESTINATION_CHANNEL_ID,
+		KV,
+	) {
 		this.bot = new Bot(TG_TOKEN);
 
-		this.bot.use(makeContext(MAIN_ADMIN_TG_USER_ID, KV));
+		this.bot.use(
+			makeContext(
+				MAIN_ADMIN_TG_USER_ID,
+				CHAT_OF_ADMINS_ID,
+				DESTINATION_CHANNEL_ID,
+				KV,
+			),
+		);
 	}
 
 	async init() {
@@ -35,6 +50,8 @@ export class BotIndex {
 			'pub-hour': PubHour,
 			'pub-post-setup': PubPostSetup,
 			'pub-confirm': PubConfirm,
+			'scheduled-list': ScheduledList,
+			'scheduled-item': ScheduledItem,
 		};
 
 		this.bot.use(routerMiddleware(routes));

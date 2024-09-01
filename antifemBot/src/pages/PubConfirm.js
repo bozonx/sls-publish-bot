@@ -1,7 +1,8 @@
+import ShortUniqueId from 'short-unique-id';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { generatePostText, publishFinalPost } from '../publishHelpres.js';
-import { PUB_KEYS } from '../constants.js';
+import { PUB_KEYS, CTX_KEYS } from '../constants.js';
 
 export class PubConfirm extends PubPageBase {
 	async mount() {
@@ -39,19 +40,49 @@ export class PubConfirm extends PubPageBase {
 
 	async _printPreview() {
 		const c = this.router.c;
-		const text = generatePostText(c, this.state.pub);
 
 		await publishFinalPost(
 			c,
 			c.msg.chat.id,
-			text,
+			generatePostText(c, this.state.pub),
 			this.state.pub[PUB_KEYS.preview],
 		);
 	}
 
 	_finalPublication = async () => {
 		const c = this.router.c;
+		const uid = new ShortUniqueId();
+		const prepared = { id: uid.rnd(), ...this.state.pub };
+		const infoMsgPostParams = {
+			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
+			[PUB_KEYS.hour]: this.state.pub[PUB_KEYS.hour],
+		};
+		const infoMsg =
+			t(c, 'infoMsgToAdminChannel') +
+			`:\n\n${makeStatePreview(c, infoMsgPostParams)}`.replace(
+				/\[:\.]/g,
+				'\\$1',
+			);
 
-		return c.reply('final');
+		await saveToKv(c, KV_KEYS.scheduled, prepared);
+		// publication
+		const { message_id } = await publishFinalPost(
+			c,
+			CTX_KEYS.CHAT_OF_ADMINS_ID,
+			generatePostText(c, prepared),
+			this.state.pub[PUB_KEYS.preview],
+		);
+		// info post
+		await publishFinalPost(
+			c,
+			CTX_KEYS.CHAT_OF_ADMINS_ID,
+			infoMsg,
+			this.state.pub[PUB_KEYS.preview],
+			message_id,
+		);
+
+		console.log('========== _finalPublication', prepared);
+
+		return this.go('home');
 	};
 }

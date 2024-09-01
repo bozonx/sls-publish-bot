@@ -12,9 +12,18 @@ import {
 	isRegisteredUser,
 } from './helpers.js';
 
-export function makeContext(MAIN_ADMIN_TG_USER_ID, KV) {
+export function makeContext(
+	MAIN_ADMIN_TG_USER_ID,
+	CHAT_OF_ADMINS_ID,
+	DESTINATION_CHANNEL_ID,
+	KV,
+) {
 	return async (c, next) => {
-		c.ctx = { [CTX_KEYS.KV]: KV };
+		c.ctx = {
+			[CTX_KEYS.KV]: KV,
+			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
+			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
+		};
 
 		// TODO: запрашивать одновремено
 		let appCfg = await loadFromKv(c, KV_KEYS.config);

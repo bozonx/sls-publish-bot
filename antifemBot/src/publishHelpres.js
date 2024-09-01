@@ -30,13 +30,21 @@ export function generatePostText(c, pubState) {
 	return text;
 }
 
-export async function publishFinalPost(c, chatId, text, usePreview = true) {
-	await c.api.sendMessage(chatId, text, {
+export async function publishFinalPost(
+	c,
+	chatId,
+	text,
+	usePreview = true,
+	replyToMsgId,
+) {
+	return c.api.sendMessage(chatId, text, {
 		link_preview_options: {
 			is_disabled: !usePreview,
 			// TODO: add certain url
 		},
 		parse_mode: 'MarkdownV2',
+
+		// TODO: add reply to msgId
 	});
 }
 

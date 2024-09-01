@@ -34,6 +34,10 @@ export default {
 		previewOffBtn: 'Выключить link preview',
 		previewOnBtn: 'Включить link preview',
 		pubConfirmBtn: 'Да',
+		showPreviewBtn: 'Предпросмотр',
+		deletePostponedBtn: 'Удалить',
+		editPostponedBtn: 'Редактировать',
+		changeDateTimeBtn: 'Изменить время',
 
 		// Menu descriptions
 		homeDescr:
@@ -52,11 +56,15 @@ export default {
 		pubConfirmDescr: 'Публикуем?',
 		selectDateDescr: 'Выберете дату',
 		selectHourDescr: 'Выберете час. (минуты будут установлены в 00)',
+		scheduledListDescr: 'Выберете отложенную публикацию для управления',
+		scheduledItemDescr: 'Управление отложенной публикацией',
 
 		// Messages
 		youAreNotRegistered:
 			'Вы не зарегистрированы, перешлите это сообщение админу',
 		tagWasAdded: 'Тэги были добавлены',
 		tagWasDeleted: 'Тэг был удалён',
+		scheduledItemWasDeleted: 'Отложенный пост был удалён',
+		infoMsgToAdminChannel: 'Этот пост будет опубликован в канале',
 	},
 };

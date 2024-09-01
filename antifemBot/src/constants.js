@@ -9,11 +9,14 @@ export const KV_KEYS = {
 	config: 'config',
 	users: 'users',
 	tags: 'tags',
+	scheduled: 'scheduled',
 };
 export const CTX_KEYS = {
 	config: 'config',
 	users: 'users',
 	KV: 'KV',
+	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
+	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
 };
 export const USER_KEYS = {
 	id: 'id',
