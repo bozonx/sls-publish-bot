@@ -47,10 +47,15 @@ export function makeContext(
 			await saveToKv(c, KV_KEYS.users, users);
 		}
 
+		const me = users.find((i) => i.id === c.msg.chat.id);
+
+		if (!me) throw new Error(`ERROR: Can't find current user`);
+
 		c.ctx = {
 			...c.ctx,
 			[CTX_KEYS.config]: appCfg,
 			[CTX_KEYS.users]: users,
+			[CTX_KEYS.me]: me,
 		};
 
 		await next();

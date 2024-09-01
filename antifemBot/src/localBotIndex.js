@@ -12,6 +12,7 @@ const testData = {
 			tags: ['sd', 'fwer'],
 			date: '2024-09-03',
 			hour: 21,
+			publisher: 'eeee',
 		},
 		{
 			id: 'omwerltnQ',
@@ -22,6 +23,7 @@ const testData = {
 			tags: ['sd', 'fwsdfder'],
 			date: '2024-09-02',
 			hour: 12,
+			publisher: 'eeee',
 		},
 	]),
 };

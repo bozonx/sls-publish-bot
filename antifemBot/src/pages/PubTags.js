@@ -75,6 +75,6 @@ export class PubTags extends PubPageBase {
 			payload,
 		]);
 
-		return this.reload({ [STATE_KEYS.tags]: mergedAllTags });
+		return this.reload({ [PUB_KEYS.tags]: mergedAllTags });
 	};
 }

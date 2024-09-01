@@ -14,6 +14,7 @@ export const KV_KEYS = {
 export const CTX_KEYS = {
 	config: 'config',
 	users: 'users',
+	me: 'me',
 	KV: 'KV',
 	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
 	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
@@ -43,6 +44,12 @@ export const PUB_KEYS = {
 	preview: 'preview',
 	date: 'date',
 	hour: 'hour',
+	publisher: 'publisher',
+};
+export const MEDIA_TYPES = {
+	photo: 'photo',
+	video: 'video',
+	file: 'file',
 };
 
 export const DEFAULT_SETUP_STATE = {

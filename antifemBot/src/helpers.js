@@ -63,10 +63,12 @@ export function makeStatePreview(c, state = {}) {
 
 	if (state[PUB_KEYS.template])
 		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
-
 	if (typeof state[PUB_KEYS.preview] !== 'undefined')
 		// res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
 		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
+
+	if (state[PUB_KEYS.publisher])
+		res += `${t(c, 'statePublisher')}: ${state[PUB_KEYS.publisher]}\n`;
 
 	return res.trim();
 }
@@ -201,9 +203,9 @@ export function nowPlusDay(plusday) {
 }
 
 export function makeContentState(c) {
-	let state = { entities: c.msg.entities };
+	let state = {};
 
-	// console.log(2222, c.msg);
+	console.log(2222, c.msg);
 
 	// TODO: captions parse to md with entities
 	// TODO: media group
@@ -212,20 +214,20 @@ export function makeContentState(c) {
 
 	if (c.msg.video) {
 		state = {
-			...state,
 			text: c.msg.caption,
+			entities: c.msg.caption_entities,
 			video: c.msg.video,
 		};
 	} else if (c.msg.photo) {
 		state = {
-			...state,
 			text: c.msg.caption,
+			entities: c.msg.caption_entities,
 			photo: c.msg.photo,
 		};
 	} else if (c.msg.text) {
 		state = {
-			...state,
 			text: c.msg.text,
+			entities: c.msg.entities,
 		};
 	} else {
 		return;
@@ -260,6 +262,14 @@ export function parseJsonSafelly(dataStr) {
 	else if (!dataStr) return;
 
 	return JSON.parse(dataStr);
+}
+
+export function hasPubHaveMedia(pubState = {}) {
+	const mediaFields = [PUB_KEYS.photo, PUB_KEYS.video];
+
+	return Boolean(
+		Object.keys(pubState).find((i) => pubState[i] && mediaFields.includes(i)),
+	);
 }
 
 // export async function prepareSession(c) {

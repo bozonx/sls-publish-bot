@@ -43,8 +43,8 @@ export async function publishFinalPost(
 			// TODO: add certain url
 		},
 		parse_mode: 'MarkdownV2',
-
-		// TODO: add reply to msgId
+		reply_parameters: { message_id: replyToMsgId },
+		// reply_to_message: replyToMsg,
 	});
 }
 

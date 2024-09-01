@@ -20,6 +20,7 @@ export default {
 		stateTime: 'Время',
 		stateTemplate: 'Шаблон',
 		stateUrlPreview: 'Предпросмотр ссылки',
+		statePublisher: 'Кто сделал',
 
 		// Button texts
 		toHomeBtn: 'На главную',
@@ -40,6 +41,11 @@ export default {
 		changeDateTimeBtn: 'Изменить время',
 		manageScheduledBtn: 'Управлять отложенными постами',
 		publicateNowBtn: 'Опубликовать сейчас',
+		replaceOnlyTextBtn: 'Заменить только текст',
+		replaceOnlyMediaBtn: 'Заменить только медиа',
+		replaceTextAndMediaBtn: 'Заменить медиа и текст и медиа',
+		removeTextBtn: 'Удалить текст',
+		removeMediaBtn: 'Удалить медиа',
 
 		// Menu descriptions
 		homeDescr:
@@ -59,6 +65,7 @@ export default {
 		selectDateDescr: 'Выберете дату',
 		selectHourDescr: 'Выберете час. (минуты будут установлены в 00)',
 		scheduledListDescr: 'Выберете отложенную публикацию для управления',
+		scheduledEmptyListDescr: 'Нет отложенных публикаций',
 		scheduledItemDescr: 'Управление отложенной публикацией',
 
 		// Messages

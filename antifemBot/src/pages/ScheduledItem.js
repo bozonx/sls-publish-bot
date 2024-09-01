@@ -133,7 +133,7 @@ export class ScheduledItem extends PageBase {
 			c,
 			c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
 			generatePostText(c, item),
-			this.state.pub[PUB_KEYS.preview],
+			item[PUB_KEYS.preview],
 		);
 
 		await this._justDeletePost();

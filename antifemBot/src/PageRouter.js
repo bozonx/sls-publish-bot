@@ -37,6 +37,10 @@ export class PageBase {
 		return this.router.state;
 	}
 
+	get me() {
+		return this.router.me;
+	}
+
 	get users() {
 		return this.router.users;
 	}
@@ -82,6 +86,10 @@ export class PageRouter {
 
 	get currentPath() {
 		return this.currentPage?.path;
+	}
+
+	get me() {
+		return this.c.ctx[CTX_KEYS.me];
 	}
 
 	get users() {

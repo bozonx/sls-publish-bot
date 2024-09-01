@@ -64,6 +64,7 @@ export class PubConfirm extends PubPageBase {
 		const infoMsgPostParams = {
 			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
 			[PUB_KEYS.hour]: this.state.pub[PUB_KEYS.hour],
+			[PUB_KEYS.publisher]: this.me.name,
 		};
 		const infoMsg =
 			t(c, 'infoMsgToAdminChannel') +
