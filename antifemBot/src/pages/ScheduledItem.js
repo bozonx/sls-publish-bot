@@ -13,7 +13,7 @@ import {
 	publishFinalPost,
 	generatePostText,
 } from '../publishHelpres.js';
-import { KV_KEYS, PUB_KEYS } from '../constants.js';
+import { KV_KEYS, PUB_KEYS, CTX_KEYS } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
 	async mount() {
@@ -95,12 +95,12 @@ export class ScheduledItem extends PageBase {
 
 		if (!item) return c.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
-		const text = convertTgEntitiesToTgMdV2(
-			item[PUB_KEYS.text],
-			item[PUB_KEYS.entities],
+		await publishFinalPost(
+			c,
+			c.msg.chat.id,
+			generatePostText(c, item),
+			item[PUB_KEYS.preview],
 		);
-
-		await publishFinalPost(c, c.msg.chat.id, text, item[PUB_KEYS.preview]);
 
 		return this.router.reload();
 	};
@@ -157,6 +157,7 @@ export class ScheduledItem extends PageBase {
 	};
 
 	async _justDeletePost() {
+		const c = this.router.c;
 		const itemId = this.state.scheduledItem;
 		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
 		const prepared = [...allItems];

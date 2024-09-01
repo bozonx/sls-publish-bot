@@ -39,7 +39,7 @@ export default {
 		editPostponedBtn: 'Редактировать',
 		changeDateTimeBtn: 'Изменить время',
 		manageScheduledBtn: 'Управлять отложенными постами',
-		publicateNowBtn: 'Опубликаовать сейчас',
+		publicateNowBtn: 'Опубликовать сейчас',
 
 		// Menu descriptions
 		homeDescr:
