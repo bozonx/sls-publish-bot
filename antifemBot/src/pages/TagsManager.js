@@ -10,12 +10,10 @@ import {
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
 
-// const TAG_ID_PREFIX = 'TAG-';
-
 export class TagsManager extends PageBase {
 	async mount() {
 		const c = this.router.c;
-		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
+		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 
 		this.text = t(c, 'tagsManagerDescr');
 		this.menu = defineMenu([
@@ -36,27 +34,27 @@ export class TagsManager extends PageBase {
 		if (!c.msg.text) return c.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
-		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
+		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 		const mergedAllTags = _.uniq([...allTags, ...newTags]).sort();
 		// save new tags to storage
-		await saveToKv(c, KV_KEYS.TAGS, mergedAllTags);
+		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
 
 		await c.reply(`${t(c, 'tagWasAdded')}: ${newTags.join(', ')}`);
-		await this.router.reload();
+
+		return this.router.reload();
 	}
 
-	tagRemoveCallback = async (btnId, payload) => {
+	tagRemoveCallback = async (payload) => {
 		const c = this.router.c;
-		// const tagName = btnId.substring(TAG_ID_PREFIX.length);
-		const allTags = await loadFromKv(c, KV_KEYS.TAGS, []);
-		const indexOfTag = allTags.indexOf(payload);
+		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
+		const prepared = [...allTags];
+		const indexOfTag = prepared.indexOf(payload);
 
 		if (indexOfTag < 0) return c.reply(`ERROR: Can't find tag`);
-
 		// remove selected tag
-		allTags.splice(indexOfTag, 1);
+		prepared.splice(indexOfTag, 1);
 
-		await saveToKv(c, KV_KEYS.TAGS, allTags);
+		await saveToKv(c, KV_KEYS.tags, prepared);
 		await c.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
 
 		return this.router.reload();

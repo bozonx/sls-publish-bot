@@ -32,9 +32,9 @@ export class PageBase {
 		return this.router.config;
 	}
 
-	get KV() {
-		return this.router.KV;
-	}
+	// get KV() {
+	// 	return this.router.KV;
+	// }
 
 	// It runs when a route of certain user has been changed
 	constructor(router, path) {
@@ -42,7 +42,9 @@ export class PageBase {
 		this.path = path;
 	}
 
-	// It runs when a route of certain user has been changed
+	// It runs twice
+	// 1. when a route of certain user has been changed
+	// 2. when button is pressed. It should find menu handler
 	async mount() {}
 
 	// It runs when a route is changing
@@ -79,9 +81,10 @@ export class PageRouter {
 		return this.c.ctx[CTX_KEYS.config];
 	}
 
-	get KV() {
-		return this.c.ctx[CTX_KEYS.KV];
-	}
+	// TODO: useless???
+	// get KV() {
+	// 	return this.c.ctx[CTX_KEYS.KV];
+	// }
 
 	constructor(initialPages) {
 		this.pages = initialPages;

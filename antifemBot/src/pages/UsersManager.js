@@ -4,7 +4,6 @@ import { PageBase } from '../PageRouter.js';
 import { t, saveToKv, isAdminUser, defineMenu } from '../helpers.js';
 import {
 	KV_KEYS,
-	CTX_KEYS,
 	USER_KEYS,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
 } from '../constants.js';
@@ -15,15 +14,13 @@ export class UsersManager extends PageBase {
 
 		if (!isAdminUser(c, c.msg.chat.id)) return this.router.go('home');
 
-		const users = c.ctx[CTX_KEYS.USERS];
-
 		this.text = t(c, 'usersManagerDescr');
 		this.menu = defineMenu([
-			...users.map((i) => [
+			...this.users.map((i) => [
 				{
-					id: `USER-${i[USER_KEYS.ID]}`,
-					label: `${i[USER_KEYS.NAME]} | ${i[USER_KEYS.ID]}${i[USER_KEYS.IS_ADMIN] ? ' (admin)' : ''}`,
-					payload: i[USER_KEYS.ID],
+					id: `USER-${i[USER_KEYS.id]}`,
+					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${i[USER_KEYS.isAdmin] ? ' (admin)' : ''}`,
+					payload: i[USER_KEYS.id],
 					cb: this.userRemoveCallback,
 				},
 			]),
@@ -61,33 +58,33 @@ export class UsersManager extends PageBase {
 			}
 		}
 
-		if (typeof obj[USER_KEYS.ID] !== 'number') {
+		if (typeof obj[USER_KEYS.id] !== 'number') {
 			return c.reply(`ERROR: wrong data. Id is not number`);
 		}
 
-		// const allUsers = await loadFromKv(c, KV_KEYS.USERS);
-		const users = c.ctx[CTX_KEYS.USERS];
-		const merged = [...users, obj];
+		const allUsers = await loadFromKv(c, KV_KEYS.users);
+		const merged = [...allUsers, obj];
 
-		await saveToKv(c, KV_KEYS.USERS, merged);
+		await saveToKv(c, KV_KEYS.users, merged);
 		await c.reply(`User was saved\n\n${yaml.dump(obj)}`);
-		await this.router.reload();
+
+		return this.router.reload();
 	}
 
-	userRemoveCallback = async (btnId, payload) => {
+	userRemoveCallback = async (payload) => {
 		const c = this.router.c;
-		const users = c.ctx[CTX_KEYS.USERS];
-		const prepared = [...users];
+		const allUsers = await loadFromKv(c, KV_KEYS.users);
+		const prepared = [...allUsers];
 		const index = prepared.findIndex(
-			(i) => i[USER_KEYS.ID] === Number(payload),
+			(i) => i[USER_KEYS.id] === Number(payload),
 		);
 
 		if (index < 0) return c.reply(`ERROR: Can't find user ${payload}`);
 
 		prepared.splice(index, 1);
 
-		await saveToKv(c, KV_KEYS.USERS, prepared);
-		await c.reply(`User was deleted\n\n${yaml.dump(users[index])}`);
+		await saveToKv(c, KV_KEYS.users, prepared);
+		await c.reply(`User was deleted\n\n${yaml.dump(allUsers[index])}`);
 
 		return c.router.reload();
 	};
