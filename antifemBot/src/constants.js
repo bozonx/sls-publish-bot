@@ -1,6 +1,7 @@
 // for webhook
 export const TG_BOT_URL = '/bot';
 export const CACHE_PREFIX = 'CACHE';
+export const QUERY_MARKER = 'PageRouter';
 // export const CACHE_MENU_MSG_ID_TTL_SEC = 80;
 export const SESSION_STATE_TTL_SEC = 80;
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
@@ -28,7 +29,7 @@ export const TEMPLATE_NAMES = {
 	byFollower: 'byFollower',
 	noFooter: 'noFooter',
 };
-export const STATE_KEYS = {
+export const PUB_KEYS = {
 	text: 'text',
 	photo: 'photo',
 	video: 'video',

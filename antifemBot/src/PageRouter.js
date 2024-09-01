@@ -1,14 +1,12 @@
-import { InlineKeyboard } from 'grammy';
 import _ from 'lodash';
-import { loadFromCache, saveToCache } from './helpers.js';
-import { KV_KEYS, SESSION_STATE_TTL_SEC } from './constants.js';
+import { loadFromCache, saveToCache, renderMenuKeyboard } from './helpers.js';
+import { SESSION_STATE_TTL_SEC, CTX_KEYS } from './constants.js';
 
-const QUERY_MARKER = 'PageRouter';
-const PREV_MENU_MSG_ID_CACHE_NAME = 'prevMsgId';
-const STATE_CACHE_NAME = 'pageState';
+const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
+const SESSION_CACHE_NAME = 'pageState';
 
 /**
- * Do not store andy state inside your page class between requests
+ * IMPORTANT: Do not store andy state inside your page class between requests
  */
 export class PageBase {
 	router;
@@ -16,11 +14,12 @@ export class PageBase {
 	path;
 	// Put here the description of menu
 	text;
-	// Put here menu rows and buttons here
-	// like [ [ {id, label, payload, cb(id, payload)}, ...btns ], ..rows ]
+	// Put here menu rows and buttons
+	// like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
 	menu = [];
 
 	// state which is passed between pages using cache
+	// actually it is a session
 	get state() {
 		return this.router.state;
 	}
@@ -43,9 +42,6 @@ export class PageBase {
 		this.path = path;
 	}
 
-	// It runs only first time init on app start. It means for all the users
-	// async init() {}
-
 	// It runs when a route of certain user has been changed
 	async mount() {}
 
@@ -55,15 +51,6 @@ export class PageBase {
 	// It runs on each income message while this page is active
 	async onMessage() {}
 }
-
-// export async function makeRouter(initialPages) {
-// 	const router = new PageRouter(initialPages);
-//
-// 	// TODO: useless
-// 	await router.init();
-//
-// 	return router;
-// }
 
 export class PageRouter {
 	c;
@@ -98,25 +85,10 @@ export class PageRouter {
 
 	constructor(initialPages) {
 		this.pages = initialPages;
-		// TODO: but why?
-
-		// for (const pathTo of Object.keys(initialPages)) {
-		// 	this.pages[pathTo] = new initialPages[pathTo](this, pathTo);
-		// }
 	}
-
-	// TODO: but why?
-	async init() {
-		// for (const pathTo of Object.keys(this.pages)) {
-		// 	await this.pages[pathTo].init();
-		// }
-	}
-
-	// resetState() {
-	// 	this._state = {};
-	// }
 
 	async reload() {
+		// TODO: может это перенести в go()
 		if (!this.currentPath)
 			return this.c.reply(
 				`ERROR: Can't reload because there isn't current page`,
@@ -126,10 +98,6 @@ export class PageRouter {
 		return this.go(this.currentPath);
 	}
 
-	/**
-	 * @param {object|null} newPartialState - state which will be merged with the main state. Null means totally clear state
-	 * @param {boolean} [replaceState=false] - if set then the main state will be replaced with newPartialState
-	 */
 	async go(pathTo) {
 		const c = this.c;
 
@@ -141,9 +109,7 @@ export class PageRouter {
 			return c.reply(String(e));
 		}
 
-		const keyboard = this._renderMenuKeyboard();
-
-		await this._sendMenu(keyboard);
+		await this._sendMenu(renderMenuKeyboard(this.currentPage.menu));
 
 		return this._theEndOfRequest();
 	}
@@ -169,8 +135,9 @@ export class PageRouter {
 		return this._theEndOfRequest();
 	};
 
+	// TODO: review
 	_handleQueryData = async (c) => {
-		console.log('-----_handleQueryData', c.update.callback_query.data);
+		console.log('============ _handleQueryData', c.update.callback_query.data);
 
 		try {
 			await this._switchPage();
@@ -205,6 +172,35 @@ export class PageRouter {
 		return c.reply(`ERROR: Can't find button. ${data}`);
 	};
 
+	async _sendMenu(keyboard) {
+		const c = this.c;
+
+		// const prevMenuMsgId = await loadFromCache(c, PREV_MENU_MSG_ID_CACHE_NAME);
+
+		// remove prev menu message
+		if (this.state[PREV_MENU_MSG_ID_STATE_NAME]) {
+			try {
+				await c.api.deleteMessage(c.chatId, prevMenuMsgId);
+			} catch (e) {
+				// skip error
+			}
+		}
+
+		const { message_id } = await c.reply(this.currentPage.text, {
+			reply_markup: keyboard,
+		});
+
+		this.state[PREV_MENU_MSG_ID_STATE_NAME] = message_id;
+
+		// await saveToCache(
+		// 	c,
+		// 	PREV_MENU_MSG_ID_CACHE_NAME,
+		// 	message_id,
+		// 	CACHE_MENU_MSG_ID_TTL_SEC,
+		// );
+	}
+
+	// TODO: review
 	async _switchPage(newPath) {
 		await this.currentPage?.unmount();
 		await this._loadState();
@@ -225,55 +221,7 @@ export class PageRouter {
 		await this.currentPage.mount();
 	}
 
-	_renderMenuKeyboard() {
-		const menu = this.currentPage?.menu;
-
-		if (!menu?.length) return;
-
-		const keyboard = new InlineKeyboard();
-
-		for (const row of menu) {
-			for (const { id, label, payload } of row) {
-				let query = `${QUERY_MARKER}|${id}`;
-
-				if (payload) query += `|${JSON.stringify(payload)}`;
-
-				keyboard.text(label, query);
-			}
-
-			keyboard.row();
-		}
-
-		return keyboard;
-	}
-
-	async _sendMenu(keyboard) {
-		const c = this.c;
-
-		// TODO: сохранять в стейте ???
-
-		const prevMenuMsgId = await loadFromCache(c, PREV_MENU_MSG_ID_CACHE_NAME);
-		// remove prev menu message
-		if (prevMenuMsgId) {
-			try {
-				await c.api.deleteMessage(c.chatId, prevMenuMsgId);
-			} catch (e) {
-				// skip error
-			}
-		}
-
-		const { message_id } = await c.reply(this.currentPage.text, {
-			reply_markup: keyboard,
-		});
-
-		await saveToCache(
-			c,
-			PREV_MENU_MSG_ID_CACHE_NAME,
-			message_id,
-			CACHE_MENU_MSG_ID_TTL_SEC,
-		);
-	}
-
+	// TODO: review
 	async _loadState() {
 		// in case switching page on .go()
 		if (this.state) return;
@@ -285,6 +233,7 @@ export class PageRouter {
 		this._state = this._loadedState || {};
 	}
 
+	// TODO: review
 	async _theEndOfRequest() {
 		// in case it has been run from .go()
 		// TODO: ?????
@@ -295,7 +244,7 @@ export class PageRouter {
 		// if (!_.isEqual(this._loadedState, this.state)) {
 		await saveToCache(
 			this.c,
-			STATE_CACHE_NAME,
+			SESSION_CACHE_NAME,
 			this.state,
 			SESSION_STATE_TTL_SEC,
 		);

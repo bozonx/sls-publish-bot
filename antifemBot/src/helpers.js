@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import { InlineKeyboard } from 'grammy';
 import locales from './i18n.js';
 import {
 	TG_BOT_URL,
@@ -7,6 +8,7 @@ import {
 	CACHE_PREFIX,
 	USER_KEYS,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
+	QUERY_MARKER,
 } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -226,6 +228,26 @@ export function makeContentState(c) {
 	}
 
 	return state;
+}
+
+export function renderMenuKeyboard(menu) {
+	if (!menu?.length) return;
+
+	const keyboard = new InlineKeyboard();
+
+	for (const row of menu) {
+		for (const { id, label, payload } of row) {
+			let query = `${QUERY_MARKER}|${id}`;
+
+			if (payload) query += `|${JSON.stringify(payload)}`;
+
+			keyboard.text(label, query);
+		}
+
+		keyboard.row();
+	}
+
+	return keyboard;
 }
 
 // export async function prepareSession(c) {
