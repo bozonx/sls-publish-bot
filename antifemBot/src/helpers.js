@@ -80,7 +80,9 @@ export async function loadFromKv(c, key, defaultValue) {
 		throw new Error(`ERROR: Can't load value of "${key}": ${e}`);
 	}
 
-	return resStr ? JSON.parse(resStr) : defaultValue;
+	const parsed = parseJsonSafelly(resStr);
+
+	return typeof parsed === 'undefined' ? defaultValue : parsed;
 }
 
 export async function saveToKv(c, key, value) {
@@ -103,7 +105,7 @@ export async function loadFromCache(c, key) {
 		throw new Error(`ERROR: Can't load value from cache "${key}": ${e}`);
 	}
 
-	return JSON.parse(resStr);
+	return parseJsonSafelly(resStr);
 }
 
 // on expire the key-value pair will be deleted
@@ -250,6 +252,14 @@ export function renderMenuKeyboard(menu) {
 	}
 
 	return keyboard;
+}
+
+export function parseJsonSafelly(dataStr) {
+	if (typeof dataStr !== 'string') return;
+	// if empty string means undefined
+	else if (!dataStr) return;
+
+	return JSON.parse(dataStr);
 }
 
 // export async function prepareSession(c) {

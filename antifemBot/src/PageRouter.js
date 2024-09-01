@@ -1,5 +1,10 @@
 import _ from 'lodash';
-import { loadFromCache, saveToCache, renderMenuKeyboard } from './helpers.js';
+import {
+	loadFromCache,
+	parseJsonSafelly,
+	saveToCache,
+	renderMenuKeyboard,
+} from './helpers.js';
 import { SESSION_STATE_TTL_SEC, CTX_KEYS } from './constants.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
@@ -109,7 +114,10 @@ export class PageRouter {
 		try {
 			await this._switchPage(pathTo);
 		} catch (e) {
-			return c.reply(String(e));
+			await c.reply(String(e));
+
+			// TODO: ???
+			throw e;
 		}
 
 		await this._sendMenu(renderMenuKeyboard(this.currentPage.menu));
@@ -155,7 +163,7 @@ export class PageRouter {
 		if (marker !== QUERY_MARKER) return;
 
 		const btnPayload = bntPayloadRest.length
-			? JSON.parse(bntPayloadRest.join('|'))
+			? parseJsonSafelly(bntPayloadRest.join('|'))
 			: undefined;
 
 		const menu = this.currentPage.menu;

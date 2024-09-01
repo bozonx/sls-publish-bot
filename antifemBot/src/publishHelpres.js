@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { toMarkdownV2 } from '@telegraf/entity';
-import { CTX_KEYS, APP_CFG_KEYS, STATE_KEYS } from './constants.js';
+import { CTX_KEYS, APP_CFG_KEYS, PUB_KEYS } from './constants.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
@@ -8,20 +8,18 @@ export function convertTgEntitiesToTgMdV2(text, entities) {
 
 export function generatePostText(c, pubState) {
 	const template =
-		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][
-			pubState[STATE_KEYS.template]
-		];
-	const contentMdV2 = pubState[STATE_KEYS.text]
+		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
+	const contentMdV2 = pubState[PUB_KEYS.text]
 		? convertTgEntitiesToTgMdV2(
-				pubState[STATE_KEYS.text],
-				pubState[STATE_KEYS.entities],
+				pubState[PUB_KEYS.text],
+				pubState[PUB_KEYS.entities],
 			).trim()
 		: '';
 
 	const tmplData = {
 		CONTENT: contentMdV2,
-		AUTHOR: pubState[STATE_KEYS.author] || '',
-		TAGS: makeHashTags(pubState[STATE_KEYS.tags]),
+		AUTHOR: pubState[PUB_KEYS.author] || '',
+		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
 	};
 
 	const text = template

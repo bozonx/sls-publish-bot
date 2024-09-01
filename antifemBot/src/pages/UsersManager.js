@@ -1,7 +1,13 @@
 import _ from 'lodash';
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import { t, saveToKv, isAdminUser, defineMenu } from '../helpers.js';
+import {
+	t,
+	saveToKv,
+	isAdminUser,
+	defineMenu,
+	parseJsonSafelly,
+} from '../helpers.js';
 import {
 	KV_KEYS,
 	USER_KEYS,
@@ -45,7 +51,7 @@ export class UsersManager extends PageBase {
 			const [useless, dataJson] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
 
 			try {
-				obj = JSON.parse(dataJson.trim());
+				obj = parseJsonSafelly(dataJson.trim());
 			} catch (e) {
 				return c.reply(`ERROR: can't parse json`);
 			}

@@ -43,8 +43,8 @@ export const PUB_KEYS = {
 };
 
 export const DEFAULT_SETUP_STATE = {
-	[STATE_KEYS.preview]: true,
-	[STATE_KEYS.template]: TEMPLATE_NAMES.default,
+	[PUB_KEYS.preview]: true,
+	[PUB_KEYS.template]: TEMPLATE_NAMES.default,
 };
 
 const footer =
