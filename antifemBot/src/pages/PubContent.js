@@ -32,7 +32,6 @@ export class PubContent extends PubPageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-
 		const pubState = makeContentState(c);
 
 		if (!pubState) return c.reply('ERROR: Wrong type of post');

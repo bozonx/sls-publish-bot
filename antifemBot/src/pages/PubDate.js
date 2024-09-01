@@ -1,5 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, nowPlusDay, defineMenu } from '../helpers.js';
+import { PUB_KEYS } from '../constants.js';
 
 export class PubDate extends PubPageBase {
 	async mount() {
@@ -30,16 +31,16 @@ export class PubDate extends PubPageBase {
 			// TODO: add days of week
 			[
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
-				},
-				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
 					cb: () => this.go('pub-tags'),
 				},
-				this.state.pub?.date && {
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.go('home'),
+				},
+				this.state.pub?.[PUB_KEYS.date] && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 					cb: () => this.go('pub-hour'),
@@ -50,12 +51,12 @@ export class PubDate extends PubPageBase {
 
 	async onMessage() {
 		//
-		// console.log(1111, c);
-		// await c.pager.go('pub-hour', this.payload);
 		// await c.reply(t(c, 'textAccepted'))
 	}
 
-	_selectDayHandler = (btnId, payload) => {
-		return this.go('pub-hour', { date: nowPlusDay(Number(payload)) });
+	_selectDayHandler = (payload) => {
+		return this.go('pub-hour', {
+			[PUB_KEYS.date]: nowPlusDay(Number(payload)),
+		});
 	};
 }

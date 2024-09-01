@@ -1,5 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
+import { PUB_KEYS } from '../constants.js';
 
 export class PubHour extends PubPageBase {
 	async mount() {
@@ -30,16 +31,16 @@ export class PubHour extends PubPageBase {
 			],
 			[
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
-				},
-				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
 					cb: () => this.go('pub-date'),
 				},
-				typeof this.state.pub?.hour === 'number' && {
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.go('home'),
+				},
+				typeof this.state.pub?.[PUB_KEYS.hour] === 'number' && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 					cb: () => this.go('pub-post-setup'),
@@ -64,7 +65,7 @@ export class PubHour extends PubPageBase {
 		};
 	}
 
-	_selectHourHandler = (btnId, payload) => {
-		return this.go('pub-post-setup', { hour: Number(payload) });
+	_selectHourHandler = (payload) => {
+		return this.go('pub-post-setup', { [PUB_KEYS.hour]: Number(payload) });
 	};
 }
