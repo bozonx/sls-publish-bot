@@ -1,6 +1,6 @@
 import { Bot } from 'grammy';
 import { handleStart, makeContext } from './botLogic.js';
-import { PageRouter } from './PageRouter.js';
+import { routerMiddleware } from './PageRouter.js';
 import { Home } from './pages/Home.js';
 import { ConfigManager } from './pages/ConfigManager.js';
 import { TagsManager } from './pages/TagsManager.js';
@@ -23,7 +23,7 @@ export class BotIndex {
 	}
 
 	async init() {
-		const router = new PageRouter({
+		const routes = {
 			home: Home,
 			'config-manager': ConfigManager,
 			'users-manager': UsersManager,
@@ -35,12 +35,12 @@ export class BotIndex {
 			'pub-hour': PubHour,
 			'pub-post-setup': PubPostSetup,
 			'pub-confirm': PubConfirm,
-		});
+		};
 
-		this.bot.use(router.middleware);
+		this.bot.use(routerMiddleware(routes));
 		this.bot.command('start', handleStart);
-		this.bot.on('callback_query:data', router._handleQueryData);
-		this.bot.on('message', router._handleMessage);
+		this.bot.on('callback_query:data', (c) => c.router._handleQueryData(c));
+		this.bot.on('message', (c) => c.router._handleMessage(c));
 	}
 
 	/**

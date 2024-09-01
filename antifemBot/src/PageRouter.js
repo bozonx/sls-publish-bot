@@ -10,6 +10,14 @@ import { SESSION_STATE_TTL_SEC, CTX_KEYS, QUERY_MARKER } from './constants.js';
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
 const SESSION_CACHE_NAME = 'pageState';
 
+export function routerMiddleware(routes) {
+	return async (c, next) => {
+		c.router = new PageRouter(c, routes);
+
+		return next();
+	};
+}
+
 /**
  * IMPORTANT: Do not store andy state inside your page class between requests
  */
@@ -36,10 +44,6 @@ export class PageBase {
 	get config() {
 		return this.router.config;
 	}
-
-	// get KV() {
-	// 	return this.router.KV;
-	// }
 
 	// It runs when a route of certain user has been changed
 	constructor(router, path) {
@@ -88,12 +92,8 @@ export class PageRouter {
 		return this.c.ctx[CTX_KEYS.config];
 	}
 
-	// TODO: useless???
-	// get KV() {
-	// 	return this.c.ctx[CTX_KEYS.KV];
-	// }
-
-	constructor(initialPages) {
+	constructor(c, initialPages) {
+		this.c = c;
 		this.pages = initialPages;
 	}
 
@@ -127,12 +127,12 @@ export class PageRouter {
 		return this._theEndOfRequest();
 	}
 
-	middleware = async (c, next) => {
-		this.c = c;
-		c.router = this;
-
-		return next();
-	};
+	// middleware = async (c, next) => {
+	// 	this.c = c;
+	// 	c.router = this;
+	//
+	// 	return next();
+	// };
 
 	_handleMessage = async (c) => {
 		console.log('-----_handleMessage', c.msg);
@@ -145,14 +145,14 @@ export class PageRouter {
 
 		await this.currentPage.onMessage?.();
 		// the end of request only if there has been called .go()
-		// if (this.prevPath) await this._theEndOfRequest();
-		await this._theEndOfRequest();
+		if (this.prevPath) await this._theEndOfRequest();
+		// await this._theEndOfRequest();
 	};
 
-	// TODO: review
 	_handleQueryData = async (c) => {
 		console.log('============ _handleQueryData', c.update.callback_query.data);
 
+		// TODO: вначале загружаем прошлую страницу
 		try {
 			await this._switchPage();
 		} catch (e) {
@@ -179,8 +179,9 @@ export class PageRouter {
 				// run menu button handler
 				await cb(btnPayload, id);
 				// the end of request only if there has been called .go()
-				// if (this.prevPath) await this._theEndOfRequest();
-				await this._theEndOfRequest();
+				// TODO: review
+				if (this.prevPath) await this._theEndOfRequest();
+				// await this._theEndOfRequest();
 
 				return;
 			}
@@ -236,16 +237,17 @@ export class PageRouter {
 		console.log('============ _theEndOfRequest', this.state);
 
 		// TODO: review
-		if (!_.isEqual(this._loadedState, this.state)) {
-			await saveToCache(
-				this.c,
-				SESSION_CACHE_NAME,
-				this.state,
-				SESSION_STATE_TTL_SEC,
-			);
-		}
+		// if (!_.isEqual(this._loadedState, this.state)) {
+		await saveToCache(
+			this.c,
+			SESSION_CACHE_NAME,
+			this.state,
+			SESSION_STATE_TTL_SEC,
+		);
+		// }
 
-		// this._state = null;
+		this._state = null;
+		this.prevPath = null;
 	}
 
 	async _sendMenu(keyboard) {
