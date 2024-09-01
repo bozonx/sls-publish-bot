@@ -1,10 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import {
-	TEMPLATE_NAMES,
-	STATE_KEYS,
-	DEFAULT_SETUP_STATE,
-} from '../constants.js';
+import { TEMPLATE_NAMES, PUB_KEYS, DEFAULT_SETUP_STATE } from '../constants.js';
 
 export class PubPostSetup extends PubPageBase {
 	async mount() {
@@ -17,50 +13,45 @@ export class PubPostSetup extends PubPageBase {
 
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
 
-		let templateNames = Object.keys(TEMPLATE_NAMES);
-
-		if (this.state.pub?.[STATE_KEYS.template]) {
-			templateNames = templateNames.filter(
-				(i) => i !== this.state.pub?.[STATE_KEYS.template],
-			);
-		}
+		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
+			(i) => i !== this.state.pub?.[PUB_KEYS.template],
+		);
 
 		this.menu = defineMenu([
-			...templateNames.map((tmplName) => [
+			...restTemplateNames.map((tmplName) => [
 				{
 					id: `template-${tmplName}`,
 					label: `${t(c, 'useTemplateBtn')}: ` + t(c, `template-${tmplName}`),
 					payload: tmplName,
-					cb: (btnId, payload) =>
-						this.reload({ [STATE_KEYS.template]: payload }),
+					cb: (payload) => this.reload({ [PUB_KEYS.template]: payload }),
 				},
 			]),
 
-			this.state.pub?.[STATE_KEYS.preview] && [
+			this.state.pub?.[PUB_KEYS.preview] && [
 				{
 					id: `previewOffBtn`,
 					label: t(c, `previewOffBtn`),
-					cb: () => this.reload({ [STATE_KEYS.preview]: false }),
+					cb: () => this.reload({ [PUB_KEYS.preview]: false }),
 				},
 			],
-			!this.state.pub?.[STATE_KEYS.preview] && [
+			!this.state.pub?.[PUB_KEYS.preview] && [
 				{
 					id: `previewOnBtn`,
 					label: t(c, `previewOnBtn`),
-					cb: () => this.reload({ [STATE_KEYS.preview]: true }),
+					cb: () => this.reload({ [PUB_KEYS.preview]: true }),
 				},
 			],
 
 			[
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
-				},
-				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
 					cb: () => this.go('pub-hour'),
+				},
+				{
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
+					cb: () => this.go('home'),
 				},
 				{
 					id: 'nextBtn',
