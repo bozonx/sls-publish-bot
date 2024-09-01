@@ -1,30 +1,32 @@
 import _ from 'lodash';
 import { toMarkdownV2 } from '@telegraf/entity';
-import telegramifyMarkdown from 'telegramify-markdown';
+// import telegramifyMarkdown from 'telegramify-markdown';
 import { CTX_KEYS, APP_CFG_KEYS, STATE_KEYS } from './constants.js';
 
 export function convertMarkDownV1ToTgMdV2(markdownV1) {
-	return telegramifyMarkdown(markdownV1).replace('\\$', '$');
+	return markdownV1;
+	// return telegramifyMarkdown(markdownV1).replace(/\\([\{\}])/g, '$1');
 }
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
-	return toMarkdownV2({});
+	return toMarkdownV2({ text, entities });
 }
-
-console.log(
-	1111,
-	convertMarkDownV1ToTgMdV2(`some **sdf** [link](https:/yam.ru) .sdf *sdf*`),
-);
 
 export function generatePostText(c, pubState) {
 	const template =
 		c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.TEMPLATES][
 			pubState[STATE_KEYS.template]
 		];
+	const contentMdV2 = pubState[STATE_KEYS.text]
+		? convertTgEntitiesToTgMdV2(
+				pubState[STATE_KEYS.text],
+				pubState[STATE_KEYS.entities],
+			).trim()
+		: '';
 
 	const tmplData = {
-		CONTENT: pubState[STATE_KEYS.text],
-		AUTHOR: pubState[STATE_KEYS.author],
+		CONTENT: contentMdV2,
+		AUTHOR: pubState[STATE_KEYS.author] || '',
 		TAGS: makeHashTags(pubState[STATE_KEYS.tags]),
 	};
 
@@ -34,6 +36,7 @@ export function generatePostText(c, pubState) {
 
 			return _.template(tgMdV2Str)(tmplData);
 		})
+		.filter((i) => i.trim())
 		.join('\n\n');
 
 	return text;
@@ -53,5 +56,5 @@ export async function publishFinalPost(c, chatId, text, usePreview) {
 export function makeHashTags(tags) {
 	if (!tags) return '';
 
-	return tags.map((item) => `#${item}`).join(' ');
+	return tags.map((item) => `\\#${item}`).join(' ');
 }

@@ -30,11 +30,13 @@ export const TEMPLATE_NAMES = {
 };
 export const STATE_KEYS = {
 	text: 'text',
+	entities: 'entities',
 	author: 'author',
 	tags: 'tags',
 	template: 'template',
 	preview: 'preview',
-	// TODO: add more
+	date: 'date',
+	hour: 'hour',
 };
 // TODO: review
 export const DEFAULT_STATE = {

@@ -1,5 +1,9 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeContentState, defineMenu } from '../helpers.js';
+import {
+	convertTgEntitiesToTgMdV2,
+	publishFinalPost,
+} from '../publishHelpres.js';
 
 export class PubContent extends PubPageBase {
 	async mount() {
@@ -22,6 +26,8 @@ export class PubContent extends PubPageBase {
 				},
 			],
 		]);
+
+		await this._printPreview();
 	}
 
 	async onMessage() {
@@ -32,5 +38,20 @@ export class PubContent extends PubPageBase {
 		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
 		return this.go('pub-author', pubState);
+	}
+
+	async _printPreview() {
+		const c = this.router.c;
+		const text = convertTgEntitiesToTgMdV2(
+			this.state.pub.text,
+			this.state.pub.entities,
+		);
+
+		await publishFinalPost(
+			c,
+			c.msg.chat.id,
+			text,
+			Boolean(c.msg.link_preview_options?.url),
+		);
 	}
 }

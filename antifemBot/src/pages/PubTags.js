@@ -70,10 +70,7 @@ export class PubTags extends PubPageBase {
 	}
 
 	tagSelectCallback = async (btnId, payload) => {
-		const mergedAllTags = _.uniq([
-			...(this.state.pub?.tags || []),
-			payload,
-		]).sort();
+		const mergedAllTags = _.uniq([...(this.state.pub?.tags || []), payload]);
 
 		return this.reload({ [STATE_KEYS.tags]: mergedAllTags });
 	};

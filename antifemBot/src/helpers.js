@@ -41,8 +41,9 @@ export function makeStatePreview(c, state = {}) {
 		mediaCount = state.video.length;
 	}
 
-	let res = `${t(c, 'statePostType')}: ${postType}\n`;
+	let res = '';
 
+	if (state.text) res += `${t(c, 'statePostType')}: ${postType}\n`;
 	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
 	if (mediaCount) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
 	if (state.author) res += `${t(c, 'stateAuthor')}: ${state.author}\n`;
@@ -210,7 +211,7 @@ export function nowPlusDay(plusday) {
 }
 
 export function makeContentState(c) {
-	let state;
+	let state = { entities: c.msg.entities };
 
 	// console.log(2222, c.msg);
 
@@ -221,16 +222,19 @@ export function makeContentState(c) {
 
 	if (c.msg.video) {
 		state = {
+			...state,
 			text: c.msg.caption,
 			video: c.msg.video,
 		};
 	} else if (c.msg.photo) {
 		state = {
+			...state,
 			text: c.msg.caption,
 			photo: c.msg.photo,
 		};
 	} else if (c.msg.text) {
 		state = {
+			...state,
 			text: c.msg.text,
 		};
 	} else {
