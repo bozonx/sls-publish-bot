@@ -23,7 +23,7 @@ export class ScheduledList extends PageBase {
 					cb: async (payload) => {
 						this.state.scheduledItem = payload;
 
-						return this.router.go();
+						return this.router.go('scheduled-item');
 					},
 				},
 			]),

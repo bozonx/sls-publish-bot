@@ -17,6 +17,13 @@ export class Home extends PageBase {
 					cb: () => this.router.go('tags-manager'),
 				},
 			],
+			[
+				{
+					id: 'manageScheduledBtn',
+					label: t(c, 'manageScheduledBtn'),
+					cb: () => this.router.go('scheduled-list'),
+				},
+			],
 			isAdmin && [
 				{
 					id: 'editConfigBtn',

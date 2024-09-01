@@ -5,7 +5,6 @@ import {
 	APP_INITIAL_CONFIG,
 } from './constants.js';
 import {
-	t,
 	loadFromKv,
 	saveToKv,
 	makeUnregisteredMsg,

@@ -38,6 +38,8 @@ export default {
 		deletePostponedBtn: 'Удалить',
 		editPostponedBtn: 'Редактировать',
 		changeDateTimeBtn: 'Изменить время',
+		manageScheduledBtn: 'Управлять отложенными постами',
+		publicateNowBtn: 'Опубликаовать сейчас',
 
 		// Menu descriptions
 		homeDescr:
@@ -65,6 +67,7 @@ export default {
 		tagWasAdded: 'Тэги были добавлены',
 		tagWasDeleted: 'Тэг был удалён',
 		scheduledItemWasDeleted: 'Отложенный пост был удалён',
+		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
 		infoMsgToAdminChannel: 'Этот пост будет опубликован в канале',
 	},
 };

@@ -1,5 +1,10 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeContentState, defineMenu } from '../helpers.js';
+import {
+	t,
+	makeContentState,
+	defineMenu,
+	makeStatePreview,
+} from '../helpers.js';
 import {
 	convertTgEntitiesToTgMdV2,
 	publishFinalPost,
