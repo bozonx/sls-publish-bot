@@ -31,11 +31,10 @@ export default {
 		withoutAuthorBtn: 'Без автора',
 		clearTagsBtn: 'Сбросить тэги',
 		useTemplateBtn: 'Использовать шаблон',
-		previewBtn: 'Посмотреть результат',
-
-		previewOff: 'Выключить link preview',
-		previewOn: 'Включить link preview',
-		pubPlan: 'Запланировать публикацию',
+		// previewBtn: 'Посмотреть результат',
+		previewOffBtn: 'Выключить link preview',
+		previewOnBtn: 'Включить link preview',
+		pubConfirmBtn: 'Да',
 
 		// Menu descriptions
 		homeDescr:
@@ -50,10 +49,10 @@ export default {
 		uploadContentDescr:
 			'Проверьте отображение текста и медиа(если есть). Замените/добавьте текст и медиа',
 		selectTagsDescr: 'Выберете тэги',
-
-		selectDate: 'Выберете дату',
-		selectHour: 'Выберете час. (минуты будут установлены в 00)',
-		pubConfirm: 'Проверьте и подтвердите публикацию',
+		pubPostSetupDescr: 'Проверьте и настройте публикацию',
+		pubConfirmDescr: 'Публикуем?',
+		selectDateDescr: 'Выберете дату',
+		selectHourDescr: 'Выберете час. (минуты будут установлены в 00)',
 
 		// Messages
 		welcomeAgain: 'И снова здравствуйте!',

@@ -1,11 +1,5 @@
 import { PubPageBase } from '../PubPageBase.js';
-import {
-	t,
-	makeStatePreview,
-	defineMenu,
-	generatePostText,
-	publishFinalPost,
-} from '../helpers.js';
+import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { TEMPLATE_NAMES, STATE_KEYS, DEFAULT_STATE } from '../constants.js';
 
 export class PubPostSetup extends PubPageBase {
@@ -17,7 +11,7 @@ export class PubPostSetup extends PubPageBase {
 			...(this.state.pub || {}),
 		};
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'pubConfirm')}`;
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
 
 		let templateNames = Object.keys(TEMPLATE_NAMES);
 
@@ -40,24 +34,16 @@ export class PubPostSetup extends PubPageBase {
 
 			this.state.pub?.[STATE_KEYS.preview] && [
 				{
-					id: `previewOff`,
-					label: t(c, `previewOff`),
+					id: `previewOffBtn`,
+					label: t(c, `previewOffBtn`),
 					cb: () => this.reload({ [STATE_KEYS.preview]: false }),
 				},
 			],
 			!this.state.pub?.[STATE_KEYS.preview] && [
 				{
-					id: `previewOn`,
-					label: t(c, `previewOn`),
+					id: `previewOnBtn`,
+					label: t(c, `previewOnBtn`),
 					cb: () => this.reload({ [STATE_KEYS.preview]: true }),
-				},
-			],
-
-			[
-				{
-					id: 'previewBtn',
-					label: t(c, 'previewBtn'),
-					cb: this._printPreview,
 				},
 			],
 
@@ -73,35 +59,11 @@ export class PubPostSetup extends PubPageBase {
 					cb: () => this.go('pub-hour'),
 				},
 				{
-					id: 'pubPlan',
-					label: '🗓️ ' + t(c, 'pubPlan'),
-					cb: this._finalPublication,
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
+					cb: () => this.go('pub-confirm'),
 				},
 			],
 		]);
 	}
-
-	async message() {
-		//
-	}
-
-	_printPreview = async () => {
-		const c = this.router.c;
-		const text = generatePostText(c, this.state.pub);
-
-		await publishFinalPost(
-			c,
-			c.msg.chat.id,
-			text,
-			this.state.pub[STATE_KEYS.preview],
-		);
-
-		return this.reload();
-	};
-
-	_finalPublication = async () => {
-		const c = this.router.c;
-
-		return c.reply('final');
-	};
 }

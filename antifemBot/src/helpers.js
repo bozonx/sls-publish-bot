@@ -5,10 +5,8 @@ import {
 	TG_BOT_URL,
 	CTX_KEYS,
 	CACHE_PREFIX,
-	APP_CFG_KEYS,
 	USER_KEYS,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
-	STATE_KEYS,
 } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -65,41 +63,6 @@ export function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
 
 	return res.trim();
-}
-
-export function generatePostText(c, pubState) {
-	const template =
-		c.ctx[CTX_KEYS.CONFIG][APP_CFG_KEYS.TEMPLATES][
-			pubState[STATE_KEYS.template]
-		];
-
-	const tmplData = {
-		CONTENT: pubState[STATE_KEYS.text],
-		AUTHOR: pubState[STATE_KEYS.author],
-		TAGS: makeHashTags(pubState[STATE_KEYS.tags]),
-	};
-
-	let text = template.map((i) => _.template(i)(tmplData)).join('\n\n');
-
-	return text;
-}
-
-export async function publishFinalPost(c, chatId, text, usePreview) {
-	await c.api.sendMessage(chatId, text, {
-		remove_keyboard: true,
-		link_preview_options: {
-			is_disabled: !usePreview,
-		},
-		reply_markup: {
-			remove_keyboard: true,
-		},
-	});
-}
-
-export function makeHashTags(tags) {
-	if (tags) return '';
-
-	return tags.map((i) => `#${item}`).join(' ');
 }
 
 export async function loadFromKv(c, key, defaultValue) {

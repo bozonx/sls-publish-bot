@@ -5,7 +5,7 @@ export class PubHour extends PubPageBase {
 	async mount() {
 		const c = this.router.c;
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectHour')}`;
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectHourDescr')}`;
 		this.menu = defineMenu([
 			[
 				this._makeHourBtn(7),
@@ -48,7 +48,7 @@ export class PubHour extends PubPageBase {
 		]);
 	}
 
-	async message(c) {
+	async onMessage() {
 		//
 		// console.log(1111, c);
 		// await c.pager.go('pub-confirm', this.payload);

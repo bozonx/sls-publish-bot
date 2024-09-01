@@ -11,6 +11,7 @@ import { PubTags } from './pages/PubTags.js';
 import { PubDate } from './pages/PubDate.js';
 import { PubHour } from './pages/PubHour.js';
 import { PubPostSetup } from './pages/PubPostSetup.js';
+import { PubConfirm } from './pages/PubConfirm.js';
 
 export class BotIndex {
 	bot;
@@ -33,6 +34,7 @@ export class BotIndex {
 			'pub-date': PubDate,
 			'pub-hour': PubHour,
 			'pub-post-setup': PubPostSetup,
+			'pub-confirm': PubConfirm,
 		});
 
 		this.bot.use(router.middleware);
