@@ -34,7 +34,7 @@ export class BotIndex {
 			'pub-author': PubAuthor,
 			'pub-tags': PubTags,
 			'pub-date': PubDate,
-			'pub-hour': PubHour,
+			'pub-time': PubHour,
 			'pub-post-setup': PubPostSetup,
 			'pub-confirm': PubConfirm,
 			'scheduled-list': ScheduledList,

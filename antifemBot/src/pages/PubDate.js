@@ -1,12 +1,32 @@
+import dayjs from 'dayjs';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, nowPlusDay, defineMenu } from '../helpers.js';
-import { PUB_KEYS } from '../constants.js';
+import { PUB_KEYS, PUBLICATION_TIME_ZONE } from '../constants.js';
 
 export class PubDate extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		const descr = _.template(t(c, 'selectDateDescr'))({
+			TIME_ZONE: t(c, 'msk'),
+		});
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectDateDescr')}`;
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'descr')}`;
+
+		const daysBtn = [];
+		const nowDate = dayjs().tz(PUBLICATION_TIME_ZONE);
+
+		for (const i = 3; i <= 7; i++) {
+			const shiftDate = nowDate.add(i, 'day');
+			// start from 1
+			const dayOfWeekNum = shiftDate.get('d');
+			const dayOfWeekLocale = t(c, 'daysOfWeek')[dayOfWeekNum - 1];
+
+			daysBtn.push({
+				id: 'DAY',
+				label: `${i} - ${dayOfWeekLocale}`,
+				payload: i,
+			});
+		}
 
 		return defineMenu([
 			[
@@ -26,7 +46,7 @@ export class PubDate extends PubPageBase {
 					payload: 2,
 				},
 			],
-			// TODO: add days of week
+			...daysBtn,
 			[
 				{
 					id: 'backBtn',
@@ -64,7 +84,23 @@ export class PubDate extends PubPageBase {
 	}
 
 	async onMessage() {
-		//
-		// await c.reply(t(c, 'textAccepted'))
+		const c = this.router.c;
+
+		if (!c.msg.text) {
+			await c.reply('No text');
+
+			return this.reload();
+		}
+
+		const currentYear = dayjs.tz(PUBLICATION_TIME_ZONE).get('year');
+		const rawDate = dayjs(`${c.msg.text.trim()}.${currentYear}`);
+
+		if (rawDate.isValid()) {
+			return this.go('pub-time', { [PUB_KEYS.time]: time });
+		} else {
+			await c.reply(t(c, 'wrongTimeFormat'));
+
+			return this.reload();
+		}
 	}
 }

@@ -44,8 +44,8 @@ export async function handleScheduled(TG_TOKEN, DESTINATION_CHANNEL_ID, KV) {
 		// TODO: uncomment on prod
 
 		// now in Moscow
-		// const nowDate = dayjs().tz(PUBLICATION_TIME_ZONE);
-		const nowDate = dayjs('2024-09-03T21:01' + PUBLICATION_TIME_ZONE);
+		const nowDate = dayjs().tz(PUBLICATION_TIME_ZONE);
+		// const nowDate = dayjs('2024-09-03T21:01' + PUBLICATION_TIME_ZONE);
 		const nowExtendedDate = nowDate.add(PUBLICATION_ADD_NOW_SEC, 'second');
 		// now minus 5 minutes
 		const nowMinusShift = nowExtendedDate.subtract(

@@ -60,7 +60,7 @@ export class PubPostSetup extends PubPageBase {
 			case 'preview':
 				return this.reload({ [PUB_KEYS.preview]: Boolean(payload) });
 			case 'backBtn':
-				return this.go('pub-hour');
+				return this.go('pub-time');
 			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':

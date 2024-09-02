@@ -3,6 +3,7 @@ export default {
 		today: 'Сегодня',
 		tomorrow: 'Завтра',
 		afterTomorrow: 'Послезавтра',
+		daysOfWeek: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
 		msk: 'МСК',
 
 		// Template names
@@ -63,7 +64,8 @@ export default {
 		selectTagsDescr: 'Выберете тэги',
 		pubPostSetupDescr: 'Проверьте и настройте публикацию',
 		pubConfirmDescr: 'Публикуем?',
-		selectDateDescr: 'Выберете дату',
+		selectDateDescr:
+			'Выберете дату либо введите в формате DD.MM. Часовая зона (\\${TIME_ZONE}).',
 		selectHourDescr:
 			'Выберете время публикации. Часовая зона (\\${TIME_ZONE}).\nЕсли выбрете час то минуты будут установлены в 00.\nЕсли нужно более точное время то введите его в формате 1:23 или 01:23',
 		scheduledListDescr: 'Выберете отложенную публикацию для управления',
