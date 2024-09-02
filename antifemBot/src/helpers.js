@@ -10,6 +10,7 @@ import {
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
 	QUERY_MARKER,
 	PUB_KEYS,
+	MEDIA_TYPES,
 } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -30,17 +31,12 @@ export function t(c, msg) {
 
 export function makeStatePreview(c, state = {}) {
 	let postType = 'text';
-	let mediaCount = 0;
+	let mediaCount = state[PUB_KEYS.media]?.length || 0;
 	// TODO: если мд то очистить
 	let textLength = state[PUB_KEYS.text]?.length || 0;
 
-	if (state[PUB_KEYS.photo]) {
-		postType = PUB_KEYS.photo;
-		mediaCount = state[PUB_KEYS.photo].length;
-	} else if (state[PUB_KEYS.video]) {
-		postType = PUB_KEYS.video;
-		mediaCount = state[PUB_KEYS.video].length;
-	}
+	if (state.media?.length === 1) postType = state.media[0].type;
+	else if (state.media?.length > 1) postType = 'media group';
 
 	let res = '';
 
@@ -207,27 +203,28 @@ export function makeContentState(c) {
 
 	console.log(2222, c.msg);
 
-	// TODO: captions parse to md with entities
 	// TODO: media group
-
 	// TODO: add STATE_KEYS
+	// TODO: add file type
 
 	if (c.msg.video) {
 		state = {
-			text: c.msg.caption,
-			entities: c.msg.caption_entities,
-			video: c.msg.video,
+			[PUB_KEYS.text]: c.msg.caption,
+			[PUB_KEYS.entities]: c.msg.caption_entities,
+			[PUB_KEYS.media]: [{ type: MEDIA_TYPES.video, data: c.msg.video }],
 		};
 	} else if (c.msg.photo) {
 		state = {
-			text: c.msg.caption,
-			entities: c.msg.caption_entities,
-			photo: c.msg.photo,
+			[PUB_KEYS.text]: c.msg.caption,
+			[PUB_KEYS.entities]: c.msg.caption_entities,
+			[PUB_KEYS.media]: [
+				{ type: MEDIA_TYPES.photo, data: c.msg.photo[c.msg.photo.length - 1] },
+			],
 		};
 	} else if (c.msg.text) {
 		state = {
-			text: c.msg.text,
-			entities: c.msg.entities,
+			[PUB_KEYS.text]: c.msg.text,
+			[PUB_KEYS.entities]: c.msg.entities,
 		};
 	} else {
 		return;
@@ -264,13 +261,13 @@ export function parseJsonSafelly(dataStr) {
 	return JSON.parse(dataStr);
 }
 
-export function hasPubHaveMedia(pubState = {}) {
-	const mediaFields = [PUB_KEYS.photo, PUB_KEYS.video];
-
-	return Boolean(
-		Object.keys(pubState).find((i) => pubState[i] && mediaFields.includes(i)),
-	);
-}
+// export function hasPubHaveMedia(pubState = {}) {
+// 	const mediaFields = [PUB_KEYS.photo, PUB_KEYS.video];
+//
+// 	return Boolean(
+// 		Object.keys(pubState).find((i) => pubState[i] && mediaFields.includes(i)),
+// 	);
+// }
 
 // export async function prepareSession(c) {
 // 	const cfgJson = await c.config.KV.get(KV_CONFIG);

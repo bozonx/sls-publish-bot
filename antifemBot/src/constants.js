@@ -35,8 +35,7 @@ export const TEMPLATE_NAMES = {
 };
 export const PUB_KEYS = {
 	text: 'text',
-	photo: 'photo',
-	video: 'video',
+	media: 'media',
 	entities: 'entities',
 	author: 'author',
 	tags: 'tags',

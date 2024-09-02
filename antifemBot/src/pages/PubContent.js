@@ -1,9 +1,9 @@
 import { PubPageBase } from '../PubPageBase.js';
+import { PUB_KEYS } from '../constants.js';
 import {
 	t,
 	makeContentState,
 	defineMenu,
-	hasPubHaveMedia,
 	makeStatePreview,
 } from '../helpers.js';
 import {
@@ -54,16 +54,17 @@ export class PubContent extends PubPageBase {
 				},
 			],
 			[
-				this.state.pub?.text && {
+				this.state.pub?.[PUB_KEYS.text] && {
 					id: 'removeTextBtn',
 					label: t(c, 'removeTextBtn'),
-					cb: () => this.reload({ text: null, entities: null }),
+					cb: () =>
+						this.reload({ [PUB_KEYS.text]: null, [PUB_KEYS.entities]: null }),
 				},
-				hasPubHaveMedia(this.state.pub) && {
+				this.state.pub?.[PUB_KEYS.media]?.length && {
 					id: 'removeMediaBtn',
 					label: t(c, 'removeMediaBtn'),
 					cb: () => {
-						return this.reload({ photo: null, video: null });
+						return this.reload({ [PUB_KEYS.media]: null });
 					},
 				},
 			],
@@ -103,13 +104,12 @@ export class PubContent extends PubPageBase {
 			pubState = fullState;
 		} else if (this.state.replaceMode === REPLACE_MODES.textOnly) {
 			pubState = {
-				text: fullState.text,
-				entries: fullState.entities,
+				[PUB_KEYS.text]: fullState[PUB_KEYS.text],
+				[PUB_KEYS.entities]: fullState[PUB_KEYS.entities],
 			};
 		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
 			pubState = {
-				photo: fullState.photo,
-				video: fullState.video,
+				[PUB_KEYS.media]: fullState[PUB_KEYS.media],
 			};
 		}
 
