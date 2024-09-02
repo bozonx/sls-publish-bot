@@ -9,6 +9,7 @@ import {
 	QUERY_MARKER,
 	PUB_KEYS,
 	USER_KEYS,
+	DATE_FORMAT,
 } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -46,7 +47,7 @@ export function makeStatePreview(c, state = {}) {
 	if (state[PUB_KEYS.tags])
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
 	if (state[PUB_KEYS.date])
-		res += `${t(c, 'stateDate')}: ${dayjs(state[PUB_KEYS.date]).format('DD.MM.YYYY')}\n`;
+		res += `${t(c, 'stateDate')}: ${dayjs(state[PUB_KEYS.date], DATE_FORMAT).format('DD.MM.YYYY')}\n`;
 	if (state[PUB_KEYS.time]) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}
@@ -182,14 +183,6 @@ export function defineMenu(menu = []) {
 	}
 
 	return res;
-}
-
-export function nowPlusDay(plusday) {
-	const date = dayjs().add(plusday, 'day');
-
-	// TODO: MOSCOW
-
-	return date.format('YYYY-MM-DD');
 }
 
 export function renderMenuKeyboard(menu) {

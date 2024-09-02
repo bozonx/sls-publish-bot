@@ -1,7 +1,8 @@
+import _ from 'lodash';
 import dayjs from 'dayjs';
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, nowPlusDay, defineMenu } from '../helpers.js';
-import { PUB_KEYS, PUBLICATION_TIME_ZONE } from '../constants.js';
+import { t, makeStatePreview, defineMenu } from '../helpers.js';
+import { PUB_KEYS, PUBLICATION_TIME_ZONE, DATE_FORMAT } from '../constants.js';
 
 export class PubDate extends PubPageBase {
 	async renderMenu() {
@@ -10,20 +11,26 @@ export class PubDate extends PubPageBase {
 			TIME_ZONE: t(c, 'msk'),
 		});
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'descr')}`;
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		const daysBtn = [];
 		const nowDate = dayjs().tz(PUBLICATION_TIME_ZONE);
 
-		for (const i = 3; i <= 7; i++) {
+		for (let i = 3; i <= 6; i++) {
 			const shiftDate = nowDate.add(i, 'day');
-			// start from 1
-			const dayOfWeekNum = shiftDate.get('d');
+			// start from sunday = 0
+			let dayOfWeekNum = shiftDate.get('d');
+
+			if (dayOfWeekNum === 0) dayOfWeekNum = 7;
+
 			const dayOfWeekLocale = t(c, 'daysOfWeek')[dayOfWeekNum - 1];
+
+			console.log(8888, i, shiftDate.format(), dayOfWeekNum, dayOfWeekLocale);
 
 			daysBtn.push({
 				id: 'DAY',
-				label: `${i} - ${dayOfWeekLocale}`,
+				// label: `${i} - ${dayOfWeekLocale}`,
+				label: dayOfWeekLocale,
 				payload: i,
 			});
 		}
@@ -46,7 +53,7 @@ export class PubDate extends PubPageBase {
 					payload: 2,
 				},
 			],
-			...daysBtn,
+			[...daysBtn],
 			[
 				{
 					id: 'backBtn',
@@ -66,8 +73,11 @@ export class PubDate extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'DAY') {
-			return this.go('pub-hour', {
-				[PUB_KEYS.date]: nowPlusDay(Number(payload)),
+			const date = dayjs().add(Number(payload || 0), 'day');
+			const dateStr = date.format(DATE_FORMAT);
+
+			return this.go('pub-time', {
+				[PUB_KEYS.date]: dateStr,
 			});
 		}
 
@@ -92,13 +102,21 @@ export class PubDate extends PubPageBase {
 			return this.reload();
 		}
 
-		const currentYear = dayjs.tz(PUBLICATION_TIME_ZONE).get('year');
-		const rawDate = dayjs(`${c.msg.text.trim()}.${currentYear}`);
+		const currentYear = dayjs().tz(PUBLICATION_TIME_ZONE).get('year');
+		const preparedDateStr = c.msg.text.trim().replace(/\s/g, '.');
+		const rawDate = dayjs(
+			`${preparedDateStr}.${currentYear}`,
+			'D.M.YYYY',
+			// strict parse and validate
+			true,
+		);
 
 		if (rawDate.isValid()) {
-			return this.go('pub-time', { [PUB_KEYS.time]: time });
+			const dateStr = rawDate.utc(true).format(DATE_FORMAT);
+
+			return this.go('pub-time', { [PUB_KEYS.date]: dateStr });
 		} else {
-			await c.reply(t(c, 'wrongTimeFormat'));
+			await c.reply(t(c, 'wrongDateFormat'));
 
 			return this.reload();
 		}

@@ -2,6 +2,7 @@
 export const TG_BOT_URL = '/bot';
 export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
+export const DATE_FORMAT = 'YYYY-MM-DD';
 // TODO: вынести в env?
 export const SESSION_STATE_TTL_SEC = 80;
 // TODO: вынести в env?
