@@ -2,7 +2,6 @@
 export const TG_BOT_URL = '/bot';
 export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
-// export const CACHE_MENU_MSG_ID_TTL_SEC = 80;
 export const SESSION_STATE_TTL_SEC = 80;
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const KV_KEYS = {
@@ -12,8 +11,11 @@ export const KV_KEYS = {
 	scheduled: 'scheduled',
 };
 export const CTX_KEYS = {
+	// it is c.msg.chat.id
+	chatWithBotId: 'chatWithBotId',
 	config: 'config',
 	users: 'users',
+	// user object from DB
 	me: 'me',
 	KV: 'KV',
 	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
@@ -35,8 +37,8 @@ export const TEMPLATE_NAMES = {
 };
 export const PUB_KEYS = {
 	text: 'text',
-	media: 'media',
 	entities: 'entities',
+	media: 'media',
 	author: 'author',
 	tags: 'tags',
 	template: 'template',
@@ -48,7 +50,6 @@ export const PUB_KEYS = {
 export const MEDIA_TYPES = {
 	photo: 'photo',
 	video: 'video',
-	file: 'file',
 };
 
 export const DEFAULT_SETUP_STATE = {

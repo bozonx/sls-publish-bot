@@ -6,11 +6,8 @@ import {
 	TG_BOT_URL,
 	CTX_KEYS,
 	CACHE_PREFIX,
-	USER_KEYS,
-	USER_SENT_TO_ADMIN_MSG_DELIMITER,
 	QUERY_MARKER,
 	PUB_KEYS,
-	MEDIA_TYPES,
 } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -30,10 +27,10 @@ export function t(c, msg) {
 }
 
 export function makeStatePreview(c, state = {}) {
-	let postType = 'text';
 	let mediaCount = state[PUB_KEYS.media]?.length || 0;
 	// TODO: если мд то очистить
 	let textLength = state[PUB_KEYS.text]?.length || 0;
+	let postType = 'text';
 
 	if (state.media?.length === 1) postType = state.media[0].type;
 	else if (state.media?.length > 1) postType = 'media group';
@@ -80,12 +77,15 @@ export async function loadFromKv(c, key, defaultValue) {
 
 	const parsed = parseJsonSafelly(resStr);
 
+	// TODO: а оно не null возвращает?
+
 	return typeof parsed === 'undefined' ? defaultValue : parsed;
 }
 
 export async function saveToKv(c, key, value) {
 	const valueStr = JSON.stringify(value);
 
+	// TODO: если передан undefined то значение очистится???
 	try {
 		return c.ctx[CTX_KEYS.KV].put(key, valueStr);
 	} catch (e) {
@@ -120,38 +120,6 @@ export async function saveToCache(c, key, value, expireFromNowSec) {
 			`ERROR: Can't save cache value ${valueStr} of "${key}": ${e}`,
 		);
 	}
-}
-
-export function isAdminUser(c, userId) {
-	if (!userId || !['string', 'number'].includes(typeof userId))
-		throw new Error(`ERROR: isAdminUser. Wrong userId - ${typeof userId}`);
-
-	const found = c.ctx[CTX_KEYS.users]?.find(
-		(i) => i[USER_KEYS.isAdmin] && Number(i[USER_KEYS.id]) === Number(userId),
-	);
-
-	return Boolean(found);
-}
-
-export function isRegisteredUser(c, userId) {
-	if (!userId || !['string', 'number'].includes(typeof userId))
-		throw new Error(`ERROR: isRegisteredUser. Wrong userId - ${typeof userId}`);
-
-	const found = c.ctx[CTX_KEYS.users]?.find(
-		(i) => Number(i[USER_KEYS.id]) === Number(userId),
-	);
-
-	return Boolean(found);
-}
-
-export function makeUnregisteredMsg(c) {
-	const dataStr = JSON.stringify({
-		[USER_KEYS.id]: c.msg.from.id,
-		// TODO: add last name
-		[USER_KEYS.name]: c.msg.from.first_name || c.msg.from.username,
-	});
-
-	return `${t(c, 'youAreNotRegistered')}.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`;
 }
 
 export function parseTagsFromInput(rawStr = '') {
@@ -198,64 +166,6 @@ export function nowPlusDay(plusday) {
 	return date.format('YYYY-MM-DD');
 }
 
-// TODO: move to publish helpers
-export function makeContentState(c) {
-	let state = {};
-
-	console.log(2222, c.msg);
-
-	// TODO: media group
-	// TODO: add STATE_KEYS
-
-	if (c.msg.video) {
-		state = {
-			[PUB_KEYS.text]: c.msg.caption,
-			[PUB_KEYS.entities]: c.msg.caption_entities,
-			[PUB_KEYS.media]: [{ type: MEDIA_TYPES.video, data: c.msg.video }],
-		};
-	} else if (c.msg.photo) {
-		state = {
-			[PUB_KEYS.text]: c.msg.caption,
-			[PUB_KEYS.entities]: c.msg.caption_entities,
-			[PUB_KEYS.media]: [
-				{ type: MEDIA_TYPES.photo, data: c.msg.photo[c.msg.photo.length - 1] },
-			],
-		};
-		// } else if (c.msg.document) {
-		// 	const doc = c.msg.document;
-		// 	let docType;
-		//
-		// 	// if (doc.mime_type.trim().indexOf('image/') === 0) {
-		// 	// 	docType = MEDIA_TYPES.photo;
-		// 	// }
-		// 	// // TODO: проверить
-		// 	// else if (doc.mime_type.trim().indexOf('video/') === 0) {
-		// 	// 	docType = MEDIA_TYPES.video;
-		// 	// } else {
-		// 	// 	return;
-		// 	// }
-		// 	//
-		//
-		// 	state = {
-		// 		[PUB_KEYS.text]: c.msg.caption,
-		// 		[PUB_KEYS.entities]: c.msg.caption_entities,
-		// 		[PUB_KEYS.media]: [
-		// 			// { type: MEDIA_TYPES.photo, data: { file_id: doc.file_id } },
-		// 			{ type: MEDIA_TYPES.photo, data: { file_id: doc.file_id } },
-		// 		],
-		// 	};
-	} else if (c.msg.text) {
-		state = {
-			[PUB_KEYS.text]: c.msg.text,
-			[PUB_KEYS.entities]: c.msg.entities,
-		};
-	} else {
-		return;
-	}
-
-	return state;
-}
-
 export function renderMenuKeyboard(menu) {
 	if (!menu?.length) return;
 
@@ -283,6 +193,28 @@ export function parseJsonSafelly(dataStr) {
 
 	return JSON.parse(dataStr);
 }
+
+// export function isAdminUser(c, userId) {
+// 	if (!userId || !['string', 'number'].includes(typeof userId))
+// 		throw new Error(`ERROR: isAdminUser. Wrong userId - ${typeof userId}`);
+//
+// 	const found = c.ctx[CTX_KEYS.users]?.find(
+// 		(i) => i[USER_KEYS.isAdmin] && Number(i[USER_KEYS.id]) === Number(userId),
+// 	);
+//
+// 	return Boolean(found);
+// }
+
+// export function isRegisteredUser(c, userId) {
+// 	if (!userId || !['string', 'number'].includes(typeof userId))
+// 		throw new Error(`ERROR: isRegisteredUser. Wrong userId - ${typeof userId}`);
+//
+// 	const found = c.ctx[CTX_KEYS.users]?.find(
+// 		(i) => Number(i[USER_KEYS.id]) === Number(userId),
+// 	);
+//
+// 	return Boolean(found);
+// }
 
 // export function hasPubHaveMedia(pubState = {}) {
 // 	const mediaFields = [PUB_KEYS.photo, PUB_KEYS.video];

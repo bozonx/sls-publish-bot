@@ -18,23 +18,10 @@ import { ScheduledItem } from './pages/ScheduledItem.js';
 export class BotIndex {
 	bot;
 
-	constructor(
-		TG_TOKEN,
-		MAIN_ADMIN_TG_USER_ID,
-		CHAT_OF_ADMINS_ID,
-		DESTINATION_CHANNEL_ID,
-		KV,
-	) {
+	constructor(TG_TOKEN, ...params) {
 		this.bot = new Bot(TG_TOKEN);
 
-		this.bot.use(
-			makeContext(
-				MAIN_ADMIN_TG_USER_ID,
-				CHAT_OF_ADMINS_ID,
-				DESTINATION_CHANNEL_ID,
-				KV,
-			),
-		);
+		this.bot.use(makeContext(...params));
 	}
 
 	async init() {

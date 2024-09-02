@@ -1,13 +1,7 @@
 import _ from 'lodash';
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import {
-	t,
-	saveToKv,
-	isAdminUser,
-	defineMenu,
-	parseJsonSafelly,
-} from '../helpers.js';
+import { t, saveToKv, defineMenu, parseJsonSafelly } from '../helpers.js';
 import {
 	KV_KEYS,
 	USER_KEYS,
@@ -18,7 +12,7 @@ export class UsersManager extends PageBase {
 	async mount() {
 		const c = this.router.c;
 
-		if (!isAdminUser(c, c.msg.chat.id)) return this.router.go('home');
+		if (!this.me[USER_KEYS.isAdmin]) return this.router.go('home');
 
 		this.text = t(c, 'usersManagerDescr');
 		this.menu = defineMenu([

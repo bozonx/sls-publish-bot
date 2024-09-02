@@ -1,10 +1,11 @@
 import { PageBase } from '../PageRouter.js';
-import { t, isAdminUser, makeContentState, defineMenu } from '../helpers.js';
+import { USER_KEYS } from '../constants.js';
+import { t, makeContentState, defineMenu } from '../helpers.js';
 
 export class Home extends PageBase {
 	async mount() {
 		const c = this.router.c;
-		const isAdmin = isAdminUser(c, c.msg.chat.id);
+		const isAdmin = this.me[USER_KEYS.isAdmin];
 		// clear pub state
 		this.state.pub = {};
 

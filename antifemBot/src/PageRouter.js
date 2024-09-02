@@ -10,6 +10,7 @@ import { SESSION_STATE_TTL_SEC, CTX_KEYS, QUERY_MARKER } from './constants.js';
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
 const SESSION_CACHE_NAME = 'pageState';
 
+// It makes a new instance of router on each request including dev env
 export function routerMiddleware(routes) {
 	return async (c, next) => {
 		c.router = new PageRouter(c, routes);
@@ -37,6 +38,10 @@ export class PageBase {
 		return this.router.state;
 	}
 
+	get chatWithBotId() {
+		return this.router.chatWithBotId;
+	}
+
 	get me() {
 		return this.router.me;
 	}
@@ -58,13 +63,13 @@ export class PageBase {
 	// It runs twice
 	// 1. when a route of certain user has been changed
 	// 2. when button is pressed. It should find menu handler
-	async mount() {}
+	async mount() { }
 
 	// It runs when a route is changing
-	async unmount() {}
+	async unmount() { }
 
 	// It runs on each income message while this page is active
-	async onMessage() {}
+	async onMessage() { }
 }
 
 export class PageRouter {
@@ -86,6 +91,10 @@ export class PageRouter {
 
 	get currentPath() {
 		return this.currentPage?.path;
+	}
+
+	get chatWithBotId() {
+		return this.c.ctx[CTX_KEYS.chatWithBotId];
 	}
 
 	get me() {

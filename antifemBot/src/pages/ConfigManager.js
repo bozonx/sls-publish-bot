@@ -1,13 +1,13 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
 import { KV_KEYS } from '../constants.js';
-import { t, isAdminUser, saveToKv, defineMenu } from '../helpers.js';
+import { t, saveToKv, defineMenu } from '../helpers.js';
 
 export class ConfigManager extends PageBase {
 	async mount() {
 		const c = this.router.c;
 
-		if (!isAdminUser(c, c.msg.chat.id)) return this.router.go('home');
+		if (!this.me[USER_KEYS.isAdmin]) return this.router.go('home');
 
 		this.text = t(c, 'editConfigDescr');
 		this.menu = defineMenu([
