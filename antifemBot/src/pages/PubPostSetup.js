@@ -27,7 +27,7 @@ export class PubPostSetup extends PubPageBase {
 				},
 			]),
 
-			[
+			!this.state.pub[PUB_KEYS.media]?.length && [
 				{
 					id: `preview`,
 					label: t(c, previewIsOn ? `previewOffBtn` : `previewOnBtn`),

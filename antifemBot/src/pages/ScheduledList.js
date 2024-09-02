@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
 import {
@@ -27,8 +28,7 @@ export class ScheduledList extends PageBase {
 			...items.map((i) => [
 				{
 					id: 'ITEM',
-					label:
-						`${i[PUB_KEYS.date]} ${i[PUB_KEYS.time]} ${i[PUB_KEYS.text]?.substring(0, 20)}`.trim(),
+					label: this.makeItemLabel(i),
 					payload: i.id,
 				},
 			]),
@@ -54,5 +54,13 @@ export class ScheduledList extends PageBase {
 			default:
 				return false;
 		}
+	}
+
+	makeItemLabel(item) {
+		const dateStr = datejs(item[PUB_KEYS.date], DATE_FORMAT).format('DD.MM');
+		const time = item[PUB_KEYS.time];
+		const text = item[PUB_KEYS.text]?.substring(0, 20).trim();
+
+		return `${dateStr} ${time} ${text}`;
 	}
 }

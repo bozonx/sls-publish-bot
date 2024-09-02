@@ -100,9 +100,12 @@ export async function deleteScheduledPost(c, itemId) {
 	return allItems[indexOfItem];
 }
 
-// TODO: remove replyToMsgId
 export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	let textMdV2;
+	const msgParams = {
+		parse_mode: 'MarkdownV2',
+		reply_parameters: replyToMsgId && { message_id: replyToMsgId },
+	};
 
 	if (pubState[PUB_KEYS.entities]) {
 		textMdV2 = convertTgEntitiesToTgMdV2(
@@ -134,14 +137,12 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 		if (type === MEDIA_TYPES.photo) {
 			return c.api.sendPhoto(chatId, data.file_id, {
 				caption: fullPostTextMdV2,
-				parse_mode: 'MarkdownV2',
-				reply_parameters: replyToMsgId && { message_id: replyToMsgId },
+				...msgParams,
 			});
 		} else if (type === MEDIA_TYPES.video) {
 			return c.api.sendVideo(chatId, data.file_id, {
 				caption: fullPostTextMdV2,
-				parse_mode: 'MarkdownV2',
-				reply_parameters: replyToMsgId && { message_id: replyToMsgId },
+				...msgParams,
 			});
 		} else {
 			// TODO: use file
@@ -154,9 +155,7 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 				is_disabled: !pubState[PUB_KEYS.preview],
 				// TODO: add certain url
 			},
-			parse_mode: 'MarkdownV2',
-			reply_parameters: replyToMsgId && { message_id: replyToMsgId },
-			// reply_to_message: replyToMsg,
+			...msgParams,
 		});
 	}
 
