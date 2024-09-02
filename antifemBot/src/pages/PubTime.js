@@ -3,7 +3,7 @@ import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { PUB_KEYS } from '../constants.js';
 
-export class PubHour extends PubPageBase {
+export class PubTime extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const descr = _.template(t(c, 'selectHourDescr'))({

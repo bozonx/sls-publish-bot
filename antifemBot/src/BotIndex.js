@@ -9,7 +9,7 @@ import { PubContent } from './pages/PubContent.js';
 import { PubAuthor } from './pages/PubAuthor.js';
 import { PubTags } from './pages/PubTags.js';
 import { PubDate } from './pages/PubDate.js';
-import { PubHour } from './pages/PubHour.js';
+import { PubTime } from './pages/PubTime.js';
 import { PubPostSetup } from './pages/PubPostSetup.js';
 import { PubConfirm } from './pages/PubConfirm.js';
 import { ScheduledList } from './pages/ScheduledList.js';
@@ -34,7 +34,7 @@ export class BotIndex {
 			'pub-author': PubAuthor,
 			'pub-tags': PubTags,
 			'pub-date': PubDate,
-			'pub-time': PubHour,
+			'pub-time': PubTime,
 			'pub-post-setup': PubPostSetup,
 			'pub-confirm': PubConfirm,
 			'scheduled-list': ScheduledList,
