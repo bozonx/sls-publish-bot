@@ -1,5 +1,5 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { PUB_KEYS } from '../constants.js';
+import { PUB_KEYS, USER_KEYS } from '../constants.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
 import { makeContentState, printFinalPost } from '../publishHelpres.js';
 
@@ -16,7 +16,7 @@ export class PubContent extends PubPageBase {
 		this.state.replaceMode = REPLACE_MODES.both;
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'uploadContentDescr')}`;
 
-		await this._printPreview();
+		await printFinalPost(c, this.me[USER_KEYS.id], this.state.pub);
 
 		return defineMenu([
 			[
@@ -114,25 +114,6 @@ export class PubContent extends PubPageBase {
 		return this.reload(pubState);
 
 		// return this.go('pub-author', pubState);
-	}
-
-	async _printPreview() {
-		const c = this.router.c;
-		// const text = convertTgEntitiesToTgMdV2(
-		// 	this.state.pub.text,
-		// 	this.state.pub.entities,
-		// );
-		//
-		// console.log(1111, text);
-		//
-		// await publishFinalPost(
-		// 	c,
-		// 	c.msg.chat.id,
-		// 	text,
-		// 	Boolean(c.msg.link_preview_options?.url),
-		// );
-
-		await printFinalPost(c, c.msg.chat.id, this.state.pub);
 	}
 
 	_showNext() {

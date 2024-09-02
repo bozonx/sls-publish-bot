@@ -64,50 +64,6 @@ export function makeContentState(c) {
 	return state;
 }
 
-// TODO: remove
-export function generatePostText(c, pubState) {
-	const template =
-		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
-	const contentMdV2 = pubState[PUB_KEYS.text]
-		? convertTgEntitiesToTgMdV2(
-			pubState[PUB_KEYS.text],
-			pubState[PUB_KEYS.entities],
-		).trim()
-		: '';
-
-	const tmplData = {
-		CONTENT: contentMdV2,
-		AUTHOR: pubState[PUB_KEYS.author] || '',
-		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
-	};
-
-	const text = template
-		.map((i) => _.template(i)(tmplData))
-		.filter((i) => i.trim())
-		.join('\n\n');
-
-	return text;
-}
-
-// TODO: remove
-export async function publishFinalPost(
-	c,
-	chatId,
-	text,
-	usePreview = true,
-	replyToMsgId,
-) {
-	return c.api.sendMessage(chatId, text, {
-		link_preview_options: {
-			is_disabled: !usePreview,
-			// TODO: add certain url
-		},
-		parse_mode: 'MarkdownV2',
-		reply_parameters: { message_id: replyToMsgId },
-		// reply_to_message: replyToMsg,
-	});
-}
-
 export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	let textMdV2;
 
@@ -190,3 +146,48 @@ export function makeHashTags(tags) {
 
 	return tags.map((item) => `\\#${item}`).join(' ');
 }
+
+//
+// // TODO: remove
+// export function generatePostText(c, pubState) {
+// 	const template =
+// 		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
+// 	const contentMdV2 = pubState[PUB_KEYS.text]
+// 		? convertTgEntitiesToTgMdV2(
+// 			pubState[PUB_KEYS.text],
+// 			pubState[PUB_KEYS.entities],
+// 		).trim()
+// 		: '';
+//
+// 	const tmplData = {
+// 		CONTENT: contentMdV2,
+// 		AUTHOR: pubState[PUB_KEYS.author] || '',
+// 		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
+// 	};
+//
+// 	const text = template
+// 		.map((i) => _.template(i)(tmplData))
+// 		.filter((i) => i.trim())
+// 		.join('\n\n');
+//
+// 	return text;
+// }
+//
+// // TODO: remove
+// export async function publishFinalPost(
+// 	c,
+// 	chatId,
+// 	text,
+// 	usePreview = true,
+// 	replyToMsgId,
+// ) {
+// 	return c.api.sendMessage(chatId, text, {
+// 		link_preview_options: {
+// 			is_disabled: !usePreview,
+// 			// TODO: add certain url
+// 		},
+// 		parse_mode: 'MarkdownV2',
+// 		reply_parameters: { message_id: replyToMsgId },
+// 		// reply_to_message: replyToMsg,
+// 	});
+// }

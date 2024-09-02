@@ -8,6 +8,7 @@ import {
 	CACHE_PREFIX,
 	QUERY_MARKER,
 	PUB_KEYS,
+	USER_KEYS,
 } from './constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -94,7 +95,8 @@ export async function saveToKv(c, key, value) {
 }
 
 export async function loadFromCache(c, key) {
-	const fullKey = `${CACHE_PREFIX}|${c.msg.chat.id}|${key}`;
+	const currentUserId = c.ctx[CTX_KEYS.me[USER_KEYS.id]];
+	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	let resStr;
 
 	try {
@@ -108,7 +110,8 @@ export async function loadFromCache(c, key) {
 
 // on expire the key-value pair will be deleted
 export async function saveToCache(c, key, value, expireFromNowSec) {
-	const fullKey = `${CACHE_PREFIX}|${c.msg.chat.id}|${key}`;
+	const currentUserId = c.ctx[CTX_KEYS.me[USER_KEYS.id]];
+	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	const valueStr = JSON.stringify(value);
 
 	try {

@@ -8,8 +8,8 @@ import {
 	defineMenu,
 	makeStatePreview,
 } from '../helpers.js';
-import { publishFinalPost, generatePostText } from '../publishHelpres.js';
-import { KV_KEYS, PUB_KEYS, CTX_KEYS } from '../constants.js';
+import { printFinalPost } from '../publishHelpres.js';
+import { KV_KEYS, PUB_KEYS, CTX_KEYS, USER_KEYS } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
@@ -106,12 +106,7 @@ export class ScheduledItem extends PageBase {
 
 		if (!item) return c.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
-		await publishFinalPost(
-			c,
-			c.msg.chat.id,
-			generatePostText(c, item),
-			item[PUB_KEYS.preview],
-		);
+		await printFinalPost(c, this.me[USER_KEYS.id], item);
 
 		return this.router.reload();
 	};
@@ -140,11 +135,10 @@ export class ScheduledItem extends PageBase {
 		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
 		const item = allItems.find((i) => i.id === itemId);
 
-		const { message_id } = await publishFinalPost(
+		const { message_id } = await printFinalPost(
 			c,
 			c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
-			generatePostText(c, item),
-			item[PUB_KEYS.preview],
+			item,
 		);
 
 		await this._justDeletePost();

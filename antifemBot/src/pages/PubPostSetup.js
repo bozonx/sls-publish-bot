@@ -58,6 +58,8 @@ export class PubPostSetup extends PubPageBase {
 
 		switch (btnId) {
 			case 'preview':
+				console.log(44444, payload);
+
 				return this.reload({ [PUB_KEYS.preview]: payload });
 			case 'backBtn':
 				return this.go('pub-hour');

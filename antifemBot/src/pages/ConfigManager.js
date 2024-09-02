@@ -1,6 +1,6 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import { KV_KEYS } from '../constants.js';
+import { KV_KEYS, USER_KEYS } from '../constants.js';
 import { t, saveToKv, defineMenu } from '../helpers.js';
 
 export class ConfigManager extends PageBase {

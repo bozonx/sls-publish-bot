@@ -54,7 +54,7 @@ export class PubTags extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'TAG') {
-			return this._selectDayHandler(payload);
+			return this.tagSelectCallback(payload);
 		}
 
 		switch (btnId) {
