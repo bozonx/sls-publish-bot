@@ -87,7 +87,7 @@ export class PubDate extends PubPageBase {
 			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':
-				return this.go('pub-hour');
+				return this.go('pub-time');
 			default:
 				return false;
 		}
