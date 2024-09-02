@@ -63,7 +63,8 @@ export default {
 		pubPostSetupDescr: 'Проверьте и настройте публикацию',
 		pubConfirmDescr: 'Публикуем?',
 		selectDateDescr: 'Выберете дату',
-		selectHourDescr: 'Выберете час. (минуты будут установлены в 00)',
+		selectHourDescr:
+			'Выберете время публикации. Часовая зона (\\${TIME_ZONE}).\nЕсли выбрете час то минуты будут установлены в 00.\nЕсли нужно более точное время то введите его в формате 1:23 или 01:23',
 		scheduledListDescr: 'Выберете отложенную публикацию для управления',
 		scheduledEmptyListDescr: 'Нет отложенных публикаций',
 		scheduledItemDescr: 'Управление отложенной публикацией',
@@ -78,5 +79,6 @@ export default {
 		scheduledItemWasDeleted: 'Отложенный пост был удалён',
 		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
 		infoMsgToAdminChannel: 'Этот пост будет опубликован в канале',
+		wrongTimeFormat: 'Не получается распознать время',
 	},
 };

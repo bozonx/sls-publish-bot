@@ -1,7 +1,10 @@
 import 'dotenv/config';
 import { BotIndex } from './BotIndex.js';
+import { handleScheduled } from './indexShedullerPublisher.js';
+import { APP_INITIAL_CONFIG } from './constants.js';
 
 const testData = {
+	config: JSON.stringify(APP_INITIAL_CONFIG),
 	scheduled: JSON.stringify([
 		{
 			id: 'omltnQ',
@@ -11,7 +14,7 @@ const testData = {
 			author: 'Айван Кей',
 			tags: ['sd', 'fwer'],
 			date: '2024-09-03',
-			hour: 21,
+			time: '21:00',
 			publisher: 'eeee',
 		},
 		{
@@ -22,7 +25,7 @@ const testData = {
 			author: 'Айван Кей',
 			tags: ['sd', 'fwsdfder'],
 			date: '2024-09-02',
-			hour: 12,
+			time: '08:00',
 			publisher: 'eeee',
 		},
 	]),
@@ -41,16 +44,24 @@ function KVStub(initialData = {}) {
 	};
 }
 
-const app = new BotIndex(
-	process.env.TG_TOKEN,
-	process.env.MAIN_ADMIN_TG_USER_ID,
-	process.env.CHAT_OF_ADMINS_ID,
-	process.env.DESTINATION_CHANNEL_ID,
-	KVStub(testData),
-);
-
 (async () => {
+	const KV = KVStub(testData);
+	const app = new BotIndex(
+		process.env.TG_TOKEN,
+		process.env.MAIN_ADMIN_TG_USER_ID,
+		process.env.CHAT_OF_ADMINS_ID,
+		process.env.DESTINATION_CHANNEL_ID,
+		KV,
+	);
+
 	await app.init();
+
+	// test scheduled
+	// await handleScheduled(
+	// 	process.env.TG_TOKEN,
+	// 	process.env.DESTINATION_CHANNEL_ID,
+	// 	KV,
+	// );
 
 	app.botStart();
 })();

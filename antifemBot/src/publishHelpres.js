@@ -1,6 +1,13 @@
 import _ from 'lodash';
 import { toMarkdownV2 } from '@telegraf/entity';
-import { CTX_KEYS, APP_CFG_KEYS, PUB_KEYS, MEDIA_TYPES } from './constants.js';
+import {
+	CTX_KEYS,
+	APP_CFG_KEYS,
+	PUB_KEYS,
+	MEDIA_TYPES,
+	KV_KEYS,
+} from './constants.js';
+import { loadFromKv, saveToKv } from './helpers.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
@@ -64,6 +71,36 @@ export function makeStateFromMessage(c) {
 	return state;
 }
 
+export async function doFullFinalPublicationProcess(c, itemId) {
+	const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
+	const item = allItems.find((i) => i.id === itemId);
+
+	const { message_id } = await printFinalPost(
+		c,
+		c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+		item,
+	);
+
+	await deleteScheduledPost(c, itemId);
+
+	return item;
+}
+
+export async function deleteScheduledPost(c, itemId) {
+	const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
+	const prepared = [...allItems];
+	const indexOfItem = prepared.findIndex((i) => i.id === itemId);
+
+	if (indexOfItem < 0) throw new Error(`ERROR: Can't find scheduled item`);
+	// remove selected tag
+	prepared.splice(indexOfItem, 1);
+
+	await saveToKv(c, KV_KEYS.scheduled, prepared);
+
+	return allItems[indexOfItem];
+}
+
+// TODO: remove replyToMsgId
 export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	let textMdV2;
 
@@ -78,6 +115,7 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 		textMdV2 = pubState[PUB_KEYS.text];
 	}
 
+	// TODO: наверное всегда прикладывать темплейт
 	const fullPostTextMdV2 = pubState[PUB_KEYS.template]
 		? applyTemplate(
 			c,

@@ -1,6 +1,6 @@
 {
 	"name": "antifem-bot",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -20,7 +20,7 @@
 		"short-unique-id": "^5.2.0"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "^0.4.25",
-		"wrangler": "^3.72.2"
+		"@cloudflare/vitest-pool-workers": "^0.4.27",
+		"wrangler": "^3.73.0"
 	}
 }

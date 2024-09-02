@@ -47,12 +47,8 @@ export function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
 	if (state[PUB_KEYS.date])
 		res += `${t(c, 'stateDate')}: ${dayjs(state[PUB_KEYS.date]).format('DD.MM.YYYY')}\n`;
-
-	if (state[PUB_KEYS.hour]) {
-		const hour =
-			state.hour < 10 ? `0${state[PUB_KEYS.hour]}` : state[PUB_KEYS.hour];
-
-		res += `${t(c, 'stateTime')}: ${hour}:00 (${t(c, 'msk')})\n`;
+	if (state[PUB_KEYS.time]) {
+		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}
 
 	if (state[PUB_KEYS.template])
@@ -92,6 +88,10 @@ export async function saveToKv(c, key, value) {
 	} catch (e) {
 		throw new Error(`ERROR: Can't save value ${valueStr} of "${key}": ${e}`);
 	}
+}
+
+export function makeIsoDateFromPubState(pubState) {
+	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
 }
 
 // export async function loadFromKv(c, key, defaultValue) {

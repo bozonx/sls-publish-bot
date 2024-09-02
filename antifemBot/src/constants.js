@@ -2,7 +2,13 @@
 export const TG_BOT_URL = '/bot';
 export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
+// TODO: вынести в env?
 export const SESSION_STATE_TTL_SEC = 80;
+// TODO: вынести в env?
+export const PUBLISHING_MINUS_MINUTES = 5;
+// TODO: вынести в env?
+export const PUBLICATION_TIME_ZONE = '+03:00';
+export const PUBLICATION_ADD_NOW_SEC = 5;
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const KV_KEYS = {
 	config: 'config',
@@ -44,7 +50,7 @@ export const PUB_KEYS = {
 	template: 'template',
 	preview: 'preview',
 	date: 'date',
-	hour: 'hour',
+	time: 'time',
 	publisher: 'publisher',
 };
 export const MEDIA_TYPES = {

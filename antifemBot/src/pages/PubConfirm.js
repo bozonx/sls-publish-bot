@@ -18,7 +18,7 @@ export class PubConfirm extends PubPageBase {
 
 		const shortPubState = {
 			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
-			[PUB_KEYS.hour]: this.state.pub[PUB_KEYS.hour],
+			[PUB_KEYS.time]: this.state.pub[PUB_KEYS.time],
 			[PUB_KEYS.template]: this.state.pub[PUB_KEYS.template],
 		};
 
@@ -63,7 +63,7 @@ export class PubConfirm extends PubPageBase {
 		const prepared = [...allScheduled, item];
 		const infoMsgPostParams = {
 			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
-			[PUB_KEYS.hour]: this.state.pub[PUB_KEYS.hour],
+			[PUB_KEYS.time]: this.state.pub[PUB_KEYS.time],
 			[PUB_KEYS.publisher]: this.me.name,
 		};
 		// TODO: надо отдать в виде стейта, но указать что это mdV2

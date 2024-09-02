@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { PUB_KEYS } from '../constants.js';
@@ -5,8 +6,11 @@ import { PUB_KEYS } from '../constants.js';
 export class PubHour extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		const descr = _.template(t(c, 'selectHourDescr'))({
+			TIME_ZONE: t(c, 'msk'),
+		});
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectHourDescr')}`;
+		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		return defineMenu([
 			[
@@ -39,7 +43,7 @@ export class PubHour extends PubPageBase {
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
 				},
-				typeof this.state.pub?.[PUB_KEYS.hour] === 'number' && {
+				this.state.pub[PUB_KEYS.time] && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 				},
@@ -49,7 +53,9 @@ export class PubHour extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'HOUR') {
-			return this.go('pub-post-setup', { [PUB_KEYS.hour]: Number(payload) });
+			const time = Number(payload) < 10 ? `0${payload}:00` : `${payload}:00`;
+
+			return this.go('pub-post-setup', { [PUB_KEYS.time]: time });
 		}
 
 		switch (btnId) {
@@ -65,10 +71,28 @@ export class PubHour extends PubPageBase {
 	}
 
 	async onMessage() {
-		//
-		// console.log(1111, c);
-		// await c.pager.go('pub-confirm', this.payload);
-		// await c.reply(t(c, 'textAccepted'))
+		const c = this.router.c;
+
+		if (!c.msg.text) {
+			await c.reply('No text');
+
+			return this.reload();
+		}
+
+		const rawTime = c.msg.text.trim();
+		let time;
+
+		if (rawTime.match(/^\d\:\d\d$/)) {
+			time = '0' + rawTime;
+		} else if (rawTime.match(/^\d\d\:\d\d$/)) {
+			time = rawTime;
+		} else {
+			await c.reply(t(c, 'wrongTimeFormat'));
+
+			return this.reload();
+		}
+
+		return this.go('pub-post-setup', { [PUB_KEYS.time]: time });
 	}
 
 	_makeHourBtn(hour) {
