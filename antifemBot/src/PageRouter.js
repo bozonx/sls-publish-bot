@@ -8,7 +8,7 @@ import {
 import { SESSION_STATE_TTL_SEC, CTX_KEYS, QUERY_MARKER } from './constants.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
-const SESSION_CACHE_NAME = 'pageState';
+const SESSION_CACHE_NAME = 'session';
 
 // It makes a new instance of router on each request including dev env
 export function routerMiddleware(routes) {
@@ -20,7 +20,12 @@ export function routerMiddleware(routes) {
 }
 
 /**
- * IMPORTANT: Do not store andy state inside your page class between requests
+ * You can store some data in class, you can define it in mount() method
+ * and this class properitites will be accesable in other methods.
+ * But keep in mind that this data is storing only while handlind current request,
+ * not between requests.
+ * To store data between requests put values into this.state,
+ * and the will be saved automaticaly.
  */
 export class PageBase {
 	router;
@@ -28,9 +33,6 @@ export class PageBase {
 	path;
 	// Put here the description of menu
 	text;
-	// Put here menu rows and buttons
-	// like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
-	menu = [];
 
 	// state which is passed between pages using cache
 	// actually it is a session
@@ -60,16 +62,23 @@ export class PageBase {
 		this.path = path;
 	}
 
-	// It runs twice
-	// 1. when a route of certain user has been changed
-	// 2. when button is pressed. It should find menu handler
+	// It runs on each request.
+	// You can save some state to user in other functions while request is handling
 	async mount() { }
 
-	// It runs when a route is changing
+	// It runs when a route is changing. On each request
 	async unmount() { }
+
+	// Render menu here and return it.
+	// It runs only when the menu need to be renderred
+	// Menu has to be like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
+	async renderMenu() { }
 
 	// It runs on each income message while this page is active
 	async onMessage() { }
+
+	// It runs on each button press of menu of this page
+	async onButtonPress(btnId, payload) { }
 }
 
 export class PageRouter {
@@ -78,6 +87,7 @@ export class PageRouter {
 	pages = {};
 	// current initialized page
 	currentPage;
+	// TODO: либо сделать чтобы полностью нормально работал либо не делать
 	// path of previous page which was changed while handling request
 	prevPath;
 	// readonly state
@@ -139,21 +149,17 @@ export class PageRouter {
 			throw e;
 		}
 
-		await this._sendMenu(renderMenuKeyboard(this.currentPage.menu));
+		const menu = this.currentPage.renderMenu() || [];
+
+		await this._sendMenu(renderMenuKeyboard(menu));
 		// really the end of request
 		return this._theEndOfRequest();
 	}
 
-	// middleware = async (c, next) => {
-	// 	this.c = c;
-	// 	c.router = this;
-	//
-	// 	return next();
-	// };
-
 	_handleMessage = async (c) => {
 		console.log('-----_handleMessage', c.msg);
 
+		// it loads current page
 		try {
 			await this._switchPage();
 		} catch (e) {
@@ -162,6 +168,7 @@ export class PageRouter {
 
 		await this.currentPage.onMessage?.();
 		// the end of request only if there has been called .go()
+		// TODO: review
 		if (this.prevPath) await this._theEndOfRequest();
 		// await this._theEndOfRequest();
 	};
@@ -169,7 +176,7 @@ export class PageRouter {
 	_handleQueryData = async (c) => {
 		console.log('============ _handleQueryData', c.update.callback_query.data);
 
-		// TODO: вначале загружаем прошлую страницу
+		// it loads current page
 		try {
 			await this._switchPage();
 		} catch (e) {
@@ -186,25 +193,35 @@ export class PageRouter {
 			? parseJsonSafelly(bntPayloadRest.join('|'))
 			: undefined;
 
-		const menu = this.currentPage.menu;
+		const result = await this.currentPage.onButtonPress(btnId, btnPayload);
 
-		if (!menu?.length) return c.reply(`ERROR: No menu`);
+		if (result === false)
+			return c.reply(
+				`ERROR: Can't find button handler "${btnId}" on page "${this.currentPath}"`,
+			);
 
-		for (const row of menu) {
-			for (const { id, cb } of row) {
-				if (String(id) !== btnId) continue;
-				// run menu button handler
-				await cb(btnPayload, id);
-				// the end of request only if there has been called .go()
-				// TODO: review
-				if (this.prevPath) await this._theEndOfRequest();
-				// await this._theEndOfRequest();
+		// TODO: review
+		if (this.prevPath) await this._theEndOfRequest();
 
-				return;
-			}
-		}
+		// const menu = this.currentPage.menu;
+		//
+		// if (!menu?.length) return c.reply(`ERROR: No menu`);
+		//
+		// for (const row of menu) {
+		// 	for (const { id, cb } of row) {
+		// 		if (String(id) !== btnId) continue;
+		// 		// run menu button handler
+		// 		await cb(btnPayload, id);
+		// 		// the end of request only if there has been called .go()
+		// 		// TODO: review
+		// 		if (this.prevPath) await this._theEndOfRequest();
+		// 		// await this._theEndOfRequest();
+		//
+		// 		return;
+		// 	}
+		// }
 
-		return c.reply(`ERROR: Can't find button. ${data}`);
+		// return c.reply(`ERROR: Can't find button. ${data}`);
 	};
 
 	// TODO: review
@@ -231,6 +248,7 @@ export class PageRouter {
 
 		// make current page instance
 		this.currentPage = new this.pages[pathTo](this, pathTo);
+
 		await this.currentPage.mount();
 	}
 
@@ -269,9 +287,6 @@ export class PageRouter {
 
 	async _sendMenu(keyboard) {
 		const c = this.c;
-
-		// const prevMenuMsgId = await loadFromCache(c, PREV_MENU_MSG_ID_CACHE_NAME);
-
 		// remove prev menu message
 		if (this.state[PREV_MENU_MSG_ID_STATE_NAME]) {
 			try {
@@ -289,12 +304,5 @@ export class PageRouter {
 		});
 
 		this.state[PREV_MENU_MSG_ID_STATE_NAME] = message_id;
-
-		// await saveToCache(
-		// 	c,
-		// 	PREV_MENU_MSG_ID_CACHE_NAME,
-		// 	message_id,
-		// 	CACHE_MENU_MSG_ID_TTL_SEC,
-		// );
 	}
 }

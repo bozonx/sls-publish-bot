@@ -9,13 +9,14 @@ import {
 } from '../constants.js';
 
 export class UsersManager extends PageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 
 		if (!this.me[USER_KEYS.isAdmin]) return this.router.go('home');
 
 		this.text = t(c, 'usersManagerDescr');
-		this.menu = defineMenu([
+
+		return defineMenu([
 			...this.users.map((i) => [
 				{
 					id: `USER-${i[USER_KEYS.id]}`,
@@ -32,6 +33,19 @@ export class UsersManager extends PageBase {
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {

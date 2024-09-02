@@ -11,12 +11,13 @@ import {
 import { KV_KEYS } from '../constants.js';
 
 export class TagsManager extends PageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 
 		this.text = t(c, 'tagsManagerDescr');
-		this.menu = defineMenu([
+
+		return defineMenu([
 			...generateTagsButtons(allTags, this.tagRemoveCallback),
 			[
 				{
@@ -26,6 +27,19 @@ export class TagsManager extends PageBase {
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {

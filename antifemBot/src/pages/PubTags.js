@@ -12,7 +12,7 @@ import {
 import { KV_KEYS, PUB_KEYS } from '../constants.js';
 
 export class PubTags extends PubPageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 
@@ -21,7 +21,8 @@ export class PubTags extends PubPageBase {
 		);
 
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
-		this.menu = defineMenu([
+
+		return defineMenu([
 			...generateTagsButtons(notSelectedTags, this.tagSelectCallback),
 			this.state.pub?.[PUB_KEYS.tags]?.length && [
 				{
@@ -48,6 +49,19 @@ export class PubTags extends PubPageBase {
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {

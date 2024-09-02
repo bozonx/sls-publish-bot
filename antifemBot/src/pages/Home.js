@@ -4,51 +4,65 @@ import { t, makeContentState, defineMenu } from '../helpers.js';
 
 export class Home extends PageBase {
 	async mount() {
+		//
+	}
+
+	async renderMenu() {
 		const c = this.router.c;
 		const isAdmin = this.me[USER_KEYS.isAdmin];
 		// clear pub state
 		this.state.pub = {};
 
 		this.text = t(c, 'homeDescr');
-		this.menu = defineMenu([
+
+		return defineMenu([
 			[
 				{
 					id: 'manageTagsBtn',
 					label: t(c, 'manageTagsBtn'),
-					cb: () => this.router.go('tags-manager'),
 				},
 			],
 			[
 				{
 					id: 'manageScheduledBtn',
 					label: t(c, 'manageScheduledBtn'),
-					cb: () => this.router.go('scheduled-list'),
 				},
 			],
 			isAdmin && [
 				{
 					id: 'editConfigBtn',
 					label: t(c, 'editConfigBtn'),
-					cb: () => this.router.go('config-manager'),
 				},
 			],
 			isAdmin && [
 				{
 					id: 'manageUsersBtn',
 					label: t(c, 'manageUsersBtn'),
-					cb: () => this.router.go('users-manager'),
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'manageTagsBtn':
+				return this.router.go('tags-manager');
+			case 'manageScheduledBtn':
+				return this.router.go('scheduled-list');
+			case 'editConfigBtn':
+				return this.router.go('config-manager');
+			case 'manageUsersBtn':
+				return this.router.go('users-manager');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {
 		const c = this.router.c;
 		const pubState = makeContentState(c);
 
-		// console.log(4444, await c.api.getFile(c.msg.document.file_id));
-
-		if (!pubState) return c.reply('ERROR: Wrong type of post');
+		if (!pubState) return c.reply(t(c, 'wrongTypeOfPost'));
 
 		this.state.pub = pubState;
 

@@ -15,7 +15,7 @@ import {
 import { PUB_KEYS, CTX_KEYS, KV_KEYS } from '../constants.js';
 
 export class PubConfirm extends PubPageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 
 		const shortPubState = {
@@ -24,8 +24,11 @@ export class PubConfirm extends PubPageBase {
 			[PUB_KEYS.template]: this.state.pub[PUB_KEYS.template],
 		};
 
+		await this._printPreview();
+
 		this.text = `${makeStatePreview(c, shortPubState)}\n\n${t(c, 'pubConfirmDescr')}`;
-		this.menu = defineMenu([
+
+		return defineMenu([
 			[
 				{
 					id: 'backBtn',
@@ -44,8 +47,19 @@ export class PubConfirm extends PubPageBase {
 				},
 			],
 		]);
+	}
 
-		return this._printPreview();
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 
 	async _printPreview() {

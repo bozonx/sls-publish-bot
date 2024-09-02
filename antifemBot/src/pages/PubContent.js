@@ -19,12 +19,15 @@ const REPLACE_MODES = {
 };
 
 export class PubContent extends PubPageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 
 		this.state.replaceMode = REPLACE_MODES.both;
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'uploadContentDescr')}`;
-		this.menu = defineMenu([
+
+		await this._printPreview();
+
+		return defineMenu([
 			[
 				this.state.replaceMode != REPLACE_MODES.textOnly && {
 					id: 'replaceOnlyTextBtn',
@@ -90,8 +93,19 @@ export class PubContent extends PubPageBase {
 				},
 			],
 		]);
+	}
 
-		await this._printPreview();
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {
@@ -99,7 +113,7 @@ export class PubContent extends PubPageBase {
 		const fullState = makeContentState(c);
 		let pubState;
 
-		if (!fullState) return c.reply('ERROR: Wrong type of post');
+		if (!fullState) return c.reply(t(c, 'wrongTypeOfPost'));
 
 		if (this.state.replaceMode === REPLACE_MODES.both) {
 			pubState = fullState;

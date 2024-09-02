@@ -3,11 +3,12 @@ import { t, makeStatePreview, nowPlusDay, defineMenu } from '../helpers.js';
 import { PUB_KEYS } from '../constants.js';
 
 export class PubDate extends PubPageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectDateDescr')}`;
-		this.menu = defineMenu([
+
+		return defineMenu([
 			[
 				{
 					id: 'today',
@@ -47,6 +48,19 @@ export class PubDate extends PubPageBase {
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {

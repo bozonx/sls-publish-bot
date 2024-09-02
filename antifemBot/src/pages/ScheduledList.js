@@ -4,7 +4,7 @@ import { t, loadFromKv, defineMenu } from '../helpers.js';
 import { KV_KEYS, PUB_KEYS } from '../constants.js';
 
 export class ScheduledList extends PageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 		const items = (await loadFromKv(c, KV_KEYS.scheduled, [])).sort(
 			(a, b) =>
@@ -17,7 +17,8 @@ export class ScheduledList extends PageBase {
 		this.text = items.length
 			? t(c, 'scheduledListDescr')
 			: t(c, 'scheduledEmptyListDescr');
-		this.menu = defineMenu([
+
+		return defineMenu([
 			...items.map((i) => [
 				{
 					id: i.id,
@@ -39,5 +40,18 @@ export class ScheduledList extends PageBase {
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 }

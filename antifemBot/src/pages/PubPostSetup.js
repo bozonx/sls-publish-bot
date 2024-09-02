@@ -3,7 +3,7 @@ import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { TEMPLATE_NAMES, PUB_KEYS, DEFAULT_SETUP_STATE } from '../constants.js';
 
 export class PubPostSetup extends PubPageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 
 		this.state.pub = {
@@ -17,7 +17,7 @@ export class PubPostSetup extends PubPageBase {
 			(i) => i !== this.state.pub?.[PUB_KEYS.template],
 		);
 
-		this.menu = defineMenu([
+		return defineMenu([
 			...restTemplateNames.map((tmplName) => [
 				{
 					id: `template-${tmplName}`,
@@ -60,5 +60,18 @@ export class PubPostSetup extends PubPageBase {
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 }

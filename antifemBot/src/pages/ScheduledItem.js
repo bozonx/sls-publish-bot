@@ -16,7 +16,7 @@ import {
 import { KV_KEYS, PUB_KEYS, CTX_KEYS } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 		const itemId = this.state.scheduledItem;
 		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
@@ -25,7 +25,8 @@ export class ScheduledItem extends PageBase {
 		if (!item) return c.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
 		this.text = t(c, 'scheduledItemDescr') + `\n\n${makeStatePreview(c, item)}`;
-		this.menu = defineMenu([
+
+		return defineMenu([
 			[
 				{
 					id: 'changeDateTimeBtn',
@@ -69,6 +70,19 @@ export class ScheduledItem extends PageBase {
 				},
 			],
 		]);
+	}
+
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'backBtn':
+				return this.router.go('');
+			case 'toHomeBtn':
+				return this.router.go('home');
+			case 'nextBtn':
+				return this.router.go('');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {

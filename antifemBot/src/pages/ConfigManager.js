@@ -4,13 +4,18 @@ import { KV_KEYS } from '../constants.js';
 import { t, saveToKv, defineMenu } from '../helpers.js';
 
 export class ConfigManager extends PageBase {
-	async mount() {
+	async renderMenu() {
 		const c = this.router.c;
 
 		if (!this.me[USER_KEYS.isAdmin]) return this.router.go('home');
 
 		this.text = t(c, 'editConfigDescr');
-		this.menu = defineMenu([
+
+		// print current config
+		// TODO: put it into code tag
+		await c.reply(yaml.dump(this.config));
+
+		return defineMenu([
 			[
 				{
 					id: 'toHomeBtn',
@@ -19,9 +24,15 @@ export class ConfigManager extends PageBase {
 				},
 			],
 		]);
+	}
 
-		// TODO: put it into code tag
-		return c.reply(yaml.dump(this.config));
+	async onButtonPress(btnId, payload) {
+		switch (btnId) {
+			case 'toHomeBtn':
+				return this.router.go('home');
+			default:
+				return false;
+		}
 	}
 
 	async onMessage() {
