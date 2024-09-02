@@ -9,6 +9,7 @@ import {
 import {
 	convertTgEntitiesToTgMdV2,
 	publishFinalPost,
+	printFinalPost,
 } from '../publishHelpres.js';
 
 const REPLACE_MODES = {
@@ -122,19 +123,21 @@ export class PubContent extends PubPageBase {
 
 	async _printPreview() {
 		const c = this.router.c;
-		const text = convertTgEntitiesToTgMdV2(
-			this.state.pub.text,
-			this.state.pub.entities,
-		);
+		// const text = convertTgEntitiesToTgMdV2(
+		// 	this.state.pub.text,
+		// 	this.state.pub.entities,
+		// );
+		//
+		// console.log(1111, text);
+		//
+		// await publishFinalPost(
+		// 	c,
+		// 	c.msg.chat.id,
+		// 	text,
+		// 	Boolean(c.msg.link_preview_options?.url),
+		// );
 
-		console.log(1111, text);
-
-		await publishFinalPost(
-			c,
-			c.msg.chat.id,
-			text,
-			Boolean(c.msg.link_preview_options?.url),
-		);
+		await printFinalPost(c, c.msg.chat.id, this.state.pub);
 	}
 
 	_showNext() {

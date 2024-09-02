@@ -198,6 +198,7 @@ export function nowPlusDay(plusday) {
 	return date.format('YYYY-MM-DD');
 }
 
+// TODO: move to publish helpers
 export function makeContentState(c) {
 	let state = {};
 
@@ -205,7 +206,6 @@ export function makeContentState(c) {
 
 	// TODO: media group
 	// TODO: add STATE_KEYS
-	// TODO: add file type
 
 	if (c.msg.video) {
 		state = {
@@ -221,6 +221,29 @@ export function makeContentState(c) {
 				{ type: MEDIA_TYPES.photo, data: c.msg.photo[c.msg.photo.length - 1] },
 			],
 		};
+		// } else if (c.msg.document) {
+		// 	const doc = c.msg.document;
+		// 	let docType;
+		//
+		// 	// if (doc.mime_type.trim().indexOf('image/') === 0) {
+		// 	// 	docType = MEDIA_TYPES.photo;
+		// 	// }
+		// 	// // TODO: проверить
+		// 	// else if (doc.mime_type.trim().indexOf('video/') === 0) {
+		// 	// 	docType = MEDIA_TYPES.video;
+		// 	// } else {
+		// 	// 	return;
+		// 	// }
+		// 	//
+		//
+		// 	state = {
+		// 		[PUB_KEYS.text]: c.msg.caption,
+		// 		[PUB_KEYS.entities]: c.msg.caption_entities,
+		// 		[PUB_KEYS.media]: [
+		// 			// { type: MEDIA_TYPES.photo, data: { file_id: doc.file_id } },
+		// 			{ type: MEDIA_TYPES.photo, data: { file_id: doc.file_id } },
+		// 		],
+		// 	};
 	} else if (c.msg.text) {
 		state = {
 			[PUB_KEYS.text]: c.msg.text,

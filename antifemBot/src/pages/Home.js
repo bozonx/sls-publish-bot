@@ -45,6 +45,8 @@ export class Home extends PageBase {
 		const c = this.router.c;
 		const pubState = makeContentState(c);
 
+		// console.log(4444, await c.api.getFile(c.msg.document.file_id));
+
 		if (!pubState) return c.reply('ERROR: Wrong type of post');
 
 		this.state.pub = pubState;

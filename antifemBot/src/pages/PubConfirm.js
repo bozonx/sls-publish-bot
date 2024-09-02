@@ -7,7 +7,11 @@ import {
 	saveToKv,
 	loadFromKv,
 } from '../helpers.js';
-import { generatePostText, publishFinalPost } from '../publishHelpres.js';
+import {
+	generatePostText,
+	publishFinalPost,
+	printFinalPost,
+} from '../publishHelpres.js';
 import { PUB_KEYS, CTX_KEYS, KV_KEYS } from '../constants.js';
 
 export class PubConfirm extends PubPageBase {
