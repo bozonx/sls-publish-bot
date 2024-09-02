@@ -26,8 +26,8 @@ export class TagsManager extends PageBase {
 			]),
 			[
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
 				},
 			],
 		]);
@@ -41,7 +41,7 @@ export class TagsManager extends PageBase {
 		switch (btnId) {
 			case 'backBtn':
 				return this.router.go('');
-			case 'toHomeBtn':
+			case 'cancelBtn':
 				return this.router.go('home');
 			default:
 				return false;

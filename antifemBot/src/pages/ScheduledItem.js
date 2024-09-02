@@ -4,6 +4,7 @@ import { t, loadFromKv, defineMenu, makeStatePreview } from '../helpers.js';
 import {
 	printFinalPost,
 	doFullFinalPublicationProcess,
+	deleteScheduledPost,
 } from '../publishHelpres.js';
 import { KV_KEYS, USER_KEYS } from '../constants.js';
 
@@ -124,7 +125,7 @@ export class ScheduledItem extends PageBase {
 	_delete = async () => {
 		const c = this.router.c;
 		const itemId = this.state.scheduledItem;
-		const item = await this.deleteScheduledPost(c, itemId);
+		const item = await deleteScheduledPost(c, itemId);
 
 		await c.reply(
 			t(c, 'scheduledItemWasDeleted') + `:\n\n${makeStatePreview(c, item)}`,

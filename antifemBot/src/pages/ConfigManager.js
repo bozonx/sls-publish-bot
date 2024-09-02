@@ -18,8 +18,8 @@ export class ConfigManager extends PageBase {
 		return defineMenu([
 			[
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'backBtn',
+					label: t(c, 'backBtn'),
 				},
 			],
 		]);
@@ -27,7 +27,7 @@ export class ConfigManager extends PageBase {
 
 	async onButtonPress(btnId, payload) {
 		switch (btnId) {
-			case 'toHomeBtn':
+			case 'backBtn':
 				return this.router.go('home');
 			default:
 				return false;

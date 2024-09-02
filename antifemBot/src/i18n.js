@@ -23,7 +23,8 @@ export default {
 		statePublisher: 'Кто сделал',
 
 		// Button texts
-		toHomeBtn: 'На главную',
+		// toHomeBtn: 'На главную',
+		cancelBtn: 'Отмена',
 		backBtn: 'Назад',
 		nextBtn: 'Далее',
 		editConfigBtn: 'Редактирование конфига',

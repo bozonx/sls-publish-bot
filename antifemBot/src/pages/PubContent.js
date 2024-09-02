@@ -45,8 +45,8 @@ export class PubContent extends PubPageBase {
 			],
 			[
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
 				},
 				this._showNext && {
 					id: 'nextBtn',
@@ -76,7 +76,7 @@ export class PubContent extends PubPageBase {
 				});
 			case 'removeMediaBtn':
 				return this.reload({ [PUB_KEYS.media]: null });
-			case 'toHomeBtn':
+			case 'cancelBtn':
 				delete this.state.replaceMode;
 
 				return this.go('home');
