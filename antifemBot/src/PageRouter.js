@@ -149,7 +149,7 @@ export class PageRouter {
 			throw e;
 		}
 
-		const menu = this.currentPage.renderMenu() || [];
+		const menu = (await this.currentPage.renderMenu()) || [];
 
 		await this._sendMenu(renderMenuKeyboard(menu));
 		// really the end of request

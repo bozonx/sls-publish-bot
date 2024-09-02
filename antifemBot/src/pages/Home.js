@@ -1,6 +1,7 @@
 import { PageBase } from '../PageRouter.js';
 import { USER_KEYS } from '../constants.js';
-import { t, makeContentState, defineMenu } from '../helpers.js';
+import { t, defineMenu } from '../helpers.js';
+import { makeContentState } from '../publishHelpres.js';
 
 export class Home extends PageBase {
 	async mount() {

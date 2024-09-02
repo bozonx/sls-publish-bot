@@ -1,16 +1,7 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { PUB_KEYS } from '../constants.js';
-import {
-	t,
-	makeContentState,
-	defineMenu,
-	makeStatePreview,
-} from '../helpers.js';
-import {
-	convertTgEntitiesToTgMdV2,
-	publishFinalPost,
-	printFinalPost,
-} from '../publishHelpres.js';
+import { t, defineMenu, makeStatePreview } from '../helpers.js';
+import { makeContentState, printFinalPost } from '../publishHelpres.js';
 
 const REPLACE_MODES = {
 	textOnly: 'textOnly',
