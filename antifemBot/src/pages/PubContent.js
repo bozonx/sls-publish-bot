@@ -23,64 +23,34 @@ export class PubContent extends PubPageBase {
 				this.state.replaceMode != REPLACE_MODES.textOnly && {
 					id: 'replaceOnlyTextBtn',
 					label: t(c, 'replaceOnlyTextBtn'),
-					cb: () => {
-						this.state.replaceMode = REPLACE_MODES.textOnly;
-
-						return this.reload();
-					},
 				},
 				this.state.replaceMode != REPLACE_MODES.mediaOnly && {
 					id: 'replaceOnlyMediaBtn',
 					label: t(c, 'replaceOnlyMediaBtn'),
-					cb: () => {
-						this.state.replaceMode = REPLACE_MODES.mediaOnly;
-
-						return this.reload();
-					},
 				},
 				this.state.replaceMode != REPLACE_MODES.both && {
 					id: 'replaceTextAndMediaBtn',
 					label: t(c, 'replaceTextAndMediaBtn'),
-					cb: () => {
-						this.state.replaceMode = REPLACE_MODES.both;
-
-						return this.reload();
-					},
 				},
 			],
 			[
 				this.state.pub?.[PUB_KEYS.text] && {
 					id: 'removeTextBtn',
 					label: t(c, 'removeTextBtn'),
-					cb: () =>
-						this.reload({ [PUB_KEYS.text]: null, [PUB_KEYS.entities]: null }),
 				},
 				this.state.pub?.[PUB_KEYS.media]?.length && {
 					id: 'removeMediaBtn',
 					label: t(c, 'removeMediaBtn'),
-					cb: () => {
-						return this.reload({ [PUB_KEYS.media]: null });
-					},
 				},
 			],
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => {
-						delete this.state.replaceMode;
-
-						return this.go('home');
-					},
 				},
 				this._showNext && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => {
-						delete this.state.replaceMode;
-
-						return this.go('pub-author');
-					},
 				},
 			],
 		]);
@@ -88,12 +58,32 @@ export class PubContent extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		switch (btnId) {
-			case 'backBtn':
-				return this.router.go('');
+			case 'replaceOnlyTextBtn':
+				this.state.replaceMode = REPLACE_MODES.textOnly;
+				return this.reload();
+			case 'replaceOnlyMediaBtn':
+				this.state.replaceMode = REPLACE_MODES.mediaOnly;
+
+				return this.reload();
+			case 'replaceTextAndMediaBtn':
+				this.state.replaceMode = REPLACE_MODES.both;
+
+				return this.reload();
+			case 'removeTextBtn':
+				return this.reload({
+					[PUB_KEYS.text]: null,
+					[PUB_KEYS.entities]: null,
+				});
+			case 'removeMediaBtn':
+				return this.reload({ [PUB_KEYS.media]: null });
 			case 'toHomeBtn':
-				return this.router.go('home');
+				delete this.state.replaceMode;
+
+				return this.go('home');
 			case 'nextBtn':
-				return this.router.go('');
+				delete this.state.replaceMode;
+
+				return this.go('pub-author');
 			default:
 				return false;
 		}

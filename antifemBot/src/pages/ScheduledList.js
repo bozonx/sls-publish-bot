@@ -21,35 +21,32 @@ export class ScheduledList extends PageBase {
 		return defineMenu([
 			...items.map((i) => [
 				{
-					id: i.id,
+					// TODO: можно и не сохранять id
+					id: 'ITEM-' + i.id,
 					label:
 						`${i[PUB_KEYS.date]} ${i[PUB_KEYS.hour]}:00 ${i[PUB_KEYS.text]?.substring(0, 20)}`.trim(),
 					payload: i.id,
-					cb: async (payload) => {
-						this.state.scheduledItem = payload;
-
-						return this.router.go('scheduled-item');
-					},
 				},
 			]),
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.router.go('home'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId.indexOf('ITEM-') === 0) {
+			this.state.scheduledItem = payload;
+
+			return this.router.go('scheduled-item');
+		}
+
 		switch (btnId) {
-			case 'backBtn':
-				return this.router.go('');
 			case 'toHomeBtn':
 				return this.router.go('home');
-			case 'nextBtn':
-				return this.router.go('');
 			default:
 				return false;
 		}

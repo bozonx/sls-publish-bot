@@ -146,18 +146,6 @@ export function defineMenu(menu = []) {
 	return res;
 }
 
-export function generateTagsButtons(tags, cb) {
-	const idPrefix = 'TAG-';
-	const menu = [];
-
-	for (const tag of tags) {
-		// TODO: split to rows
-		menu.push([{ id: idPrefix + tag, label: tag, payload: tag, cb }]);
-	}
-
-	return menu;
-}
-
 export function nowPlusDay(plusday) {
 	const date = dayjs().add(plusday, 'day');
 
@@ -193,6 +181,18 @@ export function parseJsonSafelly(dataStr) {
 
 	return JSON.parse(dataStr);
 }
+
+// export function generateTagsButtons(tags) {
+// 	const idPrefix = 'TAG-';
+// 	const menu = [];
+//
+// 	for (const tag of tags) {
+// 		// TODO: split to rows
+// 		menu.push([{ id: idPrefix + tag, label: tag, payload: tag }]);
+// 	}
+//
+// 	return menu;
+// }
 
 // export function isAdminUser(c, userId) {
 // 	if (!userId || !['string', 'number'].includes(typeof userId))

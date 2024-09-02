@@ -3,7 +3,6 @@ import { PubPageBase } from '../PubPageBase.js';
 import {
 	t,
 	makeStatePreview,
-	generateTagsButtons,
 	parseTagsFromInput,
 	defineMenu,
 	loadFromKv,
@@ -23,42 +22,50 @@ export class PubTags extends PubPageBase {
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
 
 		return defineMenu([
-			...generateTagsButtons(notSelectedTags, this.tagSelectCallback),
+			...notSelectedTags.map((tag) => [
+				{
+					id: 'TAG',
+					label: tag,
+					payload: tag,
+				},
+			]),
 			this.state.pub?.[PUB_KEYS.tags]?.length && [
 				{
 					id: 'clearTagsBtn',
 					label: t(c, 'clearTagsBtn'),
-					cb: () => this.reload({ [PUB_KEYS.tags]: null }),
 				},
 			],
 			[
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.go('pub-author'),
 				},
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
 				},
 				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.go('pub-date'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId === 'TAG') {
+			return this._selectDayHandler(payload);
+		}
+
 		switch (btnId) {
+			case 'clearTagsBtn':
+				return this.reload({ [PUB_KEYS.tags]: null });
 			case 'backBtn':
-				return this.router.go('');
+				return this.go('pub-author');
 			case 'toHomeBtn':
-				return this.router.go('home');
+				return this.go('home');
 			case 'nextBtn':
-				return this.router.go('');
+				return this.go('pub-date');
 			default:
 				return false;
 		}

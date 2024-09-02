@@ -34,30 +34,31 @@ export class PubHour extends PubPageBase {
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.go('pub-date'),
 				},
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
 				},
 				typeof this.state.pub?.[PUB_KEYS.hour] === 'number' && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.go('pub-post-setup'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId === 'HOUR') {
+			return this._selectHourHandler(payload);
+		}
+
 		switch (btnId) {
 			case 'backBtn':
-				return this.router.go('');
+				return this.go('pub-date');
 			case 'toHomeBtn':
-				return this.router.go('home');
+				return this.go('home');
 			case 'nextBtn':
-				return this.router.go('');
+				return this.go('pub-post-setup');
 			default:
 				return false;
 		}
@@ -72,10 +73,9 @@ export class PubHour extends PubPageBase {
 
 	_makeHourBtn(hour) {
 		return {
-			id: hour,
+			id: 'HOUR',
 			label: String(hour),
 			payload: hour,
-			cb: this._selectHourHandler,
 		};
 	}
 

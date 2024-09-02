@@ -11,22 +11,19 @@ export class PubDate extends PubPageBase {
 		return defineMenu([
 			[
 				{
-					id: 'today',
+					id: 'DAY',
 					label: t(c, 'today'),
 					payload: 0,
-					cb: this._selectDayHandler,
 				},
 				{
-					id: 'tomorrow',
+					id: 'DAY',
 					label: t(c, 'tomorrow'),
 					payload: 1,
-					cb: this._selectDayHandler,
 				},
 				{
-					id: 'afterTomorrow',
+					id: 'DAY',
 					label: t(c, 'afterTomorrow'),
 					payload: 2,
-					cb: this._selectDayHandler,
 				},
 			],
 			// TODO: add days of week
@@ -34,30 +31,31 @@ export class PubDate extends PubPageBase {
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.go('pub-tags'),
 				},
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
 				},
 				this.state.pub?.[PUB_KEYS.date] && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.go('pub-hour'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId === 'DAY') {
+			return this._selectDayHandler(payload);
+		}
+
 		switch (btnId) {
 			case 'backBtn':
-				return this.router.go('');
+				return this.go('pub-tags');
 			case 'toHomeBtn':
-				return this.router.go('home');
+				return this.go('home');
 			case 'nextBtn':
-				return this.router.go('');
+				return this.go('pub-hour');
 			default:
 				return false;
 		}

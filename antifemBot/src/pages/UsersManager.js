@@ -22,27 +22,25 @@ export class UsersManager extends PageBase {
 					id: `USER-${i[USER_KEYS.id]}`,
 					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${i[USER_KEYS.isAdmin] ? ' (admin)' : ''}`,
 					payload: i[USER_KEYS.id],
-					cb: this.userRemoveCallback,
 				},
 			]),
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.router.go('home'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId.indexOf('USER-') === 0) {
+			return this.userRemoveCallback(payload);
+		}
+
 		switch (btnId) {
-			case 'backBtn':
-				return this.router.go('');
 			case 'toHomeBtn':
 				return this.router.go('home');
-			case 'nextBtn':
-				return this.router.go('');
 			default:
 				return false;
 		}

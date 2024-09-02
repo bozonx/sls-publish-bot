@@ -16,60 +16,55 @@ export class PubPostSetup extends PubPageBase {
 		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
 			(i) => i !== this.state.pub?.[PUB_KEYS.template],
 		);
+		const previewIsOn = Boolean(this.state.pub[PUB_KEYS.preview]);
 
 		return defineMenu([
 			...restTemplateNames.map((tmplName) => [
 				{
-					id: `template-${tmplName}`,
+					id: 'TEMPLATE',
 					label: `${t(c, 'useTemplateBtn')}: ` + t(c, `template-${tmplName}`),
 					payload: tmplName,
-					cb: (payload) => this.reload({ [PUB_KEYS.template]: payload }),
 				},
 			]),
 
-			this.state.pub?.[PUB_KEYS.preview] && [
+			[
 				{
-					id: `previewOffBtn`,
-					label: t(c, `previewOffBtn`),
-					cb: () => this.reload({ [PUB_KEYS.preview]: false }),
+					id: `preview`,
+					label: t(c, previewIsOn ? `previewOffBtn` : `previewOnBtn`),
+					payload: !previewIsOn,
 				},
 			],
-			!this.state.pub?.[PUB_KEYS.preview] && [
-				{
-					id: `previewOnBtn`,
-					label: t(c, `previewOnBtn`),
-					cb: () => this.reload({ [PUB_KEYS.preview]: true }),
-				},
-			],
-
 			[
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.go('pub-hour'),
 				},
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
 				},
 				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.go('pub-confirm'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId === 'TEMPLATE') {
+			return this.reload({ [PUB_KEYS.template]: payload });
+		}
+
 		switch (btnId) {
+			case 'preview':
+				return this.reload({ [PUB_KEYS.preview]: payload });
 			case 'backBtn':
-				return this.router.go('');
+				return this.go('pub-hour');
 			case 'toHomeBtn':
-				return this.router.go('home');
+				return this.go('home');
 			case 'nextBtn':
-				return this.router.go('');
+				return this.go('pub-confirm');
 			default:
 				return false;
 		}

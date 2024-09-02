@@ -8,11 +8,7 @@ import {
 	defineMenu,
 	makeStatePreview,
 } from '../helpers.js';
-import {
-	convertTgEntitiesToTgMdV2,
-	publishFinalPost,
-	generatePostText,
-} from '../publishHelpres.js';
+import { publishFinalPost, generatePostText } from '../publishHelpres.js';
 import { KV_KEYS, PUB_KEYS, CTX_KEYS } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
@@ -31,42 +27,35 @@ export class ScheduledItem extends PageBase {
 				{
 					id: 'changeDateTimeBtn',
 					label: t(c, 'changeDateTimeBtn'),
-					cb: this._changeDateTime,
 				},
 				{
 					id: 'publicateNowBtn',
 					label: t(c, 'publicateNowBtn'),
-					cb: this._publicateNow,
 				},
 			],
 			[
 				{
 					id: 'deletePostponedBtn',
 					label: t(c, 'deletePostponedBtn'),
-					cb: this._delete,
 				},
 
 				{
 					id: 'editPostponedBtn',
 					label: t(c, 'editPostponedBtn'),
-					cb: this._editPost,
 				},
 				{
 					id: 'showPreviewBtn',
 					label: t(c, 'showPreviewBtn'),
-					cb: this._showPreview,
 				},
 			],
 			[
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.router.go('scheduled-list'),
 				},
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.router.go('home'),
 				},
 			],
 		]);
@@ -74,12 +63,20 @@ export class ScheduledItem extends PageBase {
 
 	async onButtonPress(btnId, payload) {
 		switch (btnId) {
+			case 'changeDateTimeBtn':
+				return this._changeDateTime();
+			case 'publicateNowBtn':
+				return this._publicateNow();
+			case 'deletePostponedBtn':
+				return this._delete();
+			case 'editPostponedBtn':
+				return this._editPost();
+			case 'showPreviewBtn':
+				return this._showPreview();
 			case 'backBtn':
-				return this.router.go('');
+				return this.router.go('scheduled-list');
 			case 'toHomeBtn':
 				return this.router.go('home');
-			case 'nextBtn':
-				return this.router.go('');
 			default:
 				return false;
 		}

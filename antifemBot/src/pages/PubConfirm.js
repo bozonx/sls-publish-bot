@@ -33,17 +33,14 @@ export class PubConfirm extends PubPageBase {
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.go('pub-post-setup'),
 				},
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
 				},
 				{
 					id: 'pubConfirmBtn',
 					label: '🗓️ ' + t(c, 'pubConfirmBtn'),
-					cb: this._finalPublication,
 				},
 			],
 		]);
@@ -52,11 +49,11 @@ export class PubConfirm extends PubPageBase {
 	async onButtonPress(btnId, payload) {
 		switch (btnId) {
 			case 'backBtn':
-				return this.router.go('');
+				return this.go('pub-post-setup');
 			case 'toHomeBtn':
-				return this.router.go('home');
-			case 'nextBtn':
-				return this.router.go('');
+				return this.go('home');
+			case 'pubConfirmBtn':
+				return this._finalPublication();
 			default:
 				return false;
 		}

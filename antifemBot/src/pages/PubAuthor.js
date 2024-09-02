@@ -13,47 +13,48 @@ export class PubAuthor extends PubPageBase {
 			// TODO: разбить по 2 шт на строку
 			...authors.map((author) => [
 				{
-					id: author,
+					id: 'ITEM-' + author,
 					label: author,
 					payload: author,
-					cb: (payload) => this.go('pub-tags', { [PUB_KEYS.author]: payload }),
 				},
 			]),
 			[
 				{
 					id: 'withoutAuthorBtn',
 					label: t(c, 'withoutAuthorBtn'),
-					cb: () => this.go('pub-tags', { [PUB_KEYS.author]: null }),
 				},
 			],
 			[
 				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
-					cb: () => this.go('pub-content'),
 				},
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.go('home'),
 				},
 				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-					cb: () => this.go('pub-tags'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId.indexOf('ITEM-') === 0) {
+			return this.go('pub-tags', { [PUB_KEYS.author]: payload });
+		}
+
 		switch (btnId) {
+			case 'withoutAuthorBtn':
+				return this.go('pub-tags', { [PUB_KEYS.author]: null });
 			case 'backBtn':
-				return this.router.go('');
+				return this.go('pub-content');
 			case 'toHomeBtn':
-				return this.router.go('home');
+				return this.go('home');
 			case 'nextBtn':
-				return this.router.go('');
+				return this.go('pub-tags');
 			default:
 				return false;
 		}

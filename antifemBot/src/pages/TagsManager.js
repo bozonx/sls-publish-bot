@@ -5,7 +5,6 @@ import {
 	loadFromKv,
 	saveToKv,
 	parseTagsFromInput,
-	generateTagsButtons,
 	defineMenu,
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
@@ -18,25 +17,32 @@ export class TagsManager extends PageBase {
 		this.text = t(c, 'tagsManagerDescr');
 
 		return defineMenu([
-			...generateTagsButtons(allTags, this.tagRemoveCallback),
+			...allTags.map((tag) => [
+				{
+					id: 'TAG',
+					label: tag,
+					payload: tag,
+				},
+			]),
 			[
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.router.go('home'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
+		if (btnId === 'TAG') {
+			return this.tagRemoveCallback(payload);
+		}
+
 		switch (btnId) {
 			case 'backBtn':
 				return this.router.go('');
 			case 'toHomeBtn':
 				return this.router.go('home');
-			case 'nextBtn':
-				return this.router.go('');
 			default:
 				return false;
 		}

@@ -20,7 +20,6 @@ export class ConfigManager extends PageBase {
 				{
 					id: 'toHomeBtn',
 					label: t(c, 'toHomeBtn'),
-					cb: () => this.router.go('home'),
 				},
 			],
 		]);
