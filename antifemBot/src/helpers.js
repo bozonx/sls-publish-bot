@@ -131,7 +131,7 @@ export function makeIsoDateFromPubState(pubState) {
 // }
 
 export async function loadFromCache(c, key) {
-	const currentUserId = c.ctx[CTX_KEYS.me[USER_KEYS.id]];
+	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.id];
 	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	let resStr;
 
@@ -146,7 +146,7 @@ export async function loadFromCache(c, key) {
 
 // on expire the key-value pair will be deleted
 export async function saveToCache(c, key, value, expireFromNowSec) {
-	const currentUserId = c.ctx[CTX_KEYS.me[USER_KEYS.id]];
+	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.id];
 	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	const valueStr = JSON.stringify(value);
 

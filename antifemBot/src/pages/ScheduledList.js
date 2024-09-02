@@ -7,7 +7,7 @@ import {
 	defineMenu,
 	makeIsoDateFromPubState,
 } from '../helpers.js';
-import { KV_KEYS, PUB_KEYS } from '../constants.js';
+import { KV_KEYS, PUB_KEYS, DATE_FORMAT } from '../constants.js';
 
 export class ScheduledList extends PageBase {
 	async renderMenu() {
@@ -57,9 +57,9 @@ export class ScheduledList extends PageBase {
 	}
 
 	makeItemLabel(item) {
-		const dateStr = datejs(item[PUB_KEYS.date], DATE_FORMAT).format('DD.MM');
+		const dateStr = dayjs(item[PUB_KEYS.date], DATE_FORMAT).format('DD.MM');
 		const time = item[PUB_KEYS.time];
-		const text = item[PUB_KEYS.text]?.substring(0, 20).trim();
+		const text = item[PUB_KEYS.text]?.substring(0, 30).trim();
 
 		return `${dateStr} ${time} ${text}`;
 	}

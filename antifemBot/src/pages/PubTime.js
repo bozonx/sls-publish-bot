@@ -82,9 +82,9 @@ export class PubTime extends PubPageBase {
 		const rawTime = c.msg.text.trim();
 		let time;
 
-		if (rawTime.match(/^\d\[:.\s]\d\d$/)) {
+		if (rawTime.match(/^\d[:.\s]\d\d$/)) {
 			time = '0' + rawTime;
-		} else if (rawTime.match(/^\d\d\[:.\s]\d\d$/)) {
+		} else if (rawTime.match(/^\d\d[:.\s]\d\d$/)) {
 			time = rawTime;
 		} else {
 			await c.reply(t(c, 'wrongTimeFormat'));
