@@ -1,7 +1,7 @@
 import { PageBase } from '../PageRouter.js';
 import { USER_KEYS } from '../constants.js';
 import { t, defineMenu } from '../helpers.js';
-import { makeContentState } from '../publishHelpres.js';
+import { makeStateFromMessage } from '../publishHelpres.js';
 
 export class Home extends PageBase {
 	async mount() {
@@ -61,7 +61,7 @@ export class Home extends PageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-		const pubState = makeContentState(c);
+		const pubState = makeStateFromMessage(c);
 
 		if (!pubState) return c.reply(t(c, 'wrongTypeOfPost'));
 

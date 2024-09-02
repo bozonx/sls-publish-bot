@@ -64,7 +64,7 @@ export class TagsManager extends PageBase {
 		return this.router.reload();
 	}
 
-	tagRemoveCallback = async (payload) => {
+	async tagRemoveCallback(payload) {
 		const c = this.router.c;
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 		const prepared = [...allTags];
@@ -78,5 +78,5 @@ export class TagsManager extends PageBase {
 		await c.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
 
 		return this.router.reload();
-	};
+	}
 }

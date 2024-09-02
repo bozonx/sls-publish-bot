@@ -8,19 +8,19 @@ import {
 	loadFromKv,
 } from '../helpers.js';
 import { printFinalPost } from '../publishHelpres.js';
-import { PUB_KEYS, CTX_KEYS, KV_KEYS } from '../constants.js';
+import { PUB_KEYS, CTX_KEYS, KV_KEYS, USER_KEYS } from '../constants.js';
 
 export class PubConfirm extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		// show preview
+		await printFinalPost(c, this.me[USER_KEYS.id], this.state.pub);
 
 		const shortPubState = {
 			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
 			[PUB_KEYS.hour]: this.state.pub[PUB_KEYS.hour],
 			[PUB_KEYS.template]: this.state.pub[PUB_KEYS.template],
 		};
-
-		await printFinalPost(c, this.me[USER_KEYS.id], this.state.pub);
 
 		this.text = `${makeStatePreview(c, shortPubState)}\n\n${t(c, 'pubConfirmDescr')}`;
 

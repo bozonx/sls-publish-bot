@@ -46,7 +46,9 @@ export class PubDate extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'DAY') {
-			return this._selectDayHandler(payload);
+			return this.go('pub-hour', {
+				[PUB_KEYS.date]: nowPlusDay(Number(payload)),
+			});
 		}
 
 		switch (btnId) {
@@ -65,10 +67,4 @@ export class PubDate extends PubPageBase {
 		//
 		// await c.reply(t(c, 'textAccepted'))
 	}
-
-	_selectDayHandler = (payload) => {
-		return this.go('pub-hour', {
-			[PUB_KEYS.date]: nowPlusDay(Number(payload)),
-		});
-	};
 }

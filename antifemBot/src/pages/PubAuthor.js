@@ -13,7 +13,7 @@ export class PubAuthor extends PubPageBase {
 			// TODO: разбить по 2 шт на строку
 			...authors.map((author) => [
 				{
-					id: 'ITEM-' + author,
+					id: 'ITEM',
 					label: author,
 					payload: author,
 				},
@@ -42,7 +42,7 @@ export class PubAuthor extends PubPageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
-		if (btnId.indexOf('ITEM-') === 0) {
+		if (btnId === 'ITEM') {
 			return this.go('pub-tags', { [PUB_KEYS.author]: payload });
 		}
 

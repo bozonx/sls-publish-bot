@@ -21,8 +21,7 @@ export class ScheduledList extends PageBase {
 		return defineMenu([
 			...items.map((i) => [
 				{
-					// TODO: можно и не сохранять id
-					id: 'ITEM-' + i.id,
+					id: 'ITEM',
 					label:
 						`${i[PUB_KEYS.date]} ${i[PUB_KEYS.hour]}:00 ${i[PUB_KEYS.text]?.substring(0, 20)}`.trim(),
 					payload: i.id,
@@ -38,7 +37,7 @@ export class ScheduledList extends PageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
-		if (btnId.indexOf('ITEM-') === 0) {
+		if (btnId === 'ITEM') {
 			this.state.scheduledItem = payload;
 
 			return this.router.go('scheduled-item');

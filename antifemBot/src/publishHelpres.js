@@ -7,7 +7,7 @@ export function convertTgEntitiesToTgMdV2(text, entities) {
 }
 
 // TODO: move to publish helpers
-export function makeContentState(c) {
+export function makeStateFromMessage(c) {
 	let state = {};
 
 	console.log(2222, c.msg);

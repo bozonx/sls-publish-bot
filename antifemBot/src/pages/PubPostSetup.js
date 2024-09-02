@@ -31,7 +31,7 @@ export class PubPostSetup extends PubPageBase {
 				{
 					id: `preview`,
 					label: t(c, previewIsOn ? `previewOffBtn` : `previewOnBtn`),
-					payload: !previewIsOn,
+					payload: Number(!previewIsOn),
 				},
 			],
 			[
@@ -58,9 +58,7 @@ export class PubPostSetup extends PubPageBase {
 
 		switch (btnId) {
 			case 'preview':
-				console.log(44444, payload);
-
-				return this.reload({ [PUB_KEYS.preview]: payload });
+				return this.reload({ [PUB_KEYS.preview]: Boolean(payload) });
 			case 'backBtn':
 				return this.go('pub-hour');
 			case 'toHomeBtn':

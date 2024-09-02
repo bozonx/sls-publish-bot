@@ -19,7 +19,7 @@ export class UsersManager extends PageBase {
 		return defineMenu([
 			...this.users.map((i) => [
 				{
-					id: `USER-${i[USER_KEYS.id]}`,
+					id: 'ITEM',
 					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${i[USER_KEYS.isAdmin] ? ' (admin)' : ''}`,
 					payload: i[USER_KEYS.id],
 				},
@@ -34,7 +34,7 @@ export class UsersManager extends PageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
-		if (btnId.indexOf('USER-') === 0) {
+		if (btnId === 'ITEM') {
 			return this.userRemoveCallback(payload);
 		}
 
@@ -83,7 +83,7 @@ export class UsersManager extends PageBase {
 		return this.router.reload();
 	}
 
-	userRemoveCallback = async (payload) => {
+	async userRemoveCallback(payload) {
 		const c = this.router.c;
 		const allUsers = await loadFromKv(c, KV_KEYS.users);
 		const prepared = [...allUsers];
@@ -99,5 +99,5 @@ export class UsersManager extends PageBase {
 		await c.reply(`User was deleted\n\n${yaml.dump(allUsers[index])}`);
 
 		return c.router.reload();
-	};
+	}
 }

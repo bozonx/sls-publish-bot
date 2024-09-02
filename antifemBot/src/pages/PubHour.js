@@ -49,7 +49,7 @@ export class PubHour extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'HOUR') {
-			return this._selectHourHandler(payload);
+			return this.go('pub-post-setup', { [PUB_KEYS.hour]: Number(payload) });
 		}
 
 		switch (btnId) {
@@ -78,8 +78,4 @@ export class PubHour extends PubPageBase {
 			payload: hour,
 		};
 	}
-
-	_selectHourHandler = (payload) => {
-		return this.go('pub-post-setup', { [PUB_KEYS.hour]: Number(payload) });
-	};
 }

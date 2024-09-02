@@ -54,7 +54,12 @@ export class PubTags extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'TAG') {
-			return this.tagSelectCallback(payload);
+			const mergedAllTags = _.uniq([
+				...(this.state.pub?.[PUB_KEYS.tags] || []),
+				payload,
+			]);
+
+			return this.reload({ [PUB_KEYS.tags]: mergedAllTags });
 		}
 
 		switch (btnId) {
@@ -89,13 +94,4 @@ export class PubTags extends PubPageBase {
 
 		await this.go('pub-date', { [PUB_KEYS.tags]: mergedSelectedTags });
 	}
-
-	tagSelectCallback = async (payload) => {
-		const mergedAllTags = _.uniq([
-			...(this.state.pub?.[PUB_KEYS.tags] || []),
-			payload,
-		]);
-
-		return this.reload({ [PUB_KEYS.tags]: mergedAllTags });
-	};
 }

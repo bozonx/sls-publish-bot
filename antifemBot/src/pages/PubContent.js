@@ -1,7 +1,7 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { PUB_KEYS, USER_KEYS } from '../constants.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
-import { makeContentState, printFinalPost } from '../publishHelpres.js';
+import { makeStateFromMessage, printFinalPost } from '../publishHelpres.js';
 
 const REPLACE_MODES = {
 	textOnly: 'textOnly',
@@ -91,7 +91,7 @@ export class PubContent extends PubPageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-		const fullState = makeContentState(c);
+		const fullState = makeStateFromMessage(c);
 		let pubState;
 
 		if (!fullState) return c.reply(t(c, 'wrongTypeOfPost'));
