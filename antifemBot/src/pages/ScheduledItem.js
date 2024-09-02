@@ -51,8 +51,8 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'backBtn'),
 				},
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
 				},
 			],
 		]);
@@ -72,7 +72,7 @@ export class ScheduledItem extends PageBase {
 				return this._showPreview();
 			case 'backBtn':
 				return this.router.go('scheduled-list');
-			case 'toHomeBtn':
+			case 'cancelBtn':
 				return this.router.go('home');
 			default:
 				return false;

@@ -40,8 +40,8 @@ export class PubHour extends PubPageBase {
 					label: t(c, 'backBtn'),
 				},
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
 				},
 				this.state.pub[PUB_KEYS.time] && {
 					id: 'nextBtn',
@@ -61,7 +61,7 @@ export class PubHour extends PubPageBase {
 		switch (btnId) {
 			case 'backBtn':
 				return this.go('pub-date');
-			case 'toHomeBtn':
+			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':
 				return this.go('pub-post-setup');

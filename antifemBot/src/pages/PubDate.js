@@ -33,8 +33,8 @@ export class PubDate extends PubPageBase {
 					label: t(c, 'backBtn'),
 				},
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
 				},
 				this.state.pub?.[PUB_KEYS.date] && {
 					id: 'nextBtn',
@@ -54,7 +54,7 @@ export class PubDate extends PubPageBase {
 		switch (btnId) {
 			case 'backBtn':
 				return this.go('pub-tags');
-			case 'toHomeBtn':
+			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':
 				return this.go('pub-hour');

@@ -31,8 +31,8 @@ export class PubConfirm extends PubPageBase {
 					label: t(c, 'backBtn'),
 				},
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
 				},
 				{
 					id: 'pubConfirmBtn',
@@ -46,7 +46,7 @@ export class PubConfirm extends PubPageBase {
 		switch (btnId) {
 			case 'backBtn':
 				return this.go('pub-post-setup');
-			case 'toHomeBtn':
+			case 'cancelBtn':
 				return this.go('home');
 			case 'pubConfirmBtn':
 				return this._finalPublication();

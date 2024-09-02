@@ -30,8 +30,8 @@ export class PubAuthor extends PubPageBase {
 					label: t(c, 'backBtn'),
 				},
 				{
-					id: 'toHomeBtn',
-					label: t(c, 'toHomeBtn'),
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
 				},
 				{
 					id: 'nextBtn',
@@ -51,7 +51,7 @@ export class PubAuthor extends PubPageBase {
 				return this.go('pub-tags', { [PUB_KEYS.author]: null });
 			case 'backBtn':
 				return this.go('pub-content');
-			case 'toHomeBtn':
+			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':
 				return this.go('pub-tags');
