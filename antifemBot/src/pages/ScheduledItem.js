@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
 import { t, loadFromKv, defineMenu, makeStatePreview } from '../helpers.js';
 import {
-	printFinalPost,
 	doFullFinalPublicationProcess,
 	deleteScheduledPost,
 } from '../publishHelpres.js';
@@ -89,7 +88,7 @@ export class ScheduledItem extends PageBase {
 		if (!item)
 			return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
-		await printFinalPost(c, this.me[USER_KEYS.id], item);
+		await this.printFinalPost(this.me[USER_KEYS.id], item);
 
 		return this.router.reload();
 	};
@@ -120,6 +119,8 @@ export class ScheduledItem extends PageBase {
 		await this.reply(
 			t(c, 'scheduledItemWasPublished') + `:\n\n${makeStatePreview(c, item)}`,
 		);
+
+		this.router.redrawMenu();
 
 		return this.router.go('scheduled-list');
 	};

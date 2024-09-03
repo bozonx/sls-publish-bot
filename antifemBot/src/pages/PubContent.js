@@ -1,7 +1,7 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { PUB_KEYS, USER_KEYS } from '../constants.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
-import { makeStateFromMessage, printFinalPost } from '../publishHelpres.js';
+import { makeStateFromMessage } from '../publishHelpres.js';
 
 const REPLACE_MODES = {
 	textOnly: 'textOnly',
@@ -34,7 +34,7 @@ export class PubContent extends PubPageBase {
 		this.text = `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}`;
 
 		if (haveAnyContent) {
-			await printFinalPost(c, this.me[USER_KEYS.id], this.state.pub);
+			await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
 		}
 
 		return defineMenu([

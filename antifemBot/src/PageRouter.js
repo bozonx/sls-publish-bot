@@ -6,6 +6,7 @@ import {
 	renderMenuKeyboard,
 } from './helpers.js';
 import { SESSION_STATE_TTL_SEC, CTX_KEYS, QUERY_MARKER } from './constants.js';
+import { printFinalPost } from './publishHelpres.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
 const SESSION_CACHE_NAME = 'session';
@@ -65,6 +66,10 @@ export class PageBase {
 	// Please use this instead of context's one
 	async reply(...p) {
 		return this.router.reply(...p);
+	}
+
+	async printFinalPost(...p) {
+		return this.router.printFinalPost(...p);
 	}
 
 	// It runs on each request.
@@ -131,9 +136,19 @@ export class PageRouter {
 
 	// Please use this instead of context's one
 	async reply(...p) {
-		this.state.redrawMenu = true;
+		this.redrawMenu();
 
-		return this.this.reply(...p);
+		return this.c.reply(...p);
+	}
+
+	async printFinalPost(...p) {
+		this.redrawMenu();
+
+		return printFinalPost(this.c, ...p);
+	}
+
+	redrawMenu() {
+		this.state.redrawMenu = true;
 	}
 
 	async reload() {
@@ -324,7 +339,7 @@ export class PageRouter {
 		if (!msgId) {
 			delete this.state.redrawMenu;
 
-			const { message_id } = await this.reply(this.currentPage.text, {
+			const { message_id } = await c.reply(this.currentPage.text, {
 				reply_markup: keyboard,
 			});
 

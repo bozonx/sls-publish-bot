@@ -7,14 +7,13 @@ import {
 	saveToKv,
 	loadFromKv,
 } from '../helpers.js';
-import { printFinalPost } from '../publishHelpres.js';
 import { PUB_KEYS, CTX_KEYS, KV_KEYS, USER_KEYS } from '../constants.js';
 
 export class PubConfirm extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		// show preview
-		await printFinalPost(c, this.me[USER_KEYS.id], this.state.pub);
+		await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
 
 		const shortPubState = {
 			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
@@ -61,34 +60,35 @@ export class PubConfirm extends PubPageBase {
 		const item = { id: uid.rnd(), ...this.state.pub };
 		const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
 		const prepared = [...allScheduled, item];
-		const infoMsgPostParams = {
-			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
-			[PUB_KEYS.time]: this.state.pub[PUB_KEYS.time],
-			[PUB_KEYS.publisher]: this.me.name,
-		};
-		// TODO: надо отдать в виде стейта, но указать что это mdV2
-		const infoMsg =
-			t(c, 'infoMsgToAdminChannel') +
-			`\n\n${makeStatePreview(c, infoMsgPostParams)}`.replace(
-				/([:.\(\)])/g,
-				'\\$1',
-			);
+
+		// const infoMsg =
+		// 	t(c, 'infoMsgToAdminChannel') +
+		// 	`\n\n${makeStatePreview(c, infoMsgPostParams)}`;
+		// 		.replace(
+		// 	/([:.\(\)])/g,
+		// 	'\\$1',
+		// );
 
 		console.log('========== _finalPublication', item);
 
 		await saveToKv(c, KV_KEYS.scheduled, prepared);
 		// publication
-		const { message_id } = await printFinalPost(
-			c,
+		const { message_id } = await this.printFinalPost(
 			c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 			item,
 		);
 		// info post
-		await printFinalPost(
-			c,
+		const infoMsgPostParams = {
+			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
+			[PUB_KEYS.time]: this.state.pub[PUB_KEYS.time],
+			[PUB_KEYS.publisher]: this.me.name,
+		};
+
+		await c.api.sendMessage(
 			c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
-			{ text: infoMsg },
-			message_id,
+			t(c, 'infoMsgToAdminChannel') +
+			`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
+			{ reply_parameters: { message_id } },
 		);
 
 		return this.go('home');
