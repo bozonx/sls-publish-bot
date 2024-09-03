@@ -97,7 +97,7 @@ export class PubDate extends PubPageBase {
 		const c = this.router.c;
 
 		if (!c.msg.text) {
-			await c.reply('No text');
+			await this.reply('No text');
 
 			return this.reload();
 		}
@@ -116,7 +116,7 @@ export class PubDate extends PubPageBase {
 
 			return this.go('pub-time', { [PUB_KEYS.date]: dateStr });
 		} else {
-			await c.reply(t(c, 'wrongDateFormat'));
+			await this.reply(t(c, 'wrongDateFormat'));
 
 			return this.reload();
 		}

@@ -15,7 +15,8 @@ export class ScheduledItem extends PageBase {
 		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
 		const item = allItems.find((i) => i.id === itemId);
 
-		if (!item) return c.reply(`ERROR: Can't find scheduled item "${itemId}"`);
+		if (!item)
+			return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
 		this.text = t(c, 'scheduledItemDescr') + `\n\n${makeStatePreview(c, item)}`;
 
@@ -85,7 +86,8 @@ export class ScheduledItem extends PageBase {
 		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
 		const item = allItems.find((i) => i.id === itemId);
 
-		if (!item) return c.reply(`ERROR: Can't find scheduled item "${itemId}"`);
+		if (!item)
+			return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
 		await printFinalPost(c, this.me[USER_KEYS.id], item);
 
@@ -115,7 +117,7 @@ export class ScheduledItem extends PageBase {
 		const itemId = this.state.scheduledItem;
 		const item = await doFullFinalPublicationProcess(c, itemId);
 
-		await c.reply(
+		await this.reply(
 			t(c, 'scheduledItemWasPublished') + `:\n\n${makeStatePreview(c, item)}`,
 		);
 
@@ -127,7 +129,7 @@ export class ScheduledItem extends PageBase {
 		const itemId = this.state.scheduledItem;
 		const item = await deleteScheduledPost(c, itemId);
 
-		await c.reply(
+		await this.reply(
 			t(c, 'scheduledItemWasDeleted') + `:\n\n${makeStatePreview(c, item)}`,
 		);
 

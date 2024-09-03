@@ -63,7 +63,7 @@ export class Home extends PageBase {
 		const c = this.router.c;
 		const pubState = makeStateFromMessage(c);
 
-		if (!pubState) return c.reply(t(c, 'wrongTypeOfPost'));
+		if (!pubState) return this.reply(t(c, 'wrongTypeOfPost'));
 
 		this.state.pub = pubState;
 

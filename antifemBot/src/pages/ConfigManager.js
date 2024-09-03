@@ -13,7 +13,7 @@ export class ConfigManager extends PageBase {
 
 		// print current config
 		// TODO: put it into code tag
-		await c.reply(yaml.dump(this.config));
+		await this.reply(yaml.dump(this.config));
 
 		return defineMenu([
 			[
@@ -42,11 +42,11 @@ export class ConfigManager extends PageBase {
 		try {
 			obj = yaml.load(rawText);
 		} catch (e) {
-			return c.reply(`ERROR: Can't parse yaml. ${e}`);
+			return this.reply(`ERROR: Can't parse yaml. ${e}`);
 		}
 
 		await saveToKv(c, KV_KEYS.config, obj);
-		await c.reply(`Success`);
+		await this.reply(`Success`);
 
 		return this.router.reload();
 	}

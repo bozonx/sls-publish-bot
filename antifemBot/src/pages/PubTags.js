@@ -9,6 +9,7 @@ import {
 	saveToKv,
 } from '../helpers.js';
 import { KV_KEYS, PUB_KEYS } from '../constants.js';
+import { breakArray } from '../lib.js';
 
 export class PubTags extends PubPageBase {
 	async renderMenu() {
@@ -22,13 +23,14 @@ export class PubTags extends PubPageBase {
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
 
 		return defineMenu([
-			...notSelectedTags.map((tag) => [
-				{
+			...breakArray(
+				notSelectedTags.map((tag) => ({
 					id: 'TAG',
 					label: tag,
 					payload: tag,
-				},
-			]),
+				})),
+				2,
+			),
 			this.state.pub?.[PUB_KEYS.tags]?.length && [
 				{
 					id: 'clearTagsBtn',
@@ -79,7 +81,7 @@ export class PubTags extends PubPageBase {
 	async onMessage() {
 		const c = this.router.c;
 
-		if (!c.msg.text) return c.reply('No text');
+		if (!c.msg.text) return this.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);

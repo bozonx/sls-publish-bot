@@ -8,6 +8,7 @@ import {
 	defineMenu,
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
+import { breakArray } from '../lib.js';
 
 export class TagsManager extends PageBase {
 	async renderMenu() {
@@ -17,13 +18,14 @@ export class TagsManager extends PageBase {
 		this.text = t(c, 'tagsManagerDescr');
 
 		return defineMenu([
-			...allTags.map((tag) => [
-				{
+			...breakArray(
+				allTags.map((tag) => ({
 					id: 'TAG',
 					label: tag,
 					payload: tag,
-				},
-			]),
+				})),
+				2,
+			),
 			[
 				{
 					id: 'cancelBtn',
@@ -51,7 +53,7 @@ export class TagsManager extends PageBase {
 	async onMessage() {
 		const c = this.router.c;
 
-		if (!c.msg.text) return c.reply('No text');
+		if (!c.msg.text) return this.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
@@ -59,7 +61,7 @@ export class TagsManager extends PageBase {
 		// save new tags to storage
 		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
 
-		await c.reply(`${t(c, 'tagWasAdded')}: ${newTags.join(', ')}`);
+		await this.reply(`${t(c, 'tagWasAdded')}: ${newTags.join(', ')}`);
 
 		return this.router.reload();
 	}
@@ -70,12 +72,12 @@ export class TagsManager extends PageBase {
 		const prepared = [...allTags];
 		const indexOfTag = prepared.indexOf(payload);
 
-		if (indexOfTag < 0) return c.reply(`ERROR: Can't find tag`);
+		if (indexOfTag < 0) return this.reply(`ERROR: Can't find tag`);
 		// remove selected tag
 		prepared.splice(indexOfTag, 1);
 
 		await saveToKv(c, KV_KEYS.tags, prepared);
-		await c.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
+		await this.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
 
 		return this.router.reload();
 	}

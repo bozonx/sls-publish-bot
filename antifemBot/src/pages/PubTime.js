@@ -74,7 +74,7 @@ export class PubTime extends PubPageBase {
 		const c = this.router.c;
 
 		if (!c.msg.text) {
-			await c.reply('No text');
+			await this.reply('No text');
 
 			return this.reload();
 		}
@@ -87,7 +87,7 @@ export class PubTime extends PubPageBase {
 		} else if (rawTime.match(/^\d\d[:.\s]\d\d$/)) {
 			time = rawTime;
 		} else {
-			await c.reply(t(c, 'wrongTimeFormat'));
+			await this.reply(t(c, 'wrongTimeFormat'));
 
 			return this.reload();
 		}
@@ -98,7 +98,7 @@ export class PubTime extends PubPageBase {
 	_makeHourBtn(hour) {
 		return {
 			id: 'HOUR',
-			label: String(hour),
+			label: `${hour}:00`,
 			payload: hour,
 		};
 	}

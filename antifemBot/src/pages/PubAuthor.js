@@ -1,6 +1,7 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { APP_CFG_KEYS, PUB_KEYS } from '../constants.js';
+import { breakArray } from '../lib.js';
 
 export class PubAuthor extends PubPageBase {
 	async renderMenu() {
@@ -10,14 +11,14 @@ export class PubAuthor extends PubPageBase {
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectAuthorDescr')}`;
 
 		return defineMenu([
-			// TODO: разбить по 2 шт на строку
-			...authors.map((author) => [
-				{
+			...breakArray(
+				authors.map((author) => ({
 					id: 'ITEM',
 					label: author,
 					payload: author,
-				},
-			]),
+				})),
+				2,
+			),
 			[
 				{
 					id: 'withoutAuthorBtn',
