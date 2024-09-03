@@ -35,9 +35,6 @@ export function makeContext(
 			throw new Error(`Can't load initial data: ${e}`);
 		}
 
-		// let appCfg = await loadFromKv(c, KV_KEYS.config);
-		// let users = await loadFromKv(c, KV_KEYS.users);
-
 		if (!appCfg) {
 			appCfg = APP_INITIAL_CONFIG;
 			// save initial config to DB on first time app start
@@ -59,8 +56,6 @@ export function makeContext(
 		}
 
 		const me = users.find((i) => i.id === c.msg.chat.id);
-
-		// if (!me) throw new Error(`ERROR: Can't find current user`);
 
 		c.ctx = {
 			...c.ctx,

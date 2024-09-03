@@ -37,7 +37,7 @@ export class PubContent extends PubPageBase {
 
 		this.text = `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}\n\n${textModeMessage}`;
 
-		if (haveAnyContent) {
+		if (haveAnyContent && this.state.mdV1Mode) {
 			await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
 		}
 

@@ -43,10 +43,10 @@ export class PubTime extends PubPageBase {
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
 				},
-				{
-					id: 'cancelBtn',
-					label: t(c, 'cancelBtn'),
-				},
+				// {
+				// 	id: 'cancelBtn',
+				// 	label: t(c, 'cancelBtn'),
+				// },
 				this.state.pub[PUB_KEYS.time] && {
 					id: 'pubConfirmBtn',
 					label: '🗓️ ' + t(c, 'pubConfirmBtn'),
@@ -56,17 +56,19 @@ export class PubTime extends PubPageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
+		const c = this.router.c;
+
 		if (btnId === 'HOUR') {
 			const time = Number(payload) < 10 ? `0${payload}:00` : `${payload}:00`;
 
-			return this.go('pub-post-setup', { [PUB_KEYS.time]: time });
+			return this.reload({ [PUB_KEYS.time]: time });
 		}
 
 		switch (btnId) {
 			case 'backBtn':
 				return this.go('pub-date');
-			case 'cancelBtn':
-				return this.go('home');
+			// case 'cancelBtn':
+			// 	return this.go('home');
 			case 'pubConfirmBtn':
 				const item = await schedulePublication(c, this.state.pub);
 				await printPubToAdminChannel(this.router, item);

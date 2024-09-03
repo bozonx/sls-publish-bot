@@ -4,16 +4,11 @@ import { t, defineMenu } from '../helpers.js';
 import { makeStateFromMessage } from '../publishHelpres.js';
 
 export class Home extends PageBase {
-	async mount() {
-		//
-	}
-
 	async renderMenu() {
 		const c = this.router.c;
 		const isAdmin = this.me[USER_KEYS.isAdmin];
 		// clear pub state
 		this.state.pub = {};
-
 		this.text = t(c, 'homeDescr');
 
 		return defineMenu([
@@ -50,7 +45,7 @@ export class Home extends PageBase {
 		]);
 	}
 
-	async onButtonPress(btnId, payload) {
+	async onButtonPress(btnId) {
 		switch (btnId) {
 			case 'sendTextInMdV1Btn':
 				this.state.mdV1Mode = true;

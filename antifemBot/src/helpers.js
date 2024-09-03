@@ -28,6 +28,10 @@ export function t(c, msg) {
 	return locales[lang][msg] || msg;
 }
 
+export function makeIsoDateFromPubState(pubState) {
+	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
+}
+
 export function makeStatePreview(c, state = {}) {
 	let mediaCount = state[PUB_KEYS.media]?.length || 0;
 	// TODO: если мд то очистить
@@ -90,45 +94,6 @@ export async function saveToKv(c, key, value) {
 		throw new Error(`ERROR: Can't save value ${valueStr} of "${key}": ${e}`);
 	}
 }
-
-export function makeIsoDateFromPubState(pubState) {
-	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
-}
-
-// export async function loadFromKv(c, key, defaultValue) {
-// 	return loadFromKvDirect(c.ctx[CTX_KEYS.KV], key, defaultValue);
-// }
-//
-// export async function loadFromKvDirect(KV, key, defaultValue) {
-// 	let resStr;
-//
-// 	try {
-// 		resStr = await KV.get(key);
-// 	} catch (e) {
-// 		throw new Error(`ERROR: Can't load value of "${key}": ${e}`);
-// 	}
-//
-// 	const parsed = parseJsonSafelly(resStr);
-//
-// 	// TODO: а оно не null возвращает?
-//
-// 	return typeof parsed === 'undefined' ? defaultValue : parsed;
-// }
-//
-// export async function saveToKv(c, key, value) {
-// 	return saveToKvDirect(c.ctx[CTX_KEYS.KV], key, value);
-// }
-//
-// export async function saveToKvDirect(KV, key, value) {
-// 	const valueStr = JSON.stringify(value);
-//
-// 	// TODO: если передан undefined то значение очистится???
-// 	try {
-// 		return KV.put(key, valueStr);
-// 	} catch (e) {
-// 		throw new Error(`ERROR: Can't save value ${valueStr} of "${key}": ${e}`);
-// 	}
-// }
 
 export async function loadFromCache(c, key) {
 	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.id];

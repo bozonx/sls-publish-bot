@@ -181,7 +181,7 @@ export class PageRouter {
 		console.log('=========== go', pathTo);
 
 		try {
-			const msg = await this._switchPage();
+			const msg = await this._switchPage(pathTo);
 
 			if (msg) return this.reply(msg);
 		} catch (e) {
@@ -208,6 +208,8 @@ export class PageRouter {
 
 			throw e;
 		}
+		// redraw menu after user message
+		this.redrawMenu();
 
 		await this.currentPage.onMessage?.();
 		// really the end of request
@@ -228,7 +230,7 @@ export class PageRouter {
 			throw e;
 		}
 
-		// The start of request
+		const prevPath = this.currentPath;
 		const data = c.update.callback_query.data;
 		const [marker, btnId, ...bntPayloadRest] = data.split('|');
 
@@ -242,7 +244,7 @@ export class PageRouter {
 
 		if (result === false)
 			return this.reply(
-				`ERROR: Can't find button handler "${btnId}" on page "${this.currentPath}"`,
+				`ERROR: Can't find button handler "${btnId}" on page "${prevPath}"`,
 			);
 
 		// really the end of request
@@ -258,7 +260,7 @@ export class PageRouter {
 
 		const pathTo = newPath || this.state.currentPath;
 
-		if (!newPath)
+		if (!pathTo)
 			throw new Error(`ERROR: No path. Start from the beginning /start`);
 
 		this._state.currentPath = pathTo;
@@ -288,14 +290,14 @@ export class PageRouter {
 	async _theEndOfRequest() {
 		console.log('============ _theEndOfRequest', this.state);
 
-		if (!_.isEqual(this._loadedSession, this.state)) {
-			await saveToCache(
-				this.c,
-				SESSION_CACHE_NAME,
-				this.state,
-				SESSION_STATE_TTL_SEC,
-			);
-		}
+		// save session each time request finish
+		// because the session always different
+		await saveToCache(
+			this.c,
+			SESSION_CACHE_NAME,
+			this.state,
+			SESSION_STATE_TTL_SEC,
+		);
 
 		this._state = null;
 	}
@@ -325,7 +327,15 @@ export class PageRouter {
 		// if can't edit message of there isn't any message then create a new one
 		if (!msgId) {
 			const [deleteResult, sendResult] = await Promise.all([
-				prevMsgId && (await c.api.deleteMessage(this.chatWithBotId, prevMsgId)),
+				prevMsgId &&
+				(async () => {
+					try {
+						await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
+					} catch (e) {
+						// ignore if can't find message to delete
+						delete this.state[PREV_MENU_MSG_ID_STATE_NAME];
+					}
+				})(),
 				await c.reply(this.currentPage.text, { reply_markup: keyboard }),
 			]);
 

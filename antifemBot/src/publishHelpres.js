@@ -14,7 +14,6 @@ export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
 }
 
-// TODO: move to publish helpers
 export function makeStateFromMessage(c) {
 	let state = {};
 
@@ -116,7 +115,7 @@ export async function printPubToAdminChannel(router, item) {
 	const c = router.c;
 
 	// publication
-	const { message_id } = await this.printFinalPost(
+	const { message_id } = await router.printFinalPost(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		item,
 	);
