@@ -14,7 +14,7 @@ const testData = {
 			author: 'Айван Кей',
 			tags: ['sd', 'fwer'],
 			date: '2024-09-03',
-			time: '21:00',
+			time: '09:55',
 			publisher: 'eeee',
 		},
 		{
@@ -24,8 +24,8 @@ const testData = {
 			text: 'sdslkdjflsdfsdf',
 			author: 'Айван Кей',
 			tags: ['sd', 'fwsdfder'],
-			date: '2024-09-02',
-			time: '08:00',
+			date: '2024-09-03',
+			time: '10:00',
 			publisher: 'eeee',
 		},
 	]),
@@ -57,11 +57,11 @@ function KVStub(initialData = {}) {
 	await app.init();
 
 	// test scheduled
-	// await handleScheduled(
-	// 	process.env.TG_TOKEN,
-	// 	process.env.DESTINATION_CHANNEL_ID,
-	// 	KV,
-	// );
+	await handleScheduled(
+		process.env.TG_TOKEN,
+		process.env.DESTINATION_CHANNEL_ID,
+		KV,
+	);
 
 	app.botStart();
 })();

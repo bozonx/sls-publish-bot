@@ -1,6 +1,4 @@
 import { Bot } from 'grammy';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat.js';
 import { handleStart, makeContext } from './botLogic.js';
 import { routerMiddleware } from './PageRouter.js';
 import { Home } from './pages/Home.js';
@@ -15,8 +13,6 @@ import { PubPostSetup } from './pages/PubPostSetup.js';
 import { PubConfirm } from './pages/PubConfirm.js';
 import { ScheduledList } from './pages/ScheduledList.js';
 import { ScheduledItem } from './pages/ScheduledItem.js';
-
-dayjs.extend(customParseFormat);
 
 export class BotIndex {
 	bot;

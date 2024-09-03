@@ -22,3 +22,22 @@ export function isEmptyObj(obj) {
 
 	return !Object.keys(obj || {}).length;
 }
+
+// operate with timestamp in milliseconds in UTC
+export function dateSubtractMinutes(tsMs, minutesToSubtract) {
+	return dateSubtractSeconds(tsMs, minutesToSubtract * 60);
+}
+
+// operate with timestamp in milliseconds in UTC
+export function dateSubtractSeconds(tsMs, secondsToSubtract) {
+	const subtractMs = secondsToSubtract * 1000;
+
+	return tsMs - subtractMs;
+}
+
+// operate with timestamp in milliseconds in UTC
+export function dateAddSeconds(tsMs, secondsToAdd) {
+	const subtractMs = secondsToAdd * 1000;
+
+	return tsMs + subtractMs;
+}

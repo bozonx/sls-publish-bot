@@ -1,8 +1,4 @@
 import { Bot } from 'grammy';
-import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween.js';
-import utc from 'dayjs/plugin/utc.js';
-import timezone from 'dayjs/plugin/timezone.js';
 import {
 	CTX_KEYS,
 	KV_KEYS,
@@ -12,19 +8,7 @@ import {
 } from './constants.js';
 import { loadFromKv, makeIsoDateFromPubState } from './helpers.js';
 import { doFullFinalPublicationProcess } from './publishHelpres.js';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(isBetween);
-
-// When true (between 5 minutes)
-// 21:59 minutes = false
-// 21:00 minutes = true
-// 21:01 minutes = true
-// 21:02 minutes = true
-// 21:03 minutes = true
-// 21:04 minutes = true
-// 21:05 minutes = false
+import { dateSubtractMinutes, dateAddSeconds } from './lib.js';
 
 export async function handleScheduled(TG_TOKEN, DESTINATION_CHANNEL_ID, KV) {
 	let c = {
@@ -35,41 +19,10 @@ export async function handleScheduled(TG_TOKEN, DESTINATION_CHANNEL_ID, KV) {
 	};
 
 	const scheduledItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-	const itemsToPublish = scheduledItems.filter((item) => {
-		// full date in Moscow
-		const itemDate = dayjs(
-			makeIsoDateFromPubState(item) + PUBLICATION_TIME_ZONE,
-		);
+	const item = findItemToPublish(scheduledItems);
+	// just do nothing if nothing found
+	if (!item) return;
 
-		// TODO: uncomment on prod
-
-		// now in Moscow
-		const nowDate = dayjs().tz(PUBLICATION_TIME_ZONE);
-		// const nowDate = dayjs('2024-09-03T21:01' + PUBLICATION_TIME_ZONE);
-		const nowExtendedDate = nowDate.add(PUBLICATION_ADD_NOW_SEC, 'second');
-		// now minus 5 minutes
-		const nowMinusShift = nowExtendedDate.subtract(
-			PUBLISHING_MINUS_MINUTES,
-			'minute',
-		);
-
-		return itemDate.isBetween(nowMinusShift, nowExtendedDate);
-	});
-
-	// if nothing to publish just do nothing
-	if (!itemsToPublish.length) return;
-
-	// TODO: check sort
-
-	// publish only one item per schedule check to not flood
-	const sortedItems = itemsToPublish.sort(
-		(a, b) =>
-			new Date(makeIsoDateFromPubState(a)) -
-			new Date(makeIsoDateFromPubState(b)),
-	);
-
-	// get closest to current item
-	const item = sortedItems[0];
 	const bot = new Bot(TG_TOKEN);
 	const config = await loadFromKv(c, KV_KEYS.config);
 
@@ -85,4 +38,47 @@ export async function handleScheduled(TG_TOKEN, DESTINATION_CHANNEL_ID, KV) {
 	};
 
 	await doFullFinalPublicationProcess(c, item);
+}
+
+// When true (between 5 minutes) - now is 10:00
+// 09:54 false
+// 09:55 true
+// 09:56 true
+// 09:57 true
+// 09:58 true
+// 09:59 true
+// 10:00 true
+// 10:01 false
+function findItemToPublish(allItems) {
+	const itemsToPublish = allItems.filter((item) => {
+		// TODO: uncomment on prod
+		// const nowDate = new Date();
+		const nowDateTs = new Date(
+			'2024-09-03T10:00' + PUBLICATION_TIME_ZONE,
+		).getTime();
+		// full date in Moscow
+		const itemTsMs = new Date(
+			makeIsoDateFromPubState(item) + PUBLICATION_TIME_ZONE,
+		);
+		const extendedNowTsMs = dateAddSeconds(nowDateTs, PUBLICATION_ADD_NOW_SEC);
+		const nowMinusShiftTsMs = dateSubtractMinutes(
+			nowDateTs,
+			PUBLISHING_MINUS_MINUTES,
+		);
+
+		return itemTsMs >= nowMinusShiftTsMs && itemTsMs <= extendedNowTsMs;
+	});
+
+	// if nothing to publish just do nothing
+	if (!itemsToPublish.length) return;
+
+	// publish only one item per schedule check to not flood
+	const sortedItems = itemsToPublish.sort(
+		(a, b) =>
+			new Date(makeIsoDateFromPubState(a)) -
+			new Date(makeIsoDateFromPubState(b)),
+	);
+
+	// get closest to current item
+	return sortedItems[0];
 }
