@@ -1,21 +1,18 @@
 import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
-import { t, loadFromKv, defineMenu, makeStatePreview } from '../helpers.js';
+import { t, defineMenu, makeStatePreview } from '../helpers.js';
 import {
 	doFullFinalPublicationProcess,
 	deleteScheduledPost,
 } from '../publishHelpres.js';
-import { KV_KEYS, USER_KEYS } from '../constants.js';
+import { USER_KEYS } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		const itemId = this.state.scheduledItem;
-		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-		const item = allItems.find((i) => i.id === itemId);
+		const item = this.state.editItem;
 
-		if (!item)
-			return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
+		if (!item) return this.reply(`ERROR: Can't find item to edit`);
 
 		this.text = t(c, 'scheduledItemDescr') + `\n\n${makeStatePreview(c, item)}`;
 
@@ -47,8 +44,8 @@ export class ScheduledItem extends PageBase {
 			],
 			[
 				{
-					id: 'backBtn',
-					label: t(c, 'backBtn'),
+					id: 'toListBtn',
+					label: t(c, 'toListBtn'),
 				},
 				{
 					id: 'cancelBtn',
@@ -58,19 +55,35 @@ export class ScheduledItem extends PageBase {
 		]);
 	}
 
-	async onButtonPress(btnId, payload) {
+	async onButtonPress(btnId) {
+		const c = this.router.c;
+
 		switch (btnId) {
 			case 'changeDateTimeBtn':
-				return this._changeDateTime();
+				return this.router.go('pub-date');
 			case 'publicateNowBtn':
-				return this._publicateNow();
+				await doFullFinalPublicationProcess(c, this.state.editItem);
+				await this.reply(
+					t(c, 'scheduledItemWasPublished') +
+						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+				);
+
+				return this.router.go('scheduled-list');
 			case 'deletePostponedBtn':
-				return this._delete();
+				await deleteScheduledPost(c, this.state.editItem.id);
+				await this.reply(
+					t(c, 'scheduledItemWasDeleted') +
+						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+				);
+
+				return this.router.go('scheduled-list');
 			case 'editPostponedBtn':
-				return this._editPost();
+				return this.router.go('pub-content');
 			case 'showPreviewBtn':
-				return this._showPreview();
-			case 'backBtn':
+				await this.printFinalPost(this.me[USER_KEYS.id], this.state.editItem);
+
+				return this.router.reload();
+			case 'toListBtn':
 				return this.router.go('scheduled-list');
 			case 'cancelBtn':
 				return this.router.go('home');
@@ -78,62 +91,4 @@ export class ScheduledItem extends PageBase {
 				return false;
 		}
 	}
-
-	_showPreview = async () => {
-		const c = this.router.c;
-		const itemId = this.state.scheduledItem;
-		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-		const item = allItems.find((i) => i.id === itemId);
-
-		if (!item)
-			return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
-
-		await this.printFinalPost(this.me[USER_KEYS.id], item);
-
-		return this.router.reload();
-	};
-
-	_editPost = async () => {
-		const c = this.router.c;
-		const itemId = this.state.scheduledItem;
-		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-		const item = allItems.find((i) => i.id === itemId);
-
-		// TODO: add
-	};
-
-	_changeDateTime = async () => {
-		const c = this.router.c;
-		const itemId = this.state.scheduledItem;
-		const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-		const item = allItems.find((i) => i.id === itemId);
-
-		// TODO: add
-	};
-
-	_publicateNow = async () => {
-		const c = this.router.c;
-		const itemId = this.state.scheduledItem;
-		const item = await doFullFinalPublicationProcess(c, itemId);
-
-		await this.reply(
-			t(c, 'scheduledItemWasPublished') + `:\n\n${makeStatePreview(c, item)}`,
-		);
-
-		this.router.redrawMenu();
-
-		return this.router.go('scheduled-list');
-	};
-
-	_delete = async () => {
-		const c = this.router.c;
-		const itemId = this.state.scheduledItem;
-		const item = await deleteScheduledPost(c, itemId);
-
-		await this.reply(
-			t(c, 'scheduledItemWasDeleted') + `:\n\n${makeStatePreview(c, item)}`,
-		);
-
-		return this.router.go('scheduled-list');
-	};
 }

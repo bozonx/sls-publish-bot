@@ -1,11 +1,7 @@
 import _ from 'lodash';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { PUB_KEYS, HOME_PAGE } from '../constants.js';
-import {
-	schedulePublication,
-	printPubToAdminChannel,
-} from '../publishHelpres.js';
+import { PUB_KEYS, HOME_PAGE, DEFAULT_PUB_TIME } from '../constants.js';
 
 export class PubTime extends PubPageBase {
 	async renderMenu() {
@@ -14,6 +10,10 @@ export class PubTime extends PubPageBase {
 			TIME_ZONE: t(c, 'msk'),
 		});
 
+		this.state.pub = {
+			[PUB_KEYS.time]: DEFAULT_PUB_TIME,
+			...this.state.pub,
+		};
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		return defineMenu([
@@ -43,21 +43,19 @@ export class PubTime extends PubPageBase {
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
 				},
-				// {
-				// 	id: 'cancelBtn',
-				// 	label: t(c, 'cancelBtn'),
-				// },
-				this.state.pub[PUB_KEYS.time] && {
-					id: 'pubConfirmBtn',
-					label: '🗓️ ' + t(c, 'pubConfirmBtn'),
+				{
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
+				},
+				{
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
 				},
 			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
-		const c = this.router.c;
-
 		if (btnId === 'HOUR') {
 			const time = Number(payload) < 10 ? `0${payload}:00` : `${payload}:00`;
 
@@ -67,14 +65,10 @@ export class PubTime extends PubPageBase {
 		switch (btnId) {
 			case 'backBtn':
 				return this.go('pub-date');
-			// case 'cancelBtn':
-			// 	return this.go('home');
-			case 'pubConfirmBtn':
-				const item = await schedulePublication(c, this.state.pub);
-				await printPubToAdminChannel(this.router, item);
-				await this.reply(t(c, 'wasSuccessfullyScheduled'));
-
+			case 'cancelBtn':
 				return this.go(HOME_PAGE);
+			case 'nextBtn':
+				return this.go('pub-confirm');
 			default:
 				return false;
 		}
@@ -102,7 +96,7 @@ export class PubTime extends PubPageBase {
 			return this.reload();
 		}
 
-		return this.reload({ [PUB_KEYS.time]: time });
+		return this.go('pub-confirm', { [PUB_KEYS.time]: time });
 	}
 
 	_makeHourBtn(hour) {

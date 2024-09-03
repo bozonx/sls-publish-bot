@@ -42,17 +42,17 @@ export class PubPostSetup extends PubPageBase {
 			],
 			this.state.pub[PUB_KEYS.author]
 				? [
-					{
-						id: 'withoutAuthorBtn',
-						label: t(c, 'withoutAuthorBtn'),
-					},
-				]
+						{
+							id: 'withoutAuthorBtn',
+							label: t(c, 'withoutAuthorBtn'),
+						},
+					]
 				: [
-					{
-						id: 'addAuthorBtn',
-						label: `${t(c, 'addAuthorBtn')}: ${this.me[USER_KEYS.authorName]}`,
-					},
-				],
+						{
+							id: 'addAuthorBtn',
+							label: `${t(c, 'addAuthorBtn')}: ${this.me[USER_KEYS.authorName]}`,
+						},
+					],
 			[
 				{
 					id: 'showPreviewBtn',

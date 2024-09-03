@@ -12,6 +12,7 @@ import { PubTags } from './pages/PubTags.js';
 import { PubDate } from './pages/PubDate.js';
 import { PubTime } from './pages/PubTime.js';
 import { PubPostSetup } from './pages/PubPostSetup.js';
+import { PubConfirm } from './pages/PubConfirm.js';
 import { ScheduledList } from './pages/ScheduledList.js';
 import { ScheduledItem } from './pages/ScheduledItem.js';
 
@@ -37,6 +38,7 @@ export class BotIndex {
 			'pub-date': PubDate,
 			'pub-time': PubTime,
 			'pub-post-setup': PubPostSetup,
+			'pub-confirm': PubConfirm,
 			'scheduled-list': ScheduledList,
 			'scheduled-item': ScheduledItem,
 		};

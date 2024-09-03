@@ -18,7 +18,7 @@ export class ScheduledList extends PageBase {
 				new Date(makeIsoDateFromPubState(b)),
 		);
 
-		delete this.state.scheduledItem;
+		delete this.state.editItem;
 
 		this.text = items.length
 			? t(c, 'scheduledListDescr')
@@ -34,8 +34,8 @@ export class ScheduledList extends PageBase {
 			]),
 			[
 				{
-					id: 'cancelBtn',
-					label: t(c, 'cancelBtn'),
+					id: 'backBtn',
+					label: t(c, 'backBtn'),
 				},
 			],
 		]);
@@ -43,13 +43,19 @@ export class ScheduledList extends PageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'ITEM') {
-			this.state.scheduledItem = payload;
+			const itemId = payload;
+			const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
+
+			this.state.editItem = allItems.find((i) => i.id === itemId);
+
+			if (!this.state.editItem)
+				return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
 			return this.router.go('scheduled-item');
 		}
 
 		switch (btnId) {
-			case 'cancelBtn':
+			case 'backBtn':
 				return this.router.go('home');
 			default:
 				return false;

@@ -84,5 +84,5 @@ export async function handleScheduled(TG_TOKEN, DESTINATION_CHANNEL_ID, KV) {
 		},
 	};
 
-	await doFullFinalPublicationProcess(c, item.id);
+	await doFullFinalPublicationProcess(c, item);
 }

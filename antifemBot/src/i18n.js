@@ -52,6 +52,7 @@ export default {
 		replaceTextAndMediaBtn: 'Заменить медиа и текст и медиа',
 		removeTextBtn: 'Удалить текст',
 		removeMediaBtn: 'Удалить медиа',
+		toListBtn: 'К списку',
 
 		// Menu descriptions
 		homeDescr:

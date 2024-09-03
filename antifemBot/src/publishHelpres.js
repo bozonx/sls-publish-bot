@@ -71,9 +71,9 @@ export function makeStateFromMessage(c) {
 	return state;
 }
 
-export async function doFullFinalPublicationProcess(c, itemId) {
-	const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-	const item = allItems.find((i) => i.id === itemId);
+export async function doFullFinalPublicationProcess(c, item) {
+	// const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
+	// const item = allItems.find((i) => i.id === itemId);
 
 	const { message_id } = await printFinalPost(
 		c,
@@ -81,7 +81,7 @@ export async function doFullFinalPublicationProcess(c, itemId) {
 		item,
 	);
 
-	await deleteScheduledPost(c, itemId);
+	await deleteScheduledPost(c, item.id);
 
 	return item;
 }
@@ -129,7 +129,7 @@ export async function printPubToAdminChannel(router, item) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		t(c, 'infoMsgToAdminChannel') +
-		`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
+			`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
 		{ reply_parameters: { message_id } },
 	);
 }
@@ -155,12 +155,12 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	// TODO: наверное всегда прикладывать темплейт
 	const fullPostTextMdV2 = pubState[PUB_KEYS.template]
 		? applyTemplate(
-			c,
-			textMdV2,
-			pubState.template,
-			pubState.author,
-			pubState.tags,
-		)
+				c,
+				textMdV2,
+				pubState.template,
+				pubState.author,
+				pubState.tags,
+			)
 		: textMdV2;
 	// TODO: add from md
 

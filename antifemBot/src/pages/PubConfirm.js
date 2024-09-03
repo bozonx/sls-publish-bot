@@ -1,0 +1,59 @@
+import { PubPageBase } from '../PubPageBase.js';
+import { t, makeStatePreview, defineMenu } from '../helpers.js';
+import { PUB_KEYS, HOME_PAGE, USER_KEYS } from '../constants.js';
+import {
+	schedulePublication,
+	printPubToAdminChannel,
+} from '../publishHelpres.js';
+
+export class PubConfirm extends PubPageBase {
+	async renderMenu() {
+		const c = this.router.c;
+		// show preview
+		await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
+
+		const shortPubState = {
+			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
+			[PUB_KEYS.time]: this.state.pub[PUB_KEYS.time],
+			[PUB_KEYS.template]: this.state.pub[PUB_KEYS.template],
+		};
+
+		this.text = `${makeStatePreview(c, shortPubState)}\n\n${t(c, 'pubConfirmDescr')}`;
+
+		return defineMenu([
+			[
+				{
+					id: 'backBtn',
+					label: t(c, 'backBtn'),
+				},
+				{
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
+				},
+				{
+					id: 'pubConfirmBtn',
+					label: '🗓️ ' + t(c, 'pubConfirmBtn'),
+				},
+			],
+		]);
+	}
+
+	async onButtonPress(btnId) {
+		const c = this.router.c;
+
+		switch (btnId) {
+			case 'backBtn':
+				return this.go('pub-time');
+			case 'cancelBtn':
+				return this.go(HOME_PAGE);
+			case 'pubConfirmBtn':
+				const item = await schedulePublication(c, this.state.pub);
+				await printPubToAdminChannel(this.router, item);
+				await this.reply(t(c, 'wasSuccessfullyScheduled'));
+
+				return this.go(HOME_PAGE);
+			default:
+				return false;
+		}
+	}
+}
