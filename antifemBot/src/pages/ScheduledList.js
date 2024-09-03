@@ -1,12 +1,12 @@
-import dayjs from 'dayjs';
 import { PageBase } from '../PageRouter.js';
 import {
 	t,
 	loadFromKv,
 	defineMenu,
 	makeIsoDateFromPubState,
+	formatIsoOnlyDateStrToLocaleDate,
 } from '../helpers.js';
-import { KV_KEYS, PUB_KEYS, DATE_FORMAT } from '../constants.js';
+import { KV_KEYS, PUB_KEYS } from '../constants.js';
 
 export class ScheduledList extends PageBase {
 	async renderMenu() {
@@ -62,7 +62,7 @@ export class ScheduledList extends PageBase {
 	}
 
 	makeItemLabel(item) {
-		const dateStr = dayjs(item[PUB_KEYS.date], DATE_FORMAT).format('DD.MM');
+		const dateStr = formatIsoOnlyDateStrToLocaleDate(item[PUB_KEYS.date]);
 		const time = item[PUB_KEYS.time];
 		const text = item[PUB_KEYS.text]?.substring(0, 30).trim();
 

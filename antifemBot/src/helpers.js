@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { InlineKeyboard } from 'grammy';
 import locales from './i18n.js';
 import {
@@ -8,8 +7,8 @@ import {
 	QUERY_MARKER,
 	PUB_KEYS,
 	USER_KEYS,
-	DATE_FORMAT,
 } from './constants.js';
+import { makeIsoDayFromNow } from './lib.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
 	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
@@ -29,6 +28,24 @@ export function t(c, msg) {
 
 export function makeIsoDateFromPubState(pubState) {
 	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
+}
+
+export function formatIsoOnlyDateStrToLocaleDate(isoDateStr) {
+	return new Date(`${isoDateStr}T00:00`).toLocaleDateString('ru-RU', {
+		weekday: 'short',
+		// year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	});
+}
+
+export function getLocaleDayOfWeekFromNow(plusDay) {
+	return new Date(`${makeIsoDayFromNow(plusDay)}T00:00`).toLocaleDateString(
+		'ru-RU',
+		{
+			weekday: 'short',
+		},
+	);
 }
 
 export function makeStatePreview(c, state = {}) {
@@ -55,7 +72,7 @@ export function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
 
 	if (state[PUB_KEYS.date])
-		res += `${t(c, 'stateDate')}: ${dayjs(state[PUB_KEYS.date], DATE_FORMAT).format('DD.MM.YYYY')}\n`;
+		res += `${t(c, 'stateDate')}: ${formatIsoOnlyDateStrToLocaleDate(state[PUB_KEYS.date])}\n`;
 	if (state[PUB_KEYS.time]) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}

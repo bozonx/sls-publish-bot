@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
 import {
 	t,
@@ -8,7 +7,7 @@ import {
 	defineMenu,
 } from '../helpers.js';
 import { KV_KEYS } from '../constants.js';
-import { breakArray } from '../lib.js';
+import { breakArray, makeStringArrayUnique } from '../lib.js';
 
 export class TagsManager extends PageBase {
 	async renderMenu() {
@@ -57,7 +56,10 @@ export class TagsManager extends PageBase {
 
 		const newTags = parseTagsFromInput(c.msg.text);
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
-		const mergedAllTags = _.uniq([...allTags, ...newTags]).sort();
+		const mergedAllTags = makeStringArrayUnique([
+			...allTags,
+			...newTags,
+		]).sort();
 		// save new tags to storage
 		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
 

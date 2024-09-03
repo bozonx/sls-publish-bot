@@ -1,10 +1,19 @@
 import _ from 'lodash';
-import dayjs from 'dayjs';
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { PUB_KEYS, PUBLICATION_TIME_ZONE, DATE_FORMAT } from '../constants.js';
+import {
+	t,
+	makeStatePreview,
+	defineMenu,
+	getLocaleDayOfWeekFromNow,
+} from '../helpers.js';
+import { PUB_KEYS } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
-import { isEmptyObj } from '../lib.js';
+import {
+	isEmptyObj,
+	isValidShortDate,
+	shortRuDateToFullIsoDate,
+	makeIsoDayFromNow,
+} from '../lib.js';
 
 export class PubDate extends PubPageBase {
 	async renderMenu() {
@@ -20,21 +29,17 @@ export class PubDate extends PubPageBase {
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		const daysBtn = [];
-		const nowDate = dayjs().tz(PUBLICATION_TIME_ZONE);
 
 		for (let i = 3; i <= 6; i++) {
-			const shiftDate = nowDate.add(i, 'day');
-			// start from sunday = 0
-			let dayOfWeekNum = shiftDate.get('d');
-
-			if (dayOfWeekNum === 0) dayOfWeekNum = 7;
-
-			const dayOfWeekLocale = t(c, 'daysOfWeek')[dayOfWeekNum - 1];
+			// TODO: remake
+			// const shiftDate = nowDate.add(i, 'day');
+			// const dayOfWeekNum = getDayOfWeekNum(shiftDate);
+			// const dayOfWeekLocale = t(c, 'daysOfWeek')[dayOfWeekNum];
 
 			daysBtn.push({
 				id: 'DAY',
-				// label: `${i} - ${dayOfWeekLocale}`,
-				label: dayOfWeekLocale,
+				label: getLocaleDayOfWeekFromNow(i),
+				// label: dayOfWeekLocale,
 				payload: i,
 			});
 		}
@@ -81,8 +86,7 @@ export class PubDate extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'DAY') {
-			const date = dayjs().add(Number(payload || 0), 'day');
-			const dateStr = date.format(DATE_FORMAT);
+			const dateStr = makeIsoDayFromNow(payload);
 
 			return this.go('pub-time', {
 				[PUB_KEYS.date]: dateStr,
@@ -118,17 +122,10 @@ export class PubDate extends PubPageBase {
 			return this.reload();
 		}
 
-		const currentYear = dayjs().tz(PUBLICATION_TIME_ZONE).get('year');
 		const preparedDateStr = c.msg.text.trim().replace(/\s/g, '.');
-		const rawDate = dayjs(
-			`${preparedDateStr}.${currentYear}`,
-			'D.M.YYYY',
-			// strict parse and validate
-			true,
-		);
 
-		if (rawDate.isValid()) {
-			const dateStr = rawDate.utc(true).format(DATE_FORMAT);
+		if (isValidShortDate(preparedDateStr)) {
+			const dateStr = shortRuDateToFullIsoDate(preparedDateStr);
 
 			return this.go('pub-time', { [PUB_KEYS.date]: dateStr });
 		} else {

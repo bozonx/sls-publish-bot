@@ -3,6 +3,7 @@ import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { PUB_KEYS, HOME_PAGE, DEFAULT_PUB_TIME } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
+import { make2SignDigitStr } from '../lib.js';
 
 export class PubTime extends PubPageBase {
 	async renderMenu() {
@@ -62,11 +63,10 @@ export class PubTime extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'HOUR') {
-			this.state.pub[PUB_KEYS.time] =
-				Number(payload) < 10 ? `0${payload}:00` : `${payload}:00`;
+			this.state.pub[PUB_KEYS.time] = make2SignDigitStr(payload) + `:00`;
 
 			if (this.state.editItem) return saveEditedScheduledPost(this.router);
-			else return this.reload();
+			else return this.go('pub-confirm');
 		}
 
 		switch (btnId) {
@@ -101,6 +101,7 @@ export class PubTime extends PubPageBase {
 		const rawTime = c.msg.text.trim();
 		let time;
 
+		// TODO: revew. and use make2SignDigitStr
 		if (rawTime.match(/^\d[:.\s]\d\d$/)) {
 			time = '0' + rawTime;
 		} else if (rawTime.match(/^\d\d[:.\s]\d\d$/)) {

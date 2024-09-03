@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { PubPageBase } from '../PubPageBase.js';
 import {
 	t,
@@ -9,7 +8,7 @@ import {
 	saveToKv,
 } from '../helpers.js';
 import { KV_KEYS, PUB_KEYS } from '../constants.js';
-import { breakArray } from '../lib.js';
+import { breakArray, makeStringArrayUnique } from '../lib.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 
 export class PubTags extends PubPageBase {
@@ -61,7 +60,7 @@ export class PubTags extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'TAG') {
-			const mergedAllTags = _.uniq([
+			const mergedAllTags = makeStringArrayUnique([
 				...(this.state.pub?.[PUB_KEYS.tags] || []),
 				payload,
 			]);
@@ -98,11 +97,14 @@ export class PubTags extends PubPageBase {
 
 		const newTags = parseTagsFromInput(c.msg.text);
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
-		const mergedAllTags = _.uniq([...allTags, ...newTags]).sort();
+		const mergedAllTags = makeStringArrayUnique([
+			...allTags,
+			...newTags,
+		]).sort();
 		// save new tags to storage
 		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
 
-		const mergedSelectedTags = _.uniq([
+		const mergedSelectedTags = makeStringArrayUnique([
 			...(this.state.pub?.[PUB_KEYS.tags] || []),
 			...newTags,
 		]);
