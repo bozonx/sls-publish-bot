@@ -62,6 +62,11 @@ export class PageBase {
 		this.path = path;
 	}
 
+	// Please use this instead of context's one
+	async reply(...p) {
+		return this.router.reply(...p);
+	}
+
 	// It runs on each request.
 	// You can save some state to user in other functions while request is handling
 	async mount() { }
@@ -124,10 +129,17 @@ export class PageRouter {
 		this.pages = initialPages;
 	}
 
+	// Please use this instead of context's one
+	async reply(...p) {
+		this.state.redrawMenu = true;
+
+		return this.this.reply(...p);
+	}
+
 	async reload() {
 		// TODO: может это перенести в go()
 		if (!this.currentPath)
-			return this.c.reply(
+			return this.this.reply(
 				`ERROR: Can't reload because there isn't current page`,
 			);
 
@@ -143,7 +155,7 @@ export class PageRouter {
 		try {
 			await this._switchPage(pathTo);
 		} catch (e) {
-			await c.reply(String(e));
+			await this.reply(String(e));
 
 			// TODO: ???
 			throw e;
@@ -163,7 +175,7 @@ export class PageRouter {
 		try {
 			await this._switchPage();
 		} catch (e) {
-			return c.reply(String(e));
+			return this.reply(String(e));
 		}
 
 		await this.currentPage.onMessage?.();
@@ -180,7 +192,7 @@ export class PageRouter {
 		try {
 			await this._switchPage();
 		} catch (e) {
-			return c.reply(String(e));
+			return this.reply(String(e));
 		}
 
 		// The start of request
@@ -196,7 +208,7 @@ export class PageRouter {
 		const result = await this.currentPage.onButtonPress(btnId, btnPayload);
 
 		if (result === false)
-			return c.reply(
+			return this.reply(
 				`ERROR: Can't find button handler "${btnId}" on page "${this.currentPath}"`,
 			);
 
@@ -205,7 +217,7 @@ export class PageRouter {
 
 		// const menu = this.currentPage.menu;
 		//
-		// if (!menu?.length) return c.reply(`ERROR: No menu`);
+		// if (!menu?.length) return this.reply(`ERROR: No menu`);
 		//
 		// for (const row of menu) {
 		// 	for (const { id, cb } of row) {
@@ -221,7 +233,7 @@ export class PageRouter {
 		// 	}
 		// }
 
-		// return c.reply(`ERROR: Can't find button. ${data}`);
+		// return this.reply(`ERROR: Can't find button. ${data}`);
 	};
 
 	// TODO: review
@@ -287,22 +299,38 @@ export class PageRouter {
 
 	async _sendMenu(keyboard) {
 		const c = this.c;
+		let msgId;
+
 		// remove prev menu message
-		if (this.state[PREV_MENU_MSG_ID_STATE_NAME]) {
+		if (!this.state.redrawMenu && this.state[PREV_MENU_MSG_ID_STATE_NAME]) {
 			try {
-				await c.api.deleteMessage(
-					c.chatId,
+				const { message_id } = await c.api.editMessageText(
+					this.chatWithBotId,
 					this.state[PREV_MENU_MSG_ID_STATE_NAME],
+					this.currentPage.text,
+					{
+						reply_markup: keyboard,
+					},
 				);
+
+				msgId = message_id;
+				// msgId = this.state[PREV_MENU_MSG_ID_STATE_NAME];
 			} catch (e) {
 				// skip error
 			}
 		}
 
-		const { message_id } = await c.reply(this.currentPage.text, {
-			reply_markup: keyboard,
-		});
+		// if can't edit message of there isn't any message then create a new one
+		if (!msgId) {
+			delete this.state.redrawMenu;
 
-		this.state[PREV_MENU_MSG_ID_STATE_NAME] = message_id;
+			const { message_id } = await this.reply(this.currentPage.text, {
+				reply_markup: keyboard,
+			});
+
+			msgId = message_id;
+		}
+
+		this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
 	}
 }
