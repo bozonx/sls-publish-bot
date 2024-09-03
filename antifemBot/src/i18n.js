@@ -76,7 +76,7 @@ export default {
 		standardTextModeDescr: 'Обычный режим текста',
 		selectTagsDescr: 'Выберете тэги',
 		pubPostSetupDescr: 'Проверьте и настройте публикацию',
-		// pubConfirmDescr: 'Публикуем?',
+		pubConfirmDescr: 'Отправляем в отложенные?',
 		selectDateDescr:
 			'Выберете дату либо введите в формате DD.MM. Часовая зона (${TIME_ZONE})',
 		selectHourDescr:
@@ -99,5 +99,6 @@ export default {
 		wrongDateFormat: 'Не получается распознать дату',
 		noContentMessage: 'Нет контента',
 		wasSuccessfullyScheduled: 'Пост сохранён в отложенные',
+		editedSavedSuccessfully: 'Отложенный пост сохранён',
 	},
 };

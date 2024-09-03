@@ -7,6 +7,7 @@ import {
 	PUB_KEYS,
 	MEDIA_TYPES,
 	KV_KEYS,
+	USER_KEYS,
 } from './constants.js';
 import { t, loadFromKv, saveToKv, makeStatePreview } from './helpers.js';
 
@@ -100,9 +101,37 @@ export async function deleteScheduledPost(c, itemId) {
 	return allItems[indexOfItem];
 }
 
+export async function saveEditedScheduledPost(router) {
+	const c = router.c;
+
+	router.state.editItem = router.state.pub;
+
+	delete router.state.pub;
+
+	const item = {
+		...router.state.editItem,
+		[PUB_KEYS.publisherName]: router.me[USER_KEYS.name],
+	};
+	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
+	const oldItemIndex = allScheduled.findIndex((i) => i.id === item.id);
+
+	if (oldItemIndex < 0) throw new Error(`ERROR: Can't find item while saving`);
+
+	allScheduled[oldItemIndex] = item;
+
+	await saveToKv(c, KV_KEYS.scheduled, allScheduled);
+	await router.reply(t(c, 'editedSavedSuccessfully'));
+
+	return router.go('scheduled-item');
+}
+
 export async function schedulePublication(c, pubState) {
 	const uid = new ShortUniqueId({ length: 10 });
-	const item = { id: uid.rnd(), ...pubState };
+	const item = {
+		id: uid.rnd(),
+		...pubState,
+		[PUB_KEYS.publisherName]: c.ctx[CTX_KEYS.me][USER_KEYS.name],
+	};
 	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
 	const prepared = [...allScheduled, item];
 
@@ -123,7 +152,7 @@ export async function printPubToAdminChannel(router, item) {
 	const infoMsgPostParams = {
 		[PUB_KEYS.date]: item[PUB_KEYS.date],
 		[PUB_KEYS.time]: item[PUB_KEYS.time],
-		[PUB_KEYS.publisher]: router.me.name,
+		[PUB_KEYS.publisherName]: item[PUB_KEYS.publisherName],
 	};
 
 	await c.api.sendMessage(

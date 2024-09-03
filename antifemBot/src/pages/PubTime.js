@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { PUB_KEYS, HOME_PAGE, DEFAULT_PUB_TIME } from '../constants.js';
+import { saveEditedScheduledPost } from '../publishHelpres.js';
 
 export class PubTime extends PubPageBase {
 	async renderMenu() {
@@ -52,20 +53,16 @@ export class PubTime extends PubPageBase {
 					label: t(c, 'nextBtn'),
 				},
 			],
-			this.state.editItem && [
-				{
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
-				},
-			],
 		]);
 	}
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'HOUR') {
-			const time = Number(payload) < 10 ? `0${payload}:00` : `${payload}:00`;
+			this.state.pub[PUB_KEYS.time] =
+				Number(payload) < 10 ? `0${payload}:00` : `${payload}:00`;
 
-			return this.reload({ [PUB_KEYS.time]: time });
+			if (this.state.editItem) return saveEditedScheduledPost(this.router);
+			else return this.reload();
 		}
 
 		switch (btnId) {
@@ -81,10 +78,6 @@ export class PubTime extends PubPageBase {
 				return this.go(HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-confirm');
-			case 'saveBtn':
-				this.state.editItem = this.state.pub;
-
-				return this.go('scheduled-item');
 			default:
 				return false;
 		}
@@ -112,7 +105,10 @@ export class PubTime extends PubPageBase {
 			return this.reload();
 		}
 
-		return this.go('pub-confirm', { [PUB_KEYS.time]: time });
+		this.state.pub[PUB_KEYS.time] = time;
+
+		if (this.state.editItem) return saveEditedScheduledPost(this.router);
+		else return this.go('pub-confirm');
 	}
 
 	_makeHourBtn(hour) {

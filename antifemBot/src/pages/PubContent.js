@@ -1,7 +1,11 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { PUB_KEYS, USER_KEYS } from '../constants.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
-import { makeStateFromMessage } from '../publishHelpres.js';
+import {
+	makeStateFromMessage,
+	saveEditedScheduledPost,
+} from '../publishHelpres.js';
+import { isEmptyObj } from '../lib.js';
 
 const REPLACE_MODES = {
 	textOnly: 'textOnly',
@@ -12,10 +16,10 @@ const REPLACE_MODES = {
 export class PubContent extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
-
-		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 		// copy state to edit in edit mode
-		if (this.state.editItem) this.state.pub = this.state.editItem;
+		if (this.state.editItem && isEmptyObj(this.state.pub))
+			this.state.pub = this.state.editItem;
+		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
 		const haveAnyContent = Boolean(
 			this.state.pub.text || this.state.pub.media?.length,
@@ -122,8 +126,8 @@ export class PubContent extends PubPageBase {
 			case 'removeMediaBtn':
 				return this.reload({ [PUB_KEYS.media]: null });
 			case 'cancelBtn':
-				delete this.state.replaceMode;
-				delete this.state.mdV1Mode;
+				// delete this.state.replaceMode;
+				// delete this.state.mdV1Mode;
 
 				if (this.state.editItem) {
 					delete this.state.pub;
@@ -133,14 +137,12 @@ export class PubContent extends PubPageBase {
 
 				return this.go('home');
 			case 'nextBtn':
-				delete this.state.replaceMode;
-				delete this.state.mdV1Mode;
+				// delete this.state.replaceMode;
+				// delete this.state.mdV1Mode;
 
 				return this.go('pub-tags');
 			case 'saveBtn':
-				this.state.editItem = this.state.pub;
-
-				return this.go('scheduled-item');
+				return saveEditedScheduledPost(this.router);
 			default:
 				return false;
 		}

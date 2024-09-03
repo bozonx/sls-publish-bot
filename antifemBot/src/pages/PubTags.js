@@ -10,6 +10,7 @@ import {
 } from '../helpers.js';
 import { KV_KEYS, PUB_KEYS } from '../constants.js';
 import { breakArray } from '../lib.js';
+import { saveEditedScheduledPost } from '../publishHelpres.js';
 
 export class PubTags extends PubPageBase {
 	async renderMenu() {
@@ -86,9 +87,7 @@ export class PubTags extends PubPageBase {
 			case 'nextBtn':
 				return this.go('pub-post-setup');
 			case 'saveBtn':
-				this.state.editItem = this.state.pub;
-
-				return this.go('scheduled-item');
+				return saveEditedScheduledPost(this.router);
 			default:
 				return false;
 		}

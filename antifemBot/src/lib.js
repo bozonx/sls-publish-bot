@@ -16,3 +16,9 @@ export function breakArray(arr, maxCount) {
 
 	return result;
 }
+
+export function isEmptyObj(obj) {
+	if (!obj) return true;
+
+	return !Object.keys(obj || {}).length;
+}

@@ -6,6 +6,7 @@ import {
 	DEFAULT_SETUP_STATE,
 	USER_KEYS,
 } from '../constants.js';
+import { saveEditedScheduledPost } from '../publishHelpres.js';
 
 export class PubPostSetup extends PubPageBase {
 	async renderMenu() {
@@ -113,9 +114,7 @@ export class PubPostSetup extends PubPageBase {
 			case 'nextBtn':
 				return this.go('pub-date');
 			case 'saveBtn':
-				this.state.editItem = this.state.pub;
-
-				return this.go('scheduled-item');
+				return saveEditedScheduledPost(this.router);
 			default:
 				return false;
 		}

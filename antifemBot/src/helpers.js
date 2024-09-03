@@ -50,20 +50,19 @@ export function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateAuthor')}: ${state[PUB_KEYS.author]}\n`;
 	if (state[PUB_KEYS.tags])
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
+	if (state[PUB_KEYS.template])
+		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
+	if (!mediaCount && typeof state[PUB_KEYS.preview] !== 'undefined')
+		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
+
 	if (state[PUB_KEYS.date])
 		res += `${t(c, 'stateDate')}: ${dayjs(state[PUB_KEYS.date], DATE_FORMAT).format('DD.MM.YYYY')}\n`;
 	if (state[PUB_KEYS.time]) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}
 
-	if (state[PUB_KEYS.template])
-		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
-	if (!mediaCount && typeof state[PUB_KEYS.preview] !== 'undefined')
-		// res += `${t(c, 'stateUrlPreview')}: ${state.preview ? '✅' : '❌'}\n`;
-		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
-
-	if (state[PUB_KEYS.publisher])
-		res += `${t(c, 'statePublisher')}: ${state[PUB_KEYS.publisher]}\n`;
+	if (state[PUB_KEYS.publisherName])
+		res += `${t(c, 'statePublisher')}: ${state[PUB_KEYS.publisherName]}\n`;
 
 	return res.trim();
 }

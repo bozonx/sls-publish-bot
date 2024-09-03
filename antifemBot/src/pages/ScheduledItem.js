@@ -23,8 +23,8 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'changeDateTimeBtn'),
 				},
 				{
-					id: 'publicateNowBtn',
-					label: t(c, 'publicateNowBtn'),
+					id: 'editPostponedBtn',
+					label: t(c, 'editPostponedBtn'),
 				},
 			],
 			[
@@ -32,10 +32,9 @@ export class ScheduledItem extends PageBase {
 					id: 'deletePostponedBtn',
 					label: t(c, 'deletePostponedBtn'),
 				},
-
 				{
-					id: 'editPostponedBtn',
-					label: t(c, 'editPostponedBtn'),
+					id: 'publicateNowBtn',
+					label: t(c, 'publicateNowBtn'),
 				},
 				{
 					id: 'showPreviewBtn',

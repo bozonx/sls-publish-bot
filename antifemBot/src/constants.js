@@ -55,7 +55,8 @@ export const PUB_KEYS = {
 	preview: 'preview',
 	date: 'date',
 	time: 'time',
-	publisher: 'publisher',
+	// name of user who made or edited post
+	publisherName: 'publisherName',
 };
 export const MEDIA_TYPES = {
 	photo: 'photo',

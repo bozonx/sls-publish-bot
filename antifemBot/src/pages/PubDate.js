@@ -3,12 +3,15 @@ import dayjs from 'dayjs';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { PUB_KEYS, PUBLICATION_TIME_ZONE, DATE_FORMAT } from '../constants.js';
+import { saveEditedScheduledPost } from '../publishHelpres.js';
+import { isEmptyObj } from '../lib.js';
 
 export class PubDate extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		// copy state to edit in edit mode
-		if (this.state.editItem) this.state.pub = this.state.editItem;
+		if (this.state.editItem && isEmptyObj(this.state.pub))
+			this.state.pub = this.state.editItem;
 
 		const descr = _.template(t(c, 'selectDateDescr'))({
 			TIME_ZONE: t(c, 'msk'),
@@ -104,9 +107,7 @@ export class PubDate extends PubPageBase {
 			case 'nextBtn':
 				return this.go('pub-time');
 			case 'saveBtn':
-				this.state.editItem = this.state.pub;
-
-				return this.go('scheduled-item');
+				return saveEditedScheduledPost(this.router);
 			default:
 				return false;
 		}

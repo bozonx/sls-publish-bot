@@ -44,7 +44,7 @@ export class ScheduledList extends PageBase {
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'ITEM') {
 			const itemId = payload;
-			const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
+			const allItems = await loadFromKv(this.router.c, KV_KEYS.scheduled, []);
 
 			this.state.editItem = allItems.find((i) => i.id === itemId);
 
