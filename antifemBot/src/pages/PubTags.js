@@ -68,11 +68,11 @@ export class PubTags extends PubPageBase {
 			case 'clearTagsBtn':
 				return this.reload({ [PUB_KEYS.tags]: null });
 			case 'backBtn':
-				return this.go('pub-author');
+				return this.go('pub-content');
 			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':
-				return this.go('pub-date');
+				return this.go('pub-post-setup');
 			default:
 				return false;
 		}
@@ -94,6 +94,6 @@ export class PubTags extends PubPageBase {
 			...newTags,
 		]);
 
-		await this.go('pub-date', { [PUB_KEYS.tags]: mergedSelectedTags });
+		await this.go('pub-post-setup', { [PUB_KEYS.tags]: mergedSelectedTags });
 	}
 }

@@ -83,7 +83,7 @@ export class PubDate extends PubPageBase {
 
 		switch (btnId) {
 			case 'backBtn':
-				return this.go('pub-tags');
+				return this.go('pub-post-setup');
 			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':

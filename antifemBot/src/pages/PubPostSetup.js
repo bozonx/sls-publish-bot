@@ -1,6 +1,11 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { TEMPLATE_NAMES, PUB_KEYS, DEFAULT_SETUP_STATE } from '../constants.js';
+import {
+	TEMPLATE_NAMES,
+	PUB_KEYS,
+	DEFAULT_SETUP_STATE,
+	USER_KEYS,
+} from '../constants.js';
 
 export class PubPostSetup extends PubPageBase {
 	async renderMenu() {
@@ -8,6 +13,7 @@ export class PubPostSetup extends PubPageBase {
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
+			[PUB_KEYS.author]: this.me[USER_KEYS.authorName],
 			...(this.state.pub || {}),
 		};
 
@@ -29,9 +35,28 @@ export class PubPostSetup extends PubPageBase {
 
 			!this.state.pub[PUB_KEYS.media]?.length && [
 				{
-					id: `preview`,
-					label: t(c, previewIsOn ? `previewOffBtn` : `previewOnBtn`),
+					id: `linkPreviewSwitch`,
+					label: t(c, previewIsOn ? `linkPreviewOffBtn` : `linkPreviewOnBtn`),
 					payload: Number(!previewIsOn),
+				},
+			],
+			this.state.pub[PUB_KEYS.author]
+				? [
+					{
+						id: 'withoutAuthorBtn',
+						label: t(c, 'withoutAuthorBtn'),
+					},
+				]
+				: [
+					{
+						id: 'addAuthorBtn',
+						label: `${t(c, 'addAuthorBtn')}: ${this.me[USER_KEYS.authorName]}`,
+					},
+				],
+			[
+				{
+					id: 'showPreviewBtn',
+					label: t(c, 'showPreviewBtn'),
 				},
 			],
 			[
@@ -57,14 +82,24 @@ export class PubPostSetup extends PubPageBase {
 		}
 
 		switch (btnId) {
-			case 'preview':
+			case 'addAuthorBtn':
+				return this.reload({
+					[PUB_KEYS.author]: this.me[USER_KEYS.authorName],
+				});
+			case 'withoutAuthorBtn':
+				return this.reload({ [PUB_KEYS.author]: null });
+			case 'showPreviewBtn':
+				await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
+
+				return this.reload();
+			case 'linkPreviewSwitch':
 				return this.reload({ [PUB_KEYS.preview]: Boolean(payload) });
 			case 'backBtn':
-				return this.go('pub-time');
+				return this.go('pub-tags');
 			case 'cancelBtn':
 				return this.go('home');
 			case 'nextBtn':
-				return this.go('pub-confirm');
+				return this.go('pub-date');
 			default:
 				return false;
 		}

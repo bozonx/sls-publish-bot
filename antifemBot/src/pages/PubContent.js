@@ -122,7 +122,7 @@ export class PubContent extends PubPageBase {
 				delete this.state.replaceMode;
 				delete this.state.mdV1Mode;
 
-				return this.go('pub-author');
+				return this.go('pub-tags');
 			default:
 				return false;
 		}

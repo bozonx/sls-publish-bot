@@ -51,6 +51,7 @@ export function makeContext(
 					[USER_KEYS.id]: Number(MAIN_ADMIN_TG_USER_ID),
 					[USER_KEYS.name]: 'Owner',
 					[USER_KEYS.isAdmin]: true,
+					[USER_KEYS.authorName]: 'Owner Author',
 				},
 			];
 			// save Owner user on first time app start

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import ShortUniqueId from 'short-unique-id';
 import { toMarkdownV2 } from '@telegraf/entity';
 import {
 	CTX_KEYS,
@@ -7,7 +8,7 @@ import {
 	MEDIA_TYPES,
 	KV_KEYS,
 } from './constants.js';
-import { loadFromKv, saveToKv } from './helpers.js';
+import { t, loadFromKv, saveToKv, makeStatePreview } from './helpers.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
@@ -98,6 +99,40 @@ export async function deleteScheduledPost(c, itemId) {
 	await saveToKv(c, KV_KEYS.scheduled, prepared);
 
 	return allItems[indexOfItem];
+}
+
+export async function schedulePublication(c, pubState) {
+	const uid = new ShortUniqueId({ length: 10 });
+	const item = { id: uid.rnd(), ...pubState };
+	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
+	const prepared = [...allScheduled, item];
+
+	await saveToKv(c, KV_KEYS.scheduled, prepared);
+
+	return item;
+}
+
+export async function printPubToAdminChannel(router, item) {
+	const c = router.c;
+
+	// publication
+	const { message_id } = await this.printFinalPost(
+		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
+		item,
+	);
+	// info post
+	const infoMsgPostParams = {
+		[PUB_KEYS.date]: item[PUB_KEYS.date],
+		[PUB_KEYS.time]: item[PUB_KEYS.time],
+		[PUB_KEYS.publisher]: router.me.name,
+	};
+
+	await c.api.sendMessage(
+		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
+		t(c, 'infoMsgToAdminChannel') +
+		`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
+		{ reply_parameters: { message_id } },
+	);
 }
 
 export async function printFinalPost(c, chatId, pubState, replyToMsgId) {

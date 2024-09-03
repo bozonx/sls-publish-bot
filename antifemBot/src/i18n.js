@@ -35,12 +35,13 @@ export default {
 		switchToMdv1ModeBtn: 'Переключиться в режим MD V1',
 		switchToStandardModeBtn: 'Переключиться в обычный режим',
 		withoutAuthorBtn: 'Без автора',
+		addAuthorBtn: 'Добавить подпись',
 		clearTagsBtn: 'Сбросить тэги',
 		useTemplateBtn: 'Использовать шаблон',
-		previewOffBtn: 'Выключить link preview',
-		previewOnBtn: 'Включить link preview',
+		linkPreviewOffBtn: 'Выключить link preview',
+		linkPreviewOnBtn: 'Включить link preview',
 		pubConfirmBtn: 'Да',
-		showPreviewBtn: 'Предпросмотр',
+		showPreviewBtn: 'Показать пост',
 		deletePostponedBtn: 'Удалить',
 		editPostponedBtn: 'Редактировать',
 		changeDateTimeBtn: 'Изменить время',
@@ -59,9 +60,9 @@ export default {
 		tagsManagerDescr:
 			'Выберете тэги которые нужно удалить. Чтобы добавить новый тэг - напишите его. Он будет переведён в snake_case. Символ # не нужен',
 		usersManagerDescr:
-			'Чтобы удалить юзера, нажмите на соответсвующую кнопку. Чтобы добавить скиньне сюда пересланое сообщение от юзера. Либо напишиет сообщение в формате YAML с полями id: number, name: string, isAdmin?: boolean',
-		selectAuthorDescr:
-			'Выберeте одного из постоянных авторов или введите другое имя автора',
+			'Чтобы удалить юзера, нажмите на соответсвующую кнопку. Чтобы добавить скиньне сюда пересланое сообщение от юзера. Либо напишиет сообщение в формате YAML с полями id: number, name: string, authorName: string, isAdmin?: boolean',
+		// selectAuthorDescr:
+		// 	'Выберeте одного из постоянных авторов или введите другое имя автора',
 		uploadContentDescr: 'Проверьте отображение текста и медиа.',
 		uploadContentBothDescr:
 			'Чтобы заменить или добавить текст и/или медиа отправьте или перешлите сообщение',
@@ -73,7 +74,7 @@ export default {
 		standardTextModeDescr: 'Обычный режим текста',
 		selectTagsDescr: 'Выберете тэги',
 		pubPostSetupDescr: 'Проверьте и настройте публикацию',
-		pubConfirmDescr: 'Публикуем?',
+		// pubConfirmDescr: 'Публикуем?',
 		selectDateDescr:
 			'Выберете дату либо введите в формате DD.MM. Часовая зона (${TIME_ZONE})',
 		selectHourDescr:
@@ -95,5 +96,6 @@ export default {
 		wrongTimeFormat: 'Не получается распознать время',
 		wrongDateFormat: 'Не получается распознать дату',
 		noContentMessage: 'Нет контента',
+		wasSuccessfullyScheduled: 'Пост сохранён в отложенные',
 	},
 };

@@ -33,6 +33,7 @@ export const USER_KEYS = {
 	id: 'id',
 	name: 'name',
 	isAdmin: 'isAdmin',
+	authorName: 'authorName',
 };
 export const APP_CFG_KEYS = {
 	authors: 'authors',

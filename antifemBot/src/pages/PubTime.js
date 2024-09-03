@@ -1,7 +1,11 @@
 import _ from 'lodash';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { PUB_KEYS } from '../constants.js';
+import { PUB_KEYS, HOME_PAGE } from '../constants.js';
+import {
+	schedulePublication,
+	printPubToAdminChannel,
+} from '../publishHelpres.js';
 
 export class PubTime extends PubPageBase {
 	async renderMenu() {
@@ -44,8 +48,8 @@ export class PubTime extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				this.state.pub[PUB_KEYS.time] && {
-					id: 'nextBtn',
-					label: t(c, 'nextBtn'),
+					id: 'pubConfirmBtn',
+					label: '🗓️ ' + t(c, 'pubConfirmBtn'),
 				},
 			],
 		]);
@@ -63,8 +67,12 @@ export class PubTime extends PubPageBase {
 				return this.go('pub-date');
 			case 'cancelBtn':
 				return this.go('home');
-			case 'nextBtn':
-				return this.go('pub-post-setup');
+			case 'pubConfirmBtn':
+				const item = await schedulePublication(c, this.state.pub);
+				await printPubToAdminChannel(this.router, item);
+				await this.reply(t(c, 'wasSuccessfullyScheduled'));
+
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}
@@ -92,7 +100,7 @@ export class PubTime extends PubPageBase {
 			return this.reload();
 		}
 
-		return this.go('pub-post-setup', { [PUB_KEYS.time]: time });
+		return this.reload({ [PUB_KEYS.time]: time });
 	}
 
 	_makeHourBtn(hour) {
