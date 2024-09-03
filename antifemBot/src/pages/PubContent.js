@@ -14,6 +14,8 @@ export class PubContent extends PubPageBase {
 		const c = this.router.c;
 
 		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
+		// copy state to edit in edit mode
+		if (this.state.editItem) this.state.pub = this.state.editItem;
 
 		const haveAnyContent = Boolean(
 			this.state.pub.text || this.state.pub.media?.length,
@@ -85,6 +87,12 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'nextBtn'),
 				},
 			],
+			this.state.editItem && [
+				{
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
+			],
 		]);
 	}
 
@@ -117,12 +125,22 @@ export class PubContent extends PubPageBase {
 				delete this.state.replaceMode;
 				delete this.state.mdV1Mode;
 
+				if (this.state.editItem) {
+					delete this.state.pub;
+
+					return this.go('scheduled-item');
+				}
+
 				return this.go('home');
 			case 'nextBtn':
 				delete this.state.replaceMode;
 				delete this.state.mdV1Mode;
 
 				return this.go('pub-tags');
+			case 'saveBtn':
+				this.state.editItem = this.state.pub;
+
+				return this.go('scheduled-item');
 			default:
 				return false;
 		}

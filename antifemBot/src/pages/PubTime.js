@@ -47,9 +47,15 @@ export class PubTime extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				{
+				!this.state.editItem && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
+				},
+			],
+			this.state.editItem && [
+				{
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
 				},
 			],
 		]);
@@ -66,9 +72,19 @@ export class PubTime extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-date');
 			case 'cancelBtn':
+				if (this.state.editItem) {
+					delete this.state.pub;
+
+					return this.go('scheduled-item');
+				}
+
 				return this.go(HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-confirm');
+			case 'saveBtn':
+				this.state.editItem = this.state.pub;
+
+				return this.go('scheduled-item');
 			default:
 				return false;
 		}

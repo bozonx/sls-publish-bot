@@ -51,6 +51,12 @@ export class PubTags extends PubPageBase {
 					label: t(c, 'nextBtn'),
 				},
 			],
+			this.state.editItem && [
+				{
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
+			],
 		]);
 	}
 
@@ -70,9 +76,19 @@ export class PubTags extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-content');
 			case 'cancelBtn':
+				if (this.state.editItem) {
+					delete this.state.pub;
+
+					return this.go('scheduled-item');
+				}
+
 				return this.go('home');
 			case 'nextBtn':
 				return this.go('pub-post-setup');
+			case 'saveBtn':
+				this.state.editItem = this.state.pub;
+
+				return this.go('scheduled-item');
 			default:
 				return false;
 		}

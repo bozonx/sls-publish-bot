@@ -7,6 +7,9 @@ import { PUB_KEYS, PUBLICATION_TIME_ZONE, DATE_FORMAT } from '../constants.js';
 export class PubDate extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		// copy state to edit in edit mode
+		if (this.state.editItem) this.state.pub = this.state.editItem;
+
 		const descr = _.template(t(c, 'selectDateDescr'))({
 			TIME_ZONE: t(c, 'msk'),
 		});
@@ -59,13 +62,19 @@ export class PubDate extends PubPageBase {
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
 				},
-				// {
-				// 	id: 'cancelBtn',
-				// 	label: t(c, 'cancelBtn'),
-				// },
+				{
+					id: 'cancelBtn',
+					label: t(c, 'cancelBtn'),
+				},
 				this.state.pub?.[PUB_KEYS.date] && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
+				},
+			],
+			this.state.editItem && [
+				{
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
 				},
 			],
 		]);
@@ -84,10 +93,20 @@ export class PubDate extends PubPageBase {
 		switch (btnId) {
 			case 'backBtn':
 				return this.go('pub-post-setup');
-			// case 'cancelBtn':
-			// 	return this.go('home');
+			case 'cancelBtn':
+				if (this.state.editItem) {
+					delete this.state.pub;
+
+					return this.go('scheduled-item');
+				}
+
+				return this.go('home');
 			case 'nextBtn':
 				return this.go('pub-time');
+			case 'saveBtn':
+				this.state.editItem = this.state.pub;
+
+				return this.go('scheduled-item');
 			default:
 				return false;
 		}
