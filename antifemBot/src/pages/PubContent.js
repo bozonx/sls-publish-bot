@@ -43,9 +43,9 @@ export class PubContent extends PubPageBase {
 
 		this.text = `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}\n\n${textModeMessage}`;
 
-		if (haveAnyContent && this.state.mdV1Mode) {
-			await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
-		}
+		// if (haveAnyContent && this.state.mdV1Mode) {
+		// 	await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
+		// }
 
 		return defineMenu([
 			[
@@ -86,15 +86,14 @@ export class PubContent extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
+				haveAnyContent &&
+					this.state.editItem && {
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					},
 				showNext && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-				},
-			],
-			this.state.editItem && [
-				{
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
 				},
 			],
 		]);

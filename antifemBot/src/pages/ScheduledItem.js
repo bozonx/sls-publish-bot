@@ -19,12 +19,12 @@ export class ScheduledItem extends PageBase {
 		return defineMenu([
 			[
 				{
-					id: 'changeDateTimeBtn',
-					label: t(c, 'changeDateTimeBtn'),
-				},
-				{
 					id: 'editPostponedBtn',
 					label: t(c, 'editPostponedBtn'),
+				},
+				{
+					id: 'changeDateTimeBtn',
+					label: t(c, 'changeDateTimeBtn'),
 				},
 			],
 			[

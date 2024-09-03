@@ -48,6 +48,10 @@ export class PubTime extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
+				this.state.editItem && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				!this.state.editItem && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
@@ -78,6 +82,8 @@ export class PubTime extends PubPageBase {
 				return this.go(HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-confirm');
+			case 'saveBtn':
+				return saveEditedScheduledPost(this.router);
 			default:
 				return false;
 		}

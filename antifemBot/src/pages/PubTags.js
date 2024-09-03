@@ -47,15 +47,13 @@ export class PubTags extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
+				this.state.editItem && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-				},
-			],
-			this.state.editItem && [
-				{
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
 				},
 			],
 		]);

@@ -31,8 +31,6 @@ export class PubDate extends PubPageBase {
 
 			const dayOfWeekLocale = t(c, 'daysOfWeek')[dayOfWeekNum - 1];
 
-			console.log(8888, i, shiftDate.format(), dayOfWeekNum, dayOfWeekLocale);
-
 			daysBtn.push({
 				id: 'DAY',
 				// label: `${i} - ${dayOfWeekLocale}`,
@@ -69,15 +67,13 @@ export class PubDate extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
+				this.state.editItem && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				this.state.pub?.[PUB_KEYS.date] && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-				},
-			],
-			this.state.editItem && [
-				{
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
 				},
 			],
 		]);

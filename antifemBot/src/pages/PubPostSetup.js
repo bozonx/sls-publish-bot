@@ -69,15 +69,13 @@ export class PubPostSetup extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
+				this.state.editItem && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				!this.state.editItem && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
-				},
-			],
-			this.state.editItem && [
-				{
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
 				},
 			],
 		]);
