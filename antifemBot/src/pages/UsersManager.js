@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
 import { t, saveToKv, defineMenu, parseJsonSafelly } from '../helpers.js';

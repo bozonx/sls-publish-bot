@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import dayjs from 'dayjs';
 import { InlineKeyboard } from 'grammy';
 import locales from './i18n.js';

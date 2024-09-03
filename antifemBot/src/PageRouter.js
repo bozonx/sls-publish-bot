@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
 	loadFromCache,
 	parseJsonSafelly,
@@ -79,21 +78,21 @@ export class PageBase {
 
 	// It runs on each request.
 	// You can save some state to user in other functions while request is handling
-	async mount() {}
+	async mount() { }
 
 	// It runs when a route is changing. On each request
-	async unmount() {}
+	async unmount() { }
 
 	// Render menu here and return it.
 	// It runs only when the menu need to be renderred
 	// Menu has to be like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
-	async renderMenu() {}
+	async renderMenu() { }
 
 	// It runs on each income message while this page is active
-	async onMessage() {}
+	async onMessage() { }
 
 	// It runs on each button press of menu of this page
-	async onButtonPress(btnId, payload) {}
+	async onButtonPress(btnId, payload) { }
 }
 
 export class PageRouter {
@@ -331,14 +330,14 @@ export class PageRouter {
 		if (!msgId) {
 			const [deleteResult, sendResult] = await Promise.all([
 				prevMsgId &&
-					(async () => {
-						try {
-							await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
-						} catch (e) {
-							// ignore if can't find message to delete
-							delete this.state[PREV_MENU_MSG_ID_STATE_NAME];
-						}
-					})(),
+				(async () => {
+					try {
+						await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
+					} catch (e) {
+						// ignore if can't find message to delete
+						delete this.state[PREV_MENU_MSG_ID_STATE_NAME];
+					}
+				})(),
 				await c.reply(this.currentPage.text, { reply_markup: keyboard }),
 			]);
 

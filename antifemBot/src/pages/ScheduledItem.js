@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
 import {
@@ -64,7 +63,7 @@ export class ScheduledItem extends PageBase {
 				await doFullFinalPublicationProcess(c, this.state.editItem);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+					`:\n\n${makeStatePreview(c, this.state.editItem)}`,
 				);
 
 				return this.router.go('scheduled-list');
@@ -72,7 +71,7 @@ export class ScheduledItem extends PageBase {
 				await deleteScheduledPost(c, this.state.editItem.id);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+					`:\n\n${makeStatePreview(c, this.state.editItem)}`,
 				);
 
 				return this.router.go('scheduled-list');

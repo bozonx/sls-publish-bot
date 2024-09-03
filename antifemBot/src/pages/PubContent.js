@@ -1,5 +1,5 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { PUB_KEYS, USER_KEYS } from '../constants.js';
+import { PUB_KEYS } from '../constants.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
 import {
 	makeStateFromMessage,
@@ -87,10 +87,10 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-					this.state.editItem && {
-						id: 'saveBtn',
-						label: t(c, 'saveBtn'),
-					},
+				this.state.editItem && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				showNext && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),

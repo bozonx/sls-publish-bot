@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import _ from 'lodash';
 import { PageBase } from '../PageRouter.js';
 import {
 	t,
