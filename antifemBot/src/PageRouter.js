@@ -5,7 +5,12 @@ import {
 	saveToCache,
 	renderMenuKeyboard,
 } from './helpers.js';
-import { SESSION_STATE_TTL_SEC, CTX_KEYS, QUERY_MARKER } from './constants.js';
+import {
+	SESSION_STATE_TTL_SEC,
+	CTX_KEYS,
+	QUERY_MARKER,
+	HOME_PAGE,
+} from './constants.js';
 import { printFinalPost } from './publishHelpres.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
@@ -97,13 +102,10 @@ export class PageRouter {
 	pages = {};
 	// current initialized page
 	currentPage;
-	// TODO: либо сделать чтобы полностью нормально работал либо не делать
-	// path of previous page which was changed while handling request
-	prevPath;
 	// readonly state
 	_state;
 	// state which is loaded from DB on request start
-	_loadedState;
+	_loadedSession;
 
 	get state() {
 		return this._state;
@@ -113,18 +115,22 @@ export class PageRouter {
 		return this.currentPage?.path;
 	}
 
+	// Chat id of current user and this bot
 	get chatWithBotId() {
 		return this.c.ctx[CTX_KEYS.chatWithBotId];
 	}
 
+	// user object
 	get me() {
 		return this.c.ctx[CTX_KEYS.me];
 	}
 
+	// all the users
 	get users() {
 		return this.c.ctx[CTX_KEYS.users];
 	}
 
+	// app config from db
 	get config() {
 		return this.c.ctx[CTX_KEYS.config];
 	}
@@ -153,51 +159,59 @@ export class PageRouter {
 
 	async reload() {
 		// TODO: может это перенести в go()
-		if (!this.currentPath)
-			return this.this.reply(
-				`ERROR: Can't reload because there isn't current page`,
-			);
+		// if (!this.currentPath)
+		// 	return this.this.reply(
+		// 		`ERROR: Can't reload because there isn't current page`,
+		// 	);
 
 		// TODO: в принципе не обязательно передавать страницу, он всеравно возмёт из стейта
-		return this.go(this.currentPath);
+		// return this.go(this.currentPath);
+
+		return this.go();
+	}
+
+	// on command start - just draw the menu
+	async start() {
+		await this.go(HOME_PAGE);
+
+		return this._theEndOfRequest();
 	}
 
 	async go(pathTo) {
-		const c = this.c;
-
-		console.log('-----go', pathTo);
+		console.log('=========== go', pathTo);
 
 		try {
-			await this._switchPage(pathTo);
+			const msg = await this._switchPage();
+
+			if (msg) return this.reply(msg);
 		} catch (e) {
 			await this.reply(String(e));
 
-			// TODO: ???
 			throw e;
 		}
 
 		const menu = (await this.currentPage.renderMenu()) || [];
 
-		await this._sendMenu(renderMenuKeyboard(menu));
-		// really the end of request
-		return this._theEndOfRequest();
+		return this._sendMenu(renderMenuKeyboard(menu));
 	}
 
 	_handleMessage = async (c) => {
-		console.log('-----_handleMessage', c.msg);
+		console.log('============= _handleMessage', c.msg);
 
 		// it loads current page
 		try {
-			await this._switchPage();
+			const msg = await this._switchPage();
+
+			if (msg) return this.reply(msg);
 		} catch (e) {
-			return this.reply(String(e));
+			await this.reply(String(e));
+
+			throw e;
 		}
 
 		await this.currentPage.onMessage?.();
-		// the end of request only if there has been called .go()
-		// TODO: review
-		if (this.prevPath) await this._theEndOfRequest();
-		// await this._theEndOfRequest();
+		// really the end of request
+		return this._theEndOfRequest();
 	};
 
 	_handleQueryData = async (c) => {
@@ -205,9 +219,13 @@ export class PageRouter {
 
 		// it loads current page
 		try {
-			await this._switchPage();
+			const msg = await this._switchPage();
+
+			if (msg) return this.reply(msg);
 		} catch (e) {
-			return this.reply(String(e));
+			await this.reply(String(e));
+
+			throw e;
 		}
 
 		// The start of request
@@ -227,47 +245,21 @@ export class PageRouter {
 				`ERROR: Can't find button handler "${btnId}" on page "${this.currentPath}"`,
 			);
 
-		// TODO: review
-		if (this.prevPath) await this._theEndOfRequest();
-
-		// const menu = this.currentPage.menu;
-		//
-		// if (!menu?.length) return this.reply(`ERROR: No menu`);
-		//
-		// for (const row of menu) {
-		// 	for (const { id, cb } of row) {
-		// 		if (String(id) !== btnId) continue;
-		// 		// run menu button handler
-		// 		await cb(btnPayload, id);
-		// 		// the end of request only if there has been called .go()
-		// 		// TODO: review
-		// 		if (this.prevPath) await this._theEndOfRequest();
-		// 		// await this._theEndOfRequest();
-		//
-		// 		return;
-		// 	}
-		// }
-
-		// return this.reply(`ERROR: Can't find button. ${data}`);
+		// really the end of request
+		return this._theEndOfRequest();
 	};
 
-	// TODO: review
 	async _switchPage(newPath) {
-		if (this.currentPage) {
-			// save previous path
-			this.prevPath = this.currentPage.path;
+		await this.currentPage?.unmount();
+		await this._loadSession();
 
-			await this.currentPage.unmount();
-		}
-
-		await this._loadState();
-
-		// TODO: если идёт переход не на home и нет стейта то он протух
-		// написать сообщение и отправить на главную
+		if (!this._loadedSession && newPath !== HOME_PAGE)
+			return `Session has been lost. Start from the beginning /start`;
 
 		const pathTo = newPath || this.state.currentPath;
 
-		console.log(11111, this.state, newPath);
+		if (!newPath)
+			throw new Error(`ERROR: No path. Start from the beginning /start`);
 
 		this._state.currentPath = pathTo;
 
@@ -279,73 +271,69 @@ export class PageRouter {
 		await this.currentPage.mount();
 	}
 
-	async _loadState() {
+	async _loadSession() {
 		// in case switching page on .go()
 		if (this.state) return;
 		else if (this.state === null) {
 			throw new Error(`ERROR: Request has been already finished`);
 		}
 
-		this._loadedState = await loadFromCache(this.c, SESSION_CACHE_NAME);
+		this._loadedSession = await loadFromCache(this.c, SESSION_CACHE_NAME);
 
-		console.log('========== _loadState', this._loadedState);
+		console.log('========== _loadState', this._loadedSession);
 
-		this._state = this._loadedState || {};
+		this._state = this._loadedSession || {};
 	}
 
 	async _theEndOfRequest() {
-		if (!this.state) return;
-
 		console.log('============ _theEndOfRequest', this.state);
 
-		// TODO: review
-		// if (!_.isEqual(this._loadedState, this.state)) {
-		await saveToCache(
-			this.c,
-			SESSION_CACHE_NAME,
-			this.state,
-			SESSION_STATE_TTL_SEC,
-		);
-		// }
+		if (!_.isEqual(this._loadedSession, this.state)) {
+			await saveToCache(
+				this.c,
+				SESSION_CACHE_NAME,
+				this.state,
+				SESSION_STATE_TTL_SEC,
+			);
+		}
 
 		this._state = null;
-		this.prevPath = null;
 	}
 
 	async _sendMenu(keyboard) {
 		const c = this.c;
+		const prevMsgId = this.state[PREV_MENU_MSG_ID_STATE_NAME];
 		let msgId;
 
 		// remove prev menu message
-		if (!this.state.redrawMenu && this.state[PREV_MENU_MSG_ID_STATE_NAME]) {
+		if (!this.state.redrawMenu && prevMsgId) {
 			try {
 				const { message_id } = await c.api.editMessageText(
 					this.chatWithBotId,
-					this.state[PREV_MENU_MSG_ID_STATE_NAME],
+					prevMsgId,
 					this.currentPage.text,
-					{
-						reply_markup: keyboard,
-					},
+					{ reply_markup: keyboard },
 				);
 
-				msgId = message_id;
-				// msgId = this.state[PREV_MENU_MSG_ID_STATE_NAME];
+				// msgId = message_id;
+				msgId = prevMsgId;
 			} catch (e) {
-				// skip error
+				// skip error. means need to create a new post
 			}
 		}
 
 		// if can't edit message of there isn't any message then create a new one
 		if (!msgId) {
-			delete this.state.redrawMenu;
+			const [deleteResult, sendResult] = await Promise.all([
+				prevMsgId && (await c.api.deleteMessage(this.chatWithBotId, prevMsgId)),
+				await c.reply(this.currentPage.text, { reply_markup: keyboard }),
+			]);
 
-			const { message_id } = await c.reply(this.currentPage.text, {
-				reply_markup: keyboard,
-			});
-
-			msgId = message_id;
+			msgId = sendResult.message_id;
 		}
 
-		this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
+		delete this.state.redrawMenu;
+
+		if (msgId) this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
 	}
 }

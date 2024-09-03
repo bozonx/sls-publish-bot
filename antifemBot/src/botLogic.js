@@ -29,6 +29,7 @@ export function makeContext(
 			[appCfg, users] = await Promise.all([
 				await loadFromKv(c, KV_KEYS.config),
 				await loadFromKv(c, KV_KEYS.users),
+				// TODO: можно ещё и сессию сразу загрузить
 			]);
 		} catch (e) {
 			throw new Error(`Can't load initial data: ${e}`);
@@ -85,5 +86,5 @@ export async function handleStart(c) {
 		);
 	}
 	// show home page on start command
-	return c.router.go('home');
+	return c.router.start();
 }

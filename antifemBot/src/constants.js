@@ -11,6 +11,7 @@ export const PUBLISHING_MINUS_MINUTES = 5;
 export const PUBLICATION_TIME_ZONE = '+03:00';
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
+export const HOME_PAGE = 'home';
 export const KV_KEYS = {
 	config: 'config',
 	users: 'users',
