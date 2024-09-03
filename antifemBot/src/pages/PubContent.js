@@ -31,13 +31,26 @@ export class PubContent extends PubPageBase {
 
 		if (!details) details = t(c, 'noContentMessage');
 
-		this.text = `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}`;
+		const textModeMessage = this.state.mdV1Mode
+			? t(c, 'mdV1TextModeDescr')
+			: t(c, 'standardTextModeDescr');
+
+		this.text = `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}\n\n${textModeMessage}`;
 
 		if (haveAnyContent) {
 			await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
 		}
 
 		return defineMenu([
+			[
+				{
+					id: 'TEXT_MODE',
+					label: this.state.mdV1Mode
+						? t(c, 'switchToStandardModeBtn')
+						: t(c, 'switchToMdv1ModeBtn'),
+					payload: Number(!this.state.mdV1Mode),
+				},
+			],
 			[
 				this.state.replaceMode !== REPLACE_MODES.textOnly && {
 					id: 'replaceOnlyTextBtn',
@@ -77,6 +90,10 @@ export class PubContent extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		switch (btnId) {
+			case 'TEXT_MODE':
+				this.state.mdV1Mode = Boolean(payload);
+
+				return this.reload();
 			case 'replaceOnlyTextBtn':
 				this.state.replaceMode = REPLACE_MODES.textOnly;
 
@@ -98,10 +115,12 @@ export class PubContent extends PubPageBase {
 				return this.reload({ [PUB_KEYS.media]: null });
 			case 'cancelBtn':
 				delete this.state.replaceMode;
+				delete this.state.mdV1Mode;
 
 				return this.go('home');
 			case 'nextBtn':
 				delete this.state.replaceMode;
+				delete this.state.mdV1Mode;
 
 				return this.go('pub-author');
 			default:

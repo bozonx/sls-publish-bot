@@ -19,6 +19,12 @@ export class Home extends PageBase {
 		return defineMenu([
 			[
 				{
+					id: 'sendTextInMdV1Btn',
+					label: t(c, 'sendTextInMdV1Btn'),
+				},
+			],
+			[
+				{
 					id: 'manageTagsBtn',
 					label: t(c, 'manageTagsBtn'),
 				},
@@ -46,6 +52,10 @@ export class Home extends PageBase {
 
 	async onButtonPress(btnId, payload) {
 		switch (btnId) {
+			case 'sendTextInMdV1Btn':
+				this.state.mdV1Mode = true;
+
+				return this.router.go('pub-content');
 			case 'manageTagsBtn':
 				return this.router.go('tags-manager');
 			case 'manageScheduledBtn':

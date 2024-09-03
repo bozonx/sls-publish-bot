@@ -31,6 +31,9 @@ export default {
 		editConfigBtn: 'Редактирование конфига',
 		manageUsersBtn: 'Управление пользователями',
 		manageTagsBtn: 'Управлять тэгами',
+		sendTextInMdV1Btn: 'Отправить текст в формате Markdown V1',
+		switchToMdv1ModeBtn: 'Переключиться в режим MD V1',
+		switchToStandardModeBtn: 'Переключиться в обычный режим',
 		withoutAuthorBtn: 'Без автора',
 		clearTagsBtn: 'Сбросить тэги',
 		useTemplateBtn: 'Использовать шаблон',
@@ -66,6 +69,8 @@ export default {
 			'Режим загрузки только текста: чтобы заменить или добавить текст отправьте или перешлите сообщение с текстом',
 		uploadContentMediaOnlyDescr:
 			'Режим загрузки только медиа: отправьте или перешлите сообщение с картинкой или видео. (Медиа группа пока не поддерживается)',
+		mdV1TextModeDescr: 'Отправьте текст в формате Markdown V1',
+		standardTextModeDescr: 'Обычный режим текста',
 		selectTagsDescr: 'Выберете тэги',
 		pubPostSetupDescr: 'Проверьте и настройте публикацию',
 		pubConfirmDescr: 'Публикуем?',
