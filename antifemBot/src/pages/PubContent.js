@@ -13,22 +13,41 @@ export class PubContent extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		this.state.replaceMode = REPLACE_MODES.both;
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'uploadContentDescr')}`;
+		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
-		await printFinalPost(c, this.me[USER_KEYS.id], this.state.pub);
+		const haveAnyContent = Boolean(
+			this.state.pub.text || this.state.pub.media?.length,
+		);
+		// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
+		const showNext = haveAnyContent;
+		let details = makeStatePreview(c, this.state.pub);
+		let modeMessage = t(c, 'uploadContentBothDescr');
+
+		if (this.state.replaceMode === REPLACE_MODES.textOnly) {
+			modeMessage = t(c, 'uploadContentTextOnlyDescr');
+		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
+			modeMessage = t(c, 'uploadContentMediaOnlyDescr');
+		}
+
+		if (!details) details = t(c, 'noContentMessage');
+
+		this.text = `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}`;
+
+		if (haveAnyContent) {
+			await printFinalPost(c, this.me[USER_KEYS.id], this.state.pub);
+		}
 
 		return defineMenu([
 			[
-				this.state.replaceMode != REPLACE_MODES.textOnly && {
+				this.state.replaceMode !== REPLACE_MODES.textOnly && {
 					id: 'replaceOnlyTextBtn',
 					label: t(c, 'replaceOnlyTextBtn'),
 				},
-				this.state.replaceMode != REPLACE_MODES.mediaOnly && {
+				this.state.replaceMode !== REPLACE_MODES.mediaOnly && {
 					id: 'replaceOnlyMediaBtn',
 					label: t(c, 'replaceOnlyMediaBtn'),
 				},
-				this.state.replaceMode != REPLACE_MODES.both && {
+				this.state.replaceMode !== REPLACE_MODES.both && {
 					id: 'replaceTextAndMediaBtn',
 					label: t(c, 'replaceTextAndMediaBtn'),
 				},
@@ -48,7 +67,7 @@ export class PubContent extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this._showNext && {
+				showNext && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 				},
@@ -60,6 +79,7 @@ export class PubContent extends PubPageBase {
 		switch (btnId) {
 			case 'replaceOnlyTextBtn':
 				this.state.replaceMode = REPLACE_MODES.textOnly;
+
 				return this.reload();
 			case 'replaceOnlyMediaBtn':
 				this.state.replaceMode = REPLACE_MODES.mediaOnly;
@@ -94,7 +114,7 @@ export class PubContent extends PubPageBase {
 		const fullState = makeStateFromMessage(c);
 		let pubState;
 
-		if (!fullState) return c.reply(t(c, 'wrongTypeOfPost'));
+		if (!fullState) return this.reply(t(c, 'wrongTypeOfPost'));
 
 		if (this.state.replaceMode === REPLACE_MODES.both) {
 			pubState = fullState;
@@ -112,12 +132,5 @@ export class PubContent extends PubPageBase {
 		delete this.state.replaceMode;
 
 		return this.reload(pubState);
-
-		// return this.go('pub-author', pubState);
-	}
-
-	_showNext() {
-		// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
-		return hasPubHaveMedia(this.state.pub) || Boolean(this.state.pub?.text);
 	}
 }
