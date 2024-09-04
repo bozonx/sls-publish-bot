@@ -68,7 +68,7 @@ export class ScheduledList extends PageBase {
 	}
 
 	makeItemLabel(item) {
-		const text = item[PUB_KEYS.text]?.trim().substring(0, 30).trim();
+		const text = item[PUB_KEYS.text]?.trim().substring(0, 38).trim();
 
 		if (
 			isPastDateTime(

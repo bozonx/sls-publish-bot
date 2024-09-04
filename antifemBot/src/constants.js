@@ -79,7 +79,6 @@ const footer =
 	'[Антифеминизм \\| Маскулизм\\. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
 
 export const APP_INITIAL_CONFIG = {
-	[APP_CFG_KEYS.authors]: ['Айван Кей'],
 	// use telegram MarkdownV2 https://core.telegram.org/bots/api#markdownv2-style
 	[APP_CFG_KEYS.templates]: {
 		[TEMPLATE_NAMES.default]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],

@@ -24,15 +24,15 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'editPostponedBtn'),
 				},
 				{
+					id: 'deleteSchuduledBtn',
+					label: t(c, 'deleteSchuduledBtn'),
+				},
+				{
 					id: 'changeDateTimeBtn',
 					label: t(c, 'changeDateTimeBtn'),
 				},
 			],
 			[
-				{
-					id: 'deleteSchuduledBtn',
-					label: t(c, 'deleteSchuduledBtn'),
-				},
 				{
 					id: 'publicateNowBtn',
 					label: t(c, 'publicateNowBtn'),
