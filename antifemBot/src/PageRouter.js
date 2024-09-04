@@ -10,7 +10,6 @@ import {
 	QUERY_MARKER,
 	HOME_PAGE,
 	SESSION_CACHE_NAME,
-	APP_DEBUG,
 } from './constants.js';
 import { printFinalPost } from './publishHelpres.js';
 
@@ -158,7 +157,7 @@ export class PageRouter {
 
 	$handleQueryData = async (c) => {
 		try {
-			await this._handleMessage();
+			await this._handleQueryData();
 		} catch (e) {
 			if (c.ctx[CTX_KEYS.APP_DEBUG]) {
 				c.reply(
@@ -240,7 +239,7 @@ export class PageRouter {
 	}
 
 	async _handleQueryData() {
-		const data = c.update.callback_query.data;
+		const data = this.c.update.callback_query.data;
 		const [marker, btnId, ...bntPayloadRest] = data.split('|');
 		// do not handle not menu queries
 		if (marker !== QUERY_MARKER) return;

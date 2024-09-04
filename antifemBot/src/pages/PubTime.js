@@ -5,9 +5,15 @@ import {
 	HOME_PAGE,
 	DEFAULT_PUB_TIME,
 	EDIT_ITEM_NAME,
+	PUBLICATION_TIME_ZONE,
 } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
-import { make2SignDigitStr, applyStringTemplate } from '../lib.js';
+import { make2SignDigitStr, applyStringTemplate, breakArray } from '../lib.js';
+import {
+	makeIsoDayFromNow,
+	isValidShortTime,
+	getCurrentHour,
+} from '../dateTimeHelpers.js';
 
 export class PubTime extends PubPageBase {
 	async renderMenu() {
@@ -23,27 +29,7 @@ export class PubTime extends PubPageBase {
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		return defineMenu([
-			[
-				this._makeHourBtn(7),
-				this._makeHourBtn(8),
-				this._makeHourBtn(9),
-				this._makeHourBtn(10),
-				this._makeHourBtn(11),
-			],
-			[
-				this._makeHourBtn(12),
-				this._makeHourBtn(13),
-				this._makeHourBtn(14),
-				this._makeHourBtn(15),
-				this._makeHourBtn(16),
-			],
-			[
-				this._makeHourBtn(17),
-				this._makeHourBtn(18),
-				this._makeHourBtn(19),
-				this._makeHourBtn(20),
-				this._makeHourBtn(21),
-			],
+			...breakArray(this._makeHourButtons(), 5),
 			[
 				{
 					id: 'backBtn',
@@ -99,14 +85,13 @@ export class PubTime extends PubPageBase {
 			return this.reload();
 		}
 
-		const rawTime = c.msg.text.trim();
+		const rawTime = c.msg.text.trim().replace(/[\s.]/g, ':');
 		let time;
 
-		// TODO: revew. and use make2SignDigitStr
-		if (rawTime.match(/^\d[:.\s]\d\d$/)) {
-			time = '0' + rawTime;
-		} else if (rawTime.match(/^\d\d[:.\s]\d\d$/)) {
-			time = rawTime;
+		if (isValidShortTime(rawTime)) {
+			const [hourStr, minuteStr] = rawTime.split(':');
+
+			time = `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
 		} else {
 			await this.reply(t(c, 'wrongTimeFormat'));
 
@@ -117,6 +102,33 @@ export class PubTime extends PubPageBase {
 
 		if (this.state[EDIT_ITEM_NAME]) return saveEditedScheduledPost(this.router);
 		else return this.go('pub-confirm');
+	}
+
+	_makeHourButtons() {
+		const firstHour = 7;
+		const lastHour = 21;
+		const res = [];
+
+		if (this.state.pub.date === makeIsoDayFromNow(0)) {
+			// is today then skip past hours
+			const currentHourNum = getCurrentHour(PUBLICATION_TIME_ZONE);
+			let startHour =
+				currentHourNum < firstHour ? firstHour : currentHourNum + 1;
+
+			console.log(11111, currentHourNum, startHour);
+
+			if (currentHourNum <= lastHour) {
+				for (let i = startHour; i <= lastHour; i++) {
+					res.push(this._makeHourBtn(i));
+				}
+			}
+		} else {
+			for (let i = firstHour; i <= lastHour; i++) {
+				res.push(this._makeHourBtn(i));
+			}
+		}
+
+		return res;
 	}
 
 	_makeHourBtn(hour) {

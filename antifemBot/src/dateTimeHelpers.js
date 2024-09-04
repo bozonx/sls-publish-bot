@@ -63,11 +63,33 @@ export function dateAddSeconds(tsMs, secondsToAdd) {
 }
 
 export function isValidShortDate(rawDateStr) {
+	// TODO: better validate
+
 	return Boolean(
 		String(rawDateStr)
 			.trim()
 			.match(/^\d{1,2}\.\d{1,2}$/),
 	);
+}
+
+export function isValidShortTime(rawDateStr) {
+	if (
+		!String(rawDateStr)
+			.trim()
+			.match(/^\d{1,2}\:\d{1,2}$/)
+	)
+		return false;
+
+	const [hourStr, minuteStr] = rawTime.split(':');
+
+	const hour = Number(hourStr);
+	const minute = Number(minuteStr);
+
+	if (Number.isNaN(hour) || Number.isNaN(minuteStr)) return false;
+	else if (hour < 0 || hour > 24) return false;
+	else if (minute < 0 || minute > 60) return false;
+
+	return true;
 }
 
 // make iso date from DD.MM. It adds current year to a date
@@ -139,6 +161,16 @@ export function isPastDateTime(isoDateStr, timeStr, minusMinute) {
 	);
 
 	return testMs < nowMs - minusMinute * 60 * 1000;
+}
+
+export function getCurrentHour(timeZone) {
+	return Number(
+		new Date().toLocaleString('ru-RU', {
+			timeZone: timeZone,
+			hour: 'numeric',
+			hour12: false,
+		}),
+	);
 }
 
 //////////// TESTS
