@@ -1,3 +1,4 @@
+import { t } from './helpers.js';
 import { make2SignDigitStr } from './lib.js';
 
 export function makeIsoDateFromPubState(pubState) {
@@ -5,16 +6,30 @@ export function makeIsoDateFromPubState(pubState) {
 }
 
 export function makeHumanRuDate(c, isoDateStr) {
-	// TODO: t(c 'today'), tomorrow, afterTomorrow
+	const closestDay = makeClosestDayRuString(c, isoDateStr);
+
+	if (closestDay) return closestDay;
 
 	return formatIsoDateToLocaleRuDate(isoDateStr);
 }
 
 export function makeHumanRuDateCompact(c, isoDateStr) {
-	// TODO: t(c 'today'), tomorrow, afterTomorrow
-	// TODO: other date are 05.11
+	const closestDay = makeClosestDayRuString(c, isoDateStr);
 
-	return formatIsoDateToLocaleRuDate(isoDateStr);
+	if (closestDay) return closestDay;
+
+	return makeShortDateFromIsoDate(isoDateStr);
+}
+
+export function makeShortDateFromIsoDate(isoDateStr) {
+	const [, monthStr, dayStr] = isoDateStr.split('-');
+
+	return `${dayStr}.${monthStr}`;
+}
+
+export function makeClosestDayRuString(c, isoDateStr) {
+	// TODO: add
+	return isoDateStr;
 }
 
 export function formatIsoDateToLocaleRuDate(isoDateStr) {
@@ -25,13 +40,10 @@ export function formatIsoDateToLocaleRuDate(isoDateStr) {
 	});
 }
 
-export function getLocaleDayOfWeekFromNow(plusDay) {
-	return new Date(`${makeIsoDayFromNow(plusDay)}T00:00`).toLocaleDateString(
-		'ru-RU',
-		{
-			weekday: 'short',
-		},
-	);
+export function getShortWeekDay(isoDateStr) {
+	return new Date(`${isoDateStr}T00:00`).toLocaleDateString('ru-RU', {
+		weekday: 'short',
+	});
 }
 
 // operate with timestamp in milliseconds in UTC
@@ -62,13 +74,15 @@ export function isValidShortDate(rawDateStr) {
 }
 
 export function shortRuDateToFullIsoDate(localeShortDate) {
+	// TODO: review
 	const [dayStr, monthStr] = localeShortDate;
 	const year = new Date().getFullYear();
 
 	return `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;
 }
 
-export function makeIsoDayFromNow(plusDay) {
+// TODO: review
+export function makeIsoDayFromNow(plusDay = 0) {
 	const now = new Date();
 	const year = now.getFullYear();
 	const month = now.getMonth() + 1;
@@ -76,6 +90,11 @@ export function makeIsoDayFromNow(plusDay) {
 	const day = now.getDay() + 1 + Number(plusDay);
 
 	return `${year}-${make2SignDigitStr(month)}-${make2SignDigitStr(day)}`;
+}
+
+// TODO: review
+export function isPastDate(isoDateStr) {
+	//
 }
 
 // // it returns number of day of week. 0 = monday, 1 = tuesday, ...

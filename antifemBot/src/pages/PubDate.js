@@ -4,10 +4,11 @@ import { PUB_KEYS, HOME_PAGE, EDIT_ITEM_NAME } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 import { isEmptyObj, applyStringTemplate } from '../lib.js';
 import {
-	getLocaleDayOfWeekFromNow,
 	isValidShortDate,
 	shortRuDateToFullIsoDate,
 	makeIsoDayFromNow,
+	makeShortDateFromIsoDate,
+	getShortWeekDay,
 } from '../dateTimeHelpers.js';
 
 export class PubDate extends PubPageBase {
@@ -16,6 +17,9 @@ export class PubDate extends PubPageBase {
 		// copy state to edit in edit mode
 		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
 			this.state.pub = this.state[EDIT_ITEM_NAME];
+
+		if (!this.state.pub[PUB_KEYS.date])
+			this.state.pub[PUB_KEYS.date] = makeIsoDayFromNow(0);
 
 		const descr = applyStringTemplate(t(c, 'selectDateDescr'), {
 			TIME_ZONE: t(c, 'msk'),
@@ -26,15 +30,13 @@ export class PubDate extends PubPageBase {
 		const daysBtn = [];
 
 		for (let i = 3; i <= 6; i++) {
-			// TODO: remake
-			// const shiftDate = nowDate.add(i, 'day');
-			// const dayOfWeekNum = getDayOfWeekNum(shiftDate);
-			// const dayOfWeekLocale = t(c, 'daysOfWeek')[dayOfWeekNum];
+			const isoDateStr = makeIsoDayFromNow(i);
+			const shortDate = makeShortDateFromIsoDate(isoDateStr);
+			const shortWeekDayStr = getShortWeekDay(isoDateStr);
 
 			daysBtn.push({
 				id: 'DAY',
-				label: getLocaleDayOfWeekFromNow(i),
-				// label: dayOfWeekLocale,
+				label: `${shortWeekDayStr} ${shortDate}`,
 				payload: i,
 			});
 		}
@@ -43,17 +45,17 @@ export class PubDate extends PubPageBase {
 			[
 				{
 					id: 'DAY',
-					label: t(c, 'today'),
+					label: t(c, 'closestDays')[0],
 					payload: 0,
 				},
 				{
 					id: 'DAY',
-					label: t(c, 'tomorrow'),
+					label: t(c, 'closestDays')[1],
 					payload: 1,
 				},
 				{
 					id: 'DAY',
-					label: t(c, 'afterTomorrow'),
+					label: t(c, 'closestDays')[2],
 					payload: 2,
 				},
 			],
@@ -116,9 +118,11 @@ export class PubDate extends PubPageBase {
 		const preparedDateStr = c.msg.text.trim().replace(/\s/g, '.');
 
 		if (isValidShortDate(preparedDateStr)) {
-			const dateStr = shortRuDateToFullIsoDate(preparedDateStr);
+			const isoDateStr = shortRuDateToFullIsoDate(preparedDateStr);
 
-			return this.go('pub-time', { [PUB_KEYS.date]: dateStr });
+			if (isPastDate(isoDateStr)) return this.reply(t(c, 'dateIsPastMessage'));
+
+			return this.go('pub-time', { [PUB_KEYS.date]: isoDateStr });
 		} else {
 			await this.reply(t(c, 'wrongDateFormat'));
 

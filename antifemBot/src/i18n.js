@@ -1,9 +1,10 @@
 export default {
 	ru: {
-		today: 'Сегодня',
-		tomorrow: 'Завтра',
-		afterTomorrow: 'Послезавтра',
-		daysOfWeek: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
+		// today: 'Сегодня',
+		// tomorrow: 'Завтра',
+		// afterTomorrow: 'Послезавтра',
+		// daysOfWeek: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
+		closestDays: ['Сегодня', 'Завтра', 'Послезавтра'],
 		msk: 'МСК',
 
 		// Template names
@@ -101,5 +102,6 @@ export default {
 		wasSuccessfullyScheduled: 'Пост сохранён в отложенные',
 		editedSavedSuccessfully: 'Отложенный пост сохранён',
 		sessionLost: 'Сессия была утереня. Начните с начала',
+		dateIsPastMessage: 'Ваша дата из прошлого. Нужно сегодня или позже',
 	},
 };

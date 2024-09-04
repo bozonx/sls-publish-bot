@@ -10,8 +10,7 @@ export class ScheduledItem extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const item = this.state[EDIT_ITEM_NAME];
-
-		// do delete it again in case of cancel btn pressed
+		// do delete it in case of cancel btn pressed
 		delete this.state.pub;
 
 		if (!item) return this.reply(`ERROR: Can't find item to edit`);
