@@ -2,6 +2,7 @@
 export const TG_BOT_URL = '/bot';
 export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
+export const SESSION_CACHE_NAME = 'session';
 // export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // TODO: вынести в env?
@@ -26,6 +27,7 @@ export const CTX_KEYS = {
 	// it is c.msg.chat.id
 	chatWithBotId: 'chatWithBotId',
 	config: 'config',
+	session: 'session',
 	users: 'users',
 	// user object from DB
 	me: 'me',
@@ -87,4 +89,10 @@ export const APP_INITIAL_CONFIG = {
 		],
 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}', '${AUTHOR}', '${TAGS}'],
 	},
+};
+
+export const INITIAL_MAIN_USER = {
+	[USER_KEYS.name]: 'Owner',
+	[USER_KEYS.isAdmin]: true,
+	[USER_KEYS.authorName]: 'Owner Author',
 };

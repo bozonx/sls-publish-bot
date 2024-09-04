@@ -1,6 +1,5 @@
 import {
 	t,
-	loadFromCache,
 	parseJsonSafelly,
 	saveToCache,
 	renderMenuKeyboard,
@@ -10,11 +9,11 @@ import {
 	CTX_KEYS,
 	QUERY_MARKER,
 	HOME_PAGE,
+	SESSION_CACHE_NAME,
 } from './constants.js';
 import { printFinalPost } from './publishHelpres.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
-const SESSION_CACHE_NAME = 'session';
 
 // It makes a new instance of router on each request including dev env
 export function routerMiddleware(routes) {
@@ -274,7 +273,8 @@ export class PageRouter {
 			throw new Error(`ERROR: Request has been already finished`);
 		}
 
-		this._loadedSession = await loadFromCache(this.c, SESSION_CACHE_NAME);
+		// this._loadedSession = await loadFromCache(this.c, SESSION_CACHE_NAME);
+		this._loadedSession = this.c.ctx[CTX_KEYS.session];
 		this._state = this._loadedSession || {};
 	}
 

@@ -4,8 +4,10 @@ import {
 	USER_KEYS,
 	APP_INITIAL_CONFIG,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
+	SESSION_CACHE_NAME,
+	INITIAL_MAIN_USER,
 } from './constants.js';
-import { loadFromKv, saveToKv } from './helpers.js';
+import { loadFromKv, loadFromCache, saveToKv } from './helpers.js';
 
 export function makeContext(
 	MAIN_ADMIN_TG_USER_ID,
@@ -15,7 +17,6 @@ export function makeContext(
 ) {
 	return async (c, next) => {
 		c.ctx = {
-			// TODO: проверить всегда ли так
 			[CTX_KEYS.chatWithBotId]: c.msg.chat.id,
 			[CTX_KEYS.KV]: KV,
 			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
@@ -24,12 +25,13 @@ export function makeContext(
 
 		let appCfg;
 		let users;
+		let session;
 
 		try {
-			[appCfg, users] = await Promise.all([
+			[appCfg, users, session] = await Promise.all([
 				await loadFromKv(c, KV_KEYS.config),
 				await loadFromKv(c, KV_KEYS.users),
-				// TODO: можно ещё и сессию сразу загрузить
+				await loadFromCache(c, SESSION_CACHE_NAME),
 			]);
 		} catch (e) {
 			throw new Error(`Can't load initial data: ${e}`);
@@ -46,9 +48,7 @@ export function makeContext(
 			users = [
 				{
 					[USER_KEYS.id]: Number(MAIN_ADMIN_TG_USER_ID),
-					[USER_KEYS.name]: 'Owner',
-					[USER_KEYS.isAdmin]: true,
-					[USER_KEYS.authorName]: 'Owner Author',
+					...INITIAL_MAIN_USER,
 				},
 			];
 			// save Owner user on first time app start
@@ -61,6 +61,7 @@ export function makeContext(
 			...c.ctx,
 			[CTX_KEYS.config]: appCfg,
 			[CTX_KEYS.users]: users,
+			[CTX_KEYS.session]: session,
 			[CTX_KEYS.me]: me,
 		};
 
@@ -72,13 +73,12 @@ export async function handleStart(c) {
 	if (!c.ctx[CTX_KEYS.me]) {
 		const dataStr = JSON.stringify({
 			[USER_KEYS.id]: c.msg.from.id,
-			// TODO: add last name
 			[USER_KEYS.name]: c.msg.from.first_name || c.msg.from.username,
 		});
 
 		return c.reply(
 			t(c, 'youAreNotRegistered') +
-			`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
+				`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
 		);
 	}
 	// show home page on start command
