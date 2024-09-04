@@ -31,7 +31,7 @@ export function makeContext(
 			[appCfg, users, session] = await Promise.all([
 				await loadFromKv(c, KV_KEYS.config),
 				await loadFromKv(c, KV_KEYS.users),
-				await loadFromCache(c, SESSION_CACHE_NAME),
+				await loadFromCache(c, SESSION_CACHE_NAME, c.msg.chat.id),
 			]);
 		} catch (e) {
 			throw new Error(`Can't load initial data: ${e}`);

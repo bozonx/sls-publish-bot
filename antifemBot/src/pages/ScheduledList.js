@@ -37,8 +37,8 @@ export class ScheduledList extends PageBase {
 			]),
 			[
 				{
-					id: 'backBtn',
-					label: t(c, 'backBtn'),
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
 				},
 			],
 		]);
@@ -58,7 +58,7 @@ export class ScheduledList extends PageBase {
 		}
 
 		switch (btnId) {
-			case 'backBtn':
+			case 'toHomeBtn':
 				return this.router.go(HOME_PAGE);
 			default:
 				return false;

@@ -39,6 +39,6 @@ export function isEmptyObj(obj) {
 export function make2SignDigitStr(digit) {
 	const num = Number(digit);
 
-	if (num < 9) return `0${num}`;
+	if (num < 10) return `0${num}`;
 	else return String(num);
 }

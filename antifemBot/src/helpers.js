@@ -87,8 +87,8 @@ export async function saveToKv(c, key, value) {
 	}
 }
 
-export async function loadFromCache(c, key) {
-	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.id];
+export async function loadFromCache(c, key, specifiedUserId) {
+	const currentUserId = specifiedUserId || c.ctx[CTX_KEYS.me][USER_KEYS.id];
 	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	let resStr;
 

@@ -29,8 +29,8 @@ export class UsersManager extends PageBase {
 			),
 			[
 				{
-					id: 'cancelBtn',
-					label: t(c, 'cancelBtn'),
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
 				},
 			],
 		]);
@@ -42,7 +42,7 @@ export class UsersManager extends PageBase {
 		}
 
 		switch (btnId) {
-			case 'cancelBtn':
+			case 'toHomeBtn':
 				return this.router.go(HOME_PAGE);
 			default:
 				return false;
