@@ -7,7 +7,12 @@ import {
 	loadFromKv,
 	saveToKv,
 } from '../helpers.js';
-import { KV_KEYS, PUB_KEYS } from '../constants.js';
+import {
+	KV_KEYS,
+	PUB_KEYS,
+	DEFAULT_BTN_ITEM_ID,
+	HOME_PAGE,
+} from '../constants.js';
 import { breakArray, makeStringArrayUnique } from '../lib.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 
@@ -25,7 +30,7 @@ export class PubTags extends PubPageBase {
 		return defineMenu([
 			...breakArray(
 				notSelectedTags.map((tag) => ({
-					id: 'TAG',
+					id: DEFAULT_BTN_ITEM_ID,
 					label: tag,
 					payload: tag,
 				})),
@@ -59,7 +64,7 @@ export class PubTags extends PubPageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
-		if (btnId === 'TAG') {
+		if (btnId === DEFAULT_BTN_ITEM_ID) {
 			const mergedAllTags = makeStringArrayUnique([
 				...(this.state.pub?.[PUB_KEYS.tags] || []),
 				payload,
@@ -80,7 +85,7 @@ export class PubTags extends PubPageBase {
 					return this.go('scheduled-item');
 				}
 
-				return this.go('home');
+				return this.go(HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-post-setup');
 			case 'saveBtn':

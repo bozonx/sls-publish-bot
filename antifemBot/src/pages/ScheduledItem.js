@@ -4,7 +4,7 @@ import {
 	doFullFinalPublicationProcess,
 	deleteScheduledPost,
 } from '../publishHelpres.js';
-import { USER_KEYS } from '../constants.js';
+import { USER_KEYS, HOME_PAGE } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
@@ -63,7 +63,7 @@ export class ScheduledItem extends PageBase {
 				await doFullFinalPublicationProcess(c, this.state.editItem);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-					`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
 				);
 
 				return this.router.go('scheduled-list');
@@ -71,7 +71,7 @@ export class ScheduledItem extends PageBase {
 				await deleteScheduledPost(c, this.state.editItem.id);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-					`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
 				);
 
 				return this.router.go('scheduled-list');
@@ -84,7 +84,7 @@ export class ScheduledItem extends PageBase {
 			case 'toListBtn':
 				return this.router.go('scheduled-list');
 			case 'cancelBtn':
-				return this.router.go('home');
+				return this.router.go(HOME_PAGE);
 			default:
 				return false;
 		}

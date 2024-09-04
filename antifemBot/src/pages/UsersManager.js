@@ -5,6 +5,8 @@ import {
 	KV_KEYS,
 	USER_KEYS,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
+	DEFAULT_BTN_ITEM_ID,
+	HOME_PAGE,
 } from '../constants.js';
 import { breakArray } from '../lib.js';
 
@@ -19,7 +21,7 @@ export class UsersManager extends PageBase {
 		return defineMenu([
 			...breakArray(
 				this.users.map((i) => ({
-					id: 'ITEM',
+					id: DEFAULT_BTN_ITEM_ID,
 					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${i[USER_KEYS.isAdmin] ? ' (admin)' : ''}`,
 					payload: i[USER_KEYS.id],
 				})),
@@ -35,13 +37,13 @@ export class UsersManager extends PageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
-		if (btnId === 'ITEM') {
+		if (btnId === DEFAULT_BTN_ITEM_ID) {
 			return this.userRemoveCallback(payload);
 		}
 
 		switch (btnId) {
 			case 'cancelBtn':
-				return this.router.go('home');
+				return this.router.go(HOME_PAGE);
 			default:
 				return false;
 		}
@@ -55,7 +57,7 @@ export class UsersManager extends PageBase {
 		if (!text) return this.reply('No text');
 
 		if (text.indexOf(USER_SENT_TO_ADMIN_MSG_DELIMITER) > 0) {
-			const [useless, dataJson] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
+			const [, dataJson] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
 
 			try {
 				obj = parseJsonSafelly(dataJson.trim());

@@ -5,6 +5,7 @@ import {
 	PUB_KEYS,
 	DEFAULT_SETUP_STATE,
 	USER_KEYS,
+	HOME_PAGE,
 } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 
@@ -108,7 +109,7 @@ export class PubPostSetup extends PubPageBase {
 					return this.go('scheduled-item');
 				}
 
-				return this.go('home');
+				return this.go(HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-date');
 			case 'saveBtn':

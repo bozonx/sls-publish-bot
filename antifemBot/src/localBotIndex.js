@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { BotIndex } from './BotIndex.js';
-import { handleScheduled } from './indexShedullerPublisher.js';
 import { APP_INITIAL_CONFIG } from './constants.js';
+import { handleScheduled } from './indexShedullerPublisher.js';
 
 const testData = {
 	config: JSON.stringify(APP_INITIAL_CONFIG),

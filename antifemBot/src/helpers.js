@@ -8,7 +8,7 @@ import {
 	PUB_KEYS,
 	USER_KEYS,
 } from './constants.js';
-import { makeIsoDayFromNow } from './lib.js';
+import { makeHumanRuDate } from './dateTimeHelpers.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
 	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
@@ -26,36 +26,8 @@ export function t(c, msg) {
 	return locales[lang][msg] || msg;
 }
 
-export function makeIsoDateFromPubState(pubState) {
-	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
-}
-
-export function makeHumanRuDate(c, isoDateStr) {
-	// TODO: t(c 'today'), tomorrow, afterTomorrow
-
-	return formatIsoDateToLocaleRuDate(isoDateStr);
-}
-
-export function formatIsoDateToLocaleRuDate(isoDateStr) {
-	return new Date(`${isoDateStr}T00:00`).toLocaleDateString('ru-RU', {
-		weekday: 'short',
-		month: 'long',
-		day: 'numeric',
-	});
-}
-
-export function getLocaleDayOfWeekFromNow(plusDay) {
-	return new Date(`${makeIsoDayFromNow(plusDay)}T00:00`).toLocaleDateString(
-		'ru-RU',
-		{
-			weekday: 'short',
-		},
-	);
-}
-
 export function makeStatePreview(c, state = {}) {
 	let mediaCount = state[PUB_KEYS.media]?.length || 0;
-	// TODO: если мд то очистить
 	let textLength = state[PUB_KEYS.text]?.length || 0;
 	let postType = 'text';
 
@@ -197,73 +169,6 @@ export function parseJsonSafelly(dataStr) {
 
 	return JSON.parse(dataStr);
 }
-
-// export function generateTagsButtons(tags) {
-// 	const idPrefix = 'TAG-';
-// 	const menu = [];
-//
-// 	for (const tag of tags) {
-// 		// TODO: split to rows
-// 		menu.push([{ id: idPrefix + tag, label: tag, payload: tag }]);
-// 	}
-//
-// 	return menu;
-// }
-
-// export function isAdminUser(c, userId) {
-// 	if (!userId || !['string', 'number'].includes(typeof userId))
-// 		throw new Error(`ERROR: isAdminUser. Wrong userId - ${typeof userId}`);
-//
-// 	const found = c.ctx[CTX_KEYS.users]?.find(
-// 		(i) => i[USER_KEYS.isAdmin] && Number(i[USER_KEYS.id]) === Number(userId),
-// 	);
-//
-// 	return Boolean(found);
-// }
-
-// export function isRegisteredUser(c, userId) {
-// 	if (!userId || !['string', 'number'].includes(typeof userId))
-// 		throw new Error(`ERROR: isRegisteredUser. Wrong userId - ${typeof userId}`);
-//
-// 	const found = c.ctx[CTX_KEYS.users]?.find(
-// 		(i) => Number(i[USER_KEYS.id]) === Number(userId),
-// 	);
-//
-// 	return Boolean(found);
-// }
-
-// export function hasPubHaveMedia(pubState = {}) {
-// 	const mediaFields = [PUB_KEYS.photo, PUB_KEYS.video];
-//
-// 	return Boolean(
-// 		Object.keys(pubState).find((i) => pubState[i] && mediaFields.includes(i)),
-// 	);
-// }
-
-// export async function prepareSession(c) {
-// 	const cfgJson = await c.config.KV.get(KV_CONFIG);
-//
-// 	if (cfgJson) {
-// 		c.session.config = JSON.parse(cfgJson);
-// 	}
-// }
-
-// export async function createInitialConfig(c) {
-// 	c.session.config = await c.config.KV.put(
-// 		KV_CONFIG,
-// 		JSON.stringify(APP_INITIAL_CONFIG),
-// 	);
-// }
-
-// export function keysToCammelCase(obj) {
-// 	const res = {};
-//
-// 	for (const index of Object.keys(obj)) {
-// 		res[_.camelCase(index)] = obj[index];
-// 	}
-//
-// 	return res;
-// }
 
 // export function normalizeNumbers(obj) {
 // 	const res = {};

@@ -6,7 +6,7 @@ import {
 	parseTagsFromInput,
 	defineMenu,
 } from '../helpers.js';
-import { KV_KEYS } from '../constants.js';
+import { KV_KEYS, DEFAULT_BTN_ITEM_ID, HOME_PAGE } from '../constants.js';
 import { breakArray, makeStringArrayUnique } from '../lib.js';
 
 export class TagsManager extends PageBase {
@@ -19,7 +19,7 @@ export class TagsManager extends PageBase {
 		return defineMenu([
 			...breakArray(
 				allTags.map((tag) => ({
-					id: 'TAG',
+					id: DEFAULT_BTN_ITEM_ID,
 					label: tag,
 					payload: tag,
 				})),
@@ -35,7 +35,7 @@ export class TagsManager extends PageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
-		if (btnId === 'TAG') {
+		if (btnId === DEFAULT_BTN_ITEM_ID) {
 			return this.tagRemoveCallback(payload);
 		}
 
@@ -43,7 +43,7 @@ export class TagsManager extends PageBase {
 			case 'backBtn':
 				return this.router.go('');
 			case 'cancelBtn':
-				return this.router.go('home');
+				return this.router.go(HOME_PAGE);
 			default:
 				return false;
 		}
@@ -62,8 +62,7 @@ export class TagsManager extends PageBase {
 		]).sort();
 		// save new tags to storage
 		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
-
-		await this.reply(`${t(c, 'tagWasAdded')}: ${newTags.join(', ')}`);
+		await this.reply(`${t(c, 'tagsWasAdded')}: ${newTags.join(', ')}`);
 
 		return this.router.reload();
 	}

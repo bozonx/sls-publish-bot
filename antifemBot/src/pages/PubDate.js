@@ -1,19 +1,14 @@
 import { PubPageBase } from '../PubPageBase.js';
-import {
-	t,
-	makeStatePreview,
-	defineMenu,
-	getLocaleDayOfWeekFromNow,
-} from '../helpers.js';
-import { PUB_KEYS } from '../constants.js';
+import { t, makeStatePreview, defineMenu } from '../helpers.js';
+import { PUB_KEYS, HOME_PAGE } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
+import { isEmptyObj, applyStringTemplate } from '../lib.js';
 import {
-	isEmptyObj,
+	getLocaleDayOfWeekFromNow,
 	isValidShortDate,
 	shortRuDateToFullIsoDate,
 	makeIsoDayFromNow,
-	applyStringTemplate,
-} from '../lib.js';
+} from '../dateTimeHelpers.js';
 
 export class PubDate extends PubPageBase {
 	async renderMenu() {
@@ -103,7 +98,7 @@ export class PubDate extends PubPageBase {
 					return this.go('scheduled-item');
 				}
 
-				return this.go('home');
+				return this.go(HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-time');
 			case 'saveBtn':

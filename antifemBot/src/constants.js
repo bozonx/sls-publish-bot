@@ -3,6 +3,8 @@ export const TG_BOT_URL = '/bot';
 export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
 export const SESSION_CACHE_NAME = 'session';
+export const DEFAULT_BTN_ITEM_ID = '-BTN=';
+export const HOME_PAGE = 'home';
 // export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // TODO: вынести в env?
@@ -16,7 +18,6 @@ export const PUBLISHING_MINUS_MINUTES = 5;
 
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
-export const HOME_PAGE = 'home';
 export const KV_KEYS = {
 	config: 'config',
 	users: 'users',

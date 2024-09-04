@@ -40,7 +40,7 @@ export default {
 		useTemplateBtn: 'Использовать шаблон',
 		linkPreviewOffBtn: 'Выключить link preview',
 		linkPreviewOnBtn: 'Включить link preview',
-		pubConfirmBtn: 'Да',
+		pubConfirmBtn: 'Запланировать',
 		showPreviewBtn: 'Показать пост',
 		deletePostponedBtn: 'Удалить',
 		editPostponedBtn: 'Редактировать',
@@ -90,7 +90,7 @@ export default {
 			'❗ Этот формат поста не поддерживается. Отправьте текст, картинку или видео.',
 		youAreNotRegistered:
 			'Вы не зарегистрированы, перешлите это сообщение админу',
-		tagWasAdded: 'Тэги были добавлены',
+		tagsWasAdded: 'Тэги были добавлены',
 		tagWasDeleted: 'Тэг был удалён',
 		scheduledItemWasDeleted: 'Отложенный пост был удалён',
 		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
