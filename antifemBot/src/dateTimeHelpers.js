@@ -1,5 +1,6 @@
 import { t } from './helpers.js';
 import { make2SignDigitStr } from './lib.js';
+import { PUB_KEYS } from './constants.js';
 
 export function makeIsoDateFromPubState(pubState) {
 	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
@@ -87,23 +88,73 @@ export function makeIsoDayFromNow(plusDay = 0) {
 }
 
 export function makeClosestDayRuString(c, isoDateStr) {
-	// TODO: add
-	return;
+	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
+	const testMs = Date.UTC(
+		Number(yearStr),
+		Number(monthStr) - 1,
+		Number(dayStr),
+	);
+	const now = new Date();
+	const nowMs = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+
+	const diffMs = testMs - nowMs;
+
+	if (diffMs < 0) return;
+
+	const daysNum = diffMs / 24 / 60 / 60 / 1000;
+
+	return t(c, 'closestDays')[daysNum];
 }
 
-// TODO: add
 export function isPastDate(isoDateStr) {
-	return false;
+	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
+	const testMs = Date.UTC(
+		Number(yearStr),
+		Number(monthStr) - 1,
+		Number(dayStr),
+	);
+	const now = new Date();
+	const nowMs = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+
+	return testMs < nowMs;
 }
 
-// // it returns number of day of week. 0 = monday, 1 = tuesday, ...
-// export function getDayOfWeekNum(someDate) {
-// 	// start from sunday = 0
-// 	// TODO: с какой зоной он возьмёт день?
-// 	const dayOfWeek = new Date(someDate).getDay();
-//
-// 	if (dayOfWeek === 0) return 7;
-//
-// 	return dayOfWeek - 1;
-// }
-//
+export function isPastDateTime(isoDateStr, timeStr, minusMinute) {
+	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
+	const [hoursStr, minutesStr] = timeStr.split(':');
+	const testMs = Date.UTC(
+		Number(yearStr),
+		Number(monthStr) - 1,
+		Number(dayStr),
+		Number(hoursStr),
+		Number(minutesStr),
+	);
+	const now = new Date();
+	const nowMs = Date.UTC(
+		now.getFullYear(),
+		now.getMonth(),
+		now.getDate(),
+		now.getHours(),
+		now.getMinutes(),
+	);
+
+	return testMs < nowMs - minusMinute * 60 * 1000;
+}
+
+//////////// TESTS
+
+// console.log(111, makeIsoDayFromNow(0), makeIsoDayFromNow(8));
+// console.log(222, shortRuDateToFullIsoDate('5.9'));
+// console.log(333, getShortWeekDay('2024-09-04'));
+// console.log(444, isoDateToLongLocaleRuDate('2024-09-04'));
+// console.log(555, makeShortDateFromIsoDate('2024-09-04'));
+// console.log(666, makeHumanRuDateCompact({}, '2024-09-04'));
+// console.log(777, makeHumanRuDate({}, '2024-09-04'));
+// console.log(
+// 	888,
+// 	isPastDate('2024-09-03'),
+// 	isPastDate('2024-09-04'),
+// 	isPastDate('2024-09-05'),
+// );
+// console.log(888, makeClosestDayRuString({}, '2024-09-06'));
+// console.log(999, isPastDateTime('2024-09-04', '14:04', 5));

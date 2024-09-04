@@ -9,6 +9,7 @@ import {
 	makeIsoDayFromNow,
 	makeShortDateFromIsoDate,
 	getShortWeekDay,
+	isPastDate,
 } from '../dateTimeHelpers.js';
 
 export class PubDate extends PubPageBase {
@@ -83,10 +84,8 @@ export class PubDate extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'DAY') {
-			const dateStr = makeIsoDayFromNow(payload);
-
 			return this.go('pub-time', {
-				[PUB_KEYS.date]: dateStr,
+				[PUB_KEYS.date]: makeIsoDayFromNow(payload),
 			});
 		}
 

@@ -13,8 +13,8 @@ const testData = {
 			text: 'sdfsdf',
 			author: 'Айван Кей',
 			tags: ['sd', 'fwer'],
-			date: '2024-09-03',
-			time: '09:55',
+			date: '2024-09-04',
+			time: '14:00',
 			publisher: 'eeee',
 		},
 		{

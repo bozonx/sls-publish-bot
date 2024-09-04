@@ -6,10 +6,12 @@ import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
+	PUBLISHING_MINUS_MINUTES,
 } from '../constants.js';
 import {
 	makeIsoDateFromPubState,
 	makeHumanRuDateCompact,
+	isPastDateTime,
 } from '../dateTimeHelpers.js';
 
 export class ScheduledList extends PageBase {
@@ -66,9 +68,20 @@ export class ScheduledList extends PageBase {
 	}
 
 	makeItemLabel(item) {
+		const text = item[PUB_KEYS.text]?.trim().substring(0, 30).trim();
+
+		if (
+			isPastDateTime(
+				item[PUB_KEYS.date],
+				item[PUB_KEYS.time],
+				PUBLISHING_MINUS_MINUTES,
+			)
+		) {
+			return `${t(this.router.c, 'staleMark')} ${text}`;
+		}
+
 		const dateStr = makeHumanRuDateCompact(this.c, item[PUB_KEYS.date]);
 		const time = item[PUB_KEYS.time];
-		const text = item[PUB_KEYS.text]?.trim().substring(0, 30).trim();
 
 		return `${dateStr} ${time} ${text}`;
 	}

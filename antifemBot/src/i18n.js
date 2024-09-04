@@ -1,11 +1,9 @@
 export default {
 	ru: {
-		// today: 'Сегодня',
-		// tomorrow: 'Завтра',
-		// afterTomorrow: 'Послезавтра',
 		// daysOfWeek: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
 		closestDays: ['Сегодня', 'Завтра', 'Послезавтра'],
 		msk: 'МСК',
+		staleMark: 'Просрочен!',
 
 		// Template names
 		'template-default': 'Основной',
