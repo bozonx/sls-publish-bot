@@ -30,10 +30,15 @@ export function makeIsoDateFromPubState(pubState) {
 	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
 }
 
-export function formatIsoOnlyDateStrToLocaleDate(isoDateStr) {
+export function makeHumanRuDate(c, isoDateStr) {
+	// TODO: t(c 'today'), tomorrow, afterTomorrow
+
+	return formatIsoDateToLocaleRuDate(isoDateStr);
+}
+
+export function formatIsoDateToLocaleRuDate(isoDateStr) {
 	return new Date(`${isoDateStr}T00:00`).toLocaleDateString('ru-RU', {
 		weekday: 'short',
-		// year: 'numeric',
 		month: 'long',
 		day: 'numeric',
 	});
@@ -72,7 +77,7 @@ export function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
 
 	if (state[PUB_KEYS.date])
-		res += `${t(c, 'stateDate')}: ${formatIsoOnlyDateStrToLocaleDate(state[PUB_KEYS.date])}\n`;
+		res += `${t(c, 'stateDate')}: ${makeHumanRuDate(c, state[PUB_KEYS.date])}\n`;
 	if (state[PUB_KEYS.time]) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}
