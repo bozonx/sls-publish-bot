@@ -6,6 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 WORKER_HOST = "antifem-bot.ivank.workers.dev"
+APP_DEBUG = true
 
 [triggers]
 # it is for webhok update

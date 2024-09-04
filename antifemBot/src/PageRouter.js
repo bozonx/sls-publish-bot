@@ -10,6 +10,7 @@ import {
 	QUERY_MARKER,
 	HOME_PAGE,
 	SESSION_CACHE_NAME,
+	APP_DEBUG,
 } from './constants.js';
 import { printFinalPost } from './publishHelpres.js';
 
@@ -145,9 +146,11 @@ export class PageRouter {
 		try {
 			await this._handleMessage();
 		} catch (e) {
-			c.reply(
-				`ERROR: handling income message ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
-			);
+			if (c.ctx[CTX_KEYS.APP_DEBUG]) {
+				c.reply(
+					`ERROR: handling income message ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
+				);
+			}
 
 			throw e;
 		}
@@ -157,9 +160,11 @@ export class PageRouter {
 		try {
 			await this._handleMessage();
 		} catch (e) {
-			c.reply(
-				`ERROR: handling query data ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
-			);
+			if (c.ctx[CTX_KEYS.APP_DEBUG]) {
+				c.reply(
+					`ERROR: handling query data ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
+				);
+			}
 
 			throw e;
 		}

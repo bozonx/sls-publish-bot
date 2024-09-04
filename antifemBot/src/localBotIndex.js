@@ -52,7 +52,7 @@ function KVStub(initialData = {}) {
 		process.env.CHAT_OF_ADMINS_ID,
 		process.env.DESTINATION_CHANNEL_ID,
 		KV,
-		process.env.DEBUG,
+		process.env.APP_DEBUG,
 	);
 
 	await app.init();

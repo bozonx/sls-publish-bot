@@ -14,7 +14,7 @@ export function makeContext(
 	CHAT_OF_ADMINS_ID,
 	DESTINATION_CHANNEL_ID,
 	KV,
-	DEBUG,
+	APP_DEBUG,
 ) {
 	return async (c, next) => {
 		c.ctx = {
@@ -22,7 +22,7 @@ export function makeContext(
 			[CTX_KEYS.KV]: KV,
 			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
-			[CTX_KEYS.DEBUG]: DEBUG,
+			[CTX_KEYS.APP_DEBUG]: APP_DEBUG,
 		};
 
 		let appCfg;
