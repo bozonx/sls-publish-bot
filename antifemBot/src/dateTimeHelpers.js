@@ -8,9 +8,10 @@ export function makeIsoDateFromPubState(pubState) {
 export function makeHumanRuDate(c, isoDateStr) {
 	const closestDay = makeClosestDayRuString(c, isoDateStr);
 
-	if (closestDay) return closestDay;
+	if (closestDay)
+		return `${closestDay} ${makeShortDateFromIsoDate(isoDateStr)}`;
 
-	return formatIsoDateToLocaleRuDate(isoDateStr);
+	return isoDateToLongLocaleRuDate(isoDateStr);
 }
 
 export function makeHumanRuDateCompact(c, isoDateStr) {
@@ -27,12 +28,7 @@ export function makeShortDateFromIsoDate(isoDateStr) {
 	return `${dayStr}.${monthStr}`;
 }
 
-export function makeClosestDayRuString(c, isoDateStr) {
-	// TODO: add
-	return isoDateStr;
-}
-
-export function formatIsoDateToLocaleRuDate(isoDateStr) {
+export function isoDateToLongLocaleRuDate(isoDateStr) {
 	return new Date(`${isoDateStr}T00:00`).toLocaleDateString('ru-RU', {
 		weekday: 'short',
 		month: 'long',
@@ -60,9 +56,9 @@ export function dateSubtractSeconds(tsMs, secondsToSubtract) {
 
 // operate with timestamp in milliseconds in UTC
 export function dateAddSeconds(tsMs, secondsToAdd) {
-	const subtractMs = secondsToAdd * 1000;
+	const addMs = secondsToAdd * 1000;
 
-	return tsMs + subtractMs;
+	return tsMs + addMs;
 }
 
 export function isValidShortDate(rawDateStr) {
@@ -73,28 +69,31 @@ export function isValidShortDate(rawDateStr) {
 	);
 }
 
+// make iso date from DD.MM. It adds current year to a date
 export function shortRuDateToFullIsoDate(localeShortDate) {
-	// TODO: review
-	const [dayStr, monthStr] = localeShortDate;
+	const [dayStr, monthStr] = localeShortDate.split('.');
 	const year = new Date().getFullYear();
 
 	return `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;
 }
 
-// TODO: review
 export function makeIsoDayFromNow(plusDay = 0) {
 	const now = new Date();
 	const year = now.getFullYear();
 	const month = now.getMonth() + 1;
-	// TODO: wrong
-	const day = now.getDay() + 1 + Number(plusDay);
+	const day = now.getDate() + Number(plusDay);
 
 	return `${year}-${make2SignDigitStr(month)}-${make2SignDigitStr(day)}`;
 }
 
-// TODO: review
+export function makeClosestDayRuString(c, isoDateStr) {
+	// TODO: add
+	return;
+}
+
+// TODO: add
 export function isPastDate(isoDateStr) {
-	//
+	return false;
 }
 
 // // it returns number of day of week. 0 = monday, 1 = tuesday, ...
