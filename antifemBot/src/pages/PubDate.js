@@ -19,8 +19,9 @@ export class PubDate extends PubPageBase {
 		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
 			this.state.pub = this.state[EDIT_ITEM_NAME];
 
+		// default date is tomorrow
 		if (!this.state.pub[PUB_KEYS.date])
-			this.state.pub[PUB_KEYS.date] = makeIsoDayFromNow(0);
+			this.state.pub[PUB_KEYS.date] = makeIsoDayFromNow(1);
 
 		const descr = applyStringTemplate(t(c, 'selectDateDescr'), {
 			TIME_ZONE: t(c, 'msk'),
