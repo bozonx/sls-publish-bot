@@ -5,30 +5,30 @@ import { APP_INITIAL_CONFIG } from './constants.js';
 
 const testData = {
 	config: JSON.stringify(APP_INITIAL_CONFIG),
-	scheduled: JSON.stringify([
-		{
-			id: 'omltnQ',
-			preview: true,
-			template: 'default',
-			text: 'sdfsdf',
-			author: 'Айван Кей',
-			tags: ['sd', 'fwer'],
-			date: '2024-09-03',
-			time: '09:55',
-			publisher: 'eeee',
-		},
-		{
-			id: 'omwerltnQ',
-			preview: true,
-			template: 'default',
-			text: 'sdslkdjflsdfsdf',
-			author: 'Айван Кей',
-			tags: ['sd', 'fwsdfder'],
-			date: '2024-09-03',
-			time: '10:00',
-			publisher: 'eeee',
-		},
-	]),
+	// scheduled: JSON.stringify([
+	// 	{
+	// 		id: 'omltnQ',
+	// 		preview: true,
+	// 		template: 'default',
+	// 		text: 'sdfsdf',
+	// 		author: 'Айван Кей',
+	// 		tags: ['sd', 'fwer'],
+	// 		date: '2024-09-03',
+	// 		time: '09:55',
+	// 		publisher: 'eeee',
+	// 	},
+	// 	{
+	// 		id: 'omwerltnQ',
+	// 		preview: true,
+	// 		template: 'default',
+	// 		text: 'sdslkdjflsdfsdf',
+	// 		author: 'Айван Кей',
+	// 		tags: ['sd', 'fwsdfder'],
+	// 		date: '2024-09-03',
+	// 		time: '10:00',
+	// 		publisher: 'eeee',
+	// 	},
+	// ]),
 };
 
 function KVStub(initialData = {}) {

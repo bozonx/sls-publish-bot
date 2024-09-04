@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { PubPageBase } from '../PubPageBase.js';
 import {
 	t,
@@ -13,6 +12,7 @@ import {
 	isValidShortDate,
 	shortRuDateToFullIsoDate,
 	makeIsoDayFromNow,
+	applyStringTemplate,
 } from '../lib.js';
 
 export class PubDate extends PubPageBase {
@@ -22,7 +22,7 @@ export class PubDate extends PubPageBase {
 		if (this.state.editItem && isEmptyObj(this.state.pub))
 			this.state.pub = this.state.editItem;
 
-		const descr = _.template(t(c, 'selectDateDescr'))({
+		const descr = applyStringTemplate(t(c, 'selectDateDescr'), {
 			TIME_ZONE: t(c, 'msk'),
 		});
 

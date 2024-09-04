@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import ShortUniqueId from 'short-unique-id';
 import { toMarkdownV2 } from '@telegraf/entity';
 import {
@@ -10,6 +9,7 @@ import {
 	USER_KEYS,
 } from './constants.js';
 import { t, loadFromKv, saveToKv, makeStatePreview } from './helpers.js';
+import { applyStringTemplate } from './lib.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
@@ -129,7 +129,7 @@ export async function schedulePublication(c, pubState) {
 		...pubState,
 		[PUB_KEYS.publisherName]: c.ctx[CTX_KEYS.me][USER_KEYS.name],
 	};
-	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
+	const allScheduled = (await loadFromKv(c, KV_KEYS.scheduled)) || [];
 	const prepared = [...allScheduled, item];
 
 	await saveToKv(c, KV_KEYS.scheduled, prepared);
@@ -231,7 +231,7 @@ export function applyTemplate(c, textMdV2, templateName, author, tags) {
 	};
 
 	const text = template
-		.map((i) => _.template(i)(tmplData))
+		.map((i) => applyStringTemplate(i, tmplData))
 		.filter((i) => i.trim())
 		.join('\n\n');
 

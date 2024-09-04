@@ -1,14 +1,13 @@
-import _ from 'lodash';
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { PUB_KEYS, HOME_PAGE, DEFAULT_PUB_TIME } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
-import { make2SignDigitStr } from '../lib.js';
+import { make2SignDigitStr, applyStringTemplate } from '../lib.js';
 
 export class PubTime extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		const descr = _.template(t(c, 'selectHourDescr'))({
+		const descr = applyStringTemplate(t(c, 'selectHourDescr'), {
 			TIME_ZONE: t(c, 'msk'),
 		});
 

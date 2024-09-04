@@ -17,6 +17,13 @@ export function breakArray(arr, maxCount) {
 	return result;
 }
 
+export function applyStringTemplate(tmpl, data) {
+	return tmpl.replace(
+		/\${\s*([^{}\s]+)\s*}/g,
+		(match, key) => data[key.trim()] || '',
+	);
+}
+
 export function makeStringArrayUnique(rawArr) {
 	const obj = {};
 
