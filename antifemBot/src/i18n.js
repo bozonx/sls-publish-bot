@@ -42,7 +42,7 @@ export default {
 		linkPreviewOnBtn: 'Включить link preview',
 		pubConfirmBtn: 'Запланировать',
 		showPreviewBtn: 'Показать пост',
-		deletePostponedBtn: 'Удалить',
+		deleteSchuduledBtn: 'Удалить',
 		editPostponedBtn: 'Редактировать',
 		changeDateTimeBtn: 'Изменить время',
 		manageScheduledBtn: 'Управлять отложенными постами',

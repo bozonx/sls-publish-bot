@@ -11,6 +11,9 @@ export class ScheduledItem extends PageBase {
 		const c = this.router.c;
 		const item = this.state[EDIT_ITEM_NAME];
 
+		// do delete it again in case of cancel btn pressed
+		delete this.state.pub;
+
 		if (!item) return this.reply(`ERROR: Can't find item to edit`);
 
 		this.text = t(c, 'scheduledItemDescr') + `\n\n${makeStatePreview(c, item)}`;
@@ -28,8 +31,8 @@ export class ScheduledItem extends PageBase {
 			],
 			[
 				{
-					id: 'deletePostponedBtn',
-					label: t(c, 'deletePostponedBtn'),
+					id: 'deleteSchuduledBtn',
+					label: t(c, 'deleteSchuduledBtn'),
 				},
 				{
 					id: 'publicateNowBtn',
@@ -67,7 +70,7 @@ export class ScheduledItem extends PageBase {
 				);
 
 				return this.router.go('scheduled-list');
-			case 'deletePostponedBtn':
+			case 'deleteSchuduledBtn':
 				await deleteScheduledPost(c, this.state[EDIT_ITEM_NAME].id);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
@@ -87,8 +90,6 @@ export class ScheduledItem extends PageBase {
 			case 'toListBtn':
 				return this.router.go('scheduled-list');
 			case 'toHomeBtn':
-				delete this.state[EDIT_ITEM_NAME];
-
 				return this.router.go(HOME_PAGE);
 			default:
 				return false;

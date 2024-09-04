@@ -78,11 +78,7 @@ export class PubTime extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-date');
 			case 'cancelBtn':
-				if (this.state[EDIT_ITEM_NAME]) {
-					delete this.state.pub;
-
-					return this.go('scheduled-item');
-				}
+				if (this.state[EDIT_ITEM_NAME]) return this.go('scheduled-item');
 
 				return this.go(HOME_PAGE);
 			case 'nextBtn':

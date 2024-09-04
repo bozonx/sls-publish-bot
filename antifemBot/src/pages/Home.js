@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { USER_KEYS } from '../constants.js';
+import { USER_KEYS, EDIT_ITEM_NAME } from '../constants.js';
 import { t, defineMenu } from '../helpers.js';
 import { makeStateFromMessage } from '../publishHelpres.js';
 
@@ -8,8 +8,11 @@ export class Home extends PageBase {
 		const c = this.router.c;
 		const isAdmin = this.me[USER_KEYS.isAdmin];
 		// clear pub state
-		this.state.pub = {};
+		delete this.state.pub;
+
 		this.text = t(c, 'homeDescr');
+
+		delete this.state[EDIT_ITEM_NAME];
 
 		return defineMenu([
 			[

@@ -7,6 +7,7 @@ import {
 	MEDIA_TYPES,
 	KV_KEYS,
 	USER_KEYS,
+	EDIT_ITEM_NAME,
 } from './constants.js';
 import { t, loadFromKv, saveToKv, makeStatePreview } from './helpers.js';
 import { applyStringTemplate } from './lib.js';
@@ -108,12 +109,12 @@ export async function deleteScheduledPost(c, itemId) {
 export async function saveEditedScheduledPost(router) {
 	const c = router.c;
 
-	router.state.editItem = router.state.pub;
+	router.state[EDIT_ITEM_NAME] = router.state.pub;
 
 	delete router.state.pub;
 
 	const item = {
-		...router.state.editItem,
+		...router.state[EDIT_ITEM_NAME],
 		[PUB_KEYS.publisherName]: router.me[USER_KEYS.name],
 	};
 	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);

@@ -16,14 +16,15 @@ export class PubPostSetup extends PubPageBase {
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
+			// set default author
 			[PUB_KEYS.author]: this.me[USER_KEYS.authorName],
-			...(this.state.pub || {}),
+			...this.state.pub,
 		};
 
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
 
 		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
-			(i) => i !== this.state.pub?.[PUB_KEYS.template],
+			(i) => i !== this.state.pub[PUB_KEYS.template],
 		);
 		const previewIsOn = Boolean(this.state.pub[PUB_KEYS.preview]);
 
@@ -35,7 +36,6 @@ export class PubPostSetup extends PubPageBase {
 					payload: tmplName,
 				},
 			]),
-
 			!this.state.pub[PUB_KEYS.media]?.length && [
 				{
 					id: `linkPreviewSwitch`,
@@ -71,14 +71,15 @@ export class PubPostSetup extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state[EDIT_ITEM_NAME] && {
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
-				},
-				!this.state[EDIT_ITEM_NAME] && {
-					id: 'nextBtn',
-					label: t(c, 'nextBtn'),
-				},
+				this.state[EDIT_ITEM_NAME]
+					? {
+							id: 'saveBtn',
+							label: t(c, 'saveBtn'),
+						}
+					: {
+							id: 'nextBtn',
+							label: t(c, 'nextBtn'),
+						},
 			],
 		]);
 	}
@@ -104,11 +105,7 @@ export class PubPostSetup extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-tags');
 			case 'cancelBtn':
-				if (this.state[EDIT_ITEM_NAME]) {
-					delete this.state.pub;
-
-					return this.go('scheduled-item');
-				}
+				if (this.state[EDIT_ITEM_NAME]) return this.go('scheduled-item');
 
 				return this.go(HOME_PAGE);
 			case 'nextBtn':

@@ -16,6 +16,10 @@ const REPLACE_MODES = {
 export class PubContent extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+
+		// TODO: review
+		if (!this.state.pub) this.state.pub = {};
+
 		// copy state to edit in edit mode
 		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
 			this.state.pub = this.state[EDIT_ITEM_NAME];
@@ -128,11 +132,7 @@ export class PubContent extends PubPageBase {
 				// delete this.state.replaceMode;
 				// delete this.state.mdV1Mode;
 
-				if (this.state[EDIT_ITEM_NAME]) {
-					delete this.state.pub;
-
-					return this.go('scheduled-item');
-				}
+				if (this.state[EDIT_ITEM_NAME]) return this.go('scheduled-item');
 
 				return this.go(HOME_PAGE);
 			case 'nextBtn':
