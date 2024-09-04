@@ -1,5 +1,5 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { PUB_KEYS, HOME_PAGE } from '../constants.js';
+import { PUB_KEYS, HOME_PAGE, EDIT_ITEM_NAME } from '../constants.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
 import {
 	makeStateFromMessage,
@@ -17,8 +17,8 @@ export class PubContent extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		// copy state to edit in edit mode
-		if (this.state.editItem && isEmptyObj(this.state.pub))
-			this.state.pub = this.state.editItem;
+		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
+			this.state.pub = this.state[EDIT_ITEM_NAME];
 		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
 		const haveAnyContent = Boolean(
@@ -87,7 +87,7 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-					this.state.editItem && {
+					this.state[EDIT_ITEM_NAME] && {
 						id: 'saveBtn',
 						label: t(c, 'saveBtn'),
 					},
@@ -128,7 +128,7 @@ export class PubContent extends PubPageBase {
 				// delete this.state.replaceMode;
 				// delete this.state.mdV1Mode;
 
-				if (this.state.editItem) {
+				if (this.state[EDIT_ITEM_NAME]) {
 					delete this.state.pub;
 
 					return this.go('scheduled-item');

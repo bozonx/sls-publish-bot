@@ -1,6 +1,11 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { PUB_KEYS, HOME_PAGE, DEFAULT_PUB_TIME } from '../constants.js';
+import {
+	PUB_KEYS,
+	HOME_PAGE,
+	DEFAULT_PUB_TIME,
+	EDIT_ITEM_NAME,
+} from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 import { make2SignDigitStr, applyStringTemplate } from '../lib.js';
 
@@ -48,11 +53,11 @@ export class PubTime extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state.editItem && {
+				this.state[EDIT_ITEM_NAME] && {
 					id: 'saveBtn',
 					label: t(c, 'saveBtn'),
 				},
-				!this.state.editItem && {
+				!this.state[EDIT_ITEM_NAME] && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 				},
@@ -64,7 +69,8 @@ export class PubTime extends PubPageBase {
 		if (btnId === 'HOUR') {
 			this.state.pub[PUB_KEYS.time] = make2SignDigitStr(payload) + `:00`;
 
-			if (this.state.editItem) return saveEditedScheduledPost(this.router);
+			if (this.state[EDIT_ITEM_NAME])
+				return saveEditedScheduledPost(this.router);
 			else return this.go('pub-confirm');
 		}
 
@@ -72,7 +78,7 @@ export class PubTime extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-date');
 			case 'cancelBtn':
-				if (this.state.editItem) {
+				if (this.state[EDIT_ITEM_NAME]) {
 					delete this.state.pub;
 
 					return this.go('scheduled-item');
@@ -113,7 +119,7 @@ export class PubTime extends PubPageBase {
 
 		this.state.pub[PUB_KEYS.time] = time;
 
-		if (this.state.editItem) return saveEditedScheduledPost(this.router);
+		if (this.state[EDIT_ITEM_NAME]) return saveEditedScheduledPost(this.router);
 		else return this.go('pub-confirm');
 	}
 

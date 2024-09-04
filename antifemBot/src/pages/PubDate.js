@@ -1,6 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { PUB_KEYS, HOME_PAGE } from '../constants.js';
+import { PUB_KEYS, HOME_PAGE, EDIT_ITEM_NAME } from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 import { isEmptyObj, applyStringTemplate } from '../lib.js';
 import {
@@ -14,8 +14,8 @@ export class PubDate extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		// copy state to edit in edit mode
-		if (this.state.editItem && isEmptyObj(this.state.pub))
-			this.state.pub = this.state.editItem;
+		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
+			this.state.pub = this.state[EDIT_ITEM_NAME];
 
 		const descr = applyStringTemplate(t(c, 'selectDateDescr'), {
 			TIME_ZONE: t(c, 'msk'),
@@ -67,7 +67,7 @@ export class PubDate extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state.editItem && {
+				this.state[EDIT_ITEM_NAME] && {
 					id: 'saveBtn',
 					label: t(c, 'saveBtn'),
 				},
@@ -92,7 +92,7 @@ export class PubDate extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-post-setup');
 			case 'cancelBtn':
-				if (this.state.editItem) {
+				if (this.state[EDIT_ITEM_NAME]) {
 					delete this.state.pub;
 
 					return this.go('scheduled-item');

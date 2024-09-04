@@ -5,6 +5,7 @@ export const QUERY_MARKER = 'PageRouter';
 export const SESSION_CACHE_NAME = 'session';
 export const DEFAULT_BTN_ITEM_ID = '-BTN=';
 export const HOME_PAGE = 'home';
+export const EDIT_ITEM_NAME = 'editItem';
 // export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // TODO: вынести в env?

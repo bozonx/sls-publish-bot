@@ -5,6 +5,7 @@ import {
 	PUB_KEYS,
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
+	EDIT_ITEM_NAME,
 } from '../constants.js';
 import {
 	makeIsoDateFromPubState,
@@ -20,7 +21,7 @@ export class ScheduledList extends PageBase {
 				new Date(makeIsoDateFromPubState(b)),
 		);
 
-		delete this.state.editItem;
+		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
 			? t(c, 'scheduledListDescr')
@@ -48,9 +49,9 @@ export class ScheduledList extends PageBase {
 			const itemId = payload;
 			const allItems = await loadFromKv(this.router.c, KV_KEYS.scheduled, []);
 
-			this.state.editItem = allItems.find((i) => i.id === itemId);
+			this.state[EDIT_ITEM_NAME] = allItems.find((i) => i.id === itemId);
 
-			if (!this.state.editItem)
+			if (!this.state[EDIT_ITEM_NAME])
 				return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
 			return this.router.go('scheduled-item');

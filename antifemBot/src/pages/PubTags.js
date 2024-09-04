@@ -12,6 +12,7 @@ import {
 	PUB_KEYS,
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
+	EDIT_ITEM_NAME,
 } from '../constants.js';
 import { breakArray, makeStringArrayUnique } from '../lib.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
@@ -51,7 +52,7 @@ export class PubTags extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state.editItem && {
+				this.state[EDIT_ITEM_NAME] && {
 					id: 'saveBtn',
 					label: t(c, 'saveBtn'),
 				},
@@ -79,7 +80,7 @@ export class PubTags extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-content');
 			case 'cancelBtn':
-				if (this.state.editItem) {
+				if (this.state[EDIT_ITEM_NAME]) {
 					delete this.state.pub;
 
 					return this.go('scheduled-item');

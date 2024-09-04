@@ -1,12 +1,13 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import {
 	TEMPLATE_NAMES,
 	PUB_KEYS,
 	DEFAULT_SETUP_STATE,
 	USER_KEYS,
 	HOME_PAGE,
+	EDIT_ITEM_NAME,
 } from '../constants.js';
+import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 
 export class PubPostSetup extends PubPageBase {
@@ -70,11 +71,11 @@ export class PubPostSetup extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state.editItem && {
+				this.state[EDIT_ITEM_NAME] && {
 					id: 'saveBtn',
 					label: t(c, 'saveBtn'),
 				},
-				!this.state.editItem && {
+				!this.state[EDIT_ITEM_NAME] && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 				},
@@ -103,7 +104,7 @@ export class PubPostSetup extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-tags');
 			case 'cancelBtn':
-				if (this.state.editItem) {
+				if (this.state[EDIT_ITEM_NAME]) {
 					delete this.state.pub;
 
 					return this.go('scheduled-item');

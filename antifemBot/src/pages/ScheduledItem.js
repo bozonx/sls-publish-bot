@@ -4,12 +4,12 @@ import {
 	doFullFinalPublicationProcess,
 	deleteScheduledPost,
 } from '../publishHelpres.js';
-import { USER_KEYS, HOME_PAGE } from '../constants.js';
+import { USER_KEYS, HOME_PAGE, EDIT_ITEM_NAME } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		const item = this.state.editItem;
+		const item = this.state[EDIT_ITEM_NAME];
 
 		if (!item) return this.reply(`ERROR: Can't find item to edit`);
 
@@ -46,8 +46,8 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'toListBtn'),
 				},
 				{
-					id: 'cancelBtn',
-					label: t(c, 'cancelBtn'),
+					id: 'toHomeBtn',
+					label: t(c, 'toHomeBtn'),
 				},
 			],
 		]);
@@ -60,30 +60,35 @@ export class ScheduledItem extends PageBase {
 			case 'changeDateTimeBtn':
 				return this.router.go('pub-date');
 			case 'publicateNowBtn':
-				await doFullFinalPublicationProcess(c, this.state.editItem);
+				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');
 			case 'deletePostponedBtn':
-				await deleteScheduledPost(c, this.state.editItem.id);
+				await deleteScheduledPost(c, this.state[EDIT_ITEM_NAME].id);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-						`:\n\n${makeStatePreview(c, this.state.editItem)}`,
+						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');
 			case 'editPostponedBtn':
 				return this.router.go('pub-content');
 			case 'showPreviewBtn':
-				await this.printFinalPost(this.me[USER_KEYS.id], this.state.editItem);
+				await this.printFinalPost(
+					this.me[USER_KEYS.id],
+					this.state[EDIT_ITEM_NAME],
+				);
 
 				return this.router.reload();
 			case 'toListBtn':
 				return this.router.go('scheduled-list');
-			case 'cancelBtn':
+			case 'toHomeBtn':
+				delete this.state[EDIT_ITEM_NAME];
+
 				return this.router.go(HOME_PAGE);
 			default:
 				return false;
