@@ -1,4 +1,5 @@
 import {
+	t,
 	loadFromCache,
 	parseJsonSafelly,
 	saveToCache,
@@ -78,21 +79,21 @@ export class PageBase {
 
 	// It runs on each request.
 	// You can save some state to user in other functions while request is handling
-	async mount() { }
+	async mount() {}
 
 	// It runs when a route is changing. On each request
-	async unmount() { }
+	async unmount() {}
 
 	// Render menu here and return it.
 	// It runs only when the menu need to be renderred
 	// Menu has to be like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
-	async renderMenu() { }
+	async renderMenu() {}
 
 	// It runs on each income message while this page is active
-	async onMessage() { }
+	async onMessage() {}
 
 	// It runs on each button press of menu of this page
-	async onButtonPress(btnId, payload) { }
+	async onButtonPress(btnId, payload) {}
 }
 
 export class PageRouter {
@@ -159,13 +160,9 @@ export class PageRouter {
 	}
 
 	async reload() {
-		// TODO: может это перенести в go()
-		// if (!this.currentPath)
-		// 	return this.this.reply(
-		// 		`ERROR: Can't reload because there isn't current page`,
-		// 	);
+		if (!this.currentPath)
+			throw new Error(`ERROR: Can't reload because there isn't current page`);
 
-		// TODO: в принципе не обязательно передавать страницу, он всеравно возмёт из стейта
 		// return this.go(this.currentPath);
 
 		return this.go();
@@ -180,8 +177,6 @@ export class PageRouter {
 	}
 
 	async go(pathTo) {
-		console.log('=========== go', pathTo);
-
 		try {
 			const msg = await this._switchPage(pathTo);
 
@@ -192,14 +187,12 @@ export class PageRouter {
 			throw e;
 		}
 
-		const menu = (await this.currentPage.renderMenu()) || [];
+		const menu = (await this.currentPage.renderMenu?.()) || [];
 
 		return this._sendMenu(renderMenuKeyboard(menu));
 	}
 
 	_handleMessage = async (c) => {
-		console.log('============= _handleMessage', c.msg);
-
 		// it loads current page
 		try {
 			const msg = await this._switchPage();
@@ -219,7 +212,14 @@ export class PageRouter {
 	};
 
 	_handleQueryData = async (c) => {
-		console.log('============ _handleQueryData', c.update.callback_query.data);
+		const data = c.update.callback_query.data;
+		const [marker, btnId, ...bntPayloadRest] = data.split('|');
+		// do not handle not menu queries
+		if (marker !== QUERY_MARKER) return;
+
+		const btnPayload = bntPayloadRest.length
+			? parseJsonSafelly(bntPayloadRest.join('|'))
+			: undefined;
 
 		// it loads current page
 		try {
@@ -233,16 +233,7 @@ export class PageRouter {
 		}
 
 		const prevPath = this.currentPath;
-		const data = c.update.callback_query.data;
-		const [marker, btnId, ...bntPayloadRest] = data.split('|');
-
-		if (marker !== QUERY_MARKER) return;
-
-		const btnPayload = bntPayloadRest.length
-			? parseJsonSafelly(bntPayloadRest.join('|'))
-			: undefined;
-
-		const result = await this.currentPage.onButtonPress(btnId, btnPayload);
+		const result = await this.currentPage.onButtonPress?.(btnId, btnPayload);
 
 		if (result === false)
 			return this.reply(
@@ -254,25 +245,26 @@ export class PageRouter {
 	};
 
 	async _switchPage(newPath) {
-		await this.currentPage?.unmount();
+		await this.currentPage?.unmount?.();
 		await this._loadSession();
 
+		// If stale or absent session and not home page then suggest to start
+		// If home page and stale session it is OK
 		if (!this._loadedSession && newPath !== HOME_PAGE)
-			return `Session has been lost. Start from the beginning /start`;
+			return `${t(this.c, 'sessionLost')} /start`;
 
+		// switch to new path or use current page (reload)
 		const pathTo = newPath || this.state.currentPath;
 
 		if (!pathTo)
 			throw new Error(`ERROR: No path. Start from the beginning /start`);
+		else if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
 
 		this._state.currentPath = pathTo;
-
-		if (!this.pages[pathTo]) throw new Error(`Wrong path "${pathTo}"`);
-
 		// make current page instance
 		this.currentPage = new this.pages[pathTo](this, pathTo);
 
-		await this.currentPage.mount();
+		await this.currentPage.mount?.();
 	}
 
 	async _loadSession() {
@@ -283,17 +275,11 @@ export class PageRouter {
 		}
 
 		this._loadedSession = await loadFromCache(this.c, SESSION_CACHE_NAME);
-
-		console.log('========== _loadState', this._loadedSession);
-
 		this._state = this._loadedSession || {};
 	}
 
 	async _theEndOfRequest() {
-		console.log('============ _theEndOfRequest', this.state);
-
-		// save session each time request finish
-		// because the session always different
+		// save session each time request finish because the session is always different
 		await saveToCache(
 			this.c,
 			SESSION_CACHE_NAME,
@@ -308,8 +294,7 @@ export class PageRouter {
 		const c = this.c;
 		const prevMsgId = this.state[PREV_MENU_MSG_ID_STATE_NAME];
 		let msgId;
-
-		// remove prev menu message
+		// try to update previous message
 		if (!this._redrawMenu && prevMsgId) {
 			try {
 				const { message_id } = await c.api.editMessageText(
@@ -319,33 +304,32 @@ export class PageRouter {
 					{ reply_markup: keyboard },
 				);
 
-				// msgId = message_id;
-				msgId = prevMsgId;
+				msgId = message_id;
+				// msgId = prevMsgId;
 			} catch (e) {
 				// skip error. means need to create a new post
 			}
 		}
-
-		// if can't edit message of there isn't any message then create a new one
+		// if can't edit message then delete previous and create a new one
 		if (!msgId) {
-			const [deleteResult, sendResult] = await Promise.all([
+			const [, createMenuResult] = await Promise.all([
+				// remove prev menu message
 				prevMsgId &&
-				(async () => {
-					try {
-						await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
-					} catch (e) {
-						// ignore if can't find message to delete
-						delete this.state[PREV_MENU_MSG_ID_STATE_NAME];
-					}
-				})(),
+					(async () => {
+						try {
+							await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
+						} catch (e) {
+							// ignore error if can't find message to delete
+						}
+					})(),
+				// print a new menu
 				await c.reply(this.currentPage.text, { reply_markup: keyboard }),
 			]);
 
-			msgId = sendResult.message_id;
+			msgId = createMenuResult.message_id;
 		}
 
 		this._redrawMenu = null;
-
-		if (msgId) this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
+		this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
 	}
 }

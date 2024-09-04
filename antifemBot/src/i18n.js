@@ -100,5 +100,6 @@ export default {
 		noContentMessage: 'Нет контента',
 		wasSuccessfullyScheduled: 'Пост сохранён в отложенные',
 		editedSavedSuccessfully: 'Отложенный пост сохранён',
+		sessionLost: 'Сессия была утереня. Начните с начала',
 	},
 };
