@@ -14,6 +14,7 @@ export function makeContext(
 	CHAT_OF_ADMINS_ID,
 	DESTINATION_CHANNEL_ID,
 	KV,
+	DEBUG,
 ) {
 	return async (c, next) => {
 		c.ctx = {
@@ -21,6 +22,7 @@ export function makeContext(
 			[CTX_KEYS.KV]: KV,
 			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
+			[CTX_KEYS.DEBUG]: DEBUG,
 		};
 
 		let appCfg;
@@ -78,7 +80,7 @@ export async function handleStart(c) {
 
 		return c.reply(
 			t(c, 'youAreNotRegistered') +
-				`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
+			`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
 		);
 	}
 	// show home page on start command

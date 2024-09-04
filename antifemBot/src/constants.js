@@ -36,6 +36,7 @@ export const CTX_KEYS = {
 	KV: 'KV',
 	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
 	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
+	DEBUG: 'DEBUG',
 };
 export const USER_KEYS = {
 	id: 'id',

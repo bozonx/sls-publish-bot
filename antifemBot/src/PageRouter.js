@@ -78,21 +78,21 @@ export class PageBase {
 
 	// It runs on each request.
 	// You can save some state to user in other functions while request is handling
-	async mount() {}
+	async mount() { }
 
 	// It runs when a route is changing. On each request
-	async unmount() {}
+	async unmount() { }
 
 	// Render menu here and return it.
 	// It runs only when the menu need to be renderred
 	// Menu has to be like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
-	async renderMenu() {}
+	async renderMenu() { }
 
 	// It runs on each income message while this page is active
-	async onMessage() {}
+	async onMessage() { }
 
 	// It runs on each button press of menu of this page
-	async onButtonPress(btnId, payload) {}
+	async onButtonPress(btnId, payload) { }
 }
 
 export class PageRouter {
@@ -140,6 +140,30 @@ export class PageRouter {
 		this.c = c;
 		this.pages = initialPages;
 	}
+
+	$handleMessage = async (c) => {
+		try {
+			await this._handleMessage();
+		} catch (e) {
+			c.reply(
+				`ERROR: handling income message ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
+			);
+
+			throw e;
+		}
+	};
+
+	$handleQueryData = async (c) => {
+		try {
+			await this._handleMessage();
+		} catch (e) {
+			c.reply(
+				`ERROR: handling query data ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
+			);
+
+			throw e;
+		}
+	};
 
 	// Please use this instead of context's one
 	async reply(...p) {
@@ -191,7 +215,7 @@ export class PageRouter {
 		return this._sendMenu(renderMenuKeyboard(menu));
 	}
 
-	_handleMessage = async (c) => {
+	async _handleMessage() {
 		// it loads current page
 		try {
 			const msg = await this._switchPage();
@@ -208,9 +232,9 @@ export class PageRouter {
 		await this.currentPage.onMessage?.();
 		// really the end of request
 		return this._theEndOfRequest();
-	};
+	}
 
-	_handleQueryData = async (c) => {
+	async _handleQueryData() {
 		const data = c.update.callback_query.data;
 		const [marker, btnId, ...bntPayloadRest] = data.split('|');
 		// do not handle not menu queries
@@ -241,7 +265,7 @@ export class PageRouter {
 
 		// really the end of request
 		return this._theEndOfRequest();
-	};
+	}
 
 	async _switchPage(newPath) {
 		await this.currentPage?.unmount?.();
@@ -315,13 +339,13 @@ export class PageRouter {
 			const [, createMenuResult] = await Promise.all([
 				// remove prev menu message
 				prevMsgId &&
-					(async () => {
-						try {
-							await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
-						} catch (e) {
-							// ignore error if can't find message to delete
-						}
-					})(),
+				(async () => {
+					try {
+						await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
+					} catch (e) {
+						// ignore error if can't find message to delete
+					}
+				})(),
 				// print a new menu
 				await c.reply(this.currentPage.text, { reply_markup: keyboard }),
 			]);

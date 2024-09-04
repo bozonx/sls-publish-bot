@@ -49,16 +49,17 @@ export function makeStateFromMessage(c) {
 
 	if (c.msg.video) {
 		state = {
-			[PUB_KEYS.text]: c.msg.caption,
-			[PUB_KEYS.entities]: c.msg.caption_entities,
 			[PUB_KEYS.media]: [
 				{ type: MEDIA_TYPES.video, data: c.msg.video.file_id },
 			],
 		};
+
+		if (c.msg.caption) {
+			state[PUB_KEYS.text] = c.msg.caption;
+			state[PUB_KEYS.entities] = c.msg.caption_entities;
+		}
 	} else if (c.msg.photo) {
 		state = {
-			[PUB_KEYS.text]: c.msg.caption,
-			[PUB_KEYS.entities]: c.msg.caption_entities,
 			[PUB_KEYS.media]: [
 				{
 					type: MEDIA_TYPES.photo,
@@ -67,6 +68,11 @@ export function makeStateFromMessage(c) {
 				},
 			],
 		};
+
+		if (c.msg.caption) {
+			state[PUB_KEYS.text] = c.msg.caption;
+			state[PUB_KEYS.entities] = c.msg.caption_entities;
+		}
 	} else if (c.msg.text) {
 		state = {
 			[PUB_KEYS.text]: c.msg.text,
@@ -163,7 +169,7 @@ export async function printPubToAdminChannel(router, item) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		t(c, 'infoMsgToAdminChannel') +
-			`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
+		`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
 		{ reply_parameters: { message_id } },
 	);
 }

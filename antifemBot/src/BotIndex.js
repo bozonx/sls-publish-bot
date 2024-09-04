@@ -41,8 +41,8 @@ export class BotIndex {
 
 		this.bot.use(routerMiddleware(routes));
 		this.bot.command('start', handleStart);
-		this.bot.on('callback_query:data', (c) => c.router._handleQueryData(c));
-		this.bot.on('message', (c) => c.router._handleMessage(c));
+		this.bot.on('callback_query:data', (c) => c.router.$handleQueryData(c));
+		this.bot.on('message', (c) => c.router.$handleMessage(c));
 	}
 
 	/**

@@ -17,6 +17,7 @@ export default {
 				env.CHAT_OF_ADMINS_ID,
 				env.DESTINATION_CHANNEL_ID,
 				env.KV,
+				env.DEBUG,
 			);
 
 			await app.init();
