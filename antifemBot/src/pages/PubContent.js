@@ -47,26 +47,28 @@ export class PubContent extends PubPageBase {
 				},
 			],
 			...breakArray(
-				this.state.pub[PUB_KEYS.text] && {
-					id: 'removeTextBtn',
-					label: t(c, 'removeTextBtn'),
-				},
-				this.state.pub[PUB_KEYS.media]?.length && {
-					id: 'removeMediaBtn',
-					label: t(c, 'removeMediaBtn'),
-				},
-				this.state.replaceMode !== REPLACE_MODES.textOnly && {
-					id: 'replaceOnlyTextBtn',
-					label: t(c, 'replaceOnlyTextBtn'),
-				},
-				this.state.replaceMode !== REPLACE_MODES.mediaOnly && {
-					id: 'replaceOnlyMediaBtn',
-					label: t(c, 'replaceOnlyMediaBtn'),
-				},
-				this.state.replaceMode !== REPLACE_MODES.both && {
-					id: 'replaceTextAndMediaBtn',
-					label: t(c, 'replaceTextAndMediaBtn'),
-				},
+				[
+					this.state.pub[PUB_KEYS.text] && {
+						id: 'removeTextBtn',
+						label: t(c, 'removeTextBtn'),
+					},
+					this.state.pub[PUB_KEYS.media]?.length && {
+						id: 'removeMediaBtn',
+						label: t(c, 'removeMediaBtn'),
+					},
+					this.state.replaceMode !== REPLACE_MODES.textOnly && {
+						id: 'replaceOnlyTextBtn',
+						label: t(c, 'replaceOnlyTextBtn'),
+					},
+					this.state.replaceMode !== REPLACE_MODES.mediaOnly && {
+						id: 'replaceOnlyMediaBtn',
+						label: t(c, 'replaceOnlyMediaBtn'),
+					},
+					this.state.replaceMode !== REPLACE_MODES.both && {
+						id: 'replaceTextAndMediaBtn',
+						label: t(c, 'replaceTextAndMediaBtn'),
+					},
+				],
 				2,
 			),
 			[

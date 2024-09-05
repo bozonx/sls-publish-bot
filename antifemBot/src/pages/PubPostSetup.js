@@ -16,8 +16,8 @@ export class PubPostSetup extends PubPageBase {
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
-			// set default author
-			[PUB_KEYS.author]: this.me[USER_KEYS.authorName],
+			// set creator of the post
+			[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
 			...this.state.pub,
 		};
 
@@ -27,6 +27,7 @@ export class PubPostSetup extends PubPageBase {
 			(i) => i !== this.state.pub[PUB_KEYS.template],
 		);
 		const previewIsOn = Boolean(this.state.pub[PUB_KEYS.preview]);
+		const authorToAdd = this._getAuthorToAdd();
 
 		return defineMenu([
 			...restTemplateNames.map((tmplName) => [
@@ -43,19 +44,20 @@ export class PubPostSetup extends PubPageBase {
 					payload: Number(!previewIsOn),
 				},
 			],
-			this.state.pub[PUB_KEYS.author]
-				? [
-						{
-							id: 'withoutAuthorBtn',
-							label: t(c, 'withoutAuthorBtn'),
-						},
-					]
+			this.state.pub[PUB_KEYS.noAuthor]
+				? authorToAdd && [
+					{
+						id: 'addAuthorBtn',
+						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
+						// payload: authorToAdd,
+					},
+				]
 				: [
-						{
-							id: 'addAuthorBtn',
-							label: `${t(c, 'addAuthorBtn')}: ${this.me[USER_KEYS.authorName]}`,
-						},
-					],
+					{
+						id: 'withoutAuthorBtn',
+						label: t(c, 'withoutAuthorBtn'),
+					},
+				],
 			[
 				{
 					id: 'showPreviewBtn',
@@ -73,13 +75,13 @@ export class PubPostSetup extends PubPageBase {
 				},
 				this.state[EDIT_ITEM_NAME]
 					? {
-							id: 'saveBtn',
-							label: t(c, 'saveBtn'),
-						}
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					}
 					: {
-							id: 'nextBtn',
-							label: t(c, 'nextBtn'),
-						},
+						id: 'nextBtn',
+						label: t(c, 'nextBtn'),
+					},
 			],
 		]);
 	}
@@ -91,11 +93,12 @@ export class PubPostSetup extends PubPageBase {
 
 		switch (btnId) {
 			case 'addAuthorBtn':
-				return this.reload({
-					[PUB_KEYS.author]: this.me[USER_KEYS.authorName],
-				});
+				return this.reload({ [PUB_KEYS.noAuthor]: false });
 			case 'withoutAuthorBtn':
-				return this.reload({ [PUB_KEYS.author]: null });
+				return this.reload({
+					[PUB_KEYS.noAuthor]: true,
+					[PUB_KEYS.customAuthor]: null,
+				});
 			case 'showPreviewBtn':
 				await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
 
@@ -115,5 +118,20 @@ export class PubPostSetup extends PubPageBase {
 			default:
 				return false;
 		}
+	}
+
+	async onMessage() {
+		const c = this.router.c;
+		const author = c.msg.text?.trim();
+
+		if (!author) return;
+
+		return this.reload({ [PUB_KEYS.customAuthor]: author });
+	}
+
+	_getAuthorToAdd() {
+		return this.state.pub[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower
+			? this.state.pub[PUB_KEYS.forwardedFrom]
+			: this.me[USER_KEYS.authorName];
 	}
 }

@@ -20,7 +20,8 @@ export default {
 		stateTime: 'Время',
 		stateTemplate: 'Шаблон',
 		stateUrlPreview: 'Предпросмотр ссылки',
-		statePublisher: 'Кто сделал',
+		stateCreator: 'Кто сделал',
+		stateUpdator: 'Кто изменил',
 
 		// Button texts
 		toHomeBtn: 'На главную',
@@ -74,7 +75,8 @@ export default {
 		mdV1TextModeDescr: 'Отправьте текст в формате Markdown V1',
 		standardTextModeDescr: 'Обычный режим текста',
 		selectTagsDescr: 'Выберете тэги',
-		pubPostSetupDescr: 'Проверьте и настройте публикацию',
+		pubPostSetupDescr:
+			'Проверьте и настройте публикацию.\nНапишите имя автора если нужно',
 		pubConfirmDescr: 'Отправляем в отложенные?',
 		selectDateDescr:
 			'Выберете дату либо введите в формате DD.MM. Часовая зона (${TIME_ZONE})',

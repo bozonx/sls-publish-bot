@@ -27,12 +27,26 @@ export function makeHashTags(tags) {
 	return tags.map((item) => `\\#${item}`).join(' ');
 }
 
-export function applyTemplate(c, textMdV2, templateName, author, tags) {
-	const template = c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][templateName];
+export function applyTemplate(c, textMdV2, pubState) {
+	const template =
+		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
+	let AUTHOR = '';
+
+	if (pubState[PUB_KEYS.noAuthor]) {
+		// do nothing
+	} else if (pubState[PUB_KEYS.customAuthor])
+		AUTHOR = pubState[PUB_KEYS.customAuthor];
+	else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
+		AUTHOR = pubState[PUB_KEYS.forwardedFrom];
+	} else {
+		// TODO: use createdBy if exist
+		AUTHOR = c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
+	}
+
 	const tmplData = {
 		CONTENT: textMdV2,
-		AUTHOR: author || '',
-		TAGS: makeHashTags(tags),
+		AUTHOR,
+		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
 	};
 
 	const text = template
@@ -132,7 +146,7 @@ export async function saveEditedScheduledPost(router) {
 
 	const item = {
 		...router.state[EDIT_ITEM_NAME],
-		[PUB_KEYS.publisherName]: router.me[USER_KEYS.name],
+		[PUB_KEYS.updatedBy]: router.me[USER_KEYS.id],
 	};
 	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
 	const oldItemIndex = allScheduled.findIndex((i) => i.id === item.id);
@@ -152,7 +166,6 @@ export async function createScheduledPublication(c, pubState) {
 	const item = {
 		...pubState,
 		id: uid.rnd(),
-		[PUB_KEYS.publisherName]: c.ctx[CTX_KEYS.me][USER_KEYS.name],
 	};
 	const allScheduled = (await loadFromKv(c, KV_KEYS.scheduled)) || [];
 	const prepared = [...allScheduled, item];
@@ -174,9 +187,15 @@ export async function printPubToAdminChannel(router, item) {
 	const infoMsgPostParams = {
 		[PUB_KEYS.date]: item[PUB_KEYS.date],
 		[PUB_KEYS.time]: item[PUB_KEYS.time],
-		// TODO: remake
-		[PUB_KEYS.publisherName]: item[PUB_KEYS.publisherName],
+		[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.users].find(
+			(i) => i.id === item[PUB_KEYS.createdBy],
+		)?.[USER_KEYS.name],
 	};
+
+	if (PUB_KEYS.updatedBy)
+		infoMsgPostParams[PUB_KEYS.updatedBy] = c.ctx[CTX_KEYS.users].find(
+			(i) => i.id === item[PUB_KEYS.updatedBy],
+		)?.[USER_KEYS.name];
 
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
@@ -236,13 +255,7 @@ function prepareMdV2MsgTextToPublish(c, pubState) {
 	}
 
 	if (pubState[PUB_KEYS.template]) {
-		return applyTemplate(
-			c,
-			contentMdV2,
-			pubState[PUB_KEYS.template],
-			pubState[PUB_KEYS.author],
-			pubState[PUB_KEYS.tags],
-		);
+		return applyTemplate(c, contentMdV2, pubState);
 	} else {
 		return contentMdV2;
 	}

@@ -38,6 +38,8 @@ export class PageBase {
 	path;
 	// Put here the description of menu
 	text;
+	// if menu text in md v2
+	menuTextInMd = false;
 
 	// state which is passed between pages using cache
 	// actually it is a session
@@ -323,6 +325,13 @@ export class PageRouter {
 	async _sendMenu(keyboard) {
 		const c = this.c;
 		const prevMsgId = this.state[PREV_MENU_MSG_ID_STATE_NAME];
+		const options = {
+			reply_markup: keyboard,
+		};
+		const text = this.currentPage.text;
+
+		if (this.currentPage.menuTextInMd) options.parse_mode = 'MarkdownV2';
+
 		let msgId;
 		// try to update previous message
 		if (!this._redrawMenu && prevMsgId) {
@@ -330,8 +339,8 @@ export class PageRouter {
 				const { message_id } = await c.api.editMessageText(
 					this.chatWithBotId,
 					prevMsgId,
-					this.currentPage.text,
-					{ reply_markup: keyboard },
+					text,
+					options,
 				);
 
 				msgId = message_id;
@@ -352,13 +361,14 @@ export class PageRouter {
 					}
 				})(),
 				// print a new menu
-				await c.reply(this.currentPage.text, { reply_markup: keyboard }),
+				await c.reply(text, options),
 			]);
 
 			msgId = createMenuResult.message_id;
 		}
 
 		this._redrawMenu = null;
+		this.currentPage.menuTextInMd = null;
 		this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
 	}
 }

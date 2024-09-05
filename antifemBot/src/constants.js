@@ -45,7 +45,6 @@ export const USER_KEYS = {
 	authorName: 'authorName',
 };
 export const APP_CFG_KEYS = {
-	authors: 'authors',
 	templates: 'templates',
 };
 export const TEMPLATE_NAMES = {
@@ -57,14 +56,18 @@ export const PUB_KEYS = {
 	text: 'text',
 	entities: 'entities',
 	media: 'media',
-	author: 'author',
 	tags: 'tags',
 	template: 'template',
 	preview: 'preview',
+	// author: 'author',
+	customAuthor: 'customAuthor',
+	forwardedFrom: 'forwardedFrom',
+	noAuthor: 'noAuthor',
 	date: 'date',
 	time: 'time',
 	// name of user who made or edited post
-	publisherName: 'publisherName',
+	createdBy: 'createdBy',
+	updatedBy: 'updatedBy',
 };
 export const MEDIA_TYPES = {
 	photo: 'photo',
@@ -84,9 +87,10 @@ export const APP_INITIAL_CONFIG = {
 	[APP_CFG_KEYS.templates]: {
 		[TEMPLATE_NAMES.default]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
 		[TEMPLATE_NAMES.byFollower]: [
-			'От подписчика ${AUTHOR}:',
+			'От подписчика:',
 			'${CONTENT}',
 			'${TAGS}',
+			'Прислано от ${AUTHOR}',
 			footer,
 		],
 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}', '${AUTHOR}', '${TAGS}'],
