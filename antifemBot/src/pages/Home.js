@@ -2,6 +2,7 @@ import { PageBase } from '../PageRouter.js';
 import { USER_KEYS, EDIT_ITEM_NAME } from '../constants.js';
 import { t, defineMenu } from '../helpers.js';
 import { makeStateFromMessage } from '../publishHelpres.js';
+import { handleScheduled } from '../indexShedullerPublisher.js';
 
 export class Home extends PageBase {
 	async renderMenu() {
@@ -33,6 +34,7 @@ export class Home extends PageBase {
 					label: t(c, 'manageScheduledBtn'),
 				},
 			],
+
 			isAdmin && [
 				{
 					id: 'editConfigBtn',
@@ -45,6 +47,12 @@ export class Home extends PageBase {
 					label: t(c, 'manageUsersBtn'),
 				},
 			],
+			// [
+			// 	{
+			// 		id: 'test',
+			// 		label: 'test',
+			// 	},
+			// ],
 		]);
 	}
 
@@ -62,6 +70,13 @@ export class Home extends PageBase {
 				return this.router.go('config-manager');
 			case 'manageUsersBtn':
 				return this.router.go('users-manager');
+			// case 'test':
+			// 	let c = this.router.c;
+			// 	return await handleScheduled(
+			// 		c.api.token,
+			// 		c.ctx.DESTINATION_CHANNEL_ID,
+			// 		c.ctx.KV,
+			// 	);
 			default:
 				return false;
 		}

@@ -27,6 +27,8 @@ export class ScheduledItem extends PageBase {
 					id: 'deleteSchuduledBtn',
 					label: t(c, 'deleteSchuduledBtn'),
 				},
+			],
+			[
 				{
 					id: 'changeDateTimeBtn',
 					label: t(c, 'changeDateTimeBtn'),
@@ -65,7 +67,7 @@ export class ScheduledItem extends PageBase {
 				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');
@@ -73,7 +75,7 @@ export class ScheduledItem extends PageBase {
 				await deleteScheduledPost(c, this.state[EDIT_ITEM_NAME].id);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');

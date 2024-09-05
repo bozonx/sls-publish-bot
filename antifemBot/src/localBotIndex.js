@@ -58,11 +58,11 @@ function KVStub(initialData = {}) {
 	await app.init();
 
 	// test scheduled
-	// await handleScheduled(
-	// 	process.env.TG_TOKEN,
-	// 	process.env.DESTINATION_CHANNEL_ID,
-	// 	KV,
-	// );
+	await handleScheduled(
+		process.env.TG_TOKEN,
+		process.env.DESTINATION_CHANNEL_ID,
+		KV,
+	);
 
 	app.botStart();
 })();

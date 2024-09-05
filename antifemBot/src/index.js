@@ -1,6 +1,7 @@
 import parseUrl from 'parse-url';
 import { webhookCallback } from 'grammy';
 import { BotIndex } from './BotIndex.js';
+import { handleScheduled } from './indexShedullerPublisher.js';
 import { setWebhook } from './helpers.js';
 import { TG_BOT_URL } from './constants.js';
 
@@ -36,6 +37,20 @@ export default {
 	},
 
 	async scheduled(event, env, ctx) {
-		ctx.waitUntil(setWebhook(env));
+		await ctx.waitUntil(setWebhook(env));
+
+		// 	switch (event.cron) {
+		// 		case '*/10 * * * *':
+		// 			// check is there some to publish
+		// 			await ctx.waitUntil(
+		// 				handleScheduled(env.TG_TOKEN, env.DESTINATION_CHANNEL_ID, env.KV),
+		// 			);
+		//
+		// 			break;
+		// 		case '0 */22 * * *':
+		// 			await ctx.waitUntil(setWebhook(env));
+		//
+		// 			break;
+		// 	}
 	},
 };

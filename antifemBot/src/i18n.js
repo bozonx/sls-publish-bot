@@ -44,7 +44,7 @@ export default {
 		showPreviewBtn: 'Показать пост',
 		deleteSchuduledBtn: 'Удалить',
 		editPostponedBtn: 'Редактировать',
-		changeDateTimeBtn: 'Изменить время',
+		changeDateTimeBtn: 'Изменить дату и время публикации',
 		manageScheduledBtn: 'Управлять отложенными постами',
 		publicateNowBtn: 'Опубликовать сейчас',
 		replaceOnlyTextBtn: 'Заменить только текст',

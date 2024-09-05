@@ -41,6 +41,8 @@ export async function handleScheduled(TG_TOKEN, DESTINATION_CHANNEL_ID, KV) {
 		},
 	};
 
+	console.log('======= ITEM PUBLISHED', item);
+
 	await doFullFinalPublicationProcess(c, item);
 }
 
@@ -55,15 +57,16 @@ export async function handleScheduled(TG_TOKEN, DESTINATION_CHANNEL_ID, KV) {
 // 10:01 false
 function findItemToPublish(allItems) {
 	const itemsToPublish = allItems.filter((item) => {
-		// TODO: uncomment on prod
-		// const nowDate = new Date();
-		const nowDateTs = new Date(
-			'2024-09-03T10:00' + PUBLICATION_TIME_ZONE,
-		).getTime();
+		// uncomment on prod
+		const nowDateTs = new Date().getTime();
+		// uncomment on dev
+		// const nowDateTs = new Date(
+		// 	'2024-09-03T10:00' + PUBLICATION_TIME_ZONE,
+		// ).getTime();
 		// full date in Moscow
 		const itemTsMs = new Date(
 			makeIsoDateFromPubState(item) + PUBLICATION_TIME_ZONE,
-		);
+		).getTime();
 		const extendedNowTsMs = dateAddSeconds(nowDateTs, PUBLICATION_ADD_NOW_SEC);
 		const nowMinusShiftTsMs = dateSubtractMinutes(
 			nowDateTs,
