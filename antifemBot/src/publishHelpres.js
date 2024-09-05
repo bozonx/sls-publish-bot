@@ -51,8 +51,7 @@ export function applyTemplate(c, textMdV2, pubState) {
 
 	const tmplData = {
 		CONTENT: textMdV2,
-		// AUTHOR,
-		AUTHOR: escapeMdV2(pubState[PUB_KEYS.author]),
+		AUTHOR: pubState[PUB_KEYS.author] && escapeMdV2(pubState[PUB_KEYS.author]),
 		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
 	};
 

@@ -170,8 +170,6 @@ export class PubContent extends PubPageBase {
 			delete pubState[PUB_KEYS.text];
 		}
 
-		console.log(444444, pubState);
-
 		delete this.state.replaceMode;
 
 		return this.reload(pubState);
