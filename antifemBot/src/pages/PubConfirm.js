@@ -2,7 +2,7 @@ import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { PUB_KEYS, HOME_PAGE, USER_KEYS } from '../constants.js';
 import {
-	schedulePublication,
+	createScheduledPublication,
 	printPubToAdminChannel,
 } from '../publishHelpres.js';
 
@@ -47,7 +47,7 @@ export class PubConfirm extends PubPageBase {
 			case 'cancelBtn':
 				return this.go(HOME_PAGE);
 			case 'pubConfirmBtn':
-				const item = await schedulePublication(c, this.state.pub);
+				const item = await createScheduledPublication(c, this.state.pub);
 				await printPubToAdminChannel(this.router, item);
 				await this.reply(t(c, 'wasSuccessfullyScheduled'));
 

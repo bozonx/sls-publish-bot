@@ -147,7 +147,7 @@ export async function saveEditedScheduledPost(router) {
 	return router.go('scheduled-item');
 }
 
-export async function schedulePublication(c, pubState) {
+export async function createScheduledPublication(c, pubState) {
 	const uid = new ShortUniqueId({ length: 10 });
 	const item = {
 		...pubState,
@@ -174,6 +174,7 @@ export async function printPubToAdminChannel(router, item) {
 	const infoMsgPostParams = {
 		[PUB_KEYS.date]: item[PUB_KEYS.date],
 		[PUB_KEYS.time]: item[PUB_KEYS.time],
+		// TODO: remake
 		[PUB_KEYS.publisherName]: item[PUB_KEYS.publisherName],
 	};
 
@@ -190,7 +191,7 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 		reply_parameters: replyToMsgId && { message_id: replyToMsgId },
 		parse_mode: 'MarkdownV2',
 	};
-	const fullPostTextMdV2 = prepareMdVwMsgTextToPublish(c, pubState);
+	const fullPostTextMdV2 = prepareMdV2MsgTextToPublish(c, pubState);
 
 	if (pubState[PUB_KEYS.media]?.length === 1) {
 		// one photo or video
@@ -209,20 +210,19 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 		} else {
 			throw new Error(`Unsupported type`);
 		}
-	} else if (!pubState[PUB_KEYS.media]?.length) {
-		// text message
-		return c.api.sendMessage(chatId, fullPostTextMdV2, {
-			...msgParams,
-			link_preview_options: {
-				is_disabled: !pubState[PUB_KEYS.preview],
-			},
-		});
+	} else if (pubState[PUB_KEYS.media]?.length > 1) {
+		throw new Error(`Media group is not supported`);
 	}
-
-	throw new Error(`Nothing to publish`);
+	// no media means text message
+	return c.api.sendMessage(chatId, fullPostTextMdV2, {
+		...msgParams,
+		link_preview_options: {
+			is_disabled: !pubState[PUB_KEYS.preview],
+		},
+	});
 }
 
-function prepareMdVwMsgTextToPublish(c, pubState) {
+function prepareMdV2MsgTextToPublish(c, pubState) {
 	let contentMdV2;
 	// it have entities then transform text to MD v2
 	if (pubState[PUB_KEYS.entities]) {

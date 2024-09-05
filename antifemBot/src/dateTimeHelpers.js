@@ -81,11 +81,10 @@ export function isValidShortTime(rawTime) {
 		return false;
 
 	const [hourStr, minuteStr] = rawTime.split(':');
-
 	const hour = Number(hourStr);
 	const minute = Number(minuteStr);
 
-	if (Number.isNaN(hour) || Number.isNaN(minuteStr)) return false;
+	if (Number.isNaN(hour) || Number.isNaN(minute)) return false;
 	else if (hour < 0 || hour > 24) return false;
 	else if (minute < 0 || minute > 60) return false;
 
@@ -95,6 +94,7 @@ export function isValidShortTime(rawTime) {
 // make iso date from DD.MM. It adds current year to a date
 export function shortRuDateToFullIsoDate(localeShortDate) {
 	const [dayStr, monthStr] = localeShortDate.split('.');
+	// TODO: с учетом локали +3
 	const year = new Date().getFullYear();
 
 	return `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;
@@ -102,8 +102,11 @@ export function shortRuDateToFullIsoDate(localeShortDate) {
 
 export function makeIsoDayFromNow(plusDay = 0) {
 	const now = new Date();
+	// TODO: с учетом локали +3
 	const year = now.getFullYear();
+	// TODO: с учетом локали +3
 	const month = now.getMonth() + 1;
+	// TODO: с учетом локали +3
 	const day = now.getDate() + Number(plusDay);
 
 	return `${year}-${make2SignDigitStr(month)}-${make2SignDigitStr(day)}`;
@@ -117,8 +120,9 @@ export function makeClosestDayRuString(c, isoDateStr) {
 		Number(dayStr),
 	);
 	const now = new Date();
-	const nowMs = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
 
+	// TODO: check time zone
+	const nowMs = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
 	const diffMs = testMs - nowMs;
 
 	if (diffMs < 0) return;
@@ -129,6 +133,8 @@ export function makeClosestDayRuString(c, isoDateStr) {
 }
 
 export function isPastDate(isoDateStr) {
+	// TODO: simplify
+
 	// if (
 	// 	new Date(isoDateStr).getTime() <
 	// 	new Date(makeIsoDayFromNow(0)).getTime()
@@ -147,6 +153,7 @@ export function isPastDate(isoDateStr) {
 	return testMs < nowMs;
 }
 
+// TODO: с учетом локали +3
 export function isPastDateTime(isoDateStr, timeStr, minusMinute) {
 	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
 	const [hoursStr, minutesStr] = timeStr.split(':');

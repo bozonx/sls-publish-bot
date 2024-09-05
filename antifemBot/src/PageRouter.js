@@ -273,12 +273,9 @@ export class PageRouter {
 
 	async _switchPage(newPath) {
 		await this.currentPage?.unmount?.();
-		await this._loadSession();
+		const isSessionLost = await this._loadSession(newPath);
 
-		// If stale or absent session and not home page then suggest to start
-		// If home page and stale session it is OK
-		if (!this._loadedSession && newPath !== HOME_PAGE)
-			return `${t(this.c, 'sessionLost')} /start`;
+		if (isSessionLost) return `${t(this.c, 'sessionLost')} /start`;
 
 		// switch to new path or use current page (reload)
 		const pathTo = newPath || this.state.currentPath;
@@ -294,16 +291,21 @@ export class PageRouter {
 		await this.currentPage.mount?.();
 	}
 
-	async _loadSession() {
+	async _loadSession(newPath) {
 		// in case switching page on .go()
 		if (this.state) return;
 		else if (this.state === null) {
 			throw new Error(`ERROR: Request has been already finished`);
 		}
 
-		// this._loadedSession = await loadFromCache(this.c, SESSION_CACHE_NAME);
 		this._loadedSession = this.c.ctx[CTX_KEYS.session];
 		this._state = this._loadedSession || {};
+
+		// TODO: сработает только при переходе на главную, что бесмылсено
+
+		// If stale or absent session and not home page then suggest to start
+		// If home page and stale session it is OK
+		if (!this._loadedSession && newPath !== HOME_PAGE) return true;
 	}
 
 	async _theEndOfRequest() {
@@ -333,7 +335,6 @@ export class PageRouter {
 				);
 
 				msgId = message_id;
-				// msgId = prevMsgId;
 			} catch (e) {
 				// skip error. means need to create a new post
 			}
