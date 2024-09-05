@@ -59,7 +59,8 @@ export const PUB_KEYS = {
 	tags: 'tags',
 	template: 'template',
 	preview: 'preview',
-	// author: 'author',
+	// the final selected author
+	author: 'author',
 	customAuthor: 'customAuthor',
 	forwardedFrom: 'forwardedFrom',
 	noAuthor: 'noAuthor',

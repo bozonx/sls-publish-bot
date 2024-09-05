@@ -148,22 +148,26 @@ export class PubContent extends PubPageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-		const fullState = makeStateFromMessage(c, this.state.mdV1Mode);
-		let pubState;
+		let pubState = makeStateFromMessage(c, this.state.mdV1Mode);
 
-		if (!fullState) return this.reply(t(c, 'wrongTypeOfPost'));
+		if (!pubState[PUB_KEYS.text] && !pubState[PUB_KEYS.media])
+			return this.reply(t(c, 'wrongTypeOfPost'));
 
-		if (this.state.replaceMode === REPLACE_MODES.both) {
-			pubState = fullState;
-		} else if (this.state.replaceMode === REPLACE_MODES.textOnly) {
+		if (this.state.replaceMode === REPLACE_MODES.textOnly) {
 			pubState = {
+				...pubState,
 				[PUB_KEYS.text]: fullState[PUB_KEYS.text],
 				[PUB_KEYS.entities]: fullState[PUB_KEYS.entities],
 			};
+
+			delete pubState[PUB_KEYS.media];
 		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
 			pubState = {
+				...pubState,
 				[PUB_KEYS.media]: fullState[PUB_KEYS.media],
 			};
+
+			delete pubState[PUB_KEYS.text];
 		}
 
 		delete this.state.replaceMode;

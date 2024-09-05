@@ -6,6 +6,7 @@ import {
 	USER_KEYS,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
+	CTX_KEYS,
 } from '../constants.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
@@ -52,7 +53,8 @@ export class PubPostSetup extends PubPageBase {
 						// payload: authorToAdd,
 					},
 				]
-				: [
+				: // TODO: не показывать в случае если шаблона от подписчика и нет forwardedName
+				[
 					{
 						id: 'withoutAuthorBtn',
 						label: t(c, 'withoutAuthorBtn'),

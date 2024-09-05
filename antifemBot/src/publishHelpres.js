@@ -62,6 +62,10 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 
 	console.log(22223333, c.msg);
 
+	state[PUB_KEYS.forwardedFrom] = c.msg.forward_sender_name
+		? c.msg.forward_sender_name
+		: null;
+
 	if (c.msg.video) {
 		state = {
 			[PUB_KEYS.media]: [
