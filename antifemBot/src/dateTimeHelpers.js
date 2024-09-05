@@ -72,9 +72,9 @@ export function isValidShortDate(rawDateStr) {
 	);
 }
 
-export function isValidShortTime(rawDateStr) {
+export function isValidShortTime(rawTime) {
 	if (
-		!String(rawDateStr)
+		!String(rawTime)
 			.trim()
 			.match(/^\d{1,2}\:\d{1,2}$/)
 	)

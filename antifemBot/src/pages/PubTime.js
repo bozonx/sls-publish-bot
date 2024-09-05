@@ -115,14 +115,13 @@ export class PubTime extends PubPageBase {
 			let startHour =
 				currentHourNum < firstHour ? firstHour : currentHourNum + 1;
 
-			console.log(11111, currentHourNum, startHour);
-
 			if (currentHourNum <= lastHour) {
 				for (let i = startHour; i <= lastHour; i++) {
 					res.push(this._makeHourBtn(i));
 				}
 			}
 		} else {
+			// all hours from 7 to 21
 			for (let i = firstHour; i <= lastHour; i++) {
 				res.push(this._makeHourBtn(i));
 			}

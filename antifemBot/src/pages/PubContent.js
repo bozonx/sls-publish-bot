@@ -1,5 +1,10 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { PUB_KEYS, HOME_PAGE, EDIT_ITEM_NAME } from '../constants.js';
+import {
+	PUB_KEYS,
+	HOME_PAGE,
+	EDIT_ITEM_NAME,
+	USER_KEYS,
+} from '../constants.js';
 import { t, defineMenu, makeStatePreview } from '../helpers.js';
 import {
 	makeStateFromMessage,
@@ -17,39 +22,19 @@ export class PubContent extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		// TODO: review
 		if (!this.state.pub) this.state.pub = {};
-
 		// copy state to edit in edit mode
 		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
 			this.state.pub = this.state[EDIT_ITEM_NAME];
+		// set initial replace mode = both
 		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
 		const haveAnyContent = Boolean(
 			this.state.pub.text || this.state.pub.media?.length,
 		);
-		// TODO: не показывать эту кнопку если текст слишком большой или слишком много медиа
 		const showNext = haveAnyContent;
-		let details = makeStatePreview(c, this.state.pub);
-		let modeMessage = t(c, 'uploadContentBothDescr');
 
-		if (this.state.replaceMode === REPLACE_MODES.textOnly) {
-			modeMessage = t(c, 'uploadContentTextOnlyDescr');
-		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
-			modeMessage = t(c, 'uploadContentMediaOnlyDescr');
-		}
-
-		if (!details) details = t(c, 'noContentMessage');
-
-		const textModeMessage = this.state.mdV1Mode
-			? t(c, 'mdV1TextModeDescr')
-			: t(c, 'standardTextModeDescr');
-
-		this.text = `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}\n\n${textModeMessage}`;
-
-		// if (haveAnyContent && this.state.mdV1Mode) {
-		// 	await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
-		// }
+		this.text = this._makeMenuText();
 
 		return defineMenu([
 			[
@@ -76,13 +61,19 @@ export class PubContent extends PubPageBase {
 				},
 			],
 			[
-				this.state.pub?.[PUB_KEYS.text] && {
+				this.state.pub[PUB_KEYS.text] && {
 					id: 'removeTextBtn',
 					label: t(c, 'removeTextBtn'),
 				},
-				this.state.pub?.[PUB_KEYS.media]?.length && {
+				this.state.pub[PUB_KEYS.media]?.length && {
 					id: 'removeMediaBtn',
 					label: t(c, 'removeMediaBtn'),
+				},
+			],
+			[
+				{
+					id: 'showPreviewBtn',
+					label: t(c, 'showPreviewBtn'),
 				},
 			],
 			[
@@ -91,10 +82,10 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-					this.state[EDIT_ITEM_NAME] && {
-						id: 'saveBtn',
-						label: t(c, 'saveBtn'),
-					},
+				this.state[EDIT_ITEM_NAME] && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				showNext && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
@@ -128,6 +119,10 @@ export class PubContent extends PubPageBase {
 				});
 			case 'removeMediaBtn':
 				return this.reload({ [PUB_KEYS.media]: null });
+			case 'showPreviewBtn':
+				await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
+
+				return this.reload();
 			case 'cancelBtn':
 				// delete this.state.replaceMode;
 				// delete this.state.mdV1Mode;
@@ -149,7 +144,7 @@ export class PubContent extends PubPageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-		const fullState = makeStateFromMessage(c);
+		const fullState = makeStateFromMessage(c, this.state.mdV1Mode);
 		let pubState;
 
 		if (!fullState) return this.reply(t(c, 'wrongTypeOfPost'));
@@ -170,5 +165,25 @@ export class PubContent extends PubPageBase {
 		delete this.state.replaceMode;
 
 		return this.reload(pubState);
+	}
+
+	_makeMenuText() {
+		const c = this.router.c;
+		let details = makeStatePreview(c, this.state.pub);
+		let modeMessage = t(c, 'uploadContentBothDescr');
+
+		if (this.state.replaceMode === REPLACE_MODES.textOnly) {
+			modeMessage = t(c, 'uploadContentTextOnlyDescr');
+		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
+			modeMessage = t(c, 'uploadContentMediaOnlyDescr');
+		}
+
+		if (!details) details = t(c, 'noContentMessage');
+
+		const textModeMessage = this.state.mdV1Mode
+			? t(c, 'mdV1TextModeDescr')
+			: t(c, 'standardTextModeDescr');
+
+		return `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}\n\n${textModeMessage}`;
 	}
 }

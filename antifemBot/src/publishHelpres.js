@@ -1,5 +1,9 @@
 import ShortUniqueId from 'short-unique-id';
 import { toMarkdownV2, escapers } from '@telegraf/entity';
+import { remark } from 'remark';
+import remarkRehype from 'remark-rehype';
+import html from 'rehype-stringify';
+import { parse } from './htmlToTgEntities/html.js';
 import {
 	CTX_KEYS,
 	APP_CFG_KEYS,
@@ -19,6 +23,60 @@ export function convertTgEntitiesToTgMdV2(text, entities) {
 export function escapeMdV2(text) {
 	return escapers.MarkdownV2(text);
 }
+
+/*
+from tg
+	entities: [
+		{ offset: 5, length: 4, type: 'bold' },
+		{ offset: 10, length: 6, type: 'italic' },
+		{ offset: 17, length: 4, type: 'text_link', url: 'https://ya.ru/' },
+		{ offset: 23, length: 5, type: 'blockquote' }
+	],
+ */
+export function convertMdV1ToTgTextAndEntities(textMdV1) {
+	const htmlText = remark()
+		.use(remarkRehype, {
+			handlers: {
+				code: (state, node) => {
+					return {
+						type: 'element',
+						tagName: 'pre',
+						children: [{ type: 'text', value: node.value }],
+					};
+				},
+				strong: (state, node) => {
+					return {
+						type: 'element',
+						tagName: 'b',
+						children: node.children,
+					};
+				},
+			},
+		})
+		.use(html)
+		.processSync(textMdV1)
+		.toString();
+
+	const [text, entities] = parse(htmlText, 'html');
+
+	console.log(66666, textMdV1, htmlText);
+
+	return [
+		text,
+		entities.map((i) => {
+			if (i.type === 'textUrl') i.type = 'text_link';
+
+			return { ...i };
+		}),
+	];
+}
+
+// console.log(
+// 	1111,
+// 	convertMdV1ToTgTextAndEntities(
+// 		'text **bold** *italic* [link](https://ya.ru) `inline fixed-width code`\n\n>Block quotation started\n\n```\nsome code\n```',
+// 	),
+// );
 
 export function makeHashTags(tags) {
 	if (!tags) return '';
@@ -42,10 +100,10 @@ export function applyTemplate(c, textMdV2, templateName, author, tags) {
 	return text;
 }
 
-export function makeStateFromMessage(c) {
+export function makeStateFromMessage(c, isTextInMdV1) {
 	let state = {};
 
-	// console.log(2222, c.msg);
+	console.log(22223333, c.msg);
 
 	if (c.msg.video) {
 		state = {
@@ -80,6 +138,13 @@ export function makeStateFromMessage(c) {
 		};
 	} else {
 		return;
+	}
+
+	if (isTextInMdV1) {
+		const [cleanText, entities] = convertMdV1ToTgTextAndEntities(state.text);
+
+		state.text = cleanText;
+		state.entities = entities;
 	}
 
 	return state;
@@ -224,11 +289,15 @@ function prepareMdVwMsgTextToPublish(c, pubState) {
 		contentMdV2 = escapeMdV2(pubState[PUB_KEYS.text]);
 	}
 
-	return applyTemplate(
-		c,
-		contentMdV2,
-		pubState[PUB_KEYS.template],
-		pubState[PUB_KEYS.author],
-		pubState[PUB_KEYS.tags],
-	);
+	if (pubState[PUB_KEYS.template]) {
+		return applyTemplate(
+			c,
+			contentMdV2,
+			pubState[PUB_KEYS.template],
+			pubState[PUB_KEYS.author],
+			pubState[PUB_KEYS.tags],
+		);
+	} else {
+		return contentMdV2;
+	}
 }
