@@ -30,22 +30,23 @@ export function makeHashTags(tags) {
 export function applyTemplate(c, textMdV2, pubState) {
 	const template =
 		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
-	let AUTHOR = '';
-
-	if (pubState[PUB_KEYS.noAuthor]) {
-		// do nothing
-	} else if (pubState[PUB_KEYS.customAuthor])
-		AUTHOR = pubState[PUB_KEYS.customAuthor];
-	else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
-		AUTHOR = pubState[PUB_KEYS.forwardedFrom];
-	} else {
-		// TODO: use createdBy if exist
-		AUTHOR = c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
-	}
+	// let AUTHOR = '';
+	//
+	// if (pubState[PUB_KEYS.noAuthor]) {
+	// 	// do nothing
+	// } else if (pubState[PUB_KEYS.customAuthor])
+	// 	AUTHOR = pubState[PUB_KEYS.customAuthor];
+	// else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
+	// 	AUTHOR = pubState[PUB_KEYS.forwardedFrom];
+	// } else {
+	// 	// TODO: use createdBy if exist
+	// 	AUTHOR = c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
+	// }
 
 	const tmplData = {
 		CONTENT: textMdV2,
-		AUTHOR,
+		// AUTHOR,
+		AUTHOR: pubState[PUB_KEYS.author],
 		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
 	};
 

@@ -31,7 +31,7 @@ export function makeStatePreview(c, state = {}) {
 	let mediaCount = state[PUB_KEYS.media]?.length || 0;
 	let textLength = state[PUB_KEYS.text]?.length || 0;
 	let postType = 'text';
-	const author = resolveAuthorNameForDetails(c, state);
+	// const author = resolveAuthorNameForDetails(c, state);
 	const users = c.ctx[CTX_KEYS.users];
 	const createdUserName =
 		state[PUB_KEYS.createdBy] &&
@@ -48,7 +48,9 @@ export function makeStatePreview(c, state = {}) {
 	if (state[PUB_KEYS.text]) res += `${t(c, 'statePostType')}: ${postType}\n`;
 	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
 	if (mediaCount) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
-	if (author) res += `${t(c, 'stateAuthor')}: ${author}\n`;
+	// if (author) res += `${t(c, 'stateAuthor')}: ${author}\n`;
+	if (state[PUB_KEYS.author])
+		res += `${t(c, 'stateAuthor')}: ${state[PUB_KEYS.author]}\n`;
 	if (state[PUB_KEYS.tags])
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
 	if (state[PUB_KEYS.template])
@@ -68,17 +70,17 @@ export function makeStatePreview(c, state = {}) {
 	return res.trim();
 }
 
-function resolveAuthorNameForDetails(c, pubState) {
-	if (pubState[PUB_KEYS.noAuthor]) return;
-	else if (pubState[PUB_KEYS.customAuthor])
-		return pubState[PUB_KEYS.customAuthor];
-	else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
-		return pubState[PUB_KEYS.forwardedFrom];
-	} else {
-		// TODO: use createdBy if exist
-		return c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
-	}
-}
+// function resolveAuthorNameForDetails(c, pubState) {
+// 	if (pubState[PUB_KEYS.noAuthor]) return;
+// 	else if (pubState[PUB_KEYS.customAuthor])
+// 		return pubState[PUB_KEYS.customAuthor];
+// 	else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
+// 		return pubState[PUB_KEYS.forwardedFrom];
+// 	} else {
+// 		// TODO: use createdBy if exist
+// 		return c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
+// 	}
+// }
 
 export async function loadFromKv(c, key, defaultValue) {
 	let resStr;

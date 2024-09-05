@@ -17,8 +17,10 @@ export class PubPostSetup extends PubPageBase {
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
+			// TODO: можно тут не делать, а в confirm
 			// set creator of the post
 			[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+			[PUB_KEYS.author]: c.ctx[CTX_KEYS.me][USER_KEYS.name],
 			...this.state.pub,
 		};
 
@@ -45,19 +47,18 @@ export class PubPostSetup extends PubPageBase {
 					payload: Number(!previewIsOn),
 				},
 			],
-			this.state.pub[PUB_KEYS.noAuthor]
+			this.state.pub[PUB_KEYS.author]
 				? authorToAdd && [
-					{
-						id: 'addAuthorBtn',
-						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
-						// payload: authorToAdd,
-					},
-				]
-				: // TODO: не показывать в случае если шаблона от подписчика и нет forwardedName
-				[
 					{
 						id: 'withoutAuthorBtn',
 						label: t(c, 'withoutAuthorBtn'),
+					},
+				]
+				: [
+					{
+						id: 'addAuthorBtn',
+						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
+						payload: authorToAdd,
 					},
 				],
 			[
@@ -90,16 +91,24 @@ export class PubPostSetup extends PubPageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'TEMPLATE') {
-			return this.reload({ [PUB_KEYS.template]: payload });
+			return this.reload({
+				[PUB_KEYS.template]: payload,
+				[PUB_KEYS.author]: this._resolveAuthorByTemplate(payload),
+			});
 		}
 
 		switch (btnId) {
 			case 'addAuthorBtn':
-				return this.reload({ [PUB_KEYS.noAuthor]: false });
+				return this.reload({
+					[PUB_KEYS.noAuthor]: false,
+					[PUB_KEYS.customAuthor]: null,
+					[PUB_KEYS.author]: payload,
+				});
 			case 'withoutAuthorBtn':
 				return this.reload({
 					[PUB_KEYS.noAuthor]: true,
 					[PUB_KEYS.customAuthor]: null,
+					[PUB_KEYS.author]: null,
 				});
 			case 'showPreviewBtn':
 				await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
@@ -136,4 +145,33 @@ export class PubPostSetup extends PubPageBase {
 			? this.state.pub[PUB_KEYS.forwardedFrom]
 			: this.me[USER_KEYS.authorName];
 	}
+
+	_resolveAuthorByTemplate(testTemplate) {
+		const customAuthor = this.state.pub[PUB_KEYS.customAuthor];
+		const noAuthor = this.state.pub[PUB_KEYS.noAuthor];
+		const forwardedFrom = this.state.pub[PUB_KEYS.forwardedFrom];
+
+		if (!noAuthor && testTemplate === TEMPLATE_NAMES.byFollower) {
+			if (customAuthor) return customAuthor;
+			else if (forwardedFrom) return forwardedFrom;
+		} else if (!noAuthor && testTemplate === TEMPLATE_NAMES.default) {
+			if (customAuthor) return customAuthor;
+			// else return this.state.pub[PUB_KEYS.createdBy];
+			else return this.router.c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
+		}
+		// template noFooter or other cases
+		return null;
+	}
+
+	// function resolveAuthorNameForDetails(c, pubState) {
+	// 	if (pubState[PUB_KEYS.noAuthor]) return;
+	// 	else if (pubState[PUB_KEYS.customAuthor])
+	// 		return pubState[PUB_KEYS.customAuthor];
+	// 	else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
+	// 		return pubState[PUB_KEYS.forwardedFrom];
+	// 	} else {
+	// 		// TODO: use createdBy if exist
+	// 		return c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
+	// 	}
+	// }
 }
