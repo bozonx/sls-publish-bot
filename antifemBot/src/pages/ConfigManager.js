@@ -2,6 +2,7 @@ import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
 import { KV_KEYS, USER_KEYS } from '../constants.js';
 import { t, saveToKv, defineMenu } from '../helpers.js';
+import { escapeMdV2 } from '../publishHelpres.js';
 
 export class ConfigManager extends PageBase {
 	async renderMenu() {
@@ -12,8 +13,9 @@ export class ConfigManager extends PageBase {
 		this.text = t(c, 'editConfigDescr');
 
 		// print current config
-		// TODO: put it into code tag
-		await this.reply(yaml.dump(this.config));
+		await this.reply('```\n' + escapeMdV2(yaml.dump(this.config)) + '\n```', {
+			parse_mode: 'MarkdownV2',
+		});
 
 		return defineMenu([
 			[

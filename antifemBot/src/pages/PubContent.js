@@ -9,6 +9,7 @@ import { t, defineMenu, makeStatePreview } from '../helpers.js';
 import {
 	makeStateFromMessage,
 	saveEditedScheduledPost,
+	escapeMdV2,
 } from '../publishHelpres.js';
 import { isEmptyObj, breakArray } from '../lib.js';
 
@@ -22,6 +23,8 @@ export class PubContent extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
+		this.menuTextInMd = true;
+
 		if (!this.state.pub) this.state.pub = {};
 		// copy state to edit in edit mode
 		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
@@ -32,7 +35,6 @@ export class PubContent extends PubPageBase {
 		const haveAnyContent = Boolean(
 			this.state.pub.text || this.state.pub.media?.length,
 		);
-		const showNext = haveAnyContent;
 
 		this.text = this._makeMenuText();
 
@@ -71,7 +73,7 @@ export class PubContent extends PubPageBase {
 				],
 				2,
 			),
-			[
+			haveAnyContent && [
 				{
 					id: 'showPreviewBtn',
 					label: t(c, 'showPreviewBtn'),
@@ -87,7 +89,7 @@ export class PubContent extends PubPageBase {
 					id: 'saveBtn',
 					label: t(c, 'saveBtn'),
 				},
-				showNext && {
+				haveAnyContent && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 				},
@@ -190,8 +192,13 @@ export class PubContent extends PubPageBase {
 
 		const textModeMessage = this.state.mdV1Mode
 			? t(c, 'mdV1TextModeDescr')
-			: t(c, 'standardTextModeDescr');
+			: escapeMdV2(t(c, 'standardTextModeDescr'));
 
-		return `${details}\n\n${t(c, 'uploadContentDescr')}\n\n${modeMessage}\n\n${textModeMessage}`;
+		return (
+			`${escapeMdV2(details)}\n\n` +
+			`${escapeMdV2(t(c, 'uploadContentDescr'))}\n\n` +
+			`${escapeMdV2(modeMessage)}\n\n` +
+			textModeMessage
+		);
 	}
 }
