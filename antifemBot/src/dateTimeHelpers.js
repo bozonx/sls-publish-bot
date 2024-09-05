@@ -129,6 +129,12 @@ export function makeClosestDayRuString(c, isoDateStr) {
 }
 
 export function isPastDate(isoDateStr) {
+	// if (
+	// 	new Date(isoDateStr).getTime() <
+	// 	new Date(makeIsoDayFromNow(0)).getTime()
+	// )
+	// 	return this.reply(t(c, 'dateIsPastMessage'));
+	//
 	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
 	const testMs = Date.UTC(
 		Number(yearStr),

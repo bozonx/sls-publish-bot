@@ -169,13 +169,3 @@ export function parseJsonSafelly(dataStr) {
 
 	return JSON.parse(dataStr);
 }
-
-// export function normalizeNumbers(obj) {
-// 	const res = {};
-//
-// 	for (const index of Object.keys(obj)) {
-// 		res[index] = Number.isNaN(Number(obj[index])) ? obj[index] : Number(obj[index]);
-// 	}
-//
-// 	return res;
-// }

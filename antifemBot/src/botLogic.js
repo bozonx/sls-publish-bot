@@ -17,8 +17,10 @@ export function makeContext(
 	APP_DEBUG,
 ) {
 	return async (c, next) => {
+		const userChatIdWithBot = c.msg.chat.id;
+
 		c.ctx = {
-			[CTX_KEYS.chatWithBotId]: c.msg.chat.id,
+			[CTX_KEYS.chatWithBotId]: userChatIdWithBot,
 			[CTX_KEYS.KV]: KV,
 			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
@@ -33,7 +35,7 @@ export function makeContext(
 			[appCfg, users, session] = await Promise.all([
 				await loadFromKv(c, KV_KEYS.config),
 				await loadFromKv(c, KV_KEYS.users),
-				await loadFromCache(c, SESSION_CACHE_NAME, c.msg.chat.id),
+				await loadFromCache(c, SESSION_CACHE_NAME, userChatIdWithBot),
 			]);
 		} catch (e) {
 			throw new Error(`Can't load initial data: ${e}`);

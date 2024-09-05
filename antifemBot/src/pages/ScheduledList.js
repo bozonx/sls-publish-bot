@@ -14,6 +14,8 @@ import {
 	isPastDateTime,
 } from '../dateTimeHelpers.js';
 
+const LABEL_LENGTH = 50;
+
 export class ScheduledList extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
@@ -68,7 +70,7 @@ export class ScheduledList extends PageBase {
 	}
 
 	makeItemLabel(item) {
-		const text = item[PUB_KEYS.text]?.trim().substring(0, 38).trim();
+		const text = item[PUB_KEYS.text]?.trim().substring(0, LABEL_LENGTH).trim();
 
 		if (
 			isPastDateTime(

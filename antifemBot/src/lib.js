@@ -42,3 +42,13 @@ export function make2SignDigitStr(digit) {
 	if (num < 10) return `0${num}`;
 	else return String(num);
 }
+
+// export function normalizeNumbers(obj) {
+// 	const res = {};
+//
+// 	for (const index of Object.keys(obj)) {
+// 		res[index] = Number.isNaN(Number(obj[index])) ? obj[index] : Number(obj[index]);
+// 	}
+//
+// 	return res;
+// }

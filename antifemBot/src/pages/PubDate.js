@@ -1,6 +1,11 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { PUB_KEYS, HOME_PAGE, EDIT_ITEM_NAME } from '../constants.js';
+import {
+	PUB_KEYS,
+	HOME_PAGE,
+	EDIT_ITEM_NAME,
+	DEFAULT_PUB_PLUS_DAY,
+} from '../constants.js';
 import { saveEditedScheduledPost } from '../publishHelpres.js';
 import { isEmptyObj, applyStringTemplate } from '../lib.js';
 import {
@@ -21,7 +26,7 @@ export class PubDate extends PubPageBase {
 
 		// default date is tomorrow
 		if (!this.state.pub[PUB_KEYS.date])
-			this.state.pub[PUB_KEYS.date] = makeIsoDayFromNow(1);
+			this.state.pub[PUB_KEYS.date] = makeIsoDayFromNow(DEFAULT_PUB_PLUS_DAY);
 
 		const descr = applyStringTemplate(t(c, 'selectDateDescr'), {
 			TIME_ZONE: t(c, 'msk'),
@@ -75,7 +80,7 @@ export class PubDate extends PubPageBase {
 					id: 'saveBtn',
 					label: t(c, 'saveBtn'),
 				},
-				this.state.pub?.[PUB_KEYS.date] && {
+				{
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
 				},

@@ -10,7 +10,7 @@ import {
 	makeStateFromMessage,
 	saveEditedScheduledPost,
 } from '../publishHelpres.js';
-import { isEmptyObj } from '../lib.js';
+import { isEmptyObj, breakArray } from '../lib.js';
 
 const REPLACE_MODES = {
 	textOnly: 'textOnly',
@@ -46,7 +46,15 @@ export class PubContent extends PubPageBase {
 					payload: Number(!this.state.mdV1Mode),
 				},
 			],
-			[
+			...breakArray(
+				this.state.pub[PUB_KEYS.text] && {
+					id: 'removeTextBtn',
+					label: t(c, 'removeTextBtn'),
+				},
+				this.state.pub[PUB_KEYS.media]?.length && {
+					id: 'removeMediaBtn',
+					label: t(c, 'removeMediaBtn'),
+				},
 				this.state.replaceMode !== REPLACE_MODES.textOnly && {
 					id: 'replaceOnlyTextBtn',
 					label: t(c, 'replaceOnlyTextBtn'),
@@ -59,17 +67,8 @@ export class PubContent extends PubPageBase {
 					id: 'replaceTextAndMediaBtn',
 					label: t(c, 'replaceTextAndMediaBtn'),
 				},
-			],
-			[
-				this.state.pub[PUB_KEYS.text] && {
-					id: 'removeTextBtn',
-					label: t(c, 'removeTextBtn'),
-				},
-				this.state.pub[PUB_KEYS.media]?.length && {
-					id: 'removeMediaBtn',
-					label: t(c, 'removeMediaBtn'),
-				},
-			],
+				2,
+			),
 			[
 				{
 					id: 'showPreviewBtn',
@@ -124,18 +123,21 @@ export class PubContent extends PubPageBase {
 
 				return this.reload();
 			case 'cancelBtn':
-				// delete this.state.replaceMode;
-				// delete this.state.mdV1Mode;
+				delete this.state.replaceMode;
+				delete this.state.mdV1Mode;
 
 				if (this.state[EDIT_ITEM_NAME]) return this.go('scheduled-item');
 
 				return this.go(HOME_PAGE);
 			case 'nextBtn':
-				// delete this.state.replaceMode;
-				// delete this.state.mdV1Mode;
+				delete this.state.replaceMode;
+				delete this.state.mdV1Mode;
 
 				return this.go('pub-tags');
 			case 'saveBtn':
+				delete this.state.replaceMode;
+				delete this.state.mdV1Mode;
+
 				return saveEditedScheduledPost(this.router);
 			default:
 				return false;

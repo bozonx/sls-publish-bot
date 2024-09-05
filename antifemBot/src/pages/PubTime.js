@@ -91,6 +91,8 @@ export class PubTime extends PubPageBase {
 		if (isValidShortTime(rawTime)) {
 			const [hourStr, minuteStr] = rawTime.split(':');
 
+			// TODO: check past
+
 			time = `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
 		} else {
 			await this.reply(t(c, 'wrongTimeFormat'));
@@ -120,6 +122,7 @@ export class PubTime extends PubPageBase {
 					res.push(this._makeHourBtn(i));
 				}
 			}
+			// else nothing - empty list
 		} else {
 			// all hours from 7 to 21
 			for (let i = firstHour; i <= lastHour; i++) {

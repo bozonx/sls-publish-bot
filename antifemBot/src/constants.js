@@ -11,13 +11,13 @@ export const EDIT_ITEM_NAME = 'editItem';
 // TODO: вынести в env?
 export const PUBLICATION_TIME_ZONE = '+03:00';
 // TODO: вынести в env?
-export const DEFAULT_PUB_TIME = '10:00';
-// TODO: вынести в env?
 export const SESSION_STATE_TTL_SEC = 80;
 // TODO: вынести в env?
 export const PUBLISHING_MINUS_MINUTES = 5;
 
 export const PUBLICATION_ADD_NOW_SEC = 5;
+export const DEFAULT_PUB_PLUS_DAY = 1;
+export const DEFAULT_PUB_TIME = '10:00';
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const KV_KEYS = {
 	config: 'config',
