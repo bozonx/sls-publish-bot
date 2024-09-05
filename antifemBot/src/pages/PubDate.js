@@ -15,6 +15,7 @@ import {
 	makeShortDateFromIsoDate,
 	getShortWeekDay,
 	isPastDate,
+	isoDateToLongLocaleRuDate,
 } from '../dateTimeHelpers.js';
 
 export class PubDate extends PubPageBase {
@@ -28,9 +29,10 @@ export class PubDate extends PubPageBase {
 		if (!this.state.pub[PUB_KEYS.date])
 			this.state.pub[PUB_KEYS.date] = makeIsoDayFromNow(DEFAULT_PUB_PLUS_DAY);
 
-		const descr = applyStringTemplate(t(c, 'selectDateDescr'), {
-			TIME_ZONE: t(c, 'msk'),
-		});
+		const descr =
+			applyStringTemplate(t(c, 'selectDateDescr'), {
+				TIME_ZONE: t(c, 'msk'),
+			}) + ` ${isoDateToLongLocaleRuDate(makeIsoDayFromNow(0))}`;
 
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 

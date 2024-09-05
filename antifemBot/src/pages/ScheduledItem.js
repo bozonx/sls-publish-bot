@@ -4,12 +4,20 @@ import {
 	doFullFinalPublicationProcess,
 	deleteScheduledPost,
 } from '../publishHelpres.js';
-import { USER_KEYS, HOME_PAGE, EDIT_ITEM_NAME } from '../constants.js';
+import {
+	USER_KEYS,
+	HOME_PAGE,
+	EDIT_ITEM_NAME,
+	PUB_KEYS,
+} from '../constants.js';
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const item = this.state[EDIT_ITEM_NAME];
+		const allowEdit =
+			this.me[USER_KEYS.isAdmin] ||
+			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
 		// do delete it in case of cancel btn pressed
 		delete this.state.pub;
 
@@ -19,13 +27,13 @@ export class ScheduledItem extends PageBase {
 
 		return defineMenu([
 			[
-				{
-					id: 'editPostponedBtn',
-					label: t(c, 'editPostponedBtn'),
-				},
-				{
+				allowEdit && {
 					id: 'deleteSchuduledBtn',
 					label: t(c, 'deleteSchuduledBtn'),
+				},
+				allowEdit && {
+					id: 'editSchuduledBtn',
+					label: t(c, 'editSchuduledBtn'),
 				},
 			],
 			[
@@ -79,7 +87,7 @@ export class ScheduledItem extends PageBase {
 				);
 
 				return this.router.go('scheduled-list');
-			case 'editPostponedBtn':
+			case 'editSchuduledBtn':
 				return this.router.go('pub-content');
 			case 'showPreviewBtn':
 				await this.printFinalPost(

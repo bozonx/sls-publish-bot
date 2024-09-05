@@ -86,15 +86,20 @@ const footer =
 export const APP_INITIAL_CONFIG = {
 	// use telegram MarkdownV2 https://core.telegram.org/bots/api#markdownv2-style
 	[APP_CFG_KEYS.templates]: {
-		[TEMPLATE_NAMES.default]: ['${CONTENT}', '${AUTHOR}', '${TAGS}', footer],
-		[TEMPLATE_NAMES.byFollower]: [
-			'От подписчика:',
-			'${CONTENT}',
-			'${TAGS}',
-			'Прислано от ${AUTHOR}',
+		[TEMPLATE_NAMES.default]: [
+			'${CONTENT}\n\n',
+			'${AUTHOR}\n\n',
+			'${TAGS}\n\n',
 			footer,
 		],
-		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}', '${AUTHOR}', '${TAGS}'],
+		[TEMPLATE_NAMES.byFollower]: [
+			'От подписчика',
+			' ${AUTHOR}',
+			'\n\n${CONTENT}\n\n',
+			'${TAGS}\n\n',
+			footer,
+		],
+		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
 	},
 };
 

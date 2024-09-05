@@ -58,7 +58,8 @@ export function applyTemplate(c, textMdV2, pubState) {
 	const text = template
 		.map((i) => applyStringTemplate(i, tmplData))
 		.filter((i) => i.trim())
-		.join('\n\n');
+		.join('')
+		.trim();
 
 	return text;
 }

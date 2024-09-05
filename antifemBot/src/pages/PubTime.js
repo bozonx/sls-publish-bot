@@ -13,6 +13,7 @@ import {
 	makeIsoDayFromNow,
 	isValidShortTime,
 	getCurrentHour,
+	getCurrentTime,
 } from '../dateTimeHelpers.js';
 
 export class PubTime extends PubPageBase {
@@ -20,6 +21,7 @@ export class PubTime extends PubPageBase {
 		const c = this.router.c;
 		const descr = applyStringTemplate(t(c, 'selectHourDescr'), {
 			TIME_ZONE: t(c, 'msk'),
+			CURRENT_TIME: getCurrentTime(PUBLICATION_TIME_ZONE),
 		});
 
 		this.state.pub = {

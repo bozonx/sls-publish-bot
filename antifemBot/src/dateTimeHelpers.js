@@ -186,6 +186,15 @@ export function getCurrentHour(timeZone) {
 	);
 }
 
+export function getCurrentTime(timeZone) {
+	return new Date().toLocaleString('ru-RU', {
+		timeZone: timeZone,
+		hour: 'numeric',
+		minute: 'numeric',
+		hour12: false,
+	});
+}
+
 //////////// TESTS
 
 // console.log(111, makeIsoDayFromNow(0), makeIsoDayFromNow(8));

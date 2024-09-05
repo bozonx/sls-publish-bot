@@ -47,7 +47,7 @@ export function makeStatePreview(c, state = {}) {
 
 	if (state[PUB_KEYS.text]) res += `${t(c, 'statePostType')}: ${postType}\n`;
 	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
-	if (mediaCount) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
+	if (mediaCount > 1) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
 	if (state[PUB_KEYS.tags])
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
 	if (!mediaCount && typeof state[PUB_KEYS.preview] !== 'undefined')

@@ -3,7 +3,7 @@ export default {
 		// daysOfWeek: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
 		closestDays: ['Сегодня', 'Завтра', 'Послезавтра'],
 		msk: 'МСК',
-		staleMark: 'Просрочен!',
+		staleMark: 'Просрочено!',
 
 		// Template names
 		'template-default': 'Основной',
@@ -31,25 +31,25 @@ export default {
 		editConfigBtn: 'Редактирование конфига',
 		manageUsersBtn: 'Управление пользователями',
 		manageTagsBtn: 'Управлять тэгами',
-		sendTextInMdV1Btn: 'Отправить текст в формате Markdown V1',
-		switchToMdv1ModeBtn: 'Переключиться в режим MD V1',
+		sendTextInMdV1Btn: 'Отправить текст в формате Markdown',
+		switchToMdv1ModeBtn: 'Переключиться в режим текста Markdown',
 		switchToStandardModeBtn: 'Переключиться в обычный режим',
 		withoutAuthorBtn: 'Без автора',
 		addAuthorBtn: 'Добавить автора',
 		clearTagsBtn: 'Сбросить тэги',
 		useTemplateBtn: 'Использовать шаблон',
-		linkPreviewOffBtn: 'Выключить link preview',
-		linkPreviewOnBtn: 'Включить link preview',
+		linkPreviewOffBtn: 'Выключить предпросмотр ссылки',
+		linkPreviewOnBtn: 'Включить предпросмотр ссылки',
 		pubConfirmBtn: 'Запланировать',
 		showPreviewBtn: 'Показать пост',
 		deleteSchuduledBtn: 'Удалить',
-		editPostponedBtn: 'Редактировать',
+		editSchuduledBtn: 'Редактировать',
 		changeDateTimeBtn: 'Изменить дату и время публикации',
 		manageScheduledBtn: 'Управлять отложенными постами',
 		publicateNowBtn: 'Опубликовать сейчас',
 		replaceOnlyTextBtn: 'Заменить только текст',
 		replaceOnlyMediaBtn: 'Заменить только медиа',
-		replaceTextAndMediaBtn: 'Заменить медиа и текст и медиа',
+		replaceTextAndMediaBtn: 'Заменить и текст и медиа',
 		removeTextBtn: 'Удалить текст',
 		removeMediaBtn: 'Удалить медиа',
 		toListBtn: 'К списку',
@@ -57,14 +57,29 @@ export default {
 
 		// Menu descriptions
 		homeDescr:
-			'Приветствую в боте публикации постов в канал Антифеминизм | Маскулизм!\n\nНапишите текст поста, картинку или видео (можно несколько) или перешлите из другого чата. (Текст или картинку можно будет добавить или изменить позже)',
+			'Приветствую в боте публикации постов в канал Антифеминизм | Маскулизм!\n\nНапишите или перешлите пост в виде текста, картинки или видео',
 		editConfigDescr: 'Отредактируйте конфиг в формате YAML и отправьте обратно',
 		tagsManagerDescr:
-			'Выберете тэги которые нужно удалить. Чтобы добавить новый тэг - напишите его. Он будет переведён в snake_case. Символ # не нужен',
+			'Выберете тэги которые нужно удалить\n\nЧтобы добавить новые тэги, напишите один или несколько тэгов через запятую. Тэги будут переведены в snake_case. Символ # не нужен',
 		usersManagerDescr:
-			'Чтобы удалить юзера, нажмите на соответсвующую кнопку. Чтобы добавить скиньне сюда пересланое сообщение от юзера. Либо напишиет сообщение в формате YAML с полями id: number, name: string, authorName: string, isAdmin?: boolean',
-		// selectAuthorDescr:
-		// 	'Выберeте одного из постоянных авторов или введите другое имя автора',
+			'Чтобы удалить юзера, нажмите на соответсвующую кнопку. Чтобы добавить скиньне сюда пересланое сообщение от юзера. Либо напишиет сообщение в формате YAML вида:\n\nid: number\nname: string\nauthorName: string\nisAdmin?: boolean',
+		selectTagsDescr:
+			'Выберете тэги\n\nЧтобы добавить новые тэги, напишите один или несколько тэгов через запятую. Тэги будут переведены в snake_case. Символ # не нужен',
+		pubPostSetupDescr:
+			'Проверьте и настройте публикацию.\n\nНапишите имя автора если нужно',
+		pubConfirmDescr: 'Отправляем в отложенные?',
+		scheduledListDescr:
+			'Выберете отложенную публикацию для управления\n\nЕсли стоит отметка "Просрочено!" то эта публикация уже не будет автоматически опубликована. Вам нужно изменить время публикации или опубликаовать её вручную',
+		scheduledEmptyListDescr: 'Нет отложенных публикаций',
+		scheduledItemDescr: 'Управление отложенной публикацией',
+		// Date and time
+		selectDateDescr:
+			'Выберете дату либо введите в формате DD.MM. Часовой пояс ${TIME_ZONE}, сейчас',
+		selectHourDescr:
+			'Выберете время публикации. Часовой пояс ${TIME_ZONE}, текущее время ${CURRENT_TIME}\n\nЕсли нужно более точное время то введите его в формате 1:23 или 9.30 или даже 8 40',
+		// Content page
+		standardTextModeDescr: 'Обычный режим текста',
+		mdV1TextModeDescr: 'Отправьте текст в формате Markdown V1 или V2',
 		uploadContentDescr: 'Проверьте отображение текста и медиа.',
 		uploadContentBothDescr:
 			'Чтобы заменить или добавить текст и/или медиа отправьте или перешлите сообщение',
@@ -72,19 +87,6 @@ export default {
 			'Режим загрузки только текста: чтобы заменить или добавить текст отправьте или перешлите сообщение с текстом',
 		uploadContentMediaOnlyDescr:
 			'Режим загрузки только медиа: отправьте или перешлите сообщение с картинкой или видео. (Медиа группа пока не поддерживается)',
-		mdV1TextModeDescr: 'Отправьте текст в формате Markdown V1',
-		standardTextModeDescr: 'Обычный режим текста',
-		selectTagsDescr: 'Выберете тэги',
-		pubPostSetupDescr:
-			'Проверьте и настройте публикацию.\nНапишите имя автора если нужно',
-		pubConfirmDescr: 'Отправляем в отложенные?',
-		selectDateDescr:
-			'Выберете дату либо введите в формате DD.MM. Часовая зона (${TIME_ZONE})',
-		selectHourDescr:
-			'Выберете время публикации. Часовая зона (${TIME_ZONE}).\nЕсли выбрете час то минуты будут установлены в 00.\nЕсли нужно более точное время то введите его в формате 1:23 или 01:23',
-		scheduledListDescr: 'Выберете отложенную публикацию для управления',
-		scheduledEmptyListDescr: 'Нет отложенных публикаций',
-		scheduledItemDescr: 'Управление отложенной публикацией',
 
 		// Messages
 		wrongTypeOfPost:
@@ -101,7 +103,8 @@ export default {
 		noContentMessage: 'Нет контента',
 		wasSuccessfullyScheduled: 'Пост сохранён в отложенные',
 		editedSavedSuccessfully: 'Отложенный пост сохранён',
-		sessionLost: 'Сессия была утереня. Начните с начала',
-		dateIsPastMessage: 'Ваша дата из прошлого. Нужно сегодня или позже',
+		sessionLost: 'Сессия была утеряна. Начните с начала',
+		dateIsPastMessage:
+			'Ваша дата из прошлого. Нужна сегодняшняя или будущяя дата',
 	},
 };
