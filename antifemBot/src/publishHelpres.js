@@ -10,7 +10,13 @@ import {
 	USER_KEYS,
 	EDIT_ITEM_NAME,
 } from './constants.js';
-import { t, loadFromKv, saveToKv, makeStatePreview } from './helpers.js';
+import {
+	t,
+	loadFromKv,
+	saveToKv,
+	makeStatePreview,
+	makeUserNameFromMsg,
+} from './helpers.js';
 import { applyStringTemplate } from './lib.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
@@ -46,7 +52,7 @@ export function applyTemplate(c, textMdV2, pubState) {
 	const tmplData = {
 		CONTENT: textMdV2,
 		// AUTHOR,
-		AUTHOR: pubState[PUB_KEYS.author],
+		AUTHOR: escapeMdV2(pubState[PUB_KEYS.author]),
 		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
 	};
 
@@ -63,12 +69,14 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 
 	console.log(22223333, c.msg);
 
-	state[PUB_KEYS.forwardedFrom] = c.msg.forward_sender_name
-		? c.msg.forward_sender_name
-		: null;
+	state[PUB_KEYS.forwardedFrom] =
+		c.msg.forward_sender_name ||
+		makeUserNameFromMsg(c.msg.forward_from) ||
+		null;
 
 	if (c.msg.video) {
 		state = {
+			...state,
 			[PUB_KEYS.media]: [
 				{ type: MEDIA_TYPES.video, data: c.msg.video.file_id },
 			],
@@ -80,6 +88,7 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 		}
 	} else if (c.msg.photo) {
 		state = {
+			...state,
 			[PUB_KEYS.media]: [
 				{
 					type: MEDIA_TYPES.photo,
@@ -95,6 +104,7 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 		}
 	} else if (c.msg.text) {
 		state = {
+			...state,
 			[PUB_KEYS.text]: c.msg.text,
 			[PUB_KEYS.entities]: c.msg.entities,
 		};

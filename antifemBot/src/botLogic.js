@@ -7,7 +7,12 @@ import {
 	SESSION_CACHE_NAME,
 	INITIAL_MAIN_USER,
 } from './constants.js';
-import { loadFromKv, loadFromCache, saveToKv } from './helpers.js';
+import {
+	loadFromKv,
+	loadFromCache,
+	saveToKv,
+	makeUserNameFromMsg,
+} from './helpers.js';
 
 export function makeContext(
 	MAIN_ADMIN_TG_USER_ID,
@@ -77,7 +82,8 @@ export async function handleStart(c) {
 	if (!c.ctx[CTX_KEYS.me]) {
 		const dataStr = JSON.stringify({
 			[USER_KEYS.id]: c.msg.from.id,
-			[USER_KEYS.name]: c.msg.from.first_name || c.msg.from.username,
+			[USER_KEYS.name]:
+				makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id),
 		});
 
 		return c.reply(

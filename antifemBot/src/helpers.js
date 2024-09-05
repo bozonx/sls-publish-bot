@@ -48,15 +48,15 @@ export function makeStatePreview(c, state = {}) {
 	if (state[PUB_KEYS.text]) res += `${t(c, 'statePostType')}: ${postType}\n`;
 	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
 	if (mediaCount) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
+	if (state[PUB_KEYS.tags])
+		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
+	if (!mediaCount && typeof state[PUB_KEYS.preview] !== 'undefined')
+		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
+	if (state[PUB_KEYS.template])
+		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
 	// if (author) res += `${t(c, 'stateAuthor')}: ${author}\n`;
 	if (state[PUB_KEYS.author])
 		res += `${t(c, 'stateAuthor')}: ${state[PUB_KEYS.author]}\n`;
-	if (state[PUB_KEYS.tags])
-		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
-	if (state[PUB_KEYS.template])
-		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
-	if (!mediaCount && typeof state[PUB_KEYS.preview] !== 'undefined')
-		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
 
 	if (state[PUB_KEYS.date])
 		res += `${t(c, 'stateDate')}: ${makeHumanRuDate(c, state[PUB_KEYS.date])}\n`;
@@ -190,4 +190,13 @@ export function parseJsonSafelly(dataStr) {
 	else if (!dataStr) return;
 
 	return JSON.parse(dataStr);
+}
+
+export function makeUserNameFromMsg(msgFrom) {
+	const fullName = [msgFrom?.first_name, msgFrom?.last_name]
+		.map((i) => i?.trim())
+		.filter(Boolean)
+		.join(' ');
+
+	return fullName || msgFrom?.username;
 }

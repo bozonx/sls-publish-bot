@@ -35,7 +35,7 @@ export default {
 		switchToMdv1ModeBtn: 'Переключиться в режим MD V1',
 		switchToStandardModeBtn: 'Переключиться в обычный режим',
 		withoutAuthorBtn: 'Без автора',
-		addAuthorBtn: 'Добавить подпись',
+		addAuthorBtn: 'Добавить автора',
 		clearTagsBtn: 'Сбросить тэги',
 		useTemplateBtn: 'Использовать шаблон',
 		linkPreviewOffBtn: 'Выключить link preview',

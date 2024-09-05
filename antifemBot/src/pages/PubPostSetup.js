@@ -20,7 +20,7 @@ export class PubPostSetup extends PubPageBase {
 			// TODO: можно тут не делать, а в confirm
 			// set creator of the post
 			[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
-			[PUB_KEYS.author]: c.ctx[CTX_KEYS.me][USER_KEYS.name],
+			[PUB_KEYS.author]: c.ctx[CTX_KEYS.me][USER_KEYS.authorName],
 			...this.state.pub,
 		};
 
@@ -48,17 +48,17 @@ export class PubPostSetup extends PubPageBase {
 				},
 			],
 			this.state.pub[PUB_KEYS.author]
-				? authorToAdd && [
+				? [
 					{
 						id: 'withoutAuthorBtn',
 						label: t(c, 'withoutAuthorBtn'),
 					},
 				]
-				: [
+				: authorToAdd && [
 					{
 						id: 'addAuthorBtn',
 						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
-						payload: authorToAdd,
+						// payload: authorToAdd,
 					},
 				],
 			[
@@ -99,10 +99,12 @@ export class PubPostSetup extends PubPageBase {
 
 		switch (btnId) {
 			case 'addAuthorBtn':
+				const authorToAdd = this._getAuthorToAdd();
+
 				return this.reload({
 					[PUB_KEYS.noAuthor]: false,
 					[PUB_KEYS.customAuthor]: null,
-					[PUB_KEYS.author]: payload,
+					[PUB_KEYS.author]: authorToAdd,
 				});
 			case 'withoutAuthorBtn':
 				return this.reload({
@@ -133,11 +135,15 @@ export class PubPostSetup extends PubPageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-		const author = c.msg.text?.trim();
+		const customAuthor = c.msg.text?.trim();
 
-		if (!author) return;
+		if (!customAuthor) return;
 
-		return this.reload({ [PUB_KEYS.customAuthor]: author });
+		return this.reload({
+			[PUB_KEYS.customAuthor]: customAuthor,
+			[PUB_KEYS.author]: customAuthor,
+			[PUB_KEYS.noAuthor]: false,
+		});
 	}
 
 	_getAuthorToAdd() {
@@ -157,21 +163,9 @@ export class PubPostSetup extends PubPageBase {
 		} else if (!noAuthor && testTemplate === TEMPLATE_NAMES.default) {
 			if (customAuthor) return customAuthor;
 			// else return this.state.pub[PUB_KEYS.createdBy];
-			else return this.router.c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
+			else return this.me[USER_KEYS.authorName];
 		}
 		// template noFooter or other cases
 		return null;
 	}
-
-	// function resolveAuthorNameForDetails(c, pubState) {
-	// 	if (pubState[PUB_KEYS.noAuthor]) return;
-	// 	else if (pubState[PUB_KEYS.customAuthor])
-	// 		return pubState[PUB_KEYS.customAuthor];
-	// 	else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
-	// 		return pubState[PUB_KEYS.forwardedFrom];
-	// 	} else {
-	// 		// TODO: use createdBy if exist
-	// 		return c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
-	// 	}
-	// }
 }
