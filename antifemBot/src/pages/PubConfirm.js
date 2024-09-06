@@ -30,6 +30,8 @@ export class PubConfirm extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
+			],
+			[
 				{
 					id: 'pubConfirmBtn',
 					label: '🗓️ ' + t(c, 'pubConfirmBtn'),

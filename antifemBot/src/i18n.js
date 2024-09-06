@@ -62,7 +62,7 @@ export default {
 		tagsManagerDescr:
 			'Выберете тэги которые нужно удалить\n\nЧтобы добавить новые тэги, напишите один или несколько тэгов через запятую. Тэги будут переведены в snake_case. Символ # не нужен',
 		usersManagerDescr:
-			'Чтобы удалить юзера, нажмите на соответсвующую кнопку. Чтобы добавить скиньне сюда пересланое сообщение от юзера. Либо напишиет сообщение в формате YAML вида:\n\nid: number\nname: string\nauthorName: string\nisAdmin?: boolean',
+			'Чтобы удалить юзера, нажмите на соответсвующую кнопку. Чтобы добавить скиньте сюда пересланое сообщение от юзера. Либо напишиет сообщение в формате YAML вида:\n\nid: number\nname: string\nauthorName: string\nisAdmin?: boolean',
 		selectTagsDescr:
 			'Выберете тэги\n\nЧтобы добавить новые тэги, напишите один или несколько тэгов через запятую. Тэги будут переведены в snake_case. Символ # не нужен',
 		pubPostSetupDescr:
@@ -80,8 +80,9 @@ export default {
 		// Content page
 		standardTextModeDescr: 'Обычный режим текста',
 		mdV1TextModeDescr:
-			'Отправьте текст в формате Markdown вида\n```\n**bold**\n_italic_\n[link text](url)\n\\`monospace\\`\n\n> blockquote\n\n\\`\\`\\`\nsome code\n\\`\\`\\` ```',
-		uploadContentDescr: 'Проверьте отображение текста и медиа',
+			'Отправьте текст в формате Markdown вида\n```\n**bold**\n*italic*\n[link text](https://example.com)\n\\`monospace\\`\n\n> blockquote\n\n\\`\\`\\`\nsome code\n\\`\\`\\` ```',
+		uploadContentDescr:
+			'Проверьте отображение текста и медиа.\nЛимит длины текстового сообщения - 4096 символов.\nЛимит подписи к картинки/видео 1024 символа.\nМакс. количество медиа фалов - 10 (пока поддреживается только 1)',
 		uploadContentBothDescr:
 			'Чтобы заменить или добавить текст и/или медиа отправьте или перешлите сообщение',
 		uploadContentTextOnlyDescr:
