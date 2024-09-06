@@ -61,9 +61,12 @@ export const PUB_KEYS = {
 	preview: 'preview',
 	// the final selected author
 	author: 'author',
-	customAuthor: 'customAuthor',
-	forwardedFrom: 'forwardedFrom',
+	// obviously do not user author
 	noAuthor: 'noAuthor',
+	// author name which has been inputted
+	customAuthor: 'customAuthor',
+	// name of tg user of forwarded message
+	forwardedFrom: 'forwardedFrom',
 	date: 'date',
 	time: 'time',
 	// name of user who made or edited post

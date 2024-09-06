@@ -17,9 +17,7 @@ export class PubPostSetup extends PubPageBase {
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
-			// TODO: можно тут не делать, а в confirm
-			// set creator of the post
-			[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+			// set default author for default template - current user's author name
 			[PUB_KEYS.author]: c.ctx[CTX_KEYS.me][USER_KEYS.authorName],
 			...this.state.pub,
 		};
@@ -29,7 +27,8 @@ export class PubPostSetup extends PubPageBase {
 		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
 			(i) => i !== this.state.pub[PUB_KEYS.template],
 		);
-		const previewIsOn = Boolean(this.state.pub[PUB_KEYS.preview]);
+		const previewIsOn = this.state.pub[PUB_KEYS.preview];
+		// author name for button addAuthor
 		const authorToAdd = this._getAuthorToAdd();
 
 		return defineMenu([
@@ -58,7 +57,6 @@ export class PubPostSetup extends PubPageBase {
 						{
 							id: 'addAuthorBtn',
 							label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
-							// payload: authorToAdd,
 						},
 					],
 			[
@@ -102,15 +100,15 @@ export class PubPostSetup extends PubPageBase {
 				const authorToAdd = this._getAuthorToAdd();
 
 				return this.reload({
+					[PUB_KEYS.author]: authorToAdd,
 					[PUB_KEYS.noAuthor]: false,
 					[PUB_KEYS.customAuthor]: null,
-					[PUB_KEYS.author]: authorToAdd,
 				});
 			case 'withoutAuthorBtn':
 				return this.reload({
+					[PUB_KEYS.author]: null,
 					[PUB_KEYS.noAuthor]: true,
 					[PUB_KEYS.customAuthor]: null,
-					[PUB_KEYS.author]: null,
 				});
 			case 'showPreviewBtn':
 				await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
@@ -140,9 +138,9 @@ export class PubPostSetup extends PubPageBase {
 		if (!customAuthor) return;
 
 		return this.reload({
-			[PUB_KEYS.customAuthor]: customAuthor,
 			[PUB_KEYS.author]: customAuthor,
 			[PUB_KEYS.noAuthor]: false,
+			[PUB_KEYS.customAuthor]: customAuthor,
 		});
 	}
 
@@ -162,10 +160,10 @@ export class PubPostSetup extends PubPageBase {
 			else if (forwardedFrom) return forwardedFrom;
 		} else if (!noAuthor && testTemplate === TEMPLATE_NAMES.default) {
 			if (customAuthor) return customAuthor;
-			// else return this.state.pub[PUB_KEYS.createdBy];
+			// set me as an author
 			else return this.me[USER_KEYS.authorName];
 		}
-		// template noFooter or other cases
+		// template noFooter or other cases means no author name
 		return null;
 	}
 }

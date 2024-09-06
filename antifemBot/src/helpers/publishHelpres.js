@@ -164,6 +164,7 @@ export async function createScheduledPublication(c, pubState) {
 	const item = {
 		...pubState,
 		id: uid.rnd(),
+		[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
 	};
 	const allScheduled = (await loadFromKv(c, KV_KEYS.scheduled)) || [];
 	const prepared = [...allScheduled, item];
