@@ -2,15 +2,6 @@ import ShortUniqueId from 'short-unique-id';
 import { toMarkdownV2, escapers } from '@telegraf/entity';
 import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
 import {
-	CTX_KEYS,
-	APP_CFG_KEYS,
-	PUB_KEYS,
-	MEDIA_TYPES,
-	KV_KEYS,
-	USER_KEYS,
-	EDIT_ITEM_NAME,
-} from './constants.js';
-import {
 	t,
 	loadFromKv,
 	saveToKv,
@@ -18,6 +9,15 @@ import {
 	makeUserNameFromMsg,
 } from './helpers.js';
 import { applyStringTemplate, omitUndefined } from './lib.js';
+import {
+	CTX_KEYS,
+	APP_CFG_KEYS,
+	PUB_KEYS,
+	MEDIA_TYPES,
+	KV_KEYS,
+	USER_KEYS,
+	EDIT_ITEM_NAME,
+} from '../constants.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
@@ -36,19 +36,22 @@ export function makeHashTags(tags) {
 export function applyTemplate(c, textMdV2, pubState) {
 	const template =
 		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
+
+	if (!template) return textMdV2;
+
 	const tmplData = {
 		CONTENT: textMdV2,
 		AUTHOR: pubState[PUB_KEYS.author] && escapeMdV2(pubState[PUB_KEYS.author]),
 		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
 	};
 
-	const text = template
+	const finalText = template
 		.map((i) => applyStringTemplate(i, tmplData))
 		.filter((i) => i.trim())
 		.join('')
 		.trim();
 
-	return text;
+	return finalText;
 }
 
 export function makeStateFromMessage(c, isTextInMdV1) {

@@ -1,5 +1,5 @@
 import { InlineKeyboard } from 'grammy';
-import locales from './i18n.js';
+import locales from '../i18n.js';
 import {
 	TG_BOT_URL,
 	CTX_KEYS,
@@ -7,7 +7,7 @@ import {
 	QUERY_MARKER,
 	PUB_KEYS,
 	USER_KEYS,
-} from './constants.js';
+} from '../constants.js';
 import { makeHumanRuDate } from './dateTimeHelpers.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {

@@ -11,7 +11,7 @@ export const EDIT_ITEM_NAME = 'editItem';
 // TODO: вынести в env?
 export const PUBLICATION_TIME_ZONE = '+03:00';
 // TODO: вынести в env?
-export const SESSION_STATE_TTL_SEC = 80;
+export const SESSION_STATE_TTL_SEC = 60 * 60 * 24 * 30;
 // TODO: вынести в env?
 export const PUBLISHING_MINUS_MINUTES = 5;
 

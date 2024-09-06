@@ -1,6 +1,6 @@
 import { t } from './helpers.js';
 import { make2SignDigitStr } from './lib.js';
-import { PUB_KEYS } from './constants.js';
+import { PUB_KEYS } from '../constants.js';
 
 export function makeIsoDateFromPubState(pubState) {
 	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
