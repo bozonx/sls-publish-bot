@@ -7,7 +7,6 @@ import {
 	QUERY_MARKER,
 	PUB_KEYS,
 	USER_KEYS,
-	TEMPLATE_NAMES,
 } from './constants.js';
 import { makeHumanRuDate } from './dateTimeHelpers.js';
 
@@ -31,7 +30,6 @@ export function makeStatePreview(c, state = {}) {
 	let mediaCount = state[PUB_KEYS.media]?.length || 0;
 	let textLength = state[PUB_KEYS.text]?.length || 0;
 	let postType = 'text';
-	// const author = resolveAuthorNameForDetails(c, state);
 	const users = c.ctx[CTX_KEYS.users];
 	const createdUserName =
 		state[PUB_KEYS.createdBy] &&
@@ -41,20 +39,21 @@ export function makeStatePreview(c, state = {}) {
 		users.find((i) => i.id === state[PUB_KEYS.updatedBy])?.[USER_KEYS.name];
 
 	if (state.media?.length === 1) postType = state.media[0].type;
-	else if (state.media?.length > 1) postType = 'media group';
+	// TODO: add
+	// else if (state.media?.length > 1) postType = 'media group';
 
 	let res = '';
 
 	if (state[PUB_KEYS.text]) res += `${t(c, 'statePostType')}: ${postType}\n`;
 	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
+	// print media count only if there are several media files
 	if (mediaCount > 1) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
 	if (state[PUB_KEYS.tags])
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
-	if (!mediaCount && typeof state[PUB_KEYS.preview] !== 'undefined')
+	if (!mediaCount && typeof state[PUB_KEYS.preview] == 'boolean')
 		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
 	if (state[PUB_KEYS.template])
 		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
-	// if (author) res += `${t(c, 'stateAuthor')}: ${author}\n`;
 	if (state[PUB_KEYS.author])
 		res += `${t(c, 'stateAuthor')}: ${state[PUB_KEYS.author]}\n`;
 
@@ -69,18 +68,6 @@ export function makeStatePreview(c, state = {}) {
 
 	return res.trim();
 }
-
-// function resolveAuthorNameForDetails(c, pubState) {
-// 	if (pubState[PUB_KEYS.noAuthor]) return;
-// 	else if (pubState[PUB_KEYS.customAuthor])
-// 		return pubState[PUB_KEYS.customAuthor];
-// 	else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
-// 		return pubState[PUB_KEYS.forwardedFrom];
-// 	} else {
-// 		// TODO: use createdBy if exist
-// 		return c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
-// 	}
-// }
 
 export async function loadFromKv(c, key, defaultValue) {
 	let resStr;

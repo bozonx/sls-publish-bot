@@ -34,6 +34,7 @@ export function prepareTgInputToTgEntities(srcText, srcEntities) {
 	return [
 		text,
 		entities.map((i) => {
+			// fix url element
 			if (i.type === 'textUrl') i.type = 'text_link';
 
 			return { ...i };
@@ -46,8 +47,9 @@ function initialTgEntitiesToMd(text, entities) {
 	let prevOffset = 0;
 
 	for (const { offset, length, type } of entities) {
+		// prev clean part
 		resHtml += text.substring(prevOffset, offset);
-
+		// stylized part
 		const textPart = text.substring(offset, offset + length);
 
 		prevOffset = offset + length;
@@ -62,7 +64,7 @@ function initialTgEntitiesToMd(text, entities) {
 			resHtml += textPart;
 		}
 	}
-
+	// last clean part
 	resHtml += text.substring(prevOffset, text.length);
 
 	return resHtml;

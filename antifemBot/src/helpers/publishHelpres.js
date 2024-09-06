@@ -36,19 +36,6 @@ export function makeHashTags(tags) {
 export function applyTemplate(c, textMdV2, pubState) {
 	const template =
 		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
-	// let AUTHOR = '';
-	//
-	// if (pubState[PUB_KEYS.noAuthor]) {
-	// 	// do nothing
-	// } else if (pubState[PUB_KEYS.customAuthor])
-	// 	AUTHOR = pubState[PUB_KEYS.customAuthor];
-	// else if (pubState[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower) {
-	// 	AUTHOR = pubState[PUB_KEYS.forwardedFrom];
-	// } else {
-	// 	// TODO: use createdBy if exist
-	// 	AUTHOR = c.ctx[CTX_KEYS.me][USER_KEYS.authorName];
-	// }
-
 	const tmplData = {
 		CONTENT: textMdV2,
 		AUTHOR: pubState[PUB_KEYS.author] && escapeMdV2(pubState[PUB_KEYS.author]),
@@ -243,7 +230,7 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	} else if (pubState[PUB_KEYS.media]?.length > 1) {
 		throw new Error(`Media group is not supported`);
 	}
-	// no media means text message
+	// else no media means text message
 	return c.api.sendMessage(chatId, fullPostTextMdV2, {
 		...msgParams,
 		link_preview_options: {
@@ -265,9 +252,5 @@ function prepareMdV2MsgTextToPublish(c, pubState) {
 		contentMdV2 = escapeMdV2(pubState[PUB_KEYS.text]);
 	}
 
-	if (pubState[PUB_KEYS.template]) {
-		return applyTemplate(c, contentMdV2, pubState);
-	} else {
-		return contentMdV2;
-	}
+	return applyTemplate(c, contentMdV2, pubState);
 }
