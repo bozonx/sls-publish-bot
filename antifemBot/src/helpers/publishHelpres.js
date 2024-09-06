@@ -104,6 +104,7 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 			[PUB_KEYS.entities]: c.msg.entities,
 		};
 	} else {
+		// returning undefined means wrong type of post
 		return;
 	}
 

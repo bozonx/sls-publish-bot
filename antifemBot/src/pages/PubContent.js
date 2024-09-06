@@ -144,32 +144,20 @@ export class PubContent extends PubPageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-		let pubState = makeStateFromMessage(c, this.state.mdV1Mode);
+		let partlyPubState = makeStateFromMessage(c, this.state.mdV1Mode);
 
-		if (!pubState[PUB_KEYS.text] && !pubState[PUB_KEYS.media])
-			return this.reply(t(c, 'wrongTypeOfPost'));
+		if (!partlyPubState) return this.reply(t(c, 'wrongTypeOfPost'));
 
 		if (this.state.replaceMode === REPLACE_MODES.textOnly) {
-			pubState = {
-				...pubState,
-				[PUB_KEYS.text]: fullState[PUB_KEYS.text],
-				[PUB_KEYS.entities]: fullState[PUB_KEYS.entities],
-			};
-
-			delete pubState[PUB_KEYS.media];
+			// do not overwrite media, only overwrite text
+			delete partlyPubState[PUB_KEYS.media];
 		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
-			pubState = {
-				...pubState,
-				// TODO: waht is fullState
-				[PUB_KEYS.media]: fullState[PUB_KEYS.media],
-			};
-
-			delete pubState[PUB_KEYS.text];
+			// do not overwrite text, only overwrite media
+			delete partlyPubState[PUB_KEYS.text];
+			delete partlyPubState[PUB_KEYS.entities];
 		}
-
-		delete this.state.replaceMode;
-
-		return this.reload(pubState);
+		// overwrite partly the pub state
+		return this.reload(partlyPubState);
 	}
 
 	_makeMenuText() {
