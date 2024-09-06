@@ -29,8 +29,6 @@ export function prepareTgInputToTgEntities(srcText, srcEntities) {
 		.processSync(preparedMdV1)
 		.toString();
 
-	console.log(66666, preparedMdV1, htmlText);
-
 	const [text, entities] = parse(htmlText, 'html');
 
 	return [

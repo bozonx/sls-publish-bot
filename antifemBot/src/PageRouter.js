@@ -368,7 +368,6 @@ export class PageRouter {
 		}
 
 		this._redrawMenu = null;
-		this.currentPage.menuTextInMd = null;
 		this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
 	}
 }
