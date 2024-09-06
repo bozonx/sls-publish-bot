@@ -6,7 +6,8 @@ import {
 	defineMenu,
 	parseJsonSafelly,
 	loadFromKv,
-} from '../helpers.js';
+} from '../helpers/helpers.js';
+import { breakArray } from '../helpers/lib.js';
 import {
 	KV_KEYS,
 	USER_KEYS,
@@ -14,7 +15,6 @@ import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 } from '../constants.js';
-import { breakArray } from '../lib.js';
 
 export class UsersManager extends PageBase {
 	async renderMenu() {

@@ -5,9 +5,9 @@ import {
 	saveToKv,
 	parseTagsFromInput,
 	defineMenu,
-} from '../helpers.js';
+} from '../helpers/helpers.js';
+import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
 import { KV_KEYS, DEFAULT_BTN_ITEM_ID, HOME_PAGE } from '../constants.js';
-import { breakArray, makeStringArrayUnique } from '../lib.js';
 
 export class TagsManager extends PageBase {
 	async renderMenu() {

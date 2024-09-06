@@ -3,7 +3,8 @@ import {
 	parseJsonSafelly,
 	saveToCache,
 	renderMenuKeyboard,
-} from './helpers.js';
+} from './helpers/helpers.js';
+import { printFinalPost } from './helpers/publishHelpres.js';
 import {
 	SESSION_STATE_TTL_SEC,
 	CTX_KEYS,
@@ -11,7 +12,6 @@ import {
 	HOME_PAGE,
 	SESSION_CACHE_NAME,
 } from './constants.js';
-import { printFinalPost } from './publishHelpres.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
 

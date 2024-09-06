@@ -1,10 +1,10 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { PUB_KEYS, HOME_PAGE, USER_KEYS } from '../constants.js';
+import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
 import {
 	createScheduledPublication,
 	printPubToAdminChannel,
-} from '../publishHelpres.js';
+} from '../helpers/publishHelpres.js';
+import { PUB_KEYS, HOME_PAGE, USER_KEYS } from '../constants.js';
 
 export class PubConfirm extends PubPageBase {
 	async renderMenu() {

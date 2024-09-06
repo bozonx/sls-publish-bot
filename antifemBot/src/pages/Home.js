@@ -1,8 +1,8 @@
 import { PageBase } from '../PageRouter.js';
+import { t, defineMenu } from '../helpers/helpers.js';
+import { makeStateFromMessage } from '../helpers/publishHelpres.js';
 import { USER_KEYS, EDIT_ITEM_NAME } from '../constants.js';
-import { t, defineMenu } from '../helpers.js';
-import { makeStateFromMessage } from '../publishHelpres.js';
-import { handleScheduled } from '../indexShedullerPublisher.js';
+// import { handleScheduled } from '../indexShedullerPublisher.js';
 
 export class Home extends PageBase {
 	async renderMenu() {

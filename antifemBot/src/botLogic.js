@@ -12,7 +12,7 @@ import {
 	loadFromCache,
 	saveToKv,
 	makeUserNameFromMsg,
-} from './helpers.js';
+} from './helpers/helpers.js';
 
 export function makeContext(
 	MAIN_ADMIN_TG_USER_ID,

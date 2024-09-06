@@ -2,7 +2,7 @@ import parseUrl from 'parse-url';
 import { webhookCallback } from 'grammy';
 import { BotIndex } from './BotIndex.js';
 import { handleScheduled } from './indexShedullerPublisher.js';
-import { setWebhook } from './helpers.js';
+import { setWebhook } from './helpers/helpers.js';
 import { TG_BOT_URL } from './constants.js';
 
 export default {

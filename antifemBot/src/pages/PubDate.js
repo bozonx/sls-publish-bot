@@ -1,13 +1,7 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import {
-	PUB_KEYS,
-	HOME_PAGE,
-	EDIT_ITEM_NAME,
-	DEFAULT_PUB_PLUS_DAY,
-} from '../constants.js';
-import { saveEditedScheduledPost } from '../publishHelpres.js';
-import { isEmptyObj, applyStringTemplate } from '../lib.js';
+import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
+import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
+import { isEmptyObj, applyStringTemplate } from '../helpers/lib.js';
 import {
 	isValidShortDate,
 	shortRuDateToFullIsoDate,
@@ -16,7 +10,13 @@ import {
 	getShortWeekDay,
 	isPastDate,
 	isoDateToLongLocaleRuDate,
-} from '../dateTimeHelpers.js';
+} from '../helpers/dateTimeHelpers.js';
+import {
+	PUB_KEYS,
+	HOME_PAGE,
+	EDIT_ITEM_NAME,
+	DEFAULT_PUB_PLUS_DAY,
+} from '../constants.js';
 
 export class PubDate extends PubPageBase {
 	async renderMenu() {

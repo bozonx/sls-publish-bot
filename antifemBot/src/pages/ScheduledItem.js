@@ -1,9 +1,9 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu, makeStatePreview } from '../helpers.js';
+import { t, defineMenu, makeStatePreview } from '../helpers/helpers.js';
 import {
 	doFullFinalPublicationProcess,
 	deleteScheduledPost,
-} from '../publishHelpres.js';
+} from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
 	HOME_PAGE,
@@ -75,7 +75,7 @@ export class ScheduledItem extends PageBase {
 				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');
@@ -83,7 +83,7 @@ export class ScheduledItem extends PageBase {
 				await deleteScheduledPost(c, this.state[EDIT_ITEM_NAME].id);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');

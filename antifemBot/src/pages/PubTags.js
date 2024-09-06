@@ -6,7 +6,9 @@ import {
 	defineMenu,
 	loadFromKv,
 	saveToKv,
-} from '../helpers.js';
+} from '../helpers/helpers.js';
+import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
+import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import {
 	KV_KEYS,
 	PUB_KEYS,
@@ -14,8 +16,6 @@ import {
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 } from '../constants.js';
-import { breakArray, makeStringArrayUnique } from '../lib.js';
-import { saveEditedScheduledPost } from '../publishHelpres.js';
 
 export class PubTags extends PubPageBase {
 	async renderMenu() {

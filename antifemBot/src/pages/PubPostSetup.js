@@ -1,4 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
+import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
+import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import {
 	TEMPLATE_NAMES,
 	PUB_KEYS,
@@ -8,8 +10,6 @@ import {
 	EDIT_ITEM_NAME,
 	CTX_KEYS,
 } from '../constants.js';
-import { t, makeStatePreview, defineMenu } from '../helpers.js';
-import { saveEditedScheduledPost } from '../publishHelpres.js';
 
 export class PubPostSetup extends PubPageBase {
 	async renderMenu() {
@@ -49,18 +49,18 @@ export class PubPostSetup extends PubPageBase {
 			],
 			this.state.pub[PUB_KEYS.author]
 				? [
-					{
-						id: 'withoutAuthorBtn',
-						label: t(c, 'withoutAuthorBtn'),
-					},
-				]
+						{
+							id: 'withoutAuthorBtn',
+							label: t(c, 'withoutAuthorBtn'),
+						},
+					]
 				: authorToAdd && [
-					{
-						id: 'addAuthorBtn',
-						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
-						// payload: authorToAdd,
-					},
-				],
+						{
+							id: 'addAuthorBtn',
+							label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
+							// payload: authorToAdd,
+						},
+					],
 			[
 				{
 					id: 'showPreviewBtn',
@@ -78,13 +78,13 @@ export class PubPostSetup extends PubPageBase {
 				},
 				this.state[EDIT_ITEM_NAME]
 					? {
-						id: 'saveBtn',
-						label: t(c, 'saveBtn'),
-					}
+							id: 'saveBtn',
+							label: t(c, 'saveBtn'),
+						}
 					: {
-						id: 'nextBtn',
-						label: t(c, 'nextBtn'),
-					},
+							id: 'nextBtn',
+							label: t(c, 'nextBtn'),
+						},
 			],
 		]);
 	}
