@@ -193,6 +193,8 @@ export function parseJsonSafelly(dataStr) {
 }
 
 export function makeUserNameFromMsg(msgFrom) {
+	if (!msgFrom) return;
+
 	const fullName = [msgFrom?.first_name, msgFrom?.last_name]
 		.map((i) => i?.trim())
 		.filter(Boolean)

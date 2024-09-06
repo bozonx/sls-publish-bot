@@ -1,4 +1,22 @@
 /**
+ * It creates a new object which doesn't include keys which values are undefined.
+ * It is from squidlet-lib
+ */
+export function omitUndefined(obj) {
+	if (!obj || Array.isArray(obj) || typeof obj !== 'object') return {};
+
+	const result = {};
+
+	for (const key of Object.keys(obj)) {
+		if (typeof obj[key] === 'undefined') continue;
+
+		result[key] = obj[key];
+	}
+
+	return result;
+}
+
+/**
  * Break long array to smaller arrays with maxCount elements.
  * maxCount = 2 means [0,1,2,3,4] => [[0,1], [2,3], [4]]
  */

@@ -17,7 +17,7 @@ import {
 	makeStatePreview,
 	makeUserNameFromMsg,
 } from './helpers.js';
-import { applyStringTemplate } from './lib.js';
+import { applyStringTemplate, omitUndefined } from './lib.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
 	return toMarkdownV2({ text, entities });
@@ -65,14 +65,15 @@ export function applyTemplate(c, textMdV2, pubState) {
 }
 
 export function makeStateFromMessage(c, isTextInMdV1) {
-	let state = {};
+	//
+	// console.log(22223333, c.msg);
 
-	console.log(22223333, c.msg);
-
-	state[PUB_KEYS.forwardedFrom] =
-		c.msg.forward_sender_name ||
-		makeUserNameFromMsg(c.msg.forward_from) ||
-		null;
+	let state = {
+		[PUB_KEYS.forwardedFrom]:
+			c.msg.forward_sender_name ||
+			makeUserNameFromMsg(c.msg.forward_from) ||
+			null,
+	};
 
 	if (c.msg.video) {
 		state = {
@@ -80,12 +81,9 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 			[PUB_KEYS.media]: [
 				{ type: MEDIA_TYPES.video, data: c.msg.video.file_id },
 			],
+			[PUB_KEYS.text]: c.msg.caption,
+			[PUB_KEYS.entities]: c.msg.caption_entities,
 		};
-
-		if (c.msg.caption) {
-			state[PUB_KEYS.text] = c.msg.caption;
-			state[PUB_KEYS.entities] = c.msg.caption_entities;
-		}
 	} else if (c.msg.photo) {
 		state = {
 			...state,
@@ -96,12 +94,9 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 					data: c.msg.photo[c.msg.photo.length - 1].file_id,
 				},
 			],
+			[PUB_KEYS.text]: c.msg.caption,
+			[PUB_KEYS.entities]: c.msg.caption_entities,
 		};
-
-		if (c.msg.caption) {
-			state[PUB_KEYS.text] = c.msg.caption;
-			state[PUB_KEYS.entities] = c.msg.caption_entities;
-		}
 	} else if (c.msg.text) {
 		state = {
 			...state,
@@ -122,7 +117,7 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 		state.entities = entities;
 	}
 
-	return state;
+	return omitUndefined(state);
 }
 
 export async function doFullFinalPublicationProcess(c, item) {
@@ -215,7 +210,7 @@ export async function printPubToAdminChannel(router, item) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		t(c, 'infoMsgToAdminChannel') +
-		`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
+			`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
 		{ reply_parameters: { message_id } },
 	);
 }

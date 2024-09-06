@@ -80,15 +80,16 @@ export function makeContext(
 
 export async function handleStart(c) {
 	if (!c.ctx[CTX_KEYS.me]) {
+		const userName = makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id);
 		const dataStr = JSON.stringify({
 			[USER_KEYS.id]: c.msg.from.id,
-			[USER_KEYS.name]:
-				makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id),
+			[USER_KEYS.name]: userName,
+			[USER_KEYS.authorName]: userName,
 		});
 
 		return c.reply(
 			t(c, 'youAreNotRegistered') +
-			`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
+				`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
 		);
 	}
 	// show home page on start command

@@ -32,9 +32,8 @@ export class PubContent extends PubPageBase {
 		// set initial replace mode = both
 		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
-		const haveAnyContent = Boolean(
-			this.state.pub.text || this.state.pub.media?.length,
-		);
+		const hasMedia = Boolean(this.state.pub.media?.length);
+		const haveAnyContent = Boolean(this.state.pub.text || hasMedia);
 
 		this.text = this._makeMenuText();
 
@@ -54,21 +53,24 @@ export class PubContent extends PubPageBase {
 						id: 'removeTextBtn',
 						label: t(c, 'removeTextBtn'),
 					},
-					this.state.pub[PUB_KEYS.media]?.length && {
+					hasMedia && {
 						id: 'removeMediaBtn',
 						label: t(c, 'removeMediaBtn'),
 					},
 					this.state.replaceMode !== REPLACE_MODES.textOnly && {
-						id: 'replaceOnlyTextBtn',
+						id: 'REPLACE_MODE',
 						label: t(c, 'replaceOnlyTextBtn'),
+						payload: REPLACE_MODES.textOnly,
 					},
 					this.state.replaceMode !== REPLACE_MODES.mediaOnly && {
-						id: 'replaceOnlyMediaBtn',
+						id: 'REPLACE_MODE',
 						label: t(c, 'replaceOnlyMediaBtn'),
+						payload: REPLACE_MODES.mediaOnly,
 					},
 					this.state.replaceMode !== REPLACE_MODES.both && {
-						id: 'replaceTextAndMediaBtn',
+						id: 'REPLACE_MODE',
 						label: t(c, 'replaceTextAndMediaBtn'),
+						payload: REPLACE_MODES.both,
 					},
 				],
 				2,
@@ -85,10 +87,10 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-				this.state[EDIT_ITEM_NAME] && {
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
-				},
+					this.state[EDIT_ITEM_NAME] && {
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					},
 				haveAnyContent && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
@@ -103,16 +105,8 @@ export class PubContent extends PubPageBase {
 				this.state.mdV1Mode = Boolean(payload);
 
 				return this.reload();
-			case 'replaceOnlyTextBtn':
-				this.state.replaceMode = REPLACE_MODES.textOnly;
-
-				return this.reload();
-			case 'replaceOnlyMediaBtn':
-				this.state.replaceMode = REPLACE_MODES.mediaOnly;
-
-				return this.reload();
-			case 'replaceTextAndMediaBtn':
-				this.state.replaceMode = REPLACE_MODES.both;
+			case 'REPLACE_MODE':
+				this.state.replaceMode = payload;
 
 				return this.reload();
 			case 'removeTextBtn':
@@ -166,6 +160,7 @@ export class PubContent extends PubPageBase {
 		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
 			pubState = {
 				...pubState,
+				// TODO: waht is fullState
 				[PUB_KEYS.media]: fullState[PUB_KEYS.media],
 			};
 
@@ -180,18 +175,12 @@ export class PubContent extends PubPageBase {
 	_makeMenuText() {
 		const c = this.router.c;
 		let details = makeStatePreview(c, this.state.pub);
-		let modeMessage = t(c, 'uploadContentBothDescr');
-
-		if (this.state.replaceMode === REPLACE_MODES.textOnly) {
-			modeMessage = t(c, 'uploadContentTextOnlyDescr');
-		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
-			modeMessage = t(c, 'uploadContentMediaOnlyDescr');
-		}
+		let modeMessage = t(c, 'uploadContentDescr-' + REPLACE_MODES.textOnly);
 
 		if (!details) details = t(c, 'noContentMessage');
 
 		const textModeMessage = this.state.mdV1Mode
-			? t(c, 'mdV1TextModeDescr')
+			? t(c, 'mdV1TextModeDescr') // it is in MD V2
 			: escapeMdV2(t(c, 'standardTextModeDescr'));
 
 		return (

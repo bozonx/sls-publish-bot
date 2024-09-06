@@ -70,7 +70,12 @@ export class ScheduledList extends PageBase {
 	}
 
 	makeItemLabel(item) {
-		const text = item[PUB_KEYS.text]?.trim().substring(0, LABEL_LENGTH).trim();
+		const text = item[PUB_KEYS.text]
+			?.trim()
+			.substring(0, LABEL_LENGTH)
+			.trim()
+			.replace(/\n/g, '')
+			.replace(/[\s]{2,}/g, ' ');
 
 		if (
 			isPastDateTime(
