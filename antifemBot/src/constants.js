@@ -7,6 +7,7 @@ export const DEFAULT_BTN_ITEM_ID = '-BTN=';
 export const HOME_PAGE = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
 export const DEFAULT_SOCIAL_MEDIA = 'telegram';
+export const MENU_ITEM_LABEL_LENGTH = 50;
 // export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // TODO: вынести в env?
@@ -55,7 +56,7 @@ export const TAG_KEYS = {
 	id: 'id',
 	name: 'name',
 	socialMedia: 'socialMedia',
-	createdByUser: 'createdByUser',
+	createdByUserId: 'createdByUserId',
 };
 export const PUB_SCHEDULED_KEYS = {
 	id: 'id',
@@ -101,6 +102,8 @@ export const PUB_KEYS = {
 	forwardedFrom: 'forwardedFrom',
 	date: 'date',
 	time: 'time',
+	// data or DB record
+	dbRecord: 'dbRecord',
 	// // name of user who made or edited post
 	// createdByUserId: 'createdByUserId',
 	// updatedByUserId: 'updatedByUserId',

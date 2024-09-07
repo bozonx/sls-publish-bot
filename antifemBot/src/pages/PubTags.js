@@ -20,6 +20,7 @@ import {
 export class PubTags extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		// TODO: sort
 		const allTags = await this.db.getAll(DB_TABLE_NAMES.Tag, {
 			[TAG_KEYS.id]: true,
 			[TAG_KEYS.name]: true,
@@ -122,7 +123,7 @@ export class PubTags extends PubPageBase {
 				this.db.createItem(DB_TABLE_NAMES.Tag, {
 					[TAG_KEYS.name]: tag,
 					[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
-					[TAG_KEYS.createdByUser]: this.me[USER_KEYS.id],
+					[TAG_KEYS.createdByUserId]: this.me[USER_KEYS.id],
 				}),
 			),
 		);

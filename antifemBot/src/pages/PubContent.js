@@ -87,10 +87,10 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-					this.state[EDIT_ITEM_NAME] && {
-						id: 'saveBtn',
-						label: t(c, 'saveBtn'),
-					},
+				this.state[EDIT_ITEM_NAME] && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				haveAnyContent && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
@@ -117,7 +117,7 @@ export class PubContent extends PubPageBase {
 			case 'removeMediaBtn':
 				return this.reload({ [PUB_KEYS.media]: null });
 			case 'showPreviewBtn':
-				await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
+				await this.printFinalPost(this.me[USER_KEYS.tgChatId], this.state.pub);
 
 				return this.reload();
 			case 'cancelBtn':

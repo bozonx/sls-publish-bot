@@ -2,17 +2,18 @@
 import { toMarkdownV2, escapers } from '@telegraf/entity';
 import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
 import { t, makeStatePreview, makeUserNameFromMsg } from './helpers.js';
-import { loadFromKv, saveToKv } from '../io/KVio.js';
 import { applyStringTemplate, omitUndefined } from './lib.js';
 import {
 	CTX_KEYS,
 	APP_CFG_KEYS,
 	PUB_KEYS,
 	MEDIA_TYPES,
-	KV_KEYS,
 	USER_KEYS,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
+	PUB_SCHEDULED_KEYS,
+	DEFAULT_SOCIAL_MEDIA,
+	MENU_ITEM_LABEL_LENGTH,
 } from '../constants.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
@@ -114,7 +115,7 @@ export async function doFullFinalPublicationProcess(c, item) {
 		item,
 	);
 
-	await deleteScheduledPost(c, item.id);
+	await deleteScheduledPost(c, item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.id]);
 
 	return msg;
 }
@@ -144,12 +145,15 @@ export async function saveEditedScheduledPost(router) {
 
 	router.state[EDIT_ITEM_NAME] = router.state.pub;
 
+	const pubState = router.state[EDIT_ITEM_NAME];
+
 	delete router.state.pub;
 
 	const item = convertPubStateToDbScheduled({
-		...router.state[EDIT_ITEM_NAME],
-		item: {
-			...router.state[EDIT_ITEM_NAME].item,
+		...pubState,
+		dbRecord: {
+			...pubState.dbRecord,
+			name: makeScheduledItemName(pubState[PUB_KEYS.text]),
 			[PUB_SCHEDULED_KEYS.updatedbyuserid]: router.me[USER_KEYS.id],
 		},
 	});
@@ -171,7 +175,13 @@ export async function saveEditedScheduledPost(router) {
 export async function createScheduledPublication(c, pubState) {
 	const item = convertPubStateToDbScheduled({
 		...pubState,
-		item: {
+		dbRecord: {
+			...pubState[PUB_KEYS.dbRecord],
+			name: makeScheduledItemName(pubState[PUB_KEYS.text]),
+
+			// TODO: расчитать
+			// pubTimestampMinutes
+			socialMedia: DEFAULT_SOCIAL_MEDIA,
 			[PUB_SCHEDULED_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
 		},
 	});
@@ -187,45 +197,59 @@ export async function createScheduledPublication(c, pubState) {
 	);
 }
 
+export function makeScheduledItemName(text) {
+	return (
+		// TODO: экранировать???
+		text
+			?.trim()
+			.substring(0, MENU_ITEM_LABEL_LENGTH)
+			.trim()
+			.replace(/\n/g, '')
+			.replace(/[\s]{2,}/g, ' ') || ''
+	);
+}
+
 export function convertPubStateToDbScheduled(pubState) {
-	const { item, ...payloadJson } = pubState;
+	const { dbRecord, ...payloadJson } = pubState;
 
 	return {
-		...item,
-		payloadJson,
+		...dbRecord,
+		payloadJson: JSON.stringify(payloadJson),
 	};
 }
 
 export function convertDbScheduledToPubState(dbItem) {
-	const { payloadJson, ...item } = dbItem;
+	const { payloadJson, ...dbRecord } = dbItem;
 
 	return {
-		item,
+		dbRecord,
 		...JSON.parse(payloadJson),
 	};
 }
 
-export async function printPubToAdminChannel(router, item) {
+export async function printPubToAdminChannel(router, dbRecord) {
 	const c = router.c;
+	const item = convertDbScheduledToPubState(dbRecord);
 
 	// publication
 	const { message_id } = await router.printFinalPost(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		item,
 	);
+	// const createdByUser = typeof  await router.db.getItem(DB_TABLE_NAMES.User, PUB_KEYS.createdBy)
 	// info post
 	const infoMsgPostParams = {
 		[PUB_KEYS.date]: item[PUB_KEYS.date],
 		[PUB_KEYS.time]: item[PUB_KEYS.time],
-		[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.users].find(
-			(i) => i.id === item[PUB_KEYS.createdBy],
-		)?.[USER_KEYS.name],
+		// [PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.users].find(
+		// 	(i) => i.id === item[PUB_KEYS.createdBy],
+		// )?.[USER_KEYS.name],
 	};
 
-	if (PUB_KEYS.updatedBy)
-		infoMsgPostParams[PUB_KEYS.updatedBy] = c.ctx[CTX_KEYS.users].find(
-			(i) => i.id === item[PUB_KEYS.updatedBy],
-		)?.[USER_KEYS.name];
+	// if (PUB_KEYS.updatedBy)
+	// 	infoMsgPostParams[PUB_KEYS.updatedBy] = c.ctx[CTX_KEYS.users].find(
+	// 		(i) => i.id === item[PUB_KEYS.updatedBy],
+	// 	)?.[USER_KEYS.name];
 
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],

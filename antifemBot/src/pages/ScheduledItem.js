@@ -16,6 +16,7 @@ import {
 	PUB_KEYS,
 	USER_CFG_KEYS,
 	USER_PERMISSIONS_KEYS,
+	PUB_SCHEDULED_KEYS,
 } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
@@ -27,15 +28,18 @@ export class ScheduledItem extends PageBase {
 		const allowEdit =
 			isAdmin ||
 			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub] ||
-			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
+			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
+			this.me[USER_KEYS.id];
 		const allowDelete =
 			isAdmin ||
 			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub] ||
-			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
+			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
+			this.me[USER_KEYS.id];
 		const allowChandeTime =
 			isAdmin ||
 			userPerms[USER_PERMISSIONS_KEYS.changeTimeOfOthersScheduledPub] ||
-			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
+			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
+			this.me[USER_KEYS.id];
 		// do delete it in case of cancel btn pressed
 		delete this.state.pub;
 
@@ -98,7 +102,10 @@ export class ScheduledItem extends PageBase {
 
 				return this.router.go('scheduled-list');
 			case 'deleteSchuduledBtn':
-				await deleteScheduledPost(c, this.state[EDIT_ITEM_NAME].id);
+				await deleteScheduledPost(
+					c,
+					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.id],
+				);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
 					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
@@ -109,7 +116,7 @@ export class ScheduledItem extends PageBase {
 				return this.router.go('pub-content');
 			case 'showPreviewBtn':
 				await this.printFinalPost(
-					this.me[USER_KEYS.id],
+					this.me[USER_KEYS.tgChatId],
 					this.state[EDIT_ITEM_NAME],
 				);
 

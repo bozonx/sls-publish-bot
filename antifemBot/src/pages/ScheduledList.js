@@ -16,8 +16,6 @@ import {
 	PUB_SCHEDULED_KEYS,
 } from '../constants.js';
 
-const LABEL_LENGTH = 50;
-
 export class ScheduledList extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
@@ -85,13 +83,6 @@ export class ScheduledList extends PageBase {
 	}
 
 	makeItemLabel(item) {
-		// TODO: move to creating item
-		// 	?.trim()
-		// 	.substring(0, LABEL_LENGTH)
-		// 	.trim()
-		// 	.replace(/\n/g, '')
-		// 	.replace(/[\s]{2,}/g, ' ');
-
 		// TODO: use pubTimestampMinutes
 		// if (
 		// 	isPastDateTime(
@@ -107,6 +98,9 @@ export class ScheduledList extends PageBase {
 		// const time = item[PUB_KEYS.time];
 
 		// return `${dateStr} ${time} ${text}`;
+		//
+
+		// TODO: написать без имени если нет
 
 		return item[PUB_SCHEDULED_KEYS.name];
 	}

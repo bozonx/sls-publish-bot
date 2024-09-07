@@ -85,7 +85,7 @@ export class UsersManager extends PageBase {
 			}
 		}
 
-		if (typeof obj[USER_KEYS.id] !== 'number') {
+		if (typeof obj[USER_KEYS.tgUserId] !== 'number') {
 			return this.reply(`ERROR: wrong data. Id is not number`);
 		}
 

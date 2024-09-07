@@ -32,12 +32,12 @@ export function makeStatePreview(c, state = {}) {
 	let textLength = state[PUB_KEYS.text]?.length || 0;
 	let postType = 'text';
 	const users = c.ctx[CTX_KEYS.users];
-	const createdUserName =
-		state[PUB_KEYS.createdBy] &&
-		users.find((i) => i.id === state[PUB_KEYS.createdBy])?.[USER_KEYS.name];
-	const updatedUserName =
-		state[PUB_KEYS.updatedBy] &&
-		users.find((i) => i.id === state[PUB_KEYS.updatedBy])?.[USER_KEYS.name];
+	// const createdUserName =
+	// 	state[PUB_KEYS.createdBy] &&
+	// 	users.find((i) => i.id === state[PUB_KEYS.createdBy])?.[USER_KEYS.name];
+	// const updatedUserName =
+	// 	state[PUB_KEYS.updatedBy] &&
+	// 	users.find((i) => i.id === state[PUB_KEYS.updatedBy])?.[USER_KEYS.name];
 
 	if (state.media?.length === 1) postType = state.media[0].type;
 	// TODO: add
@@ -64,8 +64,8 @@ export function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}
 
-	if (createdUserName) res += `${t(c, 'stateCreator')}: ${createdUserName}\n`;
-	if (updatedUserName) res += `${t(c, 'stateUpdator')}: ${updatedUserName}\n`;
+	// if (createdUserName) res += `${t(c, 'stateCreator')}: ${createdUserName}\n`;
+	// if (updatedUserName) res += `${t(c, 'stateUpdator')}: ${updatedUserName}\n`;
 
 	return res.trim();
 }

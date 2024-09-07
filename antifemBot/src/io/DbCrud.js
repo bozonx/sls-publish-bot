@@ -35,10 +35,11 @@ export class DbCrud {
 		return result;
 	}
 
-	async updateItem(tableName, itemId, data, where) {
+	async updateItem(tableName, fullData, where) {
+		const { id, ...data } = fullData;
 		const result = await this.prisma[tableName].update({
 			where: {
-				id: itemId,
+				id,
 				...where,
 			},
 			data,

@@ -48,17 +48,17 @@ export class PubPostSetup extends PubPageBase {
 			],
 			this.state.pub[PUB_KEYS.author]
 				? [
-						{
-							id: 'withoutAuthorBtn',
-							label: t(c, 'withoutAuthorBtn'),
-						},
-					]
+					{
+						id: 'withoutAuthorBtn',
+						label: t(c, 'withoutAuthorBtn'),
+					},
+				]
 				: authorToAdd && [
-						{
-							id: 'addAuthorBtn',
-							label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
-						},
-					],
+					{
+						id: 'addAuthorBtn',
+						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
+					},
+				],
 			[
 				{
 					id: 'showPreviewBtn',
@@ -76,13 +76,13 @@ export class PubPostSetup extends PubPageBase {
 				},
 				this.state[EDIT_ITEM_NAME]
 					? {
-							id: 'saveBtn',
-							label: t(c, 'saveBtn'),
-						}
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					}
 					: {
-							id: 'nextBtn',
-							label: t(c, 'nextBtn'),
-						},
+						id: 'nextBtn',
+						label: t(c, 'nextBtn'),
+					},
 			],
 		]);
 	}
@@ -111,7 +111,7 @@ export class PubPostSetup extends PubPageBase {
 					[PUB_KEYS.customAuthor]: null,
 				});
 			case 'showPreviewBtn':
-				await this.printFinalPost(this.me[USER_KEYS.id], this.state.pub);
+				await this.printFinalPost(this.me[USER_KEYS.tgChatId], this.state.pub);
 
 				return this.reload();
 			case 'linkPreviewSwitch':
