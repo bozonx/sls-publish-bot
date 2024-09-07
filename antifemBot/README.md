@@ -32,5 +32,9 @@ npx prisma migrate diff --from-local-d1 --to-schema-datamodel ./prisma/schema.pr
 # apply migrations
 npx wrangler d1 migrations apply publisher --local
 npx wrangler d1 migrations apply publisher --remote
-```
 
+####
+Prisma
+
+prisma migrate dev --name init
+```

@@ -1,6 +1,7 @@
 import parseUrl from 'parse-url';
 import { webhookCallback } from 'grammy';
 import { BotIndex } from './BotIndex.js';
+import { PrismaD1 } from '@prisma/adapter-d1';
 import { handleScheduled } from './indexShedullerPublisher.js';
 import { setWebhook } from './helpers/helpers.js';
 import { TG_BOT_URL } from './constants.js';
@@ -18,6 +19,7 @@ export default {
 				env.CHAT_OF_ADMINS_ID,
 				env.DESTINATION_CHANNEL_ID,
 				env.KV,
+				new PrismaD1(env.DB),
 				env.APP_DEBUG,
 			);
 
