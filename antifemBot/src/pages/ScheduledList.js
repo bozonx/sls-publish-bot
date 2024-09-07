@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { t, loadFromKv, defineMenu } from '../helpers/helpers.js';
+import { t, defineMenu } from '../helpers/helpers.js';
 import {
 	makeIsoDateFromPubState,
 	makeHumanRuDateCompact,
@@ -19,6 +19,7 @@ const LABEL_LENGTH = 50;
 export class ScheduledList extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		// TODO: remake
 		const items = (await loadFromKv(c, KV_KEYS.scheduled, [])).sort(
 			(a, b) =>
 				new Date(makeIsoDateFromPubState(a)) -
@@ -51,6 +52,7 @@ export class ScheduledList extends PageBase {
 	async onButtonPress(btnId, payload) {
 		if (btnId === DEFAULT_BTN_ITEM_ID) {
 			const itemId = payload;
+			// TODO: remake
 			const allItems = await loadFromKv(this.router.c, KV_KEYS.scheduled, []);
 
 			this.state[EDIT_ITEM_NAME] = allItems.find((i) => i.id === itemId);

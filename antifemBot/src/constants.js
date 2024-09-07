@@ -21,20 +21,19 @@ export const DEFAULT_PUB_TIME = '10:00';
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const KV_KEYS = {
 	config: 'config',
-	users: 'users',
-	tags: 'tags',
-	scheduled: 'scheduled',
+	// users: 'users',
+	// tags: 'tags',
+	// scheduled: 'scheduled',
 };
 export const CTX_KEYS = {
 	// it is c.msg.chat.id
 	chatWithBotId: 'chatWithBotId',
 	config: 'config',
 	session: 'session',
-	users: 'users',
 	// user object from DB
 	me: 'me',
 	KV: 'KV',
-	PRISMA_ADAPTER: 'PRISMA_ADAPTER',
+	DB_CRUD: 'DB_CRUD',
 	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
 	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
 	APP_DEBUG: 'APP_DEBUG',
@@ -46,9 +45,20 @@ export const DB_TABLE_NAMES = {
 };
 export const USER_KEYS = {
 	id: 'id',
+	tgUserId: 'tgUserId',
+	tgChatId: 'tgChatId',
 	name: 'name',
-	isAdmin: 'isAdmin',
+	cfg: 'cfg',
+};
+export const USER_CFG_KEYS = {
 	authorName: 'authorName',
+	permissions: 'permissions',
+};
+export const USER_PERMISSIONS_KEYS = {
+	admin: 'admin',
+	editOthersScheduledPub: 'editOthersScheduledPub',
+	deleteOthersScheduledPub: 'deleteOthersScheduledPub',
+	changeTimeOfOthersScheduledPub: 'changeTimeOfOthersScheduledPub',
 };
 export const APP_CFG_KEYS = {
 	templates: 'templates',
@@ -110,10 +120,4 @@ export const APP_INITIAL_CONFIG = {
 		],
 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
 	},
-};
-
-export const INITIAL_MAIN_USER = {
-	[USER_KEYS.name]: 'Owner',
-	[USER_KEYS.isAdmin]: true,
-	[USER_KEYS.authorName]: 'Owner Author',
 };

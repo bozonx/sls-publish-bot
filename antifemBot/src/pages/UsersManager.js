@@ -1,12 +1,6 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import {
-	t,
-	saveToKv,
-	defineMenu,
-	parseJsonSafelly,
-	loadFromKv,
-} from '../helpers/helpers.js';
+import { t, defineMenu, parseJsonSafelly } from '../helpers/helpers.js';
 import { breakArray } from '../helpers/lib.js';
 import {
 	KV_KEYS,
@@ -26,6 +20,7 @@ export class UsersManager extends PageBase {
 
 		return defineMenu([
 			...breakArray(
+				// TODO: remake
 				this.users.map((i) => ({
 					id: DEFAULT_BTN_ITEM_ID,
 					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${i[USER_KEYS.isAdmin] ? ' (admin)' : ''}`,
@@ -83,9 +78,11 @@ export class UsersManager extends PageBase {
 			return this.reply(`ERROR: wrong data. Id is not number`);
 		}
 
+		// TODO: remake
 		const allUsers = await loadFromKv(c, KV_KEYS.users);
 		const merged = [...allUsers, obj];
 
+		// TODO: remake
 		await saveToKv(c, KV_KEYS.users, merged);
 		await this.reply(`User was saved\n\n${yaml.dump(obj)}`);
 
@@ -94,6 +91,7 @@ export class UsersManager extends PageBase {
 
 	async userRemoveCallback(payload) {
 		const c = this.router.c;
+		// TODO: remake
 		const allUsers = await loadFromKv(c, KV_KEYS.users);
 		const prepared = [...allUsers];
 		const index = prepared.findIndex(
@@ -104,6 +102,7 @@ export class UsersManager extends PageBase {
 
 		prepared.splice(index, 1);
 
+		// TODO: remake
 		await saveToKv(c, KV_KEYS.users, prepared);
 		await this.reply(`User was deleted\n\n${yaml.dump(allUsers[index])}`);
 

@@ -1,13 +1,8 @@
 import ShortUniqueId from 'short-unique-id';
 import { toMarkdownV2, escapers } from '@telegraf/entity';
 import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
-import {
-	t,
-	loadFromKv,
-	saveToKv,
-	makeStatePreview,
-	makeUserNameFromMsg,
-} from './helpers.js';
+import { t, makeStatePreview, makeUserNameFromMsg } from './helpers.js';
+import { loadFromKv, saveToKv } from '../io/KVio.js';
 import { applyStringTemplate, omitUndefined } from './lib.js';
 import {
 	CTX_KEYS,
@@ -132,6 +127,7 @@ export async function deleteScheduledPost(c, itemId) {
 	// remove selected tag
 	prepared.splice(indexOfItem, 1);
 
+	// TODO: remake
 	await saveToKv(c, KV_KEYS.scheduled, prepared);
 
 	return allItems[indexOfItem];
@@ -149,6 +145,7 @@ export async function saveEditedScheduledPost(router) {
 		...router.state[EDIT_ITEM_NAME],
 		[PUB_KEYS.updatedBy]: router.me[USER_KEYS.id],
 	};
+	// TODO: remake
 	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
 	const oldItemIndex = allScheduled.findIndex((i) => i.id === item.id);
 
@@ -156,6 +153,7 @@ export async function saveEditedScheduledPost(router) {
 
 	allScheduled[oldItemIndex] = item;
 
+	// TODO: remake
 	await saveToKv(c, KV_KEYS.scheduled, allScheduled);
 	await router.reply(t(c, 'editedSavedSuccessfully'));
 
@@ -172,6 +170,7 @@ export async function createScheduledPublication(c, pubState) {
 	const allScheduled = (await loadFromKv(c, KV_KEYS.scheduled)) || [];
 	const prepared = [...allScheduled, item];
 
+	// TODO: remake
 	await saveToKv(c, KV_KEYS.scheduled, prepared);
 
 	return item;
@@ -202,7 +201,7 @@ export async function printPubToAdminChannel(router, item) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		t(c, 'infoMsgToAdminChannel') +
-			`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
+		`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
 		{ reply_parameters: { message_id } },
 	);
 }

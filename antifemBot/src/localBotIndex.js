@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { BotIndex } from './BotIndex.js';
 import { APP_INITIAL_CONFIG } from './constants.js';
 import { handleScheduled } from './indexShedullerPublisher.js';
+import { KVStub } from './io/KVstub.js';
 
 const testData = {
 	config: JSON.stringify(APP_INITIAL_CONFIG),
@@ -31,19 +32,6 @@ const testData = {
 	]),
 };
 
-function KVStub(initialData = {}) {
-	const storage = initialData;
-
-	return {
-		get: async (key) => {
-			return storage[key];
-		},
-		put: async (key, value) => {
-			storage[key] = value;
-		},
-	};
-}
-
 (async () => {
 	const KV = KVStub(testData);
 	const app = new BotIndex(
@@ -52,6 +40,8 @@ function KVStub(initialData = {}) {
 		process.env.CHAT_OF_ADMINS_ID,
 		process.env.DESTINATION_CHANNEL_ID,
 		KV,
+		// do not need to specify any prisma adapter for sqlite
+		undefined,
 		process.env.APP_DEBUG,
 	);
 

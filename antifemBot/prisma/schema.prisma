@@ -15,11 +15,10 @@ model User {
   id           Int            @id @default(autoincrement())
   tgUserId     String         @unique
   tgChatId     String         @unique
+  name         String
+  cfg          String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  lang         String
-  authorName   String
-  cfg          String
   Tag          Tag[]
   PubScheduled PubScheduled[]
 }

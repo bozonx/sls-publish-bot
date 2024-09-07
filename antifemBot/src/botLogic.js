@@ -1,18 +1,19 @@
 import {
-	KV_KEYS,
-	CTX_KEYS,
-	USER_KEYS,
-	APP_INITIAL_CONFIG,
-	USER_SENT_TO_ADMIN_MSG_DELIMITER,
-	SESSION_CACHE_NAME,
-	INITIAL_MAIN_USER,
-} from './constants.js';
-import {
 	loadFromKv,
 	loadFromCache,
 	saveToKv,
-	makeUserNameFromMsg,
+	makeInviteUserData,
+	makeInitialAdminUser,
 } from './helpers/helpers.js';
+import { DbCrud } from './io/DbCrud.js';
+import {
+	KV_KEYS,
+	CTX_KEYS,
+	APP_INITIAL_CONFIG,
+	USER_SENT_TO_ADMIN_MSG_DELIMITER,
+	SESSION_CACHE_NAME,
+	DB_TABLE_NAMES,
+} from './constants.js';
 
 export function makeContext(
 	MAIN_ADMIN_TG_USER_ID,
@@ -28,21 +29,23 @@ export function makeContext(
 		c.ctx = {
 			[CTX_KEYS.chatWithBotId]: userChatIdWithBot,
 			[CTX_KEYS.KV]: KV,
-			[CTX_KEYS.PRISMA_ADAPTER]: PRISMA_ADAPTER,
+			[CTX_KEYS.DB_CRUD]: new DbCrud(PRISMA_ADAPTER),
 			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
 			[CTX_KEYS.APP_DEBUG]: APP_DEBUG,
 		};
 
 		let appCfg;
-		let users;
 		let session;
+		let me;
 
 		try {
-			[appCfg, users, session] = await Promise.all([
+			[appCfg, session, me] = await Promise.all([
 				await loadFromKv(c, KV_KEYS.config),
-				await loadFromKv(c, KV_KEYS.users),
 				await loadFromCache(c, SESSION_CACHE_NAME, userChatIdWithBot),
+				await c.ctx[CTX_KEYS.DB_CRUD].getItem(DB_TABLE_NAMES.User, undefined, {
+					tgChatId: userChatIdWithBot,
+				}),
 			]);
 		} catch (e) {
 			throw new Error(`Can't load initial data: ${e}`);
@@ -54,24 +57,21 @@ export function makeContext(
 			await saveToKv(c, KV_KEYS.config, appCfg);
 		}
 
-		if (!users) {
-			// if first time start then add main admin user
-			users = [
-				{
-					[USER_KEYS.id]: Number(MAIN_ADMIN_TG_USER_ID),
-					...INITIAL_MAIN_USER,
-				},
-			];
-			// save Owner user on first time app start
-			await saveToKv(c, KV_KEYS.users, users);
-		}
+		// on first initialization write main admin to the DB
+		if (!me && c.msg.from.id === Number(MAIN_ADMIN_TG_USER_ID)) {
+			const initialAdmin = makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID);
 
-		const me = users.find((i) => i.id === c.msg.chat.id);
+			me = await c.ctx[CTX_KEYS.DB_CRUD].createItem(
+				DB_TABLE_NAMES.User,
+				initialAdmin,
+			);
+
+			console.log(111111, me);
+		}
 
 		c.ctx = {
 			...c.ctx,
 			[CTX_KEYS.config]: appCfg,
-			[CTX_KEYS.users]: users,
 			[CTX_KEYS.session]: session,
 			[CTX_KEYS.me]: me,
 		};
@@ -81,19 +81,13 @@ export function makeContext(
 }
 
 export async function handleStart(c) {
-	if (!c.ctx[CTX_KEYS.me]) {
-		const userName = makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id);
-		const dataStr = JSON.stringify({
-			[USER_KEYS.id]: c.msg.from.id,
-			[USER_KEYS.name]: userName,
-			[USER_KEYS.authorName]: userName,
-		});
-
-		return c.reply(
-			t(c, 'youAreNotRegistered') +
-			`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
-		);
-	}
 	// show home page on start command
-	return c.router.start();
+	if (c.ctx[CTX_KEYS.me]) return c.router.start();
+	// else send invite message which user have to send to admin
+	const dataStr = JSON.stringify(makeInviteUserData(c));
+
+	return c.reply(
+		t(c, 'youAreNotRegistered') +
+		`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
+	);
 }

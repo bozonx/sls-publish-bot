@@ -9,9 +9,10 @@ export class DbCrud {
 		this.prisma = new PrismaClient({ adapter: this.prismaAdapter });
 	}
 
-	async getAll(tableName, where) {
+	async getAll(tableName, select, where) {
 		const result = await this.prisma[tableName].findMany({
 			where,
+			select,
 		});
 
 		return result;
@@ -28,13 +29,13 @@ export class DbCrud {
 		return result;
 	}
 
-	async createNewRecord(tableName, data) {
+	async createItem(tableName, data) {
 		const result = await this.prisma[tableName].create({ data });
 
 		return result;
 	}
 
-	async updateRecord(tableName, itemId, data, where) {
+	async updateItem(tableName, itemId, data, where) {
 		const result = await this.prisma[tableName].update({
 			where: {
 				id: itemId,
@@ -46,7 +47,7 @@ export class DbCrud {
 		return result;
 	}
 
-	async deleteRecord(tableName, itemId, where) {
+	async deleteItem(tableName, itemId, where) {
 		const result = await this.prisma[tableName].delete({
 			where: {
 				id: itemId,

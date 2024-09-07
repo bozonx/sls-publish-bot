@@ -15,6 +15,8 @@ export class ScheduledItem extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const item = this.state[EDIT_ITEM_NAME];
+
+		// TODO: remake
 		const allowEdit =
 			this.me[USER_KEYS.isAdmin] ||
 			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
@@ -75,7 +77,7 @@ export class ScheduledItem extends PageBase {
 				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');
@@ -83,7 +85,7 @@ export class ScheduledItem extends PageBase {
 				await deleteScheduledPost(c, this.state[EDIT_ITEM_NAME].id);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-						`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');

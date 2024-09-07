@@ -1,17 +1,13 @@
 import { PageBase } from '../PageRouter.js';
-import {
-	t,
-	loadFromKv,
-	saveToKv,
-	parseTagsFromInput,
-	defineMenu,
-} from '../helpers/helpers.js';
+import { t, parseTagsFromInput, defineMenu } from '../helpers/helpers.js';
 import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
 import { KV_KEYS, DEFAULT_BTN_ITEM_ID, HOME_PAGE } from '../constants.js';
 
 export class TagsManager extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
+
+		// TODO: remake
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 
 		this.text = t(c, 'tagsManagerDescr');
@@ -55,12 +51,14 @@ export class TagsManager extends PageBase {
 		if (!c.msg.text) return this.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
+		// TODO: remake
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 		const mergedAllTags = makeStringArrayUnique([
 			...allTags,
 			...newTags,
 		]).sort();
 		// save new tags to storage
+		// TODO: remake
 		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
 		await this.reply(`${t(c, 'tagsWasAdded')}: ${newTags.join(', ')}`);
 
@@ -69,6 +67,7 @@ export class TagsManager extends PageBase {
 
 	async tagRemoveCallback(payload) {
 		const c = this.router.c;
+		// TODO: remake
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 		const prepared = [...allTags];
 		const indexOfTag = prepared.indexOf(payload);
@@ -77,6 +76,7 @@ export class TagsManager extends PageBase {
 		// remove selected tag
 		prepared.splice(indexOfTag, 1);
 
+		// TODO: remake
 		await saveToKv(c, KV_KEYS.tags, prepared);
 		await this.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
 

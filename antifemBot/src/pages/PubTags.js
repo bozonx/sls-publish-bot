@@ -4,8 +4,6 @@ import {
 	makeStatePreview,
 	parseTagsFromInput,
 	defineMenu,
-	loadFromKv,
-	saveToKv,
 } from '../helpers/helpers.js';
 import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
 import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
@@ -20,6 +18,8 @@ import {
 export class PubTags extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+
+		// TODO: remake
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 
 		const notSelectedTags = allTags.filter(
@@ -98,11 +98,13 @@ export class PubTags extends PubPageBase {
 		if (!c.msg.text) return this.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
+		// TODO: remake
 		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
 		const mergedAllTags = makeStringArrayUnique([
 			...allTags,
 			...newTags,
 		]).sort();
+		// TODO: remake
 		// save new tags to storage
 		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
 

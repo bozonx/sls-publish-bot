@@ -3,10 +3,11 @@ import locales from '../i18n.js';
 import {
 	TG_BOT_URL,
 	CTX_KEYS,
-	CACHE_PREFIX,
 	QUERY_MARKER,
 	PUB_KEYS,
 	USER_KEYS,
+	USER_CFG_KEYS,
+	USER_PERMISSIONS_KEYS,
 } from '../constants.js';
 import { makeHumanRuDate } from './dateTimeHelpers.js';
 
@@ -67,64 +68,6 @@ export function makeStatePreview(c, state = {}) {
 	if (updatedUserName) res += `${t(c, 'stateUpdator')}: ${updatedUserName}\n`;
 
 	return res.trim();
-}
-
-export async function loadFromKv(c, key, defaultValue) {
-	let resStr;
-
-	try {
-		resStr = await c.ctx[CTX_KEYS.KV].get(key);
-	} catch (e) {
-		throw new Error(`ERROR: Can't load value of "${key}": ${e}`);
-	}
-
-	const parsed = parseJsonSafelly(resStr);
-
-	// TODO: а оно не null возвращает?
-
-	return typeof parsed === 'undefined' ? defaultValue : parsed;
-}
-
-export async function saveToKv(c, key, value) {
-	const valueStr = JSON.stringify(value);
-
-	// TODO: если передан undefined то значение очистится???
-	try {
-		return c.ctx[CTX_KEYS.KV].put(key, valueStr);
-	} catch (e) {
-		throw new Error(`ERROR: Can't save value ${valueStr} of "${key}": ${e}`);
-	}
-}
-
-export async function loadFromCache(c, key, specifiedUserId) {
-	const currentUserId = specifiedUserId || c.ctx[CTX_KEYS.me][USER_KEYS.id];
-	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
-	let resStr;
-
-	try {
-		resStr = await c.ctx[CTX_KEYS.KV].get(fullKey);
-	} catch (e) {
-		throw new Error(`ERROR: Can't load value from cache "${key}": ${e}`);
-	}
-
-	return parseJsonSafelly(resStr);
-}
-
-// on expire the key-value pair will be deleted
-export async function saveToCache(c, key, value, expireFromNowSec) {
-	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.id];
-	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
-	const valueStr = JSON.stringify(value);
-
-	try {
-		return c.ctx[CTX_KEYS.KV].put(fullKey, valueStr, {
-			expirationTtl: expireFromNowSec,
-		});
-	} catch (e) {
-		throw new Error(
-			`ERROR: Can't save cache value ${valueStr} of "${key}": ${e}`,
-		);
-	}
 }
 
 export function parseTagsFromInput(rawStr = '') {
@@ -188,4 +131,31 @@ export function makeUserNameFromMsg(msgFrom) {
 		.join(' ');
 
 	return fullName || msgFrom?.username;
+}
+
+export function makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID) {
+	return {
+		[USER_KEYS.tgUserId]: String(MAIN_ADMIN_TG_USER_ID),
+		[USER_KEYS.tgChatId]: String(MAIN_ADMIN_TG_USER_ID),
+		[USER_KEYS.name]: 'Owner',
+		[USER_KEYS.authorName]: 'Owner Author',
+		[USER_KEYS.cfg]: JSON.stringify({
+			[USER_CFG_KEYS.permissions]: {
+				[USER_PERMISSIONS_KEYS.admin]: true,
+			},
+		}),
+	};
+}
+
+export function makeInviteUserData(c) {
+	const userName = makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id);
+
+	return {
+		[USER_KEYS.tgUserId]: String(c.msg.from.id),
+		[USER_KEYS.tgChatId]: String(c.msg.from.id),
+		[USER_KEYS.name]: userName,
+		[USER_KEYS.cfg]: JSON.stringify({
+			[USER_CFG_KEYS.authorName]: userName,
+		}),
+	};
 }
