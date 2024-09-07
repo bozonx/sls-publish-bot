@@ -1,12 +1,12 @@
 import { PageBase } from '../PageRouter.js';
 import { t, defineMenu } from '../helpers/helpers.js';
+import { convertDbScheduledToPubState } from '../helpers/publishHelpres.js';
 import {
 	// makeIsoDateFromPubState,
 	makeHumanRuDateCompact,
 	isPastDateTime,
 } from '../helpers/dateTimeHelpers.js';
 import {
-	KV_KEYS,
 	PUB_KEYS,
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
@@ -69,7 +69,9 @@ export class ScheduledList extends PageBase {
 			// if (!this.state[EDIT_ITEM_NAME])
 			// 	return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
 
-			const items = await this.db.getAll(DB_TABLE_NAMES.PubScheduled, {});
+			this.state[EDIT_ITEM_NAME] = convertDbScheduledToPubState(
+				await this.db.getItem(DB_TABLE_NAMES.PubScheduled, itemId),
+			);
 
 			return this.router.go('scheduled-item');
 		}
