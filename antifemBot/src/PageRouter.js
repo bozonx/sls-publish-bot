@@ -1,6 +1,6 @@
 import { t, parseJsonSafelly, renderMenuKeyboard } from './helpers/helpers.js';
 import { saveToCache } from './io/KVio.js';
-import { printFinalPost } from './helpers/publishHelpres.js';
+import { escapeMdV2, printFinalPost } from './helpers/publishHelpres.js';
 import {
 	SESSION_STATE_TTL_SEC,
 	CTX_KEYS,
@@ -76,21 +76,21 @@ export class PageBase {
 
 	// It runs on each request.
 	// You can save some state to user in other functions while request is handling
-	async mount() { }
+	async mount() {}
 
 	// It runs when a route is changing. On each request
-	async unmount() { }
+	async unmount() {}
 
 	// Render menu here and return it.
 	// It runs only when the menu need to be renderred
 	// Menu has to be like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
-	async renderMenu() { }
+	async renderMenu() {}
 
 	// It runs on each income message while this page is active
-	async onMessage() { }
+	async onMessage() {}
 
 	// It runs on each button press of menu of this page
-	async onButtonPress(btnId, payload) { }
+	async onButtonPress(btnId, payload) {}
 }
 
 export class PageRouter {
@@ -144,9 +144,9 @@ export class PageRouter {
 			await this._handleMessage();
 		} catch (e) {
 			if (c.ctx[CTX_KEYS.APP_DEBUG]) {
-				await c.reply(
-					`ERROR: handling income message ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
-				);
+				await c.reply(this._makeErrorMsg(e, '$handleMessage'), {
+					parse_mode: 'MarkdownV2',
+				});
 			}
 
 			throw e;
@@ -158,9 +158,9 @@ export class PageRouter {
 			await this._handleQueryData();
 		} catch (e) {
 			if (c.ctx[CTX_KEYS.APP_DEBUG]) {
-				await c.reply(
-					`ERROR: handling query data ${e}\n\nmessage:\n${JSON.stringify(c.msg)}\n\nstate:\n${JSON.stringify(this.state)}`,
-				);
+				await c.reply(this._makeErrorMsg(e, '$handleQueryData'), {
+					parse_mode: 'MarkdownV2',
+				});
 			}
 
 			throw e;
@@ -347,13 +347,13 @@ export class PageRouter {
 			const [, createMenuResult] = await Promise.all([
 				// remove prev menu message
 				prevMsgId &&
-				(async () => {
-					try {
-						await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
-					} catch (e) {
-						// ignore error if can't find message to delete
-					}
-				})(),
+					(async () => {
+						try {
+							await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
+						} catch (e) {
+							// ignore error if can't find message to delete
+						}
+					})(),
 				// print a new menu
 				await c.reply(text, options),
 			]);
@@ -363,5 +363,18 @@ export class PageRouter {
 
 		this._redrawMenu = null;
 		this.state[PREV_MENU_MSG_ID_STATE_NAME] = msgId;
+	}
+
+	_makeErrorMsg(e, method) {
+		return (
+			t(this.c, 'errorSendToAddmin') +
+			`\n\nERROR handling ${method}. ${e}\n\nmsg:\n` +
+			'```\n' +
+			JSON.stringify(this.c.msg, null, 2) +
+			'\n```\nstate:\n' +
+			'```\n' +
+			JSON.stringify(this.state, null, 2) +
+			'\n```'
+		);
 	}
 }

@@ -87,10 +87,10 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-				this.state[EDIT_ITEM_NAME] && {
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
-				},
+					this.state[EDIT_ITEM_NAME] && {
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					},
 				haveAnyContent && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
@@ -163,7 +163,7 @@ export class PubContent extends PubPageBase {
 	_makeMenuText() {
 		const c = this.router.c;
 		let details = makeStatePreview(c, this.state.pub);
-		let modeMessage = t(c, 'uploadContentDescr-' + REPLACE_MODES.textOnly);
+		let modeMessage = t(c, 'uploadContentDescr-' + this.state.replaceMode);
 
 		if (!details) details = t(c, 'noContentMessage');
 
