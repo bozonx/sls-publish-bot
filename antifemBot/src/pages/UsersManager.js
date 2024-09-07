@@ -1,29 +1,39 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu, parseJsonSafelly } from '../helpers/helpers.js';
+import {
+	t,
+	defineMenu,
+	parseJsonSafelly,
+	isUserAdmin,
+} from '../helpers/helpers.js';
 import { breakArray } from '../helpers/lib.js';
 import {
-	KV_KEYS,
 	USER_KEYS,
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
+	DB_TABLE_NAMES,
 } from '../constants.js';
 
 export class UsersManager extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		if (!this.me[USER_KEYS.isAdmin]) return this.router.go('home');
+		if (!isUserAdmin(this.me)) return this.router.go('home');
+
+		const users = await this.db.getAll(DB_TABLE_NAMES.User, {
+			[USER_KEYS.id]: true,
+			[USER_KEYS.name]: true,
+			[USER_KEYS.cfg]: true,
+		});
 
 		this.text = t(c, 'usersManagerDescr');
 
 		return defineMenu([
 			...breakArray(
-				// TODO: remake
-				this.users.map((i) => ({
+				users.map((i) => ({
 					id: DEFAULT_BTN_ITEM_ID,
-					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${i[USER_KEYS.isAdmin] ? ' (admin)' : ''}`,
+					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${isUserAdmin(i) ? ' (admin)' : ''}`,
 					payload: i[USER_KEYS.id],
 				})),
 				2,
@@ -67,6 +77,7 @@ export class UsersManager extends PageBase {
 			}
 		} else {
 			// try to parse YAML
+			// TODO: add authorName
 			try {
 				obj = yaml.load(text.trim());
 			} catch (e) {
@@ -78,12 +89,7 @@ export class UsersManager extends PageBase {
 			return this.reply(`ERROR: wrong data. Id is not number`);
 		}
 
-		// TODO: remake
-		const allUsers = await loadFromKv(c, KV_KEYS.users);
-		const merged = [...allUsers, obj];
-
-		// TODO: remake
-		await saveToKv(c, KV_KEYS.users, merged);
+		await this.db.createItem(DB_TABLE_NAMES.User, obj);
 		await this.reply(`User was saved\n\n${yaml.dump(obj)}`);
 
 		return this.router.reload();
@@ -91,19 +97,21 @@ export class UsersManager extends PageBase {
 
 	async userRemoveCallback(payload) {
 		const c = this.router.c;
-		// TODO: remake
-		const allUsers = await loadFromKv(c, KV_KEYS.users);
-		const prepared = [...allUsers];
-		const index = prepared.findIndex(
-			(i) => i[USER_KEYS.id] === Number(payload),
-		);
+		// // TODO: remake
+		// const allUsers = await loadFromKv(c, KV_KEYS.users);
+		// const prepared = [...allUsers];
+		// const index = prepared.findIndex(
+		// 	(i) => i[USER_KEYS.id] === Number(payload),
+		// );
+		//
+		// if (index < 0) return this.reply(`ERROR: Can't find user ${payload}`);
+		//
+		// prepared.splice(index, 1);
+		//
+		// // TODO: remake
+		// await saveToKv(c, KV_KEYS.users, prepared);
 
-		if (index < 0) return this.reply(`ERROR: Can't find user ${payload}`);
-
-		prepared.splice(index, 1);
-
-		// TODO: remake
-		await saveToKv(c, KV_KEYS.users, prepared);
+		await this.db.deleteItem(DB_TABLE_NAMES.User, Number(payload));
 		await this.reply(`User was deleted\n\n${yaml.dump(allUsers[index])}`);
 
 		return c.router.reload();

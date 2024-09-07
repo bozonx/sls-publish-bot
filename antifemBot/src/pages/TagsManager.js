@@ -1,14 +1,22 @@
 import { PageBase } from '../PageRouter.js';
 import { t, parseTagsFromInput, defineMenu } from '../helpers/helpers.js';
-import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
-import { KV_KEYS, DEFAULT_BTN_ITEM_ID, HOME_PAGE } from '../constants.js';
+import { breakArray } from '../helpers/lib.js';
+import {
+	DEFAULT_BTN_ITEM_ID,
+	HOME_PAGE,
+	DB_TABLE_NAMES,
+	TAG_KEYS,
+	USER_KEYS,
+	DEFAULT_SOCIAL_MEDIA,
+} from '../constants.js';
 
 export class TagsManager extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
-
-		// TODO: remake
-		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
+		const allTags = await this.db.getAll(DB_TABLE_NAMES.Tag, {
+			[TAG_KEYS.id]: true,
+			[TAG_KEYS.name]: true,
+		});
 
 		this.text = t(c, 'tagsManagerDescr');
 
@@ -16,8 +24,8 @@ export class TagsManager extends PageBase {
 			...breakArray(
 				allTags.map((tag) => ({
 					id: DEFAULT_BTN_ITEM_ID,
-					label: tag,
-					payload: tag,
+					label: tag[TAG_KEYS.name],
+					payload: tag[TAG_KEYS.id],
 				})),
 				2,
 			),
@@ -32,7 +40,9 @@ export class TagsManager extends PageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === DEFAULT_BTN_ITEM_ID) {
-			return this.tagRemoveCallback(payload);
+			await this.db.deleteItem(DB_TABLE_NAMES.Tag, Number(payload));
+
+			return this.router.reload();
 		}
 
 		switch (btnId) {
@@ -51,35 +61,45 @@ export class TagsManager extends PageBase {
 		if (!c.msg.text) return this.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
-		// TODO: remake
-		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
-		const mergedAllTags = makeStringArrayUnique([
-			...allTags,
-			...newTags,
-		]).sort();
-		// save new tags to storage
-		// TODO: remake
-		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
+		// // TODO: remake
+		// const allTags = await loadFromKv(c, KV_KEYS.tags, []);
+		// const mergedAllTags = makeStringArrayUnique([
+		// 	...allTags,
+		// 	...newTags,
+		// ]).sort();
+		// // save new tags to storage
+		// // TODO: remake
+		// await saveToKv(c, KV_KEYS.tags, mergedAllTags);
+
+		await Promise.all(
+			newTags.map((tag) =>
+				this.db.createItem(DB_TABLE_NAMES.Tag, {
+					[TAG_KEYS.name]: tag,
+					[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
+					[TAG_KEYS.createdByUser]: this.me[USER_KEYS.id],
+				}),
+			),
+		);
 		await this.reply(`${t(c, 'tagsWasAdded')}: ${newTags.join(', ')}`);
 
 		return this.router.reload();
 	}
 
-	async tagRemoveCallback(payload) {
-		const c = this.router.c;
-		// TODO: remake
-		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
-		const prepared = [...allTags];
-		const indexOfTag = prepared.indexOf(payload);
-
-		if (indexOfTag < 0) return this.reply(`ERROR: Can't find tag`);
-		// remove selected tag
-		prepared.splice(indexOfTag, 1);
-
-		// TODO: remake
-		await saveToKv(c, KV_KEYS.tags, prepared);
-		await this.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
-
-		return this.router.reload();
-	}
+	// async _tagRemoveCallback(payload) {
+	// 	const c = this.router.c;
+	// 	// TODO: remake
+	// 	const allTags = await loadFromKv(c, KV_KEYS.tags, []);
+	// 	const prepared = [...allTags];
+	// 	const indexOfTag = prepared.indexOf(payload);
+	//
+	// 	if (indexOfTag < 0) return this.reply(`ERROR: Can't find tag`);
+	// 	// remove selected tag
+	// 	prepared.splice(indexOfTag, 1);
+	//
+	// 	// TODO: remake
+	// 	await saveToKv(c, KV_KEYS.tags, prepared);
+	// 	await this.reply(`${t(c, 'tagWasDeleted')}: ${payload}`);
+	//
+	// 	return this.router.reload();
+	// }
 }

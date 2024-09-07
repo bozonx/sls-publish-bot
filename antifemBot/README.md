@@ -36,5 +36,5 @@ npx wrangler d1 migrations apply publisher --remote
 ####
 Prisma
 
-prisma migrate dev --name init
+npx prisma migrate dev --name init
 ```

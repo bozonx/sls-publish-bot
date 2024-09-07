@@ -40,7 +40,7 @@ export function makeContext(
 				await loadFromKv(c, KV_KEYS.config),
 				await loadFromCache(c, SESSION_CACHE_NAME, userChatIdWithBot),
 				await c.ctx[CTX_KEYS.DB_CRUD].getItem(DB_TABLE_NAMES.User, undefined, {
-					tgChatId: userChatIdWithBot,
+					tgChatId: String(userChatIdWithBot),
 				}),
 			]);
 		} catch (e) {
@@ -61,8 +61,6 @@ export function makeContext(
 				DB_TABLE_NAMES.User,
 				initialAdmin,
 			);
-
-			console.log(111111, me);
 		}
 
 		c.ctx = {

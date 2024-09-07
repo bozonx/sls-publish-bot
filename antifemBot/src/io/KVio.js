@@ -29,7 +29,9 @@ export async function saveToKv(c, key, value) {
 }
 
 export async function loadFromCache(c, key, specifiedUserId) {
-	const currentUserId = specifiedUserId || c.ctx[CTX_KEYS.me][USER_KEYS.id];
+	// TODO: почему user.id не работает?
+	const currentUserId =
+		specifiedUserId || c.ctx[CTX_KEYS.me][USER_KEYS.tgChatId];
 	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	let resStr;
 
@@ -44,7 +46,8 @@ export async function loadFromCache(c, key, specifiedUserId) {
 
 // on expire the key-value pair will be deleted
 export async function saveToCache(c, key, value, expireFromNowSec) {
-	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.id];
+	// TODO: почему user.id не работает?
+	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.tgChatId];
 	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	const valueStr = JSON.stringify(value);
 

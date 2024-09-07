@@ -6,6 +6,7 @@ export const SESSION_CACHE_NAME = 'session';
 export const DEFAULT_BTN_ITEM_ID = '-BTN=';
 export const HOME_PAGE = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
+export const DEFAULT_SOCIAL_MEDIA = 'telegram';
 // export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // TODO: вынести в env?
@@ -50,6 +51,21 @@ export const USER_KEYS = {
 	name: 'name',
 	cfg: 'cfg',
 };
+export const TAG_KEYS = {
+	id: 'id',
+	name: 'name',
+	socialMedia: 'socialMedia',
+	createdByUser: 'createdByUser',
+};
+export const PUB_SCHEDULED_KEYS = {
+	id: 'id',
+	name: 'name',
+	socialMedia: 'socialMedia',
+	pubTimestampMinutes: 'pubTimestampMinutes',
+	createdByUserId: 'createdByUserId',
+	updatedbyuserid: 'createdByUserId',
+	payloadJson: 'payloadJson',
+};
 export const USER_CFG_KEYS = {
 	authorName: 'authorName',
 	permissions: 'permissions',
@@ -85,9 +101,9 @@ export const PUB_KEYS = {
 	forwardedFrom: 'forwardedFrom',
 	date: 'date',
 	time: 'time',
-	// name of user who made or edited post
-	createdBy: 'createdBy',
-	updatedBy: 'updatedBy',
+	// // name of user who made or edited post
+	// createdByUserId: 'createdByUserId',
+	// updatedByUserId: 'updatedByUserId',
 };
 export const MEDIA_TYPES = {
 	photo: 'photo',

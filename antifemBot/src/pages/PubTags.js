@@ -8,22 +8,25 @@ import {
 import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
 import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import {
-	KV_KEYS,
 	PUB_KEYS,
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
+	DB_TABLE_NAMES,
+	TAG_KEYS,
+	DEFAULT_SOCIAL_MEDIA,
 } from '../constants.js';
 
 export class PubTags extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
-
-		// TODO: remake
-		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
+		const allTags = await this.db.getAll(DB_TABLE_NAMES.Tag, {
+			[TAG_KEYS.id]: true,
+			[TAG_KEYS.name]: true,
+		});
 
 		const notSelectedTags = allTags.filter(
-			(i) => !this.state.pub?.[PUB_KEYS.tags]?.includes(i),
+			(i) => !this.state.pub?.[PUB_KEYS.tags]?.includes(i[TAG_KEYS.name]),
 		);
 
 		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
@@ -32,8 +35,8 @@ export class PubTags extends PubPageBase {
 			...breakArray(
 				notSelectedTags.map((tag) => ({
 					id: DEFAULT_BTN_ITEM_ID,
-					label: tag,
-					payload: tag,
+					label: tag[TAG_KEYS.name],
+					payload: tag[TAG_KEYS.name],
 				})),
 				2,
 			),
@@ -98,21 +101,31 @@ export class PubTags extends PubPageBase {
 		if (!c.msg.text) return this.reply('No text');
 
 		const newTags = parseTagsFromInput(c.msg.text);
-		// TODO: remake
-		const allTags = await loadFromKv(c, KV_KEYS.tags, []);
-		const mergedAllTags = makeStringArrayUnique([
-			...allTags,
-			...newTags,
-		]).sort();
-		// TODO: remake
-		// save new tags to storage
-		await saveToKv(c, KV_KEYS.tags, mergedAllTags);
 
-		const mergedSelectedTags = makeStringArrayUnique([
-			...(this.state.pub?.[PUB_KEYS.tags] || []),
-			...newTags,
-		]);
+		// // TODO: remake
+		// const allTags = await loadFromKv(c, KV_KEYS.tags, []);
+		// const mergedAllTags = makeStringArrayUnique([
+		// 	...allTags,
+		// 	...newTags,
+		// ]).sort();
+		// // TODO: remake
+		// // save new tags to storage
+		// await saveToKv(c, KV_KEYS.tags, mergedAllTags);
+		//
+		// const mergedSelectedTags = makeStringArrayUnique([
+		// 	...(this.state.pub?.[PUB_KEYS.tags] || []),
+		// 	...newTags,
+		// ]);
 
+		await Promise.all(
+			newTags.map((tag) =>
+				this.db.createItem(DB_TABLE_NAMES.Tag, {
+					[TAG_KEYS.name]: tag,
+					[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
+					[TAG_KEYS.createdByUser]: this.me[USER_KEYS.id],
+				}),
+			),
+		);
 		await this.go('pub-post-setup', { [PUB_KEYS.tags]: mergedSelectedTags });
 	}
 }

@@ -1,15 +1,15 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu } from '../helpers/helpers.js';
+import { t, defineMenu, isUserAdmin } from '../helpers/helpers.js';
 import { saveToKv } from '../io/KVio.js';
 import { escapeMdV2 } from '../helpers/publishHelpres.js';
-import { KV_KEYS, USER_KEYS } from '../constants.js';
+import { KV_KEYS } from '../constants.js';
 
 export class ConfigManager extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		if (!this.me[USER_KEYS.isAdmin]) return this.router.go('home');
+		if (!isUserAdmin(this.me)) return this.router.go('home');
 
 		this.text = t(c, 'editConfigDescr');
 
@@ -28,7 +28,7 @@ export class ConfigManager extends PageBase {
 		]);
 	}
 
-	async onButtonPress(btnId, payload) {
+	async onButtonPress(btnId) {
 		switch (btnId) {
 			case 'toHomeBtn':
 				return this.router.go('home');

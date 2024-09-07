@@ -51,6 +51,10 @@ export class PageBase {
 		return this.router.me;
 	}
 
+	get db() {
+		return this.router.db;
+	}
+
 	get config() {
 		return this.router.config;
 	}
@@ -118,6 +122,11 @@ export class PageRouter {
 	// user object
 	get me() {
 		return this.c.ctx[CTX_KEYS.me];
+	}
+
+	// DbCrud
+	get db() {
+		return this.c.ctx[CTX_KEYS.DB_CRUD];
 	}
 
 	// app config from db

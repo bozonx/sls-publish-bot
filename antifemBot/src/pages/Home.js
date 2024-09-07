@@ -1,13 +1,13 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu } from '../helpers/helpers.js';
+import { t, defineMenu, isUserAdmin } from '../helpers/helpers.js';
 import { makeStateFromMessage } from '../helpers/publishHelpres.js';
-import { USER_KEYS, EDIT_ITEM_NAME } from '../constants.js';
+import { EDIT_ITEM_NAME } from '../constants.js';
 // import { handleScheduled } from '../indexShedullerPublisher.js';
 
 export class Home extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		const isAdmin = this.me[USER_KEYS.isAdmin];
+		const isAdmin = isUserAdmin(this.me);
 		// clear pub state
 		delete this.state.pub;
 

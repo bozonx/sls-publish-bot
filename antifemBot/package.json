@@ -21,8 +21,7 @@
 		"prisma": "^5.19.1",
 		"rehype-stringify": "^10.0.0",
 		"remark": "^15.0.1",
-		"remark-rehype": "^11.1.0",
-		"short-unique-id": "^5.2.0"
+		"remark-rehype": "^11.1.0"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.4.27",

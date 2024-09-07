@@ -1,4 +1,4 @@
-import ShortUniqueId from 'short-unique-id';
+// import ShortUniqueId from 'short-unique-id';
 import { toMarkdownV2, escapers } from '@telegraf/entity';
 import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
 import { t, makeStatePreview, makeUserNameFromMsg } from './helpers.js';
@@ -12,6 +12,7 @@ import {
 	KV_KEYS,
 	USER_KEYS,
 	EDIT_ITEM_NAME,
+	DB_TABLE_NAMES,
 } from '../constants.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
@@ -119,18 +120,22 @@ export async function doFullFinalPublicationProcess(c, item) {
 }
 
 export async function deleteScheduledPost(c, itemId) {
-	const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-	const prepared = [...allItems];
-	const indexOfItem = prepared.findIndex((i) => i.id === itemId);
+	// const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
+	// const prepared = [...allItems];
+	// const indexOfItem = prepared.findIndex((i) => i.id === itemId);
+	//
+	// if (indexOfItem < 0) throw new Error(`ERROR: Can't find scheduled item`);
+	// // remove selected tag
+	// prepared.splice(indexOfItem, 1);
+	//
+	// await saveToKv(c, KV_KEYS.scheduled, prepared);
+	//
+	// return allItems[indexOfItem];
 
-	if (indexOfItem < 0) throw new Error(`ERROR: Can't find scheduled item`);
-	// remove selected tag
-	prepared.splice(indexOfItem, 1);
-
-	// TODO: remake
-	await saveToKv(c, KV_KEYS.scheduled, prepared);
-
-	return allItems[indexOfItem];
+	return await c.ctx[CTX_KEYS.DB_CRUD].deleteItem(
+		DB_TABLE_NAMES.PubScheduled,
+		itemId,
+	);
 }
 
 // It is used in save button handlers
@@ -141,39 +146,63 @@ export async function saveEditedScheduledPost(router) {
 
 	delete router.state.pub;
 
-	const item = {
+	const item = convertPubStateToDbScheduled({
 		...router.state[EDIT_ITEM_NAME],
-		[PUB_KEYS.updatedBy]: router.me[USER_KEYS.id],
-	};
-	// TODO: remake
-	const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
-	const oldItemIndex = allScheduled.findIndex((i) => i.id === item.id);
+		item: {
+			...router.state[EDIT_ITEM_NAME].item,
+			[PUB_SCHEDULED_KEYS.updatedbyuserid]: router.me[USER_KEYS.id],
+		},
+	});
+	// const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
+	// const oldItemIndex = allScheduled.findIndex((i) => i.id === item.id);
+	//
+	// if (oldItemIndex < 0) throw new Error(`ERROR: Can't find item while saving`);
+	//
+	// allScheduled[oldItemIndex] = item;
+	//
+	// await saveToKv(c, KV_KEYS.scheduled, allScheduled);
 
-	if (oldItemIndex < 0) throw new Error(`ERROR: Can't find item while saving`);
-
-	allScheduled[oldItemIndex] = item;
-
-	// TODO: remake
-	await saveToKv(c, KV_KEYS.scheduled, allScheduled);
+	await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.PubScheduled, item);
 	await router.reply(t(c, 'editedSavedSuccessfully'));
 
 	return router.go('scheduled-item');
 }
 
 export async function createScheduledPublication(c, pubState) {
-	const uid = new ShortUniqueId({ length: 10 });
-	const item = {
+	const item = convertPubStateToDbScheduled({
 		...pubState,
-		id: uid.rnd(),
-		[PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+		item: {
+			[PUB_SCHEDULED_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+		},
+	});
+	// const uid = new ShortUniqueId({ length: 10 });
+	// const allScheduled = (await loadFromKv(c, KV_KEYS.scheduled)) || [];
+	// const prepared = [...allScheduled, item];
+	//
+	// await saveToKv(c, KV_KEYS.scheduled, prepared);
+
+	return await c.ctx[CTX_KEYS.DB_CRUD].createItem(
+		DB_TABLE_NAMES.PubScheduled,
+		item,
+	);
+}
+
+export function convertPubStateToDbScheduled(pubState) {
+	const { item, ...payloadJson } = pubState;
+
+	return {
+		...item,
+		payloadJson,
 	};
-	const allScheduled = (await loadFromKv(c, KV_KEYS.scheduled)) || [];
-	const prepared = [...allScheduled, item];
+}
 
-	// TODO: remake
-	await saveToKv(c, KV_KEYS.scheduled, prepared);
+export function convertDbScheduledToPubState(dbItem) {
+	const { payloadJson, ...item } = dbItem;
 
-	return item;
+	return {
+		item,
+		...JSON.parse(payloadJson),
+	};
 }
 
 export async function printPubToAdminChannel(router, item) {

@@ -1,5 +1,10 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu, makeStatePreview } from '../helpers/helpers.js';
+import {
+	t,
+	defineMenu,
+	makeStatePreview,
+	isUserAdmin,
+} from '../helpers/helpers.js';
 import {
 	doFullFinalPublicationProcess,
 	deleteScheduledPost,
@@ -9,16 +14,27 @@ import {
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 	PUB_KEYS,
+	USER_CFG_KEYS,
+	USER_PERMISSIONS_KEYS,
 } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const item = this.state[EDIT_ITEM_NAME];
-
-		// TODO: remake
+		const isAdmin = isUserAdmin(this.me);
+		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];
 		const allowEdit =
-			this.me[USER_KEYS.isAdmin] ||
+			isAdmin ||
+			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub] ||
+			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
+		const allowDelete =
+			isAdmin ||
+			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub] ||
+			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
+		const allowChandeTime =
+			isAdmin ||
+			userPerms[USER_PERMISSIONS_KEYS.changeTimeOfOthersScheduledPub] ||
 			item[PUB_KEYS.createdBy] === this.me[USER_KEYS.id];
 		// do delete it in case of cancel btn pressed
 		delete this.state.pub;
@@ -29,7 +45,7 @@ export class ScheduledItem extends PageBase {
 
 		return defineMenu([
 			[
-				allowEdit && {
+				allowDelete && {
 					id: 'deleteSchuduledBtn',
 					label: t(c, 'deleteSchuduledBtn'),
 				},
@@ -38,7 +54,7 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'editSchuduledBtn'),
 				},
 			],
-			[
+			allowChandeTime && [
 				{
 					id: 'changeDateTimeBtn',
 					label: t(c, 'changeDateTimeBtn'),
