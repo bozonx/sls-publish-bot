@@ -39,6 +39,11 @@ export const CTX_KEYS = {
 	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
 	APP_DEBUG: 'APP_DEBUG',
 };
+export const DB_TABLE_NAMES = {
+	User: 'User',
+	Tag: 'Tag',
+	PubScheduled: 'PubScheduled',
+};
 export const USER_KEYS = {
 	id: 'id',
 	name: 'name',
