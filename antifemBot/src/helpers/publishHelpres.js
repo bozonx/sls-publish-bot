@@ -230,7 +230,6 @@ export function convertDbScheduledToPubState(dbItem) {
 export async function printPubToAdminChannel(router, dbRecord) {
 	const c = router.c;
 	const item = convertDbScheduledToPubState(dbRecord);
-
 	// publication
 	const { message_id } = await router.printFinalPost(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
@@ -241,15 +240,13 @@ export async function printPubToAdminChannel(router, dbRecord) {
 	const infoMsgPostParams = {
 		[PUB_KEYS.date]: item[PUB_KEYS.date],
 		[PUB_KEYS.time]: item[PUB_KEYS.time],
-		// [PUB_KEYS.createdBy]: c.ctx[CTX_KEYS.users].find(
-		// 	(i) => i.id === item[PUB_KEYS.createdBy],
-		// )?.[USER_KEYS.name],
+		[PUB_KEYS.dbRecord]: {
+			[PUB_SCHEDULED_KEYS.createdByUserId]:
+				item[PUB_KEYS.dbRecord]?.[PUB_SCHEDULED_KEYS.createdByUserId],
+			[PUB_SCHEDULED_KEYS.updatedByUserId]:
+				item[PUB_KEYS.dbRecord]?.[PUB_SCHEDULED_KEYS.updatedByUserId],
+		},
 	};
-
-	// if (PUB_KEYS.updatedBy)
-	// 	infoMsgPostParams[PUB_KEYS.updatedBy] = c.ctx[CTX_KEYS.users].find(
-	// 		(i) => i.id === item[PUB_KEYS.updatedBy],
-	// 	)?.[USER_KEYS.name];
 
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
