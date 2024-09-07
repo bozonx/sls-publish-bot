@@ -154,7 +154,7 @@ export async function saveEditedScheduledPost(router) {
 		dbRecord: {
 			...pubState.dbRecord,
 			name: makeScheduledItemName(pubState[PUB_KEYS.text]),
-			[PUB_SCHEDULED_KEYS.updatedbyuserid]: router.me[USER_KEYS.id],
+			[PUB_SCHEDULED_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
 		},
 	});
 	// const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
@@ -254,7 +254,7 @@ export async function printPubToAdminChannel(router, dbRecord) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		t(c, 'infoMsgToAdminChannel') +
-		`\n\n${makeStatePreview(c, infoMsgPostParams)}`,
+			`\n\n${await makeStatePreview(c, infoMsgPostParams)}`,
 		{ reply_parameters: { message_id } },
 	);
 }

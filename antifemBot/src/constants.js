@@ -64,7 +64,7 @@ export const PUB_SCHEDULED_KEYS = {
 	socialMedia: 'socialMedia',
 	pubTimestampMinutes: 'pubTimestampMinutes',
 	createdByUserId: 'createdByUserId',
-	updatedbyuserid: 'createdByUserId',
+	updatedByUserId: 'updatedByUserId',
 	payloadJson: 'payloadJson',
 };
 export const USER_CFG_KEYS = {

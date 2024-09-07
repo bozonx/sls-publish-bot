@@ -34,7 +34,7 @@ export class PubDate extends PubPageBase {
 				TIME_ZONE: t(c, 'msk'),
 			}) + ` ${isoDateToLongLocaleRuDate(makeIsoDayFromNow(0))}`;
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
+		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		const daysBtn = [];
 

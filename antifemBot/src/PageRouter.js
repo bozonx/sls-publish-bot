@@ -367,11 +367,13 @@ export class PageRouter {
 
 	_makeErrorMsg(e, method) {
 		return (
-			t(this.c, 'errorSendToAddmin') +
-			`\n\nERROR handling ${method}. ${e}\n\nmsg:\n` +
+			escapeMdV2(
+				t(this.c, 'errorSendToAddmin') +
+					`\n\nERROR in ${method}. ${e}\n\nmsg:\n`,
+			) +
 			'```\n' +
 			JSON.stringify(this.c.msg, null, 2) +
-			'\n```\nstate:\n' +
+			'\n```\nstate\\:\n' +
 			'```\n' +
 			JSON.stringify(this.state, null, 2) +
 			'\n```'

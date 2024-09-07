@@ -30,7 +30,7 @@ export class PubTags extends PubPageBase {
 			(i) => !this.state.pub?.[PUB_KEYS.tags]?.includes(i[TAG_KEYS.name]),
 		);
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
+		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
 
 		return defineMenu([
 			...breakArray(

@@ -39,9 +39,14 @@ export function makeContext(
 			[appCfg, session, me] = await Promise.all([
 				await loadFromKv(c, KV_KEYS.config),
 				await loadFromCache(c, SESSION_CACHE_NAME, userChatIdWithBot),
-				await c.ctx[CTX_KEYS.DB_CRUD].getItem(DB_TABLE_NAMES.User, undefined, {
-					tgChatId: String(userChatIdWithBot),
-				}),
+				await c.ctx[CTX_KEYS.DB_CRUD].getItem(
+					DB_TABLE_NAMES.User,
+					undefined,
+					undefined,
+					{
+						tgChatId: String(userChatIdWithBot),
+					},
+				),
 			]);
 		} catch (e) {
 			throw new Error(`Can't load initial data: ${e}`);
@@ -85,6 +90,6 @@ export async function handleStart(c) {
 
 	return c.reply(
 		t(c, 'youAreNotRegistered') +
-		`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
+			`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
 	);
 }

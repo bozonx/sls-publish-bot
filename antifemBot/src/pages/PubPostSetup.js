@@ -22,7 +22,7 @@ export class PubPostSetup extends PubPageBase {
 			...this.state.pub,
 		};
 
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
+		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
 
 		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
 			(i) => i !== this.state.pub[PUB_KEYS.template],
@@ -48,17 +48,17 @@ export class PubPostSetup extends PubPageBase {
 			],
 			this.state.pub[PUB_KEYS.author]
 				? [
-					{
-						id: 'withoutAuthorBtn',
-						label: t(c, 'withoutAuthorBtn'),
-					},
-				]
+						{
+							id: 'withoutAuthorBtn',
+							label: t(c, 'withoutAuthorBtn'),
+						},
+					]
 				: authorToAdd && [
-					{
-						id: 'addAuthorBtn',
-						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
-					},
-				],
+						{
+							id: 'addAuthorBtn',
+							label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
+						},
+					],
 			[
 				{
 					id: 'showPreviewBtn',
@@ -76,13 +76,13 @@ export class PubPostSetup extends PubPageBase {
 				},
 				this.state[EDIT_ITEM_NAME]
 					? {
-						id: 'saveBtn',
-						label: t(c, 'saveBtn'),
-					}
+							id: 'saveBtn',
+							label: t(c, 'saveBtn'),
+						}
 					: {
-						id: 'nextBtn',
-						label: t(c, 'nextBtn'),
-					},
+							id: 'nextBtn',
+							label: t(c, 'nextBtn'),
+						},
 			],
 		]);
 	}

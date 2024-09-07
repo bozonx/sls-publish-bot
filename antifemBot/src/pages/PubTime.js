@@ -32,7 +32,7 @@ export class PubTime extends PubPageBase {
 			[PUB_KEYS.time]: DEFAULT_PUB_TIME,
 			...this.state.pub,
 		};
-		this.text = `${makeStatePreview(c, this.state.pub)}\n\n${descr}`;
+		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		return defineMenu([
 			...breakArray(this._makeHourButtons(), 5),

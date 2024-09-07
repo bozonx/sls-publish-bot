@@ -18,12 +18,13 @@ export class DbCrud {
 		return result;
 	}
 
-	async getItem(tableName, itemId, where) {
+	async getItem(tableName, itemId, select, where) {
 		const result = await this.prisma[tableName].findUnique({
 			where: {
 				id: itemId,
 				...where,
 			},
+			select,
 		});
 
 		return result;

@@ -18,7 +18,7 @@ export class PubConfirm extends PubPageBase {
 			[PUB_KEYS.template]: this.state.pub[PUB_KEYS.template],
 		};
 
-		this.text = `${makeStatePreview(c, shortPubState)}\n\n${t(c, 'pubConfirmDescr')}`;
+		this.text = `${await makeStatePreview(c, shortPubState)}\n\n${t(c, 'pubConfirmDescr')}`;
 
 		return defineMenu([
 			[

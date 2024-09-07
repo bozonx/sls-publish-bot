@@ -29,23 +29,24 @@ export class ScheduledItem extends PageBase {
 			isAdmin ||
 			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub] ||
 			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
-			this.me[USER_KEYS.id];
+				this.me[USER_KEYS.id];
 		const allowDelete =
 			isAdmin ||
 			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub] ||
 			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
-			this.me[USER_KEYS.id];
+				this.me[USER_KEYS.id];
 		const allowChandeTime =
 			isAdmin ||
 			userPerms[USER_PERMISSIONS_KEYS.changeTimeOfOthersScheduledPub] ||
 			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
-			this.me[USER_KEYS.id];
+				this.me[USER_KEYS.id];
 		// do delete it in case of cancel btn pressed
 		delete this.state.pub;
 
 		if (!item) return this.reply(`ERROR: Can't find item to edit`);
 
-		this.text = t(c, 'scheduledItemDescr') + `\n\n${makeStatePreview(c, item)}`;
+		this.text =
+			t(c, 'scheduledItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
 
 		return defineMenu([
 			[
@@ -97,7 +98,7 @@ export class ScheduledItem extends PageBase {
 				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');
@@ -108,7 +109,7 @@ export class ScheduledItem extends PageBase {
 				);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-					`:\n\n${makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.router.go('scheduled-list');

@@ -35,7 +35,7 @@ export class PubContent extends PubPageBase {
 		const hasMedia = Boolean(this.state.pub.media?.length);
 		const haveAnyContent = Boolean(this.state.pub.text || hasMedia);
 
-		this.text = this._makeMenuText();
+		this.text = await this._makeMenuText();
 
 		return defineMenu([
 			[
@@ -160,9 +160,9 @@ export class PubContent extends PubPageBase {
 		return this.reload(partlyPubState);
 	}
 
-	_makeMenuText() {
+	async _makeMenuText() {
 		const c = this.router.c;
-		let details = makeStatePreview(c, this.state.pub);
+		let details = await makeStatePreview(c, this.state.pub);
 		let modeMessage = t(c, 'uploadContentDescr-' + this.state.replaceMode);
 
 		if (!details) details = t(c, 'noContentMessage');
