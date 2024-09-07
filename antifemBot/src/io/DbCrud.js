@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 
 export class DbCrud {
-	prismaAdapter;
 	prisma;
 
 	constructor(prismaAdapter) {
-		this.prismaAdapter = prismaAdapter;
-		this.prisma = new PrismaClient({ adapter: this.prismaAdapter });
+		this.prisma = new PrismaClient(
+			prismaAdapter && { adapter: this.prismaAdapter },
+		);
 	}
 
 	async getAll(tableName, select, where) {

@@ -1,3 +1,4 @@
+import { parseJsonSafelly } from '../helpers/helpers.js';
 import { CTX_KEYS, CACHE_PREFIX, USER_KEYS } from '../constants.js';
 
 export async function loadFromKv(c, key, defaultValue) {

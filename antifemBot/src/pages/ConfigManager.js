@@ -1,6 +1,7 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import { t, saveToKv, defineMenu } from '../helpers/helpers.js';
+import { t, defineMenu } from '../helpers/helpers.js';
+import { saveToKv } from '../io/KVio.js';
 import { escapeMdV2 } from '../helpers/publishHelpres.js';
 import { KV_KEYS, USER_KEYS } from '../constants.js';
 

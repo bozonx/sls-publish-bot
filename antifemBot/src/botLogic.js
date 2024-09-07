@@ -1,10 +1,5 @@
-import {
-	loadFromKv,
-	loadFromCache,
-	saveToKv,
-	makeInviteUserData,
-	makeInitialAdminUser,
-} from './helpers/helpers.js';
+import { makeInviteUserData, makeInitialAdminUser } from './helpers/helpers.js';
+import { loadFromKv, loadFromCache, saveToKv } from './io/KVio.js';
 import { DbCrud } from './io/DbCrud.js';
 import {
 	KV_KEYS,
@@ -13,6 +8,7 @@ import {
 	USER_SENT_TO_ADMIN_MSG_DELIMITER,
 	SESSION_CACHE_NAME,
 	DB_TABLE_NAMES,
+	USER_KEYS,
 } from './constants.js';
 
 export function makeContext(
@@ -73,7 +69,10 @@ export function makeContext(
 			...c.ctx,
 			[CTX_KEYS.config]: appCfg,
 			[CTX_KEYS.session]: session,
-			[CTX_KEYS.me]: me,
+			[CTX_KEYS.me]: me && {
+				...me,
+				[USER_KEYS.cfg]: JSON.parse(me.cfg),
+			},
 		};
 
 		await next();
