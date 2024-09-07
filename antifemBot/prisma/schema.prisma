@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  tgUserId     String         @unique
+  tgChatId     String         @unique
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  lang         String
+  authorName   String
+  cfg          String
+  Tag          Tag[]
+  PubScheduled PubScheduled[]
+}
+
+model Tag {
+  id              Int      @id @default(autoincrement())
+  name            String
+  socialMedia     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdByUser   User     @relation(fields: [createdByUserId], references: [id])
+  createdByUserId Int
+}
+
+model PubScheduled {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  blogId              String
+  socialMedia         String?
+  pubTimestampMinutes Int?
+  payloadJson         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  createdByUser       User     @relation(fields: [createdByUserId], references: [id])
+  createdByUserId     Int
+}

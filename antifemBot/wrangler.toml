@@ -17,3 +17,7 @@ crons = ["0 */22 * * *"]
 binding = "KV"
 id = "4acebfd5a9834faa96e6e32ae39cad90"
 
+[[ d1_databases ]]
+binding = "DB" # available in your Worker on `env.DB`
+database_name = "publisher"
+database_id = "4c4e2220-2de6-4101-8447-4c85c4425b74"
