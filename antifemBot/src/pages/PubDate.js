@@ -32,7 +32,7 @@ export class PubDate extends PubPageBase {
 		const descr =
 			applyStringTemplate(t(c, 'selectDateDescr'), {
 				TIME_ZONE: t(c, 'msk'),
-			}) + ` ${isoDateToLongLocaleRuDate(makeIsoDate(0))}`;
+			}) + ` ${isoDateToLongLocaleRuDate(makeIsoDate())}`;
 
 		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 

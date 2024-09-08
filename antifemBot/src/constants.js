@@ -45,6 +45,7 @@ export const TAG_KEYS = {
 	id: 'id',
 	name: 'name',
 	socialMedia: 'socialMedia',
+	createdByUserId: 'createdByUserId',
 };
 export const PUB_SCHEDULED_KEYS = {
 	id: 'id',

@@ -141,7 +141,7 @@ export async function saveEditedScheduledPost(router) {
 		...pubState,
 		dbRecord: {
 			...pubState.dbRecord,
-			name: makeScheduledItemName(pubState[PUB_KEYS.text]),
+			name: makeScheduledItemName(pubState),
 			[PUB_SCHEDULED_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
 			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
 				pubState[PUB_KEYS.date],
@@ -162,7 +162,7 @@ export async function createScheduledPublication(c, pubState) {
 		...pubState,
 		dbRecord: {
 			...pubState[PUB_KEYS.dbRecord],
-			name: makeScheduledItemName(pubState[PUB_KEYS.text]),
+			name: makeScheduledItemName(pubState),
 			socialMedia: DEFAULT_SOCIAL_MEDIA,
 			[PUB_SCHEDULED_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
 			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
@@ -179,15 +179,27 @@ export async function createScheduledPublication(c, pubState) {
 	);
 }
 
-export function makeScheduledItemName(text) {
-	return (
-		text
-			?.trim()
-			.substring(0, MENU_ITEM_LABEL_LENGTH)
-			.trim()
-			.replace(/\n/g, ' ')
-			.replace(/[\s]{2,}/g, ' ') || undefined
-	);
+export function makeScheduledItemName(pubState) {
+	const fromText = pubState[PUB_KEYS.text]
+		?.trim()
+		.substring(0, MENU_ITEM_LABEL_LENGTH)
+		.trim()
+		// remove line breark
+		.replace(/\n/g, ' ')
+		// remove no words and numeric chars
+		// .replace(/[^\p{L}\p{N}_\-\s.,]/gu, ' ')
+		.replace(/[^\p{L}\p{N}\s]/gu, ' ')
+		// remove space douplicates
+		.replace(/[\s]{2,}/g, ' ');
+
+	if (fromText) return fromText;
+	else if (pubState[PUB_KEYS.tags]?.length) {
+		return pubState[PUB_KEYS.tags].map((i) => `#${i}`).join(' ');
+	} else if (pubState[PUB_KEYS.media]?.length) {
+		return 'Media';
+	}
+
+	return '';
 }
 
 export function convertPubStateToDbScheduled(pubState) {
@@ -283,7 +295,7 @@ function prepareMdV2MsgTextToPublish(c, pubState) {
 		);
 	} else {
 		// escape clean text
-		contentMdV2 = escapeMdV2(pubState[PUB_KEYS.text]);
+		contentMdV2 = escapeMdV2(pubState[PUB_KEYS.text] || '');
 	}
 
 	return applyTemplate(c, contentMdV2, pubState);

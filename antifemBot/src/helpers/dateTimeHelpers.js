@@ -92,13 +92,13 @@ export function shortRuDateToFullIsoDate(localeShortDate) {
 
 // if  specifiedDate not set then now is used
 export function makeIsoDate(plusDay = 0, specifiedDate) {
-	const now = new Date(specifiedDate);
+	const date = specifiedDate ? new Date(specifiedDate) : new Date();
 	// TODO: с учетом локали +3
-	const year = now.getFullYear();
+	const year = date.getFullYear();
 	// TODO: с учетом локали +3
-	const month = now.getMonth() + 1;
+	const month = date.getMonth() + 1;
 	// TODO: с учетом локали +3
-	const day = now.getDate() + Number(plusDay);
+	const day = date.getDate() + Number(plusDay);
 
 	return `${year}-${make2SignDigitStr(month)}-${make2SignDigitStr(day)}`;
 }
@@ -156,8 +156,9 @@ export function getCurrentHour(timeZone) {
 
 // if no specifiedDate then current time is used
 export function getTimeStr(timeZone, specifiedDate) {
+	const date = specifiedDate ? new Date(specifiedDate) : new Date();
 	// TODO: проверить что правильно срабатывает таймзона при спцифичной дате
-	return new Date(specifiedDate).toLocaleString('ru-RU', {
+	return date.toLocaleString('ru-RU', {
 		timeZone: timeZone,
 		hour: 'numeric',
 		minute: 'numeric',

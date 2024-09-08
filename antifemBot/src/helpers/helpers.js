@@ -5,6 +5,7 @@ import {
 	CTX_KEYS,
 	QUERY_MARKER,
 	PUB_KEYS,
+	TAG_KEYS,
 	USER_KEYS,
 	USER_CFG_KEYS,
 	USER_PERMISSIONS_KEYS,
@@ -13,6 +14,7 @@ import {
 	DEFAULT_SOCIAL_MEDIA,
 } from '../constants.js';
 import { makeHumanRuDate } from './dateTimeHelpers.js';
+import { makeStringArrayUnique } from './lib.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
 	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
@@ -96,6 +98,10 @@ export function parseTagsFromInput(rawStr = '') {
 		)
 		.filter(Boolean);
 }
+
+// export function removeNotLetterAndNotNumbersFromStr(str) {
+// 	return str.replace(/[^\p{L}\p{N}_]/gu, '');
+// }
 
 // remove undefined and false items in menu
 export function defineMenu(menu = []) {
@@ -182,16 +188,21 @@ export function isUserAdmin(user) {
 	return cfg[USER_CFG_KEYS.permissions][USER_PERMISSIONS_KEYS.admin];
 }
 
-export async function handleTagsFromInputAndSave(rawText, createdByUser) {
-	let newTags = parseTagsFromInput(rawText);
+export async function handleTagsFromInputAndSave(
+	router,
+	rawText,
+	createdByUser,
+) {
+	let newTags = makeStringArrayUnique(parseTagsFromInput(rawText));
 
 	const theSameTagsInDb = (
-		await this.db.getAll(
+		await router.db.getAll(
 			DB_TABLE_NAMES.Tag,
 			{ [TAG_KEYS.name]: true },
 			{
 				[TAG_KEYS.name]: {
-					equals: newTags,
+					in: newTags,
+					// equals: newTags.map((i) => ({ [TAG_KEYS.name]: i })),
 				},
 			},
 		)
@@ -201,7 +212,7 @@ export async function handleTagsFromInputAndSave(rawText, createdByUser) {
 
 	await Promise.all(
 		newTags.map((tag) =>
-			this.db.createItem(DB_TABLE_NAMES.Tag, {
+			router.db.createItem(DB_TABLE_NAMES.Tag, {
 				[TAG_KEYS.name]: tag,
 				[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
 				[TAG_KEYS.createdByUserId]: createdByUser[USER_KEYS.id],

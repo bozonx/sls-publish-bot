@@ -16,6 +16,9 @@ export class ConfigManager extends PageBase {
 		// print current config
 		await this.reply('```\n' + escapeMdV2(yaml.dump(this.config)) + '\n```', {
 			parse_mode: 'MarkdownV2',
+			link_preview_options: {
+				is_disabled: true,
+			},
 		});
 
 		return defineMenu([

@@ -32,10 +32,10 @@ export class PubContent extends PubPageBase {
 		// set initial replace mode = both
 		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
-		const hasMedia = Boolean(this.state.pub.media?.length);
-		const haveAnyContent = Boolean(this.state.pub.text || hasMedia);
+		const hasMedia = Boolean(this.state.pub[PUB_KEYS.media]?.length);
+		const haveAnyContent = Boolean(this.state.pub[PUB_KEYS.text] || hasMedia);
 
-		this.text = await this._makeMenuText();
+		this.text = await this._makeMenuText(haveAnyContent);
 
 		return defineMenu([
 			[
@@ -160,15 +160,15 @@ export class PubContent extends PubPageBase {
 		return this.reload(partlyPubState);
 	}
 
-	async _makeMenuText() {
+	async _makeMenuText(haveAnyContent) {
 		const c = this.router.c;
-		let details = await makeStatePreview(c, this.state.pub);
+		let details = haveAnyContent
+			? await makeStatePreview(c, this.state.pub)
+			: t(c, 'noContentMessage');
 		let replaceModeMessage = t(
 			c,
 			'uploadContentDescr-' + this.state.replaceMode,
 		);
-
-		if (!details) details = t(c, 'noContentMessage');
 
 		const textModeMessage = this.state.mdV1Mode
 			? t(c, 'mdV1TextModeDescr') // it is in MD V2

@@ -96,8 +96,8 @@ export class ScheduledList extends PageBase {
 					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 					itemPubMinutes * 60 * 1000,
 				);
-
-			return `${dateTimeLabel} ${itemName}`;
 		}
+
+		return `${dateTimeLabel} ${itemName}`;
 	}
 }

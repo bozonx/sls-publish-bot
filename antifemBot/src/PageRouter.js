@@ -370,7 +370,7 @@ export class PageRouter {
 		return (
 			escapeMdV2(
 				t(this.c, 'errorSendToAddmin') +
-					`\n\nERROR in ${method}. ${e}\n\nmsg:\n`,
+					`\n\n${new Date().toISOString()} ERROR in ${method}. ${e}\n\nmsg:\n`,
 			) +
 			'```\n' +
 			JSON.stringify(this.c.msg, null, 2) +

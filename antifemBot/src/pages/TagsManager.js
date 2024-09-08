@@ -67,7 +67,11 @@ export class TagsManager extends PageBase {
 
 		if (!c.msg.text) return this.reply('No text');
 
-		const newTags = await handleTagsFromInputAndSave(c.msg.text, this.me);
+		const newTags = await handleTagsFromInputAndSave(
+			this.router,
+			c.msg.text,
+			this.me,
+		);
 
 		await this.reply(`${t(c, 'tagsWasAdded')}: ${newTags.join(', ')}`);
 
