@@ -45,7 +45,7 @@ export default {
 		// 		case '*/10 * * * *':
 		// 			// check is there some to publish
 		// 			await ctx.waitUntil(
-		// 				handleScheduled(env.TG_TOKEN, env.DESTINATION_CHANNEL_ID, env.KV),
+		// 				handleScheduled(env.TG_TOKEN, env.DESTINATION_CHANNEL_ID, env.KV, new PrismaD1(env.DB)),
 		// 			);
 		//
 		// 			break;

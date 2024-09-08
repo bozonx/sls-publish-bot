@@ -6,30 +6,30 @@ import { KVStub } from './io/KVstub.js';
 
 const testData = {
 	config: JSON.stringify(APP_INITIAL_CONFIG),
-	scheduled: JSON.stringify([
-		{
-			id: 'omltnQ',
-			preview: true,
-			template: 'default',
-			text: 'sdfsdf',
-			author: 'Айван Кей',
-			tags: ['sd', 'fwer'],
-			date: '2024-09-04',
-			time: '14:00',
-			publisher: 'eeee',
-		},
-		{
-			id: 'omwerltnQ',
-			preview: true,
-			template: 'default',
-			text: 'sdslkdjflsdfsdf',
-			author: 'Айван Кей',
-			tags: ['sd', 'fwsdfder'],
-			date: '2024-09-03',
-			time: '10:00',
-			publisher: 'eeee',
-		},
-	]),
+	// scheduled: JSON.stringify([
+	// 	{
+	// 		id: 'omltnQ',
+	// 		preview: true,
+	// 		template: 'default',
+	// 		text: 'sdfsdf',
+	// 		author: 'Айван Кей',
+	// 		tags: ['sd', 'fwer'],
+	// 		date: '2024-09-04',
+	// 		time: '14:00',
+	// 		publisher: 'eeee',
+	// 	},
+	// 	{
+	// 		id: 'omwerltnQ',
+	// 		preview: true,
+	// 		template: 'default',
+	// 		text: 'sdslkdjflsdfsdf',
+	// 		author: 'Айван Кей',
+	// 		tags: ['sd', 'fwsdfder'],
+	// 		date: '2024-09-03',
+	// 		time: '10:00',
+	// 		publisher: 'eeee',
+	// 	},
+	// ]),
 };
 
 (async () => {
@@ -48,11 +48,11 @@ const testData = {
 	await app.init();
 
 	// test scheduled
-	// await handleScheduled(
-	// 	process.env.TG_TOKEN,
-	// 	process.env.DESTINATION_CHANNEL_ID,
-	// 	KV,
-	// );
+	await handleScheduled(
+		process.env.TG_TOKEN,
+		process.env.DESTINATION_CHANNEL_ID,
+		KV,
+	);
 
 	app.botStart();
 })();

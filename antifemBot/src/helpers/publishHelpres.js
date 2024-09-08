@@ -3,6 +3,7 @@ import { toMarkdownV2, escapers } from '@telegraf/entity';
 import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
 import { t, makeStatePreview, makeUserNameFromMsg } from './helpers.js';
 import { applyStringTemplate, omitUndefined } from './lib.js';
+import { convertDateTimeToTsMinutes } from './dateTimeHelpers.js';
 import {
 	CTX_KEYS,
 	APP_CFG_KEYS,
@@ -14,6 +15,7 @@ import {
 	PUB_SCHEDULED_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
 	MENU_ITEM_LABEL_LENGTH,
+	PUBLICATION_TIME_ZONE,
 } from '../constants.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
@@ -155,6 +157,11 @@ export async function saveEditedScheduledPost(router) {
 			...pubState.dbRecord,
 			name: makeScheduledItemName(pubState[PUB_KEYS.text]),
 			[PUB_SCHEDULED_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
+				pubState[PUB_KEYS.date],
+				pubState[PUB_KEYS.time],
+				PUBLICATION_TIME_ZONE,
+			),
 		},
 	});
 	// const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
@@ -178,11 +185,13 @@ export async function createScheduledPublication(c, pubState) {
 		dbRecord: {
 			...pubState[PUB_KEYS.dbRecord],
 			name: makeScheduledItemName(pubState[PUB_KEYS.text]),
-
-			// TODO: расчитать
-			// pubTimestampMinutes
 			socialMedia: DEFAULT_SOCIAL_MEDIA,
 			[PUB_SCHEDULED_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
+				pubState[PUB_KEYS.date],
+				pubState[PUB_KEYS.time],
+				PUBLICATION_TIME_ZONE,
+			),
 		},
 	});
 	// const uid = new ShortUniqueId({ length: 10 });

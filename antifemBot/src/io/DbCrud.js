@@ -4,9 +4,7 @@ export class DbCrud {
 	prisma;
 
 	constructor(prismaAdapter) {
-		this.prisma = new PrismaClient(
-			prismaAdapter && { adapter: this.prismaAdapter },
-		);
+		this.prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
 	}
 
 	async getAll(tableName, select, where) {

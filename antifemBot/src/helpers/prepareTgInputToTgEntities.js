@@ -5,6 +5,8 @@ import { parse } from './htmlToTgEntities/html.js';
 
 // got text and entities from tg message and make full correct entities
 export function prepareTgInputToTgEntities(srcText, srcEntities) {
+	if (!srcText || !srcEntities) return [srcText, srcEntities];
+
 	const preparedMdV1 = initialTgEntitiesToMd(srcText, srcEntities);
 	const htmlText = remark()
 		.use(remarkRehype, {

@@ -43,6 +43,15 @@ export function getShortWeekDay(isoDateStr) {
 	});
 }
 
+export function convertDateTimeToTsMinutes(date, time, timeZone) {
+	return (
+		// TODO: test current timezone
+		new Date(makeIsoDateFromPubState({ date, time }) + timeZone).getTime() /
+		1000 /
+		60
+	);
+}
+
 // operate with timestamp in milliseconds in UTC
 export function dateSubtractMinutes(tsMs, minutesToSubtract) {
 	return dateSubtractSeconds(tsMs, minutesToSubtract * 60);

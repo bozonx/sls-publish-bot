@@ -16,7 +16,7 @@ export const PUBLICATION_TIME_ZONE = '+03:00';
 export const SESSION_STATE_TTL_SEC = 60 * 60 * 24 * 30;
 // TODO: вынести в env?
 export const PUBLISHING_MINUS_MINUTES = 5;
-
+// TODO: вынести в env?
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const DEFAULT_PUB_PLUS_DAY = 1;
 export const DEFAULT_PUB_TIME = '10:00';
