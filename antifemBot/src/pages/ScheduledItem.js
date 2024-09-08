@@ -21,29 +21,29 @@ import {
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
-		const c = this.router.c;
 		const item = this.state[EDIT_ITEM_NAME];
-		const isAdmin = isUserAdmin(this.me);
-		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];
-		const allowEdit =
-			isAdmin ||
-			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub] ||
-			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
-				this.me[USER_KEYS.id];
-		const allowDelete =
-			isAdmin ||
-			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub] ||
-			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
-				this.me[USER_KEYS.id];
-		const allowChandeTime =
-			isAdmin ||
-			userPerms[USER_PERMISSIONS_KEYS.changeTimeOfOthersScheduledPub] ||
-			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
-				this.me[USER_KEYS.id];
-		// do delete it in case of cancel btn pressed
-		delete this.state.pub;
 
 		if (!item) return this.reply(`ERROR: Can't find item to edit`);
+
+		const c = this.router.c;
+		const isAdmin = isUserAdmin(this.me);
+		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];
+		const isAdminOrMyItem =
+			isAdmin || item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId];
+		const allowEdit =
+			isAdminOrMyItem ||
+			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub] ===
+				this.me[USER_KEYS.id];
+		const allowDelete =
+			isAdminOrMyItem ||
+			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub] ===
+				this.me[USER_KEYS.id];
+		const allowChangeTime =
+			isAdminOrMyItem ||
+			userPerms[USER_PERMISSIONS_KEYS.changeTimeOfOthersScheduledPub] ===
+				this.me[USER_KEYS.id];
+		// do delete pub state in case of cancel btn pressed
+		delete this.state.pub;
 
 		this.text =
 			t(c, 'scheduledItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
@@ -59,7 +59,7 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'editSchuduledBtn'),
 				},
 			],
-			allowChandeTime && [
+			allowChangeTime && [
 				{
 					id: 'changeDateTimeBtn',
 					label: t(c, 'changeDateTimeBtn'),

@@ -16,8 +16,6 @@ export const KV_KEYS = {
 	config: 'config',
 };
 export const CTX_KEYS = {
-	// it is c.msg.chat.id
-	chatWithBotId: 'chatWithBotId',
 	config: 'config',
 	session: 'session',
 	// user object from DB

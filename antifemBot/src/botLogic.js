@@ -23,10 +23,7 @@ export function makeContext(
 	APP_DEBUG,
 ) {
 	return async (c, next) => {
-		const userChatIdWithBot = c.msg.chat.id;
-
 		c.ctx = {
-			[CTX_KEYS.chatWithBotId]: userChatIdWithBot,
 			[CTX_KEYS.KV]: KV,
 			[CTX_KEYS.DB_CRUD]: new DbCrud(PRISMA_ADAPTER),
 			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
@@ -37,6 +34,7 @@ export function makeContext(
 			[CTX_KEYS.APP_DEBUG]: APP_DEBUG,
 		};
 
+		const chatId = c.msg.chat.id;
 		let appCfg;
 		let session;
 		let me;
@@ -44,13 +42,13 @@ export function makeContext(
 		try {
 			[appCfg, session, me] = await Promise.all([
 				await loadFromKv(c, KV_KEYS.config),
-				await loadFromCache(c, SESSION_CACHE_NAME, userChatIdWithBot),
+				await loadFromCache(c, SESSION_CACHE_NAME, chatId),
 				await c.ctx[CTX_KEYS.DB_CRUD].getItem(
 					DB_TABLE_NAMES.User,
 					undefined,
 					undefined,
 					{
-						tgChatId: String(userChatIdWithBot),
+						tgChatId: String(chatId),
 					},
 				),
 			]);
@@ -65,6 +63,7 @@ export function makeContext(
 		}
 
 		// on first initialization write main admin to the DB
+		// TODO: review
 		if (!me && c.msg.from.id === Number(MAIN_ADMIN_TG_USER_ID)) {
 			const initialAdmin = makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID);
 

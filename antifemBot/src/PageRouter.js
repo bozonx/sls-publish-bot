@@ -6,6 +6,7 @@ import {
 	QUERY_MARKER,
 	HOME_PAGE,
 	SESSION_CACHE_NAME,
+	USER_KEYS,
 } from './constants.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
@@ -115,7 +116,7 @@ export class PageRouter {
 
 	// Chat id of current user and this bot
 	get chatWithBotId() {
-		return this.c.ctx[CTX_KEYS.chatWithBotId];
+		return this.c.ctx[CTX_KEYS.me][USER_KEYS.tgChatId];
 	}
 
 	// user object
