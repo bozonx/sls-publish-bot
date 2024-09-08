@@ -14,6 +14,8 @@ const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
 // It makes a new instance of router on each request including dev env
 export function routerMiddleware(routes) {
 	return async (c, next) => {
+		if (!c.msg?.chat) return;
+
 		c.router = new PageRouter(c, routes);
 
 		return next();

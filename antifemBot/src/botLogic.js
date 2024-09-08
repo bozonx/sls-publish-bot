@@ -27,6 +27,8 @@ export function makeContext(
 	APP_DEBUG,
 ) {
 	return async (c, next) => {
+		if (!c.msg?.chat) return;
+
 		c.ctx = {
 			[CTX_KEYS.KV]: KV,
 			[CTX_KEYS.DB_CRUD]: new DbCrud(PRISMA_ADAPTER),
@@ -46,9 +48,9 @@ export function makeContext(
 
 		try {
 			[appCfg, session, me] = await Promise.all([
-				await loadFromKv(c, KV_KEYS.config),
-				await loadFromCache(c, SESSION_CACHE_NAME, chatId),
-				await c.ctx[CTX_KEYS.DB_CRUD].getItem(
+				loadFromKv(c, KV_KEYS.config),
+				loadFromCache(c, SESSION_CACHE_NAME, chatId),
+				c.ctx[CTX_KEYS.DB_CRUD].getItem(
 					DB_TABLE_NAMES.User,
 					undefined,
 					undefined,
@@ -67,15 +69,7 @@ export function makeContext(
 			await saveToKv(c, KV_KEYS.config, appCfg);
 		}
 
-		// on first initialization write main admin to the DB
-		if (!me && c.msg.from.id === Number(MAIN_ADMIN_TG_USER_ID)) {
-			const initialAdmin = makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID);
-
-			me = await c.ctx[CTX_KEYS.DB_CRUD].createItem(
-				DB_TABLE_NAMES.User,
-				initialAdmin,
-			);
-		}
+		console.log(33333, me, c.msg);
 
 		c.ctx = {
 			...c.ctx,
@@ -94,6 +88,17 @@ export function makeContext(
 export async function handleStart(c) {
 	// show home page on start command
 	if (c.ctx[CTX_KEYS.me]) return c.router.start();
+	// on first initialization write main admin to the DB
+	if (c.msg.from.id === Number(c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID])) {
+		const initialAdmin = makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID);
+
+		c.ctx[CTX_KEYS.me] = await c.ctx[CTX_KEYS.DB_CRUD].createItem(
+			DB_TABLE_NAMES.User,
+			initialAdmin,
+		);
+
+		return c.router.start();
+	}
 	// else send invite message which user have to send to admin
 	const dataStr = JSON.stringify(makeInviteUserData(c), null, 2);
 	// send message to the main admin
