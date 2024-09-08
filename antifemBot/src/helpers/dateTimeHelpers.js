@@ -52,25 +52,6 @@ export function convertDateTimeToTsMinutes(date, time, timeZone) {
 	);
 }
 
-// // operate with timestamp in milliseconds in UTC
-// export function dateSubtractMinutes(tsMs, minutesToSubtract) {
-// 	return dateSubtractSeconds(tsMs, minutesToSubtract * 60);
-// }
-//
-// // operate with timestamp in milliseconds in UTC
-// export function dateSubtractSeconds(tsMs, secondsToSubtract) {
-// 	const subtractMs = secondsToSubtract * 1000;
-//
-// 	return tsMs - subtractMs;
-// }
-
-// // operate with timestamp in milliseconds in UTC
-// export function dateAddSeconds(tsMs, secondsToAdd) {
-// 	const addMs = secondsToAdd * 1000;
-//
-// 	return tsMs + addMs;
-// }
-
 export function isValidShortDate(rawDateStr) {
 	// TODO: better validate
 
@@ -109,8 +90,9 @@ export function shortRuDateToFullIsoDate(localeShortDate) {
 	return `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;
 }
 
-export function makeIsoDayFromNow(plusDay = 0) {
-	const now = new Date();
+// if  specifiedDate not set then now is used
+export function makeIsoDate(plusDay = 0, specifiedDate) {
+	const now = new Date(specifiedDate);
 	// TODO: с учетом локали +3
 	const year = now.getFullYear();
 	// TODO: с учетом локали +3
@@ -146,7 +128,7 @@ export function isPastDate(isoDateStr) {
 
 	// if (
 	// 	new Date(isoDateStr).getTime() <
-	// 	new Date(makeIsoDayFromNow(0)).getTime()
+	// 	new Date(makeIsoDate(0)).getTime()
 	// )
 	// 	return this.reply(t(c, 'dateIsPastMessage'));
 	//
@@ -162,29 +144,6 @@ export function isPastDate(isoDateStr) {
 	return testMs < nowMs;
 }
 
-// TODO: с учетом локали +3
-export function isPastDateTime(isoDateStr, timeStr, minusMinute) {
-	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
-	const [hoursStr, minutesStr] = timeStr.split(':');
-	const testMs = Date.UTC(
-		Number(yearStr),
-		Number(monthStr) - 1,
-		Number(dayStr),
-		Number(hoursStr),
-		Number(minutesStr),
-	);
-	const now = new Date();
-	const nowMs = Date.UTC(
-		now.getFullYear(),
-		now.getMonth(),
-		now.getDate(),
-		now.getHours(),
-		now.getMinutes(),
-	);
-
-	return testMs < nowMs - minusMinute * 60 * 1000;
-}
-
 export function getCurrentHour(timeZone) {
 	return Number(
 		new Date().toLocaleString('ru-RU', {
@@ -195,8 +154,10 @@ export function getCurrentHour(timeZone) {
 	);
 }
 
-export function getCurrentTime(timeZone) {
-	return new Date().toLocaleString('ru-RU', {
+// if no specifiedDate then current time is used
+export function getTimeStr(timeZone, specifiedDate) {
+	// TODO: проверить что правильно срабатывает таймзона при спцифичной дате
+	return new Date(specifiedDate).toLocaleString('ru-RU', {
 		timeZone: timeZone,
 		hour: 'numeric',
 		minute: 'numeric',
@@ -204,9 +165,51 @@ export function getCurrentTime(timeZone) {
 	});
 }
 
+// TODO: с учетом локали +3
+// export function isPastDateTime(isoDateStr, timeStr, minusMinute) {
+// 	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
+// 	const [hoursStr, minutesStr] = timeStr.split(':');
+// 	const testMs = Date.UTC(
+// 		Number(yearStr),
+// 		Number(monthStr) - 1,
+// 		Number(dayStr),
+// 		Number(hoursStr),
+// 		Number(minutesStr),
+// 	);
+// 	const now = new Date();
+// 	const nowMs = Date.UTC(
+// 		now.getFullYear(),
+// 		now.getMonth(),
+// 		now.getDate(),
+// 		now.getHours(),
+// 		now.getMinutes(),
+// 	);
+//
+// 	return testMs < nowMs - minusMinute * 60 * 1000;
+// }
+
+// // operate with timestamp in milliseconds in UTC
+// export function dateSubtractMinutes(tsMs, minutesToSubtract) {
+// 	return dateSubtractSeconds(tsMs, minutesToSubtract * 60);
+// }
+//
+// // operate with timestamp in milliseconds in UTC
+// export function dateSubtractSeconds(tsMs, secondsToSubtract) {
+// 	const subtractMs = secondsToSubtract * 1000;
+//
+// 	return tsMs - subtractMs;
+// }
+
+// // operate with timestamp in milliseconds in UTC
+// export function dateAddSeconds(tsMs, secondsToAdd) {
+// 	const addMs = secondsToAdd * 1000;
+//
+// 	return tsMs + addMs;
+// }
+
 //////////// TESTS
 
-// console.log(111, makeIsoDayFromNow(0), makeIsoDayFromNow(8));
+// console.log(111, makeIsoDate(0), makeIsoDate(8));
 // console.log(222, shortRuDateToFullIsoDate('5.9'));
 // console.log(333, getShortWeekDay('2024-09-04'));
 // console.log(444, isoDateToLongLocaleRuDate('2024-09-04'));

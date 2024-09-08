@@ -2,36 +2,33 @@ import { PageBase } from '../PageRouter.js';
 import { t, defineMenu } from '../helpers/helpers.js';
 import { convertDbScheduledToPubState } from '../helpers/publishHelpres.js';
 import {
-	// makeIsoDateFromPubState,
 	makeHumanRuDateCompact,
-	isPastDateTime,
+	getTimeStr,
+	makeIsoDate,
 } from '../helpers/dateTimeHelpers.js';
 import {
-	PUB_KEYS,
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
 	PUB_SCHEDULED_KEYS,
+	CTX_KEYS,
 } from '../constants.js';
 
 export class ScheduledList extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		// TODO: sort
-		const items = await this.db.getAll(DB_TABLE_NAMES.PubScheduled, {
-			[PUB_SCHEDULED_KEYS.id]: true,
-			[PUB_SCHEDULED_KEYS.name]: true,
-			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: true,
-		});
-
-		// TODO: remake
-		// const items = (await loadFromKv(c, KV_KEYS.scheduled, [])).sort(
-		// 	(a, b) =>
-		// 		new Date(makeIsoDateFromPubState(a)) -
-		// 		new Date(makeIsoDateFromPubState(b)),
-		// );
-
+		const items = await this.db.getAll(
+			DB_TABLE_NAMES.PubScheduled,
+			{
+				[PUB_SCHEDULED_KEYS.id]: true,
+				[PUB_SCHEDULED_KEYS.name]: true,
+				[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: true,
+			},
+			undefined,
+			[{ [PUB_SCHEDULED_KEYS.pubTimestampMinutes]: 'asc' }],
+		);
+		// remove editing state
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
@@ -42,7 +39,7 @@ export class ScheduledList extends PageBase {
 			...items.map((i) => [
 				{
 					id: DEFAULT_BTN_ITEM_ID,
-					label: this.makeItemLabel(i),
+					label: this._makeItemLabel(i),
 					payload: i[PUB_SCHEDULED_KEYS.id],
 				},
 			]),
@@ -58,17 +55,9 @@ export class ScheduledList extends PageBase {
 	async onButtonPress(btnId, payload) {
 		if (btnId === DEFAULT_BTN_ITEM_ID) {
 			const itemId = Number(payload);
-			// // TODO: remake
-			// const allItems = await loadFromKv(this.router.c, KV_KEYS.scheduled, []);
-			//
-			// this.state[EDIT_ITEM_NAME] = allItems.find((i) => i.id === itemId);
-			//
-			// if (!this.state[EDIT_ITEM_NAME])
-			// 	return this.reply(`ERROR: Can't find scheduled item "${itemId}"`);
+			const dbItem = await this.db.getItem(DB_TABLE_NAMES.PubScheduled, itemId);
 
-			this.state[EDIT_ITEM_NAME] = convertDbScheduledToPubState(
-				await this.db.getItem(DB_TABLE_NAMES.PubScheduled, itemId),
-			);
+			this.state[EDIT_ITEM_NAME] = convertDbScheduledToPubState(dbItem);
 
 			return this.router.go('scheduled-item');
 		}
@@ -81,28 +70,34 @@ export class ScheduledList extends PageBase {
 		}
 	}
 
-	makeItemLabel(item) {
-		// TODO: use pubTimestampMinutes
-		// if (
-		// 	isPastDateTime(
-		// 		item[PUB_KEYS.date],
-		// 		item[PUB_KEYS.time],
-		// 		PUBLISHING_MINUS_MINUTES,
-		// 	)
-		// ) {
-		// 	return `${t(this.router.c, 'staleMark')} ${text}`;
-		// }
+	_makeItemLabel(dbItem) {
+		const c = this.router.c;
+		const itemName = dbItem[PUB_SCHEDULED_KEYS.name];
 
-		// const dateStr = makeHumanRuDateCompact(this.c, item[PUB_KEYS.date]);
-		// const time = item[PUB_KEYS.time];
+		if (!itemName) return t(c, 'itemHasNoContent');
 
-		// return `${dateStr} ${time} ${text}`;
-		//
+		const itemPubMinutes = dbItem[PUB_SCHEDULED_KEYS.pubTimestampMinutes];
+		const curTimeMinutes = new Date().getTime() / 1000 / 60;
+		// if staled - use stale mark
+		let dateTimeLabel = t(this.router.c, 'staleMark');
 
-		// TODO: написать без имени если нет
-		// TODO: написать image
+		if (
+			itemPubMinutes >
+			curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
+		) {
+			// means actual - else use date and time
+			dateTimeLabel =
+				makeHumanRuDateCompact(
+					this.c,
+					makeIsoDate(0, itemPubMinutes * 60 * 1000),
+				) +
+				' ' +
+				getTimeStr(
+					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					itemPubMinutes * 60 * 1000,
+				);
 
-		// TODO: экранировать???
-		return item[PUB_SCHEDULED_KEYS.name];
+			return `${dateTimeLabel} ${itemName}`;
+		}
 	}
 }

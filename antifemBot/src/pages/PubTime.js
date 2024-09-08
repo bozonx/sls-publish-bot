@@ -7,10 +7,10 @@ import {
 	breakArray,
 } from '../helpers/lib.js';
 import {
-	makeIsoDayFromNow,
+	makeIsoDate,
 	isValidShortTime,
 	getCurrentHour,
-	getCurrentTime,
+	getTimeStr,
 } from '../helpers/dateTimeHelpers.js';
 import {
 	PUB_KEYS,
@@ -25,7 +25,7 @@ export class PubTime extends PubPageBase {
 		const c = this.router.c;
 		const descr = applyStringTemplate(t(c, 'selectHourDescr'), {
 			TIME_ZONE: t(c, 'msk'),
-			CURRENT_TIME: getCurrentTime(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
+			CURRENT_TIME: getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
 		});
 
 		this.state.pub = {
@@ -117,7 +117,7 @@ export class PubTime extends PubPageBase {
 		const lastHour = 21;
 		const res = [];
 
-		if (this.state.pub.date === makeIsoDayFromNow(0)) {
+		if (this.state.pub.date === makeIsoDate(0)) {
 			// is today then skip past hours
 			const currentHourNum = getCurrentHour(
 				this.router.c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],

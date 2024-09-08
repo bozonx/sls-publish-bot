@@ -21,15 +21,15 @@ export async function handleScheduled(
 	prismaAdapter,
 ) {
 	const prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
-	const curTime = new Date().getTime() / 1000 / 60;
+	const curTimeMinutes = new Date().getTime() / 1000 / 60;
 	// const curTime = 28761420; // 2024-09-07T08:00+03:00
 	const [item] = await prisma[DB_TABLE_NAMES.PubScheduled].findMany({
 		where: {
 			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: {
 				// get items shich are a bit stale
-				gte: curTime - PUBLISHING_MINUS_MINUTES,
+				gte: curTimeMinutes - PUBLISHING_MINUS_MINUTES,
 				// get items from very near future
-				lte: curTime + PUBLICATION_ADD_NOW_SEC / 60,
+				lte: curTimeMinutes + PUBLICATION_ADD_NOW_SEC / 60,
 			},
 		},
 		// sort from small to high value

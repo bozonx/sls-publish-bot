@@ -3,6 +3,7 @@ export default {
 		closestDays: ['Сегодня', 'Завтра', 'Послезавтра'],
 		msk: 'МСК',
 		staleMark: 'Просрочено!',
+		itemHasNoContent: 'Без контента',
 
 		// Template names
 		'template-default': 'Основной',

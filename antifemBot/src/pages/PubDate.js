@@ -5,7 +5,7 @@ import { isEmptyObj, applyStringTemplate } from '../helpers/lib.js';
 import {
 	isValidShortDate,
 	shortRuDateToFullIsoDate,
-	makeIsoDayFromNow,
+	makeIsoDate,
 	makeShortDateFromIsoDate,
 	getShortWeekDay,
 	isPastDate,
@@ -27,19 +27,19 @@ export class PubDate extends PubPageBase {
 
 		// default date is tomorrow
 		if (!this.state.pub[PUB_KEYS.date])
-			this.state.pub[PUB_KEYS.date] = makeIsoDayFromNow(DEFAULT_PUB_PLUS_DAY);
+			this.state.pub[PUB_KEYS.date] = makeIsoDate(DEFAULT_PUB_PLUS_DAY);
 
 		const descr =
 			applyStringTemplate(t(c, 'selectDateDescr'), {
 				TIME_ZONE: t(c, 'msk'),
-			}) + ` ${isoDateToLongLocaleRuDate(makeIsoDayFromNow(0))}`;
+			}) + ` ${isoDateToLongLocaleRuDate(makeIsoDate(0))}`;
 
 		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		const daysBtn = [];
 
 		for (let i = 3; i <= 6; i++) {
-			const isoDateStr = makeIsoDayFromNow(i);
+			const isoDateStr = makeIsoDate(i);
 			const shortDate = makeShortDateFromIsoDate(isoDateStr);
 			const shortWeekDayStr = getShortWeekDay(isoDateStr);
 
@@ -93,7 +93,7 @@ export class PubDate extends PubPageBase {
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'DAY') {
 			return this.go('pub-time', {
-				[PUB_KEYS.date]: makeIsoDayFromNow(payload),
+				[PUB_KEYS.date]: makeIsoDate(payload),
 			});
 		}
 

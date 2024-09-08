@@ -163,7 +163,10 @@ export class PubContent extends PubPageBase {
 	async _makeMenuText() {
 		const c = this.router.c;
 		let details = await makeStatePreview(c, this.state.pub);
-		let modeMessage = t(c, 'uploadContentDescr-' + this.state.replaceMode);
+		let replaceModeMessage = t(
+			c,
+			'uploadContentDescr-' + this.state.replaceMode,
+		);
 
 		if (!details) details = t(c, 'noContentMessage');
 
@@ -174,7 +177,7 @@ export class PubContent extends PubPageBase {
 		return (
 			`${escapeMdV2(details)}\n\n` +
 			`${escapeMdV2(t(c, 'uploadContentDescr'))}\n\n` +
-			`${escapeMdV2(modeMessage)}\n\n` +
+			`${escapeMdV2(replaceModeMessage)}\n\n` +
 			textModeMessage
 		);
 	}
