@@ -10,6 +10,7 @@ import {
 	USER_PERMISSIONS_KEYS,
 	DB_TABLE_NAMES,
 	PUB_SCHEDULED_KEYS,
+	DEFAULT_SOCIAL_MEDIA,
 } from '../constants.js';
 import { makeHumanRuDate } from './dateTimeHelpers.js';
 
@@ -179,4 +180,34 @@ export function isUserAdmin(user) {
 	if (typeof cfg === 'string') cfg = JSON.parse(cfg);
 
 	return cfg[USER_CFG_KEYS.permissions][USER_PERMISSIONS_KEYS.admin];
+}
+
+export async function handleTagsFromInputAndSave(rawText, createdByUser) {
+	let newTags = parseTagsFromInput(rawText);
+
+	const theSameTagsInDb = (
+		await this.db.getAll(
+			DB_TABLE_NAMES.Tag,
+			{ [TAG_KEYS.name]: true },
+			{
+				[TAG_KEYS.name]: {
+					equals: newTags,
+				},
+			},
+		)
+	).map((i) => i[TAG_KEYS.name]);
+
+	newTags = newTags.filter((i) => !theSameTagsInDb.includes(i));
+
+	await Promise.all(
+		newTags.map((tag) =>
+			this.db.createItem(DB_TABLE_NAMES.Tag, {
+				[TAG_KEYS.name]: tag,
+				[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
+				[TAG_KEYS.createdByUserId]: createdByUser[USER_KEYS.id],
+			}),
+		),
+	);
+
+	return newTags;
 }

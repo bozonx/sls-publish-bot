@@ -2,7 +2,7 @@ import { PubPageBase } from '../PubPageBase.js';
 import {
 	t,
 	makeStatePreview,
-	parseTagsFromInput,
+	handleTagsFromInputAndSave,
 	defineMenu,
 } from '../helpers/helpers.js';
 import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
@@ -14,17 +14,20 @@ import {
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
 	TAG_KEYS,
-	DEFAULT_SOCIAL_MEDIA,
 } from '../constants.js';
 
 export class PubTags extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		// TODO: sort
-		const allTags = await this.db.getAll(DB_TABLE_NAMES.Tag, {
-			[TAG_KEYS.id]: true,
-			[TAG_KEYS.name]: true,
-		});
+		const allTags = await this.db.getAll(
+			DB_TABLE_NAMES.Tag,
+			{
+				[TAG_KEYS.id]: true,
+				[TAG_KEYS.name]: true,
+			},
+			undefined,
+			[{ [TAG_KEYS.name]: 'asc' }],
+		);
 
 		const notSelectedTags = allTags.filter(
 			(i) => !this.state.pub?.[PUB_KEYS.tags]?.includes(i[TAG_KEYS.name]),
@@ -101,32 +104,13 @@ export class PubTags extends PubPageBase {
 
 		if (!c.msg.text) return this.reply('No text');
 
-		const newTags = parseTagsFromInput(c.msg.text);
+		const newTags = await handleTagsFromInputAndSave(c.msg.text, this.me);
+		// add to selected
+		const mergedSelectedTags = makeStringArrayUnique([
+			...(this.state.pub?.[PUB_KEYS.tags] || []),
+			...newTags,
+		]);
 
-		// // TODO: remake
-		// const allTags = await loadFromKv(c, KV_KEYS.tags, []);
-		// const mergedAllTags = makeStringArrayUnique([
-		// 	...allTags,
-		// 	...newTags,
-		// ]).sort();
-		// // TODO: remake
-		// // save new tags to storage
-		// await saveToKv(c, KV_KEYS.tags, mergedAllTags);
-		//
-		// const mergedSelectedTags = makeStringArrayUnique([
-		// 	...(this.state.pub?.[PUB_KEYS.tags] || []),
-		// 	...newTags,
-		// ]);
-
-		await Promise.all(
-			newTags.map((tag) =>
-				this.db.createItem(DB_TABLE_NAMES.Tag, {
-					[TAG_KEYS.name]: tag,
-					[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
-					[TAG_KEYS.createdByUserId]: this.me[USER_KEYS.id],
-				}),
-			),
-		);
 		await this.go('pub-post-setup', { [PUB_KEYS.tags]: mergedSelectedTags });
 	}
 }
