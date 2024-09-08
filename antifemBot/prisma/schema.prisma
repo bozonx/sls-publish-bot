@@ -20,18 +20,14 @@ model User {
   cfg                    String
   createdAt              DateTime       @default(now())
   updatedAt              DateTime       @updatedAt
-  Tag                    Tag[]
   scheduledCreatedByUser PubScheduled[] @relation("ScheduledCreatedByUser")
   scheduletUpdatedByUser PubScheduled[] @relation("ScheduledUpdatedByUser")
 }
 
 model Tag {
-  id              Int      @id @default(autoincrement())
-  name            String
-  socialMedia     String?
-  createdAt       DateTime @default(now())
-  createdByUser   User     @relation(fields: [createdByUserId], references: [id])
-  createdByUserId Int
+  id          Int     @id @default(autoincrement())
+  name        String
+  socialMedia String?
 }
 
 model PubScheduled {

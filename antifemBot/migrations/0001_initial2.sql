@@ -1,7 +1,7 @@
-
 DROP TABLE IF EXISTS Tag;
 DROP TABLE IF EXISTS PubScheduled;
 DROP TABLE IF EXISTS User;
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -17,10 +17,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Tag" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "socialMedia" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "createdByUserId" INTEGER NOT NULL,
-    CONSTRAINT "Tag_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "socialMedia" TEXT
 );
 
 -- CreateTable

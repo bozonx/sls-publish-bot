@@ -104,11 +104,7 @@ export class PubTags extends PubPageBase {
 
 		if (!c.msg.text) return this.reply('No text');
 
-		const newTags = await handleTagsFromInputAndSave(
-			this.router,
-			c.msg.text,
-			this.me,
-		);
+		const newTags = await handleTagsFromInputAndSave(this.router, c.msg.text);
 		// add to selected
 		const mergedSelectedTags = makeStringArrayUnique([
 			...(this.state.pub?.[PUB_KEYS.tags] || []),

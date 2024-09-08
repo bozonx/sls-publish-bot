@@ -24,14 +24,14 @@ export class Home extends PageBase {
 			],
 			[
 				{
-					id: 'manageTagsBtn',
-					label: t(c, 'manageTagsBtn'),
+					id: 'manageScheduledBtn',
+					label: t(c, 'manageScheduledBtn'),
 				},
 			],
 			[
 				{
-					id: 'manageScheduledBtn',
-					label: t(c, 'manageScheduledBtn'),
+					id: 'manageTagsBtn',
+					label: t(c, 'manageTagsBtn'),
 				},
 			],
 

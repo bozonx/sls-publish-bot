@@ -55,7 +55,6 @@ export const TAG_KEYS = {
 	id: 'id',
 	name: 'name',
 	socialMedia: 'socialMedia',
-	createdByUserId: 'createdByUserId',
 };
 export const PUB_SCHEDULED_KEYS = {
 	id: 'id',
@@ -118,9 +117,9 @@ export const APP_INITIAL_CONFIG = {
 		[TEMPLATE_NAMES.byFollower]: [
 			'От подписчика',
 			' ${AUTHOR}',
-			'\n\n${CONTENT}\n\n',
-			'${TAGS}\n\n',
-			footer,
+			'\n\n${CONTENT}',
+			'\n\n${TAGS}',
+			'\n\n' + footer,
 		],
 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
 	},

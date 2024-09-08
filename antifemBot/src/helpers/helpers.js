@@ -185,11 +185,7 @@ export function isUserAdmin(user) {
 	return cfg[USER_CFG_KEYS.permissions][USER_PERMISSIONS_KEYS.admin];
 }
 
-export async function handleTagsFromInputAndSave(
-	router,
-	rawText,
-	createdByUser,
-) {
+export async function handleTagsFromInputAndSave(router, rawText) {
 	let newTags = makeStringArrayUnique(parseTagsFromInput(rawText));
 
 	const theSameTagsInDb = (
@@ -199,7 +195,6 @@ export async function handleTagsFromInputAndSave(
 			{
 				[TAG_KEYS.name]: {
 					in: newTags,
-					// equals: newTags.map((i) => ({ [TAG_KEYS.name]: i })),
 				},
 			},
 		)
@@ -212,7 +207,6 @@ export async function handleTagsFromInputAndSave(
 			router.db.createItem(DB_TABLE_NAMES.Tag, {
 				[TAG_KEYS.name]: tag,
 				[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
-				[TAG_KEYS.createdByUserId]: createdByUser[USER_KEYS.id],
 			}),
 		),
 	);
