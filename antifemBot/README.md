@@ -15,7 +15,7 @@ make .dev.vars file
 WORKER_HOST="antifem-bot.ivank.workers.dev"
 PUBLICATION_TIME_ZONE = '+03:00'
 PUBLISHING_MINUS_MINUTES = 30
-SESSION_STATE_TTL_SEC = 60 * 60 * 24 * 30
+SESSION_STATE_TTL_DAYS = 1
 
 # on prod they are wrangler secret
 TG_TOKEN=""

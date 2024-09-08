@@ -11,7 +11,6 @@ import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
-	PUBLISHING_MINUS_MINUTES,
 	DB_TABLE_NAMES,
 	PUB_SCHEDULED_KEYS,
 } from '../constants.js';
@@ -101,7 +100,9 @@ export class ScheduledList extends PageBase {
 		//
 
 		// TODO: написать без имени если нет
+		// TODO: написать image
 
+		// TODO: экранировать???
 		return item[PUB_SCHEDULED_KEYS.name];
 	}
 }

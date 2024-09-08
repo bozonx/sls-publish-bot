@@ -14,7 +14,6 @@ import {
 	PUB_SCHEDULED_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
 	MENU_ITEM_LABEL_LENGTH,
-	PUBLICATION_TIME_ZONE,
 } from '../constants.js';
 
 export function convertTgEntitiesToTgMdV2(text, entities) {
@@ -40,7 +39,7 @@ export function applyTemplate(c, textMdV2, pubState) {
 	const tmplData = {
 		CONTENT: textMdV2,
 		AUTHOR: pubState[PUB_KEYS.author] && escapeMdV2(pubState[PUB_KEYS.author]),
-		TAGS: makeHashTags(pubState[PUB_KEYS.tags]),
+		TAGS: escapeMdV2(makeHashTags(pubState[PUB_KEYS.tags])),
 	};
 
 	const finalText = template
@@ -79,7 +78,7 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 				{
 					type: MEDIA_TYPES.photo,
 					// the last item is biggest variant, others are thumbnails
-					data: c.msg.photo[c.msg.photo.length - 1].file_id,
+					data: c.msg.photo.at(-1).file_id,
 				},
 			],
 			[PUB_KEYS.text]: c.msg.caption,
@@ -105,7 +104,7 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 		state.text = text;
 		state.entities = entities;
 	}
-
+	// remove undefined to not overwrite media or text in case it don't need
 	return omitUndefined(state);
 }
 
@@ -122,18 +121,6 @@ export async function doFullFinalPublicationProcess(c, item) {
 }
 
 export async function deleteScheduledPost(c, itemId) {
-	// const allItems = await loadFromKv(c, KV_KEYS.scheduled, []);
-	// const prepared = [...allItems];
-	// const indexOfItem = prepared.findIndex((i) => i.id === itemId);
-	//
-	// if (indexOfItem < 0) throw new Error(`ERROR: Can't find scheduled item`);
-	// // remove selected tag
-	// prepared.splice(indexOfItem, 1);
-	//
-	// await saveToKv(c, KV_KEYS.scheduled, prepared);
-	//
-	// return allItems[indexOfItem];
-
 	return await c.ctx[CTX_KEYS.DB_CRUD].deleteItem(
 		DB_TABLE_NAMES.PubScheduled,
 		itemId,
@@ -150,7 +137,7 @@ export async function saveEditedScheduledPost(router) {
 
 	delete router.state.pub;
 
-	const item = convertPubStateToDbScheduled({
+	const dbItem = convertPubStateToDbScheduled({
 		...pubState,
 		dbRecord: {
 			...pubState.dbRecord,
@@ -159,27 +146,19 @@ export async function saveEditedScheduledPost(router) {
 			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
 				pubState[PUB_KEYS.date],
 				pubState[PUB_KEYS.time],
-				PUBLICATION_TIME_ZONE,
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 			),
 		},
 	});
-	// const allScheduled = await loadFromKv(c, KV_KEYS.scheduled);
-	// const oldItemIndex = allScheduled.findIndex((i) => i.id === item.id);
-	//
-	// if (oldItemIndex < 0) throw new Error(`ERROR: Can't find item while saving`);
-	//
-	// allScheduled[oldItemIndex] = item;
-	//
-	// await saveToKv(c, KV_KEYS.scheduled, allScheduled);
-
-	await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.PubScheduled, item);
+	// save to db
+	await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.PubScheduled, dbItem);
 	await router.reply(t(c, 'editedSavedSuccessfully'));
 
 	return router.go('scheduled-item');
 }
 
 export async function createScheduledPublication(c, pubState) {
-	const item = convertPubStateToDbScheduled({
+	const dbItem = convertPubStateToDbScheduled({
 		...pubState,
 		dbRecord: {
 			...pubState[PUB_KEYS.dbRecord],
@@ -189,31 +168,25 @@ export async function createScheduledPublication(c, pubState) {
 			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
 				pubState[PUB_KEYS.date],
 				pubState[PUB_KEYS.time],
-				PUBLICATION_TIME_ZONE,
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 			),
 		},
 	});
-	// const uid = new ShortUniqueId({ length: 10 });
-	// const allScheduled = (await loadFromKv(c, KV_KEYS.scheduled)) || [];
-	// const prepared = [...allScheduled, item];
-	//
-	// await saveToKv(c, KV_KEYS.scheduled, prepared);
 
 	return await c.ctx[CTX_KEYS.DB_CRUD].createItem(
 		DB_TABLE_NAMES.PubScheduled,
-		item,
+		dbItem,
 	);
 }
 
 export function makeScheduledItemName(text) {
 	return (
-		// TODO: экранировать???
 		text
 			?.trim()
 			.substring(0, MENU_ITEM_LABEL_LENGTH)
 			.trim()
-			.replace(/\n/g, '')
-			.replace(/[\s]{2,}/g, ' ') || ''
+			.replace(/\n/g, ' ')
+			.replace(/[\s]{2,}/g, ' ') || undefined
 	);
 }
 

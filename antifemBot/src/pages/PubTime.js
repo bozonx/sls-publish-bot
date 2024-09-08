@@ -14,10 +14,10 @@ import {
 } from '../helpers/dateTimeHelpers.js';
 import {
 	PUB_KEYS,
+	CTX_KEYS,
 	HOME_PAGE,
 	DEFAULT_PUB_TIME,
 	EDIT_ITEM_NAME,
-	PUBLICATION_TIME_ZONE,
 } from '../constants.js';
 
 export class PubTime extends PubPageBase {
@@ -25,7 +25,7 @@ export class PubTime extends PubPageBase {
 		const c = this.router.c;
 		const descr = applyStringTemplate(t(c, 'selectHourDescr'), {
 			TIME_ZONE: t(c, 'msk'),
-			CURRENT_TIME: getCurrentTime(PUBLICATION_TIME_ZONE),
+			CURRENT_TIME: getCurrentTime(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
 		});
 
 		this.state.pub = {
@@ -119,7 +119,9 @@ export class PubTime extends PubPageBase {
 
 		if (this.state.pub.date === makeIsoDayFromNow(0)) {
 			// is today then skip past hours
-			const currentHourNum = getCurrentHour(PUBLICATION_TIME_ZONE);
+			const currentHourNum = getCurrentHour(
+				this.router.c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			);
 			let startHour =
 				currentHourNum < firstHour ? firstHour : currentHourNum + 1;
 
