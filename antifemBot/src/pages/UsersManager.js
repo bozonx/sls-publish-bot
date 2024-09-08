@@ -81,8 +81,8 @@ export class UsersManager extends PageBase {
 			return this.reply(`ERROR: can't parse json`);
 		}
 
-		if (typeof obj[USER_KEYS.tgUserId] !== 'number') {
-			return this.reply(`ERROR: wrong data. Id is not a number`);
+		if (typeof obj[USER_KEYS.tgUserId] !== 'string') {
+			return this.reply(`ERROR: wrong data. No tgUserId`);
 		}
 
 		const user = {
@@ -99,7 +99,11 @@ export class UsersManager extends PageBase {
 		};
 
 		await this.db.createItem(DB_TABLE_NAMES.User, user);
-		await this.reply(`User was created`);
+
+		await Promise.all([
+			this.reply(`User was created`),
+			c.api.sendMessage(user[USER_KEYS.tgChatId], t(c, 'youWasAddedToApp')),
+		]);
 
 		return this.router.reload();
 	}

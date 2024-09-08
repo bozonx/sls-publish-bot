@@ -111,5 +111,6 @@ export default {
 		dateIsPastMessage:
 			'Ваша дата из прошлого. Нужна сегодняшняя или будущяя дата',
 		errorSendToAddmin: 'Отправьте это сообщение об ошибке Ивану',
+		youWasAddedToApp: 'Вы были добавлены в бота, нажимте ещё раз /start',
 	},
 };

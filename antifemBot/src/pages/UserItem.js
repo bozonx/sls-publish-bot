@@ -49,17 +49,17 @@ export class UserItem extends PageBase {
 		]);
 	}
 
-	async onButtonPress(btnId, payload) {
+	async onButtonPress(btnId) {
 		switch (btnId) {
 			case 'deleteUserBtn':
 				const res = await this.db.deleteItem(
 					DB_TABLE_NAMES.User,
-					Number(payload),
+					this.state.editUserId,
 				);
 
-				await this.reply(`User was deleted\n\n${yaml.dump(res)}`);
-
 				delete this.state.editUserId;
+
+				await this.reply(`User was deleted\n\n${yaml.dump(res)}`);
 
 				return this.router.go('users-manager');
 			case 'backBtn':
@@ -90,7 +90,7 @@ export class UserItem extends PageBase {
 		}
 
 		if (typeof obj[USER_KEYS.tgUserId] !== 'string') {
-			return this.reply(`ERROR: wrong data. Id is not number`);
+			return this.reply(`ERROR: wrong data. No tgUserId`);
 		}
 
 		await this.db.updateItem(DB_TABLE_NAMES.User, {

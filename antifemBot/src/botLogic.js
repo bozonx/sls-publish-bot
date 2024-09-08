@@ -1,4 +1,8 @@
-import { makeInviteUserData, makeInitialAdminUser } from './helpers/helpers.js';
+import {
+	t,
+	makeInviteUserData,
+	makeInitialAdminUser,
+} from './helpers/helpers.js';
 import { loadFromKv, loadFromCache, saveToKv } from './io/KVio.js';
 import { DbCrud } from './io/DbCrud.js';
 import {
@@ -94,10 +98,11 @@ export async function handleStart(c) {
 	// else send invite message which user have to send to admin
 	const dataStr = JSON.stringify(makeInviteUserData(c), null, 2);
 	// send message to the main admin
-	await c.api.sendMessage(
-		c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
-		`New user pressed start:\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
-	);
-
-	return c.reply(t(c, 'youAreNotRegistered'));
+	return Promise.all([
+		c.api.sendMessage(
+			c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
+			`New user pressed start:\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
+		),
+		c.reply(t(c, 'youAreNotRegistered')),
+	]);
 }

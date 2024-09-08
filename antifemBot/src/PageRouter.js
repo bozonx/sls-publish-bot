@@ -311,7 +311,7 @@ export class PageRouter {
 			SESSION_CACHE_NAME,
 			this.state,
 			// convert days to seconds
-			this.c[CTX_KEYS.SESSION_STATE_TTL_DAYS] * 24 * 60 * 60,
+			this.c.ctx[CTX_KEYS.SESSION_STATE_TTL_DAYS] * 24 * 60 * 60,
 		);
 
 		this._state = null;
