@@ -1,6 +1,6 @@
-// DROP TABLE IF EXISTS User;
 // DROP TABLE IF EXISTS Tag;
 // DROP TABLE IF EXISTS PubScheduled;
+// DROP TABLE IF EXISTS User;
 
 generator client {
   provider        = "prisma-client-js"

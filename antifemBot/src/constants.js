@@ -50,7 +50,6 @@ export const USER_PERMISSIONS_KEYS = {
 	admin: 'admin',
 	editOthersScheduledPub: 'editOthersScheduledPub',
 	deleteOthersScheduledPub: 'deleteOthersScheduledPub',
-	changeTimeOfOthersScheduledPub: 'changeTimeOfOthersScheduledPub',
 };
 export const TAG_KEYS = {
 	id: 'id',

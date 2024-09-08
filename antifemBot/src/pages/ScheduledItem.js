@@ -29,19 +29,15 @@ export class ScheduledItem extends PageBase {
 		const isAdmin = isUserAdmin(this.me);
 		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];
 		const isAdminOrMyItem =
-			isAdmin || item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId];
+			isAdmin ||
+			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
+				this.me[USER_KEYS.id];
 		const allowEdit =
 			isAdminOrMyItem ||
-			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub] ===
-				this.me[USER_KEYS.id];
+			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub];
 		const allowDelete =
 			isAdminOrMyItem ||
-			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub] ===
-				this.me[USER_KEYS.id];
-		const allowChangeTime =
-			isAdminOrMyItem ||
-			userPerms[USER_PERMISSIONS_KEYS.changeTimeOfOthersScheduledPub] ===
-				this.me[USER_KEYS.id];
+			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub];
 		// do delete pub state in case of cancel btn pressed
 		delete this.state.pub;
 
@@ -59,7 +55,7 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'editSchuduledBtn'),
 				},
 			],
-			allowChangeTime && [
+			[
 				{
 					id: 'changeDateTimeBtn',
 					label: t(c, 'changeDateTimeBtn'),

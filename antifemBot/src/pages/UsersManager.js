@@ -93,7 +93,6 @@ export class UsersManager extends PageBase {
 					admin: false,
 					editOthersScheduledPub: false,
 					deleteOthersScheduledPub: false,
-					changeTimeOfOthersScheduledPub: false,
 				},
 			}),
 		};
