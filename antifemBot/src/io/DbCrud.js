@@ -7,10 +7,11 @@ export class DbCrud {
 		this.prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
 	}
 
-	async getAll(tableName, select, where) {
+	async getAll(tableName, select, where, orderBy) {
 		const result = await this.prisma[tableName].findMany({
 			where,
 			select,
+			orderBy,
 		});
 
 		return result;

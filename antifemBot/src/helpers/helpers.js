@@ -165,7 +165,7 @@ export function makeInviteUserData(c) {
 
 	return {
 		[USER_KEYS.tgUserId]: String(c.msg.from.id),
-		[USER_KEYS.tgChatId]: String(c.msg.from.id),
+		[USER_KEYS.tgChatId]: String(c.msg.chat.id),
 		[USER_KEYS.name]: userName,
 		[USER_KEYS.cfg]: JSON.stringify({
 			[USER_CFG_KEYS.authorName]: userName,

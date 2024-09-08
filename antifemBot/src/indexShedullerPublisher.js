@@ -16,7 +16,6 @@ import {
 export async function handleScheduled(
 	TG_TOKEN,
 	DESTINATION_CHANNEL_ID,
-	PUBLICATION_TIME_ZONE,
 	PUBLISHING_MINUS_MINUTES,
 	KV,
 	prismaAdapter,

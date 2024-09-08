@@ -7,16 +7,13 @@ export const DEFAULT_BTN_ITEM_ID = '-BTN=';
 export const HOME_PAGE = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
 export const DEFAULT_SOCIAL_MEDIA = 'telegram';
-export const MENU_ITEM_LABEL_LENGTH = 50;
+export const MENU_ITEM_LABEL_LENGTH = 45;
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const DEFAULT_PUB_PLUS_DAY = 1;
 export const DEFAULT_PUB_TIME = '10:00';
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const KV_KEYS = {
 	config: 'config',
-	// users: 'users',
-	// tags: 'tags',
-	// scheduled: 'scheduled',
 };
 export const CTX_KEYS = {
 	// it is c.msg.chat.id
@@ -32,7 +29,7 @@ export const CTX_KEYS = {
 	APP_DEBUG: 'APP_DEBUG',
 	PUBLICATION_TIME_ZONE: 'PUBLICATION_TIME_ZONE',
 	PUBLISHING_MINUS_MINUTES: 'PUBLISHING_MINUS_MINUTES',
-	SESSION_STATE_TTL_SEC: 'SESSION_STATE_TTL_SEC',
+	SESSION_STATE_TTL_DAYS: 'SESSION_STATE_TTL_DAYS',
 };
 export const DB_TABLE_NAMES = {
 	User: 'User',
@@ -50,7 +47,6 @@ export const TAG_KEYS = {
 	id: 'id',
 	name: 'name',
 	socialMedia: 'socialMedia',
-	createdByUserId: 'createdByUserId',
 };
 export const PUB_SCHEDULED_KEYS = {
 	id: 'id',
@@ -88,7 +84,7 @@ export const PUB_KEYS = {
 	preview: 'preview',
 	// the final selected author
 	author: 'author',
-	// obviously do not user author
+	// obviously do not use author
 	noAuthor: 'noAuthor',
 	// author name which has been inputted
 	customAuthor: 'customAuthor',
@@ -98,15 +94,11 @@ export const PUB_KEYS = {
 	time: 'time',
 	// data or DB record
 	dbRecord: 'dbRecord',
-	// // name of user who made or edited post
-	// createdByUserId: 'createdByUserId',
-	// updatedByUserId: 'updatedByUserId',
 };
 export const MEDIA_TYPES = {
 	photo: 'photo',
 	video: 'video',
 };
-
 export const DEFAULT_SETUP_STATE = {
 	[PUB_KEYS.preview]: false,
 	[PUB_KEYS.template]: TEMPLATE_NAMES.default,

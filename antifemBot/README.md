@@ -9,6 +9,29 @@ npx wrangler d1 migrations create publisher initial
 
 ```
 
+make .dev.vars file
+
+```
+WORKER_HOST="antifem-bot.ivank.workers.dev"
+PUBLICATION_TIME_ZONE = '+03:00'
+PUBLISHING_MINUS_MINUTES = 30
+SESSION_STATE_TTL_SEC = 60 * 60 * 24 * 30
+
+# on prod they are wrangler secret
+TG_TOKEN=""
+MAIN_ADMIN_TG_USER_ID=
+CHAT_OF_ADMINS_ID=
+# Antifem channel
+DESTINATION_CHANNEL_ID=
+
+#### DEV only
+DEBUG="grammy*"
+APP_DEBUG=true
+
+# for prisma
+DATABASE_URL="file:./_devDb/dev.db"
+```
+
 ## Development
 
 ```

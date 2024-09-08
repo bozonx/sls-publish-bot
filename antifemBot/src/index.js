@@ -20,7 +20,7 @@ export default {
 				env.DESTINATION_CHANNEL_ID,
 				env.PUBLICATION_TIME_ZONE,
 				env.PUBLISHING_MINUS_MINUTES,
-				env.SESSION_STATE_TTL_SEC,
+				env.SESSION_STATE_TTL_DAYS,
 				env.KV,
 				new PrismaD1(env.DB),
 				env.APP_DEBUG,

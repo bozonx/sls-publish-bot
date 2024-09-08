@@ -2,7 +2,6 @@ import { t, parseJsonSafelly, renderMenuKeyboard } from './helpers/helpers.js';
 import { saveToCache } from './io/KVio.js';
 import { escapeMdV2, printFinalPost } from './helpers/publishHelpres.js';
 import {
-	SESSION_STATE_TTL_SEC,
 	CTX_KEYS,
 	QUERY_MARKER,
 	HOME_PAGE,
@@ -310,7 +309,8 @@ export class PageRouter {
 			this.c,
 			SESSION_CACHE_NAME,
 			this.state,
-			SESSION_STATE_TTL_SEC,
+			// convert days to seconds
+			this.c[CTX_KEYS.SESSION_STATE_TTL_DAYS] * 24 * 60 * 60,
 		);
 
 		this._state = null;

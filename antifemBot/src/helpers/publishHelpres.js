@@ -1,4 +1,3 @@
-// import ShortUniqueId from 'short-unique-id';
 import { toMarkdownV2, escapers } from '@telegraf/entity';
 import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
 import { t, makeStatePreview, makeUserNameFromMsg } from './helpers.js';
