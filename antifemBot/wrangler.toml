@@ -10,8 +10,8 @@ APP_DEBUG = true
 
 [triggers]
 # it is for webhok update
-# crons = ["*/10 * * * *","0 */22 * * *"]
-crons = ["0 */22 * * *"]
+crons = ["*/10 * * * *","0 */22 * * *"]
+# crons = ["0 */22 * * *"]
 
 [[kv_namespaces]]
 binding = "KV"

@@ -39,20 +39,25 @@ export default {
 	},
 
 	async scheduled(event, env, ctx) {
-		await ctx.waitUntil(setWebhook(env));
+		// await ctx.waitUntil(setWebhook(env));
 
-		// 	switch (event.cron) {
-		// 		case '*/10 * * * *':
-		// 			// check is there some to publish
-		// 			await ctx.waitUntil(
-		// 				handleScheduled(env.TG_TOKEN, env.DESTINATION_CHANNEL_ID, env.KV, new PrismaD1(env.DB)),
-		// 			);
-		//
-		// 			break;
-		// 		case '0 */22 * * *':
-		// 			await ctx.waitUntil(setWebhook(env));
-		//
-		// 			break;
-		// 	}
+		switch (event.cron) {
+			case '*/10 * * * *':
+				// check is there some to publish
+				await ctx.waitUntil(
+					handleScheduled(
+						env.TG_TOKEN,
+						env.DESTINATION_CHANNEL_ID,
+						env.KV,
+						new PrismaD1(env.DB),
+					),
+				);
+
+				break;
+			case '0 */22 * * *':
+				await ctx.waitUntil(setWebhook(env));
+
+				break;
+		}
 	},
 };

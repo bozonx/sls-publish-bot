@@ -38,6 +38,7 @@ export async function handleScheduled(
 		},
 		// sort from small to high value
 		orderBy: [{ [PUB_SCHEDULED_KEYS.pubTimestampMinutes]: 'asc' }],
+		take: 1,
 	});
 
 	// return if nothing found
