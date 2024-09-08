@@ -7,6 +7,9 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 WORKER_HOST = "antifem-bot.ivank.workers.dev"
 APP_DEBUG = true
+PUBLICATION_TIME_ZONE = '+03:00'
+PUBLISHING_MINUS_MINUTES = 5
+SESSION_STATE_TTL_SEC = 60 * 60 * 24 * 30
 
 [triggers]
 # it is for webhok update

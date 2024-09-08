@@ -8,15 +8,6 @@ export const HOME_PAGE = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
 export const DEFAULT_SOCIAL_MEDIA = 'telegram';
 export const MENU_ITEM_LABEL_LENGTH = 50;
-// export const DATE_FORMAT = 'YYYY-MM-DD';
-
-// TODO: вынести в env?
-export const PUBLICATION_TIME_ZONE = '+03:00';
-// TODO: вынести в env?
-export const SESSION_STATE_TTL_SEC = 60 * 60 * 24 * 30;
-// TODO: вынести в env?
-export const PUBLISHING_MINUS_MINUTES = 5;
-// TODO: вынести в env?
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const DEFAULT_PUB_PLUS_DAY = 1;
 export const DEFAULT_PUB_TIME = '10:00';
@@ -39,6 +30,9 @@ export const CTX_KEYS = {
 	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
 	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
 	APP_DEBUG: 'APP_DEBUG',
+	PUBLICATION_TIME_ZONE: 'PUBLICATION_TIME_ZONE',
+	PUBLISHING_MINUS_MINUTES: 'PUBLISHING_MINUS_MINUTES',
+	SESSION_STATE_TTL_SEC: 'SESSION_STATE_TTL_SEC',
 };
 export const DB_TABLE_NAMES = {
 	User: 'User',

@@ -15,7 +15,6 @@ CREATE TABLE "Tag" (
     "name" TEXT NOT NULL,
     "socialMedia" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
     "createdByUserId" INTEGER NOT NULL,
     CONSTRAINT "Tag_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

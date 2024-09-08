@@ -52,24 +52,24 @@ export function convertDateTimeToTsMinutes(date, time, timeZone) {
 	);
 }
 
-// operate with timestamp in milliseconds in UTC
-export function dateSubtractMinutes(tsMs, minutesToSubtract) {
-	return dateSubtractSeconds(tsMs, minutesToSubtract * 60);
-}
+// // operate with timestamp in milliseconds in UTC
+// export function dateSubtractMinutes(tsMs, minutesToSubtract) {
+// 	return dateSubtractSeconds(tsMs, minutesToSubtract * 60);
+// }
+//
+// // operate with timestamp in milliseconds in UTC
+// export function dateSubtractSeconds(tsMs, secondsToSubtract) {
+// 	const subtractMs = secondsToSubtract * 1000;
+//
+// 	return tsMs - subtractMs;
+// }
 
-// operate with timestamp in milliseconds in UTC
-export function dateSubtractSeconds(tsMs, secondsToSubtract) {
-	const subtractMs = secondsToSubtract * 1000;
-
-	return tsMs - subtractMs;
-}
-
-// operate with timestamp in milliseconds in UTC
-export function dateAddSeconds(tsMs, secondsToAdd) {
-	const addMs = secondsToAdd * 1000;
-
-	return tsMs + addMs;
-}
+// // operate with timestamp in milliseconds in UTC
+// export function dateAddSeconds(tsMs, secondsToAdd) {
+// 	const addMs = secondsToAdd * 1000;
+//
+// 	return tsMs + addMs;
+// }
 
 export function isValidShortDate(rawDateStr) {
 	// TODO: better validate

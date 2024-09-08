@@ -1,3 +1,7 @@
+// DROP TABLE IF EXISTS User;
+// DROP TABLE IF EXISTS Tag;
+// DROP TABLE IF EXISTS PubScheduled;
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -9,16 +13,16 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  tgUserId      String         @unique
-  tgChatId      String         @unique
-  name          String
-  cfg           String
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  Tag           Tag[]
-  createdByUser PubScheduled[] @relation("CreatedByUser")
-  UpdatedByUser PubScheduled[] @relation("UpdatedByUser")
+  id                     Int            @id @default(autoincrement())
+  tgUserId               String         @unique
+  tgChatId               String         @unique
+  name                   String
+  cfg                    String
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  Tag                    Tag[]
+  scheduledCreatedByUser PubScheduled[] @relation("ScheduledCreatedByUser")
+  scheduletUpdatedByUser PubScheduled[] @relation("ScheduledUpdatedByUser")
 }
 
 model Tag {
@@ -26,7 +30,6 @@ model Tag {
   name            String
   socialMedia     String?
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
   createdByUser   User     @relation(fields: [createdByUserId], references: [id])
   createdByUserId Int
 }
@@ -39,8 +42,8 @@ model PubScheduled {
   payloadJson         String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
-  createdByUser       User     @relation("CreatedByUser", fields: [createdByUserId], references: [id])
+  createdByUser       User     @relation("ScheduledCreatedByUser", fields: [createdByUserId], references: [id])
   createdByUserId     Int
-  updatedByUser       User?    @relation("UpdatedByUser", fields: [updatedByUserId], references: [id])
+  updatedByUser       User?    @relation("ScheduledUpdatedByUser", fields: [updatedByUserId], references: [id])
   updatedByUserId     Int?
 }

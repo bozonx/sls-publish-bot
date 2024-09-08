@@ -39,6 +39,9 @@ const testData = {
 		process.env.MAIN_ADMIN_TG_USER_ID,
 		process.env.CHAT_OF_ADMINS_ID,
 		process.env.DESTINATION_CHANNEL_ID,
+		process.env.PUBLICATION_TIME_ZONE,
+		process.env.PUBLISHING_MINUS_MINUTES,
+		process.env.SESSION_STATE_TTL_SEC,
 		KV,
 		// do not need to specify any prisma adapter for sqlite
 		undefined,
@@ -51,7 +54,9 @@ const testData = {
 	await handleScheduled(
 		process.env.TG_TOKEN,
 		process.env.DESTINATION_CHANNEL_ID,
+		process.env.PUBLISHING_MINUS_MINUTES,
 		KV,
+		undefined,
 	);
 
 	app.botStart();

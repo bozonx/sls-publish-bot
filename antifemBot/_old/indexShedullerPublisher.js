@@ -71,7 +71,51 @@ export async function handleScheduled(
 		},
 	};
 
-	// console.log('======= ITEM PUBLISHED', item);
+	console.log('======= ITEM PUBLISHED', item);
 
 	await doFullFinalPublicationProcess(c, convertDbScheduledToPubState(item));
 }
+
+// When true (between 5 minutes) - now is 10:00
+// 09:54 false
+// 09:55 true
+// 09:56 true
+// 09:57 true
+// 09:58 true
+// 09:59 true
+// 10:00 true
+// 10:01 false
+// function findItemToPublish(allItems) {
+// 	const itemsToPublish = allItems.filter((item) => {
+// 		// uncomment on prod
+// 		const nowDateTs = new Date().getTime();
+// 		// uncomment on dev
+// 		// const nowDateTs = new Date(
+// 		// 	'2024-09-03T10:00' + PUBLICATION_TIME_ZONE,
+// 		// ).getTime();
+// 		// full date in Moscow
+// 		const itemTsMs = new Date(
+// 			makeIsoDateFromPubState(item) + PUBLICATION_TIME_ZONE,
+// 		).getTime();
+// 		const extendedNowTsMs = dateAddSeconds(nowDateTs, PUBLICATION_ADD_NOW_SEC);
+// 		const nowMinusShiftTsMs = dateSubtractMinutes(
+// 			nowDateTs,
+// 			PUBLISHING_MINUS_MINUTES,
+// 		);
+//
+// 		return itemTsMs >= nowMinusShiftTsMs && itemTsMs <= extendedNowTsMs;
+// 	});
+//
+// 	// if nothing to publish just do nothing
+// 	if (!itemsToPublish.length) return;
+//
+// 	// publish only one item per schedule check to not flood
+// 	const sortedItems = itemsToPublish.sort(
+// 		(a, b) =>
+// 			new Date(makeIsoDateFromPubState(a)) -
+// 			new Date(makeIsoDateFromPubState(b)),
+// 	);
+//
+// 	// get closest to current item
+// 	return sortedItems[0];
+// }
