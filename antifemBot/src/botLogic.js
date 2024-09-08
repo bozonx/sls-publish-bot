@@ -68,7 +68,6 @@ export function makeContext(
 		}
 
 		// on first initialization write main admin to the DB
-		// TODO: review
 		if (!me && c.msg.from.id === Number(MAIN_ADMIN_TG_USER_ID)) {
 			const initialAdmin = makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID);
 

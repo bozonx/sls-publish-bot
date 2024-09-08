@@ -12,15 +12,14 @@ export async function loadFromKv(c, key, defaultValue) {
 
 	const parsed = parseJsonSafelly(resStr);
 
-	// TODO: а оно не null возвращает?
-
-	return typeof parsed === 'undefined' ? defaultValue : parsed;
+	return parsed === null || typeof parsed === 'undefined'
+		? defaultValue
+		: parsed;
 }
 
 export async function saveToKv(c, key, value) {
 	const valueStr = JSON.stringify(value);
 
-	// TODO: если передан undefined то значение очистится???
 	try {
 		return c.ctx[CTX_KEYS.KV].put(key, valueStr);
 	} catch (e) {
@@ -29,7 +28,6 @@ export async function saveToKv(c, key, value) {
 }
 
 export async function loadFromCache(c, key, specifiedUserId) {
-	// TODO: почему user.id не работает?
 	const currentUserId =
 		specifiedUserId || c.ctx[CTX_KEYS.me][USER_KEYS.tgChatId];
 	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
@@ -46,7 +44,6 @@ export async function loadFromCache(c, key, specifiedUserId) {
 
 // on expire the key-value pair will be deleted
 export async function saveToCache(c, key, value, expireFromNowSec) {
-	// TODO: почему user.id не работает?
 	const currentUserId = c.ctx[CTX_KEYS.me][USER_KEYS.tgChatId];
 	const fullKey = `${CACHE_PREFIX}|${currentUserId}|${key}`;
 	const valueStr = JSON.stringify(value);
