@@ -27,7 +27,7 @@ export function escapeMdV2(text) {
 export function makeHashTags(tags) {
 	if (!tags) return '';
 
-	return tags.map((item) => `\\#${item}`).join(' ');
+	return tags.map((item) => `#${item}`).join(' ');
 }
 
 export function applyTemplate(c, textMdV2, pubState) {
