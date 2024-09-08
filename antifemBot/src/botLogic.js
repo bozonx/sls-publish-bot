@@ -69,8 +69,6 @@ export function makeContext(
 			await saveToKv(c, KV_KEYS.config, appCfg);
 		}
 
-		console.log(33333, me, c.msg);
-
 		c.ctx = {
 			...c.ctx,
 			[CTX_KEYS.config]: appCfg,

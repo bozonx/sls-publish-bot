@@ -9,6 +9,7 @@ import {
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 	CTX_KEYS,
+	USER_CFG_KEYS,
 } from '../constants.js';
 
 export class PubPostSetup extends PubPageBase {
@@ -18,7 +19,8 @@ export class PubPostSetup extends PubPageBase {
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
 			// set default author for default template - current user's author name
-			[PUB_KEYS.author]: c.ctx[CTX_KEYS.me][USER_KEYS.authorName],
+			[PUB_KEYS.author]:
+				c.ctx[CTX_KEYS.me][USER_KEYS.cfg][USER_CFG_KEYS.authorName],
 			...this.state.pub,
 		};
 
@@ -147,7 +149,7 @@ export class PubPostSetup extends PubPageBase {
 	_getAuthorToAdd() {
 		return this.state.pub[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower
 			? this.state.pub[PUB_KEYS.forwardedFrom]
-			: this.me[USER_KEYS.authorName];
+			: this.me[USER_KEYS.cfg][USER_CFG_KEYS.authorName];
 	}
 
 	_resolveAuthorByTemplate(testTemplate) {
@@ -161,7 +163,7 @@ export class PubPostSetup extends PubPageBase {
 		} else if (!noAuthor && testTemplate === TEMPLATE_NAMES.default) {
 			if (customAuthor) return customAuthor;
 			// set me as an author
-			else return this.me[USER_KEYS.authorName];
+			else return this.me[USER_KEYS.cfg][USER_CFG_KEYS.authorName];
 		}
 		// template noFooter or other cases means no author name
 		return null;
