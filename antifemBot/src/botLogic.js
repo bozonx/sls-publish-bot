@@ -26,6 +26,7 @@ export function makeContext(
 		c.ctx = {
 			[CTX_KEYS.KV]: KV,
 			[CTX_KEYS.DB_CRUD]: new DbCrud(PRISMA_ADAPTER),
+			[CTX_KEYS.MAIN_ADMIN_TG_USER_ID]: MAIN_ADMIN_TG_USER_ID,
 			[CTX_KEYS.CHAT_OF_ADMINS_ID]: CHAT_OF_ADMINS_ID,
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
 			[CTX_KEYS.PUBLICATION_TIME_ZONE]: PUBLICATION_TIME_ZONE,
@@ -91,10 +92,12 @@ export async function handleStart(c) {
 	// show home page on start command
 	if (c.ctx[CTX_KEYS.me]) return c.router.start();
 	// else send invite message which user have to send to admin
-	const dataStr = JSON.stringify(makeInviteUserData(c));
-
-	return c.reply(
-		t(c, 'youAreNotRegistered') +
-			`.\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
+	const dataStr = JSON.stringify(makeInviteUserData(c), null, 2);
+	// send message to the main admin
+	await c.api.sendMessage(
+		c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
+		`New user pressed start:\n${USER_SENT_TO_ADMIN_MSG_DELIMITER}\n${dataStr}`,
 	);
+
+	return c.reply(t(c, 'youAreNotRegistered'));
 }

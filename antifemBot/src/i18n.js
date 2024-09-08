@@ -44,6 +44,7 @@ export default {
 		showPreviewBtn: 'Показать пост',
 		deleteSchuduledBtn: 'Удалить',
 		editSchuduledBtn: 'Редактировать',
+		deleteUserBtn: 'Удалить пользователя',
 		changeDateTimeBtn: 'Изменить дату и время публикации',
 		manageScheduledBtn: 'Управлять отложенными постами',
 		publicateNowBtn: 'Опубликовать сейчас',
@@ -62,7 +63,9 @@ export default {
 		tagsManagerDescr:
 			'Выберете тэги которые нужно удалить\n\nЧтобы добавить новые тэги, напишите один или несколько тэгов через запятую. Тэги будут переведены в snake_case. Символ # не нужен',
 		usersManagerDescr:
-			'Чтобы удалить юзера, нажмите на соответсвующую кнопку. Чтобы добавить скиньте сюда пересланое сообщение от юзера. Либо напишиет сообщение в формате YAML вида:\n\nid: number\nname: string\nauthorName: string\nisAdmin?: boolean',
+			'Юзеры.\n\nЧтобы добавить юзера скиньте сообщение-приглашение сюда',
+		userItemDescr:
+			'Управление пользователем\n\nЧтобы изменить юзера скиньте сюда его данные в формате YAML',
 		selectTagsDescr:
 			'Выберете тэги\n\nЧтобы добавить новые тэги, напишите один или несколько тэгов через запятую. Тэги будут переведены в snake_case. Символ # не нужен',
 		pubPostSetupDescr:
@@ -93,8 +96,7 @@ export default {
 		// Messages
 		wrongTypeOfPost:
 			'❗ Этот формат поста не поддерживается. Отправьте текст, картинку или видео.',
-		youAreNotRegistered:
-			'Вы не зарегистрированы, перешлите это сообщение админу',
+		youAreNotRegistered: 'Вы не зарегистрированы, обратитесь к админу',
 		tagsWasAdded: 'Тэги были добавлены',
 		tagWasDeleted: 'Тэг был удалён',
 		scheduledItemWasDeleted: 'Отложенный пост был удалён',

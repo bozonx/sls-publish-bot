@@ -13,6 +13,8 @@ import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	DB_TABLE_NAMES,
+	USER_CFG_KEYS,
+	USER_PERMISSIONS_KEYS,
 } from '../constants.js';
 
 export class UsersManager extends PageBase {
@@ -33,7 +35,7 @@ export class UsersManager extends PageBase {
 			...breakArray(
 				users.map((i) => ({
 					id: DEFAULT_BTN_ITEM_ID,
-					label: `${i[USER_KEYS.name]} | ${i[USER_KEYS.id]}${isUserAdmin(i) ? ' (admin)' : ''}`,
+					label: i[USER_KEYS.name] + (isUserAdmin(i) ? ' (admin)' : ''),
 					payload: i[USER_KEYS.id],
 				})),
 				2,
@@ -49,7 +51,9 @@ export class UsersManager extends PageBase {
 
 	async onButtonPress(btnId, payload) {
 		if (btnId === DEFAULT_BTN_ITEM_ID) {
-			return this.userRemoveCallback(payload);
+			this.state.editUserId = Number(payload);
+
+			return this.router.go('user-item');
 		}
 
 		switch (btnId) {
@@ -66,54 +70,37 @@ export class UsersManager extends PageBase {
 		let obj;
 
 		if (!text) return this.reply('No text');
+		else if (text.indexOf(USER_SENT_TO_ADMIN_MSG_DELIMITER) < 0)
+			return this.reply('Wrong message');
 
-		if (text.indexOf(USER_SENT_TO_ADMIN_MSG_DELIMITER) > 0) {
-			const [, dataJson] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
+		const [, dataJson] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
 
-			try {
-				obj = parseJsonSafelly(dataJson.trim());
-			} catch (e) {
-				return this.reply(`ERROR: can't parse json`);
-			}
-		} else {
-			// try to parse YAML
-			// TODO: add authorName
-			try {
-				obj = yaml.load(text.trim());
-			} catch (e) {
-				return this.reply(`ERROR: Can't parse yaml. ${e}`);
-			}
+		try {
+			obj = parseJsonSafelly(dataJson.trim());
+		} catch (e) {
+			return this.reply(`ERROR: can't parse json`);
 		}
 
 		if (typeof obj[USER_KEYS.tgUserId] !== 'number') {
-			return this.reply(`ERROR: wrong data. Id is not number`);
+			return this.reply(`ERROR: wrong data. Id is not a number`);
 		}
 
-		await this.db.createItem(DB_TABLE_NAMES.User, obj);
-		await this.reply(`User was saved\n\n${yaml.dump(obj)}`);
+		const user = {
+			...obj,
+			cfg: JSON.stringify({
+				[USER_CFG_KEYS.authorName]: obj[USER_KEYS.name],
+				[USER_CFG_KEYS.permissions]: {
+					admin: false,
+					editOthersScheduledPub: false,
+					deleteOthersScheduledPub: false,
+					changeTimeOfOthersScheduledPub: false,
+				},
+			}),
+		};
+
+		await this.db.createItem(DB_TABLE_NAMES.User, user);
+		await this.reply(`User was created`);
 
 		return this.router.reload();
-	}
-
-	async userRemoveCallback(payload) {
-		const c = this.router.c;
-		// // TODO: remake
-		// const allUsers = await loadFromKv(c, KV_KEYS.users);
-		// const prepared = [...allUsers];
-		// const index = prepared.findIndex(
-		// 	(i) => i[USER_KEYS.id] === Number(payload),
-		// );
-		//
-		// if (index < 0) return this.reply(`ERROR: Can't find user ${payload}`);
-		//
-		// prepared.splice(index, 1);
-		//
-		// // TODO: remake
-		// await saveToKv(c, KV_KEYS.users, prepared);
-
-		await this.db.deleteItem(DB_TABLE_NAMES.User, Number(payload));
-		await this.reply(`User was deleted\n\n${yaml.dump(allUsers[index])}`);
-
-		return c.router.reload();
 	}
 }

@@ -8,54 +8,45 @@ export class DbCrud {
 	}
 
 	async getAll(tableName, select, where, orderBy) {
-		const result = await this.prisma[tableName].findMany({
+		return await this.prisma[tableName].findMany({
 			where,
 			select,
 			orderBy,
 		});
-
-		return result;
 	}
 
 	async getItem(tableName, itemId, select, where) {
-		const result = await this.prisma[tableName].findUnique({
+		return await this.prisma[tableName].findUnique({
 			where: {
 				id: itemId,
 				...where,
 			},
 			select,
 		});
-
-		return result;
 	}
 
 	async createItem(tableName, data) {
-		const result = await this.prisma[tableName].create({ data });
-
-		return result;
+		return await this.prisma[tableName].create({ data });
 	}
 
 	async updateItem(tableName, fullData, where) {
 		const { id, ...data } = fullData;
-		const result = await this.prisma[tableName].update({
+
+		return await this.prisma[tableName].update({
 			where: {
 				id,
 				...where,
 			},
 			data,
 		});
-
-		return result;
 	}
 
 	async deleteItem(tableName, itemId, where) {
-		const result = await this.prisma[tableName].delete({
+		return await this.prisma[tableName].delete({
 			where: {
 				id: itemId,
 				...where,
 			},
 		});
-
-		return result;
 	}
 }

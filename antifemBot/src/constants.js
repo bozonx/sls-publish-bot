@@ -22,6 +22,7 @@ export const CTX_KEYS = {
 	me: 'me',
 	KV: 'KV',
 	DB_CRUD: 'DB_CRUD',
+	MAIN_ADMIN_TG_USER_ID: 'MAIN_ADMIN_TG_USER_ID',
 	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
 	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
 	APP_DEBUG: 'APP_DEBUG',
@@ -41,6 +42,16 @@ export const USER_KEYS = {
 	name: 'name',
 	cfg: 'cfg',
 };
+export const USER_CFG_KEYS = {
+	authorName: 'authorName',
+	permissions: 'permissions',
+};
+export const USER_PERMISSIONS_KEYS = {
+	admin: 'admin',
+	editOthersScheduledPub: 'editOthersScheduledPub',
+	deleteOthersScheduledPub: 'deleteOthersScheduledPub',
+	changeTimeOfOthersScheduledPub: 'changeTimeOfOthersScheduledPub',
+};
 export const TAG_KEYS = {
 	id: 'id',
 	name: 'name',
@@ -55,16 +66,6 @@ export const PUB_SCHEDULED_KEYS = {
 	createdByUserId: 'createdByUserId',
 	updatedByUserId: 'updatedByUserId',
 	payloadJson: 'payloadJson',
-};
-export const USER_CFG_KEYS = {
-	authorName: 'authorName',
-	permissions: 'permissions',
-};
-export const USER_PERMISSIONS_KEYS = {
-	admin: 'admin',
-	editOthersScheduledPub: 'editOthersScheduledPub',
-	deleteOthersScheduledPub: 'deleteOthersScheduledPub',
-	changeTimeOfOthersScheduledPub: 'changeTimeOfOthersScheduledPub',
 };
 export const APP_CFG_KEYS = {
 	templates: 'templates',

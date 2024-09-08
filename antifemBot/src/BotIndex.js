@@ -4,6 +4,7 @@ import { routerMiddleware } from './PageRouter.js';
 import { Home } from './pages/Home.js';
 import { ConfigManager } from './pages/ConfigManager.js';
 import { TagsManager } from './pages/TagsManager.js';
+import { UserItem } from './pages/UserItem.js';
 import { UsersManager } from './pages/UsersManager.js';
 import { PubContent } from './pages/PubContent.js';
 import { PubTags } from './pages/PubTags.js';
@@ -28,6 +29,7 @@ export class BotIndex {
 			home: Home,
 			'config-manager': ConfigManager,
 			'users-manager': UsersManager,
+			'user-item': UserItem,
 			'tags-manager': TagsManager,
 			'pub-content': PubContent,
 			'pub-tags': PubTags,

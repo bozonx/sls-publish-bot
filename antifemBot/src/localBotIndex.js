@@ -27,13 +27,13 @@ const testData = {
 	await app.init();
 
 	// test scheduled
-	await handleScheduled(
-		process.env.TG_TOKEN,
-		process.env.DESTINATION_CHANNEL_ID,
-		process.env.PUBLISHING_MINUS_MINUTES,
-		KV,
-		undefined,
-	);
+	// await handleScheduled(
+	// 	process.env.TG_TOKEN,
+	// 	process.env.DESTINATION_CHANNEL_ID,
+	// 	process.env.PUBLISHING_MINUS_MINUTES,
+	// 	KV,
+	// 	undefined,
+	// );
 
 	app.botStart();
 })();
