@@ -4,7 +4,7 @@ import { convertDbScheduledToPubState } from '../helpers/publishHelpres.js';
 import {
 	makeHumanRuDateCompact,
 	getTimeStr,
-	makeIsoDate,
+	makeIsoLocaleDate,
 } from '../helpers/dateTimeHelpers.js';
 import {
 	DEFAULT_BTN_ITEM_ID,
@@ -89,7 +89,10 @@ export class ScheduledList extends PageBase {
 			dateTimeLabel =
 				makeHumanRuDateCompact(
 					this.c,
-					makeIsoDate(0, itemPubMinutes * 60 * 1000),
+					makeIsoLocaleDate(
+						itemPubMinutes * 60 * 1000,
+						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					),
 				) +
 				' ' +
 				getTimeStr(

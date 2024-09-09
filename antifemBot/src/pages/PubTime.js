@@ -7,7 +7,7 @@ import {
 	breakArray,
 } from '../helpers/lib.js';
 import {
-	makeIsoDate,
+	makeIsoLocaleDate,
 	isValidShortTime,
 	getCurrentHour,
 	getTimeStr,
@@ -113,14 +113,18 @@ export class PubTime extends PubPageBase {
 	}
 
 	_makeHourButtons() {
+		const c = this.router.c;
 		const firstHour = 7;
 		const lastHour = 21;
 		const res = [];
 
-		if (this.state.pub.date === makeIsoDate(0)) {
+		if (
+			this.state.pub.date ===
+			makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE])
+		) {
 			// is today then skip past hours
 			const currentHourNum = getCurrentHour(
-				this.router.c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 			);
 			let startHour =
 				currentHourNum < firstHour ? firstHour : currentHourNum + 1;

@@ -5,17 +5,19 @@ import { isEmptyObj, applyStringTemplate } from '../helpers/lib.js';
 import {
 	isValidShortDate,
 	shortRuDateToFullIsoDate,
-	makeIsoDate,
+	todayPlusDaysIsoDate,
 	makeShortDateFromIsoDate,
 	getShortWeekDay,
 	isPastDate,
 	isoDateToLongLocaleRuDate,
+	makeIsoLocaleDate,
 } from '../helpers/dateTimeHelpers.js';
 import {
 	PUB_KEYS,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DEFAULT_PUB_PLUS_DAY,
+	CTX_KEYS,
 } from '../constants.js';
 
 export class PubDate extends PubPageBase {
@@ -27,19 +29,26 @@ export class PubDate extends PubPageBase {
 
 		// default date is tomorrow
 		if (!this.state.pub[PUB_KEYS.date])
-			this.state.pub[PUB_KEYS.date] = makeIsoDate(DEFAULT_PUB_PLUS_DAY);
+			this.state.pub[PUB_KEYS.date] = todayPlusDaysIsoDate(
+				DEFAULT_PUB_PLUS_DAY,
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			);
 
 		const descr =
 			applyStringTemplate(t(c, 'selectDateDescr'), {
 				TIME_ZONE: t(c, 'msk'),
-			}) + ` ${isoDateToLongLocaleRuDate(makeIsoDate())}`;
+			}) +
+			` ${isoDateToLongLocaleRuDate(makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]))}`;
 
 		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${descr}`;
 
 		const daysBtn = [];
 
 		for (let i = 3; i <= 6; i++) {
-			const isoDateStr = makeIsoDate(i);
+			const isoDateStr = todayPlusDaysIsoDate(
+				i,
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			);
 			const shortDate = makeShortDateFromIsoDate(isoDateStr);
 			const shortWeekDayStr = getShortWeekDay(isoDateStr);
 
@@ -93,7 +102,10 @@ export class PubDate extends PubPageBase {
 	async onButtonPress(btnId, payload) {
 		if (btnId === 'DAY') {
 			return this.go('pub-time', {
-				[PUB_KEYS.date]: makeIsoDate(payload),
+				[PUB_KEYS.date]: todayPlusDaysIsoDate(
+					payload,
+					this.router.c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				),
 			});
 		}
 
@@ -125,7 +137,10 @@ export class PubDate extends PubPageBase {
 		const preparedDateStr = c.msg.text.trim().replace(/\s/g, '.');
 
 		if (isValidShortDate(preparedDateStr)) {
-			const isoDateStr = shortRuDateToFullIsoDate(preparedDateStr);
+			const isoDateStr = shortRuDateToFullIsoDate(
+				preparedDateStr,
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			);
 
 			if (isPastDate(isoDateStr)) return this.reply(t(c, 'dateIsPastMessage'));
 
