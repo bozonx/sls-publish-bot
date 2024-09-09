@@ -6,7 +6,6 @@ export function makeIsoDateFromPubState(pubState) {
 	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
 }
 
-// TODO: пишет завтра когда не надо
 export function makeHumanRuDate(c, isoDateStr) {
 	const closestDay = makeClosestDayRuString(c, isoDateStr);
 
@@ -16,13 +15,14 @@ export function makeHumanRuDate(c, isoDateStr) {
 	return isoDateToLongLocaleRuDate(isoDateStr);
 }
 
-// TODO: пишет завтра когда не надо
 export function makeHumanRuDateCompact(c, isoDateStr) {
 	const closestDay = makeClosestDayRuString(c, isoDateStr);
 
 	if (closestDay) return closestDay;
 
-	return makeShortDateFromIsoDate(isoDateStr);
+	return (
+		`${getShortWeekDay(isoDateStr)} ` + makeShortDateFromIsoDate(isoDateStr)
+	);
 }
 
 export function makeShortDateFromIsoDate(isoDateStr) {
@@ -32,7 +32,8 @@ export function makeShortDateFromIsoDate(isoDateStr) {
 }
 
 export function isoDateToLongLocaleRuDate(isoDateStr) {
-	return new Date(`${isoDateStr}T00:00`).toLocaleDateString('ru-RU', {
+	return new Date(`${isoDateStr}T00:00Z`).toLocaleDateString('ru-RU', {
+		timeZone: '+00:00',
 		weekday: 'short',
 		month: 'long',
 		day: 'numeric',
@@ -40,7 +41,8 @@ export function isoDateToLongLocaleRuDate(isoDateStr) {
 }
 
 export function getShortWeekDay(isoDateStr) {
-	return new Date(`${isoDateStr}T00:00`).toLocaleDateString('ru-RU', {
+	return new Date(`${isoDateStr}T00:00Z`).toLocaleDateString('ru-RU', {
+		timeZone: '+00:00',
 		weekday: 'short',
 	});
 }
@@ -53,23 +55,15 @@ export function convertDateTimeToTsMinutes(date, time, timeZone) {
 	);
 }
 
-// make iso date from DD.MM. It adds current year to a date
-export function shortRuDateToFullIsoDate(localeShortDate, timeZone) {
-	const timeZoneMs = timeZoneToMinutes(timeZone) * 60 * 1000;
-	const [dayStr, monthStr] = localeShortDate.split('.');
-	const year = new Date(new Date().getTime() + timeZoneMs).getFullYear();
+export function timeToMinutes(time) {
+	if (!time) return 0;
 
-	return `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;
-}
+	const [hoursStr, minutesStr] = time.split(':');
+	const hourNum = Number(hoursStr);
+	const minutesNum = Number(minutesStr);
 
-export function timeZoneToMinutes(timeZone) {
-	if (!timeZone) return 0;
-
-	const [hours, minutes] = timeZone.split(':');
-	const hourNum = Number(hours);
-
-	if (hourNum >= 0) return hourNum * 60 + Number(minutes);
-	else return hourNum * 60 - Number(minutes);
+	if (hourNum >= 0) return hourNum * 60 + minutesNum;
+	else return hourNum * 60 - minutesNum;
 }
 
 export function todayPlusDaysIsoDate(plusDay = 0, timeZone) {
@@ -81,7 +75,7 @@ export function todayPlusDaysIsoDate(plusDay = 0, timeZone) {
 
 export function makeIsoLocaleDate(specifiedDate, timeZone) {
 	const date = specifiedDate ? new Date(specifiedDate) : new Date();
-	const timeZoneMs = timeZoneToMinutes(timeZone) * 60 * 1000;
+	const timeZoneMs = timeToMinutes(timeZone) * 60 * 1000;
 	const zonedDate = new Date(date.getTime() + timeZoneMs);
 	const year = zonedDate.getUTCFullYear();
 	const month = zonedDate.getUTCMonth() + 1;
@@ -89,29 +83,6 @@ export function makeIsoLocaleDate(specifiedDate, timeZone) {
 
 	return `${year}-${make2SignDigitStr(month)}-${make2SignDigitStr(day)}`;
 }
-
-export function makeClosestDayRuString(c, isoDateStr) {
-	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
-	const testMs = Date.UTC(
-		Number(yearStr),
-		Number(monthStr) - 1,
-		Number(dayStr),
-	);
-	const now = new Date();
-
-	// TODO: check time zone
-	const nowMs = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-	const diffMs = testMs - nowMs;
-
-	if (diffMs < 0) return;
-
-	const daysNum = diffMs / 24 / 60 / 60 / 1000;
-
-	return t(c, 'closestDays')[daysNum];
-}
-
-// console.log(1111, todayPlusDaysIsoDate(6, '+03:00'));
-// console.log(2222, makeIsoLocaleDate('2024-09-10T00:00Z', '+03:00'));
 
 export function getCurrentHour(timeZone) {
 	return Number(
@@ -124,7 +95,7 @@ export function getCurrentHour(timeZone) {
 }
 
 // if no specifiedDate then current time is used
-// better to put full specifiedDate of timestamp
+// better to put full specifiedDate or timestamp
 export function getTimeStr(timeZone, specifiedDate) {
 	const date = specifiedDate ? new Date(specifiedDate) : new Date();
 	return date.toLocaleString('ru-RU', {
@@ -135,39 +106,44 @@ export function getTimeStr(timeZone, specifiedDate) {
 	});
 }
 
-export function isPastDate(isoDateStr) {
-	// TODO: simplify
-
-	// if (
-	// 	new Date(isoDateStr).getTime() <
-	// 	new Date(makeIsoDate(0)).getTime()
-	// )
-	// 	return this.reply(t(c, 'dateIsPastMessage'));
-	//
+export function makeClosestDayRuString(c, isoDateStr) {
 	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
-	const testMs = Date.UTC(
-		Number(yearStr),
-		Number(monthStr) - 1,
-		Number(dayStr),
+	const testDaysTs = Math.floor(
+		Date.UTC(Number(yearStr), Number(monthStr) - 1, Number(dayStr)) /
+			1000 /
+			60 /
+			60 /
+			24,
 	);
-	const now = new Date();
-	const nowMs = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+	const nowDaysTs = Math.floor(new Date().getTime() / 1000 / 60 / 60 / 24);
+	const diffDays = testDaysTs - nowDaysTs;
 
-	return testMs < nowMs;
+	if (diffDays < 0) return;
+
+	return t(c, 'closestDays')[diffDays];
 }
 
-export function isValidShortDate(rawDateStr) {
-	// TODO: better validate
-
-	return Boolean(
-		String(rawDateStr)
-			.trim()
-			.match(/^\d{1,2}\.\d{1,2}$/),
-	);
+export function isPastDate(isoDateStr, timeZone) {
+	return isTimePast('00:00', isoDateStr, timeZone, -60 * 24);
 }
 
-// TODO: review
-export function isValidShortTime(rawTime) {
+export function isTimePast(
+	normalizedTime,
+	isoDateStr,
+	timeZone,
+	additionalMinutes = 0,
+) {
+	const testMs = new Date(
+		`${isoDateStr}T${normalizedTime}${timeZone}`,
+	).getTime();
+	const nowMs = new Date().getTime();
+	const testMinutesTs = Math.floor(testMs / 1000 / 60);
+	const nowMinutesTs = Math.floor(nowMs / 1000 / 60) + additionalMinutes;
+
+	return testMinutesTs < nowMinutesTs;
+}
+
+export function normalizeTime(rawTime) {
 	if (
 		!String(rawTime)
 			.trim()
@@ -175,73 +151,26 @@ export function isValidShortTime(rawTime) {
 	)
 		return false;
 
-	const [hourStr, minuteStr] = rawTime.split(':');
-	const hour = Number(hourStr);
-	const minute = Number(minuteStr);
+	const [hourStr, minuteStr] = rawTime.trim().split(':');
+	const hour = Number(hourStr.trim());
+	const minute = Number(minuteStr.trim());
 
 	if (Number.isNaN(hour) || Number.isNaN(minute)) return false;
 	else if (hour < 0 || hour > 24) return false;
 	else if (minute < 0 || minute > 60) return false;
 
-	return true;
+	return `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
 }
 
-// TODO: с учетом локали +3
-// export function isPastDateTime(isoDateStr, timeStr, minusMinute) {
-// 	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
-// 	const [hoursStr, minutesStr] = timeStr.split(':');
-// 	const testMs = Date.UTC(
-// 		Number(yearStr),
-// 		Number(monthStr) - 1,
-// 		Number(dayStr),
-// 		Number(hoursStr),
-// 		Number(minutesStr),
-// 	);
-// 	const now = new Date();
-// 	const nowMs = Date.UTC(
-// 		now.getFullYear(),
-// 		now.getMonth(),
-// 		now.getDate(),
-// 		now.getHours(),
-// 		now.getMinutes(),
-// 	);
-//
-// 	return testMs < nowMs - minusMinute * 60 * 1000;
-// }
+export function normalizeShortDateToIsoDate(localeShortDate, timeZone) {
+	if (!localeShortDate?.trim().match(/^\d{1,2}\.\d{1,2}$/)) return false;
 
-// // operate with timestamp in milliseconds in UTC
-// export function dateSubtractMinutes(tsMs, minutesToSubtract) {
-// 	return dateSubtractSeconds(tsMs, minutesToSubtract * 60);
-// }
-//
-// // operate with timestamp in milliseconds in UTC
-// export function dateSubtractSeconds(tsMs, secondsToSubtract) {
-// 	const subtractMs = secondsToSubtract * 1000;
-//
-// 	return tsMs - subtractMs;
-// }
+	const timeZoneMs = timeToMinutes(timeZone) * 60 * 1000;
+	const [dayStr, monthStr] = localeShortDate.split('.');
+	const year = new Date(new Date().getTime() + timeZoneMs).getFullYear();
+	const isoDate = `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;
 
-// // operate with timestamp in milliseconds in UTC
-// export function dateAddSeconds(tsMs, secondsToAdd) {
-// 	const addMs = secondsToAdd * 1000;
-//
-// 	return tsMs + addMs;
-// }
+	if (new Date(isoDate) === 'Invalid Date') return false;
 
-//////////// TESTS
-
-// console.log(111, makeIsoDate(0), makeIsoDate(8));
-// console.log(222, shortRuDateToFullIsoDate('5.9'));
-// console.log(333, getShortWeekDay('2024-09-04'));
-// console.log(444, isoDateToLongLocaleRuDate('2024-09-04'));
-// console.log(555, makeShortDateFromIsoDate('2024-09-04'));
-// console.log(666, makeHumanRuDateCompact({}, '2024-09-04'));
-// console.log(777, makeHumanRuDate({}, '2024-09-04'));
-// console.log(
-// 	888,
-// 	isPastDate('2024-09-03'),
-// 	isPastDate('2024-09-04'),
-// 	isPastDate('2024-09-05'),
-// );
-// console.log(888, makeClosestDayRuString({}, '2024-09-06'));
-// console.log(999, isPastDateTime('2024-09-04', '14:04', 5));
+	return isoDate;
+}

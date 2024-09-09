@@ -8,9 +8,10 @@ import {
 } from '../helpers/lib.js';
 import {
 	makeIsoLocaleDate,
-	isValidShortTime,
+	normalizeTime,
 	getCurrentHour,
 	getTimeStr,
+	isTimePast,
 } from '../helpers/dateTimeHelpers.js';
 import {
 	PUB_KEYS,
@@ -19,6 +20,10 @@ import {
 	DEFAULT_PUB_TIME,
 	EDIT_ITEM_NAME,
 } from '../constants.js';
+
+const FIRST_HOUR = 7;
+const LAST_HOUR = 21;
+const PAST_CHECK_ADDITIONAL_MINUTES = 10;
 
 export class PubTime extends PubPageBase {
 	async renderMenu() {
@@ -45,14 +50,15 @@ export class PubTime extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state[EDIT_ITEM_NAME] && {
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
-				},
-				!this.state[EDIT_ITEM_NAME] && {
-					id: 'nextBtn',
-					label: t(c, 'nextBtn'),
-				},
+				this.state[EDIT_ITEM_NAME]
+					? {
+							id: 'saveBtn',
+							label: t(c, 'saveBtn'),
+						}
+					: {
+							id: 'nextBtn',
+							label: t(c, 'nextBtn'),
+						},
 			],
 		]);
 	}
@@ -85,28 +91,23 @@ export class PubTime extends PubPageBase {
 	async onMessage() {
 		const c = this.router.c;
 
-		if (!c.msg.text) {
-			await this.reply('No text');
-
-			return this.reload();
-		}
+		if (!c.msg.text) await this.reply('No text');
 
 		const rawTime = c.msg.text.trim().replace(/[\s.]/g, ':');
-		let time;
+		const normalizedTime = normalizeTime(rawTime);
 
-		if (isValidShortTime(rawTime)) {
-			const [hourStr, minuteStr] = rawTime.split(':');
+		if (!normalizedTime) await this.reply(t(c, 'wrongTimeFormat'));
+		else if (
+			isTimePast(
+				normalizedTime,
+				this.state.pub[PUB_KEYS.date],
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				PAST_CHECK_ADDITIONAL_MINUTES,
+			)
+		)
+			await this.reply(t(c, 'timeIsPastMessage'));
 
-			// TODO: check past
-
-			time = `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
-		} else {
-			await this.reply(t(c, 'wrongTimeFormat'));
-
-			return this.reload();
-		}
-
-		this.state.pub[PUB_KEYS.time] = time;
+		this.state.pub[PUB_KEYS.time] = normalizedTime;
 
 		if (this.state[EDIT_ITEM_NAME]) return saveEditedScheduledPost(this.router);
 		else return this.go('pub-confirm');
@@ -114,8 +115,6 @@ export class PubTime extends PubPageBase {
 
 	_makeHourButtons() {
 		const c = this.router.c;
-		const firstHour = 7;
-		const lastHour = 21;
 		const res = [];
 
 		if (
@@ -127,17 +126,15 @@ export class PubTime extends PubPageBase {
 				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 			);
 			let startHour =
-				currentHourNum < firstHour ? firstHour : currentHourNum + 1;
+				currentHourNum < FIRST_HOUR ? FIRST_HOUR : currentHourNum + 1;
 
-			if (currentHourNum <= lastHour) {
-				for (let i = startHour; i <= lastHour; i++) {
-					res.push(this._makeHourBtn(i));
-				}
+			for (let i = startHour; i <= LAST_HOUR; i++) {
+				res.push(this._makeHourBtn(i));
 			}
 			// else nothing - empty list
 		} else {
-			// all hours from 7 to 21
-			for (let i = firstHour; i <= lastHour; i++) {
+			// not today all hours from 7 to 21
+			for (let i = FIRST_HOUR; i <= LAST_HOUR; i++) {
 				res.push(this._makeHourBtn(i));
 			}
 		}

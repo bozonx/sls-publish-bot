@@ -203,22 +203,30 @@ export class PageRouter {
 
 	// on command start - just draw the menu
 	async start() {
+		// make initial session if it doesn't exists
+		if (!this.start) this._state = {};
+
 		this.redrawMenu();
-		await this.go(HOME_PAGE);
 
-		return this._theEndOfRequest();
-	}
-
-	async go(pathTo) {
 		try {
-			const msg = await this._switchPage(pathTo);
+			await this.go(HOME_PAGE);
 
-			if (msg) return this.reply(msg);
+			return this._theEndOfRequest();
 		} catch (e) {
-			await this.reply(String(e));
+			if (c.ctx[CTX_KEYS.APP_DEBUG]) {
+				await c.reply(this._makeErrorMsg(e, 'start'), {
+					parse_mode: 'MarkdownV2',
+				});
+			}
 
 			throw e;
 		}
+	}
+
+	async go(pathTo) {
+		const msg = await this._switchPage(pathTo);
+
+		if (msg) return this.reply(msg);
 
 		const menu = (await this.currentPage.renderMenu?.()) || [];
 
@@ -227,15 +235,9 @@ export class PageRouter {
 
 	async _handleMessage() {
 		// it loads current page
-		try {
-			const msg = await this._switchPage();
+		const msg = await this._switchPage();
 
-			if (msg) return this.reply(msg);
-		} catch (e) {
-			await this.reply(String(e));
-
-			throw e;
-		}
+		if (msg) return this.reply(msg);
 		// redraw menu after user message
 		this.redrawMenu();
 
@@ -255,15 +257,9 @@ export class PageRouter {
 			: undefined;
 
 		// it loads current page
-		try {
-			const msg = await this._switchPage();
+		const msg = await this._switchPage();
 
-			if (msg) return this.reply(msg);
-		} catch (e) {
-			await this.reply(String(e));
-
-			throw e;
-		}
+		if (msg) return this.reply(msg);
 
 		const prevPath = this.currentPath;
 		const result = await this.currentPage.onButtonPress?.(btnId, btnPayload);
@@ -279,9 +275,9 @@ export class PageRouter {
 
 	async _switchPage(newPath) {
 		await this.currentPage?.unmount?.();
-		const isSessionLost = await this._loadSession(newPath);
-
-		if (isSessionLost) return `${t(this.c, 'sessionLost')} /start`;
+		await this._loadSession();
+		// If stale or absent session then suggest to start
+		if (!this._loadedSession) return `${t(this.c, 'sessionLost')} /start`;
 
 		// switch to new path or use current page (reload)
 		const pathTo = newPath || this.state.currentPath;
@@ -297,7 +293,7 @@ export class PageRouter {
 		await this.currentPage.mount?.();
 	}
 
-	async _loadSession(newPath) {
+	async _loadSession() {
 		// in case switching page on .go()
 		if (this.state) return;
 		else if (this.state === null) {
@@ -305,13 +301,7 @@ export class PageRouter {
 		}
 
 		this._loadedSession = this.c.ctx[CTX_KEYS.session];
-		this._state = this._loadedSession || {};
-
-		// TODO: сработает только при переходе на главную, что бесмылсено
-
-		// If stale or absent session and not home page then suggest to start
-		// If home page and stale session it is OK
-		if (!this._loadedSession && newPath !== HOME_PAGE) return true;
+		this._state = this._loadedSession;
 	}
 
 	async _theEndOfRequest() {

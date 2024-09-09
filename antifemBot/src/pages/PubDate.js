@@ -3,8 +3,7 @@ import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
 import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import { isEmptyObj, applyStringTemplate } from '../helpers/lib.js';
 import {
-	isValidShortDate,
-	shortRuDateToFullIsoDate,
+	normalizeShortDateToIsoDate,
 	todayPlusDaysIsoDate,
 	makeShortDateFromIsoDate,
 	getShortWeekDay,
@@ -26,13 +25,14 @@ export class PubDate extends PubPageBase {
 		// copy state to edit in edit mode
 		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
 			this.state.pub = this.state[EDIT_ITEM_NAME];
-
 		// default date is tomorrow
-		if (!this.state.pub[PUB_KEYS.date])
-			this.state.pub[PUB_KEYS.date] = todayPlusDaysIsoDate(
+		this.state.pub = {
+			[PUB_KEYS.date]: todayPlusDaysIsoDate(
 				DEFAULT_PUB_PLUS_DAY,
 				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-			);
+			),
+			...this.state.pub,
+		};
 
 		const descr =
 			applyStringTemplate(t(c, 'selectDateDescr'), {
@@ -49,12 +49,12 @@ export class PubDate extends PubPageBase {
 				i,
 				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 			);
-			const shortDate = makeShortDateFromIsoDate(isoDateStr);
-			const shortWeekDayStr = getShortWeekDay(isoDateStr);
 
 			daysBtn.push({
 				id: 'DAY',
-				label: `${shortWeekDayStr} ${shortDate}`,
+				label:
+					makeShortDateFromIsoDate(isoDateStr) +
+					` ${getShortWeekDay(isoDateStr)}`,
 				payload: i,
 			});
 		}
@@ -128,27 +128,19 @@ export class PubDate extends PubPageBase {
 	async onMessage() {
 		const c = this.router.c;
 
-		if (!c.msg.text) {
-			await this.reply('No text');
-
-			return this.reload();
-		}
+		if (!c.msg.text) await this.reply('No text');
 
 		const preparedDateStr = c.msg.text.trim().replace(/\s/g, '.');
+		const isoDateStr = normalizeShortDateToIsoDate(
+			preparedDateStr,
+			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+		);
 
-		if (isValidShortDate(preparedDateStr)) {
-			const isoDateStr = shortRuDateToFullIsoDate(
-				preparedDateStr,
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-			);
+		if (!isoDateStr) return this.reply(t(c, 'wrongDateFormat'));
 
-			if (isPastDate(isoDateStr)) return this.reply(t(c, 'dateIsPastMessage'));
+		if (isPastDate(isoDateStr, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]))
+			return this.reply(t(c, 'dateIsPastMessage'));
 
-			return this.go('pub-time', { [PUB_KEYS.date]: isoDateStr });
-		} else {
-			await this.reply(t(c, 'wrongDateFormat'));
-
-			return this.reload();
-		}
+		return this.go('pub-time', { [PUB_KEYS.date]: isoDateStr });
 	}
 }
