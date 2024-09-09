@@ -84,7 +84,7 @@ export class UserItem extends PageBase {
 
 		// try to parse YAML
 		try {
-			obj = yaml.load(text.trim());
+			obj = yaml.load(text);
 		} catch (e) {
 			return this.reply(`ERROR: Can't parse yaml. ${e}`);
 		}

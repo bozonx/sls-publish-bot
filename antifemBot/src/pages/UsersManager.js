@@ -1,11 +1,6 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
-import {
-	t,
-	defineMenu,
-	parseJsonSafelly,
-	isUserAdmin,
-} from '../helpers/helpers.js';
+import { t, defineMenu, isUserAdmin } from '../helpers/helpers.js';
 import { breakArray } from '../helpers/lib.js';
 import {
 	USER_KEYS,
@@ -14,7 +9,6 @@ import {
 	HOME_PAGE,
 	DB_TABLE_NAMES,
 	USER_CFG_KEYS,
-	USER_PERMISSIONS_KEYS,
 } from '../constants.js';
 
 export class UsersManager extends PageBase {
@@ -26,6 +20,7 @@ export class UsersManager extends PageBase {
 		const users = await this.db.getAll(DB_TABLE_NAMES.User, {
 			[USER_KEYS.id]: true,
 			[USER_KEYS.name]: true,
+			// it need to check is user admin
 			[USER_KEYS.cfg]: true,
 		});
 
@@ -73,12 +68,12 @@ export class UsersManager extends PageBase {
 		else if (text.indexOf(USER_SENT_TO_ADMIN_MSG_DELIMITER) < 0)
 			return this.reply('Wrong message');
 
-		const [, dataJson] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
+		const [, dataStr] = text.split(USER_SENT_TO_ADMIN_MSG_DELIMITER);
 
 		try {
-			obj = parseJsonSafelly(dataJson.trim());
+			obj = yaml.load(dataStr);
 		} catch (e) {
-			return this.reply(`ERROR: can't parse json`);
+			return this.reply(`ERROR: can't parse yaml`);
 		}
 
 		if (typeof obj[USER_KEYS.tgUserId] !== 'string') {
