@@ -14,8 +14,6 @@ const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
 // It makes a new instance of router on each request including dev env
 export function routerMiddleware(routes) {
 	return async (c, next) => {
-		if (!c.msg?.chat) return;
-
 		c.router = new PageRouter(c, routes);
 
 		return next();
@@ -142,6 +140,13 @@ export class PageRouter {
 	}
 
 	$handleMessage = async (c) => {
+		//
+		// console.log(22222, c.msg)
+
+		// filter all other messages. Pass only messager from user to bot
+		if (!c.msg?.chat || !c.ctx[CTX_KEYS.me] || c.msg.chat.id !== c.msg?.from.id)
+			return;
+
 		try {
 			await this._handleMessage();
 		} catch (e) {
@@ -156,6 +161,9 @@ export class PageRouter {
 	};
 
 	$handleQueryData = async (c) => {
+		// work only with messager from user to bot
+		if (!c.msg?.chat || !c.ctx[CTX_KEYS.me]) return;
+
 		try {
 			await this._handleQueryData();
 		} catch (e) {

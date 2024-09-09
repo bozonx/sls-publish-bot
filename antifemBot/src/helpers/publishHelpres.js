@@ -52,9 +52,6 @@ export function applyTemplate(c, textMdV2, pubState) {
 }
 
 export function makeStateFromMessage(c, isTextInMdV1) {
-	//
-	// console.log(22223333, c.msg);
-
 	let state = {
 		[PUB_KEYS.forwardedFrom]:
 			c.msg.forward_sender_name ||
