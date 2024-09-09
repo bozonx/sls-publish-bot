@@ -136,9 +136,8 @@ export class PubDate extends PubPageBase {
 			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 		);
 
-		if (!isoDateStr) return this.reply(t(c, 'wrongDateFormat'));
-
-		if (isPastDate(isoDateStr, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]))
+		if (!isoDateStr) return this.reply(t(c, 'wrongDate'));
+		else if (isPastDate(isoDateStr, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]))
 			return this.reply(t(c, 'dateIsPastMessage'));
 
 		return this.go('pub-time', { [PUB_KEYS.date]: isoDateStr });

@@ -152,14 +152,19 @@ export function normalizeTime(rawTime) {
 		return false;
 
 	const [hourStr, minuteStr] = rawTime.trim().split(':');
-	const hour = Number(hourStr.trim());
-	const minute = Number(minuteStr.trim());
+	const time = `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
 
-	if (Number.isNaN(hour) || Number.isNaN(minute)) return false;
-	else if (hour < 0 || hour > 24) return false;
-	else if (minute < 0 || minute > 60) return false;
+	if (new Date(`2024-08-06T${time}`).toString() === 'Invalid Date')
+		return false;
 
-	return `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
+	// const hour = Number(hourStr.trim());
+	// const minute = Number(minuteStr.trim());
+	//
+	// if (Number.isNaN(hour) || Number.isNaN(minute)) return false;
+	// else if (hour < 0 || hour > 24) return false;
+	// else if (minute < 0 || minute > 60) return false;
+
+	return time;
 }
 
 export function normalizeShortDateToIsoDate(localeShortDate, timeZone) {
@@ -170,7 +175,7 @@ export function normalizeShortDateToIsoDate(localeShortDate, timeZone) {
 	const year = new Date(new Date().getTime() + timeZoneMs).getFullYear();
 	const isoDate = `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;
 
-	if (new Date(isoDate) === 'Invalid Date') return false;
+	if (new Date(isoDate).toString() === 'Invalid Date') return false;
 
 	return isoDate;
 }

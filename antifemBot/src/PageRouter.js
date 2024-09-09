@@ -204,7 +204,7 @@ export class PageRouter {
 	// on command start - just draw the menu
 	async start() {
 		// make initial session if it doesn't exists
-		if (!this.start) this._state = {};
+		if (!this.state) this._state = {};
 
 		this.redrawMenu();
 
@@ -213,8 +213,8 @@ export class PageRouter {
 
 			return this._theEndOfRequest();
 		} catch (e) {
-			if (c.ctx[CTX_KEYS.APP_DEBUG]) {
-				await c.reply(this._makeErrorMsg(e, 'start'), {
+			if (this.c.ctx[CTX_KEYS.APP_DEBUG]) {
+				await this.c.reply(this._makeErrorMsg(e, 'start'), {
 					parse_mode: 'MarkdownV2',
 				});
 			}
@@ -276,8 +276,8 @@ export class PageRouter {
 	async _switchPage(newPath) {
 		await this.currentPage?.unmount?.();
 		await this._loadSession();
-		// If stale or absent session then suggest to start
-		if (!this._loadedSession) return `${t(this.c, 'sessionLost')} /start`;
+
+		if (!this.state) return `${t(this.c, 'sessionLost')} /start`;
 
 		// switch to new path or use current page (reload)
 		const pathTo = newPath || this.state.currentPath;
@@ -302,6 +302,8 @@ export class PageRouter {
 
 		this._loadedSession = this.c.ctx[CTX_KEYS.session];
 		this._state = this._loadedSession;
+		// if no session and newPath is home page then create a new session
+		// if (!this.state && newPath === HOME_PAGE) this._state = {};
 	}
 
 	async _theEndOfRequest() {

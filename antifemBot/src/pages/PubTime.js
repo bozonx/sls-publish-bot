@@ -96,7 +96,7 @@ export class PubTime extends PubPageBase {
 		const rawTime = c.msg.text.trim().replace(/[\s.]/g, ':');
 		const normalizedTime = normalizeTime(rawTime);
 
-		if (!normalizedTime) await this.reply(t(c, 'wrongTimeFormat'));
+		if (!normalizedTime) return this.reply(t(c, 'wrongTime'));
 		else if (
 			isTimePast(
 				normalizedTime,
@@ -105,7 +105,7 @@ export class PubTime extends PubPageBase {
 				PAST_CHECK_ADDITIONAL_MINUTES,
 			)
 		)
-			await this.reply(t(c, 'timeIsPastMessage'));
+			return this.reply(t(c, 'timeIsPastMessage'));
 
 		this.state.pub[PUB_KEYS.time] = normalizedTime;
 
