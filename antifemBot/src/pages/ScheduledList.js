@@ -1,5 +1,6 @@
 import { PageBase } from '../PageRouter.js';
 import { t, defineMenu } from '../helpers/helpers.js';
+import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbScheduledToPubState } from '../helpers/publishHelpres.js';
 import {
 	makeHumanRuDateCompact,
@@ -32,7 +33,9 @@ export class ScheduledList extends PageBase {
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
-			? t(c, 'scheduledListDescr')
+			? applyStringTemplate(t(c, 'scheduledListDescr'), {
+					TIME_ZONE: t(c, 'msk'),
+				})
 			: t(c, 'scheduledEmptyListDescr');
 
 		return defineMenu([
