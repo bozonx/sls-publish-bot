@@ -6,8 +6,8 @@ export function makeIsoDateFromPubState(pubState) {
 	return `${pubState[PUB_KEYS.date]}T${pubState[PUB_KEYS.time]}`;
 }
 
-export function makeHumanRuDate(c, isoDateStr) {
-	const closestDay = makeClosestDayRuString(c, isoDateStr);
+export function makeHumanRuDate(c, isoDateStr, timeZone) {
+	const closestDay = makeClosestDayRuString(c, isoDateStr, timeZone);
 
 	if (closestDay)
 		return `${closestDay} ${makeShortDateFromIsoDate(isoDateStr)}`;
@@ -15,8 +15,8 @@ export function makeHumanRuDate(c, isoDateStr) {
 	return isoDateToLongLocaleRuDate(isoDateStr);
 }
 
-export function makeHumanRuDateCompact(c, isoDateStr) {
-	const closestDay = makeClosestDayRuString(c, isoDateStr);
+export function makeHumanRuDateCompact(c, isoDateStr, timeZone) {
+	const closestDay = makeClosestDayRuString(c, isoDateStr, timeZone);
 
 	if (closestDay) return closestDay;
 
@@ -106,16 +106,14 @@ export function getTimeStr(timeZone, specifiedDate) {
 	});
 }
 
-export function makeClosestDayRuString(c, isoDateStr) {
-	const [yearStr, monthStr, dayStr] = isoDateStr.split('-');
+export function makeClosestDayRuString(c, isoDateStr, timeZone) {
+	const timeZoneMs = timeToMinutes(timeZone) * 60 * 1000;
 	const testDaysTs = Math.floor(
-		Date.UTC(Number(yearStr), Number(monthStr) - 1, Number(dayStr)) /
-			1000 /
-			60 /
-			60 /
-			24,
+		new Date(`${isoDateStr}T00:00Z`).getTime() / 1000 / 60 / 60 / 24,
 	);
-	const nowDaysTs = Math.floor(new Date().getTime() / 1000 / 60 / 60 / 24);
+	const nowDaysTs = Math.floor(
+		(new Date().getTime() + timeZoneMs) / 1000 / 60 / 60 / 24,
+	);
 	const diffDays = testDaysTs - nowDaysTs;
 
 	if (diffDays < 0) return;

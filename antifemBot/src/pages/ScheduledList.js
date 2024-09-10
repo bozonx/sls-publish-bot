@@ -101,6 +101,7 @@ export class ScheduledList extends PageBase {
 						itemPubMinutes * 60 * 1000,
 						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 					),
+					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
 				) +
 				' ' +
 				getTimeStr(

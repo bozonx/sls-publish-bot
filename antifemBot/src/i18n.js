@@ -82,7 +82,7 @@ export default {
 		scheduledItemDescr: 'Управление отложенной публикацией',
 		conservedListDescr: 'Консервы',
 		conservedEmptyListDescr: 'Нет консерв',
-		scheduledItemDescr: 'Управление консервой',
+		conservedItemDescr: 'Управление консервой',
 		publishedListDescr: 'Опубликованные посты',
 		publishedEmptyListDescr: 'Ничего пока не опубликовано',
 		publishedItemDescr: 'Управление опубликованным постом',

@@ -43,7 +43,7 @@ export class ConservedItem extends PageBase {
 		delete this.state.editReturnUrl;
 
 		this.text =
-			t(c, 'scheduledItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
+			t(c, 'conservedItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
 
 		return defineMenu([
 			[

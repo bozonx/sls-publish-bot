@@ -71,7 +71,7 @@ export async function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateAuthor')}: ${state[PUB_KEYS.author]}\n`;
 
 	if (state[PUB_KEYS.date])
-		res += `${t(c, 'stateDate')}: ${makeHumanRuDate(c, state[PUB_KEYS.date])}\n`;
+		res += `${t(c, 'stateDate')}: ${makeHumanRuDate(c, state[PUB_KEYS.date], c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE])}\n`;
 	if (state[PUB_KEYS.time]) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}

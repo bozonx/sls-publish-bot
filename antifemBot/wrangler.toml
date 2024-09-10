@@ -12,6 +12,7 @@ PUBLISHING_MINUS_MINUTES = 30
 SESSION_STATE_TTL_DAYS = 30
 # 80 seconds
 # SESSION_STATE_TTL_DAYS = 0.0009259
+TEST_MODE = true
 
 [triggers]
 # it is for webhok update
