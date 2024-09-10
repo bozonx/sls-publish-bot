@@ -211,3 +211,36 @@ export async function handleTagsFromInputAndSave(router, rawText) {
 
 	return newTags;
 }
+
+// export function makePostListItemLabel(c, dbItem) {
+// 	const itemName = dbItem[POST_KEYS.name];
+//
+// 	if (!itemName) return t(c, 'itemHasNoContent');
+//
+// 	const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
+// 	const curTimeMinutes = new Date().getTime() / 1000 / 60;
+// 	// if staled - use stale mark
+// 	let dateTimeLabel = t(this.router.c, 'staleMark');
+//
+// 	if (
+// 		itemPubMinutes >
+// 		curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
+// 	) {
+// 		// means actual - else use date and time
+// 		dateTimeLabel =
+// 			makeHumanRuDateCompact(
+// 				this.c,
+// 				makeIsoLocaleDate(
+// 					itemPubMinutes * 60 * 1000,
+// 					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+// 				),
+// 			) +
+// 			' ' +
+// 			getTimeStr(
+// 				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+// 				itemPubMinutes * 60 * 1000,
+// 			);
+// 	}
+//
+// 	return `${dateTimeLabel} ${itemName}`;
+// }

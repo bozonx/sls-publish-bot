@@ -30,6 +30,16 @@ export class Home extends PageBase {
 			],
 			[
 				{
+					id: 'publishedBtn',
+					label: t(c, 'publishedBtn'),
+				},
+				{
+					id: 'conservedBtn',
+					label: t(c, 'conservedBtn'),
+				},
+			],
+			[
+				{
 					id: 'manageTagsBtn',
 					label: t(c, 'manageTagsBtn'),
 				},
@@ -66,6 +76,10 @@ export class Home extends PageBase {
 				return this.router.go('tags-manager');
 			case 'manageScheduledBtn':
 				return this.router.go('scheduled-list');
+			case 'publishedBtn':
+				return this.router.go('published-list');
+			case 'conservedBtn':
+				return this.router.go('conserved-list');
 			case 'editConfigBtn':
 				return this.router.go('config-manager');
 			case 'manageUsersBtn':

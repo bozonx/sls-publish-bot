@@ -2,7 +2,7 @@ import { Bot } from 'grammy';
 import { PrismaClient } from '@prisma/client';
 import {
 	doFullFinalPublicationProcess,
-	convertDbScheduledToPubState,
+	convertDbPostToPubState,
 } from './helpers/publishHelpres.js';
 import { loadFromKv } from './io/KVio.js';
 import {
@@ -72,5 +72,5 @@ export async function handleScheduled(
 
 	// console.log('======= ITEM PUBLISHED', item);
 
-	await doFullFinalPublicationProcess(c, convertDbScheduledToPubState(item));
+	await doFullFinalPublicationProcess(c, convertDbPostToPubState(item));
 }

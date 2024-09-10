@@ -42,8 +42,8 @@ export default {
 		linkPreviewOnBtn: 'Включить предпросмотр ссылки',
 		pubConfirmBtn: 'Да, запланировать публикацию',
 		showPreviewBtn: 'Показать пост',
-		deleteSchuduledBtn: 'Удалить',
-		editSchuduledBtn: 'Редактировать',
+		deletePostBtn: 'Удалить',
+		editPostBtn: 'Редактировать',
 		deleteUserBtn: 'Удалить пользователя',
 		changeDateTimeBtn: 'Изменить дату и время публикации',
 		manageScheduledBtn: 'Управлять отложенными постами',
@@ -55,6 +55,10 @@ export default {
 		removeMediaBtn: 'Удалить медиа',
 		toListBtn: 'К списку',
 		saveBtn: 'Сохранить',
+		publishedBtn: 'Опубликованные',
+		conservedBtn: 'Консервы',
+		toScheduledBtn: 'В отложенные',
+		saveToScheduledBtn: 'Сохранить в отложенные',
 
 		// Menu descriptions
 		homeDescr:
@@ -75,6 +79,7 @@ export default {
 			'Выберете отложенную публикацию для управления\n\nЕсли стоит отметка "Просрочено!" то эта публикация уже не будет автоматически опубликована, в этом случае вам нужно изменить время публикации или опубликаовать вручную.\n\nЧасовая зона ${TIME_ZONE}',
 		scheduledEmptyListDescr: 'Нет отложенных публикаций',
 		scheduledItemDescr: 'Управление отложенной публикацией',
+		conservedListDescr: 'Консервы',
 		// Date and time
 		selectDateDescr:
 			'Выберете дату либо введите в формате DD.MM.\nЧасовой пояс ${TIME_ZONE}, сегодня',
@@ -100,11 +105,13 @@ export default {
 		tagWasDeleted: 'Тэг был удалён',
 		scheduledItemWasDeleted: 'Отложенный пост был удалён',
 		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
+		scheduledInfoMsgToAdminChannel: 'Пост добавлен в отложенные',
 		infoMsgToAdminChannel: 'Этот пост будет опубликован в канале',
 		wrongTime: 'Не верное время',
 		wrongDate: 'Не верная дата',
 		noContentMessage: 'Нет контента',
 		wasSuccessfullyScheduled: 'Пост сохранён в отложенные',
+		wasSuccessfullyConserved: 'Пост сохранён в консервы',
 		editedSavedSuccessfully: 'Отложенный пост сохранён',
 		sessionLost: 'Сессия была утеряна. Начните с начала',
 		dateIsPastMessage:

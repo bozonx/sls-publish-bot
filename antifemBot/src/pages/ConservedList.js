@@ -3,11 +3,6 @@ import { t, defineMenu } from '../helpers/helpers.js';
 import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
-	makeHumanRuDateCompact,
-	getTimeStr,
-	makeIsoLocaleDate,
-} from '../helpers/dateTimeHelpers.js';
-import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
@@ -16,7 +11,7 @@ import {
 	CTX_KEYS,
 } from '../constants.js';
 
-export class ScheduledList extends PageBase {
+export class ConservedList extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const items = await this.db.getAll(
@@ -28,19 +23,15 @@ export class ScheduledList extends PageBase {
 			},
 			{
 				[POST_KEYS.pubMsgId]: null,
-				NOT: {
-					[POST_KEYS.pubTimestampMinutes]: null,
-				},
+				[POST_KEYS.pubTimestampMinutes]: null,
 			},
-			[{ [POST_KEYS.pubTimestampMinutes]: 'asc' }],
+			// [{ [POST_KEYS.name]: 'asc' }],
 		);
 		// remove editing state
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
-			? applyStringTemplate(t(c, 'scheduledListDescr'), {
-					TIME_ZONE: t(c, 'msk'),
-				})
+			? t(c, 'conservedListDescr')
 			: t(c, 'scheduledEmptyListDescr');
 
 		return defineMenu([
@@ -67,7 +58,7 @@ export class ScheduledList extends PageBase {
 
 			this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbItem);
 
-			return this.router.go('scheduled-item');
+			return this.router.go('conserved-item');
 		}
 
 		switch (btnId) {
@@ -79,36 +70,8 @@ export class ScheduledList extends PageBase {
 	}
 
 	_makeItemLabel(dbItem) {
-		const c = this.router.c;
-		const itemName = dbItem[POST_KEYS.name];
-
-		if (!itemName) return t(c, 'itemHasNoContent');
-
-		const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
-		const curTimeMinutes = new Date().getTime() / 1000 / 60;
-		// if staled - use stale mark
-		let dateTimeLabel = t(this.router.c, 'staleMark');
-
-		if (
-			itemPubMinutes >
-			curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
-		) {
-			// means actual - else use date and time
-			dateTimeLabel =
-				makeHumanRuDateCompact(
-					this.c,
-					makeIsoLocaleDate(
-						itemPubMinutes * 60 * 1000,
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					),
-				) +
-				' ' +
-				getTimeStr(
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					itemPubMinutes * 60 * 1000,
-				);
-		}
-
-		return `${dateTimeLabel} ${itemName}`;
+		return dbItem[POST_KEYS.name]
+			? dbItem[POST_KEYS.name]
+			: t(this.router.c, 'itemHasNoContent');
 	}
 }

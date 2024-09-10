@@ -14,6 +14,9 @@ import { PubPostSetup } from './pages/PubPostSetup.js';
 import { PubConfirm } from './pages/PubConfirm.js';
 import { ScheduledList } from './pages/ScheduledList.js';
 import { ScheduledItem } from './pages/ScheduledItem.js';
+import { ConservedList } from './pages/ConservedList.js';
+import { ConservedItem } from './pages/ConservedItem.js';
+import { AlreadyPublishedList } from './pages/AlreadyPublishedList.js';
 
 export class BotIndex {
 	bot;
@@ -39,6 +42,9 @@ export class BotIndex {
 			'pub-confirm': PubConfirm,
 			'scheduled-list': ScheduledList,
 			'scheduled-item': ScheduledItem,
+			'conserved-list': ConservedList,
+			'conserved-item': ConservedItem,
+			'published-list': AlreadyPublishedList,
 		};
 
 		this.bot.use(routerMiddleware(routes));

@@ -19,7 +19,7 @@ import {
 	POST_KEYS,
 } from '../constants.js';
 
-export class ScheduledItem extends PageBase {
+export class ConservedItem extends PageBase {
 	async renderMenu() {
 		const item = this.state[EDIT_ITEM_NAME];
 
@@ -57,8 +57,8 @@ export class ScheduledItem extends PageBase {
 			],
 			[
 				{
-					id: 'changeDateTimeBtn',
-					label: t(c, 'changeDateTimeBtn'),
+					id: 'toScheduledBtn',
+					label: t(c, 'toScheduledBtn'),
 				},
 			],
 			[
@@ -88,7 +88,7 @@ export class ScheduledItem extends PageBase {
 		const c = this.router.c;
 
 		switch (btnId) {
-			case 'changeDateTimeBtn':
+			case 'toScheduled':
 				return this.router.go('pub-date');
 			case 'publicateNowBtn':
 				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);

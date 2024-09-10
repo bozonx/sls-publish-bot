@@ -1,6 +1,9 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
-import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
+import {
+	saveEditedScheduledPost,
+	createPost,
+} from '../helpers/publishHelpres.js';
 import {
 	TEMPLATE_NAMES,
 	PUB_KEYS,
@@ -69,6 +72,12 @@ export class PubPostSetup extends PubPageBase {
 			],
 			[
 				{
+					id: 'saveToScheduledBtn',
+					label: t(c, 'saveToScheduledBtn'),
+				},
+			],
+			[
+				{
 					id: 'backBtn',
 					label: t(c, 'backBtn'),
 				},
@@ -118,6 +127,12 @@ export class PubPostSetup extends PubPageBase {
 				return this.reload();
 			case 'linkPreviewSwitch':
 				return this.reload({ [PUB_KEYS.preview]: Boolean(payload) });
+			case 'saveToScheduledBtn':
+				const item = await createPost(c, this.state.pub, true);
+				await printPubToAdminChannel(this.router, item);
+				await this.reply(t(c, 'wasSuccessfullyConserved'));
+
+				return this.go(HOME_PAGE);
 			case 'backBtn':
 				return this.go('pub-tags');
 			case 'cancelBtn':

@@ -131,7 +131,7 @@ export async function saveEditedScheduledPost(router) {
 
 	delete router.state.pub;
 
-	const dbItem = convertPubStateToDbScheduled({
+	const dbItem = convertPubStateToDbPost({
 		...pubState,
 		dbRecord: {
 			...pubState.dbRecord,
@@ -151,19 +151,21 @@ export async function saveEditedScheduledPost(router) {
 	return router.go('scheduled-item');
 }
 
-export async function createScheduledPublication(c, pubState) {
-	const dbItem = convertPubStateToDbScheduled({
+export async function createPost(c, pubState, conserved = false) {
+	const dbItem = convertPubStateToDbPost({
 		...pubState,
 		dbRecord: {
 			...pubState[PUB_KEYS.dbRecord],
 			name: makeScheduledItemName(pubState),
 			socialMedia: DEFAULT_SOCIAL_MEDIA,
 			[POST_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
-			[POST_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
-				pubState[PUB_KEYS.date],
-				pubState[PUB_KEYS.time],
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-			),
+			[POST_KEYS.pubTimestampMinutes]: conserved
+				? null
+				: convertDateTimeToTsMinutes(
+						pubState[PUB_KEYS.date],
+						pubState[PUB_KEYS.time],
+						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					),
 		},
 	});
 
@@ -193,7 +195,7 @@ export function makeScheduledItemName(pubState) {
 	return '';
 }
 
-export function convertPubStateToDbScheduled(pubState) {
+export function convertPubStateToDbPost(pubState) {
 	const { dbRecord, ...payloadJson } = pubState;
 
 	return {
@@ -202,7 +204,7 @@ export function convertPubStateToDbScheduled(pubState) {
 	};
 }
 
-export function convertDbScheduledToPubState(dbItem) {
+export function convertDbPostToPubState(dbItem) {
 	const { payloadJson, ...dbRecord } = dbItem;
 
 	return {
@@ -213,17 +215,21 @@ export function convertDbScheduledToPubState(dbItem) {
 
 export async function printPubToAdminChannel(router, dbRecord) {
 	const c = router.c;
-	const item = convertDbScheduledToPubState(dbRecord);
+	const item = convertDbPostToPubState(dbRecord);
 	// publication
 	const { message_id } = await router.printFinalPost(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		item,
 	);
-	// const createdByUser = typeof  await router.db.getItem(DB_TABLE_NAMES.User, PUB_KEYS.createdBy)
+	const msg = dbRecord[POST_KEYS.pubTimestampMinutes]
+		? t(c, 'scheduledInfoMsgToAdminChannel')
+		: t(c, 'conservedInfoMsgToAdminChannel');
 	// info post
 	const infoMsgPostParams = {
-		[PUB_KEYS.date]: item[PUB_KEYS.date],
-		[PUB_KEYS.time]: item[PUB_KEYS.time],
+		[PUB_KEYS.date]:
+			dbRecord[POST_KEYS.pubTimestampMinutes] && item[PUB_KEYS.date],
+		[PUB_KEYS.time]:
+			dbRecord[POST_KEYS.pubTimestampMinutes] && item[PUB_KEYS.time],
 		[PUB_KEYS.dbRecord]: {
 			[POST_KEYS.createdByUserId]:
 				item[PUB_KEYS.dbRecord]?.[POST_KEYS.createdByUserId],
@@ -234,8 +240,7 @@ export async function printPubToAdminChannel(router, dbRecord) {
 
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
-		t(c, 'infoMsgToAdminChannel') +
-			`\n\n${await makeStatePreview(c, infoMsgPostParams)}`,
+		msg + `\n\n${await makeStatePreview(c, infoMsgPostParams)}`,
 		{ reply_parameters: { message_id } },
 	);
 }
