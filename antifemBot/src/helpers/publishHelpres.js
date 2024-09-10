@@ -111,21 +111,38 @@ export async function doFullFinalPublicationProcess(c, pubState) {
 		c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
 		pubState,
 	);
-	const dbItem = convertPubStateToDbPost({
-		...pubState,
-		[PUB_KEYS.date]: null,
-		[PUB_KEYS.time]: null,
-		dbRecord: {
-			...pubState.dbRecord,
+
+	return await updatePost(
+		c,
+		{
+			...pubState,
+			[PUB_KEYS.date]: null,
+			[PUB_KEYS.time]: null,
+		},
+		{
 			[POST_KEYS.pubMsgId]: String(message_id),
-			// [POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
 			[POST_KEYS.pubTimestampMinutes]: Math.floor(
 				new Date().getTime() / 1000 / 60,
 			),
+			// [POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
 		},
-	});
-	// save to db
-	return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
+	);
+
+	// const dbItem = convertPubStateToDbPost({
+	// 	...pubState,
+	// 	[PUB_KEYS.date]: null,
+	// 	[PUB_KEYS.time]: null,
+	// 	dbRecord: {
+	// 		...pubState.dbRecord,
+	// 		[POST_KEYS.pubMsgId]: String(message_id),
+	// 		// [POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+	// 		[POST_KEYS.pubTimestampMinutes]: Math.floor(
+	// 			new Date().getTime() / 1000 / 60,
+	// 		),
+	// 	},
+	// });
+	// // save to db
+	// return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
 }
 
 export async function deletePost(c, itemId) {
@@ -135,31 +152,57 @@ export async function deletePost(c, itemId) {
 // It is used in save button handlers
 export async function saveEditedScheduledPost(router) {
 	const c = router.c;
+	const returnUrl = router.state.editReturnUrl;
 
 	router.state[EDIT_ITEM_NAME] = router.state.pub;
 
 	const pubState = router.state[EDIT_ITEM_NAME];
 
 	delete router.state.pub;
+	delete router.state.returnUrl;
 
+	await updatePost(c, pubState, {
+		[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+	});
+
+	// const dbItem = convertPubStateToDbPost({
+	// 	...pubState,
+	// 	dbRecord: {
+	// 		...pubState.dbRecord,
+	// 		name: makeScheduledItemName(pubState),
+	// 		[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+	// 		[POST_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
+	// 			pubState[PUB_KEYS.date],
+	// 			pubState[PUB_KEYS.time],
+	// 			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+	// 		),
+	// 	},
+	// });
+	// // save to db
+	// await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
+	await router.reply(t(c, 'editedSavedSuccessfully'));
+
+	return router.go(returnUrl);
+}
+
+export async function updatePost(c, pubState, dbOverwrite) {
 	const dbItem = convertPubStateToDbPost({
 		...pubState,
 		dbRecord: {
 			...pubState.dbRecord,
 			name: makeScheduledItemName(pubState),
-			[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
-			[POST_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
-				pubState[PUB_KEYS.date],
-				pubState[PUB_KEYS.time],
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-			),
+			[POST_KEYS.pubTimestampMinutes]: pubState[PUB_KEYS.date]
+				? convertDateTimeToTsMinutes(
+						pubState[PUB_KEYS.date],
+						pubState[PUB_KEYS.time],
+						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					)
+				: null,
+			...dbOverwrite,
 		},
 	});
 	// save to db
-	await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
-	await router.reply(t(c, 'editedSavedSuccessfully'));
-
-	return router.go('scheduled-item');
+	return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
 }
 
 export async function createPost(c, pubState, conserved = false) {

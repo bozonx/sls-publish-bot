@@ -89,8 +89,8 @@ export class ConservedItem extends PageBase {
 		const c = this.router.c;
 
 		switch (btnId) {
-			case 'toScheduled':
-				this.state.editReturnUrl = 'conserved-item';
+			case 'toScheduledBtn':
+				this.state.editReturnUrl = 'scheduled-item';
 
 				return this.router.go('pub-date');
 			case 'editPostBtn':

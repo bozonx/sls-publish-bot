@@ -5,10 +5,7 @@ import {
 	makeStatePreview,
 	isUserAdmin,
 } from '../helpers/helpers.js';
-import {
-	doFullFinalPublicationProcess,
-	deletePost,
-} from '../helpers/publishHelpres.js';
+import { deletePost } from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
 	HOME_PAGE,

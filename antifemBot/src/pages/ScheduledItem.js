@@ -8,6 +8,8 @@ import {
 import {
 	doFullFinalPublicationProcess,
 	deletePost,
+	updatePost,
+	convertDbPostToPubState,
 } from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
@@ -58,6 +60,10 @@ export class ScheduledItem extends PageBase {
 			],
 			[
 				{
+					id: 'toConservedBtn',
+					label: t(c, 'toConservedBtn'),
+				},
+				{
 					id: 'changeDateTimeBtn',
 					label: t(c, 'changeDateTimeBtn'),
 				},
@@ -89,6 +95,16 @@ export class ScheduledItem extends PageBase {
 		const c = this.router.c;
 
 		switch (btnId) {
+			case 'toConservedBtn':
+				const dbRes = await updatePost(c, {
+					...this.state[EDIT_ITEM_NAME],
+					[PUB_KEYS.date]: null,
+					[PUB_KEYS.time]: null,
+				});
+
+				this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbRes);
+
+				return this.router.go('conserved-item');
 			case 'changeDateTimeBtn':
 				this.state.editReturnUrl = 'scheduled-item';
 

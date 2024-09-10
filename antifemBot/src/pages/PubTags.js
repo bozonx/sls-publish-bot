@@ -87,7 +87,8 @@ export class PubTags extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-content');
 			case 'cancelBtn':
-				if (this.state[EDIT_ITEM_NAME]) return this.go('scheduled-item');
+				if (this.state[EDIT_ITEM_NAME])
+					return this.go(this.state.editReturnUrl);
 
 				return this.go(HOME_PAGE);
 			case 'nextBtn':

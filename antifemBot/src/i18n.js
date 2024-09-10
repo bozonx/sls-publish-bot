@@ -59,6 +59,7 @@ export default {
 		conservedBtn: 'Консервы',
 		toScheduledBtn: 'В отложенные',
 		saveToConservedBtn: 'Сохранить в консервы',
+		toConservedBtn: 'В консервы',
 
 		// Menu descriptions
 		homeDescr:
@@ -81,9 +82,10 @@ export default {
 		scheduledItemDescr: 'Управление отложенной публикацией',
 		conservedListDescr: 'Консервы',
 		conservedEmptyListDescr: 'Нет консерв',
+		scheduledItemDescr: 'Управление консервой',
 		publishedListDescr: 'Опубликованные посты',
 		publishedEmptyListDescr: 'Ничего пока не опубликовано',
-		publishedItemDescr: 'Опубликованные',
+		publishedItemDescr: 'Управление опубликованным постом',
 		// Date and time
 		selectDateDescr:
 			'Выберете дату либо введите в формате DD.MM.\nЧасовой пояс ${TIME_ZONE}, сегодня',

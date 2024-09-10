@@ -8,7 +8,7 @@ export class DbCrud {
 	}
 
 	async getAll(tableName, select, where, orderBy) {
-		return await this.prisma[tableName].findMany({
+		return this.prisma[tableName].findMany({
 			where,
 			select,
 			orderBy,
@@ -16,7 +16,7 @@ export class DbCrud {
 	}
 
 	async getItem(tableName, itemId, select, where) {
-		return await this.prisma[tableName].findUnique({
+		return this.prisma[tableName].findUnique({
 			where: {
 				id: itemId,
 				...where,
@@ -26,13 +26,13 @@ export class DbCrud {
 	}
 
 	async createItem(tableName, data) {
-		return await this.prisma[tableName].create({ data });
+		return this.prisma[tableName].create({ data });
 	}
 
 	async updateItem(tableName, fullData, where) {
 		const { id, ...data } = fullData;
 
-		return await this.prisma[tableName].update({
+		return this.prisma[tableName].update({
 			where: {
 				id,
 				...where,
@@ -42,7 +42,7 @@ export class DbCrud {
 	}
 
 	async deleteItem(tableName, itemId, where) {
-		return await this.prisma[tableName].delete({
+		return this.prisma[tableName].delete({
 			where: {
 				id: itemId,
 				...where,

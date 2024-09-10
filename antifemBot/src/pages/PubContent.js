@@ -125,7 +125,8 @@ export class PubContent extends PubPageBase {
 				delete this.state.replaceMode;
 				delete this.state.mdV1Mode;
 
-				if (this.state[EDIT_ITEM_NAME]) return this.go('scheduled-item');
+				if (this.state[EDIT_ITEM_NAME])
+					return this.go(this.state.editReturnUrl);
 
 				return this.go(HOME_PAGE);
 			case 'nextBtn':
