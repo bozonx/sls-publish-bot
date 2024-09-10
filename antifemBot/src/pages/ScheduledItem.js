@@ -40,6 +40,7 @@ export class ScheduledItem extends PageBase {
 			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub];
 		// do delete pub state in case of cancel btn pressed
 		delete this.state.pub;
+		delete this.state.editReturnUrl;
 
 		this.text =
 			t(c, 'scheduledItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
@@ -89,7 +90,13 @@ export class ScheduledItem extends PageBase {
 
 		switch (btnId) {
 			case 'changeDateTimeBtn':
+				this.state.editReturnUrl = 'scheduled-item';
+
 				return this.router.go('pub-date');
+			case 'editPostBtn':
+				this.state.editReturnUrl = 'scheduled-item';
+
+				return this.router.go('pub-content');
 			case 'publicateNowBtn':
 				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
 				await this.reply(
@@ -109,8 +116,6 @@ export class ScheduledItem extends PageBase {
 				);
 
 				return this.router.go('scheduled-list');
-			case 'editPostBtn':
-				return this.router.go('pub-content');
 			case 'showPreviewBtn':
 				await this.printFinalPost(
 					this.me[USER_KEYS.tgChatId],

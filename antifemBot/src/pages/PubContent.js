@@ -34,6 +34,7 @@ export class PubContent extends PubPageBase {
 
 		const hasMedia = Boolean(this.state.pub[PUB_KEYS.media]?.length);
 		const haveAnyContent = Boolean(this.state.pub[PUB_KEYS.text] || hasMedia);
+		const editMode = Boolean(this.state[EDIT_ITEM_NAME]);
 
 		this.text = await this._makeMenuText(haveAnyContent);
 
@@ -87,7 +88,7 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-					this.state[EDIT_ITEM_NAME] && {
+					editMode && {
 						id: 'saveBtn',
 						label: t(c, 'saveBtn'),
 					},

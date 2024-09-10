@@ -105,16 +105,27 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 	return omitUndefined(state);
 }
 
-export async function doFullFinalPublicationProcess(c, item) {
-	const msg = await printFinalPost(
+export async function doFullFinalPublicationProcess(c, pubState) {
+	const { message_id } = await printFinalPost(
 		c,
 		c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
-		item,
+		pubState,
 	);
-
-	await deleteScheduledPost(c, item[PUB_KEYS.dbRecord][POST_KEYS.id]);
-
-	return msg;
+	const dbItem = convertPubStateToDbPost({
+		...pubState,
+		[PUB_KEYS.date]: null,
+		[PUB_KEYS.time]: null,
+		dbRecord: {
+			...pubState.dbRecord,
+			[POST_KEYS.pubMsgId]: String(message_id),
+			// [POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+			[POST_KEYS.pubTimestampMinutes]: Math.floor(
+				new Date().getTime() / 1000 / 60,
+			),
+		},
+	});
+	// save to db
+	return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
 }
 
 export async function deleteScheduledPost(c, itemId) {

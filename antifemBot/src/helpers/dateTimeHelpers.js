@@ -48,10 +48,10 @@ export function getShortWeekDay(isoDateStr) {
 }
 
 export function convertDateTimeToTsMinutes(date, time, timeZone) {
-	return (
+	return Math.floor(
 		new Date(makeIsoDateFromPubState({ date, time }) + timeZone).getTime() /
-		1000 /
-		60
+			1000 /
+			60,
 	);
 }
 

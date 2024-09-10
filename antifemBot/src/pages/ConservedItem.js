@@ -40,6 +40,7 @@ export class ConservedItem extends PageBase {
 			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub];
 		// do delete pub state in case of cancel btn pressed
 		delete this.state.pub;
+		delete this.state.editReturnUrl;
 
 		this.text =
 			t(c, 'scheduledItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
@@ -89,28 +90,32 @@ export class ConservedItem extends PageBase {
 
 		switch (btnId) {
 			case 'toScheduled':
+				this.state.editReturnUrl = 'conserved-item';
+
 				return this.router.go('pub-date');
+			case 'editPostBtn':
+				this.state.editReturnUrl = 'conserved-item';
+
+				return this.router.go('pub-content');
 			case 'publicateNowBtn':
 				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
 				await this.reply(
-					t(c, 'scheduledItemWasPublished') +
+					t(c, 'conservedItemWasPublished') +
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('scheduled-list');
+				return this.router.go('conserved-list');
 			case 'deletePostBtn':
 				await deleteScheduledPost(
 					c,
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.id],
 				);
 				await this.reply(
-					t(c, 'scheduledItemWasDeleted') +
+					t(c, 'conservedItemWasDeleted') +
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('scheduled-list');
-			case 'editPostBtn':
-				return this.router.go('pub-content');
+				return this.router.go('conserved-list');
 			case 'showPreviewBtn':
 				await this.printFinalPost(
 					this.me[USER_KEYS.tgChatId],
@@ -119,7 +124,7 @@ export class ConservedItem extends PageBase {
 
 				return this.router.reload();
 			case 'toListBtn':
-				return this.router.go('scheduled-list');
+				return this.router.go('conserved-list');
 			case 'toHomeBtn':
 				return this.router.go(HOME_PAGE);
 			default:

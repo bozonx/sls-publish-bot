@@ -105,6 +105,8 @@ export default {
 		tagWasDeleted: 'Тэг был удалён',
 		scheduledItemWasDeleted: 'Отложенный пост был удалён',
 		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
+		conservedItemWasPublished: 'Консерва была успешно опубликована',
+		conservedItemWasDeleted: 'Консерва была удалена',
 		scheduledInfoMsgToAdminChannel: 'Пост добавлен в отложенные',
 		conservedInfoMsgToAdminChannel: 'Пост добавлен в консервы',
 		wrongTime: 'Не верное время',
