@@ -3,6 +3,7 @@ import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
 import {
 	saveEditedScheduledPost,
 	createPost,
+	printPubToAdminChannel,
 } from '../helpers/publishHelpres.js';
 import {
 	TEMPLATE_NAMES,
@@ -70,10 +71,10 @@ export class PubPostSetup extends PubPageBase {
 					label: t(c, 'showPreviewBtn'),
 				},
 			],
-			[
+			!this.state[EDIT_ITEM_NAME] && [
 				{
-					id: 'saveToScheduledBtn',
-					label: t(c, 'saveToScheduledBtn'),
+					id: 'saveToConservedBtn',
+					label: t(c, 'saveToConservedBtn'),
 				},
 			],
 			[
@@ -99,6 +100,8 @@ export class PubPostSetup extends PubPageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
+		const c = this.router.c;
+
 		if (btnId === 'TEMPLATE') {
 			return this.reload({
 				[PUB_KEYS.template]: payload,
@@ -127,7 +130,7 @@ export class PubPostSetup extends PubPageBase {
 				return this.reload();
 			case 'linkPreviewSwitch':
 				return this.reload({ [PUB_KEYS.preview]: Boolean(payload) });
-			case 'saveToScheduledBtn':
+			case 'saveToConservedBtn':
 				const item = await createPost(c, this.state.pub, true);
 				await printPubToAdminChannel(this.router, item);
 				await this.reply(t(c, 'wasSuccessfullyConserved'));

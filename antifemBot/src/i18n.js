@@ -58,7 +58,7 @@ export default {
 		publishedBtn: 'Опубликованные',
 		conservedBtn: 'Консервы',
 		toScheduledBtn: 'В отложенные',
-		saveToScheduledBtn: 'Сохранить в отложенные',
+		saveToConservedBtn: 'Сохранить в консервы',
 
 		// Menu descriptions
 		homeDescr:
@@ -106,7 +106,7 @@ export default {
 		scheduledItemWasDeleted: 'Отложенный пост был удалён',
 		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
 		scheduledInfoMsgToAdminChannel: 'Пост добавлен в отложенные',
-		infoMsgToAdminChannel: 'Этот пост будет опубликован в канале',
+		conservedInfoMsgToAdminChannel: 'Пост добавлен в консервы',
 		wrongTime: 'Не верное время',
 		wrongDate: 'Не верная дата',
 		noContentMessage: 'Нет контента',
