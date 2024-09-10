@@ -17,9 +17,10 @@ import {
 	USER_CFG_KEYS,
 	USER_PERMISSIONS_KEYS,
 	POST_KEYS,
+	CTX_KEYS,
 } from '../constants.js';
 
-export class ConservedItem extends PageBase {
+export class AlreadyPublishedItem extends PageBase {
 	async renderMenu() {
 		const item = this.state[EDIT_ITEM_NAME];
 
@@ -43,7 +44,7 @@ export class ConservedItem extends PageBase {
 		delete this.state.editReturnUrl;
 
 		this.text =
-			t(c, 'scheduledItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
+			t(c, 'publishedItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
 
 		return defineMenu([
 			[
@@ -54,22 +55,6 @@ export class ConservedItem extends PageBase {
 				allowEdit && {
 					id: 'editPostBtn',
 					label: t(c, 'editPostBtn'),
-				},
-			],
-			[
-				{
-					id: 'toScheduledBtn',
-					label: t(c, 'toScheduledBtn'),
-				},
-			],
-			[
-				{
-					id: 'publicateNowBtn',
-					label: t(c, 'publicateNowBtn'),
-				},
-				{
-					id: 'showPreviewBtn',
-					label: t(c, 'showPreviewBtn'),
 				},
 			],
 			[
@@ -89,42 +74,32 @@ export class ConservedItem extends PageBase {
 		const c = this.router.c;
 
 		switch (btnId) {
-			case 'toScheduled':
-				this.state.editReturnUrl = 'conserved-item';
-
-				return this.router.go('pub-date');
 			case 'editPostBtn':
-				this.state.editReturnUrl = 'conserved-item';
+				this.state.editReturnUrl = 'published-item';
 
 				return this.router.go('pub-content');
-			case 'publicateNowBtn':
-				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
-				await this.reply(
-					t(c, 'conservedItemWasPublished') +
-						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+			case 'deletePostBtn':
+				const msgId =
+					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId];
+
+				await c.api.deleteMessage(
+					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+					Number(msgId),
 				);
 
-				return this.router.go('conserved-list');
-			case 'deletePostBtn':
 				await deletePost(
 					c,
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.id],
 				);
+
 				await this.reply(
-					t(c, 'conservedItemWasDeleted') +
+					t(c, 'publishedItemWasDeleted') +
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('conserved-list');
-			case 'showPreviewBtn':
-				await this.printFinalPost(
-					this.me[USER_KEYS.tgChatId],
-					this.state[EDIT_ITEM_NAME],
-				);
-
-				return this.router.reload();
+				return this.router.go('published-list');
 			case 'toListBtn':
-				return this.router.go('conserved-list');
+				return this.router.go('published-list');
 			case 'toHomeBtn':
 				return this.router.go(HOME_PAGE);
 			default:

@@ -26,17 +26,21 @@ export class AlreadyPublishedList extends PageBase {
 				[POST_KEYS.name]: true,
 				[POST_KEYS.pubTimestampMinutes]: true,
 			},
-			undefined,
+			{
+				NOT: {
+					[POST_KEYS.pubMsgId]: null,
+				},
+			},
 			[{ [POST_KEYS.pubTimestampMinutes]: 'asc' }],
 		);
 		// remove editing state
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
-			? applyStringTemplate(t(c, 'scheduledListDescr'), {
+			? applyStringTemplate(t(c, 'publishedListDescr'), {
 					TIME_ZONE: t(c, 'msk'),
 				})
-			: t(c, 'scheduledEmptyListDescr');
+			: t(c, 'publishedEmptyListDescr');
 
 		return defineMenu([
 			...items.map((i) => [
@@ -62,7 +66,7 @@ export class AlreadyPublishedList extends PageBase {
 
 			this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbItem);
 
-			return this.router.go('scheduled-item');
+			return this.router.go('published-item');
 		}
 
 		switch (btnId) {
@@ -74,6 +78,7 @@ export class AlreadyPublishedList extends PageBase {
 	}
 
 	_makeItemLabel(dbItem) {
+		// TODO: выводить дату
 		return dbItem[POST_KEYS.name]
 			? dbItem[POST_KEYS.name]
 			: t(this.router.c, 'itemHasNoContent');

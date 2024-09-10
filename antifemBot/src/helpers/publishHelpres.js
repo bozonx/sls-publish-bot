@@ -128,7 +128,7 @@ export async function doFullFinalPublicationProcess(c, pubState) {
 	return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
 }
 
-export async function deleteScheduledPost(c, itemId) {
+export async function deletePost(c, itemId) {
 	return await c.ctx[CTX_KEYS.DB_CRUD].deleteItem(DB_TABLE_NAMES.Post, itemId);
 }
 

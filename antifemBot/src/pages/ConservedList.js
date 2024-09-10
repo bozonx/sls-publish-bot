@@ -32,7 +32,7 @@ export class ConservedList extends PageBase {
 
 		this.text = items.length
 			? t(c, 'conservedListDescr')
-			: t(c, 'scheduledEmptyListDescr');
+			: t(c, 'conservedEmptyListDescr');
 
 		return defineMenu([
 			...items.map((i) => [

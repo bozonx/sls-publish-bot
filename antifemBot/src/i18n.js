@@ -80,6 +80,10 @@ export default {
 		scheduledEmptyListDescr: 'Нет отложенных публикаций',
 		scheduledItemDescr: 'Управление отложенной публикацией',
 		conservedListDescr: 'Консервы',
+		conservedEmptyListDescr: 'Нет консерв',
+		publishedListDescr: 'Опубликованные посты',
+		publishedEmptyListDescr: 'Ничего пока не опубликовано',
+		publishedItemDescr: 'Опубликованные',
 		// Date and time
 		selectDateDescr:
 			'Выберете дату либо введите в формате DD.MM.\nЧасовой пояс ${TIME_ZONE}, сегодня',
@@ -107,6 +111,7 @@ export default {
 		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
 		conservedItemWasPublished: 'Консерва была успешно опубликована',
 		conservedItemWasDeleted: 'Консерва была удалена',
+		publishedItemWasDeleted: 'Опубликованный пост был удалён из канала',
 		scheduledInfoMsgToAdminChannel: 'Пост добавлен в отложенные',
 		conservedInfoMsgToAdminChannel: 'Пост добавлен в консервы',
 		wrongTime: 'Не верное время',

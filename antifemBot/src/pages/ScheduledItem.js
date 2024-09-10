@@ -7,7 +7,7 @@ import {
 } from '../helpers/helpers.js';
 import {
 	doFullFinalPublicationProcess,
-	deleteScheduledPost,
+	deletePost,
 } from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
@@ -106,7 +106,7 @@ export class ScheduledItem extends PageBase {
 
 				return this.router.go('scheduled-list');
 			case 'deletePostBtn':
-				await deleteScheduledPost(
+				await deletePost(
 					c,
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.id],
 				);
