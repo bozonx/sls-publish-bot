@@ -1,7 +1,3 @@
-DROP TABLE IF EXISTS Tag;
-DROP TABLE IF EXISTS PubScheduled;
-DROP TABLE IF EXISTS User;
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -21,18 +17,18 @@ CREATE TABLE "Tag" (
 );
 
 -- CreateTable
-CREATE TABLE "PubScheduled" (
+CREATE TABLE "Post" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "socialMedia" TEXT,
     "pubTimestampMinutes" INTEGER,
+    "pubMsgId" TEXT,
     "payloadJson" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "createdByUserId" INTEGER NOT NULL,
     "updatedByUserId" INTEGER,
-    CONSTRAINT "PubScheduled_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "PubScheduled_updatedByUserId_fkey" FOREIGN KEY ("updatedByUserId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT "Post_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex
@@ -40,4 +36,3 @@ CREATE UNIQUE INDEX "User_tgUserId_key" ON "User"("tgUserId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_tgChatId_key" ON "User"("tgChatId");
-

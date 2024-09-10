@@ -12,7 +12,7 @@ import {
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
-	PUB_SCHEDULED_KEYS,
+	POST_KEYS,
 	CTX_KEYS,
 } from '../constants.js';
 
@@ -20,14 +20,14 @@ export class ScheduledList extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const items = await this.db.getAll(
-			DB_TABLE_NAMES.PubScheduled,
+			DB_TABLE_NAMES.Post,
 			{
-				[PUB_SCHEDULED_KEYS.id]: true,
-				[PUB_SCHEDULED_KEYS.name]: true,
-				[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: true,
+				[POST_KEYS.id]: true,
+				[POST_KEYS.name]: true,
+				[POST_KEYS.pubTimestampMinutes]: true,
 			},
 			undefined,
-			[{ [PUB_SCHEDULED_KEYS.pubTimestampMinutes]: 'asc' }],
+			[{ [POST_KEYS.pubTimestampMinutes]: 'asc' }],
 		);
 		// remove editing state
 		delete this.state[EDIT_ITEM_NAME];
@@ -43,7 +43,7 @@ export class ScheduledList extends PageBase {
 				{
 					id: DEFAULT_BTN_ITEM_ID,
 					label: this._makeItemLabel(i),
-					payload: i[PUB_SCHEDULED_KEYS.id],
+					payload: i[POST_KEYS.id],
 				},
 			]),
 			[
@@ -58,7 +58,7 @@ export class ScheduledList extends PageBase {
 	async onButtonPress(btnId, payload) {
 		if (btnId === DEFAULT_BTN_ITEM_ID) {
 			const itemId = Number(payload);
-			const dbItem = await this.db.getItem(DB_TABLE_NAMES.PubScheduled, itemId);
+			const dbItem = await this.db.getItem(DB_TABLE_NAMES.Post, itemId);
 
 			this.state[EDIT_ITEM_NAME] = convertDbScheduledToPubState(dbItem);
 
@@ -75,11 +75,11 @@ export class ScheduledList extends PageBase {
 
 	_makeItemLabel(dbItem) {
 		const c = this.router.c;
-		const itemName = dbItem[PUB_SCHEDULED_KEYS.name];
+		const itemName = dbItem[POST_KEYS.name];
 
 		if (!itemName) return t(c, 'itemHasNoContent');
 
-		const itemPubMinutes = dbItem[PUB_SCHEDULED_KEYS.pubTimestampMinutes];
+		const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
 		const curTimeMinutes = new Date().getTime() / 1000 / 60;
 		// if staled - use stale mark
 		let dateTimeLabel = t(this.router.c, 'staleMark');

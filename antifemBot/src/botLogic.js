@@ -89,7 +89,9 @@ export async function handleStart(c) {
 	if (c.ctx[CTX_KEYS.me]) return c.router.start();
 	// else on first initialization write main admin to the DB
 	else if (c.msg?.from.id === Number(c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID])) {
-		const initialAdmin = makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID);
+		const initialAdmin = makeInitialAdminUser(
+			c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
+		);
 
 		c.ctx[CTX_KEYS.me] = await c.ctx[CTX_KEYS.DB_CRUD].createItem(
 			DB_TABLE_NAMES.User,

@@ -11,7 +11,7 @@ import {
 	USER_KEYS,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
-	PUB_SCHEDULED_KEYS,
+	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
 	MENU_ITEM_LABEL_LENGTH,
 } from '../constants.js';
@@ -112,16 +112,13 @@ export async function doFullFinalPublicationProcess(c, item) {
 		item,
 	);
 
-	await deleteScheduledPost(c, item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.id]);
+	await deleteScheduledPost(c, item[PUB_KEYS.dbRecord][POST_KEYS.id]);
 
 	return msg;
 }
 
 export async function deleteScheduledPost(c, itemId) {
-	return await c.ctx[CTX_KEYS.DB_CRUD].deleteItem(
-		DB_TABLE_NAMES.PubScheduled,
-		itemId,
-	);
+	return await c.ctx[CTX_KEYS.DB_CRUD].deleteItem(DB_TABLE_NAMES.Post, itemId);
 }
 
 // It is used in save button handlers
@@ -139,8 +136,8 @@ export async function saveEditedScheduledPost(router) {
 		dbRecord: {
 			...pubState.dbRecord,
 			name: makeScheduledItemName(pubState),
-			[PUB_SCHEDULED_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
-			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
+			[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+			[POST_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
 				pubState[PUB_KEYS.date],
 				pubState[PUB_KEYS.time],
 				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
@@ -148,7 +145,7 @@ export async function saveEditedScheduledPost(router) {
 		},
 	});
 	// save to db
-	await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.PubScheduled, dbItem);
+	await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
 	await router.reply(t(c, 'editedSavedSuccessfully'));
 
 	return router.go('scheduled-item');
@@ -161,8 +158,8 @@ export async function createScheduledPublication(c, pubState) {
 			...pubState[PUB_KEYS.dbRecord],
 			name: makeScheduledItemName(pubState),
 			socialMedia: DEFAULT_SOCIAL_MEDIA,
-			[PUB_SCHEDULED_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
-			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
+			[POST_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+			[POST_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
 				pubState[PUB_KEYS.date],
 				pubState[PUB_KEYS.time],
 				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
@@ -170,10 +167,7 @@ export async function createScheduledPublication(c, pubState) {
 		},
 	});
 
-	return await c.ctx[CTX_KEYS.DB_CRUD].createItem(
-		DB_TABLE_NAMES.PubScheduled,
-		dbItem,
-	);
+	return await c.ctx[CTX_KEYS.DB_CRUD].createItem(DB_TABLE_NAMES.Post, dbItem);
 }
 
 export function makeScheduledItemName(pubState) {
@@ -231,10 +225,10 @@ export async function printPubToAdminChannel(router, dbRecord) {
 		[PUB_KEYS.date]: item[PUB_KEYS.date],
 		[PUB_KEYS.time]: item[PUB_KEYS.time],
 		[PUB_KEYS.dbRecord]: {
-			[PUB_SCHEDULED_KEYS.createdByUserId]:
-				item[PUB_KEYS.dbRecord]?.[PUB_SCHEDULED_KEYS.createdByUserId],
-			[PUB_SCHEDULED_KEYS.updatedByUserId]:
-				item[PUB_KEYS.dbRecord]?.[PUB_SCHEDULED_KEYS.updatedByUserId],
+			[POST_KEYS.createdByUserId]:
+				item[PUB_KEYS.dbRecord]?.[POST_KEYS.createdByUserId],
+			[POST_KEYS.updatedByUserId]:
+				item[PUB_KEYS.dbRecord]?.[POST_KEYS.updatedByUserId],
 		},
 	};
 

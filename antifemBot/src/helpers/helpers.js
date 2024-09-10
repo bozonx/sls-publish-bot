@@ -10,7 +10,7 @@ import {
 	USER_CFG_KEYS,
 	USER_PERMISSIONS_KEYS,
 	DB_TABLE_NAMES,
-	PUB_SCHEDULED_KEYS,
+	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
 } from '../constants.js';
 import { makeHumanRuDate } from './dateTimeHelpers.js';
@@ -37,19 +37,17 @@ export async function makeStatePreview(c, state = {}) {
 	let textLength = state[PUB_KEYS.text]?.length || 0;
 	let postType = 'text';
 	const createdByUser =
-		typeof state[PUB_KEYS.dbRecord]?.[PUB_SCHEDULED_KEYS.createdByUserId] ===
-			'number' &&
+		typeof state[PUB_KEYS.dbRecord]?.[POST_KEYS.createdByUserId] === 'number' &&
 		(await c.ctx[CTX_KEYS.DB_CRUD].getItem(
 			DB_TABLE_NAMES.User,
-			state[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId],
+			state[PUB_KEYS.dbRecord][POST_KEYS.createdByUserId],
 			{ [USER_KEYS.name]: true },
 		));
 	const updatedByUser =
-		typeof state[PUB_KEYS.dbRecord]?.[PUB_SCHEDULED_KEYS.updatedByUserId] ===
-			'number' &&
+		typeof state[PUB_KEYS.dbRecord]?.[POST_KEYS.updatedByUserId] === 'number' &&
 		(await c.ctx[CTX_KEYS.DB_CRUD].getItem(
 			DB_TABLE_NAMES.User,
-			state[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.updatedByUserId],
+			state[PUB_KEYS.dbRecord][POST_KEYS.updatedByUserId],
 			{ [USER_KEYS.name]: true },
 		));
 

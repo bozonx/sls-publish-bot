@@ -33,7 +33,7 @@ export const CTX_KEYS = {
 export const DB_TABLE_NAMES = {
 	User: 'User',
 	Tag: 'Tag',
-	PubScheduled: 'PubScheduled',
+	Post: 'Post',
 };
 export const USER_KEYS = {
 	id: 'id',
@@ -56,11 +56,12 @@ export const TAG_KEYS = {
 	name: 'name',
 	socialMedia: 'socialMedia',
 };
-export const PUB_SCHEDULED_KEYS = {
+export const POST_KEYS = {
 	id: 'id',
 	name: 'name',
 	socialMedia: 'socialMedia',
 	pubTimestampMinutes: 'pubTimestampMinutes',
+	pubMsgId: 'pubMsgId',
 	createdByUserId: 'createdByUserId',
 	updatedByUserId: 'updatedByUserId',
 	payloadJson: 'payloadJson',

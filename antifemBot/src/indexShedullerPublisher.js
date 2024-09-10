@@ -10,7 +10,7 @@ import {
 	KV_KEYS,
 	PUBLICATION_ADD_NOW_SEC,
 	DB_TABLE_NAMES,
-	PUB_SCHEDULED_KEYS,
+	POST_KEYS,
 } from './constants.js';
 
 export async function handleScheduled(
@@ -23,9 +23,9 @@ export async function handleScheduled(
 	const prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
 	const curTimeMinutes = new Date().getTime() / 1000 / 60;
 	// const curTimeMinutes = 28768620; // new Date('2024-09-12T08:00+03:00').getTime() / 1000 / 60
-	const [item] = await prisma[DB_TABLE_NAMES.PubScheduled].findMany({
+	const [item] = await prisma[DB_TABLE_NAMES.Post].findMany({
 		where: {
-			[PUB_SCHEDULED_KEYS.pubTimestampMinutes]: {
+			[POST_KEYS.pubTimestampMinutes]: {
 				// get items shich are a bit stale
 				gte: curTimeMinutes - PUBLISHING_MINUS_MINUTES,
 				// get items from very near future
@@ -33,7 +33,7 @@ export async function handleScheduled(
 			},
 		},
 		// sort from small to high value
-		orderBy: [{ [PUB_SCHEDULED_KEYS.pubTimestampMinutes]: 'asc' }],
+		orderBy: [{ [POST_KEYS.pubTimestampMinutes]: 'asc' }],
 		take: 1,
 	});
 	// return if nothing found

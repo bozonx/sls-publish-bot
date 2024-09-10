@@ -1,5 +1,5 @@
 // DROP TABLE IF EXISTS Tag;
-// DROP TABLE IF EXISTS PubScheduled;
+// DROP TABLE IF EXISTS Post;
 // DROP TABLE IF EXISTS User;
 
 generator client {
@@ -13,15 +13,14 @@ datasource db {
 }
 
 model User {
-  id                     Int            @id @default(autoincrement())
-  tgUserId               String         @unique
-  tgChatId               String         @unique
-  name                   String
-  cfg                    String
-  createdAt              DateTime       @default(now())
-  updatedAt              DateTime       @updatedAt
-  scheduledCreatedByUser PubScheduled[] @relation("ScheduledCreatedByUser")
-  scheduletUpdatedByUser PubScheduled[] @relation("ScheduledUpdatedByUser")
+  id        Int      @id @default(autoincrement())
+  tgUserId  String   @unique
+  tgChatId  String   @unique
+  name      String
+  cfg       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Post      Post[]
 }
 
 model Tag {
@@ -30,16 +29,18 @@ model Tag {
   socialMedia String?
 }
 
-model PubScheduled {
+model Post {
   id                  Int      @id @default(autoincrement())
   name                String
   socialMedia         String?
   pubTimestampMinutes Int?
+  // message_id in the tg channel
+  pubMsgId            String?
   payloadJson         String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
-  createdByUser       User     @relation("ScheduledCreatedByUser", fields: [createdByUserId], references: [id])
+  // createdByUser       User     @relation("ScheduledCreatedByUser", fields: [createdByUserId], references: [id])
+  createdByUser       User     @relation(fields: [createdByUserId], references: [id])
   createdByUserId     Int
-  updatedByUser       User?    @relation("ScheduledUpdatedByUser", fields: [updatedByUserId], references: [id])
   updatedByUserId     Int?
 }

@@ -16,7 +16,7 @@ import {
 	PUB_KEYS,
 	USER_CFG_KEYS,
 	USER_PERMISSIONS_KEYS,
-	PUB_SCHEDULED_KEYS,
+	POST_KEYS,
 } from '../constants.js';
 
 export class ScheduledItem extends PageBase {
@@ -30,7 +30,7 @@ export class ScheduledItem extends PageBase {
 		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];
 		const isAdminOrMyItem =
 			isAdmin ||
-			item[PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.createdByUserId] ===
+			item[PUB_KEYS.dbRecord][POST_KEYS.createdByUserId] ===
 				this.me[USER_KEYS.id];
 		const allowEdit =
 			isAdminOrMyItem ||
@@ -101,7 +101,7 @@ export class ScheduledItem extends PageBase {
 			case 'deleteSchuduledBtn':
 				await deleteScheduledPost(
 					c,
-					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][PUB_SCHEDULED_KEYS.id],
+					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.id],
 				);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
