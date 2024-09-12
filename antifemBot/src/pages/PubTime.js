@@ -1,5 +1,10 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
+import {
+	t,
+	makeStatePreview,
+	makeListOfScheduledForDescr,
+	defineMenu,
+} from '../helpers/helpers.js';
 import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import {
 	make2SignDigitStr,
@@ -28,16 +33,19 @@ const PAST_CHECK_ADDITIONAL_MINUTES = 10;
 export class PubTime extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		const descr = applyStringTemplate(t(c, 'selectHourDescr'), {
-			TIME_ZONE: t(c, 'msk'),
-			CURRENT_TIME: getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
-		});
 
 		this.state.pub = {
 			[PUB_KEYS.time]: DEFAULT_PUB_TIME,
 			...this.state.pub,
 		};
-		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${descr}`;
+		this.text =
+			(await makeListOfScheduledForDescr(c)) +
+			'\n\n----------\n\n' +
+			`${t(c, 'timeZone')} ${t(c, 'msk')}, ${t(c, 'now')}: ` +
+			getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
+			'\n\n----------\n\n' +
+			`${await makeStatePreview(c, this.state.pub)}\n\n` +
+			t(c, 'selectHourDescr');
 
 		return defineMenu([
 			...breakArray(this._makeHourButtons(), 5),
@@ -51,7 +59,7 @@ export class PubTime extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				this.state[EDIT_ITEM_NAME]
-					? {
+					? this.state.pub[PUB_KEYS.time] && {
 							id: 'saveBtn',
 							label: t(c, 'saveBtn'),
 						}
@@ -94,7 +102,7 @@ export class PubTime extends PubPageBase {
 
 		if (!c.msg.text) await this.reply('No text');
 
-		const rawTime = c.msg.text.trim().replace(/[\s.]/g, ':');
+		const rawTime = c.msg.text.trim().replace(/[\s.,]/g, ':');
 		const normalizedTime = normalizeTime(rawTime);
 
 		if (!normalizedTime) return this.reply(t(c, 'wrongTime'));

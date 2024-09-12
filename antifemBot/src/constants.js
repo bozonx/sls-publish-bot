@@ -7,7 +7,7 @@ export const DEFAULT_BTN_ITEM_ID = '-BTN=';
 export const HOME_PAGE = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
 export const DEFAULT_SOCIAL_MEDIA = 'telegram';
-export const MENU_ITEM_LABEL_LENGTH = 45;
+export const MENU_ITEM_LABEL_LENGTH = 40;
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const DEFAULT_PUB_PLUS_DAY = 1;
 export const DEFAULT_PUB_TIME = '10:00';

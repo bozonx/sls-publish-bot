@@ -1,5 +1,10 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu } from '../helpers/helpers.js';
+import {
+	t,
+	defineMenu,
+	getPostShortTime,
+	makePostItemLabel,
+} from '../helpers/helpers.js';
 import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
@@ -47,7 +52,7 @@ export class ScheduledList extends PageBase {
 			...items.map((i) => [
 				{
 					id: DEFAULT_BTN_ITEM_ID,
-					label: this._makeItemLabel(i),
+					label: makePostItemLabel(c, i),
 					payload: i[POST_KEYS.id],
 				},
 			]),
@@ -78,38 +83,25 @@ export class ScheduledList extends PageBase {
 		}
 	}
 
-	_makeItemLabel(dbItem) {
-		const c = this.router.c;
-		const itemName = dbItem[POST_KEYS.name];
-
-		if (!itemName) return t(c, 'itemHasNoContent');
-
-		const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
-		const curTimeMinutes = new Date().getTime() / 1000 / 60;
-		// if staled - use stale mark
-		let dateTimeLabel = t(this.router.c, 'staleMark');
-
-		if (
-			itemPubMinutes >
-			curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
-		) {
-			// means actual - else use date and time
-			dateTimeLabel =
-				makeHumanRuDateCompact(
-					this.c,
-					makeIsoLocaleDate(
-						itemPubMinutes * 60 * 1000,
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					),
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-				) +
-				' ' +
-				getTimeStr(
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					itemPubMinutes * 60 * 1000,
-				);
-		}
-
-		return `${dateTimeLabel} ${itemName}`;
-	}
+	// _makeItemLabel(dbItem) {
+	// 	const c = this.router.c;
+	// 	const itemName = dbItem[POST_KEYS.name];
+	//
+	// 	if (!itemName) return t(c, 'itemHasNoContent');
+	//
+	// 	const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
+	// 	const curTimeMinutes = new Date().getTime() / 1000 / 60;
+	// 	// if staled - use stale mark
+	// 	let dateTimeLabel = t(this.router.c, 'staleMark');
+	//
+	// 	if (
+	// 		itemPubMinutes >
+	// 		curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
+	// 	) {
+	// 		// means actual - else use date and time
+	// 		dateTimeLabel = getPostShortTime(this.c, itemPubMinutes);
+	// 	}
+	//
+	// 	return `${dateTimeLabel} ${itemName}`;
+	// }
 }

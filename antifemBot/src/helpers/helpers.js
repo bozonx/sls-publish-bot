@@ -13,7 +13,12 @@ import {
 	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
 } from '../constants.js';
-import { makeHumanRuDate } from './dateTimeHelpers.js';
+import {
+	makeHumanRuDate,
+	makeHumanRuDateCompact,
+	getTimeStr,
+	makeIsoLocaleDate,
+} from './dateTimeHelpers.js';
 import { makeStringArrayUnique } from './lib.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -82,6 +87,71 @@ export async function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateUpdator')}: ${updatedByUser[USER_KEYS.name]}\n`;
 
 	return res.trim();
+}
+
+export async function makeListOfScheduledForDescr(c) {
+	let res = t(c, 'scheduledListDescr') + ':\n\n';
+
+	const items = await c.ctx[CTX_KEYS.DB_CRUD].getAll(
+		DB_TABLE_NAMES.Post,
+		{
+			[POST_KEYS.id]: true,
+			[POST_KEYS.name]: true,
+			[POST_KEYS.pubTimestampMinutes]: true,
+		},
+		{
+			[POST_KEYS.pubMsgId]: null,
+			NOT: {
+				[POST_KEYS.pubTimestampMinutes]: null,
+			},
+		},
+		[{ [POST_KEYS.pubTimestampMinutes]: 'asc' }],
+	);
+
+	for (const item of items) {
+		res += makePostItemLabel(c, item) + '\n';
+	}
+
+	return res.trim();
+}
+
+export function makePostItemLabel(c, dbItem) {
+	const itemName = dbItem[POST_KEYS.name];
+
+	if (!itemName) return t(c, 'itemHasNoContent');
+
+	const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
+	const curTimeMinutes = new Date().getTime() / 1000 / 60;
+	// if staled - use stale mark
+	let dateTimeLabel = t(c, 'staleMark');
+
+	if (
+		itemPubMinutes >
+		curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
+	) {
+		// means actual - else use date and time
+		dateTimeLabel = getPostShortTime(c, itemPubMinutes);
+	}
+
+	return `${dateTimeLabel} ${itemName}`;
+}
+
+export function getPostShortTime(c, itemPubMinutes) {
+	return (
+		makeHumanRuDateCompact(
+			c,
+			makeIsoLocaleDate(
+				itemPubMinutes * 60 * 1000,
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			),
+			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+		) +
+		' ' +
+		getTimeStr(
+			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			itemPubMinutes * 60 * 1000,
+		)
+	);
 }
 
 export function parseTagsFromInput(rawStr = '') {

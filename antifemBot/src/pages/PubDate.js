@@ -1,5 +1,10 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
+import {
+	t,
+	makeStatePreview,
+	defineMenu,
+	makeListOfScheduledForDescr,
+} from '../helpers/helpers.js';
 import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import { isEmptyObj, applyStringTemplate } from '../helpers/lib.js';
 import {
@@ -34,13 +39,16 @@ export class PubDate extends PubPageBase {
 			...this.state.pub,
 		};
 
-		const descr =
-			applyStringTemplate(t(c, 'selectDateDescr'), {
-				TIME_ZONE: t(c, 'msk'),
-			}) +
-			` ${isoDateToLongLocaleRuDate(makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]))}`;
-
-		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${descr}`;
+		this.text =
+			(await makeListOfScheduledForDescr(c)) +
+			'\n\n----------\n\n' +
+			`${t(c, 'timeZone')} ${t(c, 'msk')}. ${t(c, 'now')}: ` +
+			isoDateToLongLocaleRuDate(
+				makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
+			) +
+			'\n\n----------\n\n' +
+			`\n\n${await makeStatePreview(c, this.state.pub)}\n\n` +
+			t(c, 'selectDateDescr');
 
 		const daysBtn = [];
 
@@ -131,7 +139,7 @@ export class PubDate extends PubPageBase {
 
 		if (!c.msg.text) await this.reply('No text');
 
-		const preparedDateStr = c.msg.text.trim().replace(/\s/g, '.');
+		const preparedDateStr = c.msg.text.trim().replace(/[\s,]/g, '.');
 		const isoDateStr = normalizeShortDateToIsoDate(
 			preparedDateStr,
 			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],

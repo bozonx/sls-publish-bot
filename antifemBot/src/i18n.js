@@ -4,6 +4,8 @@ export default {
 		msk: 'МСК',
 		staleMark: 'Просрочено!',
 		itemHasNoContent: 'Без контента',
+		timeZone: 'Часовой пояс',
+		now: 'Сейчас',
 
 		// Template names
 		'template-default': 'Основной',
@@ -93,6 +95,7 @@ export default {
 			'Выберете время публикации.\nЧасовой пояс ${TIME_ZONE}, текущее время ${CURRENT_TIME}\n\nЕсли нужно более точное время то введите его в формате 1:23 или 9.30 или даже 8 40',
 		// Content page
 		standardTextModeDescr: 'Обычный режим текста',
+		scheduledListDescr: 'Ожидают публикации',
 		mdV1TextModeDescr:
 			'Отправьте текст в формате Markdown с таким форматированием:\n```\n**bold**\n*italic*\n[link text](https://example.com)\n\\`monospace\\`\n\n> blockquote\n\n\\`\\`\\`\nsome code\n\\`\\`\\` ```',
 		uploadContentDescr:
