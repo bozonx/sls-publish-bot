@@ -90,7 +90,7 @@ export async function makeStatePreview(c, state = {}) {
 }
 
 export async function makeListOfScheduledForDescr(c) {
-	let res = t(c, 'scheduledListDescr') + ':\n\n';
+	let res = t(c, 'waitForPublicationsListInDescr') + ':\n\n';
 
 	const items = await c.ctx[CTX_KEYS.DB_CRUD].getAll(
 		DB_TABLE_NAMES.Post,

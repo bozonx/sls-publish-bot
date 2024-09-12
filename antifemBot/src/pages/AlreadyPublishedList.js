@@ -2,11 +2,12 @@ import { PageBase } from '../PageRouter.js';
 import { t, defineMenu } from '../helpers/helpers.js';
 import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
-// import {
-// 	makeHumanRuDateCompact,
-// 	getTimeStr,
-// 	makeIsoLocaleDate,
-// } from '../helpers/dateTimeHelpers.js';
+import {
+	makeHumanRuDateCompact,
+	isoDateToLongLocaleRuDate,
+	getTimeStr,
+	makeIsoLocaleDate,
+} from '../helpers/dateTimeHelpers.js';
 import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
@@ -37,9 +38,15 @@ export class AlreadyPublishedList extends PageBase {
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
-			? applyStringTemplate(t(c, 'publishedListDescr'), {
-					TIME_ZONE: t(c, 'msk'),
-				})
+			? t(c, 'publishedListDescr') +
+				'\n\n' +
+				`${t(c, 'now')}: ` +
+				isoDateToLongLocaleRuDate(
+					makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
+				) +
+				' ' +
+				getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
+				` ${t(c, 'msk')}`
 			: t(c, 'publishedEmptyListDescr');
 
 		return defineMenu([

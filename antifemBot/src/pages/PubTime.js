@@ -41,8 +41,9 @@ export class PubTime extends PubPageBase {
 		this.text =
 			(await makeListOfScheduledForDescr(c)) +
 			'\n\n----------\n\n' +
-			`${t(c, 'timeZone')} ${t(c, 'msk')}, ${t(c, 'now')}: ` +
+			`${t(c, 'now')}: ` +
 			getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
+			` ${t(c, 'msk')}` +
 			'\n\n----------\n\n' +
 			`${await makeStatePreview(c, this.state.pub)}\n\n` +
 			t(c, 'selectHourDescr');

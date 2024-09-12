@@ -9,6 +9,7 @@ import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
 	makeHumanRuDateCompact,
+	isoDateToLongLocaleRuDate,
 	getTimeStr,
 	makeIsoLocaleDate,
 } from '../helpers/dateTimeHelpers.js';
@@ -43,9 +44,15 @@ export class ScheduledList extends PageBase {
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
-			? applyStringTemplate(t(c, 'scheduledListDescr'), {
-					TIME_ZONE: t(c, 'msk'),
-				})
+			? t(c, 'scheduledListDescr') +
+				'\n\n' +
+				`${t(c, 'now')}: ` +
+				isoDateToLongLocaleRuDate(
+					makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
+				) +
+				' ' +
+				getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
+				` ${t(c, 'msk')}`
 			: t(c, 'scheduledEmptyListDescr');
 
 		return defineMenu([
