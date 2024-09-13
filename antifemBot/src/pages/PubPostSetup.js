@@ -25,15 +25,15 @@ export class PubPostSetup extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const linkIds = getLinkIds(this.state.pub[PUB_KEYS.entities]);
-		let defaultPreviewLink = null;
-
-		if (!this.state.pub[PUB_KEYS.media]?.length && linkIds.length === 1) {
-			defaultPreviewLink = this.state.pub[PUB_KEYS.entities][linkIds[0]].url;
-		}
+		// let defaultPreviewLink = null;
+		//
+		// if (!this.state.pub[PUB_KEYS.media]?.length && linkIds.length === 1) {
+		// 	defaultPreviewLink = this.state.pub[PUB_KEYS.entities][linkIds[0]].url;
+		// }
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
-			[PUB_KEYS.previewLink]: defaultPreviewLink,
+			// [PUB_KEYS.previewLink]: defaultPreviewLink,
 			// set default author for default template - current user's author name
 			[PUB_KEYS.author]:
 				c.ctx[CTX_KEYS.me][USER_KEYS.cfg][USER_CFG_KEYS.authorName],

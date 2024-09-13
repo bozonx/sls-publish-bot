@@ -103,6 +103,7 @@ export const MEDIA_TYPES = {
 };
 export const DEFAULT_SETUP_STATE = {
 	[PUB_KEYS.previewLinkOnTop]: false,
+	[PUB_KEYS.previewLink]: null,
 	[PUB_KEYS.template]: TEMPLATE_NAMES.default,
 };
 
