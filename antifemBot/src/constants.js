@@ -83,6 +83,7 @@ export const PUB_KEYS = {
 	// TODO: remove
 	// preview: 'preview',
 	previewLink: 'previewLink',
+	previewLinkOnTop: 'previewLinkOnTop',
 	// the final selected author
 	author: 'author',
 	// obviously do not use author
@@ -100,8 +101,8 @@ export const MEDIA_TYPES = {
 	photo: 'photo',
 	video: 'video',
 };
-// TODO: make just const
 export const DEFAULT_SETUP_STATE = {
+	[PUB_KEYS.previewLinkOnTop]: false,
 	[PUB_KEYS.template]: TEMPLATE_NAMES.default,
 };
 

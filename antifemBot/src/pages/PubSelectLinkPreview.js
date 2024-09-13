@@ -21,6 +21,12 @@ export class PubSelectLinkPreview extends PubPageBase {
 			]),
 			[
 				{
+					id: 'linkPreviewOffBtn',
+					label: t(c, 'linkPreviewOffBtn'),
+				},
+			],
+			[
+				{
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
@@ -44,6 +50,10 @@ export class PubSelectLinkPreview extends PubPageBase {
 		}
 
 		switch (btnId) {
+			case 'linkPreviewOffBtn':
+				return this.go('pub-post-setup', {
+					[PUB_KEYS.previewLink]: null,
+				});
 			case 'cancelBtn':
 				return this.go('pub-post-setup');
 			default:

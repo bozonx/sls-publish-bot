@@ -31,16 +31,6 @@ export class PubPostSetup extends PubPageBase {
 			defaultPreviewLink = this.state.pub[PUB_KEYS.entities][linkIds[0]].url;
 		}
 
-		// if (this.state.pub[PUB_KEYS.media]?.length) {
-		// 	this.state.pub[PUB_KEYS.previewLink] = null;
-		// } else {
-		// 	if (linkIds.length === 0) {
-		// 		this.state.pub[PUB_KEYS.previewLink] = null;
-		// 	} else if (linkIds.length === 1) {
-		// 		this.state.pub[PUB_KEYS.previewLink] =
-		// 			this.state.pub[PUB_KEYS.entities][linkIds[0]].url;
-		// 	}
-		// }
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
 			[PUB_KEYS.previewLink]: defaultPreviewLink,
@@ -55,11 +45,8 @@ export class PubPostSetup extends PubPageBase {
 		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
 			(i) => i !== this.state.pub[PUB_KEYS.template],
 		);
-		// const previewIsOn = this.state.pub[PUB_KEYS.preview];
 		// author name for button addAuthor
 		const authorToAdd = this._getAuthorToAdd();
-
-		console.log(1111, linkIds, this.state.pub);
 
 		return defineMenu([
 			...restTemplateNames.map((tmplName) => [
@@ -72,7 +59,7 @@ export class PubPostSetup extends PubPageBase {
 			!this.state.pub[PUB_KEYS.media]?.length &&
 				linkIds.length === 1 && [
 					{
-						id: `linkPreviewSwitch`,
+						id: `LINK_PREVIEW_SWITCH`,
 						label: t(
 							c,
 							this.state.pub[PUB_KEYS.previewLink] === null
@@ -84,8 +71,20 @@ export class PubPostSetup extends PubPageBase {
 			!this.state.pub[PUB_KEYS.media]?.length &&
 				linkIds.length > 1 && [
 					{
-						id: `linkPreviewSelect`,
-						label: t(c, `linkPreviewSelect`),
+						id: `linkPreviewSelectBtn`,
+						label: t(c, `linkPreviewSelectBtn`),
+					},
+				],
+			!this.state.pub[PUB_KEYS.media]?.length &&
+				linkIds.length > 0 && [
+					{
+						id: `LINK_PREVIEW_PLACEMENT`,
+						label: t(
+							c,
+							this.state.pub[PUB_KEYS.previewLinkOnTop]
+								? 'linkPreviewToBottomBtn'
+								: `linkPreviewToTopBtn`,
+						),
 					},
 				],
 			this.state.pub[PUB_KEYS.author]
@@ -103,8 +102,8 @@ export class PubPostSetup extends PubPageBase {
 					],
 			[
 				{
-					id: 'showPreviewBtn',
-					label: t(c, 'showPreviewBtn'),
+					id: 'showPostBtn',
+					label: t(c, 'showPostBtn'),
 				},
 			],
 			!this.state[EDIT_ITEM_NAME] && [
@@ -160,11 +159,11 @@ export class PubPostSetup extends PubPageBase {
 					[PUB_KEYS.noAuthor]: true,
 					[PUB_KEYS.customAuthor]: null,
 				});
-			case 'showPreviewBtn':
+			case 'showPostBtn':
 				await this.printFinalPost(this.me[USER_KEYS.tgChatId], this.state.pub);
 
 				return this.reload();
-			case 'linkPreviewSwitch':
+			case 'LINK_PREVIEW_SWITCH':
 				let previewLink = null;
 
 				if (!this.state.pub[PUB_KEYS.previewLink]) {
@@ -175,7 +174,12 @@ export class PubPostSetup extends PubPageBase {
 				}
 
 				return this.reload({ [PUB_KEYS.previewLink]: previewLink });
-			case 'linkPreviewSelect':
+			case 'LINK_PREVIEW_PLACEMENT':
+				return this.reload({
+					[PUB_KEYS.previewLinkOnTop]:
+						!this.state.pub[PUB_KEYS.previewLinkOnTop],
+				});
+			case 'linkPreviewSelectBtn':
 				return this.go('pub-select-preview');
 			case 'saveToConservedBtn':
 				const item = await createPost(c, this.state.pub, true);

@@ -330,7 +330,9 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	return c.api.sendMessage(chatId, fullPostTextMdV2, {
 		...msgParams,
 		link_preview_options: {
-			is_disabled: !pubState[PUB_KEYS.preview],
+			is_disabled: !pubState[PUB_KEYS.previewLink],
+			url: pubState[PUB_KEYS.previewLink],
+			show_above_text: pubState[PUB_KEYS.previewLinkOnTop],
 		},
 	});
 }
