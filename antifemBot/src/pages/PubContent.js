@@ -78,8 +78,8 @@ export class PubContent extends PubPageBase {
 			),
 			haveAnyContent && [
 				{
-					id: 'showPreviewBtn',
-					label: t(c, 'showPreviewBtn'),
+					id: 'showPostBtn',
+					label: t(c, 'showPostBtn'),
 				},
 			],
 			[
@@ -117,7 +117,7 @@ export class PubContent extends PubPageBase {
 				});
 			case 'removeMediaBtn':
 				return this.reload({ [PUB_KEYS.media]: null });
-			case 'showPreviewBtn':
+			case 'showPostBtn':
 				await this.printFinalPost(this.me[USER_KEYS.tgChatId], this.state.pub);
 
 				return this.reload();

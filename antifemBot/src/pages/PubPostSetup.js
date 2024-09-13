@@ -75,18 +75,17 @@ export class PubPostSetup extends PubPageBase {
 						label: t(c, `linkPreviewSelectBtn`),
 					},
 				],
-			!this.state.pub[PUB_KEYS.media]?.length &&
-				linkIds.length > 0 && [
-					{
-						id: `LINK_PREVIEW_PLACEMENT`,
-						label: t(
-							c,
-							this.state.pub[PUB_KEYS.previewLinkOnTop]
-								? 'linkPreviewToBottomBtn'
-								: `linkPreviewToTopBtn`,
-						),
-					},
-				],
+			this.state.pub[PUB_KEYS.previewLink] && [
+				{
+					id: `LINK_PREVIEW_PLACEMENT`,
+					label: t(
+						c,
+						this.state.pub[PUB_KEYS.previewLinkOnTop]
+							? 'linkPreviewToBottomBtn'
+							: `linkPreviewToTopBtn`,
+					),
+				},
+			],
 			this.state.pub[PUB_KEYS.author]
 				? [
 						{
