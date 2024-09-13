@@ -80,7 +80,9 @@ export const PUB_KEYS = {
 	media: 'media',
 	tags: 'tags',
 	template: 'template',
-	preview: 'preview',
+	// TODO: remove
+	// preview: 'preview',
+	previewLink: 'previewLink',
 	// the final selected author
 	author: 'author',
 	// obviously do not use author
@@ -98,8 +100,8 @@ export const MEDIA_TYPES = {
 	photo: 'photo',
 	video: 'video',
 };
+// TODO: make just const
 export const DEFAULT_SETUP_STATE = {
-	[PUB_KEYS.preview]: false,
 	[PUB_KEYS.template]: TEMPLATE_NAMES.default,
 };
 

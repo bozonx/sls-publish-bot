@@ -25,6 +25,7 @@ export async function handleScheduled(
 	// const curTimeMinutes = 28768620; // new Date('2024-09-12T08:00+03:00').getTime() / 1000 / 60
 	const [item] = await prisma[DB_TABLE_NAMES.Post].findMany({
 		where: {
+			[POST_KEYS.pubMsgId]: null,
 			[POST_KEYS.pubTimestampMinutes]: {
 				// get items shich are a bit stale
 				gte: curTimeMinutes - PUBLISHING_MINUS_MINUTES,

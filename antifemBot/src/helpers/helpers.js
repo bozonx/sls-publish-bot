@@ -68,8 +68,9 @@ export async function makeStatePreview(c, state = {}) {
 	if (mediaCount > 1) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
 	if (state[PUB_KEYS.tags])
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
-	if (!mediaCount && typeof state[PUB_KEYS.preview] == 'boolean')
-		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
+	if (!mediaCount && state[PUB_KEYS.previewLink])
+		res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.previewLink]}\n`;
+	// res += `${t(c, 'stateUrlPreview')}: ${state[PUB_KEYS.preview] ? '✓' : '𐄂'}\n`;
 	if (state[PUB_KEYS.template])
 		res += `${t(c, 'stateTemplate')}: ${t(c, 'template-' + state[PUB_KEYS.template])}\n`;
 	if (state[PUB_KEYS.author])
@@ -280,6 +281,16 @@ export async function handleTagsFromInputAndSave(router, rawText) {
 	);
 
 	return newTags;
+}
+
+export function getLinkIds(entities = []) {
+	const linkIds = [];
+
+	for (const index in entities) {
+		if (entities[index].type === 'text_link') linkIds.push(index);
+	}
+
+	return linkIds;
 }
 
 // export function makePostListItemLabel(c, dbItem) {

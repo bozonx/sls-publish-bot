@@ -42,6 +42,7 @@ export default {
 		useTemplateBtn: 'Использовать шаблон',
 		linkPreviewOffBtn: 'Выключить предпросмотр ссылки',
 		linkPreviewOnBtn: 'Включить предпросмотр ссылки',
+		linkPreviewSelect: 'Выбрать ссылку для предпросмотра',
 		pubConfirmBtn: 'Да, запланировать публикацию',
 		showPreviewBtn: 'Показать пост',
 		deletePostBtn: 'Удалить',
@@ -93,10 +94,11 @@ export default {
 		selectDateDescr: 'Выберете дату либо введите в формате DD.MM',
 		selectHourDescr:
 			'Выберете время публикации.\n\nЕсли нужно более точное время то введите его в формате 1:23 или 9.30 или даже 8 40',
-		// Content page
+		// Content pageH
 		standardTextModeDescr: 'Обычный режим текста',
 		mdV1TextModeDescr:
 			'Отправьте текст в формате Markdown с таким форматированием:\n```\n**bold**\n*italic*\n[link text](https://example.com)\n\\`monospace\\`\n\n> blockquote\n\n\\`\\`\\`\nsome code\n\\`\\`\\` ```',
+		selectLinkPreview: 'Выберете ссылку для которой будет сделан предпросмотр',
 		uploadContentDescr:
 			'Проверьте отображение текста и медиа.\nЛимит длины текстового сообщения - 4096 символов.\nЛимит подписи к картинке/видео 1024 символа.\nМакс. количество медиа фалов - 10 (пока поддреживается только 1)',
 		'uploadContentDescr-both':

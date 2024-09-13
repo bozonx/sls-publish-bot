@@ -1,5 +1,10 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
+import {
+	t,
+	makeStatePreview,
+	defineMenu,
+	getLinkIds,
+} from '../helpers/helpers.js';
 import {
 	saveEditedScheduledPost,
 	createPost,
@@ -19,9 +24,26 @@ import {
 export class PubPostSetup extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		const linkIds = getLinkIds(this.state.pub[PUB_KEYS.entities]);
+		let defaultPreviewLink = null;
 
+		if (!this.state.pub[PUB_KEYS.media]?.length && linkIds.length === 1) {
+			defaultPreviewLink = this.state.pub[PUB_KEYS.entities][linkIds[0]].url;
+		}
+
+		// if (this.state.pub[PUB_KEYS.media]?.length) {
+		// 	this.state.pub[PUB_KEYS.previewLink] = null;
+		// } else {
+		// 	if (linkIds.length === 0) {
+		// 		this.state.pub[PUB_KEYS.previewLink] = null;
+		// 	} else if (linkIds.length === 1) {
+		// 		this.state.pub[PUB_KEYS.previewLink] =
+		// 			this.state.pub[PUB_KEYS.entities][linkIds[0]].url;
+		// 	}
+		// }
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
+			[PUB_KEYS.previewLink]: defaultPreviewLink,
 			// set default author for default template - current user's author name
 			[PUB_KEYS.author]:
 				c.ctx[CTX_KEYS.me][USER_KEYS.cfg][USER_CFG_KEYS.authorName],
@@ -33,9 +55,11 @@ export class PubPostSetup extends PubPageBase {
 		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
 			(i) => i !== this.state.pub[PUB_KEYS.template],
 		);
-		const previewIsOn = this.state.pub[PUB_KEYS.preview];
+		// const previewIsOn = this.state.pub[PUB_KEYS.preview];
 		// author name for button addAuthor
 		const authorToAdd = this._getAuthorToAdd();
+
+		console.log(1111, linkIds, this.state.pub);
 
 		return defineMenu([
 			...restTemplateNames.map((tmplName) => [
@@ -45,13 +69,25 @@ export class PubPostSetup extends PubPageBase {
 					payload: tmplName,
 				},
 			]),
-			!this.state.pub[PUB_KEYS.media]?.length && [
-				{
-					id: `linkPreviewSwitch`,
-					label: t(c, previewIsOn ? `linkPreviewOffBtn` : `linkPreviewOnBtn`),
-					payload: Number(!previewIsOn),
-				},
-			],
+			!this.state.pub[PUB_KEYS.media]?.length &&
+				linkIds.length === 1 && [
+					{
+						id: `linkPreviewSwitch`,
+						label: t(
+							c,
+							this.state.pub[PUB_KEYS.previewLink] === null
+								? `linkPreviewOnBtn`
+								: `linkPreviewOffBtn`,
+						),
+					},
+				],
+			!this.state.pub[PUB_KEYS.media]?.length &&
+				linkIds.length > 1 && [
+					{
+						id: `linkPreviewSelect`,
+						label: t(c, `linkPreviewSelect`),
+					},
+				],
 			this.state.pub[PUB_KEYS.author]
 				? [
 						{
@@ -129,7 +165,18 @@ export class PubPostSetup extends PubPageBase {
 
 				return this.reload();
 			case 'linkPreviewSwitch':
-				return this.reload({ [PUB_KEYS.preview]: Boolean(payload) });
+				let previewLink = null;
+
+				if (!this.state.pub[PUB_KEYS.previewLink]) {
+					const linkIds = getLinkIds(this.state.pub[PUB_KEYS.entities]);
+
+					previewLink =
+						this.state.pub[PUB_KEYS.entities][Number(linkIds[0])].url;
+				}
+
+				return this.reload({ [PUB_KEYS.previewLink]: previewLink });
+			case 'linkPreviewSelect':
+				return this.go('pub-select-preview');
 			case 'saveToConservedBtn':
 				const item = await createPost(c, this.state.pub, true);
 				await printPubToAdminChannel(this.router, item);
