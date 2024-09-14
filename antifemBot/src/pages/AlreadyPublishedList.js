@@ -42,7 +42,7 @@ export class AlreadyPublishedList extends PageBase {
 			...items.map((i) => [
 				{
 					id: DEFAULT_BTN_ITEM_ID,
-					label: makePostItemLabel(c, i),
+					label: makePostItemLabel(c, i, false),
 					payload: i[POST_KEYS.id],
 				},
 			]),

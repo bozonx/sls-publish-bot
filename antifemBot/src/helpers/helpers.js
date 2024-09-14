@@ -116,43 +116,36 @@ export async function makeListOfScheduledForDescr(c) {
 	return res.trim();
 }
 
-export function makePostItemLabel(c, dbItem) {
-	const itemName = dbItem[POST_KEYS.name];
-
-	if (!itemName) return t(c, 'itemHasNoContent');
-
+export function makePostItemLabel(c, dbItem, markStaled = true) {
+	const itemName = dbItem[POST_KEYS.name] || t(c, 'itemHasNoContent');
 	const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
 	const curTimeMinutes = new Date().getTime() / 1000 / 60;
 	// if staled - use stale mark
-	let dateTimeLabel = t(c, 'staleMark');
+	let dateTimeLabel;
 
 	if (
-		itemPubMinutes >
-		curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
+		markStaled &&
+		itemPubMinutes <= curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
 	) {
-		// means actual - else use date and time
-		dateTimeLabel = getPostShortTime(c, itemPubMinutes);
+		dateTimeLabel = t(c, 'staleMark');
+	} else {
+		dateTimeLabel =
+			makeHumanRuDateCompact(
+				c,
+				makeIsoLocaleDate(
+					itemPubMinutes * 60 * 1000,
+					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				),
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			) +
+			' ' +
+			getTimeStr(
+				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				itemPubMinutes * 60 * 1000,
+			);
 	}
 
 	return `${dateTimeLabel} ${itemName}`;
-}
-
-export function getPostShortTime(c, itemPubMinutes) {
-	return (
-		makeHumanRuDateCompact(
-			c,
-			makeIsoLocaleDate(
-				itemPubMinutes * 60 * 1000,
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-			),
-			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-		) +
-		' ' +
-		getTimeStr(
-			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-			itemPubMinutes * 60 * 1000,
-		)
-	);
 }
 
 export function parseTagsFromInput(rawStr = '') {
@@ -167,10 +160,6 @@ export function parseTagsFromInput(rawStr = '') {
 		)
 		.filter(Boolean);
 }
-
-// export function removeNotLetterAndNotNumbersFromStr(str) {
-// 	return str.replace(/[^\p{L}\p{N}_]/gu, '');
-// }
 
 // remove undefined and false items in menu
 export function defineMenu(menu = []) {
@@ -284,13 +273,14 @@ export async function handleTagsFromInputAndSave(router, rawText) {
 }
 
 export function getLinkIds(entities = []) {
-	const linkIds = [];
+	const linkIds = {};
 
 	for (const index in entities) {
-		if (entities[index].type === 'text_link') linkIds.push(index);
+		if (['text_link', 'url'].includes(entities[index].type))
+			linkIds[entities[index].url] = index;
 	}
 
-	return linkIds;
+	return Object.values(linkIds);
 }
 
 export function makeCurrentDateTimeStr(c) {
@@ -304,6 +294,10 @@ export function makeCurrentDateTimeStr(c) {
 		` ${t(c, 'msk')}`
 	);
 }
+
+// export function removeNotLetterAndNotNumbersFromStr(str) {
+// 	return str.replace(/[^\p{L}\p{N}_]/gu, '');
+// }
 
 // export function makePostListItemLabel(c, dbItem) {
 // 	const itemName = dbItem[POST_KEYS.name];
