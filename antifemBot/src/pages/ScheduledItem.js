@@ -74,8 +74,8 @@ export class ScheduledItem extends PageBase {
 					label: t(c, 'publicateNowBtn'),
 				},
 				{
-					id: 'showPreviewBtn',
-					label: t(c, 'showPreviewBtn'),
+					id: 'showPostBtn',
+					label: t(c, 'showPostBtn'),
 				},
 			],
 			[
@@ -114,7 +114,11 @@ export class ScheduledItem extends PageBase {
 
 				return this.router.go('pub-content');
 			case 'publicateNowBtn':
-				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
+				await doFullFinalPublicationProcess(
+					c,
+					this.state[EDIT_ITEM_NAME],
+					this.me[USER_KEYS.id],
+				);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
@@ -132,7 +136,7 @@ export class ScheduledItem extends PageBase {
 				);
 
 				return this.router.go('scheduled-list');
-			case 'showPreviewBtn':
+			case 'showPostBtn':
 				await this.printFinalPost(
 					this.me[USER_KEYS.tgChatId],
 					this.state[EDIT_ITEM_NAME],

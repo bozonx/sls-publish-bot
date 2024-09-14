@@ -16,8 +16,8 @@ export default {
 			const app = new BotIndex(
 				env.TG_TOKEN,
 				env.MAIN_ADMIN_TG_USER_ID,
-				env.CHAT_OF_ADMINS_ID,
-				env.DESTINATION_CHANNEL_ID,
+				env.TEST_MODE ? env.MAIN_ADMIN_TG_USER_ID : env.CHAT_OF_ADMINS_ID,
+				env.TEST_MODE ? env.MAIN_ADMIN_TG_USER_ID : env.DESTINATION_CHANNEL_ID,
 				env.PUBLICATION_TIME_ZONE,
 				env.PUBLISHING_MINUS_MINUTES,
 				env.SESSION_STATE_TTL_DAYS,
@@ -48,7 +48,9 @@ export default {
 				await ctx.waitUntil(
 					handleScheduled(
 						env.TG_TOKEN,
-						env.DESTINATION_CHANNEL_ID,
+						env.TEST_MODE
+							? env.MAIN_ADMIN_TG_USER_ID
+							: env.DESTINATION_CHANNEL_ID,
 						env.PUBLISHING_MINUS_MINUTES,
 						env.KV,
 						new PrismaD1(env.DB),

@@ -68,8 +68,8 @@ export class ConservedItem extends PageBase {
 					label: t(c, 'publicateNowBtn'),
 				},
 				{
-					id: 'showPreviewBtn',
-					label: t(c, 'showPreviewBtn'),
+					id: 'showPostBtn',
+					label: t(c, 'showPostBtn'),
 				},
 			],
 			[
@@ -98,7 +98,11 @@ export class ConservedItem extends PageBase {
 
 				return this.router.go('pub-content');
 			case 'publicateNowBtn':
-				await doFullFinalPublicationProcess(c, this.state[EDIT_ITEM_NAME]);
+				await doFullFinalPublicationProcess(
+					c,
+					this.state[EDIT_ITEM_NAME],
+					this.me[USER_KEYS.id],
+				);
 				await this.reply(
 					t(c, 'conservedItemWasPublished') +
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
@@ -116,7 +120,7 @@ export class ConservedItem extends PageBase {
 				);
 
 				return this.router.go('conserved-list');
-			case 'showPreviewBtn':
+			case 'showPostBtn':
 				await this.printFinalPost(
 					this.me[USER_KEYS.tgChatId],
 					this.state[EDIT_ITEM_NAME],

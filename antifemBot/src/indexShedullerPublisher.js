@@ -21,7 +21,7 @@ export async function handleScheduled(
 	prismaAdapter,
 ) {
 	const prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
-	const curTimeMinutes = new Date().getTime() / 1000 / 60;
+	const curTimeMinutes = Math.floor(new Date().getTime() / 1000 / 60);
 	// const curTimeMinutes = 28768620; // new Date('2024-09-12T08:00+03:00').getTime() / 1000 / 60
 	const [item] = await prisma[DB_TABLE_NAMES.Post].findMany({
 		where: {

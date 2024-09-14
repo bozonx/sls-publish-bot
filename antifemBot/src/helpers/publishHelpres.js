@@ -109,12 +109,19 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 	return omitUndefined(state);
 }
 
-export async function doFullFinalPublicationProcess(c, pubState) {
-	const { message_id } = await printFinalPost(
+export async function doFullFinalPublicationProcess(
+	c,
+	pubState,
+	forcePublishedByUserId,
+) {
+	const result = await printFinalPost(
 		c,
 		c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
 		pubState,
 	);
+	const msgId = Array.isArray(result)
+		? result[0]?.message_id
+		: result?.message_id;
 
 	return await updatePost(
 		c,
@@ -122,31 +129,15 @@ export async function doFullFinalPublicationProcess(c, pubState) {
 			...pubState,
 			[PUB_KEYS.date]: null,
 			[PUB_KEYS.time]: null,
+			[PUB_KEYS.forcePublishedByUserId]: forcePublishedByUserId,
 		},
 		{
-			[POST_KEYS.pubMsgId]: String(message_id),
+			[POST_KEYS.pubMsgId]: String(msgId),
 			[POST_KEYS.pubTimestampMinutes]: Math.floor(
 				new Date().getTime() / 1000 / 60,
 			),
-			// [POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
 		},
 	);
-
-	// const dbItem = convertPubStateToDbPost({
-	// 	...pubState,
-	// 	[PUB_KEYS.date]: null,
-	// 	[PUB_KEYS.time]: null,
-	// 	dbRecord: {
-	// 		...pubState.dbRecord,
-	// 		[POST_KEYS.pubMsgId]: String(message_id),
-	// 		// [POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
-	// 		[POST_KEYS.pubTimestampMinutes]: Math.floor(
-	// 			new Date().getTime() / 1000 / 60,
-	// 		),
-	// 	},
-	// });
-	// // save to db
-	// return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
 }
 
 export async function deletePost(c, itemId) {
