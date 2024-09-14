@@ -1,6 +1,11 @@
 import { toMarkdownV2, escapers } from '@telegraf/entity';
 import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
-import { t, makeStatePreview, makeUserNameFromMsg } from './helpers.js';
+import {
+	t,
+	makeStatePreview,
+	makeUserNameFromMsg,
+	makeListOfScheduledForDescr,
+} from './helpers.js';
 import { applyStringTemplate, omitUndefined } from './lib.js';
 import { convertDateTimeToTsMinutes } from './dateTimeHelpers.js';
 import {
@@ -56,6 +61,7 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 		[PUB_KEYS.forwardedFrom]:
 			c.msg.forward_sender_name ||
 			makeUserNameFromMsg(c.msg.forward_from) ||
+			// TODO: add channel
 			null,
 	};
 
@@ -73,6 +79,7 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 			};
 		}
 
+		// add other media to media group
 		if (c.msg.media_group_id === prevPubState[PUB_KEYS.media_group_id]) {
 			prevMedia = prevPubState[PUB_KEYS.media] || [];
 		}
@@ -125,14 +132,15 @@ export async function doFullFinalPublicationProcess(
 
 	return await updatePost(
 		c,
-		{
+		omitUndefined({
 			...pubState,
 			[PUB_KEYS.date]: null,
 			[PUB_KEYS.time]: null,
 			[PUB_KEYS.forcePublishedByUserId]: forcePublishedByUserId,
-		},
+		}),
 		{
 			[POST_KEYS.pubMsgId]: String(msgId),
+			// save current date ad published date
 			[POST_KEYS.pubTimestampMinutes]: Math.floor(
 				new Date().getTime() / 1000 / 60,
 			),
@@ -140,12 +148,53 @@ export async function doFullFinalPublicationProcess(
 	);
 }
 
-export async function deletePost(c, itemId) {
-	return await c.ctx[CTX_KEYS.DB_CRUD].deleteItem(DB_TABLE_NAMES.Post, itemId);
+export function convertPubStateToDbPost(pubState) {
+	const { dbRecord, ...payloadJson } = pubState;
+
+	return {
+		...dbRecord,
+		payloadJson: JSON.stringify(payloadJson),
+	};
 }
+
+export function convertDbPostToPubState(dbItem) {
+	const { payloadJson, ...dbRecord } = dbItem;
+
+	return {
+		dbRecord,
+		...JSON.parse(payloadJson),
+	};
+}
+
+export function makeScheduledItemName(pubState) {
+	const fromText = pubState[PUB_KEYS.text]
+		?.trim()
+		.substring(0, MENU_ITEM_LABEL_LENGTH)
+		.trim()
+		// remove line breark
+		.replace(/\n/g, ' ')
+		// remove no words and numeric chars
+		// .replace(/[^\p{L}\p{N}_\-\s.,]/gu, ' ')
+		.replace(/[^\p{L}\p{N}\s]/gu, ' ')
+		// remove space douplicates
+		.replace(/[\s]{2,}/g, ' ');
+
+	if (fromText) return fromText;
+	else if (pubState[PUB_KEYS.tags]?.length) {
+		return pubState[PUB_KEYS.tags].map((i) => `#${i}`).join(' ');
+	} else if (pubState[PUB_KEYS.media]?.length) {
+		return 'Media';
+	}
+
+	return '';
+}
+
+/////////////////////
 
 // It is used in save button handlers
 export async function saveEditedScheduledPost(router) {
+	// TODO: remake
+
 	const c = router.c;
 	const returnUrl = router.state.editReturnUrl;
 
@@ -180,93 +229,11 @@ export async function saveEditedScheduledPost(router) {
 	return router.go(returnUrl);
 }
 
-export async function updatePost(c, pubState, dbOverwrite) {
-	const dbItem = convertPubStateToDbPost({
-		...pubState,
-		dbRecord: {
-			...pubState.dbRecord,
-			name: makeScheduledItemName(pubState),
-			[POST_KEYS.pubTimestampMinutes]: pubState[PUB_KEYS.date]
-				? convertDateTimeToTsMinutes(
-						pubState[PUB_KEYS.date],
-						pubState[PUB_KEYS.time],
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					)
-				: null,
-			...dbOverwrite,
-		},
-	});
-	// save to db
-	return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
-}
-
-export async function createPost(c, pubState, conserved = false) {
-	const dbItem = convertPubStateToDbPost({
-		...pubState,
-		dbRecord: {
-			...pubState[PUB_KEYS.dbRecord],
-			name: makeScheduledItemName(pubState),
-			socialMedia: DEFAULT_SOCIAL_MEDIA,
-			[POST_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
-			[POST_KEYS.pubTimestampMinutes]: conserved
-				? null
-				: convertDateTimeToTsMinutes(
-						pubState[PUB_KEYS.date],
-						pubState[PUB_KEYS.time],
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					),
-		},
-	});
-
-	return await c.ctx[CTX_KEYS.DB_CRUD].createItem(DB_TABLE_NAMES.Post, dbItem);
-}
-
-export function makeScheduledItemName(pubState) {
-	const fromText = pubState[PUB_KEYS.text]
-		?.trim()
-		.substring(0, MENU_ITEM_LABEL_LENGTH)
-		.trim()
-		// remove line breark
-		.replace(/\n/g, ' ')
-		// remove no words and numeric chars
-		// .replace(/[^\p{L}\p{N}_\-\s.,]/gu, ' ')
-		.replace(/[^\p{L}\p{N}\s]/gu, ' ')
-		// remove space douplicates
-		.replace(/[\s]{2,}/g, ' ');
-
-	if (fromText) return fromText;
-	else if (pubState[PUB_KEYS.tags]?.length) {
-		return pubState[PUB_KEYS.tags].map((i) => `#${i}`).join(' ');
-	} else if (pubState[PUB_KEYS.media]?.length) {
-		return 'Media';
-	}
-
-	return '';
-}
-
-export function convertPubStateToDbPost(pubState) {
-	const { dbRecord, ...payloadJson } = pubState;
-
-	return {
-		...dbRecord,
-		payloadJson: JSON.stringify(payloadJson),
-	};
-}
-
-export function convertDbPostToPubState(dbItem) {
-	const { payloadJson, ...dbRecord } = dbItem;
-
-	return {
-		dbRecord,
-		...JSON.parse(payloadJson),
-	};
-}
-
-export async function printPubToAdminChannel(router, dbRecord) {
-	const c = router.c;
+export async function printPubToAdminChannel(c, dbRecord) {
 	const item = convertDbPostToPubState(dbRecord);
 	// publication
-	const printRes = await router.printFinalPost(
+	const printRes = await printFinalPost(
+		c,
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		item,
 	);
@@ -292,7 +259,10 @@ export async function printPubToAdminChannel(router, dbRecord) {
 
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
-		msg + `\n\n${await makeStatePreview(c, infoMsgPostParams)}`,
+		(await makeListOfScheduledForDescr(c)) +
+			'\n\n----------\n\n' +
+			msg +
+			`\n\n${await makeStatePreview(c, infoMsgPostParams)}`,
 		{ reply_parameters: { message_id: msgId } },
 	);
 }
@@ -324,17 +294,14 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	} else if (pubState[PUB_KEYS.media]?.length > 1) {
 		return c.api.sendMediaGroup(
 			chatId,
-			pubState[PUB_KEYS.media].map((item, index) => {
-				const res = {
+			pubState[PUB_KEYS.media].map((item, index) =>
+				omitUndefined({
 					type: item.type,
 					media: item.data,
+					caption: index === 0 ? fullPostTextMdV2 : undefined,
 					...msgParams,
-				};
-
-				if (index === 0) res.caption = fullPostTextMdV2;
-
-				return res;
-			}),
+				}),
+			),
 		);
 	}
 	// else no media means text message
@@ -362,4 +329,49 @@ function prepareMdV2MsgTextToPublish(c, pubState) {
 	}
 
 	return applyTemplate(c, contentMdV2, pubState);
+}
+
+export async function createPost(c, pubState, conserved = false) {
+	const dbItem = convertPubStateToDbPost({
+		...pubState,
+		dbRecord: {
+			...pubState[PUB_KEYS.dbRecord],
+			name: makeScheduledItemName(pubState),
+			socialMedia: DEFAULT_SOCIAL_MEDIA,
+			[POST_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+			[POST_KEYS.pubTimestampMinutes]: conserved
+				? null
+				: convertDateTimeToTsMinutes(
+						pubState[PUB_KEYS.date],
+						pubState[PUB_KEYS.time],
+						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					),
+		},
+	});
+
+	return await c.ctx[CTX_KEYS.DB_CRUD].createItem(DB_TABLE_NAMES.Post, dbItem);
+}
+
+export async function updatePost(c, pubState, dbOverwrite) {
+	const dbItem = convertPubStateToDbPost({
+		...pubState,
+		dbRecord: {
+			...pubState.dbRecord,
+			name: makeScheduledItemName(pubState),
+			[POST_KEYS.pubTimestampMinutes]: pubState[PUB_KEYS.date]
+				? convertDateTimeToTsMinutes(
+						pubState[PUB_KEYS.date],
+						pubState[PUB_KEYS.time],
+						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					)
+				: null,
+			...dbOverwrite,
+		},
+	});
+	// save to db
+	return c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
+}
+
+export async function deletePost(c, itemId) {
+	return await c.ctx[CTX_KEYS.DB_CRUD].deleteItem(DB_TABLE_NAMES.Post, itemId);
 }

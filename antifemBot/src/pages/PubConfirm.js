@@ -51,7 +51,7 @@ export class PubConfirm extends PubPageBase {
 			case 'pubConfirmBtn':
 				const item = await createPost(c, this.state.pub);
 
-				await printPubToAdminChannel(this.router, item);
+				await printPubToAdminChannel(c, item);
 				await this.reply(t(c, 'wasSuccessfullyScheduled'));
 
 				return this.go(HOME_PAGE);

@@ -181,7 +181,7 @@ export class PubPostSetup extends PubPageBase {
 			case 'saveToConservedBtn':
 				const item = await createPost(c, this.state.pub, true);
 
-				await printPubToAdminChannel(this.router, item);
+				await printPubToAdminChannel(c, item);
 				await this.reply(t(c, 'wasSuccessfullyConserved'));
 
 				return this.go(HOME_PAGE);
