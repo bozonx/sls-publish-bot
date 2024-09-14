@@ -76,14 +76,14 @@ export class AlreadyPublishedItem extends PageBase {
 
 				return this.router.go('pub-content');
 			case 'deletePostBtn':
-				const msgId =
-					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId];
-
+				// delete message in telegram channel
 				await c.api.deleteMessage(
 					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
-					Number(msgId),
+					Number(
+						this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+					),
 				);
-
+				// delete post from db
 				await deletePost(
 					c,
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.id],

@@ -101,6 +101,7 @@ export class ConservedItem extends PageBase {
 				await doFullFinalPublicationProcess(
 					c,
 					this.state[EDIT_ITEM_NAME],
+					// save user who has forcelly publicated this
 					this.me[USER_KEYS.id],
 				);
 				await this.reply(

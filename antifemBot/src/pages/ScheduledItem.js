@@ -96,6 +96,7 @@ export class ScheduledItem extends PageBase {
 
 		switch (btnId) {
 			case 'toConservedBtn':
+				// pubTimestampMinutes will be cleared automatically
 				const dbRes = await updatePost(c, {
 					...this.state[EDIT_ITEM_NAME],
 					[PUB_KEYS.date]: null,
@@ -117,6 +118,7 @@ export class ScheduledItem extends PageBase {
 				await doFullFinalPublicationProcess(
 					c,
 					this.state[EDIT_ITEM_NAME],
+					// save user who has forcelly publicated this
 					this.me[USER_KEYS.id],
 				);
 				await this.reply(
