@@ -1,6 +1,5 @@
 import { PageBase } from '../PageRouter.js';
 import { t, defineMenu } from '../helpers/helpers.js';
-import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
 	DEFAULT_BTN_ITEM_ID,
@@ -8,7 +7,6 @@ import {
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
 	POST_KEYS,
-	CTX_KEYS,
 } from '../constants.js';
 
 export class ConservedList extends PageBase {
@@ -25,7 +23,6 @@ export class ConservedList extends PageBase {
 				[POST_KEYS.pubMsgId]: null,
 				[POST_KEYS.pubTimestampMinutes]: null,
 			},
-			// [{ [POST_KEYS.name]: 'asc' }],
 		);
 		// remove editing state
 		delete this.state[EDIT_ITEM_NAME];
@@ -38,7 +35,7 @@ export class ConservedList extends PageBase {
 			...items.map((i) => [
 				{
 					id: DEFAULT_BTN_ITEM_ID,
-					label: this._makeItemLabel(i),
+					label: i[POST_KEYS.name] || t(c, 'itemHasNoContent'),
 					payload: i[POST_KEYS.id],
 				},
 			]),
@@ -67,11 +64,5 @@ export class ConservedList extends PageBase {
 			default:
 				return false;
 		}
-	}
-
-	_makeItemLabel(dbItem) {
-		return dbItem[POST_KEYS.name]
-			? dbItem[POST_KEYS.name]
-			: t(this.router.c, 'itemHasNoContent');
 	}
 }

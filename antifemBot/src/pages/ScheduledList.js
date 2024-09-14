@@ -73,26 +73,4 @@ export class ScheduledList extends PageBase {
 				return false;
 		}
 	}
-
-	// _makeItemLabel(dbItem) {
-	// 	const c = this.router.c;
-	// 	const itemName = dbItem[POST_KEYS.name];
-	//
-	// 	if (!itemName) return t(c, 'itemHasNoContent');
-	//
-	// 	const itemPubMinutes = dbItem[POST_KEYS.pubTimestampMinutes];
-	// 	const curTimeMinutes = new Date().getTime() / 1000 / 60;
-	// 	// if staled - use stale mark
-	// 	let dateTimeLabel = t(this.router.c, 'staleMark');
-	//
-	// 	if (
-	// 		itemPubMinutes >
-	// 		curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
-	// 	) {
-	// 		// means actual - else use date and time
-	// 		dateTimeLabel = getPostShortTime(this.c, itemPubMinutes);
-	// 	}
-	//
-	// 	return `${dateTimeLabel} ${itemName}`;
-	// }
 }

@@ -1,20 +1,17 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu, makeCurrentDateTimeStr } from '../helpers/helpers.js';
-import { applyStringTemplate } from '../helpers/lib.js';
-import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
-	makeHumanRuDateCompact,
-	isoDateToLongLocaleRuDate,
-	getTimeStr,
-	makeIsoLocaleDate,
-} from '../helpers/dateTimeHelpers.js';
+	t,
+	defineMenu,
+	makeCurrentDateTimeStr,
+	makePostItemLabel,
+} from '../helpers/helpers.js';
+import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
 	POST_KEYS,
-	CTX_KEYS,
 } from '../constants.js';
 
 export class AlreadyPublishedList extends PageBase {
@@ -45,7 +42,7 @@ export class AlreadyPublishedList extends PageBase {
 			...items.map((i) => [
 				{
 					id: DEFAULT_BTN_ITEM_ID,
-					label: this._makeItemLabel(i),
+					label: makePostItemLabel(c, i),
 					payload: i[POST_KEYS.id],
 				},
 			]),
@@ -74,12 +71,5 @@ export class AlreadyPublishedList extends PageBase {
 			default:
 				return false;
 		}
-	}
-
-	_makeItemLabel(dbItem) {
-		// TODO: выводить дату
-		return dbItem[POST_KEYS.name]
-			? dbItem[POST_KEYS.name]
-			: t(this.router.c, 'itemHasNoContent');
 	}
 }
