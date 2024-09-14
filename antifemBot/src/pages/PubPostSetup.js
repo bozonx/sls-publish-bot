@@ -25,25 +25,23 @@ export class PubPostSetup extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const linkIds = getLinkIds(this.state.pub[PUB_KEYS.entities]);
-		// let defaultPreviewLink = null;
-		//
-		// if (!this.state.pub[PUB_KEYS.media]?.length && linkIds.length === 1) {
-		// 	defaultPreviewLink = this.state.pub[PUB_KEYS.entities][linkIds[0]].url;
-		// }
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
-			// [PUB_KEYS.previewLink]: defaultPreviewLink,
 			// set default author for default template - current user's author name
 			[PUB_KEYS.author]:
 				c.ctx[CTX_KEYS.me][USER_KEYS.cfg][USER_CFG_KEYS.authorName],
 			...this.state.pub,
 		};
 
-		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
+		const pub = this.state.pub;
+		const editMode = Boolean(this.state[EDIT_ITEM_NAME]);
+		const hasMedia = Boolean(this.state.pub[PUB_KEYS.media]?.length);
+
+		this.text = `${await makeStatePreview(c, pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
 
 		const restTemplateNames = Object.keys(TEMPLATE_NAMES).filter(
-			(i) => i !== this.state.pub[PUB_KEYS.template],
+			(i) => i !== pub[PUB_KEYS.template],
 		);
 		// author name for button addAuthor
 		const authorToAdd = this._getAuthorToAdd();
@@ -56,37 +54,37 @@ export class PubPostSetup extends PubPageBase {
 					payload: tmplName,
 				},
 			]),
-			!this.state.pub[PUB_KEYS.media]?.length &&
+			!hasMedia &&
 				linkIds.length === 1 && [
 					{
 						id: `LINK_PREVIEW_SWITCH`,
 						label: t(
 							c,
-							this.state.pub[PUB_KEYS.previewLink] === null
+							pub[PUB_KEYS.previewLink] === null
 								? `linkPreviewOnBtn`
 								: `linkPreviewOffBtn`,
 						),
 					},
 				],
-			!this.state.pub[PUB_KEYS.media]?.length &&
+			!hasMedia &&
 				linkIds.length > 1 && [
 					{
 						id: `linkPreviewSelectBtn`,
 						label: t(c, `linkPreviewSelectBtn`),
 					},
 				],
-			this.state.pub[PUB_KEYS.previewLink] && [
+			pub[PUB_KEYS.previewLink] && [
 				{
 					id: `LINK_PREVIEW_PLACEMENT`,
 					label: t(
 						c,
-						this.state.pub[PUB_KEYS.previewLinkOnTop]
+						pub[PUB_KEYS.previewLinkOnTop]
 							? 'linkPreviewToBottomBtn'
 							: `linkPreviewToTopBtn`,
 					),
 				},
 			],
-			this.state.pub[PUB_KEYS.author]
+			pub[PUB_KEYS.author]
 				? [
 						{
 							id: 'withoutAuthorBtn',
@@ -105,7 +103,7 @@ export class PubPostSetup extends PubPageBase {
 					label: t(c, 'showPostBtn'),
 				},
 			],
-			!this.state[EDIT_ITEM_NAME] && [
+			!editMode && [
 				{
 					id: 'saveToConservedBtn',
 					label: t(c, 'saveToConservedBtn'),
@@ -120,7 +118,7 @@ export class PubPostSetup extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state[EDIT_ITEM_NAME]
+				editMode
 					? {
 							id: 'saveBtn',
 							label: t(c, 'saveBtn'),
@@ -182,6 +180,7 @@ export class PubPostSetup extends PubPageBase {
 				return this.go('pub-select-preview');
 			case 'saveToConservedBtn':
 				const item = await createPost(c, this.state.pub, true);
+
 				await printPubToAdminChannel(this.router, item);
 				await this.reply(t(c, 'wasSuccessfullyConserved'));
 
@@ -216,9 +215,14 @@ export class PubPostSetup extends PubPageBase {
 	}
 
 	_getAuthorToAdd() {
-		return this.state.pub[PUB_KEYS.template] === TEMPLATE_NAMES.byFollower
-			? this.state.pub[PUB_KEYS.forwardedFrom]
-			: this.me[USER_KEYS.cfg][USER_CFG_KEYS.authorName];
+		if (
+			[TEMPLATE_NAMES.gotFrom, TEMPLATE_NAMES.byFollower].includes(
+				this.state.pub[PUB_KEYS.template],
+			)
+		)
+			return this.state.pub[PUB_KEYS.forwardedFrom];
+
+		return this.me[USER_KEYS.cfg][USER_CFG_KEYS.authorName];
 	}
 
 	_resolveAuthorByTemplate(testTemplate) {
@@ -226,7 +230,10 @@ export class PubPostSetup extends PubPageBase {
 		const noAuthor = this.state.pub[PUB_KEYS.noAuthor];
 		const forwardedFrom = this.state.pub[PUB_KEYS.forwardedFrom];
 
-		if (!noAuthor && testTemplate === TEMPLATE_NAMES.byFollower) {
+		if (
+			!noAuthor &&
+			[TEMPLATE_NAMES.gotFrom, TEMPLATE_NAMES.byFollower].includes(testTemplate)
+		) {
 			if (customAuthor) return customAuthor;
 			else if (forwardedFrom) return forwardedFrom;
 		} else if (!noAuthor && testTemplate === TEMPLATE_NAMES.default) {

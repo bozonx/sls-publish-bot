@@ -160,6 +160,7 @@ export class PubContent extends PubPageBase {
 		if (this.state.replaceMode === REPLACE_MODES.textOnly) {
 			// do not overwrite media, only overwrite text
 			delete partlyPubState[PUB_KEYS.media];
+			delete partlyPubState[PUB_KEYS.media_group_id];
 		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
 			// do not overwrite text, only overwrite media
 			delete partlyPubState[PUB_KEYS.text];
