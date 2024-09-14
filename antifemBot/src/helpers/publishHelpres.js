@@ -259,10 +259,10 @@ export async function printPubToAdminChannel(c, dbRecord) {
 
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
-		(await makeListOfScheduledForDescr(c)) +
+		msg +
+			`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
 			'\n\n----------\n\n' +
-			msg +
-			`\n\n${await makeStatePreview(c, infoMsgPostParams)}`,
+			(await makeListOfScheduledForDescr(c)),
 		{ reply_parameters: { message_id: msgId } },
 	);
 }
