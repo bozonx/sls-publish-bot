@@ -52,8 +52,6 @@ export function applyTemplate(c, textMdV2, pubState) {
 }
 
 export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
-	console.log(22222, c.msg, prevPubState);
-
 	let state = {
 		[PUB_KEYS.forwardedFrom]:
 			c.msg.forward_sender_name ||
@@ -75,8 +73,7 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 			};
 		}
 
-		// TODO: более умное условие
-		if (c.msg.media_group_id) {
+		if (c.msg.media_group_id === prevPubState[PUB_KEYS.media_group_id]) {
 			prevMedia = prevPubState[PUB_KEYS.media] || [];
 		}
 

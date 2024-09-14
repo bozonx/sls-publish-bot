@@ -116,7 +116,10 @@ export class PubContent extends PubPageBase {
 					[PUB_KEYS.entities]: null,
 				});
 			case 'removeMediaBtn':
-				return this.reload({ [PUB_KEYS.media]: null });
+				return this.reload({
+					[PUB_KEYS.media]: null,
+					[PUB_KEYS.media_group_id]: null,
+				});
 			case 'showPostBtn':
 				await this.printFinalPost(this.me[USER_KEYS.tgChatId], this.state.pub);
 
