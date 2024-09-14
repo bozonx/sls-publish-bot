@@ -146,7 +146,11 @@ export class PubContent extends PubPageBase {
 
 	async onMessage() {
 		const c = this.router.c;
-		let partlyPubState = makeStateFromMessage(c, this.state.mdV1Mode);
+		let partlyPubState = makeStateFromMessage(
+			c,
+			this.state.pub,
+			this.state.mdV1Mode,
+		);
 
 		if (!partlyPubState) return this.reply(t(c, 'wrongTypeOfPost'));
 

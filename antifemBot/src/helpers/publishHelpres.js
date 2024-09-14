@@ -51,7 +51,9 @@ export function applyTemplate(c, textMdV2, pubState) {
 	return finalText;
 }
 
-export function makeStateFromMessage(c, isTextInMdV1) {
+export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
+	console.log(22222, c.msg, prevPubState);
+
 	let state = {
 		[PUB_KEYS.forwardedFrom]:
 			c.msg.forward_sender_name ||
@@ -59,33 +61,38 @@ export function makeStateFromMessage(c, isTextInMdV1) {
 			null,
 	};
 
-	if (c.msg.video) {
+	if (c.msg.video || c.msg.photo) {
+		let mediaItem;
+		let prevMedia = [];
+
+		if (c.msg.video)
+			mediaItem = { type: MEDIA_TYPES.video, data: c.msg.video.file_id };
+		else if (c.msg.photo) {
+			mediaItem = {
+				type: MEDIA_TYPES.photo,
+				// the last item is biggest variant, others are thumbnails
+				data: c.msg.photo.at(-1).file_id,
+			};
+		}
+
+		// TODO: более умное условие
+		if (c.msg.media_group_id) {
+			prevMedia = prevPubState[PUB_KEYS.media] || [];
+		}
+
 		state = {
 			...state,
-			[PUB_KEYS.media]: [
-				{ type: MEDIA_TYPES.video, data: c.msg.video.file_id },
-			],
+			[PUB_KEYS.media]: [...prevMedia, mediaItem],
 			[PUB_KEYS.text]: c.msg.caption,
 			[PUB_KEYS.entities]: c.msg.caption_entities,
-		};
-	} else if (c.msg.photo) {
-		state = {
-			...state,
-			[PUB_KEYS.media]: [
-				{
-					type: MEDIA_TYPES.photo,
-					// the last item is biggest variant, others are thumbnails
-					data: c.msg.photo.at(-1).file_id,
-				},
-			],
-			[PUB_KEYS.text]: c.msg.caption,
-			[PUB_KEYS.entities]: c.msg.caption_entities,
+			[PUB_KEYS.media_group_id]: c.msg.media_group_id,
 		};
 	} else if (c.msg.text) {
 		state = {
 			...state,
 			[PUB_KEYS.text]: c.msg.text,
 			[PUB_KEYS.entities]: c.msg.entities,
+			[PUB_KEYS.media_group_id]: null,
 		};
 	} else {
 		// returning undefined means wrong type of post
@@ -271,10 +278,13 @@ export async function printPubToAdminChannel(router, dbRecord) {
 	const c = router.c;
 	const item = convertDbPostToPubState(dbRecord);
 	// publication
-	const { message_id } = await router.printFinalPost(
+	const printRes = await router.printFinalPost(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		item,
 	);
+	const msgId = Array.isArray(printRes)
+		? printRes[0]?.message_id
+		: printRes?.message_id;
 	const msg = dbRecord[POST_KEYS.pubTimestampMinutes]
 		? t(c, 'scheduledInfoMsgToAdminChannel')
 		: t(c, 'conservedInfoMsgToAdminChannel');
@@ -295,7 +305,7 @@ export async function printPubToAdminChannel(router, dbRecord) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		msg + `\n\n${await makeStatePreview(c, infoMsgPostParams)}`,
-		{ reply_parameters: { message_id } },
+		{ reply_parameters: { message_id: msgId } },
 	);
 }
 
@@ -324,7 +334,20 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 			throw new Error(`Unsupported type`);
 		}
 	} else if (pubState[PUB_KEYS.media]?.length > 1) {
-		throw new Error(`Media group is not supported`);
+		return c.api.sendMediaGroup(
+			chatId,
+			pubState[PUB_KEYS.media].map((item, index) => {
+				const res = {
+					type: item.type,
+					media: item.data,
+					...msgParams,
+				};
+
+				if (index === 0) res.caption = fullPostTextMdV2;
+
+				return res;
+			}),
+		);
 	}
 	// else no media means text message
 	return c.api.sendMessage(chatId, fullPostTextMdV2, {

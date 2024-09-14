@@ -57,8 +57,7 @@ export async function makeStatePreview(c, state = {}) {
 		));
 
 	if (state.media?.length === 1) postType = state.media[0].type;
-	// TODO: add
-	// else if (state.media?.length > 1) postType = 'media group';
+	else if (state.media?.length > 1) postType = 'media group';
 
 	let res = '';
 

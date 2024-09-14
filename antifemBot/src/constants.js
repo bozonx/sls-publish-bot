@@ -78,10 +78,9 @@ export const PUB_KEYS = {
 	text: 'text',
 	entities: 'entities',
 	media: 'media',
+	media_group_id: 'media_group_id',
 	tags: 'tags',
 	template: 'template',
-	// TODO: remove
-	// preview: 'preview',
 	previewLink: 'previewLink',
 	previewLinkOnTop: 'previewLinkOnTop',
 	// the final selected author
