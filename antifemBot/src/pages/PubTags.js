@@ -19,6 +19,7 @@ import {
 export class PubTags extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		const pub = this.state.pub;
 		const allTags = await this.db.getAll(
 			DB_TABLE_NAMES.Tag,
 			{
@@ -30,10 +31,10 @@ export class PubTags extends PubPageBase {
 		);
 
 		const notSelectedTags = allTags.filter(
-			(i) => !this.state.pub?.[PUB_KEYS.tags]?.includes(i[TAG_KEYS.name]),
+			(i) => !pub?.[PUB_KEYS.tags]?.includes(i[TAG_KEYS.name]),
 		);
 
-		this.text = `${await makeStatePreview(c, this.state.pub)}\n\n${t(c, 'selectTagsDescr')}`;
+		this.text = `${await makeStatePreview(c, pub)}\n\n${t(c, 'selectTagsDescr')}`;
 
 		return defineMenu([
 			...breakArray(
@@ -44,7 +45,7 @@ export class PubTags extends PubPageBase {
 				})),
 				2,
 			),
-			this.state.pub?.[PUB_KEYS.tags]?.length && [
+			pub?.[PUB_KEYS.tags]?.length && [
 				{
 					id: 'clearTagsBtn',
 					label: t(c, 'clearTagsBtn'),

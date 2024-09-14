@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu } from '../helpers/helpers.js';
+import { t, defineMenu, makeCurrentDateTimeStr } from '../helpers/helpers.js';
 import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
@@ -38,15 +38,7 @@ export class AlreadyPublishedList extends PageBase {
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
-			? t(c, 'publishedListDescr') +
-				'\n\n' +
-				`${t(c, 'now')}: ` +
-				isoDateToLongLocaleRuDate(
-					makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
-				) +
-				' ' +
-				getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
-				` ${t(c, 'msk')}`
+			? t(c, 'publishedListDescr') + '\n\n' + makeCurrentDateTimeStr(c)
 			: t(c, 'publishedEmptyListDescr');
 
 		return defineMenu([

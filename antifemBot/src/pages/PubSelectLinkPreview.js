@@ -42,8 +42,6 @@ export class PubSelectLinkPreview extends PubPageBase {
 
 			if (!item) return c.reply(`ERROR: Can't find the item`);
 
-			// this.state.pub[PUB_KEYS.previewLink] = item.url;
-
 			return this.go('pub-post-setup', {
 				[PUB_KEYS.previewLink]: item.url,
 			});

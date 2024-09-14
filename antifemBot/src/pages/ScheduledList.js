@@ -2,24 +2,16 @@ import { PageBase } from '../PageRouter.js';
 import {
 	t,
 	defineMenu,
-	getPostShortTime,
+	makeCurrentDateTimeStr,
 	makePostItemLabel,
 } from '../helpers/helpers.js';
-import { applyStringTemplate } from '../helpers/lib.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
-import {
-	makeHumanRuDateCompact,
-	isoDateToLongLocaleRuDate,
-	getTimeStr,
-	makeIsoLocaleDate,
-} from '../helpers/dateTimeHelpers.js';
 import {
 	DEFAULT_BTN_ITEM_ID,
 	HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
 	POST_KEYS,
-	CTX_KEYS,
 } from '../constants.js';
 
 export class ScheduledList extends PageBase {
@@ -44,15 +36,7 @@ export class ScheduledList extends PageBase {
 		delete this.state[EDIT_ITEM_NAME];
 
 		this.text = items.length
-			? t(c, 'scheduledListDescr') +
-				'\n\n' +
-				`${t(c, 'now')}: ` +
-				isoDateToLongLocaleRuDate(
-					makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
-				) +
-				' ' +
-				getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
-				` ${t(c, 'msk')}`
+			? t(c, 'scheduledListDescr') + '\n\n' + makeCurrentDateTimeStr(c)
 			: t(c, 'scheduledEmptyListDescr');
 
 		return defineMenu([

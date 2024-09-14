@@ -4,18 +4,14 @@ import {
 	makeStatePreview,
 	makeListOfScheduledForDescr,
 	defineMenu,
+	makeCurrentDateTimeStr,
 } from '../helpers/helpers.js';
 import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
-import {
-	make2SignDigitStr,
-	applyStringTemplate,
-	breakArray,
-} from '../helpers/lib.js';
+import { make2SignDigitStr, breakArray } from '../helpers/lib.js';
 import {
 	makeIsoLocaleDate,
 	normalizeTime,
 	getCurrentHour,
-	getTimeStr,
 	isTimePast,
 } from '../helpers/dateTimeHelpers.js';
 import {
@@ -41,9 +37,7 @@ export class PubTime extends PubPageBase {
 		this.text =
 			(await makeListOfScheduledForDescr(c)) +
 			'\n\n----------\n\n' +
-			`${t(c, 'now')}: ` +
-			getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
-			` ${t(c, 'msk')}` +
+			makeCurrentDateTimeStr(c) +
 			'\n\n----------\n\n' +
 			`${await makeStatePreview(c, this.state.pub)}\n\n` +
 			t(c, 'selectHourDescr');

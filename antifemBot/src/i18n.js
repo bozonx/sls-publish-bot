@@ -4,13 +4,13 @@ export default {
 		msk: 'МСК',
 		staleMark: 'Просрочено!',
 		itemHasNoContent: 'Без контента',
-		// timeZone: 'Часовой пояс',
 		now: 'Сейчас',
 
 		// Template names
 		'template-default': 'Основной',
 		'template-byFollower': 'От подписчика',
 		'template-noFooter': 'Без футера',
+		'template-gotFrom': 'Взято из',
 
 		// State keys
 		statePostType: 'Тип поста',

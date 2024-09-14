@@ -18,6 +18,7 @@ import {
 	makeHumanRuDateCompact,
 	getTimeStr,
 	makeIsoLocaleDate,
+	isoDateToLongLocaleRuDate,
 } from './dateTimeHelpers.js';
 import { makeStringArrayUnique } from './lib.js';
 
@@ -290,6 +291,18 @@ export function getLinkIds(entities = []) {
 	}
 
 	return linkIds;
+}
+
+export function makeCurrentDateTimeStr(c) {
+	return (
+		`${t(c, 'now')}: ` +
+		isoDateToLongLocaleRuDate(
+			makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
+		) +
+		' ' +
+		getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
+		` ${t(c, 'msk')}`
+	);
 }
 
 // export function makePostListItemLabel(c, dbItem) {

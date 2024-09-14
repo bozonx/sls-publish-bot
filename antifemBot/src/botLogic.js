@@ -83,6 +83,7 @@ export async function handleStart(c) {
 	// save initial config to DB on first time app start
 	if (!c.ctx[CTX_KEYS.config]) {
 		c.ctx[CTX_KEYS.config] = APP_INITIAL_CONFIG;
+
 		await saveToKv(c, KV_KEYS.config, c.ctx[CTX_KEYS.config]);
 	}
 	// show home page on start command

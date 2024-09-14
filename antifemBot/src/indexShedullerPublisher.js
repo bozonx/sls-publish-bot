@@ -21,7 +21,7 @@ export async function handleScheduled(
 	prismaAdapter,
 ) {
 	const prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
-	const curTimeMinutes = Math.floor(new Date().getTime() / 1000 / 60);
+	const curTimeMinutes = new Date().getTime() / 1000 / 60;
 	// const curTimeMinutes = 28768620; // new Date('2024-09-12T08:00+03:00').getTime() / 1000 / 60
 	const [item] = await prisma[DB_TABLE_NAMES.Post].findMany({
 		where: {
@@ -60,11 +60,12 @@ export async function handleScheduled(
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
 			[CTX_KEYS.config]: config,
 			[CTX_KEYS.DB_CRUD]: {
-				async deleteItem(tableName, itemId) {
+				async updateItem(tableName, data) {
+					const { id, ...data } = data;
+
 					return await prisma[tableName].delete({
-						where: {
-							id: itemId,
-						},
+						where: { id },
+						data,
 					});
 				},
 			},

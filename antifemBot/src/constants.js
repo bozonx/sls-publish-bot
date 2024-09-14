@@ -15,6 +15,15 @@ export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const KV_KEYS = {
 	config: 'config',
 };
+export const APP_CFG_KEYS = {
+	templates: 'templates',
+};
+export const TEMPLATE_NAMES = {
+	default: 'default',
+	byFollower: 'byFollower',
+	noFooter: 'noFooter',
+	gotFrom: 'gotFrom',
+};
 export const CTX_KEYS = {
 	config: 'config',
 	session: 'session',
@@ -66,14 +75,6 @@ export const POST_KEYS = {
 	updatedByUserId: 'updatedByUserId',
 	payloadJson: 'payloadJson',
 };
-export const APP_CFG_KEYS = {
-	templates: 'templates',
-};
-export const TEMPLATE_NAMES = {
-	default: 'default',
-	byFollower: 'byFollower',
-	noFooter: 'noFooter',
-};
 export const PUB_KEYS = {
 	text: 'text',
 	entities: 'entities',
@@ -122,6 +123,13 @@ export const APP_INITIAL_CONFIG = {
 		],
 		[TEMPLATE_NAMES.byFollower]: [
 			'От подписчика',
+			' ${AUTHOR}',
+			'\n\n${CONTENT}',
+			'\n\n${TAGS}',
+			'\n\n' + footer,
+		],
+		[TEMPLATE_NAMES.gotFrom]: [
+			'Взято из',
 			' ${AUTHOR}',
 			'\n\n${CONTENT}',
 			'\n\n${TAGS}',

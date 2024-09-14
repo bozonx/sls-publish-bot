@@ -4,17 +4,16 @@ import {
 	makeStatePreview,
 	defineMenu,
 	makeListOfScheduledForDescr,
+	makeCurrentDateTimeStr,
 } from '../helpers/helpers.js';
 import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
-import { isEmptyObj, applyStringTemplate } from '../helpers/lib.js';
+import { isEmptyObj } from '../helpers/lib.js';
 import {
 	normalizeShortDateToIsoDate,
 	todayPlusDaysIsoDate,
 	makeShortDateFromIsoDate,
 	getShortWeekDay,
 	isPastDate,
-	isoDateToLongLocaleRuDate,
-	makeIsoLocaleDate,
 } from '../helpers/dateTimeHelpers.js';
 import {
 	PUB_KEYS,
@@ -27,8 +26,9 @@ import {
 export class PubDate extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
+		const editMode = Boolean(this.state[EDIT_ITEM_NAME]);
 		// copy state to edit in edit mode
-		if (this.state[EDIT_ITEM_NAME] && isEmptyObj(this.state.pub))
+		if (editMode && isEmptyObj(this.state.pub))
 			this.state.pub = this.state[EDIT_ITEM_NAME];
 		// default date is tomorrow
 		this.state.pub = {
@@ -42,11 +42,7 @@ export class PubDate extends PubPageBase {
 		this.text =
 			(await makeListOfScheduledForDescr(c)) +
 			'\n\n----------\n\n' +
-			`${t(c, 'now')}: ` +
-			isoDateToLongLocaleRuDate(
-				makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
-			) +
-			` ${t(c, 'msk')}` +
+			makeCurrentDateTimeStr(c) +
 			'\n\n----------\n\n' +
 			`${await makeStatePreview(c, this.state.pub)}\n\n` +
 			t(c, 'selectDateDescr');
@@ -96,7 +92,7 @@ export class PubDate extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				this.state[EDIT_ITEM_NAME] && {
+				editMode && {
 					id: 'saveBtn',
 					label: t(c, 'saveBtn'),
 				},
