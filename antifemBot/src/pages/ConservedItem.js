@@ -8,7 +8,6 @@ import {
 import {
 	doFullFinalPublicationProcess,
 	deletePost,
-	saveEditedPost,
 } from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
@@ -22,7 +21,19 @@ import {
 
 export class ConservedItem extends PageBase {
 	async renderMenu() {
-		if (this.state.saveIt) await saveEditedPost(this.router);
+		if (this.state.saveIt) {
+			this.state[EDIT_ITEM_NAME] = this.state.pub;
+
+			await updatePost(c, this.state[EDIT_ITEM_NAME], {
+				[POST_KEYS.updatedByUserId]: this.me[USER_KEYS.id],
+			});
+
+			await this.reply(t(c, 'editedSavedSuccessfully'));
+		}
+
+		delete this.state.pub;
+		delete this.state.saveIt;
+		delete this.state.editReturnUrl;
 
 		const item = this.state[EDIT_ITEM_NAME];
 
@@ -41,9 +52,6 @@ export class ConservedItem extends PageBase {
 		const allowDelete =
 			isAdminOrMyItem ||
 			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub];
-		// do delete pub state in case of cancel btn pressed
-		delete this.state.pub;
-		delete this.state.editReturnUrl;
 
 		this.text =
 			t(c, 'conservedItemDescr') + `\n\n${await makeStatePreview(c, item)}`;

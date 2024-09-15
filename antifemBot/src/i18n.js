@@ -119,7 +119,7 @@ export default {
 		scheduledItemWasPublished: 'Отложенный пост был успешно опубликован',
 		conservedItemWasPublished: 'Консерва была успешно опубликована',
 		conservedItemWasDeleted: 'Консерва была удалена',
-		publishedItemWasDeleted: 'Опубликованный пост был удалён из канала',
+		publishedItemWasDeleted: 'Опубликованный пост был удалён',
 		scheduledInfoMsgToAdminChannel: 'Пост добавлен в отложенные',
 		conservedInfoMsgToAdminChannel: 'Пост добавлен в консервы',
 		wrongTime: 'Не верное время',
@@ -137,5 +137,7 @@ export default {
 			'Отправьте это сообщение об ошибке Ивану и нажмите /start',
 		youAreNotRegistered: 'Вы не зарегистрированы, обратитесь к админу',
 		youWasAddedToApp: 'Вы были добавлены в бота, нажимте ещё раз /start',
+		noMsgInDestinationChannel:
+			'Сообщение в канале не найдено, возможно оно уже было удалено. Будет удалена только запись в базе данных',
 	},
 };

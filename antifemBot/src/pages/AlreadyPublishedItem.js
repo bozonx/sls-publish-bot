@@ -5,7 +5,11 @@ import {
 	makeStatePreview,
 	isUserAdmin,
 } from '../helpers/helpers.js';
-import { deletePost } from '../helpers/publishHelpres.js';
+import {
+	deletePost,
+	updatePost,
+	updateFinalPost,
+} from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
 	HOME_PAGE,
@@ -19,11 +23,29 @@ import {
 
 export class AlreadyPublishedItem extends PageBase {
 	async renderMenu() {
+		const c = this.router.c;
+
+		if (this.state.saveIt) {
+			this.state[EDIT_ITEM_NAME] = this.state.pub;
+
+			await updateFinalPost(
+				c,
+				c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+				this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+				this.state[EDIT_ITEM_NAME],
+			);
+
+			await updatePost(c, this.state[EDIT_ITEM_NAME]);
+		}
+
+		delete this.state.pub;
+		delete this.state.saveIt;
+		delete this.state.editReturnUrl;
+
 		const item = this.state[EDIT_ITEM_NAME];
 
 		if (!item) return this.reply(`ERROR: Can't find item to edit`);
 
-		const c = this.router.c;
 		const isAdmin = isUserAdmin(this.me);
 		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];
 		const isAdminOrMyItem =
@@ -36,17 +58,6 @@ export class AlreadyPublishedItem extends PageBase {
 		const allowDelete =
 			isAdminOrMyItem ||
 			userPerms[USER_PERMISSIONS_KEYS.deleteOthersScheduledPub];
-		// do delete pub state in case of cancel btn pressed
-		delete this.state.pub;
-		delete this.state.editReturnUrl;
-
-		if (this.state.saveIt) {
-			delete this.state.saveIt;
-
-			// TODO: do it
-			//
-			// await saveEditedPost(this.router);
-		}
 
 		this.text =
 			t(c, 'publishedItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
@@ -85,12 +96,20 @@ export class AlreadyPublishedItem extends PageBase {
 				return this.router.go('pub-content');
 			case 'deletePostBtn':
 				// delete message in telegram channel
-				await c.api.deleteMessage(
-					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
-					Number(
-						this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
-					),
-				);
+				try {
+					await c.api.deleteMessage(
+						c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+						Number(
+							this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+						),
+					);
+				} catch (e) {
+					// skip not found
+					if (e.error_code === 400)
+						await c.reply(t(c, 'noMsgInDestinationChannel'));
+					else throw e;
+				}
+
 				// delete post from db
 				await deletePost(
 					c,

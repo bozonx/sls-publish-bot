@@ -14,7 +14,6 @@ import {
 	PUB_KEYS,
 	MEDIA_TYPES,
 	USER_KEYS,
-	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
 	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
@@ -112,6 +111,9 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 		state.text = text;
 		state.entities = entities;
 	}
+	// clear entities if it is simple text
+	if (!state.entities) state.entities = null;
+
 	// remove undefined to not overwrite media or text in case it don't need
 	return omitUndefined(state);
 }
@@ -273,6 +275,60 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 			show_above_text: pubState[PUB_KEYS.previewLinkOnTop],
 		},
 	});
+}
+
+export async function updateFinalPost(c, chatId, msgId, pubState) {
+	const msgParams = {
+		parse_mode: 'MarkdownV2',
+	};
+	const fullPostTextMdV2 = prepareMdV2MsgTextToPublish(c, pubState);
+
+	if (pubState[PUB_KEYS.media]?.length === 1) {
+		// one photo or video
+		// const { type, data } = pubState[PUB_KEYS.media][0];
+		//
+		// if (type === MEDIA_TYPES.photo) {
+		// 	return c.api.sendPhoto(chatId, data, {
+		// 		...msgParams,
+		// 		caption: fullPostTextMdV2,
+		// 	});
+		// } else if (type === MEDIA_TYPES.video) {
+		// 	return c.api.sendVideo(chatId, data, {
+		// 		...msgParams,
+		// 		caption: fullPostTextMdV2,
+		// 	});
+		// } else {
+		// 	throw new Error(`Unsupported type`);
+		// }
+	} else if (pubState[PUB_KEYS.media]?.length > 1) {
+		// return c.api.sendMediaGroup(
+		// 	chatId,
+		// 	pubState[PUB_KEYS.media].map((item, index) =>
+		// 		omitUndefined({
+		// 			type: item.type,
+		// 			media: item.data,
+		// 			caption: index === 0 ? fullPostTextMdV2 : undefined,
+		// 			...msgParams,
+		// 		}),
+		// 	),
+		// );
+	}
+
+	if (pubState[PUB_KEYS.media]?.length) {
+		return c.api.editMessageCaption(chatId, msgId, {
+			...msgParams,
+			caption: fullPostTextMdV2,
+		});
+	} else {
+		return c.api.editMessageText(chatId, msgId, fullPostTextMdV2, {
+			...msgParams,
+			link_preview_options: {
+				is_disabled: !pubState[PUB_KEYS.previewLink],
+				url: pubState[PUB_KEYS.previewLink],
+				show_above_text: pubState[PUB_KEYS.previewLinkOnTop],
+			},
+		});
+	}
 }
 
 function prepareMdV2MsgTextToPublish(c, pubState) {
