@@ -6,7 +6,6 @@ import {
 	defineMenu,
 } from '../helpers/helpers.js';
 import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
-import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import {
 	PUB_KEYS,
 	DEFAULT_BTN_ITEM_ID,
@@ -95,7 +94,9 @@ export class PubTags extends PubPageBase {
 			case 'nextBtn':
 				return this.go('pub-post-setup');
 			case 'saveBtn':
-				return saveEditedScheduledPost(this.router);
+				this.state.saveIt = true;
+
+				return this.go(this.state.editReturnUrl);
 			default:
 				return false;
 		}

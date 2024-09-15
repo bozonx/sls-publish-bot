@@ -8,6 +8,7 @@ import {
 import {
 	doFullFinalPublicationProcess,
 	deletePost,
+	saveEditedPost,
 } from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
@@ -21,6 +22,8 @@ import {
 
 export class ConservedItem extends PageBase {
 	async renderMenu() {
+		if (this.state.saveIt) await saveEditedPost(this.router);
+
 		const item = this.state[EDIT_ITEM_NAME];
 
 		if (!item) return this.reply(`ERROR: Can't find item to edit`);

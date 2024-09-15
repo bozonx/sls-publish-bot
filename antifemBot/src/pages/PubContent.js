@@ -1,10 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, defineMenu, makeStatePreview } from '../helpers/helpers.js';
-import {
-	makeStateFromMessage,
-	saveEditedScheduledPost,
-	escapeMdV2,
-} from '../helpers/publishHelpres.js';
+import { makeStateFromMessage, escapeMdV2 } from '../helpers/publishHelpres.js';
 import { isEmptyObj, breakArray } from '../helpers/lib.js';
 import {
 	PUB_KEYS,
@@ -141,7 +137,9 @@ export class PubContent extends PubPageBase {
 				delete this.state.replaceMode;
 				delete this.state.mdV1Mode;
 
-				return saveEditedScheduledPost(this.router);
+				this.state.saveIt = true;
+
+				return this.go(this.state.editReturnUrl);
 			default:
 				return false;
 		}

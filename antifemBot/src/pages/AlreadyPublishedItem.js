@@ -40,6 +40,14 @@ export class AlreadyPublishedItem extends PageBase {
 		delete this.state.pub;
 		delete this.state.editReturnUrl;
 
+		if (this.state.saveIt) {
+			delete this.state.saveIt;
+
+			// TODO: do it
+			//
+			// await saveEditedPost(this.router);
+		}
+
 		this.text =
 			t(c, 'publishedItemDescr') + `\n\n${await makeStatePreview(c, item)}`;
 

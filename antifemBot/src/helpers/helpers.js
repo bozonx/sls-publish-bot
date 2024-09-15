@@ -12,6 +12,7 @@ import {
 	DB_TABLE_NAMES,
 	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
+	EDIT_ITEM_NAME,
 } from '../constants.js';
 import {
 	makeHumanRuDate,
@@ -20,6 +21,7 @@ import {
 	makeIsoLocaleDate,
 	isoDateToLongLocaleRuDate,
 } from './dateTimeHelpers.js';
+import { updatePost } from './publishHelpres.js';
 import { makeStringArrayUnique } from './lib.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -270,6 +272,22 @@ export async function handleTagsFromInputAndSave(router, rawText) {
 	);
 
 	return newTags;
+}
+
+export async function saveEditedPost(router) {
+	const c = router.c;
+
+	router.state[EDIT_ITEM_NAME] = router.state.pub;
+
+	delete router.state.pub;
+	delete router.state.saveIt;
+	delete router.state.returnUrl;
+
+	await updatePost(c, router.state[EDIT_ITEM_NAME], {
+		[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+	});
+
+	await router.reply(t(c, 'editedSavedSuccessfully'));
 }
 
 export function getLinkIds(entities = []) {

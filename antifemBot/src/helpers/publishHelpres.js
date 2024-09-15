@@ -189,46 +189,6 @@ export function makeScheduledItemName(pubState) {
 	return '';
 }
 
-/////////////////////
-
-// It is used in save button handlers
-export async function saveEditedScheduledPost(router) {
-	// TODO: remake
-
-	const c = router.c;
-	const returnUrl = router.state.editReturnUrl;
-
-	router.state[EDIT_ITEM_NAME] = router.state.pub;
-
-	const pubState = router.state[EDIT_ITEM_NAME];
-
-	delete router.state.pub;
-	delete router.state.returnUrl;
-
-	await updatePost(c, pubState, {
-		[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
-	});
-
-	// const dbItem = convertPubStateToDbPost({
-	// 	...pubState,
-	// 	dbRecord: {
-	// 		...pubState.dbRecord,
-	// 		name: makeScheduledItemName(pubState),
-	// 		[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
-	// 		[POST_KEYS.pubTimestampMinutes]: convertDateTimeToTsMinutes(
-	// 			pubState[PUB_KEYS.date],
-	// 			pubState[PUB_KEYS.time],
-	// 			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-	// 		),
-	// 	},
-	// });
-	// // save to db
-	// await c.ctx[CTX_KEYS.DB_CRUD].updateItem(DB_TABLE_NAMES.Post, dbItem);
-	await router.reply(t(c, 'editedSavedSuccessfully'));
-
-	return router.go(returnUrl);
-}
-
 export async function printPubToAdminChannel(c, dbRecord) {
 	const item = convertDbPostToPubState(dbRecord);
 	// publication

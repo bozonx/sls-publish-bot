@@ -6,7 +6,6 @@ import {
 	makeListOfScheduledForDescr,
 	makeCurrentDateTimeStr,
 } from '../helpers/helpers.js';
-import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import { isEmptyObj } from '../helpers/lib.js';
 import {
 	normalizeShortDateToIsoDate,
@@ -125,7 +124,9 @@ export class PubDate extends PubPageBase {
 			case 'nextBtn':
 				return this.go('pub-time');
 			case 'saveBtn':
-				return saveEditedScheduledPost(this.router);
+				this.state.saveIt = true;
+
+				return this.go(this.state.editReturnUrl);
 			default:
 				return false;
 		}

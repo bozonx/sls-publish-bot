@@ -6,7 +6,6 @@ import {
 	defineMenu,
 	makeCurrentDateTimeStr,
 } from '../helpers/helpers.js';
-import { saveEditedScheduledPost } from '../helpers/publishHelpres.js';
 import { make2SignDigitStr, breakArray } from '../helpers/lib.js';
 import {
 	makeIsoLocaleDate,
@@ -70,9 +69,11 @@ export class PubTime extends PubPageBase {
 		if (btnId === 'HOUR') {
 			this.state.pub[PUB_KEYS.time] = make2SignDigitStr(payload) + `:00`;
 
-			if (this.state[EDIT_ITEM_NAME])
-				return saveEditedScheduledPost(this.router);
-			else return this.go('pub-confirm');
+			if (this.state[EDIT_ITEM_NAME]) {
+				this.state.saveIt = true;
+
+				return this.go(this.state.editReturnUrl);
+			} else return this.go('pub-confirm');
 		}
 
 		switch (btnId) {
@@ -86,7 +87,9 @@ export class PubTime extends PubPageBase {
 			case 'nextBtn':
 				return this.go('pub-confirm');
 			case 'saveBtn':
-				return saveEditedScheduledPost(this.router);
+				this.state.saveIt = true;
+
+				return this.go(this.state.editReturnUrl);
 			default:
 				return false;
 		}
@@ -113,8 +116,11 @@ export class PubTime extends PubPageBase {
 
 		this.state.pub[PUB_KEYS.time] = normalizedTime;
 
-		if (this.state[EDIT_ITEM_NAME]) return saveEditedScheduledPost(this.router);
-		else return this.go('pub-confirm');
+		if (this.state[EDIT_ITEM_NAME]) {
+			this.state.saveIt = true;
+
+			return this.go(this.state.editReturnUrl);
+		} else return this.go('pub-confirm');
 	}
 
 	_makeHourButtons() {

@@ -6,7 +6,6 @@ import {
 	getLinkIds,
 } from '../helpers/helpers.js';
 import {
-	saveEditedScheduledPost,
 	createPost,
 	printPubToAdminChannel,
 } from '../helpers/publishHelpres.js';
@@ -195,7 +194,9 @@ export class PubPostSetup extends PubPageBase {
 			case 'nextBtn':
 				return this.go('pub-date');
 			case 'saveBtn':
-				return saveEditedScheduledPost(this.router);
+				this.state.saveIt = true;
+
+				return this.go(this.state.editReturnUrl);
 			default:
 				return false;
 		}
