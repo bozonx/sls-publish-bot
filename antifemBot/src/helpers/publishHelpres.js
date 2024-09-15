@@ -124,7 +124,7 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 export async function doFullFinalPublicationProcess(
 	c,
 	pubState,
-	forcePublishedByUserId,
+	forcePublishedByUserName,
 ) {
 	const result = await printFinalPost(
 		c,
@@ -141,7 +141,7 @@ export async function doFullFinalPublicationProcess(
 			...pubState,
 			[PUB_KEYS.date]: null,
 			[PUB_KEYS.time]: null,
-			[PUB_KEYS.forcePublishedByUserId]: forcePublishedByUserId,
+			[PUB_KEYS.forcePublishedByUserName]: forcePublishedByUserName,
 		}),
 		{
 			[POST_KEYS.pubMsgId]: String(msgId),

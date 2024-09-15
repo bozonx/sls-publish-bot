@@ -97,7 +97,9 @@ export const PUB_KEYS = {
 	// data or DB record
 	dbRecord: 'dbRecord',
 	// who forcely published this post
-	forcePublishedByUserId: 'forcePublishedByUserId',
+	forcePublishedByUserName: 'forcePublishedByUserName',
+	// who updated time
+	chandedTimeByUserName: 'chandedTimeByUserName',
 };
 export const MEDIA_TYPES = {
 	photo: 'photo',

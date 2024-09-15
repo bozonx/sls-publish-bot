@@ -24,6 +24,8 @@ export default {
 		stateUrlPreview: 'Предпросмотр ссылки',
 		stateCreator: 'Кто сделал',
 		stateUpdator: 'Кто изменил',
+		stateForcePublishedBy: 'Кто намеряно опубликовал',
+		stateChangedTimeBy: 'Кто изменил время',
 
 		// Button texts
 		toHomeBtn: 'На главную',

@@ -83,10 +83,24 @@ export async function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}
 
-	if (createdByUser)
+	if (createdByUser) {
 		res += `${t(c, 'stateCreator')}: ${createdByUser[USER_KEYS.name]}\n`;
-	if (updatedByUser)
-		res += `${t(c, 'stateUpdator')}: ${updatedByUser[USER_KEYS.name]}\n`;
+		if (
+			updatedByUser &&
+			updatedByUser[USER_KEYS.id] !== createdByUser[USER_KEYS.id]
+		)
+			res += `${t(c, 'stateUpdator')}: ${updatedByUser[USER_KEYS.name]}\n`;
+		if (
+			state[PUB_KEYS.forcePublishedByUserName] &&
+			state[PUB_KEYS.forcePublishedByUserName] !== createdByUser[USER_KEYS.name]
+		)
+			res += `${t(c, 'stateForcePublishedBy')}: ${state[PUB_KEYS.forcePublishedByUserName]}\n`;
+		if (
+			state[PUB_KEYS.chandedTimeByUserName] &&
+			state[PUB_KEYS.chandedTimeByUserName] !== createdByUser[USER_KEYS.name]
+		)
+			res += `${t(c, 'stateChangedTimeBy')}: ${state[PUB_KEYS.chandedTimeByUserName]}\n`;
+	}
 
 	return res.trim();
 }
@@ -294,6 +308,37 @@ export function makeCurrentDateTimeStr(c) {
 		getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
 		` ${t(c, 'msk')}`
 	);
+}
+
+export async function handleEditedPostSave(router) {
+	const c = router.c;
+
+	if (router.state.saveIt) {
+		const pub = router.state.pub;
+		let dbItem;
+
+		if (
+			pub[PUB_KEYS.date] !== router.state[EDIT_ITEM_NAME][PUB_KEYS.date] ||
+			pub[PUB_KEYS.time] !== router.state[EDIT_ITEM_NAME][PUB_KEYS.time]
+		) {
+			pub[PUB_KEYS.chandedTimeByUserName] = router.me[USER_KEYS.name];
+		} else {
+			dbItem = {
+				[POST_KEYS.updatedByUserId]: router.me[USER_KEYS.id],
+			};
+		}
+
+		router.state[EDIT_ITEM_NAME] = pub;
+
+		await updatePost(c, pub, dbItem);
+		await this.reply(t(c, 'editedSavedSuccessfully'));
+	}
+
+	delete router.state.pub;
+	delete router.state.saveIt;
+	delete router.state.editReturnUrl;
+
+	return pub;
 }
 
 // export function removeNotLetterAndNotNumbersFromStr(str) {

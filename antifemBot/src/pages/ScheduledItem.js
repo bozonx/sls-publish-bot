@@ -4,6 +4,7 @@ import {
 	defineMenu,
 	makeStatePreview,
 	isUserAdmin,
+	handleEditedPostSave,
 } from '../helpers/helpers.js';
 import {
 	doFullFinalPublicationProcess,
@@ -23,24 +24,7 @@ import {
 
 export class ScheduledItem extends PageBase {
 	async renderMenu() {
-		if (this.state.saveIt) {
-			this.state[EDIT_ITEM_NAME] = this.state.pub;
-
-			await updatePost(c, this.state[EDIT_ITEM_NAME], {
-				[POST_KEYS.updatedByUserId]: this.me[USER_KEYS.id],
-			});
-
-			await this.reply(t(c, 'editedSavedSuccessfully'));
-		}
-
-		delete this.state.pub;
-		delete this.state.saveIt;
-		delete this.state.editReturnUrl;
-
-		const item = this.state[EDIT_ITEM_NAME];
-
-		if (!item) return this.reply(`ERROR: Can't find item to edit`);
-
+		const item = handleEditedPostSave(this.router);
 		const c = this.router.c;
 		const isAdmin = isUserAdmin(this.me);
 		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];
@@ -130,7 +114,7 @@ export class ScheduledItem extends PageBase {
 					c,
 					this.state[EDIT_ITEM_NAME],
 					// save user who has forcelly publicated this
-					this.me[USER_KEYS.id],
+					this.me[USER_KEYS.name],
 				);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
