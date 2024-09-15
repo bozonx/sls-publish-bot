@@ -28,12 +28,19 @@ export class AlreadyPublishedItem extends PageBase {
 		if (this.state.saveIt) {
 			this.state[EDIT_ITEM_NAME] = this.state.pub;
 
-			await updateFinalPost(
-				c,
-				c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
-				this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
-				this.state[EDIT_ITEM_NAME],
-			);
+			try {
+				await updateFinalPost(
+					c,
+					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+					this.state[EDIT_ITEM_NAME],
+				);
+			} catch (e) {
+				// skip not found
+				if (e.error_code === 400)
+					await c.reply(t(c, 'updateNoMsgInDestinationChannel'));
+				else throw e;
+			}
 
 			await updatePost(c, this.state[EDIT_ITEM_NAME]);
 		}
@@ -106,7 +113,7 @@ export class AlreadyPublishedItem extends PageBase {
 				} catch (e) {
 					// skip not found
 					if (e.error_code === 400)
-						await c.reply(t(c, 'noMsgInDestinationChannel'));
+						await c.reply(t(c, 'deleteNoMsgInDestinationChannel'));
 					else throw e;
 				}
 

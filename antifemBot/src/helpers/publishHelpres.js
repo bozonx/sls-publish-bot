@@ -79,7 +79,10 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 		}
 
 		// add other media to media group
-		if (c.msg.media_group_id === prevPubState[PUB_KEYS.media_group_id]) {
+		if (
+			c.msg.media_group_id &&
+			c.msg.media_group_id === prevPubState[PUB_KEYS.media_group_id]
+		) {
 			prevMedia = prevPubState[PUB_KEYS.media] || [];
 		}
 
@@ -112,7 +115,7 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 		state.entities = entities;
 	}
 	// clear entities if it is simple text
-	if (!state.entities) state.entities = null;
+	if (state.text && !state.entities) state.entities = null;
 
 	// remove undefined to not overwrite media or text in case it don't need
 	return omitUndefined(state);
@@ -285,33 +288,17 @@ export async function updateFinalPost(c, chatId, msgId, pubState) {
 
 	if (pubState[PUB_KEYS.media]?.length === 1) {
 		// one photo or video
-		// const { type, data } = pubState[PUB_KEYS.media][0];
-		//
-		// if (type === MEDIA_TYPES.photo) {
-		// 	return c.api.sendPhoto(chatId, data, {
-		// 		...msgParams,
-		// 		caption: fullPostTextMdV2,
-		// 	});
-		// } else if (type === MEDIA_TYPES.video) {
-		// 	return c.api.sendVideo(chatId, data, {
-		// 		...msgParams,
-		// 		caption: fullPostTextMdV2,
-		// 	});
-		// } else {
-		// 	throw new Error(`Unsupported type`);
-		// }
+		const { type, data } = pubState[PUB_KEYS.media][0];
+
+		if ([MEDIA_TYPES.photo, MEDIA_TYPES.video].includes(type)) {
+			await c.api.editMessageMedia(chatId, msgId, { type, media: data });
+		} else {
+			throw new Error(`Unsupported type`);
+		}
 	} else if (pubState[PUB_KEYS.media]?.length > 1) {
-		// return c.api.sendMediaGroup(
-		// 	chatId,
-		// 	pubState[PUB_KEYS.media].map((item, index) =>
-		// 		omitUndefined({
-		// 			type: item.type,
-		// 			media: item.data,
-		// 			caption: index === 0 ? fullPostTextMdV2 : undefined,
-		// 			...msgParams,
-		// 		}),
-		// 	),
-		// );
+		await c.reply(
+			`Editing of media group is not supported. Only text was changed`,
+		);
 	}
 
 	if (pubState[PUB_KEYS.media]?.length) {

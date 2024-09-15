@@ -12,7 +12,6 @@ import {
 	DB_TABLE_NAMES,
 	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
-	EDIT_ITEM_NAME,
 } from '../constants.js';
 import {
 	makeHumanRuDate,

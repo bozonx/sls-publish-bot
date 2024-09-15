@@ -137,7 +137,9 @@ export default {
 			'Отправьте это сообщение об ошибке Ивану и нажмите /start',
 		youAreNotRegistered: 'Вы не зарегистрированы, обратитесь к админу',
 		youWasAddedToApp: 'Вы были добавлены в бота, нажимте ещё раз /start',
-		noMsgInDestinationChannel:
+		deleteNoMsgInDestinationChannel:
 			'Сообщение в канале не найдено, возможно оно уже было удалено. Будет удалена только запись в базе данных',
+		updateNoMsgInDestinationChannel:
+			'Сообщение в канале не найдено, возможно оно уже было удалено',
 	},
 };
