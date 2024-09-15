@@ -14,7 +14,8 @@ export default {
 
 		// State keys
 		statePostType: 'Тип поста',
-		stateTextLength: 'Кол. символов текста',
+		stateContentLength: 'Длина контента',
+		stateFullPostLength: 'Полная длина поста',
 		stateMediaCount: 'Кол. медиа файлов',
 		stateAuthor: 'Автор',
 		stateTags: 'Тэги',

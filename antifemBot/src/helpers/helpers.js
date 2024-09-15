@@ -1,6 +1,16 @@
 import { InlineKeyboard } from 'grammy';
 import locales from '../i18n.js';
 import {
+	makeHumanRuDate,
+	makeHumanRuDateCompact,
+	getTimeStr,
+	makeIsoLocaleDate,
+	isoDateToLongLocaleRuDate,
+} from './dateTimeHelpers.js';
+import { updatePost, applyTemplate } from './publishHelpres.js';
+import { htmlToCleanText } from './converters.js';
+import { makeStringArrayUnique } from './lib.js';
+import {
 	TG_BOT_URL,
 	CTX_KEYS,
 	QUERY_MARKER,
@@ -13,15 +23,6 @@ import {
 	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
 } from '../constants.js';
-import {
-	makeHumanRuDate,
-	makeHumanRuDateCompact,
-	getTimeStr,
-	makeIsoLocaleDate,
-	isoDateToLongLocaleRuDate,
-} from './dateTimeHelpers.js';
-import { updatePost } from './publishHelpres.js';
-import { makeStringArrayUnique } from './lib.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
 	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
@@ -40,8 +41,12 @@ export function t(c, msg) {
 }
 
 export async function makeStatePreview(c, state = {}) {
-	let mediaCount = state[PUB_KEYS.media]?.length || 0;
-	let textLength = state[PUB_KEYS.text]?.length || 0;
+	const mediaCount = state[PUB_KEYS.media]?.length || 0;
+	const contentLength = htmlToCleanText(state[PUB_KEYS.textHtml])?.length;
+	const fullPostLength =
+		state[PUB_KEYS.template] &&
+		htmlToCleanText(applyTemplate(c, pubState[PUB_KEYS.textHtml], state))
+			?.length;
 	let postType = 'text';
 	const createdByUser =
 		typeof state[PUB_KEYS.dbRecord]?.[POST_KEYS.createdByUserId] === 'number' &&
@@ -64,7 +69,9 @@ export async function makeStatePreview(c, state = {}) {
 	let res = '';
 
 	if (state[PUB_KEYS.text]) res += `${t(c, 'statePostType')}: ${postType}\n`;
-	if (textLength) res += `${t(c, 'stateTextLength')}: ${textLength}\n`;
+	if (contentLength) res += `${t(c, 'stateContentLength')}: ${contentLength}\n`;
+	if (fullPostLength)
+		res += `${t(c, 'stateFullPostLength')}: ${fullPostLength}\n`;
 	// print media count only if there are several media files
 	if (mediaCount > 1) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
 	if (state[PUB_KEYS.tags])
@@ -285,17 +292,6 @@ export async function handleTagsFromInputAndSave(router, rawText) {
 	);
 
 	return newTags;
-}
-
-export function getLinkIds(entities = []) {
-	const linkIds = {};
-
-	for (const index in entities) {
-		if (['text_link', 'url'].includes(entities[index].type))
-			linkIds[entities[index].url] = index;
-	}
-
-	return Object.values(linkIds);
 }
 
 export function makeCurrentDateTimeStr(c) {

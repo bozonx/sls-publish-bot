@@ -1,10 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
-import {
-	t,
-	makeStatePreview,
-	defineMenu,
-	getLinkIds,
-} from '../helpers/helpers.js';
+import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
+import { getLinksFromHtml } from '../helpers/converters.js';
 import {
 	createPost,
 	printPubToAdminChannel,
@@ -23,7 +19,7 @@ import {
 export class PubPostSetup extends PubPageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		const linkIds = getLinkIds(this.state.pub[PUB_KEYS.entities]);
+		const links = getLinksFromHtml(this.state.pub[PUB_KEYS.textHtml]);
 
 		this.state.pub = {
 			...DEFAULT_SETUP_STATE,
@@ -54,24 +50,24 @@ export class PubPostSetup extends PubPageBase {
 				},
 			]),
 			!hasMedia &&
-				linkIds.length === 1 && [
-					{
-						id: `LINK_PREVIEW_SWITCH`,
-						label: t(
-							c,
-							pub[PUB_KEYS.previewLink] === null
-								? `linkPreviewOnBtn`
-								: `linkPreviewOffBtn`,
-						),
-					},
-				],
+			links.length === 1 && [
+				{
+					id: `LINK_PREVIEW_SWITCH`,
+					label: t(
+						c,
+						pub[PUB_KEYS.previewLink] === null
+							? `linkPreviewOnBtn`
+							: `linkPreviewOffBtn`,
+					),
+				},
+			],
 			!hasMedia &&
-				linkIds.length > 1 && [
-					{
-						id: `linkPreviewSelectBtn`,
-						label: t(c, `linkPreviewSelectBtn`),
-					},
-				],
+			links.length > 1 && [
+				{
+					id: `linkPreviewSelectBtn`,
+					label: t(c, `linkPreviewSelectBtn`),
+				},
+			],
 			pub[PUB_KEYS.previewLink] && [
 				{
 					id: `LINK_PREVIEW_PLACEMENT`,
@@ -85,17 +81,17 @@ export class PubPostSetup extends PubPageBase {
 			],
 			pub[PUB_KEYS.author]
 				? [
-						{
-							id: 'withoutAuthorBtn',
-							label: t(c, 'withoutAuthorBtn'),
-						},
-					]
+					{
+						id: 'withoutAuthorBtn',
+						label: t(c, 'withoutAuthorBtn'),
+					},
+				]
 				: authorToAdd && [
-						{
-							id: 'addAuthorBtn',
-							label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
-						},
-					],
+					{
+						id: 'addAuthorBtn',
+						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
+					},
+				],
 			[
 				{
 					id: 'showPostBtn',
@@ -119,13 +115,13 @@ export class PubPostSetup extends PubPageBase {
 				},
 				editMode
 					? {
-							id: 'saveBtn',
-							label: t(c, 'saveBtn'),
-						}
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					}
 					: {
-							id: 'nextBtn',
-							label: t(c, 'nextBtn'),
-						},
+						id: 'nextBtn',
+						label: t(c, 'nextBtn'),
+					},
 			],
 		]);
 	}
@@ -163,10 +159,9 @@ export class PubPostSetup extends PubPageBase {
 				let previewLink = null;
 
 				if (!this.state.pub[PUB_KEYS.previewLink]) {
-					const linkIds = getLinkIds(this.state.pub[PUB_KEYS.entities]);
+					const links = getLinksFromHtml(this.state.pub[PUB_KEYS.textHtml]);
 
-					previewLink =
-						this.state.pub[PUB_KEYS.entities][Number(linkIds[0])].url;
+					previewLink = links[0] || null;
 				}
 
 				return this.reload({ [PUB_KEYS.previewLink]: previewLink });

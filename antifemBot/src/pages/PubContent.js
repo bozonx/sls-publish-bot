@@ -1,6 +1,7 @@
 import { PubPageBase } from '../PubPageBase.js';
 import { t, defineMenu, makeStatePreview } from '../helpers/helpers.js';
-import { makeStateFromMessage, escapeMdV2 } from '../helpers/publishHelpres.js';
+import { escapeMdV2 } from '../helpers/converters.js';
+import { makeStateFromMessage } from '../helpers/publishHelpres.js';
 import { isEmptyObj, breakArray } from '../helpers/lib.js';
 import {
 	PUB_KEYS,
@@ -29,7 +30,9 @@ export class PubContent extends PubPageBase {
 		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
 		const hasMedia = Boolean(this.state.pub[PUB_KEYS.media]?.length);
-		const haveAnyContent = Boolean(this.state.pub[PUB_KEYS.text] || hasMedia);
+		const haveAnyContent = Boolean(
+			this.state.pub[PUB_KEYS.textHtml] || hasMedia,
+		);
 		const editMode = Boolean(this.state[EDIT_ITEM_NAME]);
 
 		this.text = await this._makeMenuText(haveAnyContent);
@@ -46,7 +49,7 @@ export class PubContent extends PubPageBase {
 			],
 			...breakArray(
 				[
-					this.state.pub[PUB_KEYS.text] && {
+					this.state.pub[PUB_KEYS.textHtml] && {
 						id: 'removeTextBtn',
 						label: t(c, 'removeTextBtn'),
 					},
@@ -84,10 +87,10 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-					editMode && {
-						id: 'saveBtn',
-						label: t(c, 'saveBtn'),
-					},
+				editMode && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				haveAnyContent && {
 					id: 'nextBtn',
 					label: t(c, 'nextBtn'),
@@ -108,8 +111,7 @@ export class PubContent extends PubPageBase {
 				return this.reload();
 			case 'removeTextBtn':
 				return this.reload({
-					[PUB_KEYS.text]: null,
-					[PUB_KEYS.entities]: null,
+					[PUB_KEYS.textHtml]: null,
 				});
 			case 'removeMediaBtn':
 				return this.reload({
@@ -161,8 +163,7 @@ export class PubContent extends PubPageBase {
 			delete partlyPubState[PUB_KEYS.media_group_id];
 		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
 			// do not overwrite text, only overwrite media
-			delete partlyPubState[PUB_KEYS.text];
-			delete partlyPubState[PUB_KEYS.entities];
+			delete partlyPubState[PUB_KEYS.textHtml];
 		}
 		// overwrite partly the pub state
 		return this.reload(partlyPubState);

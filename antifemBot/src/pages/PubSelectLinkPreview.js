@@ -1,5 +1,6 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, defineMenu, getLinkIds } from '../helpers/helpers.js';
+import { t, defineMenu } from '../helpers/helpers.js';
+import { getLinksFromHtml } from '../helpers/converters.js';
 import { PUB_KEYS, DEFAULT_BTN_ITEM_ID } from '../constants.js';
 
 export class PubSelectLinkPreview extends PubPageBase {
@@ -8,15 +9,14 @@ export class PubSelectLinkPreview extends PubPageBase {
 
 		this.text = t(c, 'selectLinkPreview');
 
-		const linkIds = getLinkIds(this.state.pub[PUB_KEYS.entities]);
+		const links = getLinksFromHtml(this.state.pub[PUB_KEYS.textHtml]);
 
 		return defineMenu([
-			...linkIds.map((index) => [
+			...links.map((link) => [
 				{
 					id: DEFAULT_BTN_ITEM_ID,
-					label:
-						this.state.pub[PUB_KEYS.entities][index]?.url || '!WRONG ITEM!',
-					payload: index,
+					label: link,
+					payload: link,
 				},
 			]),
 			[
@@ -35,15 +35,9 @@ export class PubSelectLinkPreview extends PubPageBase {
 	}
 
 	async onButtonPress(btnId, payload) {
-		const c = this.router.c;
-
 		if (btnId === DEFAULT_BTN_ITEM_ID) {
-			const item = this.state.pub[PUB_KEYS.entities][Number(payload)];
-
-			if (!item) return c.reply(`ERROR: Can't find the item`);
-
 			return this.go('pub-post-setup', {
-				[PUB_KEYS.previewLink]: item.url,
+				[PUB_KEYS.previewLink]: payload,
 			});
 		}
 

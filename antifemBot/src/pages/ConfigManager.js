@@ -1,8 +1,8 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
+import { escapeMdV2 } from '../helpers/converters.js';
 import { t, defineMenu, isUserAdmin } from '../helpers/helpers.js';
 import { saveToKv } from '../io/KVio.js';
-import { escapeMdV2 } from '../helpers/publishHelpres.js';
 import { KV_KEYS } from '../constants.js';
 
 export class ConfigManager extends PageBase {

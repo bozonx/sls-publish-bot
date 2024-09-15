@@ -76,8 +76,8 @@ export const POST_KEYS = {
 	payloadJson: 'payloadJson',
 };
 export const PUB_KEYS = {
-	text: 'text',
-	entities: 'entities',
+	// telegram html
+	textHtml: 'textHtml',
 	media: 'media',
 	media_group_id: 'media_group_id',
 	tags: 'tags',
@@ -112,7 +112,8 @@ export const DEFAULT_SETUP_STATE = {
 };
 
 const footer =
-	'[Антифеминизм \\| Маскулизм\\. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
+	'<a href="https://t.me/antifem_battle">Антифеминизм | Маскулизм. подписывайся</a> | <a href="https://t.me/antifem_battle/78">донат</a>';
+// '[Антифеминизм \\| Маскулизм\\. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
 
 export const APP_INITIAL_CONFIG = {
 	// use telegram MarkdownV2 https://core.telegram.org/bots/api#markdownv2-style

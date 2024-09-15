@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 import { PageBase } from '../PageRouter.js';
+import { escapeMdV2 } from '../helpers/converters.js';
 import { t, defineMenu, isUserAdmin } from '../helpers/helpers.js';
-import { escapeMdV2 } from '../helpers/publishHelpres.js';
 import { USER_KEYS, HOME_PAGE, DB_TABLE_NAMES } from '../constants.js';
 
 export class UserItem extends PageBase {
@@ -20,9 +20,9 @@ export class UserItem extends PageBase {
 		this.text =
 			escapeMdV2(
 				t(c, 'userItemDescr') +
-					`\n\nid: ${id}\n` +
-					`createdAt: ${new Date(createdAt).toISOString()}\n` +
-					`updatedAt: ${new Date(updatedAt).toISOString()}\n`,
+				`\n\nid: ${id}\n` +
+				`createdAt: ${new Date(createdAt).toISOString()}\n` +
+				`updatedAt: ${new Date(updatedAt).toISOString()}\n`,
 			) +
 			'```\n' +
 			yaml.dump(user) +

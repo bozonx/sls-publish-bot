@@ -1,11 +1,15 @@
-import { toMarkdownV2, escapers } from '@telegraf/entity';
-import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
+// import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
 import {
 	t,
 	makeStatePreview,
 	makeUserNameFromMsg,
 	makeListOfScheduledForDescr,
 } from './helpers.js';
+import {
+	convertTgEntitiesToTgHtml,
+	escapeHtml,
+	htmlToCleanText,
+} from './converters.js';
 import { applyStringTemplate, omitUndefined } from './lib.js';
 import { convertDateTimeToTsMinutes } from './dateTimeHelpers.js';
 import {
@@ -20,30 +24,22 @@ import {
 	MENU_ITEM_LABEL_LENGTH,
 } from '../constants.js';
 
-export function convertTgEntitiesToTgMdV2(text, entities) {
-	return toMarkdownV2({ text, entities });
-}
-
-export function escapeMdV2(text) {
-	return escapers.MarkdownV2(text);
-}
-
 export function makeHashTags(tags) {
 	if (!tags) return '';
 
 	return tags.map((item) => `#${item}`).join(' ');
 }
 
-export function applyTemplate(c, textMdV2, pubState) {
+export function applyTemplate(c, textHtml, pubState) {
 	const template =
 		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
 
-	if (!template) return textMdV2;
+	if (!template) return textHtml;
 
 	const tmplData = {
-		CONTENT: textMdV2,
-		AUTHOR: pubState[PUB_KEYS.author] && escapeMdV2(pubState[PUB_KEYS.author]),
-		TAGS: escapeMdV2(makeHashTags(pubState[PUB_KEYS.tags])),
+		CONTENT: textHtml,
+		AUTHOR: pubState[PUB_KEYS.author] && escapeHtml(pubState[PUB_KEYS.author]),
+		TAGS: escapeHtml(makeHashTags(pubState[PUB_KEYS.tags])),
 	};
 
 	const finalText = template
@@ -89,15 +85,19 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 		state = {
 			...state,
 			[PUB_KEYS.media]: [...prevMedia, mediaItem],
-			[PUB_KEYS.text]: c.msg.caption,
-			[PUB_KEYS.entities]: c.msg.caption_entities,
+			[PUB_KEYS.textHtml]: convertTgEntitiesToTgHtml(
+				c.msg.caption,
+				c.msg.caption_entities,
+			),
 			[PUB_KEYS.media_group_id]: c.msg.media_group_id,
 		};
 	} else if (c.msg.text) {
 		state = {
 			...state,
-			[PUB_KEYS.text]: c.msg.text,
-			[PUB_KEYS.entities]: c.msg.entities,
+			[PUB_KEYS.textHtml]: convertTgEntitiesToTgHtml(
+				c.msg.text,
+				c.msg.entities,
+			),
 			[PUB_KEYS.media_group_id]: null,
 		};
 	} else {
@@ -105,17 +105,17 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 		return;
 	}
 
-	if (isTextInMdV1) {
-		const [text, entities] = prepareTgInputToTgEntities(
-			state.text,
-			state.entities,
-		);
-
-		state.text = text;
-		state.entities = entities;
-	}
+	// if (isTextInMdV1) {
+	// 	const [text, entities] = prepareTgInputToTgEntities(
+	// 		state.text,
+	// 		state.entities,
+	// 	);
+	//
+	// 	state.text = text;
+	// 	state.entities = entities;
+	// }
 	// clear entities if it is simple text
-	if (state.text && !state.entities) state.entities = null;
+	// if (state.text && !state.entities) state.entities = null;
 
 	// remove undefined to not overwrite media or text in case it don't need
 	return omitUndefined(state);
@@ -172,7 +172,7 @@ export function convertDbPostToPubState(dbItem) {
 }
 
 export function makeScheduledItemName(pubState) {
-	const fromText = pubState[PUB_KEYS.text]
+	const fromText = htmlToCleanText(pubState[PUB_KEYS.textHtml])
 		?.trim()
 		.substring(0, MENU_ITEM_LABEL_LENGTH)
 		.trim()
@@ -225,9 +225,9 @@ export async function printPubToAdminChannel(c, dbRecord) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		msg +
-			`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
-			'\n\n----------\n\n' +
-			(await makeListOfScheduledForDescr(c)),
+		`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
+		'\n\n----------\n\n' +
+		(await makeListOfScheduledForDescr(c)),
 		{ reply_parameters: { message_id: msgId } },
 	);
 }
@@ -235,9 +235,13 @@ export async function printPubToAdminChannel(c, dbRecord) {
 export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 	const msgParams = {
 		reply_parameters: replyToMsgId && { message_id: replyToMsgId },
-		parse_mode: 'MarkdownV2',
+		parse_mode: 'HTML',
 	};
-	const fullPostTextMdV2 = prepareMdV2MsgTextToPublish(c, pubState);
+	const fullPostTextHtml = applyTemplate(
+		c,
+		pubState[PUB_KEYS.textHtml],
+		pubState,
+	);
 
 	if (pubState[PUB_KEYS.media]?.length === 1) {
 		// one photo or video
@@ -246,12 +250,12 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 		if (type === MEDIA_TYPES.photo) {
 			return c.api.sendPhoto(chatId, data, {
 				...msgParams,
-				caption: fullPostTextMdV2,
+				caption: fullPostTextHtml,
 			});
 		} else if (type === MEDIA_TYPES.video) {
 			return c.api.sendVideo(chatId, data, {
 				...msgParams,
-				caption: fullPostTextMdV2,
+				caption: fullPostTextHtml,
 			});
 		} else {
 			throw new Error(`Unsupported type`);
@@ -263,14 +267,14 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 				omitUndefined({
 					type: item.type,
 					media: item.data,
-					caption: index === 0 ? fullPostTextMdV2 : undefined,
+					caption: index === 0 ? fullPostTextHtml : undefined,
 					...msgParams,
 				}),
 			),
 		);
 	}
 	// else no media means text message
-	return c.api.sendMessage(chatId, fullPostTextMdV2, {
+	return c.api.sendMessage(chatId, fullPostTextHtml, {
 		...msgParams,
 		link_preview_options: {
 			is_disabled: !pubState[PUB_KEYS.previewLink],
@@ -282,9 +286,13 @@ export async function printFinalPost(c, chatId, pubState, replyToMsgId) {
 
 export async function updateFinalPost(c, chatId, msgId, pubState) {
 	const msgParams = {
-		parse_mode: 'MarkdownV2',
+		parse_mode: 'HTML',
 	};
-	const fullPostTextMdV2 = prepareMdV2MsgTextToPublish(c, pubState);
+	const fullPostTextHtml = applyTemplate(
+		c,
+		pubState[PUB_KEYS.textHtml],
+		pubState,
+	);
 
 	if (pubState[PUB_KEYS.media]?.length === 1) {
 		// one photo or video
@@ -304,10 +312,10 @@ export async function updateFinalPost(c, chatId, msgId, pubState) {
 	if (pubState[PUB_KEYS.media]?.length) {
 		return c.api.editMessageCaption(chatId, msgId, {
 			...msgParams,
-			caption: fullPostTextMdV2,
+			caption: fullPostTextHtml,
 		});
 	} else {
-		return c.api.editMessageText(chatId, msgId, fullPostTextMdV2, {
+		return c.api.editMessageText(chatId, msgId, fullPostTextHtml, {
 			...msgParams,
 			link_preview_options: {
 				is_disabled: !pubState[PUB_KEYS.previewLink],
@@ -318,21 +326,21 @@ export async function updateFinalPost(c, chatId, msgId, pubState) {
 	}
 }
 
-function prepareMdV2MsgTextToPublish(c, pubState) {
-	let contentMdV2;
-	// it have entities then transform text to MD v2
-	if (pubState[PUB_KEYS.entities]) {
-		contentMdV2 = convertTgEntitiesToTgMdV2(
-			pubState[PUB_KEYS.text],
-			pubState[PUB_KEYS.entities],
-		);
-	} else {
-		// escape clean text
-		contentMdV2 = escapeMdV2(pubState[PUB_KEYS.text] || '');
-	}
-
-	return applyTemplate(c, contentMdV2, pubState);
-}
+// function prepareMdV2MsgTextToPublish(c, pubState) {
+// 	let contentHtml;
+// 	// if have entities then transform text to HTML
+// 	if (pubState[PUB_KEYS.entities]) {
+// 		contentHtml = convertTgEntitiesToTgMdV2(
+// 			pubState[PUB_KEYS.text],
+// 			pubState[PUB_KEYS.entities],
+// 		);
+// 	} else {
+// 		// escape clean text
+// 		contentHtml = escapeMdV2(pubState[PUB_KEYS.text] || '');
+// 	}
+//
+// 	return applyTemplate(c, contentHtml, pubState);
+// }
 
 export async function createPost(c, pubState, conserved = false) {
 	const dbItem = convertPubStateToDbPost({
@@ -345,10 +353,10 @@ export async function createPost(c, pubState, conserved = false) {
 			[POST_KEYS.pubTimestampMinutes]: conserved
 				? null
 				: convertDateTimeToTsMinutes(
-						pubState[PUB_KEYS.date],
-						pubState[PUB_KEYS.time],
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					),
+					pubState[PUB_KEYS.date],
+					pubState[PUB_KEYS.time],
+					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				),
 		},
 	});
 
@@ -363,10 +371,10 @@ export async function updatePost(c, pubState, dbOverwrite) {
 			name: makeScheduledItemName(pubState),
 			[POST_KEYS.pubTimestampMinutes]: pubState[PUB_KEYS.date]
 				? convertDateTimeToTsMinutes(
-						pubState[PUB_KEYS.date],
-						pubState[PUB_KEYS.time],
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					)
+					pubState[PUB_KEYS.date],
+					pubState[PUB_KEYS.time],
+					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				)
 				: null,
 			...dbOverwrite,
 		},
