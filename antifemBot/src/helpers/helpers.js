@@ -45,8 +45,7 @@ export async function makeStatePreview(c, state = {}) {
 	const contentLength = htmlToCleanText(state[PUB_KEYS.textHtml])?.length;
 	const fullPostLength =
 		state[PUB_KEYS.template] &&
-		htmlToCleanText(applyTemplate(c, pubState[PUB_KEYS.textHtml], state))
-			?.length;
+		htmlToCleanText(applyTemplate(c, state[PUB_KEYS.textHtml], state))?.length;
 	let postType = 'text';
 	const createdByUser =
 		typeof state[PUB_KEYS.dbRecord]?.[POST_KEYS.createdByUserId] === 'number' &&

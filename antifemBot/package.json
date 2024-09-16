@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"deploy": "wrangler deploy",
+		"deploy": "wrangler deploy --minify=true --upload-source-maps=false",
 		"devbot": "node ./src/localBotIndex.js dotenv_config_path=.dev.vars"
 	},
 	"dependencies": {
@@ -14,11 +14,11 @@
 		"dotenv": "^16.4.5",
 		"grammy": "^1.29.0",
 		"hast-util-to-string": "^3.0.0",
-		"htmlparser2": "^9.1.0",
 		"js-yaml": "^4.1.0",
 		"parse-url": "^9.2.0",
 		"prisma": "^5.19.1",
 		"rehype": "^13.0.1",
+		"rehype-rewrite": "^4.0.2",
 		"remark": "^15.0.1",
 		"remark-rehype": "^11.1.0"
 	},

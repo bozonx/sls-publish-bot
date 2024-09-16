@@ -1,4 +1,4 @@
-// import { prepareTgInputToTgEntities } from './prepareTgInputToTgEntities.js';
+import { convertInputMdV1ToHtml } from './prepareTgInputToTgEntities.js';
 import {
 	t,
 	makeStatePreview,
@@ -85,19 +85,17 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 		state = {
 			...state,
 			[PUB_KEYS.media]: [...prevMedia, mediaItem],
-			[PUB_KEYS.textHtml]: convertTgEntitiesToTgHtml(
-				c.msg.caption,
-				c.msg.caption_entities,
-			),
+			[PUB_KEYS.textHtml]: isTextInMdV1
+				? convertInputMdV1ToHtml(c.msg.caption, c.msg.caption_entities)
+				: convertTgEntitiesToTgHtml(c.msg.caption, c.msg.caption_entities),
 			[PUB_KEYS.media_group_id]: c.msg.media_group_id,
 		};
 	} else if (c.msg.text) {
 		state = {
 			...state,
-			[PUB_KEYS.textHtml]: convertTgEntitiesToTgHtml(
-				c.msg.text,
-				c.msg.entities,
-			),
+			[PUB_KEYS.textHtml]: isTextInMdV1
+				? convertInputMdV1ToHtml(c.msg.text, c.msg.entities)
+				: convertTgEntitiesToTgHtml(c.msg.text, c.msg.entities),
 			[PUB_KEYS.media_group_id]: null,
 		};
 	} else {
@@ -106,13 +104,13 @@ export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 	}
 
 	// if (isTextInMdV1) {
-	// 	const [text, entities] = prepareTgInputToTgEntities(
-	// 		state.text,
-	// 		state.entities,
-	// 	);
+	// const [text, entities] = prepareTgInputToTgEntities(
+	// 	state.text,
+	// 	state.entities,
+	// );
 	//
-	// 	state.text = text;
-	// 	state.entities = entities;
+	// state.text = text;
+	// state.entities = entities;
 	// }
 	// clear entities if it is simple text
 	// if (state.text && !state.entities) state.entities = null;

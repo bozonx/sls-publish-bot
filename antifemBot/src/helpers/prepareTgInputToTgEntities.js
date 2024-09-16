@@ -1,14 +1,16 @@
 import { remark } from 'remark';
 import remarkRehype from 'remark-rehype';
-import html from 'rehype-stringify';
-import { parse } from './htmlToTgEntities/html.js';
+import rehypeRewrite from 'rehype-rewrite';
+import rehypeStringify from 'rehype-stringify';
 
-// got text and entities from tg message and make full correct entities
-export function prepareTgInputToTgEntities(srcText, srcEntities) {
-	if (!srcText || !srcEntities) return [srcText, srcEntities];
+export function convertInputMdV1ToHtml(srcText, srcEntities = []) {
+	if (!srcText) return srcText;
 
 	const preparedMdV1 = initialTgEntitiesToMd(srcText, srcEntities);
 	const htmlText = remark()
+		.data('settings', {
+			fragment: true,
+		})
 		.use(remarkRehype, {
 			handlers: {
 				code: (state, node) => {
@@ -25,23 +27,47 @@ export function prepareTgInputToTgEntities(srcText, srcEntities) {
 						children: node.children,
 					};
 				},
+				break: (state, node) => {
+					return {
+						type: 'text',
+						value: '\n',
+					};
+				},
 			},
 		})
-		.use(html)
+		// unwrap <p>
+		.use(rehypeRewrite, {
+			rewrite: (node, index, parent) => {
+				if (node.type !== 'element') return;
+
+				if (
+					['ul', 'ol', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+						node.tagName,
+					)
+				) {
+					node.type = 'root';
+
+					delete node.tagName;
+				} else if (node.tagName === 'li') {
+					node.type = 'root';
+
+					node.children = [
+						{
+							type: 'text',
+							value: '* ',
+						},
+						...node.children,
+					];
+
+					delete node.tagName;
+				}
+			},
+		})
+		.use(rehypeStringify)
 		.processSync(preparedMdV1)
 		.toString();
 
-	const [text, entities] = parse(htmlText, 'html');
-
-	return [
-		text,
-		entities.map((i) => {
-			// fix url element
-			if (i.type === 'textUrl') i.type = 'text_link';
-
-			return { ...i };
-		}),
-	];
+	return htmlText;
 }
 
 function initialTgEntitiesToMd(text, entities) {
@@ -86,4 +112,46 @@ function initialTgEntitiesToMd(text, entities) {
 // 	{ offset: 41, length: 23, type: 'code' },
 // 	{ offset: 96, length: 9, type: 'pre' },
 // ];
-// console.log(11111, prepareTgInputToTgEntities(testText, testEntities));
+// console.log(11111, convertInputMdV1ToHtml(testText, testEntities));
+// console.log(11111, convertInputMdV1ToHtml(`ss\n\n* ff\n* rr\n\nyy`));
+
+// // got text and entities from tg message and make full correct entities
+// export function prepareTgInputToTgEntities(srcText, srcEntities) {
+// 	if (!srcText || !srcEntities) return [srcText, srcEntities];
+//
+// 	const preparedMdV1 = initialTgEntitiesToMd(srcText, srcEntities);
+// 	const htmlText = remark()
+// 		.use(remarkRehype, {
+// 			handlers: {
+// 				code: (state, node) => {
+// 					return {
+// 						type: 'element',
+// 						tagName: 'pre',
+// 						children: [{ type: 'text', value: node.value }],
+// 					};
+// 				},
+// 				strong: (state, node) => {
+// 					return {
+// 						type: 'element',
+// 						tagName: 'b',
+// 						children: node.children,
+// 					};
+// 				},
+// 			},
+// 		})
+// 		.use(html)
+// 		.processSync(preparedMdV1)
+// 		.toString();
+//
+// 	const [text, entities] = parse(htmlText, 'html');
+//
+// 	return [
+// 		text,
+// 		entities.map((i) => {
+// 			// fix url element
+// 			if (i.type === 'textUrl') i.type = 'text_link';
+//
+// 			return { ...i };
+// 		}),
+// 	];
+// }

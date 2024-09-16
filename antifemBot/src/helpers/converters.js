@@ -1,4 +1,4 @@
-import { toMarkdownV2, toHTML, escapers } from '@telegraf/entity';
+import { toHTML, escapers } from '@telegraf/entity';
 import { toString } from 'hast-util-to-string';
 import { rehype } from 'rehype';
 
@@ -25,22 +25,33 @@ export function htmlToCleanText(html) {
 }
 
 export function getLinksFromHtml(html) {
-	const res = [];
+	const res = {};
+	const tree = rehype()
+		.data('settings', {
+			fragment: true,
+		})
+		.parse(html);
 
-	// TODO: deduplicate
+	function recursive(node) {
+		if (node.type === 'element' && node.tagName === 'a') {
+			const url = node.properties.href?.trim();
 
-	return res;
+			if (url) res[url] = true;
+		}
+
+		if (node.children) {
+			for (const child of node.children) recursive(child);
+		}
+	}
+
+	recursive(tree);
+
+	return Object.keys(res);
 }
 
-// console.log(1111, htmlToCleanText('<p><b>sdfsdf </b>dssdf</p>'));
-//
-// export function getLinkIds(entities = []) {
-// 	const linkIds = {};
-//
-// 	for (const index in entities) {
-// 		if (['text_link', 'url'].includes(entities[index].type))
-// 			linkIds[entities[index].url] = index;
-// 	}
-//
-// 	return Object.values(linkIds);
-// }
+// console.log(
+// 	1111,
+// 	getLinksFromHtml(
+// 		'<p><a href="https://ya.ru">ddd</a></p> dfsdf <a href="https://example.com">tttt</a>',
+// 	),
+// );
