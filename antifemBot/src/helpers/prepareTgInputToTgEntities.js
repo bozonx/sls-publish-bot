@@ -4,7 +4,7 @@ import rehypeRewrite from 'rehype-rewrite';
 import rehypeStringify from 'rehype-stringify';
 
 export function convertInputMdV1ToHtml(srcText, srcEntities = []) {
-	if (!srcText) return srcText;
+	if (!srcText || !srcText.trim()) return srcText;
 
 	const preparedMdV1 = initialTgEntitiesToMd(srcText, srcEntities);
 	const htmlText = remark()

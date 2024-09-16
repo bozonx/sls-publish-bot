@@ -148,12 +148,15 @@ export class PubContent extends PubPageBase {
 	}
 
 	async onMessage() {
+		console.log(222, this.state);
+
 		const c = this.router.c;
 		let partlyPubState = makeStateFromMessage(
 			c,
 			this.state.pub,
 			this.state.mdV1Mode,
 		);
+		console.log(333, partlyPubState);
 
 		if (!partlyPubState) return this.reply(t(c, 'wrongTypeOfPost'));
 
@@ -164,7 +167,14 @@ export class PubContent extends PubPageBase {
 		} else if (this.state.replaceMode === REPLACE_MODES.mediaOnly) {
 			// do not overwrite text, only overwrite media
 			delete partlyPubState[PUB_KEYS.textHtml];
+		} else {
+			// both - do not overwrite empty text
+			if (!partlyPubState[PUB_KEYS.textHtml]?.trim())
+				delete partlyPubState[PUB_KEYS.textHtml];
 		}
+
+		console.log(444, partlyPubState);
+
 		// overwrite partly the pub state
 		return this.reload(partlyPubState);
 	}
