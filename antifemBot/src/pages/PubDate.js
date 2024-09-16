@@ -10,9 +10,8 @@ import { isEmptyObj } from '../helpers/lib.js';
 import {
 	normalizeShortDateToIsoDate,
 	todayPlusDaysIsoDate,
-	makeShortDateFromIsoDate,
-	getShortWeekDay,
 	isPastDate,
+	makeHumanRuDateCompact,
 } from '../helpers/dateTimeHelpers.js';
 import {
 	PUB_KEYS,
@@ -21,6 +20,14 @@ import {
 	DEFAULT_PUB_PLUS_DAY,
 	CTX_KEYS,
 } from '../constants.js';
+
+function makeClosestDayLabel(c, plusDay) {
+	return makeHumanRuDateCompact(
+		c,
+		todayPlusDaysIsoDate(plusDay, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
+		c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+	);
+}
 
 export class PubDate extends PubPageBase {
 	async renderMenu() {
@@ -49,16 +56,9 @@ export class PubDate extends PubPageBase {
 		const daysBtn = [];
 
 		for (let i = 3; i <= 6; i++) {
-			const isoDateStr = todayPlusDaysIsoDate(
-				i,
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-			);
-
 			daysBtn.push({
 				id: 'DAY',
-				label:
-					makeShortDateFromIsoDate(isoDateStr) +
-					` ${getShortWeekDay(isoDateStr)}`,
+				label: makeClosestDayLabel(c, i),
 				payload: i,
 			});
 		}
@@ -67,17 +67,17 @@ export class PubDate extends PubPageBase {
 			[
 				{
 					id: 'DAY',
-					label: t(c, 'closestDays')[0],
+					label: makeClosestDayLabel(c, 0),
 					payload: 0,
 				},
 				{
 					id: 'DAY',
-					label: t(c, 'closestDays')[1],
+					label: makeClosestDayLabel(c, 1),
 					payload: 1,
 				},
 				{
 					id: 'DAY',
-					label: t(c, 'closestDays')[2],
+					label: makeClosestDayLabel(c, 2),
 					payload: 2,
 				},
 			],

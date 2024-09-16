@@ -17,12 +17,11 @@ export function makeHumanRuDate(c, isoDateStr, timeZone) {
 
 export function makeHumanRuDateCompact(c, isoDateStr, timeZone) {
 	const closestDay = makeClosestDayRuString(c, isoDateStr, timeZone);
+	const shortDate = makeShortDateFromIsoDate(isoDateStr);
 
-	if (closestDay) return closestDay;
+	if (closestDay) return closestDay + ` ${shortDate}`;
 
-	return (
-		`${getShortWeekDay(isoDateStr)} ` + makeShortDateFromIsoDate(isoDateStr)
-	);
+	return getShortWeekDay(isoDateStr) + ` ${shortDate}`;
 }
 
 export function makeShortDateFromIsoDate(isoDateStr) {
@@ -50,8 +49,8 @@ export function getShortWeekDay(isoDateStr) {
 export function convertDateTimeToTsMinutes(date, time, timeZone) {
 	return Math.floor(
 		new Date(makeIsoDateFromPubState({ date, time }) + timeZone).getTime() /
-			1000 /
-			60,
+		1000 /
+		60,
 	);
 }
 
