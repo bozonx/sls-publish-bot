@@ -142,7 +142,7 @@ export class PageRouter {
 
 	$handleMessage = async (c) => {
 		//
-		// console.log(22222, c.msg);
+		console.log(22222, c.msg);
 
 		// filter all other messages. Pass only messager from user to bot
 		if (!c.msg?.chat || !c.ctx[CTX_KEYS.me] || c.msg.chat.id !== c.msg?.from.id)

@@ -36,9 +36,35 @@ export function applyTemplate(c, textHtml, pubState) {
 
 	if (!template) return textHtml;
 
+	let author = '';
+
+	if (pubState[PUB_KEYS.author]) {
+		const parts = pubState[PUB_KEYS.author].split('|');
+		let url;
+		let name;
+
+		if (parts.length > 1 && parts.at(-1).match(/^\s*https?\:\/\//)) {
+			url = parts.at(-1).trim();
+
+			const nameParts = [...parts];
+
+			nameParts.pop();
+
+			name = nameParts.join('|').trim();
+		} else {
+			name = parts.join('|');
+		}
+
+		if (url) {
+			author = `<a href="${url}">${name}</a>`;
+		} else {
+			author = escapeHtml(name);
+		}
+	}
+
 	const tmplData = {
 		CONTENT: textHtml,
-		AUTHOR: pubState[PUB_KEYS.author] && escapeHtml(pubState[PUB_KEYS.author]),
+		AUTHOR: author,
 		TAGS: escapeHtml(makeHashTags(pubState[PUB_KEYS.tags])),
 	};
 
@@ -51,13 +77,26 @@ export function applyTemplate(c, textHtml, pubState) {
 	return finalText;
 }
 
+function makeForwardedFrom(c) {
+	if (!c.msg?.forward_origin) return null;
+	else if (c.msg?.forward_origin.type === 'channel') {
+		const username = c.msg.forward_origin.chat.username;
+		const title = c.msg.forward_origin.chat.title;
+
+		if (title && !username) return title;
+		else if (!title && username) return username;
+
+		return `${title} | https://t.me/${username}`;
+	}
+
+	return (
+		c.msg.forward_sender_name || makeUserNameFromMsg(c.msg.forward_from) || null
+	);
+}
+
 export function makeStateFromMessage(c, prevPubState = {}, isTextInMdV1) {
 	let state = {
-		[PUB_KEYS.forwardedFrom]:
-			c.msg.forward_sender_name ||
-			makeUserNameFromMsg(c.msg.forward_from) ||
-			// TODO: add channel
-			null,
+		[PUB_KEYS.forwardedFrom]: makeForwardedFrom(c),
 	};
 
 	if (c.msg.video || c.msg.photo) {
