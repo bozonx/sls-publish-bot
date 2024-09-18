@@ -100,15 +100,15 @@ export class ScheduledItem extends PageBase {
 
 				this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbRes);
 
-				return this.router.go('conserved-item');
+				return this.go('conserved-item');
 			case 'changeDateTimeBtn':
 				this.state.editReturnUrl = 'scheduled-item';
 
-				return this.router.go('pub-date');
+				return this.go('pub-date');
 			case 'editPostBtn':
 				this.state.editReturnUrl = 'scheduled-item';
 
-				return this.router.go('pub-content');
+				return this.go('pub-content');
 			case 'publicateNowBtn':
 				await doFullFinalPublicationProcess(
 					c,
@@ -121,7 +121,7 @@ export class ScheduledItem extends PageBase {
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('scheduled-list');
+				return this.go('scheduled-list');
 			case 'deletePostBtn':
 				await deletePost(
 					c,
@@ -132,18 +132,18 @@ export class ScheduledItem extends PageBase {
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('scheduled-list');
+				return this.go('scheduled-list');
 			case 'showPostBtn':
 				await this.printFinalPost(
 					this.me[USER_KEYS.tgChatId],
 					this.state[EDIT_ITEM_NAME],
 				);
 
-				return this.router.reload();
+				return this.reload();
 			case 'toListBtn':
-				return this.router.go('scheduled-list');
+				return this.go('scheduled-list');
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}

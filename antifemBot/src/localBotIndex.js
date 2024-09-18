@@ -15,6 +15,7 @@ const testData = {
 		process.env.MAIN_ADMIN_TG_USER_ID,
 		process.env.CHAT_OF_ADMINS_ID,
 		process.env.DESTINATION_CHANNEL_ID,
+		process.env.DESTINATION_CHANNEL_NAME,
 		process.env.PUBLICATION_TIME_ZONE,
 		process.env.PUBLISHING_MINUS_MINUTES,
 		process.env.SESSION_STATE_TTL_DAYS,

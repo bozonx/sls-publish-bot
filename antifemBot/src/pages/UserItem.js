@@ -8,7 +8,7 @@ export class UserItem extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		if (!isUserAdmin(this.me)) return this.router.go('home');
+		if (!isUserAdmin(this.me)) return this.go('home');
 
 		const { createdAt, updatedAt, id, ...user } = await this.db.getItem(
 			DB_TABLE_NAMES.User,
@@ -20,9 +20,9 @@ export class UserItem extends PageBase {
 		this.text =
 			escapeMdV2(
 				t(c, 'userItemDescr') +
-				`\n\nid: ${id}\n` +
-				`createdAt: ${new Date(createdAt).toISOString()}\n` +
-				`updatedAt: ${new Date(updatedAt).toISOString()}\n`,
+					`\n\nid: ${id}\n` +
+					`createdAt: ${new Date(createdAt).toISOString()}\n` +
+					`updatedAt: ${new Date(updatedAt).toISOString()}\n`,
 			) +
 			'```\n' +
 			yaml.dump(user) +
@@ -61,15 +61,15 @@ export class UserItem extends PageBase {
 
 				await this.reply(`User was deleted\n\n${yaml.dump(res)}`);
 
-				return this.router.go('users-manager');
+				return this.go('users-manager');
 			case 'backBtn':
 				delete this.state.editUserId;
 
-				return this.router.go('users-manager');
+				return this.go('users-manager');
 			case 'toHomeBtn':
 				delete this.state.editUserId;
 
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}
@@ -100,6 +100,6 @@ export class UserItem extends PageBase {
 		});
 		await this.reply(`User was saved`);
 
-		return this.router.reload();
+		return this.reload();
 	}
 }

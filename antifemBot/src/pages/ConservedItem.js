@@ -87,11 +87,11 @@ export class ConservedItem extends PageBase {
 			case 'toScheduledBtn':
 				this.state.editReturnUrl = 'scheduled-item';
 
-				return this.router.go('pub-date');
+				return this.go('pub-date');
 			case 'editPostBtn':
 				this.state.editReturnUrl = 'conserved-item';
 
-				return this.router.go('pub-content');
+				return this.go('pub-content');
 			case 'publicateNowBtn':
 				await doFullFinalPublicationProcess(
 					c,
@@ -104,7 +104,7 @@ export class ConservedItem extends PageBase {
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('conserved-list');
+				return this.go('conserved-list');
 			case 'deletePostBtn':
 				await deletePost(
 					c,
@@ -115,18 +115,18 @@ export class ConservedItem extends PageBase {
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('conserved-list');
+				return this.go('conserved-list');
 			case 'showPostBtn':
 				await this.printFinalPost(
 					this.me[USER_KEYS.tgChatId],
 					this.state[EDIT_ITEM_NAME],
 				);
 
-				return this.router.reload();
+				return this.reload();
 			case 'toListBtn':
-				return this.router.go('conserved-list');
+				return this.go('conserved-list');
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}

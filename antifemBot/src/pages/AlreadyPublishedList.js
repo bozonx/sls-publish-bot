@@ -62,12 +62,12 @@ export class AlreadyPublishedList extends PageBase {
 
 			this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbItem);
 
-			return this.router.go('published-item');
+			return this.go('published-item');
 		}
 
 		switch (btnId) {
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}

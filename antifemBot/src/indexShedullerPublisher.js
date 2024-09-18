@@ -60,11 +60,14 @@ export async function handleScheduled(
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
 			[CTX_KEYS.config]: config,
 			[CTX_KEYS.DB_CRUD]: {
-				async updateItem(tableName, dbData) {
-					const { id, ...data } = dbData;
+				async updateItem(tableName, fullData, where) {
+					const { id, ...data } = fullData;
 
-					return await prisma[tableName].delete({
-						where: { id },
+					return prisma[tableName].update({
+						where: {
+							id,
+							...where,
+						},
 						data,
 					});
 				},

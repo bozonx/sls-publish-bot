@@ -15,7 +15,7 @@ export class UsersManager extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		if (!isUserAdmin(this.me)) return this.router.go('home');
+		if (!isUserAdmin(this.me)) return this.go('home');
 
 		const users = await this.db.getAll(DB_TABLE_NAMES.User, {
 			[USER_KEYS.id]: true,
@@ -48,12 +48,12 @@ export class UsersManager extends PageBase {
 		if (btnId === DEFAULT_BTN_ITEM_ID) {
 			this.state.editUserId = Number(payload);
 
-			return this.router.go('user-item');
+			return this.go('user-item');
 		}
 
 		switch (btnId) {
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}
@@ -99,6 +99,6 @@ export class UsersManager extends PageBase {
 			c.api.sendMessage(user[USER_KEYS.tgChatId], t(c, 'youWasAddedToApp')),
 		]);
 
-		return this.router.reload();
+		return this.reload();
 	}
 }

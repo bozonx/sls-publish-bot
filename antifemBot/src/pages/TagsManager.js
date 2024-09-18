@@ -53,10 +53,8 @@ export class TagsManager extends PageBase {
 		}
 
 		switch (btnId) {
-			case 'backBtn':
-				return this.router.go('');
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}
@@ -71,6 +69,6 @@ export class TagsManager extends PageBase {
 
 		await this.reply(`${t(c, 'tagsWasAdded')}: ${newTags.join(', ')}`);
 
-		return this.router.reload();
+		return this.reload();
 	}
 }

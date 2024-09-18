@@ -34,7 +34,7 @@ export class ConfigManager extends PageBase {
 	async onButtonPress(btnId) {
 		switch (btnId) {
 			case 'toHomeBtn':
-				return this.router.go('home');
+				return this.go('home');
 			default:
 				return false;
 		}
@@ -54,6 +54,6 @@ export class ConfigManager extends PageBase {
 		await saveToKv(c, KV_KEYS.config, obj);
 		await this.reply(`Success`);
 
-		return this.router.reload();
+		return this.reload();
 	}
 }

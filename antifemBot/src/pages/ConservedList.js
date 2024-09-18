@@ -55,12 +55,12 @@ export class ConservedList extends PageBase {
 
 			this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbItem);
 
-			return this.router.go('conserved-item');
+			return this.go('conserved-item');
 		}
 
 		switch (btnId) {
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}

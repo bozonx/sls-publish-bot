@@ -10,8 +10,10 @@ APP_DEBUG = true
 PUBLICATION_TIME_ZONE = '+03:00'
 PUBLISHING_MINUS_MINUTES = 30
 SESSION_STATE_TTL_DAYS = 30
+DESTINATION_CHANNEL_NAME = "antifem_battle"
 # 80 seconds
 # SESSION_STATE_TTL_DAYS = 0.0009259
+# Do not publish in destination channel and admin channel
 TEST_MODE = true
 
 [triggers]

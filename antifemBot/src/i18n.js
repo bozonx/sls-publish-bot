@@ -68,6 +68,9 @@ export default {
 		toScheduledBtn: 'В отложенные',
 		saveToConservedBtn: 'Сохранить в консервы',
 		toConservedBtn: 'В консервы',
+		deleteOnlyDbPostBtn: 'Удалить только из БД',
+		copyPostToConservedBtn: 'Скопировать в консервы',
+		showPublicatedPostBtn: 'Показать опубликованный пост',
 
 		// Menu descriptions
 		homeDescr:
@@ -125,6 +128,8 @@ export default {
 		conservedItemWasPublished: 'Консерва была успешно опубликована',
 		conservedItemWasDeleted: 'Консерва была удалена',
 		publishedItemWasDeleted: 'Опубликованный пост был удалён',
+		publishedItemWasDeletedOnlyInDb:
+			'Опубликованный пост был удалён только из базы данных, но остался в канале',
 		scheduledInfoMsgToAdminChannel: 'Пост добавлен в отложенные',
 		conservedInfoMsgToAdminChannel: 'Пост добавлен в консервы',
 		wrongTime: 'Не верное время',

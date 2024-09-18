@@ -75,9 +75,25 @@ export class AlreadyPublishedItem extends PageBase {
 					id: 'deletePostBtn',
 					label: t(c, 'deletePostBtn'),
 				},
+				allowDelete && {
+					id: 'deleteOnlyDbPostBtn',
+					label: t(c, 'deleteOnlyDbPostBtn'),
+				},
+			],
+			[
+				{
+					id: 'copyPostToConservedBtn',
+					label: t(c, 'copyPostToConservedBtn'),
+				},
 				allowEdit && {
 					id: 'editPostBtn',
 					label: t(c, 'editPostBtn'),
+				},
+			],
+			[
+				{
+					id: 'showPublicatedPostBtn',
+					label: t(c, 'showPublicatedPostBtn'),
 				},
 			],
 			[
@@ -100,7 +116,7 @@ export class AlreadyPublishedItem extends PageBase {
 			case 'editPostBtn':
 				this.state.editReturnUrl = 'published-item';
 
-				return this.router.go('pub-content');
+				return this.go('pub-content');
 			case 'deletePostBtn':
 				// delete message in telegram channel
 				try {
@@ -128,11 +144,38 @@ export class AlreadyPublishedItem extends PageBase {
 						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
-				return this.router.go('published-list');
+				return this.go('published-list');
+			case 'deleteOnlyDbPostBtn':
+				await deletePost(
+					c,
+					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.id],
+				);
+
+				await this.reply(
+					t(c, 'publishedItemWasDeletedOnlyInDb') +
+						`https://t.me/${c.ctx[CTX_KEYS.DESTINATION_CHANNEL_NAME]}/` +
+						this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId] +
+						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+				);
+
+				return this.go('published-list');
+			case 'copyPostToConservedBtn':
+				// pubTimestampMinutes will be cleared automatically
+				const dbRes = await updatePost(c, {
+					...this.state[EDIT_ITEM_NAME],
+					[PUB_KEYS.date]: null,
+					[PUB_KEYS.time]: null,
+				});
+
+				this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbRes);
+
+				return this.go('conserved-item');
+			case 'showPublicatedPostBtn':
+				return this.reload();
 			case 'toListBtn':
-				return this.router.go('published-list');
+				return this.go('published-list');
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}

@@ -71,19 +71,19 @@ export class Home extends PageBase {
 			case 'sendTextInMdV1Btn':
 				this.state.mdV1Mode = true;
 
-				return this.router.go('pub-content');
+				return this.go('pub-content');
 			case 'manageTagsBtn':
-				return this.router.go('tags-manager');
+				return this.go('tags-manager');
 			case 'manageScheduledBtn':
-				return this.router.go('scheduled-list');
+				return this.go('scheduled-list');
 			case 'publishedBtn':
-				return this.router.go('published-list');
+				return this.go('published-list');
 			case 'conservedBtn':
-				return this.router.go('conserved-list');
+				return this.go('conserved-list');
 			case 'editConfigBtn':
-				return this.router.go('config-manager');
+				return this.go('config-manager');
 			case 'manageUsersBtn':
-				return this.router.go('users-manager');
+				return this.go('users-manager');
 			// case 'test':
 			// 	let c = this.router.c;
 			// 	return await handleScheduled(
@@ -104,6 +104,6 @@ export class Home extends PageBase {
 
 		this.state.pub = pubState;
 
-		return this.router.go('pub-content');
+		return this.go('pub-content');
 	}
 }

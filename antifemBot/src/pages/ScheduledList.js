@@ -63,12 +63,12 @@ export class ScheduledList extends PageBase {
 
 			this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbItem);
 
-			return this.router.go('scheduled-item');
+			return this.go('scheduled-item');
 		}
 
 		switch (btnId) {
 			case 'toHomeBtn':
-				return this.router.go(HOME_PAGE);
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}
