@@ -25,6 +25,7 @@ import {
 	MAX_MEDIA_COUNT,
 	MAX_CAPTION_LENGTH,
 	MAX_TEXT_POST_LENGTH,
+	EDIT_ITEM_NAME,
 } from '../constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -340,12 +341,13 @@ export async function handleEditedPostSave(router) {
 	const c = router.c;
 
 	if (router.state.saveIt) {
-		const pub = router.state.pub;
 		let dbItem;
+		const pub = router.state.pub;
 
 		if (
-			pub[PUB_KEYS.date] !== router.state[EDIT_ITEM_NAME][PUB_KEYS.date] ||
-			pub[PUB_KEYS.time] !== router.state[EDIT_ITEM_NAME][PUB_KEYS.time]
+			router.state[EDIT_ITEM_NAME][PUB_KEYS.date] &&
+			(pub[PUB_KEYS.date] !== router.state[EDIT_ITEM_NAME][PUB_KEYS.date] ||
+				pub[PUB_KEYS.time] !== router.state[EDIT_ITEM_NAME][PUB_KEYS.time])
 		) {
 			pub[PUB_KEYS.chandedTimeByUserName] = router.me[USER_KEYS.name];
 		} else {
@@ -357,14 +359,14 @@ export async function handleEditedPostSave(router) {
 		router.state[EDIT_ITEM_NAME] = pub;
 
 		await updatePost(c, pub, dbItem);
-		await this.reply(t(c, 'editedSavedSuccessfully'));
+		await router.reply(t(c, 'editedSavedSuccessfully'));
 	}
 
 	delete router.state.pub;
 	delete router.state.saveIt;
 	delete router.state.editReturnUrl;
 
-	return pub;
+	return router.state[EDIT_ITEM_NAME];
 }
 
 // export function removeNotLetterAndNotNumbersFromStr(str) {

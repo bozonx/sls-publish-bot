@@ -87,28 +87,28 @@ export class PubContent extends PubPageBase {
 				2,
 			),
 			haveAnyContent &&
-			!isContentExceeded && [
-				{
-					id: 'showPostBtn',
-					label: t(c, 'showPostBtn'),
-				},
-			],
+				!isContentExceeded && [
+					{
+						id: 'showPostBtn',
+						label: t(c, 'showPostBtn'),
+					},
+				],
 			[
 				{
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-				!isContentExceeded &&
-				(editMode
-					? {
+					!isContentExceeded &&
+					editMode && {
 						id: 'saveBtn',
 						label: t(c, 'saveBtn'),
-					}
-					: {
+					},
+				haveAnyContent &&
+					!isContentExceeded && {
 						id: 'nextBtn',
 						label: t(c, 'nextBtn'),
-					}),
+					},
 			],
 		]);
 	}

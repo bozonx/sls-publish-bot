@@ -22,7 +22,7 @@ import {
 
 export class ConservedItem extends PageBase {
 	async renderMenu() {
-		const item = handleEditedPostSave(this.router);
+		const item = await handleEditedPostSave(this.router);
 		const c = this.router.c;
 		const isAdmin = isUserAdmin(this.me);
 		const userPerms = this.me[USER_KEYS.cfg][USER_CFG_KEYS.permissions];

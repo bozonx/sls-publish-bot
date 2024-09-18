@@ -9,6 +9,7 @@ import {
 	SESSION_CACHE_NAME,
 	USER_KEYS,
 	PUB_KEYS,
+	EDIT_ITEM_NAME,
 } from './constants.js';
 
 const PREV_MENU_MSG_ID_STATE_NAME = 'prevMsgId';
@@ -376,14 +377,21 @@ export class PageRouter {
 	_makeErrorMsg(e, method) {
 		const msg = {
 			...this.c.msg,
-			text: this.c.msg?.text.substring(0, 300),
-			caption: this.c.msg?.caption.substring(0, 300),
+			text: this.c.msg?.text?.substring(0, 300),
+			caption: this.c.msg?.caption?.substring(0, 300),
 		};
 		const state = {
 			...this.state,
 			pub: {
 				...this.state.pub,
-				[PUB_KEYS.textHtml]: this.state.pub[PUB_KEYS.textHtml]?.substring(
+				[PUB_KEYS.textHtml]: this.state.pub?.[PUB_KEYS.textHtml]?.substring(
+					0,
+					300,
+				),
+			},
+			[EDIT_ITEM_NAME]: {
+				...this.state[EDIT_ITEM_NAME],
+				[PUB_KEYS.textHtml]: this.state.pub?.[PUB_KEYS.textHtml]?.substring(
 					0,
 					300,
 				),
@@ -396,10 +404,10 @@ export class PageRouter {
 					`\n\n${new Date().toISOString()} ERROR in ${method}. ${e}\n\nmsg:\n`,
 			) +
 			'```\n' +
-			JSON.stringify(msg, null, 2) +
+			JSON.stringify(msg, null, 2)?.substring(0, 1500) +
 			'\n```\nstate\\:\n' +
 			'```\n' +
-			JSON.stringify(state, null, 2) +
+			JSON.stringify(state, null, 2)?.substring(0, 1500) +
 			'\n```'
 		);
 	}

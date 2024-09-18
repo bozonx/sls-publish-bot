@@ -22,6 +22,8 @@ export function escapeHtml(text) {
 }
 
 export function htmlToCleanText(html) {
+	if (!html) return html;
+
 	const tree = rehype().parse(html);
 
 	return toString(tree);
