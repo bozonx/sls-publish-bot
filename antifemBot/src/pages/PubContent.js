@@ -1,5 +1,11 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, defineMenu, makeStatePreview } from '../helpers/helpers.js';
+import {
+	t,
+	defineMenu,
+	makeStatePreview,
+	calculateTextLengths,
+	exscidedPostTextLimit,
+} from '../helpers/helpers.js';
 import { escapeMdV2 } from '../helpers/converters.js';
 import { makeStateFromMessage } from '../helpers/publishHelpres.js';
 import { isEmptyObj, breakArray } from '../helpers/lib.js';
@@ -29,11 +35,16 @@ export class PubContent extends PubPageBase {
 		// set initial replace mode = both
 		if (!this.state.replaceMode) this.state.replaceMode = REPLACE_MODES.both;
 
-		const hasMedia = Boolean(this.state.pub[PUB_KEYS.media]?.length);
-		const haveAnyContent = Boolean(
-			this.state.pub[PUB_KEYS.textHtml] || hasMedia,
-		);
+		const pub = this.state.pub;
+		const hasMedia = Boolean(pub[PUB_KEYS.media]?.length);
+		const haveAnyContent = Boolean(pub[PUB_KEYS.textHtml] || hasMedia);
 		const editMode = Boolean(this.state[EDIT_ITEM_NAME]);
+
+		const [contentLength] = calculateTextLengths(c, pub);
+		const isContentExceeded = exscidedPostTextLimit(
+			contentLength,
+			pub[PUB_KEYS.media]?.length,
+		);
 
 		this.text = await this._makeMenuText(haveAnyContent);
 
@@ -49,7 +60,7 @@ export class PubContent extends PubPageBase {
 			],
 			...breakArray(
 				[
-					this.state.pub[PUB_KEYS.textHtml] && {
+					pub[PUB_KEYS.textHtml] && {
 						id: 'removeTextBtn',
 						label: t(c, 'removeTextBtn'),
 					},
@@ -75,7 +86,8 @@ export class PubContent extends PubPageBase {
 				],
 				2,
 			),
-			haveAnyContent && [
+			haveAnyContent &&
+			!isContentExceeded && [
 				{
 					id: 'showPostBtn',
 					label: t(c, 'showPostBtn'),
@@ -87,14 +99,16 @@ export class PubContent extends PubPageBase {
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-				editMode && {
-					id: 'saveBtn',
-					label: t(c, 'saveBtn'),
-				},
-				haveAnyContent && {
-					id: 'nextBtn',
-					label: t(c, 'nextBtn'),
-				},
+				!isContentExceeded &&
+				(editMode
+					? {
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					}
+					: {
+						id: 'nextBtn',
+						label: t(c, 'nextBtn'),
+					}),
 			],
 		]);
 	}

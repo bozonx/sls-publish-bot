@@ -22,6 +22,9 @@ import {
 	DB_TABLE_NAMES,
 	POST_KEYS,
 	DEFAULT_SOCIAL_MEDIA,
+	MAX_MEDIA_COUNT,
+	MAX_CAPTION_LENGTH,
+	MAX_TEXT_POST_LENGTH,
 } from '../constants.js';
 
 export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
@@ -40,12 +43,36 @@ export function t(c, msg) {
 	return locales[lang][msg] || msg;
 }
 
+export function exscidedPostTextLimit(fullPostLength, mediaCount = 0) {
+	if (mediaCount) return fullPostLength > MAX_CAPTION_LENGTH;
+
+	return fullPostLength > MAX_TEXT_POST_LENGTH;
+}
+
+export function calculateTextLengths(c, pubState) {
+	const contentLength = htmlToCleanText(pubState[PUB_KEYS.textHtml])?.length;
+	const fullPostLength =
+		pubState[PUB_KEYS.template] &&
+		htmlToCleanText(applyTemplate(c, pubState[PUB_KEYS.textHtml], pubState))
+			?.length;
+
+	return [contentLength, fullPostLength];
+}
+
 export async function makeStatePreview(c, state = {}) {
 	const mediaCount = state[PUB_KEYS.media]?.length || 0;
-	const contentLength = htmlToCleanText(state[PUB_KEYS.textHtml])?.length;
-	const fullPostLength =
-		state[PUB_KEYS.template] &&
-		htmlToCleanText(applyTemplate(c, state[PUB_KEYS.textHtml], state))?.length;
+	const mediaLimitWarn = mediaCount > MAX_MEDIA_COUNT ? ' ‼️' : '';
+	const [contentLength, fullPostLength] = calculateTextLengths(c, state);
+	// const contentLength = htmlToCleanText(state[PUB_KEYS.textHtml])?.length;
+	// const fullPostLength =
+	// 	state[PUB_KEYS.template] &&
+	// 	htmlToCleanText(applyTemplate(c, state[PUB_KEYS.textHtml], state))?.length;
+	const contentLimitWarn = exscidedPostTextLimit(contentLength, mediaCount)
+		? ' ‼️'
+		: '';
+	const fullTextLimitWarn = exscidedPostTextLimit(fullPostLength, mediaCount)
+		? ' ‼️'
+		: '';
 	let postType = 'text';
 	const createdByUser =
 		typeof state[PUB_KEYS.dbRecord]?.[POST_KEYS.createdByUserId] === 'number' &&
@@ -68,11 +95,13 @@ export async function makeStatePreview(c, state = {}) {
 	let res = '';
 
 	if (state[PUB_KEYS.text]) res += `${t(c, 'statePostType')}: ${postType}\n`;
-	if (contentLength) res += `${t(c, 'stateContentLength')}: ${contentLength}\n`;
+	if (contentLength)
+		res += `${t(c, 'stateContentLength')}: ${contentLength}${contentLimitWarn}\n`;
 	if (fullPostLength)
-		res += `${t(c, 'stateFullPostLength')}: ${fullPostLength}\n`;
+		res += `${t(c, 'stateFullPostLength')}: ${fullPostLength}${fullTextLimitWarn}\n`;
 	// print media count only if there are several media files
-	if (mediaCount > 1) res += `${t(c, 'stateMediaCount')}: ${mediaCount}\n`;
+	if (mediaCount > 1)
+		res += `${t(c, 'stateMediaCount')}: ${mediaCount}${mediaLimitWarn}\n`;
 	if (state[PUB_KEYS.tags])
 		res += `${t(c, 'stateTags')}: ${state[PUB_KEYS.tags].join(', ')}\n`;
 	if (!mediaCount && state[PUB_KEYS.previewLink])

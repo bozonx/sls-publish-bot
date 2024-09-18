@@ -7,8 +7,11 @@ import { rehype } from 'rehype';
 // }
 
 export function convertTgEntitiesToTgHtml(text, entities) {
+	// TODO: надо както экранировать символы <> но так чтобы не смещался текст
 	return toHTML({ text, entities });
 }
+
+// console.log(1111, convertTgEntitiesToTgHtml('ddd <R sd', []));
 
 export function escapeMdV2(text) {
 	return escapers.MarkdownV2(text);

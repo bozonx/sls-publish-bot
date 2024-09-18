@@ -12,6 +12,9 @@ export const PUBLICATION_ADD_NOW_SEC = 5;
 export const DEFAULT_PUB_PLUS_DAY = 1;
 export const DEFAULT_PUB_TIME = '10:00';
 export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
+export const MAX_MEDIA_COUNT = 10;
+export const MAX_CAPTION_LENGTH = 1024;
+export const MAX_TEXT_POST_LENGTH = 4096;
 export const KV_KEYS = {
 	config: 'config',
 };

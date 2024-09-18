@@ -1,5 +1,11 @@
 import { PubPageBase } from '../PubPageBase.js';
-import { t, makeStatePreview, defineMenu } from '../helpers/helpers.js';
+import {
+	t,
+	makeStatePreview,
+	defineMenu,
+	calculateTextLengths,
+	exscidedPostTextLimit,
+} from '../helpers/helpers.js';
 import { getLinksFromHtml } from '../helpers/converters.js';
 import {
 	createPost,
@@ -32,6 +38,11 @@ export class PubPostSetup extends PubPageBase {
 		const pub = this.state.pub;
 		const editMode = Boolean(this.state[EDIT_ITEM_NAME]);
 		const hasMedia = Boolean(this.state.pub[PUB_KEYS.media]?.length);
+		const [, fullPostLength] = calculateTextLengths(c, pub);
+		const isFullPostExceeded = exscidedPostTextLimit(
+			fullPostLength,
+			pub[PUB_KEYS.media]?.length,
+		);
 
 		this.text = `${await makeStatePreview(c, pub)}\n\n${t(c, 'pubPostSetupDescr')}`;
 
@@ -92,13 +103,14 @@ export class PubPostSetup extends PubPageBase {
 						label: `${t(c, 'addAuthorBtn')}: ${authorToAdd}`,
 					},
 				],
-			[
+			!isFullPostExceeded && [
 				{
 					id: 'showPostBtn',
 					label: t(c, 'showPostBtn'),
 				},
 			],
-			!editMode && [
+			!editMode &&
+			!isFullPostExceeded && [
 				{
 					id: 'saveToConservedBtn',
 					label: t(c, 'saveToConservedBtn'),
@@ -113,7 +125,8 @@ export class PubPostSetup extends PubPageBase {
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
-				editMode
+				!isFullPostExceeded &&
+				(editMode
 					? {
 						id: 'saveBtn',
 						label: t(c, 'saveBtn'),
@@ -121,7 +134,7 @@ export class PubPostSetup extends PubPageBase {
 					: {
 						id: 'nextBtn',
 						label: t(c, 'nextBtn'),
-					},
+					}),
 			],
 		]);
 	}
