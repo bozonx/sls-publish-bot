@@ -18,7 +18,6 @@
 		"grammy": "^1.29.0",
 		"hast-util-to-string": "^3.0.0",
 		"hono": "^4.5.8",
-		"js-yaml": "^4.1.0",
 		"lodash": "^4.17.21",
 		"parse-url": "^9.2.0",
 		"prisma": "^5.18.0",

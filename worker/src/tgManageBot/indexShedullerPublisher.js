@@ -4,22 +4,14 @@ import {
 	doFullFinalPublicationProcess,
 	convertDbPostToPubState,
 } from './helpers/publishHelpres.js';
-import { loadFromKv } from './io/KVio.js';
 import {
 	CTX_KEYS,
-	KV_KEYS,
 	PUBLICATION_ADD_NOW_SEC,
 	DB_TABLE_NAMES,
 	POST_KEYS,
 } from './constants.js';
 
-export async function handleScheduled(
-	TG_TOKEN,
-	DESTINATION_CHANNEL_ID,
-	PUBLISHING_MINUS_MINUTES,
-	KV,
-	prismaAdapter,
-) {
+export async function handleScheduled(TG_TOKEN, TEST_MODE, prismaAdapter) {
 	const prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
 	const curTimeMinutes = new Date().getTime() / 1000 / 60;
 	// const curTimeMinutes = 28768620; // new Date('2024-09-12T08:00+03:00').getTime() / 1000 / 60
@@ -46,9 +38,9 @@ export async function handleScheduled(
 		},
 	};
 
-	const config = await loadFromKv(c, KV_KEYS.config);
-
-	if (!config) throw new Error(`ERROR: Can't get config`);
+	// const config = await loadFromKv(c, KV_KEYS.config);
+	//
+	// if (!config) throw new Error(`ERROR: Can't get config`);
 
 	const bot = new Bot(TG_TOKEN);
 
