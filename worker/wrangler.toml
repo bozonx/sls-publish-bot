@@ -16,10 +16,12 @@ WORKER_HOST = "publisher.ivank.workers.dev"
 WEB_APP_URL = "https://publisher-ui-1zw.pages.dev"
 CORS_ORIGIN = "https://publisher-ui-1zw.pages.dev"
 AUTH_MAX_AGE_DAYS=30
+APP_DEBUG = true
+TEST_MODE = false
 # TG_TOKEN, JWT_SECRET and API_CALL_LOCAL_CODE are secrets in wrangler (see cloudflare dashboard)
 
 [triggers]
-crons = ["0 */22 * * *"]
+crons = ["*/10 * * * *","0 */22 * * *"]
 
 # Bind a D1 database. D1 is Cloudflare’s native serverless SQL database.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#d1-databases
@@ -29,16 +31,14 @@ database_name = "publisher"
 database_id = "36880bf7-044e-4bad-b91b-6694f4eac0ad"
 # migrations_dir = "src/migrations"
 
+[[kv_namespaces]]
+binding = "KV"
+id = "e95892c59a4d4b25ac9f5df1a36ba56e"
+
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
 # [ai]
 # binding = "AI"
-
-# Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
-# Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#kv-namespaces
-# [[kv_namespaces]]
-# binding = "MY_KV_NAMESPACE"
-# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#r2-buckets
@@ -52,8 +52,3 @@ database_id = "36880bf7-044e-4bad-b91b-6694f4eac0ad"
 # binding = "MY_SERVICE"
 # service = "my-service"
 
-# Bind a Vectorize index. Use to store and query vector embeddings for semantic search, classification and other vector search use-cases.
-# Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#vectorize-indexes
-# [[vectorize]]
-# binding = "MY_INDEX"
-# index_name = "my-index"

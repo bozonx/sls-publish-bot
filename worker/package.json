@@ -1,10 +1,10 @@
 {
 	"name": "publisher",
-	"version": "0.4.0",
+	"version": "0.5.0",
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"deploy": "wrangler deploy",
+		"deploy": "wrangler deploy --minify=true --upload-source-maps=false",
 		"dev": "wrangler dev",
 		"devbot": "node ./src/localBotIndex.js dotenv_config_path=.dev.vars",
 		"start": "wrangler dev",
@@ -13,12 +13,19 @@
 	"dependencies": {
 		"@prisma/adapter-d1": "^5.18.0",
 		"@prisma/client": "^5.18.0",
+		"@telegraf/entity": "^0.5.0",
 		"dotenv": "^16.4.5",
 		"grammy": "^1.29.0",
+		"hast-util-to-string": "^3.0.0",
 		"hono": "^4.5.8",
+		"js-yaml": "^4.1.0",
 		"lodash": "^4.17.21",
 		"parse-url": "^9.2.0",
-		"prisma": "^5.18.0"
+		"prisma": "^5.18.0",
+		"rehype": "^13.0.1",
+		"rehype-rewrite": "^4.0.2",
+		"remark": "^15.0.1",
+		"remark-rehype": "^11.1.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.4.25",

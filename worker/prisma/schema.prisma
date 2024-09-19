@@ -20,59 +20,96 @@ model User {
   id        Int         @id @default(autoincrement())
   tgUserId  String      @unique
   tgChatId  String      @unique
+  lang      String
+  name      String
+  cfg       String
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-  lang      String
-  cfg       String
-  Blog      Blog[]
-  Inbox     Inbox[]
-  Workspace Workspace[]
-  Tag       Tag[]
 }
 
 model Workspace {
   id              Int      @id @default(autoincrement())
   name            String
+  cfg             String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   createdByUser   User     @relation(fields: [createdByUserId], references: [id])
   createdByUserId Int
-  cfg             String
-  Blog            Blog[]
+}
+
+model GuestsByWorkspace {
+  id              Int      @id @default(autoincrement())
+  cfg             String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+  workspace   User     @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
 }
 
 model Blog {
   id              Int       @id @default(autoincrement())
   name            String
+  cfg             String
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  createdByUser   User      @relation(fields: [createdByUserId], references: [id])
-  createdByUserId Int
   workspace       Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId     Int
+}
+
+model SocialMedia {
+  id              Int       @id @default(autoincrement())
+  // special name
+  type String
   cfg             String
-  Tag             Tag[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  blog            Blog     @relation(fields: [blogId], references: [id])
+  blogId          Int
 }
 
 model Tag {
   id              Int      @id @default(autoincrement())
   name            String
-  socialMedia     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  createdByUser   User     @relation(fields: [createdByUserId], references: [id])
-  createdByUserId Int
   blog            Blog     @relation(fields: [blogId], references: [id])
   blogId          Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  socialMedia            SocialMedia     @relation(fields: [socialMediaId], references: [id])
+  socialMediaId          Int
 }
 
 model Inbox {
   id              Int      @id @default(autoincrement())
   name            String?
+  payloadJson        String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   createdByUser   User     @relation(fields: [createdByUserId], references: [id])
   createdByUserId Int
-  dataJson        String?
+  workspace       Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId     Int
   // media
+}
+
+model Post {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  // timestamp minutes of publicated moment
+  pubTimestampMinutes Int?
+  // data of publicated post, depends on certain social media
+  publicatedDataJson            String
+  payloadJson         String?
+  // createdByUser       User     @relation("ScheduledCreatedByUser", fields: [createdByUserId], references: [id])
+  updatedByUserId     Int?
+  forcePublishedByUserId     Int?
+  changedTimeByUserId     Int?
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  createdByUser       User     @relation(fields: [createdByUserId], references: [id])
+  createdByUserId     Int
+  socialMedia            SocialMedia     @relation(fields: [socialMediaId], references: [id])
+  socialMediaId          Int
 }
