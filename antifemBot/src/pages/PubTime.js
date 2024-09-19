@@ -100,7 +100,7 @@ export class PubTime extends PubPageBase {
 
 		if (!c.msg.text) await this.reply('No text');
 
-		const rawTime = c.msg.text.trim().replace(/[\s.,]/g, ':');
+		const rawTime = c.msg.text.trim().replace(/[\s.,]+/g, ':');
 		const normalizedTime = normalizeTime(rawTime);
 
 		if (!normalizedTime) return this.reply(t(c, 'wrongTime'));

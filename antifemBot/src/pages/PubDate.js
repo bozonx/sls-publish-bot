@@ -137,7 +137,7 @@ export class PubDate extends PubPageBase {
 
 		if (!c.msg.text) await this.reply('No text');
 
-		const preparedDateStr = c.msg.text.trim().replace(/[\s,]/g, '.');
+		const preparedDateStr = c.msg.text.trim().replace(/[\s,]+/g, '.');
 		const isoDateStr = normalizeShortDateToIsoDate(
 			preparedDateStr,
 			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],

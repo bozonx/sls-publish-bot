@@ -49,8 +49,8 @@ export function getShortWeekDay(isoDateStr) {
 export function convertDateTimeToTsMinutes(date, time, timeZone) {
 	return Math.floor(
 		new Date(makeIsoDateFromPubState({ date, time }) + timeZone).getTime() /
-		1000 /
-		60,
+			1000 /
+			60,
 	);
 }
 
@@ -165,9 +165,33 @@ export function normalizeTime(rawTime) {
 }
 
 export function normalizeShortDateToIsoDate(localeShortDate, timeZone) {
+	const timeZoneMs = timeToMinutes(timeZone) * 60 * 1000;
+
+	if (localeShortDate?.trim().match(/^\d{1,2}$/)) {
+		// use only day and get current or next month
+		const day = Number(localeShortDate.trim());
+		const now = new Date(new Date().getTime() + timeZoneMs);
+		const monthDay = now.getDate();
+		const year = now.getFullYear();
+		const curMonth = now.getMonth() + 1;
+		let isoDate;
+
+		if (day >= monthDay) {
+			// today or future date of this month
+			isoDate = `${year}-${make2SignDigitStr(curMonth)}-${make2SignDigitStr(day)}`;
+		} else {
+			let fixedMonth = curMonth === 12 ? 1 : curMonth + 1;
+			// next month date
+			isoDate = `${year}-${make2SignDigitStr(fixedMonth)}-${make2SignDigitStr(day)}`;
+		}
+		// if exceeded count of days in month then false
+		if (new Date(isoDate).toString() === 'Invalid Date') return false;
+
+		return isoDate;
+	}
+
 	if (!localeShortDate?.trim().match(/^\d{1,2}\.\d{1,2}$/)) return false;
 
-	const timeZoneMs = timeToMinutes(timeZone) * 60 * 1000;
 	const [dayStr, monthStr] = localeShortDate.split('.');
 	const year = new Date(new Date().getTime() + timeZoneMs).getFullYear();
 	const isoDate = `${year}-${make2SignDigitStr(monthStr)}-${make2SignDigitStr(dayStr)}`;

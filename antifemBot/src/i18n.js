@@ -101,7 +101,8 @@ export default {
 		publishedEmptyListDescr: 'Ничего пока не опубликовано',
 		publishedItemDescr: 'Управление опубликованным постом',
 		// Date and time
-		selectDateDescr: 'Выберете дату либо введите в формате DD.MM',
+		selectDateDescr:
+			'Выберете дату либо введите в формате DD.MM. Можно только день в пределах месяца',
 		selectHourDescr:
 			'Выберете время публикации.\n\nЕсли нужно более точное время то введите его в формате 1:23 или 9.30 или даже 8 40',
 		// Content pageH
