@@ -7,8 +7,10 @@ import {
 } from '../helpers/helpers.js';
 import {
 	deletePost,
+	createPost,
 	updatePost,
 	updateFinalPost,
+	convertDbPostToPubState,
 } from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
@@ -118,6 +120,22 @@ export class AlreadyPublishedItem extends PageBase {
 
 				return this.go('pub-content');
 			case 'deletePostBtn':
+				const copyRes = await c.api.copyMessage(
+					c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
+					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+				);
+				const copyMsgId = Array.isArray(copyRes)
+					? copyRes[0]?.message_id
+					: copyRes?.message_id;
+				await c.api.sendMessage(
+					c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
+					t(c, 'warnAdminsPostDeletedFromChannel'),
+					{
+						reply_parameters: { message_id: copyMsgId },
+					},
+				);
+
 				// delete message in telegram channel
 				try {
 					await c.api.deleteMessage(
@@ -160,17 +178,35 @@ export class AlreadyPublishedItem extends PageBase {
 
 				return this.go('published-list');
 			case 'copyPostToConservedBtn':
-				// pubTimestampMinutes will be cleared automatically
-				const dbRes = await updatePost(c, {
-					...this.state[EDIT_ITEM_NAME],
-					[PUB_KEYS.date]: null,
-					[PUB_KEYS.time]: null,
-				});
+				const dbRes = await createPost(
+					c,
+					{
+						...this.state[EDIT_ITEM_NAME],
+						[PUB_KEYS.date]: null,
+						[PUB_KEYS.time]: null,
+						[PUB_KEYS.media_group_id]: null,
+						[PUB_KEYS.forcePublishedByUserName]: null,
+						[PUB_KEYS.chandedTimeByUserName]: null,
+						[PUB_KEYS.dbRecord]: {
+							...this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord],
+							[POST_KEYS.pubMsgId]: null,
+							[POST_KEYS.updatedByUserId]: null,
+							[POST_KEYS.createdByUserId]: this.me[USER_KEYS.id],
+						},
+					},
+					true,
+				);
 
 				this.state[EDIT_ITEM_NAME] = convertDbPostToPubState(dbRes);
 
 				return this.go('conserved-item');
 			case 'showPublicatedPostBtn':
+				await c.api.forwardMessage(
+					this.me[USER_KEYS.tgChatId],
+					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+				);
+
 				return this.reload();
 			case 'toListBtn':
 				return this.go('published-list');

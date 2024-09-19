@@ -94,6 +94,14 @@ export class PageBase {
 
 	// It runs on each button press of menu of this page
 	async onButtonPress(btnId, payload) {}
+
+	async go(...p) {
+		return this.router.go(...p);
+	}
+
+	async reload(...p) {
+		return this.router.reload(...p);
+	}
 }
 
 export class PageRouter {

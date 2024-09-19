@@ -86,7 +86,7 @@ function makeForwardedFrom(c) {
 		if (title && !username) return title;
 		else if (!title && username) return username;
 
-		return `${title} | https://t.me/${username}`;
+		return `${title} | https://t.me/${username}/${c.msg.forward_origin.message_id}`;
 	}
 
 	return (
@@ -262,9 +262,9 @@ export async function printPubToAdminChannel(c, dbRecord) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		msg +
-		`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
-		'\n\n----------\n\n' +
-		(await makeListOfScheduledForDescr(c)),
+			`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
+			'\n\n----------\n\n' +
+			(await makeListOfScheduledForDescr(c)),
 		{ reply_parameters: { message_id: msgId } },
 	);
 }
@@ -380,20 +380,21 @@ export async function updateFinalPost(c, chatId, msgId, pubState) {
 // }
 
 export async function createPost(c, pubState, conserved = false) {
+	const { id, ...dbRecord } = pubState[PUB_KEYS.dbRecord];
 	const dbItem = convertPubStateToDbPost({
 		...pubState,
 		dbRecord: {
-			...pubState[PUB_KEYS.dbRecord],
+			...dbRecord,
 			name: makeScheduledItemName(pubState),
 			socialMedia: DEFAULT_SOCIAL_MEDIA,
 			[POST_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
 			[POST_KEYS.pubTimestampMinutes]: conserved
 				? null
 				: convertDateTimeToTsMinutes(
-					pubState[PUB_KEYS.date],
-					pubState[PUB_KEYS.time],
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-				),
+						pubState[PUB_KEYS.date],
+						pubState[PUB_KEYS.time],
+						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					),
 		},
 	});
 
@@ -408,10 +409,10 @@ export async function updatePost(c, pubState, dbOverwrite) {
 			name: makeScheduledItemName(pubState),
 			[POST_KEYS.pubTimestampMinutes]: pubState[PUB_KEYS.date]
 				? convertDateTimeToTsMinutes(
-					pubState[PUB_KEYS.date],
-					pubState[PUB_KEYS.time],
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-				)
+						pubState[PUB_KEYS.date],
+						pubState[PUB_KEYS.time],
+						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					)
 				: null,
 			...dbOverwrite,
 		},
