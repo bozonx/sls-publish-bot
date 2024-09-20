@@ -1,16 +1,23 @@
 import { Bot, session } from 'grammy';
 import {
-	handleStart,
-	handleMessage,
-	handleButtonCallback,
-} from './BotLogic.js';
-
-// await bot.api.sendMessage(12345, "Hello!");
+	tgManageBotPlugin,
+	onMessage,
+	onQueryData,
+	onStart,
+} from './tgManageBot/pluginIndex.js';
 
 export class BotIndex {
 	bot;
 
-	constructor(token, webAppUrl, apiCallLocalCode, apiBaseUrlOrDb) {
+	constructor(
+		token,
+		webAppUrl,
+		apiCallLocalCode,
+		KV,
+		PRISMA_ADAPTER,
+		APP_DEBUG,
+		TEST_MODE,
+	) {
 		this.bot = new Bot(token);
 
 		this.bot.use(async (ctx, next) => {
@@ -18,6 +25,13 @@ export class BotIndex {
 				webAppUrl,
 				apiBaseUrlOrDb,
 				apiCallLocalCode,
+			};
+
+			c.ctx = {
+				[CTX_KEYS.KV]: KV,
+				[CTX_KEYS.DB_CRUD]: new DbCrud(PRISMA_ADAPTER),
+				[CTX_KEYS.SESSION_STATE_TTL_DAYS]: SESSION_STATE_TTL_DAYS,
+				[CTX_KEYS.APP_DEBUG]: APP_DEBUG,
 			};
 
 			await next();
@@ -37,9 +51,11 @@ export class BotIndex {
 			}),
 		);
 
-		this.bot.command('start', handleStart);
-		this.bot.on('callback_query:data', handleButtonCallback);
-		this.bot.on('message', handleMessage);
+		this.bot.use(tgManageBotPlugin());
+
+		this.bot.command('start', onStart);
+		this.bot.on('callback_query:data', onQueryData);
+		this.bot.on('message', onMessage);
 	}
 
 	/**

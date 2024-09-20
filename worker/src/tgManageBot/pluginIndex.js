@@ -1,6 +1,7 @@
-import { Bot } from 'grammy';
 import { handleStart, makeContext } from './botLogic.js';
+
 import { routerMiddleware } from './PageRouter.js';
+
 import { Home } from './pages/Home.js';
 import { ConfigManager } from './pages/ConfigManager.js';
 import { TagsManager } from './pages/TagsManager.js';
@@ -20,47 +21,43 @@ import { ConservedItem } from './pages/ConservedItem.js';
 import { AlreadyPublishedList } from './pages/AlreadyPublishedList.js';
 import { AlreadyPublishedItem } from './pages/AlreadyPublishedItem.js';
 
-export class BotIndex {
-	bot;
+const routes = {
+	home: Home,
+	'config-manager': ConfigManager,
+	'users-manager': UsersManager,
+	'user-item': UserItem,
+	'tags-manager': TagsManager,
+	'pub-content': PubContent,
+	'pub-tags': PubTags,
+	'pub-date': PubDate,
+	'pub-time': PubTime,
+	'pub-post-setup': PubPostSetup,
+	'pub-select-preview': PubSelectLinkPreview,
+	'pub-confirm': PubConfirm,
+	'scheduled-list': ScheduledList,
+	'scheduled-item': ScheduledItem,
+	'conserved-list': ConservedList,
+	'conserved-item': ConservedItem,
+	'published-list': AlreadyPublishedList,
+	'published-item': AlreadyPublishedItem,
+};
 
-	constructor(TG_TOKEN, ...params) {
-		this.bot = new Bot(TG_TOKEN);
+export function tgManageBotPlugin() {
+	return async (c, next) => {
+		await makeContext();
 
-		this.bot.use(makeContext(...params));
-	}
+		await routerMiddleware(routes)(c, next);
+	};
+}
 
-	async init() {
-		const routes = {
-			home: Home,
-			'config-manager': ConfigManager,
-			'users-manager': UsersManager,
-			'user-item': UserItem,
-			'tags-manager': TagsManager,
-			'pub-content': PubContent,
-			'pub-tags': PubTags,
-			'pub-date': PubDate,
-			'pub-time': PubTime,
-			'pub-post-setup': PubPostSetup,
-			'pub-select-preview': PubSelectLinkPreview,
-			'pub-confirm': PubConfirm,
-			'scheduled-list': ScheduledList,
-			'scheduled-item': ScheduledItem,
-			'conserved-list': ConservedList,
-			'conserved-item': ConservedItem,
-			'published-list': AlreadyPublishedList,
-			'published-item': AlreadyPublishedItem,
-		};
+export async function onMessage(c) {
+	await c.router.$handleMessage(c);
+}
 
-		this.bot.use(routerMiddleware(routes));
-		this.bot.command('start', handleStart);
-		this.bot.on('message', (c) => c.router.$handleMessage(c));
-		this.bot.on('callback_query:data', (c) => c.router.$handleQueryData(c));
-	}
+export async function onQueryData(c) {
+	await c.router.$handleQueryData(c);
+}
 
-	/**
-	 * This is only for dev
-	 */
-	botStart() {
-		this.bot.start();
-	}
+export async function onStart(c) {
+	await handleStart(c);
 }
