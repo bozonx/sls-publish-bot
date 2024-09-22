@@ -16,7 +16,7 @@ export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
 export const SESSION_CACHE_NAME = 'session';
 export const DEFAULT_BTN_ITEM_ID = '-BTN=';
-export const HOME_PAGE = 'home';
+export const HOME_PAGE = 'tg-manager-home';
 export const EDIT_ITEM_NAME = 'editItem';
 // export const DEFAULT_SOCIAL_MEDIA = 'telegram';
 export const MENU_ITEM_LABEL_LENGTH = 40;
@@ -48,7 +48,7 @@ export const CTX_KEYS = {
 	KV: 'KV',
 	DB_CRUD: 'DB_CRUD',
 	WEB_APP_URL: 'WEB_APP_URL',
-	SESSION_STATE_TTL_DAYS: 'SESSION_STATE_TTL_DAYS',
+	BOT_SESSION_TTL_DAYS: 'BOT_SESSION_TTL_DAYS',
 	APP_DEBUG: 'APP_DEBUG',
 	TEST_MODE: 'TEST_MODE',
 	// MAIN_ADMIN_TG_USER_ID: 'MAIN_ADMIN_TG_USER_ID',
@@ -77,6 +77,9 @@ export const POST_KEYS = {
 };
 export const DB_TABLE_NAMES = {
 	User: 'User',
+	Workspace: 'Workspace',
+	Blog: 'Blog',
+	SocialMedia: 'SocialMedia',
 	Tag: 'Tag',
 	Post: 'Post',
 };

@@ -10,15 +10,23 @@ import { CTX_KEYS } from './tgManageBot/constants.js';
 export class BotIndex {
 	bot;
 
-	constructor(TG_TOKEN, WEB_APP_URL, KV, PRISMA_ADAPTER, APP_DEBUG, TEST_MODE) {
+	constructor(
+		TG_TOKEN,
+		WEB_APP_URL,
+		KV,
+		PRISMA_ADAPTER,
+		BOT_SESSION_TTL_DAYS,
+		APP_DEBUG,
+		TEST_MODE,
+	) {
 		this.bot = new Bot(TG_TOKEN);
 
 		this.bot.use(async (c, next) => {
 			c.ctx = {
+				[CTX_KEYS.WEB_APP_URL]: WEB_APP_URL,
 				[CTX_KEYS.KV]: KV,
 				[CTX_KEYS.DB_CRUD]: new DbCrud(PRISMA_ADAPTER),
-				[CTX_KEYS.WEB_APP_URL]: WEB_APP_URL,
-				[CTX_KEYS.SESSION_STATE_TTL_DAYS]: SESSION_STATE_TTL_DAYS,
+				[CTX_KEYS.BOT_SESSION_TTL_DAYS]: BOT_SESSION_TTL_DAYS,
 				[CTX_KEYS.APP_DEBUG]: APP_DEBUG,
 				[CTX_KEYS.TEST_MODE]: TEST_MODE,
 			};

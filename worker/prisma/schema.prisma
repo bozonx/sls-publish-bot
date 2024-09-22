@@ -31,6 +31,7 @@ model Workspace {
   id              Int      @id @default(autoincrement())
   name            String
   cfg             String
+  orderNum        Int?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   createdByUser   User     @relation(fields: [createdByUserId], references: [id])
@@ -52,6 +53,7 @@ model Blog {
   id              Int       @id @default(autoincrement())
   name            String
   cfg             String
+  orderNum        Int?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   workspace       Workspace @relation(fields: [workspaceId], references: [id])
@@ -62,7 +64,10 @@ model SocialMedia {
   id              Int       @id @default(autoincrement())
   // special name
   type String
+  // optional name in case if there several similar social media
+  name String?
   cfg             String
+  orderNum        Int?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   blog            Blog     @relation(fields: [blogId], references: [id])

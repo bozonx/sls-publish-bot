@@ -79,21 +79,21 @@ export class PageBase {
 
 	// It runs on each request.
 	// You can save some state to user in other functions while request is handling
-	async mount() {}
+	async mount() { }
 
 	// It runs when a route is changing. On each request
-	async unmount() {}
+	async unmount() { }
 
 	// Render menu here and return it.
 	// It runs only when the menu need to be renderred
 	// Menu has to be like [ [ {id, label, payload, cb(payload, id)}, ...btns ], ..rows ]
-	async renderMenu() {}
+	async renderMenu() { }
 
 	// It runs on each income message while this page is active
-	async onMessage() {}
+	async onMessage() { }
 
 	// It runs on each button press of menu of this page
-	async onButtonPress(btnId, payload) {}
+	async onButtonPress(btnId, payload) { }
 
 	async go(...p) {
 		return this.router.go(...p);
@@ -324,7 +324,7 @@ export class PageRouter {
 			SESSION_CACHE_NAME,
 			this.state,
 			// convert days to seconds
-			this.c.ctx[CTX_KEYS.SESSION_STATE_TTL_DAYS] * 24 * 60 * 60,
+			this.c.ctx[CTX_KEYS.BOT_SESSION_TTL_DAYS] * 24 * 60 * 60,
 		);
 
 		this._state = null;
@@ -364,13 +364,13 @@ export class PageRouter {
 			const [, createMenuResult] = await Promise.all([
 				// remove prev menu message
 				prevMsgId &&
-					(async () => {
-						try {
-							await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
-						} catch (e) {
-							// ignore error if can't find message to delete
-						}
-					})(),
+				(async () => {
+					try {
+						await c.api.deleteMessage(this.chatWithBotId, prevMsgId);
+					} catch (e) {
+						// ignore error if can't find message to delete
+					}
+				})(),
 				// print a new menu
 				await c.reply(text, options),
 			]);
@@ -409,7 +409,7 @@ export class PageRouter {
 		return (
 			escapeMdV2(
 				t(this.c, 'errorSendToAddmin') +
-					`\n\n${new Date().toISOString()} ERROR in ${method}. ${e}\n\nmsg:\n`,
+				`\n\n${new Date().toISOString()} ERROR in ${method}. ${e}\n\nmsg:\n`,
 			) +
 			'```\n' +
 			JSON.stringify(msg, null, 2)?.substring(0, 1500) +

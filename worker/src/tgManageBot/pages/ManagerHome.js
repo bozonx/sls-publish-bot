@@ -4,7 +4,7 @@ import { makeStateFromMessage } from '../helpers/publishHelpres.js';
 import { EDIT_ITEM_NAME } from '../constants.js';
 // import { handleScheduled } from '../indexShedullerPublisher.js';
 
-export class Home extends PageBase {
+export class ManagerHome extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 		const isAdmin = isUserAdmin(this.me);

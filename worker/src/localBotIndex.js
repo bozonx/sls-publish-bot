@@ -7,10 +7,10 @@ import { KVStub } from './io/KVstub.js';
 	const app = new BotIndex(
 		process.env.TG_TOKEN,
 		process.env.WEB_APP_URL,
-		// process.env.API_CALL_LOCAL_CODE,
 		KV,
 		// do not need to specify any prisma adapter for sqlite
 		undefined,
+		process.env.BOT_SESSION_TTL_DAYS,
 		true,
 		true,
 	);
