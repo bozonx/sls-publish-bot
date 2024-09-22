@@ -5,7 +5,7 @@ import {
 	SESSION_CACHE_NAME,
 	DB_TABLE_NAMES,
 	USER_KEYS,
-	HOME_PAGE,
+	MAIN_HOME,
 } from './constants.js';
 import { routerMiddleware } from './PageRouter.js';
 import { MainHome } from './pages/MainHome.js';
@@ -95,7 +95,7 @@ async function makeContext(c) {
 		throw new Error(`Can't load initial data: ${e}`);
 	}
 
-	if (session.tgSmId) {
+	if (typeof session?.tgSmId !== 'undefined') {
 		tgSm = await c.ctx[CTX_KEYS.DB_CRUD].getItem(
 			DB_TABLE_NAMES.SocialMedia,
 			session.tgSmId,
@@ -125,5 +125,5 @@ async function handleStart(c) {
 		);
 	}
 
-	return c.router.start();
+	return c.router.start(MAIN_HOME);
 }

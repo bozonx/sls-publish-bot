@@ -19,7 +19,7 @@ import {
 	USER_KEYS,
 	DB_TABLE_NAMES,
 	POST_KEYS,
-	DEFAULT_SOCIAL_MEDIA,
+	// DEFAULT_SOCIAL_MEDIA,
 	MENU_ITEM_LABEL_LENGTH,
 } from '../constants.js';
 
@@ -389,7 +389,8 @@ export async function createPost(c, pubState, conserved = false) {
 		dbRecord: {
 			...dbRecord,
 			name: makeScheduledItemName(pubState),
-			socialMedia: DEFAULT_SOCIAL_MEDIA,
+			// TODO: no DEFAULT_SOCIAL_MEDIA
+			// socialMedia: DEFAULT_SOCIAL_MEDIA,
 			[POST_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
 			[POST_KEYS.pubTimestampMinutes]: conserved
 				? null

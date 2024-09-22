@@ -21,7 +21,7 @@ import {
 	USER_PERMISSIONS_KEYS,
 	DB_TABLE_NAMES,
 	POST_KEYS,
-	DEFAULT_SOCIAL_MEDIA,
+	// DEFAULT_SOCIAL_MEDIA,
 	MAX_MEDIA_COUNT,
 	MAX_CAPTION_LENGTH,
 	MAX_TEXT_POST_LENGTH,
@@ -318,7 +318,8 @@ export async function handleTagsFromInputAndSave(router, rawText) {
 		newTags.map((tag) =>
 			router.db.createItem(DB_TABLE_NAMES.Tag, {
 				[TAG_KEYS.name]: tag,
-				[TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
+				// TODO: no DEFAULT_SOCIAL_MEDIA
+				// [TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
 			}),
 		),
 	);

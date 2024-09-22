@@ -17,6 +17,7 @@ export const QUERY_MARKER = 'PageRouter';
 export const SESSION_CACHE_NAME = 'session';
 export const DEFAULT_BTN_ITEM_ID = '-BTN=';
 export const HOME_PAGE = 'tg-manager-home';
+export const MAIN_HOME = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
 // export const DEFAULT_SOCIAL_MEDIA = 'telegram';
 export const MENU_ITEM_LABEL_LENGTH = 40;
@@ -147,28 +148,28 @@ const footer =
 	'<a href="https://t.me/antifem_battle">Антифеминизм | Маскулизм. подписывайся</a> | <a href="https://t.me/antifem_battle/78">донат</a>';
 // '[Антифеминизм \\| Маскулизм\\. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
 
-export const APP_INITIAL_CONFIG = {
-	// use telegram MarkdownV2 https://core.telegram.org/bots/api#markdownv2-style
-	[APP_CFG_KEYS.templates]: {
-		[TEMPLATE_NAMES.default]: [
-			'${CONTENT}\n\n',
-			'${AUTHOR}\n\n',
-			'${TAGS}\n\n',
-			footer,
-		],
-		[TEMPLATE_NAMES.byFollower]: [
-			'От подписчика',
-			' ${AUTHOR}',
-			'\n\n${CONTENT}',
-			'\n\n${TAGS}',
-			'\n\n' + footer,
-		],
-		[TEMPLATE_NAMES.gotFrom]: [
-			'${CONTENT}\n\n',
-			'Взято из ${AUTHOR}\n\n',
-			'${TAGS}\n\n',
-			footer,
-		],
-		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
-	},
-};
+// export const APP_INITIAL_CONFIG = {
+// 	// use telegram MarkdownV2 https://core.telegram.org/bots/api#markdownv2-style
+// 	[APP_CFG_KEYS.templates]: {
+// 		[TEMPLATE_NAMES.default]: [
+// 			'${CONTENT}\n\n',
+// 			'${AUTHOR}\n\n',
+// 			'${TAGS}\n\n',
+// 			footer,
+// 		],
+// 		[TEMPLATE_NAMES.byFollower]: [
+// 			'От подписчика',
+// 			' ${AUTHOR}',
+// 			'\n\n${CONTENT}',
+// 			'\n\n${TAGS}',
+// 			'\n\n' + footer,
+// 		],
+// 		[TEMPLATE_NAMES.gotFrom]: [
+// 			'${CONTENT}\n\n',
+// 			'Взято из ${AUTHOR}\n\n',
+// 			'${TAGS}\n\n',
+// 			footer,
+// 		],
+// 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
+// 	},
+// };

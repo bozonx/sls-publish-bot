@@ -16,7 +16,6 @@ npx wrangler kv namespace create publisher
 npx wrangler d1 create publisher
 npx prisma init --datasource-provider sqlite
 npx wrangler d1 migrations create publisher initial
-
 ```
 
 make .dev.vars file
@@ -76,10 +75,8 @@ yarn dev
 npx prisma studio
 
 # Format scheme.prisma
-npx prisma format
-
 # run it each time you change the scheme.prisma
-npx prisma generate
+npx prisma format && npx prisma generate
 
 DATABASE_URL="file:./_devDb/dev.db" npx prisma migrate dev --name init
 

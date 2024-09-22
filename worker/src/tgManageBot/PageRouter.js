@@ -213,14 +213,14 @@ export class PageRouter {
 	}
 
 	// on command start - just draw the menu
-	async start() {
+	async start(goTo) {
 		// make initial session if it doesn't exists
 		if (!this.state) this._state = {};
 
 		this.redrawMenu();
 
 		try {
-			await this.go(HOME_PAGE);
+			await this.go(goTo);
 
 			return this._theEndOfRequest();
 		} catch (e) {

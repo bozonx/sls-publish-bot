@@ -8,20 +8,25 @@ import {
 	HOME_PAGE,
 } from '../constants.js';
 
-export class ManagerHome extends PageBase {
+export class MainHome extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		this.text = t(c, 'mainHomeDescr');
+		console.log(1111, this.me);
 
-		delete this.state[EDIT_ITEM_NAME];
-
-		const workspaces = await this.db.getAll(DB_TABLE_NAMES.Workspace, ['id'], {
-			createdByUserId: this.me[USER_KEYS.id],
-		});
+		const workspaces = await this.db.getAll(
+			DB_TABLE_NAMES.Workspace,
+			// TODO: select id only
+			undefined,
+			{
+				createdByUserId: this.me[USER_KEYS.id],
+			},
+		);
 		let blogs = [];
 		let tgSms = [];
 		let tgMsBtns = [];
+
+		console.log(2222, workspaces);
 
 		if (workspaces?.length) {
 			blogs = this.db.getAll(DB_TABLE_NAMES.Blog, ['id', 'name'], {
@@ -49,6 +54,8 @@ export class ManagerHome extends PageBase {
 				payload: tgSm.id,
 			},
 		]);
+
+		this.text = t(c, 'mainHomeDescr');
 
 		return defineMenu([...tgMsBtns]);
 	}
