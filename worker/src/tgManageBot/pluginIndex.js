@@ -1,5 +1,12 @@
-import { HOME_PAGE } from './constants.js';
-import { handleStart, makeContext } from './botLogic.js';
+import { makeNewTgUser } from './helpers/helpers.js';
+import { loadFromCache } from './io/KVio.js';
+import {
+	CTX_KEYS,
+	SESSION_CACHE_NAME,
+	DB_TABLE_NAMES,
+	USER_KEYS,
+	HOME_PAGE,
+} from './constants.js';
 import { routerMiddleware } from './PageRouter.js';
 import { MainHome } from './pages/MainHome.js';
 // import { ManagerHome } from './pages/ManagerHome.js';
@@ -61,4 +68,62 @@ export function onQueryData(c) {
 
 export function onStart(c) {
 	return handleStart(c);
+}
+
+async function makeContext(c) {
+	if (!c.msg?.chat) return;
+
+	const chatId = c.msg.chat.id;
+	let tgSm;
+	let session;
+	let me;
+
+	try {
+		[session, me] = await Promise.all([
+			loadFromCache(c, SESSION_CACHE_NAME, chatId),
+			// load me
+			c.ctx[CTX_KEYS.DB_CRUD].getItem(
+				DB_TABLE_NAMES.User,
+				undefined,
+				undefined,
+				{
+					tgChatId: String(chatId),
+				},
+			),
+		]);
+	} catch (e) {
+		throw new Error(`Can't load initial data: ${e}`);
+	}
+
+	if (session.tgSmId) {
+		tgSm = await c.ctx[CTX_KEYS.DB_CRUD].getItem(
+			DB_TABLE_NAMES.SocialMedia,
+			session.tgSmId,
+		);
+	}
+
+	c.ctx = {
+		...c.ctx,
+		[CTX_KEYS.tgSm]: tgSm && {
+			...tgSm,
+			[SOCIAL_MEDIA_KEYS.cfg]: JSON.parse(tgSm.cfg),
+		},
+		[CTX_KEYS.session]: session,
+		[CTX_KEYS.me]: me && {
+			...me,
+			[USER_KEYS.cfg]: JSON.parse(me.cfg),
+		},
+	};
+}
+
+async function handleStart(c) {
+	if (!c.ctx[CTX_KEYS.me]) {
+		// else create user
+		c.ctx[CTX_KEYS.me] = await c.ctx[CTX_KEYS.DB_CRUD].createItem(
+			DB_TABLE_NAMES.User,
+			makeNewTgUser(c),
+		);
+	}
+
+	return c.router.start();
 }

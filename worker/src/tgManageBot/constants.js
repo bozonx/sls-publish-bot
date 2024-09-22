@@ -41,8 +41,10 @@ export const TEMPLATE_NAMES = {
 };
 
 export const CTX_KEYS = {
-	// config: 'config',
+	// session state from db
 	session: 'session',
+	// selected telegram social media from db
+	tgSm: 'tgSm',
 	// user object from DB
 	me: 'me',
 	KV: 'KV',
@@ -51,6 +53,7 @@ export const CTX_KEYS = {
 	BOT_SESSION_TTL_DAYS: 'BOT_SESSION_TTL_DAYS',
 	APP_DEBUG: 'APP_DEBUG',
 	TEST_MODE: 'TEST_MODE',
+	// config: 'config',
 	// MAIN_ADMIN_TG_USER_ID: 'MAIN_ADMIN_TG_USER_ID',
 	// CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
 	// DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
@@ -64,6 +67,7 @@ export const USER_KEYS = {
 	tgChatId: 'tgChatId',
 	name: 'name',
 	cfg: 'cfg',
+	lang: 'lang',
 };
 export const POST_KEYS = {
 	id: 'id',
@@ -74,6 +78,11 @@ export const POST_KEYS = {
 	createdByUserId: 'createdByUserId',
 	updatedByUserId: 'updatedByUserId',
 	payloadJson: 'payloadJson',
+};
+export const SOCIAL_MEDIA_KEYS = {
+	id: 'id',
+	name: 'name',
+	cfg: 'cfg',
 };
 export const DB_TABLE_NAMES = {
 	User: 'User',

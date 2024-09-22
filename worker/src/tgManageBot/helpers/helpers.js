@@ -264,27 +264,28 @@ export function makeUserNameFromMsg(msgFrom) {
 	return fullName || msgFrom?.username;
 }
 
-export function makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID) {
-	return {
-		[USER_KEYS.tgUserId]: String(MAIN_ADMIN_TG_USER_ID),
-		[USER_KEYS.tgChatId]: String(MAIN_ADMIN_TG_USER_ID),
-		[USER_KEYS.name]: 'Owner',
-		[USER_KEYS.cfg]: JSON.stringify({
-			[USER_CFG_KEYS.authorName]: 'Owner Author',
-			[USER_CFG_KEYS.permissions]: {
-				[USER_PERMISSIONS_KEYS.admin]: true,
-			},
-		}),
-	};
-}
+// export function makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID) {
+// 	return {
+// 		[USER_KEYS.tgUserId]: String(MAIN_ADMIN_TG_USER_ID),
+// 		[USER_KEYS.tgChatId]: String(MAIN_ADMIN_TG_USER_ID),
+// 		[USER_KEYS.name]: 'Owner',
+// 		[USER_KEYS.cfg]: JSON.stringify({
+// 			[USER_CFG_KEYS.authorName]: 'Owner Author',
+// 			[USER_CFG_KEYS.permissions]: {
+// 				[USER_PERMISSIONS_KEYS.admin]: true,
+// 			},
+// 		}),
+// 	};
+// }
 
-export function makeInviteUserData(c) {
-	const userName = makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id);
-
+export function makeNewTgUser(c) {
 	return {
 		[USER_KEYS.tgUserId]: String(c.msg.from.id),
 		[USER_KEYS.tgChatId]: String(c.msg.chat.id),
-		[USER_KEYS.name]: userName,
+		[USER_KEYS.name]: makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id),
+		// TODO: может взять его ???
+		[USER_KEYS.lang]: 'ru',
+		[USER_KEYS.cfg]: '{}',
 	};
 }
 

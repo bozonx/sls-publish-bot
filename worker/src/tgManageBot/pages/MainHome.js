@@ -5,6 +5,7 @@ import {
 	EDIT_ITEM_NAME,
 	USER_KEYS,
 	DEFAULT_BTN_ITEM_ID,
+	HOME_PAGE,
 } from '../constants.js';
 
 export class ManagerHome extends PageBase {
@@ -45,17 +46,19 @@ export class ManagerHome extends PageBase {
 				id: DEFAULT_BTN_ITEM_ID,
 				// TODO: add blog name, and optional name
 				label: `${tgSm.id}`,
+				payload: tgSm.id,
 			},
 		]);
 
 		return defineMenu([...tgMsBtns]);
 	}
 
-	async onButtonPress(btnId) {
+	async onButtonPress(btnId, payload) {
 		switch (btnId) {
 			case 'manageScheduledBtn':
-				return this.go('scheduled-list');
+				this.state.tgSmId = Number(payload);
 
+				return this.go(HOME_PAGE);
 			default:
 				return false;
 		}
