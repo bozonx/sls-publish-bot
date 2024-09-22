@@ -5,7 +5,7 @@ import {
 	onQueryData,
 	onStart,
 } from './tgManageBot/pluginIndex.js';
-import { CTX_KEYS } from './constants.js';
+import { CTX_KEYS } from './tgManageBot/constants.js';
 
 export class BotIndex {
 	bot;
