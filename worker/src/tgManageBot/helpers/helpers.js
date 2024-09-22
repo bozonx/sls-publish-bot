@@ -11,7 +11,6 @@ import { updatePost, applyTemplate } from './publishHelpres.js';
 import { htmlToCleanText } from './converters.js';
 import { makeStringArrayUnique } from './lib.js';
 import {
-	TG_BOT_URL,
 	CTX_KEYS,
 	QUERY_MARKER,
 	PUB_KEYS,
@@ -28,11 +27,11 @@ import {
 	EDIT_ITEM_NAME,
 } from '../constants.js';
 
-export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
-	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
-
-	return fetch(url);
-}
+// export async function setWebhook({ TG_TOKEN, WORKER_HOST }) {
+// 	const url = `https://api.telegram.org/bot${TG_TOKEN}/setWebhook?url=https://${WORKER_HOST}${TG_BOT_URL}`;
+//
+// 	return fetch(url);
+// }
 
 export function t(c, msg) {
 	// let lang = ctx.session?.userData?.lang || ctx.from.language_code;

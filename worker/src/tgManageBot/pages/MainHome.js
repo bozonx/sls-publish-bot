@@ -12,8 +12,6 @@ export class MainHome extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
 
-		console.log(1111, this.me);
-
 		const workspaces = await this.db.getAll(
 			DB_TABLE_NAMES.Workspace,
 			// TODO: select id only
@@ -25,8 +23,6 @@ export class MainHome extends PageBase {
 		let blogs = [];
 		let tgSms = [];
 		let tgMsBtns = [];
-
-		console.log(2222, workspaces);
 
 		if (workspaces?.length) {
 			blogs = this.db.getAll(DB_TABLE_NAMES.Blog, ['id', 'name'], {

@@ -1,11 +1,11 @@
 import parseUrl from 'parse-url';
 import { PrismaD1 } from '@prisma/adapter-d1';
 import { webhookCallback } from 'grammy';
-import apiIndex from './apiIndex.js';
+import apiIndex from './api/apiIndex.js';
 import { BotIndex } from './BotIndex.js';
-import { setWebhook } from './helpers.js';
-import { handleScheduled } from './tgManageBot/indexShedullerPublisher.js';
-import { TG_BOT_URL } from './constants.js';
+import { setWebhook } from './api/helpers.js';
+import { handleScheduled } from './indexShedullerPublisher.js';
+import { TG_BOT_URL } from './api/constants.js';
 
 export default {
 	async fetch(request, env, ctx) {
@@ -18,6 +18,8 @@ export default {
 				env.TG_TOKEN,
 				env.WEB_APP_URL,
 				env.KV,
+				// if undefined then will be used local sqlite
+				// undefined,
 				new PrismaD1(env.DB),
 				env.BOT_SESSION_TTL_DAYS,
 				env.APP_DEBUG,

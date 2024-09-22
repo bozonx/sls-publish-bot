@@ -3,13 +3,13 @@ import { PrismaClient } from '@prisma/client';
 import {
 	doFullFinalPublicationProcess,
 	convertDbPostToPubState,
-} from './helpers/publishHelpres.js';
+} from './tgManageBot/helpers/publishHelpres.js';
 import {
 	CTX_KEYS,
 	PUBLICATION_ADD_NOW_SEC,
 	DB_TABLE_NAMES,
 	POST_KEYS,
-} from './constants.js';
+} from './tgManageBot/constants.js';
 
 export async function handleScheduled(TG_TOKEN, TEST_MODE, prismaAdapter) {
 	const prisma = new PrismaClient(prismaAdapter && { adapter: prismaAdapter });
