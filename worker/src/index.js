@@ -17,7 +17,7 @@ export default {
 			const app = new BotIndex(
 				env.TG_TOKEN,
 				env.WEB_APP_URL,
-				env.API_CALL_LOCAL_CODE,
+				// env.API_CALL_LOCAL_CODE,
 				env.KV,
 				new PrismaD1(env.DB),
 				env.APP_DEBUG,

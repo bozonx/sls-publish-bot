@@ -262,9 +262,9 @@ export async function printPubToAdminChannel(c, dbRecord) {
 	await c.api.sendMessage(
 		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
 		msg +
-			`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
-			'\n\n----------\n\n' +
-			(await makeListOfScheduledForDescr(c)),
+		`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
+		'\n\n----------\n\n' +
+		(await makeListOfScheduledForDescr(c)),
 		{ reply_parameters: { message_id: msgId } },
 	);
 }
@@ -380,7 +380,10 @@ export async function updateFinalPost(c, chatId, msgId, pubState) {
 // }
 
 export async function createPost(c, pubState, conserved = false) {
-	const { id, ...dbRecord } = pubState[PUB_KEYS.dbRecord];
+	const dbRecord = { ...pubState[PUB_KEYS.dbRecord] };
+
+	delete dbRecord[POST_KEYS.id];
+
 	const dbItem = convertPubStateToDbPost({
 		...pubState,
 		dbRecord: {
@@ -391,10 +394,10 @@ export async function createPost(c, pubState, conserved = false) {
 			[POST_KEYS.pubTimestampMinutes]: conserved
 				? null
 				: convertDateTimeToTsMinutes(
-						pubState[PUB_KEYS.date],
-						pubState[PUB_KEYS.time],
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					),
+					pubState[PUB_KEYS.date],
+					pubState[PUB_KEYS.time],
+					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				),
 		},
 	});
 
@@ -409,10 +412,10 @@ export async function updatePost(c, pubState, dbOverwrite) {
 			name: makeScheduledItemName(pubState),
 			[POST_KEYS.pubTimestampMinutes]: pubState[PUB_KEYS.date]
 				? convertDateTimeToTsMinutes(
-						pubState[PUB_KEYS.date],
-						pubState[PUB_KEYS.time],
-						c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
-					)
+					pubState[PUB_KEYS.date],
+					pubState[PUB_KEYS.time],
+					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				)
 				: null,
 			...dbOverwrite,
 		},

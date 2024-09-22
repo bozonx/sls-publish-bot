@@ -7,12 +7,12 @@ import { KVStub } from './io/KVstub.js';
 	const app = new BotIndex(
 		process.env.TG_TOKEN,
 		process.env.WEB_APP_URL,
-		process.env.API_CALL_LOCAL_CODE,
+		// process.env.API_CALL_LOCAL_CODE,
 		KV,
 		// do not need to specify any prisma adapter for sqlite
 		undefined,
-		process.env.APP_DEBUG,
-		process.env.TEST_MODE,
+		true,
+		true,
 	);
 
 	await app.init();
