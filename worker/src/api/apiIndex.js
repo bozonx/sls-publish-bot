@@ -7,6 +7,7 @@ import apiTgBot from './apiTgBot.js';
 import apiUser from './apiUser.js';
 import apiWorkspace from './apiWorkspace.js';
 import apiBlog from './apiBlog.js';
+import apiSocialMedia from './apiSocialMedia.js';
 import apiInbox from './apiInbox.js';
 
 const app = new Hono().basePath('/api');
@@ -35,6 +36,7 @@ app.route('/bot', apiTgBot);
 app.route('/auth/users', apiUser);
 app.route('/auth/workspaces', apiWorkspace);
 app.route('/auth/blogs', apiBlog);
+app.route('/auth/social-media', apiSocialMedia);
 app.route('/auth/inbox', apiInbox);
 
 app.post('/tg-auth-from-web', async (c) => {

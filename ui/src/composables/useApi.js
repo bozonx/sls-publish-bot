@@ -26,7 +26,7 @@ export async function useApiDevLogin() {
 export async function useApiMe() {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/users/me`;
 
-  return await useAsyncData(url, async () => $fetch(url, fetchOptions));
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
 ////// GET LISTS
@@ -34,13 +34,19 @@ export async function useApiMe() {
 export async function useApiListWorkspaces() {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces`;
 
-  return await useAsyncData(url, async () => $fetch(url, fetchOptions));
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
 export async function useApiListBlogs(wpid) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs?workspace-id=${wpid}`;
 
-  return await useAsyncData(url, async () => $fetch(url, fetchOptions));
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
+export async function useApiListSns(blogId) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media?blog-id=${blogId}`;
+
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
 ////// GET ITEM
@@ -48,13 +54,13 @@ export async function useApiListBlogs(wpid) {
 export async function useApiGetWorkspace(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
 
-  return await useAsyncData(url, async () => $fetch(url, fetchOptions));
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
 export async function useApiGetBlog(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
 
-  return await useAsyncData(url, async () => $fetch(url, fetchOptions));
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
 ////// DELETE ITEM
@@ -62,7 +68,7 @@ export async function useApiGetBlog(id) {
 export async function useApiDeleteWorkspace(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
 
-  return await useAsyncData(url, async () =>
+  return useAsyncData(url, async () =>
     $fetch(url, { method: "DELETE", ...fetchOptions }),
   );
 }
@@ -70,7 +76,7 @@ export async function useApiDeleteWorkspace(id) {
 export async function useApiDeleteBlog(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
 
-  return await useAsyncData(url, async () =>
+  return useAsyncData(url, async () =>
     $fetch(url, { method: "DELETE", ...fetchOptions }),
   );
 }

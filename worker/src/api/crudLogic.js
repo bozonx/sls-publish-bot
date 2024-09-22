@@ -15,7 +15,7 @@ export async function crudList(c, tableName) {
 		result = await prisma[tableName].findMany({
 			where: {
 				...keysToCammelCase(normalizeNumbers(c.req.query())),
-				createdByUserId: userId,
+				// createdByUserId: userId,
 			},
 		});
 	} catch (e) {
@@ -34,7 +34,7 @@ export async function crudGet(c, tableName) {
 		await getBase(c, tableName, {
 			id: Number(c.req.param().id),
 			// TODO: get from session
-			createdByUserId: userId,
+			// createdByUserId: userId,
 		}),
 	);
 }
@@ -46,7 +46,7 @@ export async function crudCreate(c, tableName) {
 	return c.json(
 		await createBase(c, tableName, {
 			...data,
-			createdByUserId: userId,
+			// createdByUserId: userId,
 		}),
 	);
 }
@@ -58,7 +58,7 @@ export async function crudUpdate(c, tableName) {
 	return c.json(
 		await updateBase(c, tableName, data, {
 			id: Number(data.id),
-			createdByUserId: userId,
+			// createdByUserId: userId,
 		}),
 	);
 }
@@ -74,7 +74,7 @@ export async function crudDelete(c, tableName) {
 		result = await prisma[tableName].delete({
 			where: {
 				id: Number(id),
-				createdByUserId: userId,
+				// createdByUserId: userId,
 			},
 		});
 	} catch (e) {

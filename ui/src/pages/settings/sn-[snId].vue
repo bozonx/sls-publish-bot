@@ -6,12 +6,7 @@ const confirm = useConfirm();
 
 const { data: user } = await useApiMe();
 const { data, status } = await useApiGetBlog(route.params.blogId);
-const { data: sns, status: snsStatus } = await useApiListSns(
-  route.params.blogId,
-);
 const formModel = ref(null);
-const createSnModalOpen = ref(false);
-const snFormModel = ref(null);
 
 definePageParams({
   title: data.value.name,
@@ -22,19 +17,9 @@ const handleSave = () => {
   formModel.value?.submit();
 };
 
-const handleCreateSnSave = () => {
-  snFormModel.value?.submit();
-};
-
-const handleSnSuccess = (response, form$) => {
-  const id = response.data.id;
-
-  navigateTo(`/settings/sn-${id}`);
-};
-
 const handleDelete = () => {
   confirm.require({
-    message: t("sureDeleteBlog"),
+    message: t("sureDeleteSn"),
     header: t("confirmDeletion"),
     // icon: "pi pi-exclamation-triangle",
     rejectProps: {
@@ -73,28 +58,12 @@ const handleDelete = () => {
 </script>
 
 <template>
-  <FormBlog v-model="formModel" :loaded="data" method="patch" :userId="user.id" />
+  <FormSocialMedia v-model="formModel" :loaded="data" method="patch" :userId="user.id" />
 
   <div class="flex gap-x-2">
     <SmartButton :label="$t('save')" @click="handleSave" />
-    <SmartButton :label="$t('deleteBlog')" @click="handleDelete" />
+    <SmartButton :label="$t('deleteSn')" @click="handleDelete" />
   </div>
-
-  <Fieldset :legend="$t('snsOfBlog')">
-    <SimpleList :data="sns" :status="snsStatus">
-      <template #item="{ item }">
-        <SmartListItem :label="item.name || item.type" :to="`/settings/sn-${item.id}`" />
-      </template>
-    </SimpleList>
-
-    <div class="mt-4">
-      <SmartButton :label="$t('createSn')" @click="createSnModalOpen = true" />
-    </div>
-  </Fieldset>
-
-  <SimpleFormModal v-model="createSnModalOpen" :header="$t('createSnModalHeader')" @save="handleCreateSnSave">
-    <FormSocialMedia v-model="snFormModel" :blogId="route.params.blogId" :handleSuccess="handleSnSuccess" />
-  </SimpleFormModal>
 
   <ConfirmDialog></ConfirmDialog>
 </template>
