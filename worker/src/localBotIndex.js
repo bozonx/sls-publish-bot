@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { BotIndex } from './BotIndex.js';
-import { KVStub } from './io/KVstub.js';
+import { KVStub } from './tgManageBot/io/KVstub.js';
 
 (async () => {
 	const KV = KVStub();

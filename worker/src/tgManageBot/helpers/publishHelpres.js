@@ -14,7 +14,6 @@ import { applyStringTemplate, omitUndefined } from './lib.js';
 import { convertDateTimeToTsMinutes } from './dateTimeHelpers.js';
 import {
 	CTX_KEYS,
-	APP_CFG_KEYS,
 	PUB_KEYS,
 	MEDIA_TYPES,
 	USER_KEYS,
@@ -31,6 +30,7 @@ export function makeHashTags(tags) {
 }
 
 export function applyTemplate(c, textHtml, pubState) {
+	// TODO: APP_CFG_KEYS where
 	const template =
 		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
 

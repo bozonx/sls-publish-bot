@@ -11,24 +11,24 @@
 		"test": "vitest"
 	},
 	"dependencies": {
-		"@prisma/adapter-d1": "^5.18.0",
-		"@prisma/client": "^5.18.0",
+		"@prisma/adapter-d1": "^5.19.1",
+		"@prisma/client": "^5.19.1",
 		"@telegraf/entity": "^0.5.0",
-		"dotenv": "^16.4.5",
-		"grammy": "^1.29.0",
+		"grammy": "^1.30.0",
 		"hast-util-to-string": "^3.0.0",
-		"hono": "^4.5.8",
+		"hono": "^4.6.2",
 		"lodash": "^4.17.21",
 		"parse-url": "^9.2.0",
-		"prisma": "^5.18.0",
+		"prisma": "^5.19.1",
 		"rehype": "^13.0.1",
 		"rehype-rewrite": "^4.0.2",
 		"remark": "^15.0.1",
 		"remark-rehype": "^11.1.1"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "^0.4.25",
-		"vitest": "2.0.5",
-		"wrangler": "^3.72.2"
+		"@cloudflare/vitest-pool-workers": "^0.5.7",
+		"dotenv": "^16.4.5",
+		"vitest": "2.1.1",
+		"wrangler": "^3.78.7"
 	}
 }
