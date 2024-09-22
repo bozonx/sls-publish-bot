@@ -12,7 +12,12 @@ import apiInbox from './apiInbox.js';
 const app = new Hono().basePath('/api');
 
 app.use('*', (c, next) => {
-	if (c.req.path.indexOf('/api/auth') === 0 || ['/api/tg-auth-from-web', '/api/dev-login'].includes(c.req.path)) {
+	const reqPath = c.req.path;
+
+	if (
+		reqPath.indexOf('/api/auth') === 0 ||
+		['/api/tg-auth-from-web', '/api/dev-login'].includes(reqPath)
+	) {
 		// requests with cookies
 		return cors({
 			origin: c.env.CORS_ORIGIN,
@@ -53,6 +58,8 @@ app.post('/tg-auth-from-web', async (c) => {
 });
 
 app.post('/dev-login', async (c) => {
+	console.log(111, c);
+
 	if (!c.env.DEV_TG_USER_ID) throw riseError(403, `Not allowed in production`);
 
 	await createJwtTokenByTgUserId(c, c.env.DEV_TG_USER_ID);
@@ -63,7 +70,8 @@ app.post('/dev-login', async (c) => {
 export default app;
 
 async function createJwtTokenByTgUserId(c, tgUserId) {
-	const res = await getBase(c, 'user', { tgUserId: String(tgUserId) });
+	// TODO: use select
+	const res = await getBase(c, 'User', { tgUserId: String(tgUserId) });
 
 	if (!('id' in res)) {
 		throw riseError(404, `Can't find user`);

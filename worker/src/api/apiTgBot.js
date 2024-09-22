@@ -11,44 +11,44 @@ app.get('/setwh', async (c) => {
 	return c.json(await res.text());
 });
 
-app.get('/users/by-tg-id/:tgid', async (c) => {
-	const { code } = c.req.query();
-
-	if (code !== c.env.API_CALL_LOCAL_CODE) {
-		c.status(403);
-
-		return c.json({ message: 'Secured' });
-	}
-
-	const res = await getBase(c, 'user', { tgUserId: c.req.param().tgid });
-
-	if ('id' in res) return c.json({ id: res.id });
-	else return c.json(res);
-});
-
-app.post('/users', async (c) => {
-	const { code } = c.req.query();
-
-	if (code !== c.env.API_CALL_LOCAL_CODE) {
-		c.status(403);
-
-		return c.json({ message: 'Secured' });
-	}
-
-	return c.json(await createBase(c, 'user', await c.req.json()));
-});
-
-app.post('/inbox', async (c) => {
-	const { code } = c.req.query();
-
-	if (code !== c.env.API_CALL_LOCAL_CODE) {
-		c.status(403);
-
-		return c.json({ message: 'Secured' });
-	}
-
-	return c.json(await createBase(c, 'inbox', await c.req.json()));
-});
+// app.get('/users/by-tg-id/:tgid', async (c) => {
+// 	const { code } = c.req.query();
+//
+// 	if (code !== c.env.API_CALL_LOCAL_CODE) {
+// 		c.status(403);
+//
+// 		return c.json({ message: 'Secured' });
+// 	}
+//
+// 	const res = await getBase(c, 'user', { tgUserId: c.req.param().tgid });
+//
+// 	if ('id' in res) return c.json({ id: res.id });
+// 	else return c.json(res);
+// });
+//
+// app.post('/users', async (c) => {
+// 	const { code } = c.req.query();
+//
+// 	if (code !== c.env.API_CALL_LOCAL_CODE) {
+// 		c.status(403);
+//
+// 		return c.json({ message: 'Secured' });
+// 	}
+//
+// 	return c.json(await createBase(c, 'user', await c.req.json()));
+// });
+//
+// app.post('/inbox', async (c) => {
+// 	const { code } = c.req.query();
+//
+// 	if (code !== c.env.API_CALL_LOCAL_CODE) {
+// 		c.status(403);
+//
+// 		return c.json({ message: 'Secured' });
+// 	}
+//
+// 	return c.json(await createBase(c, 'inbox', await c.req.json()));
+// });
 
 export default app;
 

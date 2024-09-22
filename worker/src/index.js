@@ -18,8 +18,6 @@ export default {
 				env.TG_TOKEN,
 				env.WEB_APP_URL,
 				env.KV,
-				// if undefined then will be used local sqlite
-				// undefined,
 				new PrismaD1(env.DB),
 				env.BOT_SESSION_TTL_DAYS,
 				env.APP_DEBUG,
@@ -31,7 +29,14 @@ export default {
 			return webhookCallback(app.bot, 'cloudflare-mod')(request);
 		} else {
 			// else api request
-			return apiIndex.fetch(request, env, ctx);
+			return apiIndex.fetch(
+				request,
+				{
+					...env,
+					adapter: new PrismaD1(env.DB),
+				},
+				ctx,
+			);
 		}
 	},
 
