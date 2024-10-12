@@ -27,10 +27,13 @@ if (allTelegramSn.length) {
 }
 
 // TODO: select template
-// if (tmpState.value)
-//   tmpState.value.template = props.blogConf.yaml.socialMedia.find(
-//     (item) => item.use === SOCIAL_MEDIAS.dzen,
-//   )?.templates[0][1];
+if (tmpState.value)
+  tmpState.value.template =
+    "\${CONTENT}\n\n\nAuthor: [\${AUTHOR}](\${AUTHOR_URL})";
+
+// tmpState.value.template = props.blogConf.yaml.socialMedia.find(
+//   (item) => item.use === SOCIAL_MEDIAS.dzen,
+// )?.templates[0][1];
 </script>
 
 <template>

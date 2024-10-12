@@ -1,6 +1,6 @@
 <script setup>
 const { t } = useI18n();
-const props = defineProps(["blogConf"]);
+// const props = defineProps(["blogConf"]);
 const tmpState = useTmpState();
 
 /*

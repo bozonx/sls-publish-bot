@@ -2,11 +2,10 @@
 const route = useRoute();
 const { t } = useI18n();
 
-const { data, status } = await useApiGetBlog(route.params.blogId);
-const blogConf = getItemConf(data.value);
+const { data, status } = await useApiGetMyBlog(route.params.blogId);
 
 definePageParams({
-  backUrl: `/blog/${route.params.blogId}/pub-article/customize`,
+  backUrl: `/blog/${route.params.blogId}/article-${route.params.snId}/customize`,
   categoryTitle: data.value.name,
   categoryUrl: `/blog/${route.params.blogId}`,
   title: t("copyToDzen"),
@@ -14,5 +13,5 @@ definePageParams({
 </script>
 
 <template>
-  <ArticleDzenCopy :blogConf="blogConf" />
+  <ArticleDzenCopy />
 </template>
