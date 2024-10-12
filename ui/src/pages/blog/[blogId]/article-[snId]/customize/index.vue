@@ -2,11 +2,13 @@
 const route = useRoute();
 const { t } = useI18n();
 
-const { data, status } = await useApiGetBlog(route.params.blogId);
-const blogConf = getItemConf(data.value);
+const { data, status } = await useApiGetMyBlog(route.params.blogId);
+const { data: sns, status: snsStatus } = await useApiListMySns(
+  route.params.blogId,
+);
 
 definePageParams({
-  backUrl: `/blog/${route.params.blogId}/pub-article`,
+  backUrl: `/blog/${route.params.blogId}/article-${route.params.snId}`,
   categoryTitle: data.value.name,
   categoryUrl: `/blog/${route.params.blogId}`,
   title: t("pubCustomize"),
@@ -14,5 +16,5 @@ definePageParams({
 </script>
 
 <template>
-  <ArticleCustomize :blogConf="blogConf" :currentPath="route.path" />
+  <ArticleCustomize :sns="sns" :currentPath="route.path" />
 </template>

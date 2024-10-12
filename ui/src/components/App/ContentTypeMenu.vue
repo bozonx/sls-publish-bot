@@ -22,6 +22,7 @@ const items = [];
 
 const allBlogsSn = sns.value.filter((i) => i.type === SOCIAL_MEDIAS.blog);
 
+// TODO: только в случае если есть ещё хотябы дзен или телеграм
 for (const blogSn of allBlogsSn) {
   items.push({
     // TODO: add name of sn

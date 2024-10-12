@@ -7,8 +7,6 @@ const tmpState = useTmpState();
 // )?.postGitPath;
 const postGitPath = props.snCfg.postGitPath;
 
-console.log(11111, props.snCfg);
-
 const ACCORDION_SATES = {
   remote: "remote",
   local: "local",
