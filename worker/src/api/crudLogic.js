@@ -5,7 +5,7 @@ import { SESSION_PARAM } from './constants.js';
 
 const NOT_FOUD_RESULT = { message: 'Not found' };
 
-export async function crudList(c, tableName) {
+export async function crudList(c, tableName, options) {
 	const { userId } = c.get(SESSION_PARAM);
 	// const adapter = new PrismaD1(c.env.DB);
 	const prisma = new PrismaClient(c.env.adapter && { adapter: c.env.adapter });
@@ -13,9 +13,10 @@ export async function crudList(c, tableName) {
 
 	try {
 		result = await prisma[tableName].findMany({
+			...options,
 			where: {
 				...keysToCammelCase(normalizeNumbers(c.req.query())),
-				// createdByUserId: userId,
+				// byUserId: userId,
 			},
 		});
 	} catch (e) {
@@ -34,31 +35,31 @@ export async function crudGet(c, tableName) {
 		await getBase(c, tableName, {
 			id: Number(c.req.param().id),
 			// TODO: get from session
-			// createdByUserId: userId,
+			// byUserId: userId,
 		}),
 	);
 }
 
 export async function crudCreate(c, tableName) {
 	const { userId } = c.get(SESSION_PARAM);
-	const { id, createdByUserId, ...data } = await c.req.json();
+	const { id, byUserId, ...data } = await c.req.json();
 
 	return c.json(
 		await createBase(c, tableName, {
 			...data,
-			// createdByUserId: userId,
+			byUserId: userId,
 		}),
 	);
 }
 
 export async function crudUpdate(c, tableName) {
 	const { userId } = c.get(SESSION_PARAM);
-	const { createdByUserId, ...data } = await c.req.json();
+	const { byUserId, ...data } = await c.req.json();
 
 	return c.json(
 		await updateBase(c, tableName, data, {
 			id: Number(data.id),
-			// createdByUserId: userId,
+			byUserId: userId,
 		}),
 	);
 }
@@ -74,7 +75,7 @@ export async function crudDelete(c, tableName) {
 		result = await prisma[tableName].delete({
 			where: {
 				id: Number(id),
-				// createdByUserId: userId,
+				// byUserId: userId,
 			},
 		});
 	} catch (e) {

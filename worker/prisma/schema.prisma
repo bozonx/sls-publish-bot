@@ -8,7 +8,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  previewFeatures = ["driverAdapters", "relationJoins"]
 }
 
 datasource db {
@@ -29,6 +29,8 @@ model User {
   GuestsByWorkspace GuestsByWorkspace[]
   Inbox             Inbox[]
   Post              Post[]
+  Blog              Blog[]
+  SocialMedia       SocialMedia[]
 }
 
 model Workspace {
@@ -38,8 +40,8 @@ model Workspace {
   orderNum          Int?
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
-  createdByUser     User                @relation(fields: [createdByUserId], references: [id])
-  createdByUserId   Int
+  byUser            User                @relation(fields: [byUserId], references: [id])
+  byUserId          Int
   GuestsByWorkspace GuestsByWorkspace[]
   Blog              Blog[]
   Inbox             Inbox[]
@@ -65,13 +67,15 @@ model Blog {
   updatedAt   DateTime      @updatedAt
   workspace   Workspace     @relation(fields: [workspaceId], references: [id])
   workspaceId Int
+  byUser      User          @relation(fields: [byUserId], references: [id])
+  byUserId    Int
   SocialMedia SocialMedia[]
   Tag         Tag[]
 }
 
 model SocialMedia {
   id        Int      @id @default(autoincrement())
-  // special name
+  // e.g telegram, dzen, etc
   type      String
   // optional name in case if there several similar social media
   name      String?
@@ -81,6 +85,8 @@ model SocialMedia {
   updatedAt DateTime @updatedAt
   blog      Blog     @relation(fields: [blogId], references: [id])
   blogId    Int
+  byUser    User     @relation(fields: [byUserId], references: [id])
+  byUserId  Int
   Tag       Tag[]
   Post      Post[]
 }
@@ -97,15 +103,15 @@ model Tag {
 }
 
 model Inbox {
-  id              Int       @id @default(autoincrement())
-  name            String?
-  payloadJson     String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  createdByUser   User      @relation(fields: [createdByUserId], references: [id])
-  createdByUserId Int
-  workspace       Workspace @relation(fields: [workspaceId], references: [id])
-  workspaceId     Int
+  id          Int       @id @default(autoincrement())
+  name        String?
+  payloadJson String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  byUser      User      @relation(fields: [byUserId], references: [id])
+  byUserId    Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
   // media
 }
 

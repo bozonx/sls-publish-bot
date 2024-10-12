@@ -1,4 +1,4 @@
-import { makeNewTgUser } from './helpers/helpers.js';
+import { makeUserNameFromMsg } from './helpers/helpers.js';
 import { loadFromCache } from './io/KVio.js';
 import {
 	CTX_KEYS,
@@ -6,10 +6,11 @@ import {
 	DB_TABLE_NAMES,
 	USER_KEYS,
 	MAIN_HOME,
+	TG_HOME_PAGE,
 } from './constants.js';
 import { routerMiddleware } from './PageRouter.js';
 import { MainHome } from './pages/MainHome.js';
-// import { ManagerHome } from './pages/ManagerHome.js';
+import { TgHome } from './pages/TgHome.js';
 // import { ConfigManager } from './pages/ConfigManager.js';
 // import { TagsManager } from './pages/TagsManager.js';
 // import { UserItem } from './pages/UserItem.js';
@@ -30,7 +31,7 @@ import { MainHome } from './pages/MainHome.js';
 
 const routes = {
 	home: MainHome,
-	// [HOME_PAGE]: ManagerHome,
+	[TG_HOME_PAGE]: TgHome,
 	// 'config-manager': ConfigManager,
 	// 'users-manager': UsersManager,
 	// 'user-item': UserItem,
@@ -53,7 +54,6 @@ const routes = {
 export function tgManageBotPlugin() {
 	return async (c, next) => {
 		await makeContext(c);
-
 		await routerMiddleware(routes)(c, next);
 	};
 }
@@ -126,4 +126,15 @@ async function handleStart(c) {
 	}
 
 	return c.router.start(MAIN_HOME);
+}
+
+function makeNewTgUser(c) {
+	return {
+		[USER_KEYS.tgUserId]: String(c.msg.from.id),
+		[USER_KEYS.tgChatId]: String(c.msg.chat.id),
+		[USER_KEYS.name]: makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id),
+		// TODO: может взять его ???
+		[USER_KEYS.lang]: 'ru',
+		[USER_KEYS.cfg]: '{}',
+	};
 }

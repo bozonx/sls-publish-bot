@@ -5,7 +5,6 @@ import { printFinalPost } from './helpers/publishHelpres.js';
 import {
 	CTX_KEYS,
 	QUERY_MARKER,
-	HOME_PAGE,
 	SESSION_CACHE_NAME,
 	USER_KEYS,
 	PUB_KEYS,

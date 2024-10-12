@@ -2,10 +2,9 @@ import { PageBase } from '../PageRouter.js';
 import { t, defineMenu } from '../helpers/helpers.js';
 import {
 	DB_TABLE_NAMES,
-	EDIT_ITEM_NAME,
 	USER_KEYS,
 	DEFAULT_BTN_ITEM_ID,
-	HOME_PAGE,
+	TG_HOME_PAGE,
 } from '../constants.js';
 
 export class MainHome extends PageBase {
@@ -17,7 +16,7 @@ export class MainHome extends PageBase {
 			// TODO: select id only
 			undefined,
 			{
-				createdByUserId: this.me[USER_KEYS.id],
+				byUserId: this.me[USER_KEYS.id],
 			},
 		);
 		let blogs = [];
@@ -61,7 +60,7 @@ export class MainHome extends PageBase {
 			case 'manageScheduledBtn':
 				this.state.tgSmId = Number(payload);
 
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			default:
 				return false;
 		}

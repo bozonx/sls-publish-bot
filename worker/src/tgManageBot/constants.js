@@ -2,7 +2,7 @@ export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
 export const SESSION_CACHE_NAME = 'session';
 export const DEFAULT_BTN_ITEM_ID = '-BTN=';
-export const HOME_PAGE = 'tg-manager-home';
+export const TG_HOME_PAGE = 'tg-manager-home';
 export const MAIN_HOME = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
 // export const DEFAULT_SOCIAL_MEDIA = 'telegram';

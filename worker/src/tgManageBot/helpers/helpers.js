@@ -277,17 +277,6 @@ export function makeUserNameFromMsg(msgFrom) {
 // 	};
 // }
 
-export function makeNewTgUser(c) {
-	return {
-		[USER_KEYS.tgUserId]: String(c.msg.from.id),
-		[USER_KEYS.tgChatId]: String(c.msg.chat.id),
-		[USER_KEYS.name]: makeUserNameFromMsg(c.msg.from) || String(c.msg.from.id),
-		// TODO: может взять его ???
-		[USER_KEYS.lang]: 'ru',
-		[USER_KEYS.cfg]: '{}',
-	};
-}
-
 export function isUserAdmin(user) {
 	let cfg = user[USER_KEYS.cfg];
 
