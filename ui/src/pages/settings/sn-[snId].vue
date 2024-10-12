@@ -1,69 +1,44 @@
 <script setup>
 const { t } = useI18n();
 const route = useRoute();
-// const router = useRouter();
-const confirm = useConfirm();
+const confirm = useSimpleConfirm();
+// const toast = useToast();
 
-const { data: user } = await useApiMe();
-const { data, status } = await useApiGetBlog(route.params.blogId);
-const formModel = ref(null);
+const { data: sn, status: snStatus } = await useApiGetMySn(route.params.snId);
+const snFormModel = ref(null);
 
 definePageParams({
-  title: data.value.name,
-  backUrl: `/settings/workspace-${data.value.workspaceId}`,
+  title: makeSnName(sn.value),
+  backUrl: `/settings/blog-${sn.value.blogId}`,
 });
 
-const handleSave = () => {
-  formModel.value?.submit();
+const handleSnSave = () => {
+  snFormModel.value?.submit();
 };
 
-const handleDelete = () => {
-  confirm.require({
-    message: t("sureDeleteSn"),
-    header: t("confirmDeletion"),
-    // icon: "pi pi-exclamation-triangle",
-    rejectProps: {
-      label: "Cancel",
-      severity: "secondary",
-      outlined: true,
-    },
-    acceptProps: {
-      label: "Save",
-    },
-    accept: async () => {
-      const { status: deleteStatus } = await useApiDeleteBlog(data.value.id);
+const handleSnDelete = () => {
+  confirm(t("confirmDeletion"), t("sureDeleteSn"), t("delete"), async () => {
+    const { status: deleteStatus } = await useApiDeleteMySn(sn.value.id);
 
-      if (deleteStatus.value === "success") {
-        // router.push(`/settings/workspace-${data.value.workspaceId}`);
-        navigateTo(`/settings/workspace-${data.value.workspaceId}`);
-      }
+    if (deleteStatus.value === "success") {
+      navigateTo(`/settings/blog-${sn.value.blogId}`);
+    }
 
-      // toast.add({
-      //   severity: "info",
-      //   summary: "Confirmed",
-      //   detail: "You have accepted",
-      //   life: 3000,
-      // });
-    },
-    // reject: () => {
-    //   toast.add({
-    //     severity: "error",
-    //     summary: "Rejected",
-    //     detail: "You have rejected",
-    //     life: 3000,
-    //   });
-    // },
+    // toast.add({
+    //   severity: "info",
+    //   summary: "Confirmed",
+    //   detail: "You have accepted",
+    //   life: 3000,
+    // });
   });
 };
 </script>
 
 <template>
-  <FormSocialMedia v-model="formModel" :loaded="data" method="patch" :userId="user.id" />
+  <FormSocialMedia v-model="snFormModel" :preLoadedData="sn" method="patch" />
 
   <div class="flex gap-x-2">
-    <SmartButton :label="$t('save')" @click="handleSave" />
-    <SmartButton :label="$t('deleteSn')" @click="handleDelete" />
+    <SmartButton :label="$t('save')" @click="handleSnSave" />
+    <SmartButton :label="$t('deleteSn')" @click="handleSnDelete" />
   </div>
-
-  <ConfirmDialog></ConfirmDialog>
 </template>

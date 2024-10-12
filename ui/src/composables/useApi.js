@@ -26,18 +26,20 @@ export async function useApiDevLogin() {
 export async function useApiMe() {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/users/me`;
 
+  // TODO: кэшировать
+
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
 ////// GET LISTS
 
-export async function useApiListWorkspaces() {
+export async function useApiListMyWorkspaces() {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
-export async function useApiListBlogs(wpid) {
+export async function useApiListMyBlogs(wpid) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs?workspace-id=${wpid}`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
@@ -51,21 +53,27 @@ export async function useApiListSns(blogId) {
 
 ////// GET ITEM
 
-export async function useApiGetWorkspace(id) {
+export async function useApiGetMyWorkspace(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
-export async function useApiGetBlog(id) {
+export async function useApiGetMyBlog(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
+
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
+export async function useApiGetMySn(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
 ////// DELETE ITEM
 
-export async function useApiDeleteWorkspace(id) {
+export async function useApiDeleteMyWorkspace(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
 
   return useAsyncData(url, async () =>
@@ -73,8 +81,16 @@ export async function useApiDeleteWorkspace(id) {
   );
 }
 
-export async function useApiDeleteBlog(id) {
+export async function useApiDeleteMyBlog(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
+
+  return useAsyncData(url, async () =>
+    $fetch(url, { method: "DELETE", ...fetchOptions }),
+  );
+}
+
+export async function useApiDeleteMySn(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
 
   return useAsyncData(url, async () =>
     $fetch(url, { method: "DELETE", ...fetchOptions }),

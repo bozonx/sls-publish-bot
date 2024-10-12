@@ -1,25 +1,26 @@
 <script setup>
 const { t } = useI18n();
 const route = useRoute();
-// const router = useRouter();
-const confirm = useConfirm();
+const confirm = useSimpleConfirm();
+// const toast = useToast();
 
-const { data: user } = await useApiMe();
-const { data, status } = await useApiGetBlog(route.params.blogId);
+const { data: blog, status: blogStatus } = await useApiGetMyBlog(
+  route.params.blogId,
+);
 const { data: sns, status: snsStatus } = await useApiListSns(
   route.params.blogId,
 );
-const formModel = ref(null);
 const createSnModalOpen = ref(false);
+const blogFormModel = ref(null);
 const snFormModel = ref(null);
 
 definePageParams({
-  title: data.value.name,
-  backUrl: `/settings/workspace-${data.value.workspaceId}`,
+  title: blog.value.name,
+  backUrl: `/settings/workspace-${blog.value.workspaceId}`,
 });
 
-const handleSave = () => {
-  formModel.value?.submit();
+const handleBlogSave = () => {
+  blogFormModel.value?.submit();
 };
 
 const handleCreateSnSave = () => {
@@ -32,69 +33,47 @@ const handleSnSuccess = (response, form$) => {
   navigateTo(`/settings/sn-${id}`);
 };
 
-const handleDelete = () => {
-  confirm.require({
-    message: t("sureDeleteBlog"),
-    header: t("confirmDeletion"),
-    // icon: "pi pi-exclamation-triangle",
-    rejectProps: {
-      label: "Cancel",
-      severity: "secondary",
-      outlined: true,
-    },
-    acceptProps: {
-      label: "Save",
-    },
-    accept: async () => {
-      const { status: deleteStatus } = await useApiDeleteBlog(data.value.id);
+const handleBlogDelete = () => {
+  confirm(t("confirmDeletion"), t("sureDeleteBlog"), t("delete"), async () => {
+    const { status: deleteStatus } = await useApiDeleteMyBlog(blog.value.id);
 
-      if (deleteStatus.value === "success") {
-        // router.push(`/settings/workspace-${data.value.workspaceId}`);
-        navigateTo(`/settings/workspace-${data.value.workspaceId}`);
-      }
+    if (deleteStatus.value === "success") {
+      navigateTo(`/settings/workspace-${blog.value.workspaceId}`);
+    }
 
-      // toast.add({
-      //   severity: "info",
-      //   summary: "Confirmed",
-      //   detail: "You have accepted",
-      //   life: 3000,
-      // });
-    },
-    // reject: () => {
-    //   toast.add({
-    //     severity: "error",
-    //     summary: "Rejected",
-    //     detail: "You have rejected",
-    //     life: 3000,
-    //   });
-    // },
+    // toast.add({
+    //   severity: "info",
+    //   summary: "Confirmed",
+    //   detail: "You have accepted",
+    //   life: 3000,
+    // });
   });
 };
 </script>
 
 <template>
-  <FormBlog v-model="formModel" :loaded="data" method="patch" :userId="user.id" />
+  <template v-if="blogStatus === 'success'">
+    <FormBlog v-model="blogFormModel" :preLoadedData="blog" method="patch" />
 
-  <div class="flex gap-x-2">
-    <SmartButton :label="$t('save')" @click="handleSave" />
-    <SmartButton :label="$t('deleteBlog')" @click="handleDelete" />
-  </div>
-
-  <Fieldset :legend="$t('snsOfBlog')">
-    <SimpleList :data="sns" :status="snsStatus">
-      <template #item="{ item }">
-        <SmartListItem :label="item.name || item.type" :to="`/settings/sn-${item.id}`" />
-      </template>
-    </SimpleList>
-
-    <div class="mt-4">
-      <SmartButton :label="$t('createSn')" @click="createSnModalOpen = true" />
+    <div class="flex gap-x-2">
+      <SmartButton :label="$t('save')" @click="handleBlogSave" />
+      <SmartButton :label="$t('deleteBlog')" @click="handleBlogDelete" :disabled="sns?.length" />
     </div>
-  </Fieldset>
 
-  <SimpleFormModal v-model="createSnModalOpen" :header="$t('createSnModalHeader')" @save="handleCreateSnSave">
-    <FormSocialMedia v-model="snFormModel" :blogId="route.params.blogId" :handleSuccess="handleSnSuccess" />
-  </SimpleFormModal>
+    <Fieldset :legend="$t('snsOfBlog')">
+      <SimpleList :data="sns" :status="snsStatus">
+        <template #item="{ item }">
+          <SmartListItem :label="makeSnName(item)" :to="`/settings/sn-${item.id}`" />
+        </template>
+      </SimpleList>
 
-  <ConfirmDialog></ConfirmDialog>
+      <div class="mt-4">
+        <SmartButton :label="$t('createSn')" @click="createSnModalOpen = true" />
+      </div>
+    </Fieldset>
+
+    <SimpleFormModal v-model="createSnModalOpen" :header="$t('createSnModalHeader')" @save="handleCreateSnSave">
+      <FormSocialMedia v-model="snFormModel" :blogId="blog.id" :handleSuccess="handleSnSuccess" />
+    </SimpleFormModal>
+  </template>
 </template>

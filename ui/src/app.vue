@@ -17,4 +17,6 @@ await callOnce(async () => {
   <div class="pt-2 pb-12 px-4">
     <NuxtPage />
   </div>
+
+  <ConfirmDialog />
 </template>

@@ -45,6 +45,14 @@ export function makeTgAuthHeaders() {
   };
 }
 
+export function makeSnName(sn) {
+  if (sn.name) {
+    return `${sn.name} (${sn.type})`;
+  }
+
+  return sn.type;
+}
+
 // export function removeFrontmatter(rawMd) {
 //   const frontmatterRegex = /^---\n([\s\S]*?)\n---/
 //

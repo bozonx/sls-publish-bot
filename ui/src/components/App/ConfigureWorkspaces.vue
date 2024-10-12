@@ -2,8 +2,8 @@
 const { t } = useI18n();
 const router = useRouter();
 
-const { data: user } = await useApiMe();
-const { data, status } = await useApiListWorkspaces();
+// const { data: user } = await useApiMe();
+const { data, status } = await useApiListMyWorkspaces();
 const createModalOpen = ref(false);
 const formModel = ref(null);
 
@@ -30,6 +30,6 @@ const handleSuccess = (response, form$) => {
   </div>
 
   <SimpleFormModal v-model="createModalOpen" :header="$t('createWorkspaceModalHeader')" @save="handleSave">
-    <FormWorkspace v-model="formModel" :userId="user.id" :handleSuccess="handleSuccess" />
+    <FormWorkspace v-model="formModel" :handleSuccess="handleSuccess" />
   </SimpleFormModal>
 </template>

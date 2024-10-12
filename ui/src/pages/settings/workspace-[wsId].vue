@@ -1,13 +1,15 @@
 <script setup>
 const { t } = useI18n();
 const route = useRoute();
-// const router = useRouter();
-const confirm = useConfirm();
+const confirm = useSimpleConfirm();
 // const toast = useToast();
 
-const { data: user } = await useApiMe();
-const { data: workspace } = await useApiGetWorkspace(route.params.wsId);
-const { data: blogs, status } = await useApiListBlogs(workspace.value.id);
+const { data: workspace, status: workspaceStatus } = await useApiGetMyWorkspace(
+  route.params.wsId,
+);
+const { data: blogs, status: blogsStatus } = await useApiListMyBlogs(
+  workspace.value.id,
+);
 const createBlogModalOpen = ref(false);
 const wsFormModel = ref(null);
 const blogFormModel = ref(null);
@@ -31,21 +33,13 @@ const handleBlogSuccess = (response, form$) => {
   navigateTo(`/settings/blog-${id}`);
 };
 
-const handleDeleteWorkspace = () => {
-  confirm.require({
-    message: t("sureDeleteWorkspace"),
-    header: t("confirmDeletion"),
-    // icon: "pi pi-exclamation-triangle",
-    rejectProps: {
-      label: "Cancel",
-      severity: "secondary",
-      outlined: true,
-    },
-    acceptProps: {
-      label: "Save",
-    },
-    accept: async () => {
-      const { status: deleteStatus } = await useApiDeleteWorkspace(
+const handleWorkspaceDelete = () => {
+  confirm(
+    t("confirmDeletion"),
+    t("sureDeleteWorkspace"),
+    t("delete"),
+    async () => {
+      const { status: deleteStatus } = await useApiDeleteMyWorkspace(
         workspace.value.id,
       );
 
@@ -60,41 +54,33 @@ const handleDeleteWorkspace = () => {
       //   life: 3000,
       // });
     },
-    // reject: () => {
-    //   toast.add({
-    //     severity: "error",
-    //     summary: "Rejected",
-    //     detail: "You have rejected",
-    //     life: 3000,
-    //   });
-    // },
-  });
+  );
 };
 </script>
 
 <template>
-  <FormWorkspace v-model="wsFormModel" :loaded="workspace" method="patch" :userId="user.id" />
+  <template v-if="workspaceStatus === 'success'">
+    <FormWorkspace v-model="wsFormModel" :preLoadedData="workspace" method="patch" />
 
-  <div class="flex gap-x-2 mb-6">
-    <SmartButton :label="$t('save')" @click="handleWorkspaceSave" />
-    <SmartButton :label="$t('deleteWorkspace')" @click="handleDeleteWorkspace" :disabled="blogs?.length" />
-  </div>
-
-  <Fieldset :legend="$t('blogsOfWorkspace')">
-    <SimpleList :data="blogs" :status="status">
-      <template #item="{ item }">
-        <SmartListItem :label="item.name" :to="`/settings/blog-${item.id}`" />
-      </template>
-    </SimpleList>
-
-    <div class="mt-4">
-      <SmartButton :label="$t('createBlog')" @click="createBlogModalOpen = true" />
+    <div class="flex gap-x-2 mb-6">
+      <SmartButton :label="$t('save')" @click="handleWorkspaceSave" />
+      <SmartButton :label="$t('deleteWorkspace')" @click="handleWorkspaceDelete" :disabled="blogs?.length" />
     </div>
-  </Fieldset>
 
-  <SimpleFormModal v-model="createBlogModalOpen" :header="$t('createBlogModalHeader')" @save="handleCreateBlogSave">
-    <FormBlog v-model="blogFormModel" :wpid="workspace.id" :handleSuccess="handleBlogSuccess" />
-  </SimpleFormModal>
+    <Fieldset :legend="$t('blogsOfWorkspace')">
+      <SimpleList :data="blogs" :status="blogsStatus">
+        <template #item="{ item }">
+          <SmartListItem :label="item.name" :to="`/settings/blog-${item.id}`" />
+        </template>
+      </SimpleList>
 
-  <ConfirmDialog></ConfirmDialog>
+      <div class="mt-4">
+        <SmartButton :label="$t('createBlog')" @click="createBlogModalOpen = true" />
+      </div>
+    </Fieldset>
+
+    <SimpleFormModal v-model="createBlogModalOpen" :header="$t('createBlogModalHeader')" @save="handleCreateBlogSave">
+      <FormBlog v-model="blogFormModel" :wpid="workspace.id" :handleSuccess="handleBlogSuccess" />
+    </SimpleFormModal>
+  </template>
 </template>

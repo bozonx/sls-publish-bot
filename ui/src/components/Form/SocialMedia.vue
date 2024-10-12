@@ -1,9 +1,9 @@
 <script setup>
 const props = defineProps([
+  // it is for create
   "blogId",
   "modelValue",
-  "loaded",
-  "userId",
+  "preLoadedData",
   "method",
   "handleSuccess",
 ]);
@@ -13,21 +13,26 @@ const { t } = useI18n();
 const form$ = ref(null);
 const schema = ref({
   name: { type: "text", label: t("name") },
+  type: {
+    type: "select",
+    label: t("snType"),
+    items: Object.keys(SOCIAL_MEDIAS),
+  },
   cfg: {
     type: "textarea",
+    label: t("config"),
     // TODO: взависимости от типа нужно подбирать конфиг по умолчанию
     // default: BLOG_DEFAULT_YAML_CONFIG,
     default: "{}",
   },
-  // TODO: select type
+  id: { type: "hidden", default: props.preLoadedData?.id },
   blogId: { type: "hidden", default: props.blogId },
-  id: { type: "hidden", default: props.loaded?.id },
 });
 
 onMounted(async () => {
-  if (props.loaded)
+  if (props.preLoadedData)
     form$.value.load({
-      ...props.loaded,
+      ...props.preLoadedData,
       // TODO: сохранять в обычный JSON но при вводе использовать преобразование в yaml
       // cfg: props.loaded.cfg && JSON.parse(props.loaded.cfg).yaml,
     });

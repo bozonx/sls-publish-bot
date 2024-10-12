@@ -2,8 +2,7 @@
 const props = defineProps([
   "wpid",
   "modelValue",
-  "loaded",
-  "userId",
+  "preLoadedData",
   "method",
   "handleSuccess",
 ]);
@@ -15,18 +14,18 @@ const schema = ref({
   name: { type: "text", label: t("name") },
   cfg: {
     type: "textarea",
-    // default: BLOG_DEFAULT_YAML_CONFIG,
+    label: t("config"),
     default: "{}",
   },
+  id: { type: "hidden", default: props.preLoadedData?.id },
   workspaceId: { type: "hidden", default: props.wpid },
-  id: { type: "hidden", default: props.loaded?.id },
 });
 
 onMounted(async () => {
-  if (props.loaded)
+  if (props.preLoadedData)
     form$.value.load({
-      ...props.loaded,
-      cfg: props.loaded.cfg && JSON.parse(props.loaded.cfg).yaml,
+      ...props.preLoadedData,
+      // cfg: props.preLoadedData.cfg && JSON.parse(props.preLoadedData.cfg).yaml,
     });
 });
 
