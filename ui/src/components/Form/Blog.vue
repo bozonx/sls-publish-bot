@@ -15,7 +15,7 @@ const schema = ref({
   cfg: {
     type: "textarea",
     label: t("config"),
-    default: "{}",
+    default: "",
   },
   id: { type: "hidden", default: props.preLoadedData?.id },
   workspaceId: { type: "hidden", default: props.wpid },
@@ -25,7 +25,9 @@ onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
       ...props.preLoadedData,
-      // cfg: props.preLoadedData.cfg && JSON.parse(props.preLoadedData.cfg).yaml,
+      cfg:
+        props.preLoadedData.cfg &&
+        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
     });
 });
 
@@ -34,7 +36,7 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  form$.data.cfg = JSON.stringify({ yaml: form$.data.cfg });
+  form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
 
   return formSubmitHelper("/auth/blogs")(FormData, form$);
 };

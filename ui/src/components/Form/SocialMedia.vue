@@ -23,7 +23,7 @@ const schema = ref({
     label: t("config"),
     // TODO: взависимости от типа нужно подбирать конфиг по умолчанию
     // default: BLOG_DEFAULT_YAML_CONFIG,
-    default: "{}",
+    default: "",
   },
   id: { type: "hidden", default: props.preLoadedData?.id },
   blogId: { type: "hidden", default: props.blogId },
@@ -33,8 +33,9 @@ onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
       ...props.preLoadedData,
-      // TODO: сохранять в обычный JSON но при вводе использовать преобразование в yaml
-      // cfg: props.loaded.cfg && JSON.parse(props.loaded.cfg).yaml,
+      cfg:
+        props.preLoadedData.cfg &&
+        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
     });
 });
 
@@ -43,7 +44,7 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  form$.data.cfg = JSON.stringify(form$.data.cfg);
+  form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
 
   return formSubmitHelper("/auth/social-media")(FormData, form$);
 };

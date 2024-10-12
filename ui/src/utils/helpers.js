@@ -4,6 +4,10 @@ export function parseYaml(str) {
   return yaml.load(str);
 }
 
+export function stringifyYaml(obj) {
+  return yaml.dump(obj);
+}
+
 // export function resolveSocialMediaId(sm) {
 //   return sm.id || sm.use;
 // }

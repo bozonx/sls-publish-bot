@@ -20,15 +20,26 @@ const schema = ref({
 });
 
 onMounted(async () => {
-  if (props.preLoadedData) form$.value.load(props.preLoadedData);
+  if (props.preLoadedData)
+    form$.value.load({
+      ...props.preLoadedData,
+      cfg:
+        props.preLoadedData.cfg &&
+        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
+    });
 });
 
 watchEffect(() => {
   emit("update:modelValue", form$.value);
 });
+
+const prepareData = (FormData, form$) => {
+  form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
+
+  return formSubmitHelper("/auth/workspaces")(FormData, form$);
+};
 </script>
 
 <template>
-  <Vueform :endpoint="formSubmitHelper('/auth/workspaces')" :method="props.method" ref="form$" :schema="schema"
-    @success="props.handleSuccess" />
+  <Vueform :endpoint="prepareData" :method="props.method" ref="form$" :schema="schema" @success="props.handleSuccess" />
 </template>
