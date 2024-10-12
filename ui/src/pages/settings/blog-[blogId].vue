@@ -7,7 +7,7 @@ const confirm = useSimpleConfirm();
 const { data: blog, status: blogStatus } = await useApiGetMyBlog(
   route.params.blogId,
 );
-const { data: sns, status: snsStatus } = await useApiListSns(
+const { data: sns, status: snsStatus } = await useApiListMySns(
   route.params.blogId,
 );
 const createSnModalOpen = ref(false);

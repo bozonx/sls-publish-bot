@@ -1,6 +1,13 @@
 <script setup>
-const props = defineProps(["blogConf", "nextStepUrl"]);
+const props = defineProps(["snCfg", "nextStepUrl"]);
 const tmpState = useTmpState();
+
+// const postGitPath = props.blogConf.yaml.socialMedia.find(
+//   (item) => item.use === SOCIAL_MEDIAS.blog,
+// )?.postGitPath;
+const postGitPath = props.snCfg.postGitPath;
+
+console.log(11111, props.snCfg);
 
 const ACCORDION_SATES = {
   remote: "remote",
@@ -35,9 +42,6 @@ const allowSubmit = computed({
 
 function loadArticle() {
   state.loading = true;
-  const postGitPath = props.blogConf.yaml.socialMedia.find(
-    (item) => item.use === SOCIAL_MEDIAS.blog,
-  )?.postGitPath;
 
   $fetch(`${postGitPath}/${state.articlePath}.md`)
     .then((res) => {

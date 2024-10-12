@@ -45,7 +45,7 @@ export async function useApiListMyBlogs(wpid) {
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
-export async function useApiListSns(blogId) {
+export async function useApiListMySns(blogId) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media?blog-id=${blogId}`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));

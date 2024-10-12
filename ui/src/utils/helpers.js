@@ -4,13 +4,13 @@ export function parseYaml(str) {
   return yaml.load(str);
 }
 
-export function resolveSocialMediaId(sm) {
-  return sm.id || sm.use;
-}
+// export function resolveSocialMediaId(sm) {
+//   return sm.id || sm.use;
+// }
 
-export function resolveSmTypes(sm) {
-  return sm.types || SOCIAL_MEDIA_PARAMS[sm.use].types;
-}
+// export function resolveSmTypes(sm) {
+//   return sm.types || SOCIAL_MEDIA_PARAMS[sm.use].types;
+// }
 
 // export function replaceLineBreak() { }
 
@@ -18,14 +18,14 @@ export function runTemplate(tmpl, data) {
   return useTemplate(tmpl)(data);
 }
 
-export function getItemConf(item) {
-  const parsed = JSON.parse(item.cfg);
-
-  return {
-    ...parsed,
-    yaml: parseYaml(parsed.yaml),
-  };
-}
+// export function getItemConf(item) {
+//   const parsed = JSON.parse(item.cfg);
+//
+//   return {
+//     ...parsed,
+//     yaml: parseYaml(parsed.yaml),
+//   };
+// }
 
 export function extractTitleFromMd(mdWithoutFrontmatter) {
   const firstTitleMatch = mdWithoutFrontmatter.trim().match(/^\#\s+(.+)$/m);

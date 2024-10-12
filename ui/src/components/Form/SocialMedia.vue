@@ -43,7 +43,7 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  form$.data.cfg = JSON.stringify({ yaml: form$.data.cfg });
+  form$.data.cfg = JSON.stringify(form$.data.cfg);
 
   return formSubmitHelper("/auth/social-media")(FormData, form$);
 };
