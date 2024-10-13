@@ -93,7 +93,7 @@ CREATE TABLE "Post" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "pubTimestampMinutes" INTEGER,
-    "publicatedDataJson" TEXT NOT NULL,
+    "publicatedData" TEXT,
     "payloadJson" TEXT,
     "updatedByUserId" INTEGER,
     "forcePublishedByUserId" INTEGER,

@@ -18,6 +18,7 @@ export async function handleScheduled(TG_TOKEN, TEST_MODE, prismaAdapter) {
 	const [item] = await prisma[DB_TABLE_NAMES.Post].findMany({
 		where: {
 			[POST_KEYS.pubMsgId]: null,
+			// TODO: another name
 			[POST_KEYS.pubTimestampMinutes]: {
 				// TODO: get from config
 				// get items shich are a bit stale

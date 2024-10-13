@@ -50,12 +50,14 @@ export const USER_KEYS = {
 export const POST_KEYS = {
 	id: 'id',
 	name: 'name',
-	socialMedia: 'socialMedia',
 	pubTimestampMinutes: 'pubTimestampMinutes',
-	pubMsgId: 'pubMsgId',
+	publicatedData: 'publicatedData',
+	payloadJson: 'payloadJson',
+	// pubMsgId: 'pubMsgId',
 	createdByUserId: 'createdByUserId',
 	updatedByUserId: 'updatedByUserId',
-	payloadJson: 'payloadJson',
+	forcePublishedByUserId: 'forcePublishedByUserId',
+	changedTimeByUserId: 'changedTimeByUserId',
 };
 export const SM_KEYS = {
 	id: 'id',
@@ -120,12 +122,6 @@ export const PUB_KEYS = {
 	time: 'time',
 	// data of DB record
 	dbRecord: 'dbRecord',
-	// TODO: move to db record
-	// who forcely published this post
-	forcePublishedByUserName: 'forcePublishedByUserName',
-	// TODO: move to db record
-	// who updated time
-	chandedTimeByUserName: 'chandedTimeByUserName',
 };
 export const MEDIA_TYPES = {
 	photo: 'photo',

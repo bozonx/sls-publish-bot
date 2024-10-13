@@ -124,7 +124,8 @@ model Post {
   // timestamp minutes of publicated moment
   pubTimestampMinutes    Int?
   // data of publicated post, depends on certain social media
-  publicatedDataJson     String
+  publicatedData         String?
+  // state of post
   payloadJson            String?
   // createdByUser       User     @relation("ScheduledCreatedByUser", fields: [createdByUserId], references: [id])
   updatedByUserId        Int?
