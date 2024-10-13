@@ -21,7 +21,9 @@ export class TagsManager extends PageBase {
 				[TAG_KEYS.id]: true,
 				[TAG_KEYS.name]: true,
 			},
-			undefined,
+			{
+				socialMediaId: this.state.sm.id,
+			},
 			[{ [TAG_KEYS.name]: 'asc' }],
 		);
 
@@ -65,7 +67,11 @@ export class TagsManager extends PageBase {
 
 		if (!c.msg.text) return this.reply('No text');
 
-		const newTags = await handleTagsFromInputAndSave(this.router, c.msg.text);
+		const newTags = await handleTagsFromInputAndSave(
+			this.router,
+			c.msg.text,
+			this.state.sm.id,
+		);
 
 		await this.reply(`${t(c, 'tagsWasAdded')}: ${newTags.join(', ')}`);
 

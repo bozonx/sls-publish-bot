@@ -95,11 +95,11 @@ model Tag {
   id            Int         @id @default(autoincrement())
   name          String
   blog          Blog        @relation(fields: [blogId], references: [id])
-  blogId        Int
+  blogId        Int?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   socialMedia   SocialMedia @relation(fields: [socialMediaId], references: [id])
-  socialMediaId Int
+  socialMediaId Int?
 }
 
 model Inbox {

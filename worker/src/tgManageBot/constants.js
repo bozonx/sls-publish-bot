@@ -92,7 +92,8 @@ export const USER_PERMISSIONS_KEYS = {
 export const TAG_KEYS = {
 	id: 'id',
 	name: 'name',
-	socialMedia: 'socialMedia',
+	socialMediaId: 'socialMediaId',
+	blogId: 'blogId',
 };
 export const PUB_KEYS = {
 	// telegram html

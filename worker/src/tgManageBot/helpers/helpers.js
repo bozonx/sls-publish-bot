@@ -206,7 +206,7 @@ export function parseTagsFromInput(rawStr = '') {
 		.map((i) =>
 			i
 				.trim()
-				.toLowerCase()
+				// .toLowerCase()
 				.replace(/[\-\s]/g, '_')
 				.replace(/[^\p{L}\p{N}_]/gu, ''),
 		)
@@ -285,7 +285,7 @@ export function isUserAdmin(user) {
 	return cfg[USER_CFG_KEYS.permissions]?.[USER_PERMISSIONS_KEYS.admin];
 }
 
-export async function handleTagsFromInputAndSave(router, rawText) {
+export async function handleTagsFromInputAndSave(router, rawText, smId) {
 	let newTags = makeStringArrayUnique(parseTagsFromInput(rawText));
 
 	const theSameTagsInDb = (
@@ -306,6 +306,7 @@ export async function handleTagsFromInputAndSave(router, rawText) {
 		newTags.map((tag) =>
 			router.db.createItem(DB_TABLE_NAMES.Tag, {
 				[TAG_KEYS.name]: tag,
+				[TAG_KEYS.socialMediaId]: smId,
 				// TODO: no DEFAULT_SOCIAL_MEDIA
 				// [TAG_KEYS.socialMedia]: DEFAULT_SOCIAL_MEDIA,
 			}),
