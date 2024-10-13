@@ -20,6 +20,8 @@ import {
 	USER_PERMISSIONS_KEYS,
 	DB_TABLE_NAMES,
 	POST_KEYS,
+	SM_KEYS,
+	TEMPLATE_NAMES,
 	// DEFAULT_SOCIAL_MEDIA,
 	MAX_MEDIA_COUNT,
 	MAX_CAPTION_LENGTH,
@@ -113,7 +115,7 @@ export async function makeStatePreview(c, state = {}) {
 		res += `${t(c, 'stateAuthor')}: ${state[PUB_KEYS.author]}\n`;
 
 	if (state[PUB_KEYS.date])
-		res += `${t(c, 'stateDate')}: ${makeHumanRuDate(c, state[PUB_KEYS.date], c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE])}\n`;
+		res += `${t(c, 'stateDate')}: ${makeHumanRuDate(c, state[PUB_KEYS.date], c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE)}\n`;
 	if (state[PUB_KEYS.time]) {
 		res += `${t(c, 'stateTime')}: ${state[PUB_KEYS.time]} (${t(c, 'msk')})\n`;
 	}
@@ -177,7 +179,9 @@ export function makePostItemLabel(c, dbItem, markStaled = true) {
 
 	if (
 		markStaled &&
-		itemPubMinutes <= curTimeMinutes - c.ctx[CTX_KEYS.PUBLISHING_MINUS_MINUTES]
+		itemPubMinutes <=
+		curTimeMinutes -
+		c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLISHING_MINUS_MINUTES
 	) {
 		dateTimeLabel = t(c, 'staleMark');
 	} else {
@@ -186,13 +190,13 @@ export function makePostItemLabel(c, dbItem, markStaled = true) {
 				c,
 				makeIsoLocaleDate(
 					itemPubMinutes * 60 * 1000,
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 				),
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 			) +
 			' ' +
 			getTimeStr(
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 				itemPubMinutes * 60 * 1000,
 			);
 	}
@@ -320,10 +324,13 @@ export function makeCurrentDateTimeStr(c) {
 	return (
 		`${t(c, 'now')}: ` +
 		isoDateToLongLocaleRuDate(
-			makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
+			makeIsoLocaleDate(
+				undefined,
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
+			),
 		) +
 		' ' +
-		getTimeStr(c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]) +
+		getTimeStr(c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE) +
 		` ${t(c, 'msk')}`
 	);
 }
@@ -364,6 +371,37 @@ export function makeBlogAndSmName(smName, blogName) {
 	return smName ? `${smName} (${blogName})` : blogName;
 }
 
+// TODO: remake to new teplate engine
+export function getTemplates() {
+	const footer =
+		'<a href="https://t.me/antifem_battle">Антифеминизм | Маскулизм. подписывайся</a> | <a href="https://t.me/antifem_battle/78">донат</a>';
+	// '[Антифеминизм \\| Маскулизм\\. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
+
+	return {
+		// use telegram MarkdownV2 https://core.telegram.org/bots/api#markdownv2-style
+		[TEMPLATE_NAMES.default]: [
+			'${CONTENT}\n\n',
+			'${AUTHOR}\n\n',
+			'${TAGS}\n\n',
+			footer,
+		],
+		[TEMPLATE_NAMES.byFollower]: [
+			'От подписчика',
+			' ${AUTHOR}',
+			'\n\n${CONTENT}',
+			'\n\n${TAGS}',
+			'\n\n' + footer,
+		],
+		[TEMPLATE_NAMES.gotFrom]: [
+			'${CONTENT}\n\n',
+			'Взято из ${AUTHOR}\n\n',
+			'${TAGS}\n\n',
+			footer,
+		],
+		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
+	};
+}
+
 // export function removeNotLetterAndNotNumbersFromStr(str) {
 // 	return str.replace(/[^\p{L}\p{N}_]/gu, '');
 // }
@@ -388,12 +426,12 @@ export function makeBlogAndSmName(smName, blogName) {
 // 				this.c,
 // 				makeIsoLocaleDate(
 // 					itemPubMinutes * 60 * 1000,
-// 					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+// 					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 // 				),
 // 			) +
 // 			' ' +
 // 			getTimeStr(
-// 				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+// 				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 // 				itemPubMinutes * 60 * 1000,
 // 			);
 // 	}

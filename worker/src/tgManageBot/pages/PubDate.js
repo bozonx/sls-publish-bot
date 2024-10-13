@@ -19,13 +19,17 @@ import {
 	EDIT_ITEM_NAME,
 	DEFAULT_PUB_PLUS_DAY,
 	CTX_KEYS,
+	SM_KEYS,
 } from '../constants.js';
 
 function makeClosestDayLabel(c, plusDay) {
 	return makeHumanRuDateCompact(
 		c,
-		todayPlusDaysIsoDate(plusDay, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]),
-		c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+		todayPlusDaysIsoDate(
+			plusDay,
+			c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
+		),
+		c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 	);
 }
 
@@ -40,7 +44,7 @@ export class PubDate extends PubPageBase {
 		this.state.pub = {
 			[PUB_KEYS.date]: todayPlusDaysIsoDate(
 				DEFAULT_PUB_PLUS_DAY,
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 			),
 			...this.state.pub,
 		};
@@ -108,7 +112,8 @@ export class PubDate extends PubPageBase {
 			return this.go('pub-time', {
 				[PUB_KEYS.date]: todayPlusDaysIsoDate(
 					payload,
-					this.router.c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					this.router.c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg]
+						.PUBLICATION_TIME_ZONE,
 				),
 			});
 		}
@@ -140,11 +145,16 @@ export class PubDate extends PubPageBase {
 		const preparedDateStr = c.msg.text.trim().replace(/[\s,]+/g, '.');
 		const isoDateStr = normalizeShortDateToIsoDate(
 			preparedDateStr,
-			c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+			c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 		);
 
 		if (!isoDateStr) return this.reply(t(c, 'wrongDate'));
-		else if (isPastDate(isoDateStr, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE]))
+		else if (
+			isPastDate(
+				isoDateStr,
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
+			)
+		)
 			return this.reply(t(c, 'dateIsPastMessage'));
 
 		return this.go('pub-time', { [PUB_KEYS.date]: isoDateStr });

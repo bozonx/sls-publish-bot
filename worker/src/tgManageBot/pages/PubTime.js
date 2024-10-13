@@ -17,8 +17,8 @@ import {
 	PUB_KEYS,
 	CTX_KEYS,
 	TG_HOME_PAGE,
-	DEFAULT_PUB_TIME,
 	EDIT_ITEM_NAME,
+	SM_KEYS,
 } from '../constants.js';
 
 const FIRST_HOUR = 7;
@@ -30,7 +30,7 @@ export class PubTime extends PubPageBase {
 		const c = this.router.c;
 
 		this.state.pub = {
-			[PUB_KEYS.time]: DEFAULT_PUB_TIME,
+			[PUB_KEYS.time]: this.state.sm[SM_KEYS.cfg].DEFAULT_PUB_TIME,
 			...this.state.pub,
 		};
 		this.text =
@@ -108,7 +108,7 @@ export class PubTime extends PubPageBase {
 			isTimePast(
 				normalizedTime,
 				this.state.pub[PUB_KEYS.date],
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 				PAST_CHECK_ADDITIONAL_MINUTES,
 			)
 		)
@@ -129,11 +129,14 @@ export class PubTime extends PubPageBase {
 
 		if (
 			this.state.pub.date ===
-			makeIsoLocaleDate(undefined, c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE])
+			makeIsoLocaleDate(
+				undefined,
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
+			)
 		) {
 			// is today then skip past hours
 			const currentHourNum = getCurrentHour(
-				c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 			);
 			let startHour =
 				currentHourNum < FIRST_HOUR ? FIRST_HOUR : currentHourNum + 1;

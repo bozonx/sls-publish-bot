@@ -11,10 +11,7 @@ import {
 import { routerMiddleware } from './PageRouter.js';
 import { MainHome } from './pages/MainHome.js';
 import { TgHome } from './pages/TgHome.js';
-// import { ConfigManager } from './pages/ConfigManager.js';
 import { TagsManager } from './pages/TagsManager.js';
-// import { UserItem } from './pages/UserItem.js';
-// import { UsersManager } from './pages/UsersManager.js';
 import { PubContent } from './pages/PubContent.js';
 import { PubTags } from './pages/PubTags.js';
 import { PubDate } from './pages/PubDate.js';
@@ -30,11 +27,8 @@ import { PubConfirm } from './pages/PubConfirm.js';
 // import { AlreadyPublishedItem } from './pages/AlreadyPublishedItem.js';
 
 const routes = {
-	home: MainHome,
+	[MAIN_HOME]: MainHome,
 	[TG_HOME_PAGE]: TgHome,
-	// 'config-manager': ConfigManager,
-	// 'users-manager': UsersManager,
-	// 'user-item': UserItem,
 	'tags-manager': TagsManager,
 	'pub-content': PubContent,
 	'pub-tags': PubTags,
@@ -74,7 +68,7 @@ async function makeContext(c) {
 	if (!c.msg?.chat) return;
 
 	const chatId = c.msg.chat.id;
-	let tgSm;
+	// let tgSm;
 	let session;
 	let me;
 
@@ -95,19 +89,19 @@ async function makeContext(c) {
 		throw new Error(`Can't load initial data: ${e}`);
 	}
 
-	if (typeof session?.tgSmId !== 'undefined') {
-		tgSm = await c.ctx[CTX_KEYS.DB_CRUD].getItem(
-			DB_TABLE_NAMES.SocialMedia,
-			session.tgSmId,
-		);
-	}
+	// if (typeof session?.tgSmId !== 'undefined') {
+	// 	tgSm = await c.ctx[CTX_KEYS.DB_CRUD].getItem(
+	// 		DB_TABLE_NAMES.SocialMedia,
+	// 		session.tgSmId,
+	// 	);
+	// }
 
 	c.ctx = {
 		...c.ctx,
-		[CTX_KEYS.tgSm]: tgSm && {
-			...tgSm,
-			[SOCIAL_MEDIA_KEYS.cfg]: JSON.parse(tgSm.cfg),
-		},
+		// [CTX_KEYS.tgSm]: tgSm && {
+		// 	...tgSm,
+		// 	[SOCIAL_MEDIA_KEYS.cfg]: JSON.parse(tgSm.cfg),
+		// },
 		[CTX_KEYS.session]: session,
 		[CTX_KEYS.me]: me && {
 			...me,

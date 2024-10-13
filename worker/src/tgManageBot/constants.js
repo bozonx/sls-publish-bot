@@ -9,7 +9,6 @@ export const EDIT_ITEM_NAME = 'editItem';
 export const MENU_ITEM_LABEL_LENGTH = 40;
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const DEFAULT_PUB_PLUS_DAY = 1;
-export const DEFAULT_PUB_TIME = '10:00';
 // export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
 export const MAX_MEDIA_COUNT = 10;
 export const MAX_CAPTION_LENGTH = 1024;
@@ -30,8 +29,6 @@ export const TEMPLATE_NAMES = {
 export const CTX_KEYS = {
 	// session state from db
 	session: 'session',
-	// selected telegram social media from db
-	tgSm: 'tgSm',
 	// user object from DB
 	me: 'me',
 	KV: 'KV',
@@ -40,14 +37,8 @@ export const CTX_KEYS = {
 	BOT_SESSION_TTL_DAYS: 'BOT_SESSION_TTL_DAYS',
 	APP_DEBUG: 'APP_DEBUG',
 	TEST_MODE: 'TEST_MODE',
-	// config: 'config',
-	// MAIN_ADMIN_TG_USER_ID: 'MAIN_ADMIN_TG_USER_ID',
-	// CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
-	// DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
-	// DESTINATION_CHANNEL_NAME: 'DESTINATION_CHANNEL_NAME',
-	// PUBLICATION_TIME_ZONE: 'PUBLICATION_TIME_ZONE',
-	// PUBLISHING_MINUS_MINUTES: 'PUBLISHING_MINUS_MINUTES',
 };
+
 export const USER_KEYS = {
 	id: 'id',
 	tgUserId: 'tgUserId',
@@ -66,11 +57,19 @@ export const POST_KEYS = {
 	updatedByUserId: 'updatedByUserId',
 	payloadJson: 'payloadJson',
 };
-export const SOCIAL_MEDIA_KEYS = {
+export const SM_KEYS = {
 	id: 'id',
 	name: 'name',
 	cfg: 'cfg',
+	blog: 'blog',
 };
+export const TAG_KEYS = {
+	id: 'id',
+	name: 'name',
+	socialMediaId: 'socialMediaId',
+	blogId: 'blogId',
+};
+
 export const DB_TABLE_NAMES = {
 	User: 'User',
 	Workspace: 'Workspace',
@@ -81,19 +80,24 @@ export const DB_TABLE_NAMES = {
 };
 
 export const USER_CFG_KEYS = {
+	// TODO: remove
 	authorName: 'authorName',
 	permissions: 'permissions',
 };
+// TODO: specified for tg bot
 export const USER_PERMISSIONS_KEYS = {
 	admin: 'admin',
 	editOthersScheduledPub: 'editOthersScheduledPub',
 	deleteOthersScheduledPub: 'deleteOthersScheduledPub',
 };
-export const TAG_KEYS = {
-	id: 'id',
-	name: 'name',
-	socialMediaId: 'socialMediaId',
-	blogId: 'blogId',
+export const SM_CONFIG_KEYS = {
+	// MAIN_ADMIN_TG_USER_ID: 'MAIN_ADMIN_TG_USER_ID',
+	CHAT_OF_ADMINS_ID: 'CHAT_OF_ADMINS_ID',
+	DESTINATION_CHANNEL_ID: 'DESTINATION_CHANNEL_ID',
+	DESTINATION_CHANNEL_NAME: 'DESTINATION_CHANNEL_NAME',
+	PUBLICATION_TIME_ZONE: 'PUBLICATION_TIME_ZONE',
+	PUBLISHING_MINUS_MINUTES: 'PUBLISHING_MINUS_MINUTES',
+	DEFAULT_PUB_TIME: 'DEFAULT_PUB_TIME',
 };
 export const PUB_KEYS = {
 	// telegram html
@@ -114,10 +118,12 @@ export const PUB_KEYS = {
 	forwardedFrom: 'forwardedFrom',
 	date: 'date',
 	time: 'time',
-	// data or DB record
+	// data of DB record
 	dbRecord: 'dbRecord',
+	// TODO: move to db record
 	// who forcely published this post
 	forcePublishedByUserName: 'forcePublishedByUserName',
+	// TODO: move to db record
 	// who updated time
 	chandedTimeByUserName: 'chandedTimeByUserName',
 };
@@ -130,33 +136,3 @@ export const DEFAULT_SETUP_STATE = {
 	[PUB_KEYS.previewLink]: null,
 	[PUB_KEYS.template]: TEMPLATE_NAMES.default,
 };
-
-const footer =
-	'<a href="https://t.me/antifem_battle">Антифеминизм | Маскулизм. подписывайся</a> | <a href="https://t.me/antifem_battle/78">донат</a>';
-// '[Антифеминизм \\| Маскулизм\\. подписывайся](https://t.me/antifem_battle) \\| [донат](https://t.me/antifem_battle/78)';
-
-// export const APP_INITIAL_CONFIG = {
-// 	// use telegram MarkdownV2 https://core.telegram.org/bots/api#markdownv2-style
-// 	[APP_CFG_KEYS.templates]: {
-// 		[TEMPLATE_NAMES.default]: [
-// 			'${CONTENT}\n\n',
-// 			'${AUTHOR}\n\n',
-// 			'${TAGS}\n\n',
-// 			footer,
-// 		],
-// 		[TEMPLATE_NAMES.byFollower]: [
-// 			'От подписчика',
-// 			' ${AUTHOR}',
-// 			'\n\n${CONTENT}',
-// 			'\n\n${TAGS}',
-// 			'\n\n' + footer,
-// 		],
-// 		[TEMPLATE_NAMES.gotFrom]: [
-// 			'${CONTENT}\n\n',
-// 			'Взято из ${AUTHOR}\n\n',
-// 			'${TAGS}\n\n',
-// 			footer,
-// 		],
-// 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
-// 	},
-// };

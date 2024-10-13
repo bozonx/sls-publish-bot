@@ -4,6 +4,7 @@ import {
 	makeStatePreview,
 	makeUserNameFromMsg,
 	makeListOfScheduledForDescr,
+	getTemplates,
 } from './helpers.js';
 import {
 	convertTgEntitiesToTgHtml,
@@ -19,6 +20,7 @@ import {
 	USER_KEYS,
 	DB_TABLE_NAMES,
 	POST_KEYS,
+	SM_KEYS,
 	// DEFAULT_SOCIAL_MEDIA,
 	MENU_ITEM_LABEL_LENGTH,
 } from '../constants.js';
@@ -30,9 +32,7 @@ export function makeHashTags(tags) {
 }
 
 export function applyTemplate(c, textHtml, pubState) {
-	// TODO: APP_CFG_KEYS where
-	const template =
-		c.ctx[CTX_KEYS.config][APP_CFG_KEYS.templates][pubState[PUB_KEYS.template]];
+	const template = getTemplates()[pubState[PUB_KEYS.template]];
 
 	if (!template) return textHtml;
 
@@ -165,7 +165,7 @@ export async function doFullFinalPublicationProcess(
 ) {
 	const result = await printFinalPost(
 		c,
-		c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+		c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
 		pubState,
 	);
 	const msgId = Array.isArray(result)
@@ -236,7 +236,7 @@ export async function printPubToAdminChannel(c, dbRecord) {
 	// publication
 	const printRes = await printFinalPost(
 		c,
-		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
+		c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].CHAT_OF_ADMINS_ID,
 		item,
 	);
 	const msgId = Array.isArray(printRes)
@@ -260,7 +260,7 @@ export async function printPubToAdminChannel(c, dbRecord) {
 	};
 
 	await c.api.sendMessage(
-		c.ctx[CTX_KEYS.CHAT_OF_ADMINS_ID],
+		c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].CHAT_OF_ADMINS_ID,
 		msg +
 		`\n\n${await makeStatePreview(c, infoMsgPostParams)}` +
 		'\n\n----------\n\n' +
@@ -397,7 +397,7 @@ export async function createPost(c, pubState, conserved = false) {
 				: convertDateTimeToTsMinutes(
 					pubState[PUB_KEYS.date],
 					pubState[PUB_KEYS.time],
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 				),
 		},
 	});
@@ -415,7 +415,7 @@ export async function updatePost(c, pubState, dbOverwrite) {
 				? convertDateTimeToTsMinutes(
 					pubState[PUB_KEYS.date],
 					pubState[PUB_KEYS.time],
-					c.ctx[CTX_KEYS.PUBLICATION_TIME_ZONE],
+					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLICATION_TIME_ZONE,
 				)
 				: null,
 			...dbOverwrite,

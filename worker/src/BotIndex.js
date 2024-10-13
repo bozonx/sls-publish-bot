@@ -24,9 +24,9 @@ export class BotIndex {
 
 		this.bot.use(async (c, next) => {
 			c.ctx = {
-				[CTX_KEYS.WEB_APP_URL]: WEB_APP_URL,
 				[CTX_KEYS.KV]: KV,
 				[CTX_KEYS.DB_CRUD]: new DbCrud(PRISMA_ADAPTER),
+				[CTX_KEYS.WEB_APP_URL]: WEB_APP_URL,
 				[CTX_KEYS.BOT_SESSION_TTL_DAYS]: BOT_SESSION_TTL_DAYS,
 				[CTX_KEYS.APP_DEBUG]: APP_DEBUG,
 				[CTX_KEYS.TEST_MODE]: TEST_MODE,

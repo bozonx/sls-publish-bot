@@ -79,7 +79,7 @@ export class MainHome extends PageBase {
 				this.state.sm = {
 					id: Number(payload),
 					name: sm.name,
-					cfg: JSON.parse(sm.cfg),
+					cfg: sm.cfg && JSON.parse(sm.cfg),
 					blog: {
 						id: blog.id,
 						name: blog.name,

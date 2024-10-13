@@ -19,6 +19,7 @@ export async function handleScheduled(TG_TOKEN, TEST_MODE, prismaAdapter) {
 		where: {
 			[POST_KEYS.pubMsgId]: null,
 			[POST_KEYS.pubTimestampMinutes]: {
+				// TODO: get from config
 				// get items shich are a bit stale
 				gte: curTimeMinutes - PUBLISHING_MINUS_MINUTES,
 				// get items from very near future
@@ -49,6 +50,7 @@ export async function handleScheduled(TG_TOKEN, TEST_MODE, prismaAdapter) {
 		api: bot.api,
 		ctx: {
 			...c.ctx,
+			// TODO: надо взять из sm
 			[CTX_KEYS.DESTINATION_CHANNEL_ID]: DESTINATION_CHANNEL_ID,
 			[CTX_KEYS.config]: config,
 			[CTX_KEYS.DB_CRUD]: {

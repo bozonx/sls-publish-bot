@@ -21,6 +21,7 @@ import {
 	USER_PERMISSIONS_KEYS,
 	POST_KEYS,
 	CTX_KEYS,
+	SM_KEYS,
 } from '../constants.js';
 
 export class AlreadyPublishedItem extends PageBase {
@@ -33,7 +34,7 @@ export class AlreadyPublishedItem extends PageBase {
 			try {
 				await updateFinalPost(
 					c,
-					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
 					this.state[EDIT_ITEM_NAME],
 				);
@@ -121,14 +122,16 @@ export class AlreadyPublishedItem extends PageBase {
 				return this.go('pub-content');
 			case 'deletePostBtn':
 				const copyRes = await c.api.copyMessage(
+					// TODO: почему сюда ????
 					c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
-					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
 				);
 				const copyMsgId = Array.isArray(copyRes)
 					? copyRes[0]?.message_id
 					: copyRes?.message_id;
 				await c.api.sendMessage(
+					// TODO: почему сюда ????
 					c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
 					t(c, 'warnAdminsPostDeletedFromChannel'),
 					{
@@ -139,7 +142,7 @@ export class AlreadyPublishedItem extends PageBase {
 				// delete message in telegram channel
 				try {
 					await c.api.deleteMessage(
-						c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+						c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
 						Number(
 							this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
 						),
@@ -171,7 +174,7 @@ export class AlreadyPublishedItem extends PageBase {
 
 				await this.reply(
 					t(c, 'publishedItemWasDeletedOnlyInDb') +
-					`https://t.me/${c.ctx[CTX_KEYS.DESTINATION_CHANNEL_NAME]}/` +
+					`https://t.me/${c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_NAME}/` +
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId] +
 					`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
@@ -203,7 +206,7 @@ export class AlreadyPublishedItem extends PageBase {
 			case 'showPublicatedPostBtn':
 				await c.api.forwardMessage(
 					this.me[USER_KEYS.tgChatId],
-					c.ctx[CTX_KEYS.DESTINATION_CHANNEL_ID],
+					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
 					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
 				);
 

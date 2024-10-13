@@ -6,7 +6,7 @@ import {
 	makeBlogAndSmName,
 } from '../helpers/helpers.js';
 import { makeStateFromMessage } from '../helpers/publishHelpres.js';
-import { EDIT_ITEM_NAME } from '../constants.js';
+import { EDIT_ITEM_NAME, MAIN_HOME } from '../constants.js';
 // import { handleScheduled } from '../indexShedullerPublisher.js';
 
 export class TgHome extends PageBase {
@@ -99,7 +99,7 @@ export class TgHome extends PageBase {
 			case 'manageUsersBtn':
 				return this.go('users-manager');
 			case 'backBtn':
-				return this.go('home');
+				return this.go(MAIN_HOME);
 			// case 'test':
 			// 	let c = this.router.c;
 			// 	return await handleScheduled(
