@@ -50,10 +50,11 @@ export const USER_KEYS = {
 export const POST_KEYS = {
 	id: 'id',
 	name: 'name',
+	// time of real publication
 	pubTimestampMinutes: 'pubTimestampMinutes',
+	// data of publicated item such as message_id
 	publicatedData: 'publicatedData',
 	payloadJson: 'payloadJson',
-	// pubMsgId: 'pubMsgId',
 	createdByUserId: 'createdByUserId',
 	updatedByUserId: 'updatedByUserId',
 	forcePublishedByUserId: 'forcePublishedByUserId',

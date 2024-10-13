@@ -181,7 +181,7 @@ export async function doFullFinalPublicationProcess(
 			[PUB_KEYS.forcePublishedByUserName]: forcePublishedByUserName,
 		}),
 		{
-			[POST_KEYS.pubMsgId]: String(msgId),
+			[POST_KEYS.publicatedData]: JSON.stringify({ msgId }),
 			// save current date ad published date
 			[POST_KEYS.pubTimestampMinutes]: Math.floor(
 				new Date().getTime() / 1000 / 60,

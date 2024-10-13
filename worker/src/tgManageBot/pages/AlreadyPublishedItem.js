@@ -31,11 +31,15 @@ export class AlreadyPublishedItem extends PageBase {
 		if (this.state.saveIt) {
 			this.state[EDIT_ITEM_NAME] = this.state.pub;
 
+			const msgId = JSON.parse(
+				this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.publicatedData],
+			).msgId;
+
 			try {
 				await updateFinalPost(
 					c,
 					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
-					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+					msgId,
 					this.state[EDIT_ITEM_NAME],
 				);
 			} catch (e) {
@@ -114,6 +118,9 @@ export class AlreadyPublishedItem extends PageBase {
 
 	async onButtonPress(btnId) {
 		const c = this.router.c;
+		const msgId = JSON.parse(
+			this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.publicatedData],
+		).msgId;
 
 		switch (btnId) {
 			case 'editPostBtn':
@@ -125,7 +132,7 @@ export class AlreadyPublishedItem extends PageBase {
 					// TODO: почему сюда ????
 					c.ctx[CTX_KEYS.MAIN_ADMIN_TG_USER_ID],
 					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
-					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+					msgId,
 				);
 				const copyMsgId = Array.isArray(copyRes)
 					? copyRes[0]?.message_id
@@ -143,9 +150,7 @@ export class AlreadyPublishedItem extends PageBase {
 				try {
 					await c.api.deleteMessage(
 						c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
-						Number(
-							this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
-						),
+						msgId,
 					);
 				} catch (e) {
 					// skip not found
@@ -175,7 +180,7 @@ export class AlreadyPublishedItem extends PageBase {
 				await this.reply(
 					t(c, 'publishedItemWasDeletedOnlyInDb') +
 					`https://t.me/${c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_NAME}/` +
-					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId] +
+					msgId +
 					`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
@@ -192,9 +197,12 @@ export class AlreadyPublishedItem extends PageBase {
 						[PUB_KEYS.chandedTimeByUserName]: null,
 						[PUB_KEYS.dbRecord]: {
 							...this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord],
-							[POST_KEYS.pubMsgId]: null,
-							[POST_KEYS.updatedByUserId]: null,
+							[POST_KEYS.pubTimestampMinutes]: null,
+							[POST_KEYS.publicatedData]: null,
 							[POST_KEYS.createdByUserId]: this.me[USER_KEYS.id],
+							[POST_KEYS.updatedByUserId]: null,
+							[POST_KEYS.forcePublishedByUserId]: null,
+							[POST_KEYS.changedTimeByUserId]: null,
 						},
 					},
 					true,
@@ -207,7 +215,7 @@ export class AlreadyPublishedItem extends PageBase {
 				await c.api.forwardMessage(
 					this.me[USER_KEYS.tgChatId],
 					c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].DESTINATION_CHANNEL_ID,
-					this.state[EDIT_ITEM_NAME][PUB_KEYS.dbRecord][POST_KEYS.pubMsgId],
+					msgId,
 				);
 
 				return this.reload();

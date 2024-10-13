@@ -20,7 +20,7 @@ export class ConservedList extends PageBase {
 				[POST_KEYS.pubTimestampMinutes]: true,
 			},
 			{
-				[POST_KEYS.pubMsgId]: null,
+				[POST_KEYS.publicatedData]: null,
 				[POST_KEYS.pubTimestampMinutes]: null,
 			},
 		);

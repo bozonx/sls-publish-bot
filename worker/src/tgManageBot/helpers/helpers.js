@@ -151,7 +151,7 @@ export async function makeListOfScheduledForDescr(c) {
 			[POST_KEYS.pubTimestampMinutes]: true,
 		},
 		{
-			[POST_KEYS.pubMsgId]: null,
+			[POST_KEYS.publicatedData]: null,
 			NOT: {
 				[POST_KEYS.pubTimestampMinutes]: null,
 			},

@@ -26,7 +26,7 @@ export class AlreadyPublishedList extends PageBase {
 			},
 			{
 				NOT: {
-					[POST_KEYS.pubMsgId]: null,
+					[POST_KEYS.publicatedData]: null,
 				},
 			},
 			[{ [POST_KEYS.pubTimestampMinutes]: 'asc' }],

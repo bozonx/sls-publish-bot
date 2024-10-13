@@ -17,7 +17,7 @@ export async function handleScheduled(TG_TOKEN, TEST_MODE, prismaAdapter) {
 	// const curTimeMinutes = 28768620; // new Date('2024-09-12T08:00+03:00').getTime() / 1000 / 60
 	const [item] = await prisma[DB_TABLE_NAMES.Post].findMany({
 		where: {
-			[POST_KEYS.pubMsgId]: null,
+			[POST_KEYS.publicatedData]: null,
 			// TODO: another name
 			[POST_KEYS.pubTimestampMinutes]: {
 				// TODO: get from config
