@@ -16,7 +16,7 @@ import {
 import {
 	PUB_KEYS,
 	CTX_KEYS,
-	HOME_PAGE,
+	TG_HOME_PAGE,
 	DEFAULT_PUB_TIME,
 	EDIT_ITEM_NAME,
 } from '../constants.js';
@@ -54,13 +54,13 @@ export class PubTime extends PubPageBase {
 				},
 				this.state[EDIT_ITEM_NAME]
 					? this.state.pub[PUB_KEYS.time] && {
-							id: 'saveBtn',
-							label: t(c, 'saveBtn'),
-						}
+						id: 'saveBtn',
+						label: t(c, 'saveBtn'),
+					}
 					: {
-							id: 'nextBtn',
-							label: t(c, 'nextBtn'),
-						},
+						id: 'nextBtn',
+						label: t(c, 'nextBtn'),
+					},
 			],
 		]);
 	}
@@ -83,7 +83,7 @@ export class PubTime extends PubPageBase {
 				if (this.state[EDIT_ITEM_NAME])
 					return this.go(this.state.editReturnUrl);
 
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-confirm');
 			case 'saveBtn':

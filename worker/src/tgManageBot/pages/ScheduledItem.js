@@ -14,7 +14,7 @@ import {
 } from '../helpers/publishHelpres.js';
 import {
 	USER_KEYS,
-	HOME_PAGE,
+	TG_HOME_PAGE,
 	EDIT_ITEM_NAME,
 	PUB_KEYS,
 	USER_CFG_KEYS,
@@ -31,7 +31,7 @@ export class ScheduledItem extends PageBase {
 		const isAdminOrMyItem =
 			isAdmin ||
 			item[PUB_KEYS.dbRecord][POST_KEYS.createdByUserId] ===
-				this.me[USER_KEYS.id];
+			this.me[USER_KEYS.id];
 		const allowEdit =
 			isAdminOrMyItem ||
 			userPerms[USER_PERMISSIONS_KEYS.editOthersScheduledPub];
@@ -118,7 +118,7 @@ export class ScheduledItem extends PageBase {
 				);
 				await this.reply(
 					t(c, 'scheduledItemWasPublished') +
-						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+					`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.go('scheduled-list');
@@ -129,7 +129,7 @@ export class ScheduledItem extends PageBase {
 				);
 				await this.reply(
 					t(c, 'scheduledItemWasDeleted') +
-						`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
+					`:\n\n${await makeStatePreview(c, this.state[EDIT_ITEM_NAME])}`,
 				);
 
 				return this.go('scheduled-list');
@@ -143,7 +143,7 @@ export class ScheduledItem extends PageBase {
 			case 'toListBtn':
 				return this.go('scheduled-list');
 			case 'toHomeBtn':
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			default:
 				return false;
 		}

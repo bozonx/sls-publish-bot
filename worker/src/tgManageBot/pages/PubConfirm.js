@@ -4,7 +4,7 @@ import {
 	createPost,
 	printPubToAdminChannel,
 } from '../helpers/publishHelpres.js';
-import { PUB_KEYS, HOME_PAGE, USER_KEYS } from '../constants.js';
+import { PUB_KEYS, TG_HOME_PAGE, USER_KEYS } from '../constants.js';
 
 export class PubConfirm extends PubPageBase {
 	async renderMenu() {
@@ -47,14 +47,14 @@ export class PubConfirm extends PubPageBase {
 			case 'backBtn':
 				return this.go('pub-time');
 			case 'cancelBtn':
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			case 'pubConfirmBtn':
 				const item = await createPost(c, this.state.pub);
 
 				await printPubToAdminChannel(c, item);
 				await this.reply(t(c, 'wasSuccessfullyScheduled'));
 
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			default:
 				return false;
 		}

@@ -1,5 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu } from '../helpers/helpers.js';
+import { t, defineMenu, makeBlogAndSmName } from '../helpers/helpers.js';
 import {
 	DB_TABLE_NAMES,
 	USER_KEYS,
@@ -24,19 +24,24 @@ export class MainHome extends PageBase {
 		let tgMsBtns = [];
 
 		if (workspaces?.length) {
-			blogs = this.db.getAll(DB_TABLE_NAMES.Blog, ['id', 'name'], {
+			// ['id', 'name']
+			blogs = await this.db.getAll(DB_TABLE_NAMES.Blog, undefined, {
+				// equals: {
+				// 	workspaceId: workspaces.map((i) => i.id),
+				// },
 				workspaceId: {
-					equals: workspaces.map((i) => i.id),
+					in: workspaces.map((i) => i.id),
 				},
 			});
 		}
 
 		if (blogs?.length) {
-			tgSms = this.db.getAll(DB_TABLE_NAMES.SocialMedia, ['id', 'name'], {
+			// ['id', 'name']
+			tgSms = await this.db.getAll(DB_TABLE_NAMES.SocialMedia, undefined, {
 				// TODO: use constant
 				type: 'telegram',
 				blogId: {
-					equals: workspaces.map((i) => i.id),
+					in: blogs.map((i) => i.id),
 				},
 			});
 		}
@@ -44,8 +49,10 @@ export class MainHome extends PageBase {
 		tgMsBtns = tgSms.map((tgSm) => [
 			{
 				id: DEFAULT_BTN_ITEM_ID,
-				// TODO: add blog name, and optional name
-				label: `${tgSm.id}`,
+				label: makeBlogAndSmName(
+					tgSm.name,
+					blogs.find((i) => i.id === tgSm.blogId).name,
+				),
 				payload: tgSm.id,
 			},
 		]);
@@ -57,8 +64,27 @@ export class MainHome extends PageBase {
 
 	async onButtonPress(btnId, payload) {
 		switch (btnId) {
-			case 'manageScheduledBtn':
-				this.state.tgSmId = Number(payload);
+			case DEFAULT_BTN_ITEM_ID:
+				const sm = await this.db.getItem(
+					DB_TABLE_NAMES.SocialMedia,
+					Number(payload),
+					// ['name', 'cfg'],
+				);
+				const blog = await this.db.getItem(
+					DB_TABLE_NAMES.Blog,
+					sm.blogId,
+					// ['name', 'cfg'],
+				);
+
+				this.state.sm = {
+					id: Number(payload),
+					name: sm.name,
+					cfg: JSON.parse(sm.cfg),
+					blog: {
+						id: blog.id,
+						name: blog.name,
+					},
+				};
 
 				return this.go(TG_HOME_PAGE);
 			default:

@@ -1,5 +1,10 @@
 import { PageBase } from '../PageRouter.js';
-import { t, defineMenu, isUserAdmin } from '../helpers/helpers.js';
+import {
+	t,
+	defineMenu,
+	isUserAdmin,
+	makeBlogAndSmName,
+} from '../helpers/helpers.js';
 import { makeStateFromMessage } from '../helpers/publishHelpres.js';
 import { EDIT_ITEM_NAME } from '../constants.js';
 // import { handleScheduled } from '../indexShedullerPublisher.js';
@@ -11,7 +16,10 @@ export class TgHome extends PageBase {
 		// clear pub state
 		delete this.state.pub;
 
-		this.text = t(c, 'homeDescr');
+		this.text =
+			makeBlogAndSmName(this.state.sm.name, this.state.sm.blog.name) +
+			`\n\n` +
+			t(c, 'homeDescr');
 
 		delete this.state[EDIT_ITEM_NAME];
 
@@ -57,6 +65,12 @@ export class TgHome extends PageBase {
 					label: t(c, 'manageUsersBtn'),
 				},
 			],
+			[
+				{
+					id: 'backBtn',
+					label: t(c, 'backToSelectBlog'),
+				},
+			],
 			// [
 			// 	{
 			// 		id: 'test',
@@ -84,6 +98,8 @@ export class TgHome extends PageBase {
 				return this.go('config-manager');
 			case 'manageUsersBtn':
 				return this.go('users-manager');
+			case 'backBtn':
+				return this.go('home');
 			// case 'test':
 			// 	let c = this.router.c;
 			// 	return await handleScheduled(

@@ -16,7 +16,7 @@ import {
 	PUB_KEYS,
 	DEFAULT_SETUP_STATE,
 	USER_KEYS,
-	HOME_PAGE,
+	TG_HOME_PAGE,
 	EDIT_ITEM_NAME,
 	CTX_KEYS,
 	USER_CFG_KEYS,
@@ -191,14 +191,14 @@ export class PubPostSetup extends PubPageBase {
 				await printPubToAdminChannel(c, item);
 				await this.reply(t(c, 'wasSuccessfullyConserved'));
 
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			case 'backBtn':
 				return this.go('pub-tags');
 			case 'cancelBtn':
 				if (this.state[EDIT_ITEM_NAME])
 					return this.go(this.state.editReturnUrl);
 
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-date');
 			case 'saveBtn':

@@ -11,7 +11,7 @@ import { makeStateFromMessage } from '../helpers/publishHelpres.js';
 import { isEmptyObj, breakArray } from '../helpers/lib.js';
 import {
 	PUB_KEYS,
-	HOME_PAGE,
+	TG_HOME_PAGE,
 	EDIT_ITEM_NAME,
 	USER_KEYS,
 } from '../constants.js';
@@ -87,28 +87,28 @@ export class PubContent extends PubPageBase {
 				2,
 			),
 			haveAnyContent &&
-				!isContentExceeded && [
-					{
-						id: 'showPostBtn',
-						label: t(c, 'showPostBtn'),
-					},
-				],
+			!isContentExceeded && [
+				{
+					id: 'showPostBtn',
+					label: t(c, 'showPostBtn'),
+				},
+			],
 			[
 				{
 					id: 'cancelBtn',
 					label: t(c, 'cancelBtn'),
 				},
 				haveAnyContent &&
-					!isContentExceeded &&
-					editMode && {
-						id: 'saveBtn',
-						label: t(c, 'saveBtn'),
-					},
+				!isContentExceeded &&
+				editMode && {
+					id: 'saveBtn',
+					label: t(c, 'saveBtn'),
+				},
 				haveAnyContent &&
-					!isContentExceeded && {
-						id: 'nextBtn',
-						label: t(c, 'nextBtn'),
-					},
+				!isContentExceeded && {
+					id: 'nextBtn',
+					label: t(c, 'nextBtn'),
+				},
 			],
 		]);
 	}
@@ -143,7 +143,7 @@ export class PubContent extends PubPageBase {
 				if (this.state[EDIT_ITEM_NAME])
 					return this.go(this.state.editReturnUrl);
 
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			case 'nextBtn':
 				delete this.state.replaceMode;
 				delete this.state.mdV1Mode;

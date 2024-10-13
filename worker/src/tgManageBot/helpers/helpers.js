@@ -282,7 +282,7 @@ export function isUserAdmin(user) {
 
 	if (typeof cfg === 'string') cfg = JSON.parse(cfg);
 
-	return cfg[USER_CFG_KEYS.permissions][USER_PERMISSIONS_KEYS.admin];
+	return cfg[USER_CFG_KEYS.permissions]?.[USER_PERMISSIONS_KEYS.admin];
 }
 
 export async function handleTagsFromInputAndSave(router, rawText) {
@@ -357,6 +357,10 @@ export async function handleEditedPostSave(router) {
 	delete router.state.editReturnUrl;
 
 	return router.state[EDIT_ITEM_NAME];
+}
+
+export function makeBlogAndSmName(smName, blogName) {
+	return smName ? `${smName} (${blogName})` : blogName;
 }
 
 // export function removeNotLetterAndNotNumbersFromStr(str) {

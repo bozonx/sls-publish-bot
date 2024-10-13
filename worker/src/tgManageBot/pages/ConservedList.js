@@ -3,7 +3,7 @@ import { t, defineMenu } from '../helpers/helpers.js';
 import { convertDbPostToPubState } from '../helpers/publishHelpres.js';
 import {
 	DEFAULT_BTN_ITEM_ID,
-	HOME_PAGE,
+	TG_HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
 	POST_KEYS,
@@ -60,7 +60,7 @@ export class ConservedList extends PageBase {
 
 		switch (btnId) {
 			case 'toHomeBtn':
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			default:
 				return false;
 		}

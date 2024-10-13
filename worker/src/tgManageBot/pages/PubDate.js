@@ -15,7 +15,7 @@ import {
 } from '../helpers/dateTimeHelpers.js';
 import {
 	PUB_KEYS,
-	HOME_PAGE,
+	TG_HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DEFAULT_PUB_PLUS_DAY,
 	CTX_KEYS,
@@ -120,7 +120,7 @@ export class PubDate extends PubPageBase {
 				if (this.state[EDIT_ITEM_NAME])
 					return this.go(this.state.editReturnUrl);
 
-				return this.go(HOME_PAGE);
+				return this.go(TG_HOME_PAGE);
 			case 'nextBtn':
 				return this.go('pub-time');
 			case 'saveBtn':
