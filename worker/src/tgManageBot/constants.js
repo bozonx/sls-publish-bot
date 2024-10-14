@@ -59,6 +59,7 @@ export const POST_KEYS = {
 	updatedByUserId: 'updatedByUserId',
 	forcePublishedByUserId: 'forcePublishedByUserId',
 	changedTimeByUserId: 'changedTimeByUserId',
+	socialMediaId: 'socialMediaId',
 };
 export const SM_KEYS = {
 	id: 'id',

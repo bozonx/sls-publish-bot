@@ -389,9 +389,8 @@ export async function createPost(c, pubState, conserved = false) {
 		dbRecord: {
 			...dbRecord,
 			name: makeScheduledItemName(pubState),
-			// TODO: no DEFAULT_SOCIAL_MEDIA
-			// socialMedia: DEFAULT_SOCIAL_MEDIA,
 			[POST_KEYS.createdByUserId]: c.ctx[CTX_KEYS.me][USER_KEYS.id],
+			[POST_KEYS.socialMediaId]: c.ctx[CTX_KEYS.session].sm[SM_KEYS.id],
 			[POST_KEYS.pubTimestampMinutes]: conserved
 				? null
 				: convertDateTimeToTsMinutes(
