@@ -8,7 +8,7 @@ const postFormModel = ref(null);
 definePageParams({
   // categoryTitle: blog.value.name,
   // categoryUrl: `/blog/${route.params.blogId}`,
-  title: t("contentSelect"),
+  title: t("postData"),
   backUrl: `/blog/${route.params.blogId}`,
 });
 
@@ -16,16 +16,18 @@ const handlePostSave = () => {
   // snFormModel.value?.submit();
 
   // TODO: check validity
+  // TODO: save to state
 
-  console.log(111, postFormModel.value);
-  // navigateTo(`/ blog / ${ route.params.blogId } / sn - ${ id }`);
+  console.log(111, postFormModel.value.data);
+
+  navigateTo(`/blog/${route.params.blogId}/post/select-sm`);
 };
 </script>
 
 <template>
-  <FromPost v-model="postFormModel" :blogId="route.params.blogId" />
+  <FormPost v-model="postFormModel" :blogId="route.params.blogId" />
 
-  <div>
+  <div class="mt-4">
     <SmartButton :label="$t('next')" @click="handlePostSave" />
   </div>
 </template>

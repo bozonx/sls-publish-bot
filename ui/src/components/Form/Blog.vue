@@ -43,8 +43,5 @@ const prepareData = (FormData, form$) => {
 </script>
 
 <template>
-  <div>
-    <Vueform :endpoint="prepareData" :method="props.method" ref="form$" :schema="schema"
-      @success="props.handleSuccess" />
-  </div>
+  <Vueform :endpoint="prepareData" :method="props.method" ref="form$" :schema="schema" @success="props.handleSuccess" />
 </template>

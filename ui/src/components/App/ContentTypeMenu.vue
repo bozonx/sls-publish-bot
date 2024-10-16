@@ -31,7 +31,7 @@ for (const sn of allBlogsSn) {
   });
 }
 
-const allSnSupportedPosts = sns.value.filter((i) =>
+const allSmSupportedPosts = sns.value.filter((i) =>
   [
     // SOCIAL_MEDIAS.dzen,
     SOCIAL_MEDIAS.telegram,
@@ -46,20 +46,20 @@ const allSnSupportedPosts = sns.value.filter((i) =>
 //     to: `/blog/${props.blog.id}/post-${sn.id}`,
 //   });
 // }
-if (allSnSupportedPosts.length) {
+if (allSmSupportedPosts.length) {
   items.push({
     label: t("postType.post"),
     to: `/blog/${props.blog.id}/post`,
   });
 }
 
-const allSnSupportedMicroPosts = sns.value.filter((i) =>
+const allSmSupportedMicroPosts = sns.value.filter((i) =>
   [SOCIAL_MEDIAS.mastadon, SOCIAL_MEDIAS.threads, SOCIAL_MEDIAS.x].includes(
     i.type,
   ),
 );
 
-if (allSnSupportedMicroPosts.length) {
+if (allSmSupportedMicroPosts.length) {
   items.push({
     label: t("postType.microPost"),
     to: `/blog/${props.blog.id}/micropost`,
