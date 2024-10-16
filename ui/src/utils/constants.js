@@ -29,14 +29,22 @@ export const SOCIAL_MEDIAS = {
   dzen: "dzen",
   telegram: "telegram",
   youtube: "youtube",
+  odysee: "odysee",
   rutube: "rutube",
   tiktok: "tiktok",
   spotify: "spotify",
   mave: "mave",
+  mastadon: "mastadon",
+  threads: "threads",
+  x: "x",
+  // facebook: 'facebook',
+  // vk
+  // instagram
 };
 export const PUBLICATION_TYPES = {
   article: "article",
   post: "post",
+  microPost: "microPost",
   // video and audio podcast
   podcast: "podcast",
   // horizontal video

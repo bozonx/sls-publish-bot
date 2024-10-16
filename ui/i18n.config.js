@@ -132,6 +132,7 @@ export default defineI18nConfig(() => ({
       postType: {
         article: "Статья",
         post: "Пост",
+        microPost: "Микро пост",
         podcast: "Подкаст",
         video: "Видео",
         short: "Short",

@@ -1,18 +1,28 @@
 <script setup>
 const props = defineProps([
   "modelValue",
-  "loaded",
-  // "userId",
-  // "method",
+  "preLoadedData",
+  "method",
+  "handleSuccess",
+  "createdByUserId",
+  "socialMediaId",
 ]);
 const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
 
 const form$ = ref(null);
 
-// onMounted(async () => {
-//   if (props.loaded) form$.value.load(props.loaded);
-// });
+onMounted(async () => {
+  if (props.preLoadedData)
+    form$.value.load({
+      ...props.preLoadedData,
+      cfg:
+        props.preLoadedData.cfg &&
+        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
+    });
+});
+
+// TODO: add name, payloadJson?
 
 watchEffect(() => {
   emit("update:modelValue", form$.value);

@@ -23,11 +23,46 @@ const items = [];
 const allBlogsSn = sns.value.filter((i) => i.type === SOCIAL_MEDIAS.blog);
 
 // TODO: только в случае если есть ещё хотябы дзен или телеграм
-for (const blogSn of allBlogsSn) {
+for (const sn of allBlogsSn) {
   items.push({
-    // TODO: add name of sn
-    label: t(`postType.article`),
-    to: `/blog/${props.blog.id}/article-${blogSn.id}`,
+    // TODO: только для дзена ???
+    label: `${t("postType.article")} ${makeSnName(sn)}`,
+    to: `/blog/${props.blog.id}/article-${sn.id}`,
+  });
+}
+
+const allSnSupportedPosts = sns.value.filter((i) =>
+  [
+    // SOCIAL_MEDIAS.dzen,
+    SOCIAL_MEDIAS.telegram,
+    SOCIAL_MEDIAS.youtube,
+    SOCIAL_MEDIAS.odysee,
+  ].includes(i.type),
+);
+
+// for (const sn of allSnSupportedPosts) {
+//   items.push({
+//     label: `${t("postType.post")} ${makeSnName(sn)}`,
+//     to: `/blog/${props.blog.id}/post-${sn.id}`,
+//   });
+// }
+if (allSnSupportedPosts.length) {
+  items.push({
+    label: t("postType.post"),
+    to: `/blog/${props.blog.id}/post`,
+  });
+}
+
+const allSnSupportedMicroPosts = sns.value.filter((i) =>
+  [SOCIAL_MEDIAS.mastadon, SOCIAL_MEDIAS.threads, SOCIAL_MEDIAS.x].includes(
+    i.type,
+  ),
+);
+
+if (allSnSupportedMicroPosts.length) {
+  items.push({
+    label: t("postType.microPost"),
+    to: `/blog/${props.blog.id}/micropost`,
   });
 }
 </script>
