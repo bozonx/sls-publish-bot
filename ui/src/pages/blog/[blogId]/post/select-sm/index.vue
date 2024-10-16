@@ -6,7 +6,7 @@ const { data: blog, status } = await useApiGetMyBlog(route.params.blogId);
 const { data: sns, status: snsStatus } = await useApiListMySns(
   route.params.blogId,
 );
-// const postFormModel = ref(null);
+const postData = useLocalStateGet(LOCAL_STATES.newPost);
 const allSmSupportedPosts = sns.value.filter((i) =>
   [
     // SOCIAL_MEDIAS.dzen,
@@ -22,24 +22,16 @@ definePageParams({
   title: t("selectPubSns"),
   backUrl: `/blog/${route.params.blogId}/post`,
 });
-
-const handleTgPublish = () => {
-  // snFormModel.value?.submit();
-
-  // TODO: check validity
-
-  console.log(111);
-  // navigateTo(`/ blog / ${ route.params.blogId } / sn - ${ id }`);
-};
 </script>
 
 <template>
+  <AppPostPreview postData="postData" />
+
+  <AppPostDetails postData="postData" />
+
   <div v-for="sm in allSmSupportedPosts">
-    <div v-if="sm.type === SOCIAL_MEDIAS.telegram">
-      <div class="mt-4">
-        <SmartButton :label="$t('publish')" @click="handleTgPublish" />
-      </div>
-    </div>
+    <Fieldset v-if="sm.type === SOCIAL_MEDIAS.telegram" :legend="$t('socialMedia.telegram')">
+      <AppTelegramPubSetup postData="postData" />
+    </Fieldset>
   </div>
-  <!-- <FormPost v-model="postFormModel" :blogId="route.params.blogId" /> -->
 </template>

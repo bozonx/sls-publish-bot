@@ -2,6 +2,9 @@ export const JWT_COOKIE_NAME = "apisessid";
 export const TMP_STATE_TYPES = {
   articleToPublish: "articleToPublish",
 };
+export const LOCAL_STATES = {
+  newPost: "newPost",
+};
 
 // export const BLOG_DEFAULT_YAML_CONFIG = `
 // socialMedia:

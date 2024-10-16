@@ -57,7 +57,8 @@ export const TAG_KEYS = {
 
 // common post payload
 export const POST_PAYLOAD = {
-	textRaw: 'textRaw',
+	// raw text from form input
+	textMdV1Raw: 'textMdV1Raw',
 	media: 'media',
 	tags: 'tags',
 	template: 'template',

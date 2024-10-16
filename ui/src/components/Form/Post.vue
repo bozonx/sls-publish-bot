@@ -12,6 +12,8 @@ const { t } = useI18n();
 
 const form$ = ref(null);
 
+console.log(11111, props.preLoadedData);
+
 onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
@@ -61,6 +63,6 @@ const generateName = () => {
         <SmartButton :label="$t('generate')" @click.prevent="generateName" />
       </div>
     </div>
-    <TextareaElement name="text" :label="$t('text')" />
+    <TextareaElement name="text" :label="$t('textMd')" />
   </Vueform>
 </template>
