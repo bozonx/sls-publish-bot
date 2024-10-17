@@ -41,15 +41,4 @@ const handleSubmit = async (form$, FormData) => {
 // TODO: add - media, tags, template, author
 </script>
 
-<template>
-  <Vueform :endpoint="false" ref="form$" @submit="handleSubmit">
-    <TextElement name="customAuthor" :label="$t('customAuthor')" />
-
-    <CheckboxElement name="noAuthor">
-      {{ t("noAuthor") }}
-    </CheckboxElement>
-
-    <TextElement name="date" :label="$t('date')" />
-    <TextElement name="time" :label="$t('time')" />
-  </Vueform>
-</template>
+<template>template</template>

@@ -48,8 +48,5 @@ const handleSubmit = async (form$, FormData) => {
     <CheckboxElement name="noAuthor">
       {{ t("noAuthor") }}
     </CheckboxElement>
-
-    <TextElement name="date" :label="$t('date')" />
-    <TextElement name="time" :label="$t('time')" />
   </Vueform>
 </template>

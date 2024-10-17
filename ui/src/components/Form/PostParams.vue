@@ -38,13 +38,16 @@ const handleSubmit = async (form$, FormData) => {
 // :endpoint="false"
 //  @submit="handleSubmit"
 
-// TODO: add - media, template
+// TODO: add - template
 </script>
 
 <template>
-  <FormMedia />
-  <FormTags />
-  <FormAuthor />
-  <FormDate />
-  <FormTime />
+  <Vueform :endpoint="false" ref="form$" @submit="handleSubmit">
+    <FieldMedia />
+    <FieldSmartTags />
+    <!--   <FieldPubTagsElement name="tags" /> -->
+    <FieldAuthor />
+    <FieldDate />
+    <FieldTime />
+  </Vueform>
 </template>

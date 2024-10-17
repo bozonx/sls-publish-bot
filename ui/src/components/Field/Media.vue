@@ -37,8 +37,6 @@ const handleSubmit = async (form$, FormData) => {
 
 // :endpoint="false"
 //  @submit="handleSubmit"
-
-// TODO: add - media, template
 </script>
 
 <template>
