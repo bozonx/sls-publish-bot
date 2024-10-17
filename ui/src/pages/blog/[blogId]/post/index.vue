@@ -3,6 +3,7 @@ const route = useRoute();
 const { t } = useI18n();
 
 const postData = useLocalStateGet(LOCAL_STATES.newPost);
+const me = await useApiMe();
 const postFormModel = ref(null);
 
 definePageParams({
@@ -18,7 +19,7 @@ const handlePostSave = () => {
 </script>
 
 <template>
-  <FormPost v-model="postFormModel" :preLoadedData="postData" :blogId="route.params.blogId" />
+  <FormPost v-model="postFormModel" :preLoadedData="postData" :createdByUserId="me.id" />
 
   <div class="mt-4">
     <SmartButton :label="$t('next')" @click="handlePostSave" :disabled="postFormModel?.invalid" />

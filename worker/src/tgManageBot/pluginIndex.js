@@ -11,7 +11,6 @@ import {
 import { routerMiddleware } from './PageRouter.js';
 import { MainHome } from './pages/MainHome.js';
 import { TgHome } from './pages/TgHome.js';
-import { TagsManager } from './pages/TagsManager.js';
 import { PubContent } from './pages/PubContent.js';
 import { PubTags } from './pages/PubTags.js';
 import { PubDate } from './pages/PubDate.js';
@@ -21,10 +20,11 @@ import { PubSelectLinkPreview } from './pages/PubSelectLinkPreview.js';
 import { PubConfirm } from './pages/PubConfirm.js';
 import { ScheduledList } from './pages/ScheduledList.js';
 import { ScheduledItem } from './pages/ScheduledItem.js';
-import { ConservedList } from './pages/ConservedList.js';
-import { ConservedItem } from './pages/ConservedItem.js';
-import { AlreadyPublishedList } from './pages/AlreadyPublishedList.js';
-import { AlreadyPublishedItem } from './pages/AlreadyPublishedItem.js';
+// import { TagsManager } from './pages/TagsManager.js';
+// import { ConservedList } from './pages/ConservedList.js';
+// import { ConservedItem } from './pages/ConservedItem.js';
+// import { AlreadyPublishedList } from './pages/AlreadyPublishedList.js';
+// import { AlreadyPublishedItem } from './pages/AlreadyPublishedItem.js';
 
 const routes = {
 	[MAIN_HOME]: MainHome,
@@ -38,11 +38,11 @@ const routes = {
 	'pub-confirm': PubConfirm,
 	'scheduled-list': ScheduledList,
 	'scheduled-item': ScheduledItem,
-	'conserved-list': ConservedList,
-	'conserved-item': ConservedItem,
-	'published-list': AlreadyPublishedList,
-	'published-item': AlreadyPublishedItem,
-	'tags-manager': TagsManager,
+	// 'tags-manager': TagsManager,
+	// 'conserved-list': ConservedList,
+	// 'conserved-item': ConservedItem,
+	// 'published-list': AlreadyPublishedList,
+	// 'published-item': AlreadyPublishedItem,
 };
 
 export function tgManageBotPlugin() {

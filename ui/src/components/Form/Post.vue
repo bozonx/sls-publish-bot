@@ -4,23 +4,24 @@ const props = defineProps([
   "preLoadedData",
   "method",
   "handleSuccess",
+  // for creating
   "createdByUserId",
+  // for creating
   "socialMediaId",
 ]);
 const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
 
 const form$ = ref(null);
-
-console.log(11111, props.preLoadedData);
+const paramsFormModel = ref(null);
 
 onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
       ...props.preLoadedData,
-      // payloadJson:
-      //   props.preLoadedData.payloadJson &&
-      //   stringifyYaml(JSON.parse(props.preLoadedData.payloadJson)),
+      payloadJson: props.preLoadedData.payloadJson
+        ? JSON.parse(props.preLoadedData.payloadJson)
+        : {},
     });
 });
 
@@ -29,8 +30,9 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  // form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
-  // TODO: add name, payloadJson?, createdByUserId, socialMediaId
+  form$.data.payloadJson = JSON.stringify(paramsFormModel.value.data);
+  form$.data.createdByUserId = props.createdByUserId;
+  form$.data.socialMediaId = props.socialMediaId;
 
   return formSubmitHelper("/auth/posts")(FormData, form$);
 };
@@ -38,19 +40,6 @@ const prepareData = (FormData, form$) => {
 const generateName = () => {
   // TODO: generate name
 };
-
-// const handleSubmit = async (form$, FormData) => {
-//   // Using form$.data will INCLUDE conditional elements and it
-//   // will submit the form as "Content-Type: application/json".
-//   const data = form$.data;
-//
-//   console.log(111, data);
-// };
-
-// :endpoint="false"
-//  @submit="handleSubmit"
-
-// TODO: add - media, tags, template, author, noAuthor, customAuthor, date, time
 </script>
 
 <template>
@@ -65,4 +54,8 @@ const generateName = () => {
     </div>
     <TextareaElement name="text" :label="$t('textMd')" />
   </Vueform>
+
+  <div class="mt-12">
+    <FormPostParams v-model="paramsFormModel" :preLoadedData="form$?.data?.payloadJson" />
+  </div>
 </template>

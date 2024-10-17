@@ -26,7 +26,7 @@ export async function useApiDevLogin() {
 export async function useApiMe() {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/users/me`;
 
-  // TODO: кэшировать
+  // TODO: кэшировать в session Storage
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }

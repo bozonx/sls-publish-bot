@@ -1,10 +1,5 @@
 import { PageBase } from '../PageRouter.js';
-import {
-	t,
-	defineMenu,
-	isUserAdmin,
-	makeBlogAndSmName,
-} from '../helpers/helpers.js';
+import { t, defineMenu, makeBlogAndSmName } from '../helpers/helpers.js';
 import { makeStateFromMessage } from '../helpers/publishHelpres.js';
 import { EDIT_ITEM_NAME, MAIN_HOME } from '../constants.js';
 // import { handleScheduled } from '../indexShedullerPublisher.js';
@@ -12,7 +7,6 @@ import { EDIT_ITEM_NAME, MAIN_HOME } from '../constants.js';
 export class TgHome extends PageBase {
 	async renderMenu() {
 		const c = this.router.c;
-		const isAdmin = isUserAdmin(this.me);
 		// clear pub state
 		delete this.state.pub;
 
@@ -36,35 +30,23 @@ export class TgHome extends PageBase {
 					label: t(c, 'manageScheduledBtn'),
 				},
 			],
-			[
-				{
-					id: 'publishedBtn',
-					label: t(c, 'publishedBtn'),
-				},
-				{
-					id: 'conservedBtn',
-					label: t(c, 'conservedBtn'),
-				},
-			],
-			[
-				{
-					id: 'manageTagsBtn',
-					label: t(c, 'manageTagsBtn'),
-				},
-			],
+			// [
+			// 	{
+			// 		id: 'publishedBtn',
+			// 		label: t(c, 'publishedBtn'),
+			// 	},
+			// 	{
+			// 		id: 'conservedBtn',
+			// 		label: t(c, 'conservedBtn'),
+			// 	},
+			// ],
+			// [
+			// 	{
+			// 		id: 'manageTagsBtn',
+			// 		label: t(c, 'manageTagsBtn'),
+			// 	},
+			// ],
 
-			isAdmin && [
-				{
-					id: 'editConfigBtn',
-					label: t(c, 'editConfigBtn'),
-				},
-			],
-			isAdmin && [
-				{
-					id: 'manageUsersBtn',
-					label: t(c, 'manageUsersBtn'),
-				},
-			],
 			[
 				{
 					id: 'backBtn',
@@ -86,20 +68,17 @@ export class TgHome extends PageBase {
 				this.state.mdV1Mode = true;
 
 				return this.go('pub-content');
-			case 'manageTagsBtn':
-				return this.go('tags-manager');
 			case 'manageScheduledBtn':
 				return this.go('scheduled-list');
-			case 'publishedBtn':
-				return this.go('published-list');
-			case 'conservedBtn':
-				return this.go('conserved-list');
-			case 'editConfigBtn':
-				return this.go('config-manager');
-			case 'manageUsersBtn':
-				return this.go('users-manager');
 			case 'backBtn':
 				return this.go(MAIN_HOME);
+
+			// case 'manageTagsBtn':
+			// 	return this.go('tags-manager');
+			// case 'publishedBtn':
+			// 	return this.go('published-list');
+			// case 'conservedBtn':
+			// 	return this.go('conserved-list');
 			// case 'test':
 			// 	let c = this.router.c;
 			// 	return await handleScheduled(

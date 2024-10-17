@@ -267,28 +267,6 @@ export function makeUserNameFromMsg(msgFrom) {
 	return fullName || msgFrom?.username;
 }
 
-// export function makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID) {
-// 	return {
-// 		[USER_KEYS.tgUserId]: String(MAIN_ADMIN_TG_USER_ID),
-// 		[USER_KEYS.tgChatId]: String(MAIN_ADMIN_TG_USER_ID),
-// 		[USER_KEYS.name]: 'Owner',
-// 		[USER_KEYS.cfg]: JSON.stringify({
-// 			[USER_CFG_KEYS.authorName]: 'Owner Author',
-// 			[USER_CFG_KEYS.permissions]: {
-// 				[USER_PERMISSIONS_KEYS.admin]: true,
-// 			},
-// 		}),
-// 	};
-// }
-
-export function isUserAdmin(user) {
-	let cfg = user[USER_KEYS.cfg];
-
-	if (typeof cfg === 'string') cfg = JSON.parse(cfg);
-
-	return cfg[USER_CFG_KEYS.permissions]?.[USER_PERMISSIONS_KEYS.admin];
-}
-
 export async function handleTagsFromInputAndSave(router, rawText, smId) {
 	let newTags = makeStringArrayUnique(parseTagsFromInput(rawText));
 
@@ -371,6 +349,14 @@ export function makeBlogAndSmName(smName, blogName) {
 	return smName ? `${smName} (${blogName})` : blogName;
 }
 
+export function isUserAdmin(user) {
+	let cfg = user[USER_KEYS.cfg];
+
+	if (typeof cfg === 'string') cfg = JSON.parse(cfg);
+
+	return cfg[USER_CFG_KEYS.permissions]?.[USER_PERMISSIONS_KEYS.admin];
+}
+
 // TODO: remake to new teplate engine
 export function getTemplates() {
 	const footer =
@@ -401,6 +387,20 @@ export function getTemplates() {
 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
 	};
 }
+
+// export function makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID) {
+// 	return {
+// 		[USER_KEYS.tgUserId]: String(MAIN_ADMIN_TG_USER_ID),
+// 		[USER_KEYS.tgChatId]: String(MAIN_ADMIN_TG_USER_ID),
+// 		[USER_KEYS.name]: 'Owner',
+// 		[USER_KEYS.cfg]: JSON.stringify({
+// 			[USER_CFG_KEYS.authorName]: 'Owner Author',
+// 			[USER_CFG_KEYS.permissions]: {
+// 				[USER_PERMISSIONS_KEYS.admin]: true,
+// 			},
+// 		}),
+// 	};
+// }
 
 // export function removeNotLetterAndNotNumbersFromStr(str) {
 // 	return str.replace(/[^\p{L}\p{N}_]/gu, '');
