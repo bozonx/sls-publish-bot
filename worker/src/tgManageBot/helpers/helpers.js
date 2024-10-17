@@ -349,13 +349,13 @@ export function makeBlogAndSmName(smName, blogName) {
 	return smName ? `${smName} (${blogName})` : blogName;
 }
 
-export function isUserAdmin(user) {
-	let cfg = user[USER_KEYS.cfg];
-
-	if (typeof cfg === 'string') cfg = JSON.parse(cfg);
-
-	return cfg[USER_CFG_KEYS.permissions]?.[USER_PERMISSIONS_KEYS.admin];
-}
+// export function isUserAdmin(user) {
+// 	let cfg = user[USER_KEYS.cfg];
+//
+// 	if (typeof cfg === 'string') cfg = JSON.parse(cfg);
+//
+// 	return cfg[USER_CFG_KEYS.permissions]?.[USER_PERMISSIONS_KEYS.admin];
+// }
 
 // TODO: remake to new teplate engine
 export function getTemplates() {

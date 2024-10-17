@@ -18,8 +18,8 @@ import { PubTime } from './pages/PubTime.js';
 import { PubPostSetup } from './pages/PubPostSetup.js';
 import { PubSelectLinkPreview } from './pages/PubSelectLinkPreview.js';
 import { PubConfirm } from './pages/PubConfirm.js';
-import { ScheduledList } from './pages/ScheduledList.js';
-import { ScheduledItem } from './pages/ScheduledItem.js';
+// import { ScheduledList } from './pages/ScheduledList.js';
+// import { ScheduledItem } from './pages/ScheduledItem.js';
 // import { TagsManager } from './pages/TagsManager.js';
 // import { ConservedList } from './pages/ConservedList.js';
 // import { ConservedItem } from './pages/ConservedItem.js';
@@ -36,8 +36,8 @@ const routes = {
 	'pub-post-setup': PubPostSetup,
 	'pub-select-preview': PubSelectLinkPreview,
 	'pub-confirm': PubConfirm,
-	'scheduled-list': ScheduledList,
-	'scheduled-item': ScheduledItem,
+	// 'scheduled-list': ScheduledList,
+	// 'scheduled-item': ScheduledItem,
 	// 'tags-manager': TagsManager,
 	// 'conserved-list': ConservedList,
 	// 'conserved-item': ConservedItem,

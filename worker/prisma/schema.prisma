@@ -121,12 +121,15 @@ model Inbox {
 model Post {
   id                     Int     @id @default(autoincrement())
   name                   String
-  // timestamp minutes of publicated moment
+  // timestamp minutes of publication
   pubTimestampMinutes    Int?
   // data of publicated post, depends on certain social media
+  // JSON data. It is set only after publication has happened
   publicatedData         String?
-  // state of post
-  payloadJson            String?
+  // JSON additional data of post
+  payload            String?
+	// the final selected author
+  author            String?
   // createdByUser       User     @relation("ScheduledCreatedByUser", fields: [createdByUserId], references: [id])
   updatedByUserId        Int?
   forcePublishedByUserId Int?
@@ -138,4 +141,25 @@ model Post {
   createdByUserId Int
   socialMedia     SocialMedia @relation(fields: [socialMediaId], references: [id])
   socialMediaId   Int
+}
+
+model Task {
+  id                     Int     @id @default(autoincrement())
+  name                   String?
+  type                   String?
+  // json
+  payload                   String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  createdByUser   User        @relation(fields: [createdByUserId], references: [id])
+  createdByUserId Int
+  post          Post?        @relation(fields: [postId], references: [id])
+  postId        Int?
+  // you need to specify blogId or socialMediaId
+  // if specified means task for whole blog
+  blog          Blog?        @relation(fields: [blogId], references: [id])
+  blogId        Int?
+  // if specified means task only for specified social media
+  socialMedia     SocialMedia? @relation(fields: [socialMediaId], references: [id])
+  socialMediaId   Int?
 }

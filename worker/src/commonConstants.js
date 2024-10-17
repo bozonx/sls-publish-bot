@@ -35,7 +35,8 @@ export const POST_KEYS = {
 	pubTimestampMinutes: 'pubTimestampMinutes',
 	// data of publicated item such as message_id
 	publicatedData: 'publicatedData',
-	payloadJson: 'payloadJson',
+	payload: 'payload',
+	author: 'author',
 	createdByUserId: 'createdByUserId',
 	updatedByUserId: 'updatedByUserId',
 	forcePublishedByUserId: 'forcePublishedByUserId',
@@ -58,16 +59,16 @@ export const TAG_KEYS = {
 // common post payload
 export const POST_PAYLOAD = {
 	// raw text from form input
-	textMdV1Raw: 'textMdV1Raw',
+	// textMdV1Raw: 'textMdV1Raw',
 	media: 'media',
 	tags: 'tags',
 	template: 'template',
 	// the final selected author
-	author: 'author',
+	// author: 'author',
 	// obviously do not use author
 	noAuthor: 'noAuthor',
 	// author name which has been inputted
 	customAuthor: 'customAuthor',
-	date: 'date',
-	time: 'time',
+	// date: 'date',
+	// time: 'time',
 };
