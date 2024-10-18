@@ -8,7 +8,7 @@ const snCfg = JSON.parse(sn.value.cfg);
 
 definePageParams({
   categoryTitle: data.value.name,
-  categoryUrl: `/blog/${route.params.blogId}`,
+  categoryUrl: `/blog-${route.params.blogId}`,
   title: t("contentSelect"),
 });
 </script>

@@ -10,7 +10,7 @@ const { data, status } = await useApiListMyBlogs(props.item.id);
     <template #content>
       <SimpleList :data="data" :status="status">
         <template #item="{ item }">
-          <SmartListItem :label="item.name" :to="`/blog/${item.id}`" />
+          <SmartListItem :label="item.name" :to="`/blog-${item.id}`" />
         </template>
       </SimpleList>
     </template>
