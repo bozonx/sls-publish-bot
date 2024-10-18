@@ -12,9 +12,11 @@ definePageParams({
 });
 
 const handlePostSave = () => {
+  console.log(1111, postFormModel.value.data);
+
   useLocalStateSet(LOCAL_STATES.newPost, postFormModel.value.data);
 
-  navigateTo(`/blog/${route.params.blogId}/post/select-sm`);
+  navigateTo(`/blog-${route.params.blogId}/post/select-sm`);
 };
 </script>
 

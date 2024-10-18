@@ -56,8 +56,14 @@ const generateName = () => {
     </div>
     <TextareaElement name="descr" :label="$t('description')" />
     <TextareaElement name="text" :label="$t('textMd')" />
-    <FieldAuthor />
-    <FieldDateTime />
+
+    <GroupElement name="authorGroup" :before="$t('postAuthor')">
+      <FieldAuthor />
+    </GroupElement>
+
+    <GroupElement name="dateGroup" :before="$t('publicationDate')">
+      <FieldDateTime />
+    </GroupElement>
   </Vueform>
 
   <div class="mt-12">

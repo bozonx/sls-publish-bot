@@ -21,8 +21,8 @@ const handleNoAuthorChange = (isChecked) => {
   noAuthor.value = isChecked;
 };
 
-const handleCustomAuthorChange = (value) => {
-  authorRef.value.value = value;
+const handleCustomAuthorInput = (value) => {
+  authorRef.value.value = customAuthorRef.value.value;
 };
 </script>
 
@@ -30,13 +30,15 @@ const handleCustomAuthorChange = (value) => {
   <TextElement
     name="author"
     ref="authorRef"
+    :default="authorName"
     :disabled="true"
-    :columns="{ container: 3 }"
+    :columns="{ container: 4 }"
   />
   <ButtonElement
     v-if="authorName"
     name="setAuthorName"
     secondary
+    :columns="{ container: 4 }"
     :submits="false"
     :button-label="t('setAuthor') + ': ' + authorName"
     :disabled="noAuthor || authorRef?.value === authorName"
@@ -47,7 +49,7 @@ const handleCustomAuthorChange = (value) => {
     ref="customAuthorRef"
     :label="$t('customAuthor')"
     :disabled="noAuthor"
-    @change="handleCustomAuthorChange"
+    @input="handleCustomAuthorInput"
   />
   <CheckboxElement name="noAuthor" @change="handleNoAuthorChange">
     {{ t("noAuthor") }}

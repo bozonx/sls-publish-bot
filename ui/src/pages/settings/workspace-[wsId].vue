@@ -60,12 +60,22 @@ const handleWorkspaceDelete = () => {
 
 <template>
   <template v-if="workspaceStatus === 'success'">
-    <FormWorkspace v-model="wsFormModel" :preLoadedData="workspace" method="patch" />
+    <Fieldset :legend="$t('workspaceParams')">
+      <FormWorkspace
+        v-model="wsFormModel"
+        :preLoadedData="workspace"
+        method="patch"
+      />
 
-    <div class="flex gap-x-2 mb-6">
-      <SmartButton :label="$t('save')" @click="handleWorkspaceSave" />
-      <SmartButton :label="$t('deleteWorkspace')" @click="handleWorkspaceDelete" :disabled="blogs?.length" />
-    </div>
+      <div class="flex gap-x-2 mb-6">
+        <SmartButton :label="$t('save')" @click="handleWorkspaceSave" />
+        <SmartButton
+          :label="$t('deleteWorkspace')"
+          @click="handleWorkspaceDelete"
+          :disabled="blogs?.length"
+        />
+      </div>
+    </Fieldset>
 
     <Fieldset :legend="$t('blogsOfWorkspace')">
       <SimpleList :data="blogs" :status="blogsStatus">
@@ -75,12 +85,23 @@ const handleWorkspaceDelete = () => {
       </SimpleList>
 
       <div class="mt-4">
-        <SmartButton :label="$t('createBlog')" @click="createBlogModalOpen = true" />
+        <SmartButton
+          :label="$t('createBlog')"
+          @click="createBlogModalOpen = true"
+        />
       </div>
     </Fieldset>
 
-    <SimpleFormModal v-model="createBlogModalOpen" :header="$t('createBlogModalHeader')" @save="handleCreateBlogSave">
-      <FormBlog v-model="blogFormModel" :wpid="workspace.id" :handleSuccess="handleBlogSuccess" />
+    <SimpleFormModal
+      v-model="createBlogModalOpen"
+      :header="$t('createBlogModalHeader')"
+      @save="handleCreateBlogSave"
+    >
+      <FormBlog
+        v-model="blogFormModel"
+        :wpid="workspace.id"
+        :handleSuccess="handleBlogSuccess"
+      />
     </SimpleFormModal>
   </template>
 </template>

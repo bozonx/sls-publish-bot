@@ -53,16 +53,18 @@ const handleBlogDelete = () => {
 
 <template>
   <template v-if="blogStatus === 'success'">
-    <FormBlog v-model="blogFormModel" :preLoadedData="blog" method="patch" />
+    <Fieldset :legend="$t('blogParams')">
+      <FormBlog v-model="blogFormModel" :preLoadedData="blog" method="patch" />
 
-    <div class="flex gap-x-2">
-      <SmartButton :label="$t('save')" @click="handleBlogSave" />
-      <SmartButton
-        :label="$t('deleteBlog')"
-        @click="handleBlogDelete"
-        :disabled="sns?.length"
-      />
-    </div>
+      <div class="flex gap-x-2">
+        <SmartButton :label="$t('save')" @click="handleBlogSave" />
+        <SmartButton
+          :label="$t('deleteBlog')"
+          @click="handleBlogDelete"
+          :disabled="sns?.length"
+        />
+      </div>
+    </Fieldset>
 
     <Fieldset :legend="$t('manageBlogTags')"> manage </Fieldset>
 

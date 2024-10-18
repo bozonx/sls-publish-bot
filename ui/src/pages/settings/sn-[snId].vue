@@ -35,12 +35,14 @@ const handleSnDelete = () => {
 </script>
 
 <template>
-  <FormSocialMedia v-model="snFormModel" :preLoadedData="sn" method="patch" />
+  <Fieldset :legend="$t('socialMediaParams')">
+    <FormSocialMedia v-model="snFormModel" :preLoadedData="sn" method="patch" />
 
-  <div class="flex gap-x-2">
-    <SmartButton :label="$t('save')" @click="handleSnSave" />
-    <SmartButton :label="$t('deleteSn')" @click="handleSnDelete" />
-  </div>
+    <div class="flex gap-x-2">
+      <SmartButton :label="$t('save')" @click="handleSnSave" />
+      <SmartButton :label="$t('deleteSn')" @click="handleSnDelete" />
+    </div>
+  </Fieldset>
 
   <Fieldset :legend="$t('manageSmTags')"> manage </Fieldset>
 </template>
