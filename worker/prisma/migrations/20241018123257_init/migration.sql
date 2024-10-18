@@ -11,9 +11,26 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Permissions" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT,
+    "descr" TEXT,
+    "payload" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "blogId" INTEGER,
+    "socialMediaId" INTEGER,
+    CONSTRAINT "Permissions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Permissions_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Permissions_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "Workspace" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
+    "descr" TEXT,
     "cfg" TEXT NOT NULL,
     "orderNum" INTEGER,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -38,6 +55,7 @@ CREATE TABLE "GuestsByWorkspace" (
 CREATE TABLE "Blog" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
+    "descr" TEXT,
     "cfg" TEXT NOT NULL,
     "orderNum" INTEGER,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -53,14 +71,15 @@ CREATE TABLE "SocialMedia" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "type" TEXT NOT NULL,
     "name" TEXT,
+    "descr" TEXT,
     "cfg" TEXT NOT NULL,
     "orderNum" INTEGER,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "blogId" INTEGER NOT NULL,
-    "byUserId" INTEGER NOT NULL,
+    "userId" INTEGER,
     CONSTRAINT "SocialMedia_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "SocialMedia_byUserId_fkey" FOREIGN KEY ("byUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "SocialMedia_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -76,34 +95,54 @@ CREATE TABLE "Tag" (
 );
 
 -- CreateTable
-CREATE TABLE "Inbox" (
+CREATE TABLE "Post" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT,
-    "payloadJson" TEXT,
+    "descr" TEXT,
+    "pubDateTime" DATETIME,
+    "payload" TEXT,
+    "pubData" TEXT,
+    "author" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "byUserId" INTEGER NOT NULL,
-    "workspaceId" INTEGER NOT NULL,
-    CONSTRAINT "Inbox_byUserId_fkey" FOREIGN KEY ("byUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Inbox_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "Workspace" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "socialMediaId" INTEGER NOT NULL,
+    "userId" INTEGER,
+    CONSTRAINT "Post_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "Post" (
+CREATE TABLE "Task" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
-    "pubTimestampMinutes" INTEGER,
-    "publicatedData" TEXT,
-    "payloadJson" TEXT,
-    "updatedByUserId" INTEGER,
-    "forcePublishedByUserId" INTEGER,
-    "changedTimeByUserId" INTEGER,
+    "name" TEXT,
+    "descr" TEXT,
+    "type" TEXT NOT NULL,
+    "dateTime" DATETIME NOT NULL,
+    "payload" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "createdByUserId" INTEGER NOT NULL,
-    "socialMediaId" INTEGER NOT NULL,
-    CONSTRAINT "Post_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Post_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "postId" INTEGER,
+    "blogId" INTEGER,
+    "socialMediaId" INTEGER,
+    CONSTRAINT "Task_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Task_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Task_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ChangeLog" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT,
+    "type" TEXT NOT NULL,
+    "dateTime" DATETIME NOT NULL,
+    "payload" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "actionByUserId" INTEGER NOT NULL,
+    "postId" INTEGER,
+    "taskId" INTEGER,
+    CONSTRAINT "ChangeLog_actionByUserId_fkey" FOREIGN KEY ("actionByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "ChangeLog_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "ChangeLog_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateIndex

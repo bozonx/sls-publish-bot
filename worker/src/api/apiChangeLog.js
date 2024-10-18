@@ -1,8 +1,14 @@
 import { Hono } from 'hono';
-import { crudList, crudGet, crudCreate, crudUpdate, crudDelete } from './crudLogic.js';
+import {
+	crudList,
+	crudGet,
+	crudCreate,
+	crudUpdate,
+	crudDelete,
+} from './crudLogic.js';
 
 const app = new Hono();
-const tableName = 'inbox';
+const tableName = 'changelog';
 
 app.get('/', (c) => crudList(c, tableName));
 app.get('/:id', (c) => crudGet(c, tableName));

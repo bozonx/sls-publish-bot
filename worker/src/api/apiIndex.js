@@ -8,7 +8,9 @@ import apiUser from './apiUser.js';
 import apiWorkspace from './apiWorkspace.js';
 import apiBlog from './apiBlog.js';
 import apiSocialMedia from './apiSocialMedia.js';
-import apiInbox from './apiInbox.js';
+import apiTask from './apiTask.js';
+import apiPermission from './apiPermission.js';
+import apiChangeLog from './apiChangeLog.js';
 
 const app = new Hono().basePath('/api');
 
@@ -37,7 +39,9 @@ app.route('/auth/users', apiUser);
 app.route('/auth/workspaces', apiWorkspace);
 app.route('/auth/blogs', apiBlog);
 app.route('/auth/social-media', apiSocialMedia);
-app.route('/auth/inbox', apiInbox);
+app.route('/auth/task', apiTask);
+app.route('/auth/permission', apiPermission);
+app.route('/auth/apiChangeLog', apiChangeLog);
 
 app.post('/tg-auth-from-web', async (c) => {
 	const { id: tgUserId } = await c.req.json();
