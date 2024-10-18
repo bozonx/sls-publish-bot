@@ -17,20 +17,18 @@ datasource db {
 }
 
 model User {
-  id                Int                 @id @default(autoincrement())
-  tgUserId          String              @unique
-  tgChatId          String              @unique
-  lang              String
-  name              String
-  cfg               String
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  id        Int      @id @default(autoincrement())
+  tgUserId  String   @unique
+  tgChatId  String   @unique
+  lang      String
+  name      String
+  cfg       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Permission        Permission[]
   Workspace         Workspace[]
   GuestsByWorkspace GuestsByWorkspace[]
-  Post              Post[]
-  Blog              Blog[]
-  SocialMedia       SocialMedia[]
-  Permissions       Permissions[]
   ChangeLog         ChangeLog[]
 }
 
@@ -77,44 +75,38 @@ model GuestsByWorkspace {
 }
 
 model Blog {
-  id          Int           @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   descr       String?
   cfg         String
   orderNum    Int?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  workspace   Workspace     @relation(fields: [workspaceId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId Int
-  byUser      User          @relation(fields: [byUserId], references: [id])
-  byUserId    Int
+  Permission  Permission[]
   SocialMedia SocialMedia[]
   Tag         Tag[]
-  Permissions Permissions[]
   Task        Task[]
 }
 
 model SocialMedia {
-  id          Int           @id @default(autoincrement())
+  id         Int          @id @default(autoincrement())
   // e.g telegram, dzen, etc
-  type        String
+  type       String
   // optional name in case if there several similar social media
-  name        String?
-  descr       String?
-  cfg         String
-  orderNum    Int?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  blog        Blog          @relation(fields: [blogId], references: [id])
-  blogId      Int
-  // byUser    User     @relation(fields: [byUserId], references: [id])
-  // byUserId  Int
-  Tag         Tag[]
-  Post        Post[]
-  User        User?         @relation(fields: [userId], references: [id])
-  userId      Int?
-  Permissions Permissions[]
-  Task        Task[]
+  name       String?
+  descr      String?
+  cfg        String
+  orderNum   Int?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  blog       Blog         @relation(fields: [blogId], references: [id])
+  blogId     Int
+  Permission Permission[]
+  Tag        Tag[]
+  Post       Post[]
+  Task       Task[]
 }
 
 // has to have blogId or socialMediaId
@@ -150,8 +142,6 @@ model Post {
   // createdByUserId Int
   socialMedia   SocialMedia @relation(fields: [socialMediaId], references: [id])
   socialMediaId Int
-  User          User?       @relation(fields: [userId], references: [id])
-  userId        Int?
   Task          Task[]
   ChangeLog     ChangeLog[]
 }

@@ -51,6 +51,18 @@ export async function useApiListMySns(blogId) {
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
+export async function useApiListBlogTasks(blogId) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task?blog-id=${blogId}`;
+
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
+export async function useApiListSmTasks(smId) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task?social-media-id=${smId}`;
+
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
 ////// GET ITEM
 
 export async function useApiGetMyWorkspace(id) {
@@ -67,6 +79,12 @@ export async function useApiGetMyBlog(id) {
 
 export async function useApiGetMySn(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
+
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
+export async function useApiGetTask(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task/${id}`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
@@ -91,6 +109,14 @@ export async function useApiDeleteMyBlog(id) {
 
 export async function useApiDeleteMySn(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
+
+  return useAsyncData(url, async () =>
+    $fetch(url, { method: "DELETE", ...fetchOptions }),
+  );
+}
+
+export async function useApiDeleteTask(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task/${id}`;
 
   return useAsyncData(url, async () =>
     $fetch(url, { method: "DELETE", ...fetchOptions }),

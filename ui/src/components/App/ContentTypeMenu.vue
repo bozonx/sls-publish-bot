@@ -65,6 +65,19 @@ if (allSmSupportedMicroPosts.length) {
     to: `/blog/${props.blog.id}/micropost`,
   });
 }
+
+items.push({
+  label: t("tasks"),
+  to: `/blog/${props.blog.id}/tasks`,
+});
+items.push({
+  label: t("conserves"),
+  to: `/blog/${props.blog.id}/conserves`,
+});
+items.push({
+  label: t("alreadyPublished"),
+  to: `/blog/${props.blog.id}/published`,
+});
 </script>
 
 <template>

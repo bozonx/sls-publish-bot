@@ -47,7 +47,7 @@ export async function crudCreate(c, tableName) {
 	return c.json(
 		await createBase(c, tableName, {
 			...data,
-			byUserId: userId,
+			// byUserId: userId,
 		}),
 	);
 }
@@ -59,7 +59,7 @@ export async function crudUpdate(c, tableName) {
 	return c.json(
 		await updateBase(c, tableName, data, {
 			id: Number(data.id),
-			byUserId: userId,
+			// byUserId: userId,
 		}),
 	);
 }
