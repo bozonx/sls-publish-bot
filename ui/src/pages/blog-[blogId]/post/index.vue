@@ -3,12 +3,12 @@ const route = useRoute();
 const { t } = useI18n();
 
 const postData = useLocalStateGet(LOCAL_STATES.newPost);
-const me = await useApiMe();
+// const me = await useApiMe();
 const postFormModel = ref(null);
 
 definePageParams({
   title: t("postData"),
-  backUrl: `/blog/${route.params.blogId}`,
+  backUrl: `/blog-${route.params.blogId}`,
 });
 
 const handlePostSave = () => {
@@ -19,9 +19,13 @@ const handlePostSave = () => {
 </script>
 
 <template>
-  <FormPost v-model="postFormModel" :preLoadedData="postData" :createdByUserId="me.id" />
+  <FormPost v-model="postFormModel" :preLoadedData="postData" />
 
   <div class="mt-4">
-    <SmartButton :label="$t('next')" @click="handlePostSave" :disabled="postFormModel?.invalid" />
+    <SmartButton
+      :label="$t('next')"
+      @click="handlePostSave"
+      :disabled="postFormModel?.invalid"
+    />
   </div>
 </template>

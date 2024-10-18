@@ -46,8 +46,5 @@ const handleSubmit = async (form$, FormData) => {
     <FieldMedia />
     <FieldSmartTags />
     <!--   <FieldPubTagsElement name="tags" /> -->
-    <FieldAuthor />
-    <FieldDate />
-    <FieldTime />
   </Vueform>
 </template>

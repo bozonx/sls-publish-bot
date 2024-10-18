@@ -138,8 +138,6 @@ model Post {
   author        String?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-  // createdByUser   User        @relation(fields: [createdByUserId], references: [id])
-  // createdByUserId Int
   socialMedia   SocialMedia @relation(fields: [socialMediaId], references: [id])
   socialMediaId Int
   Task          Task[]

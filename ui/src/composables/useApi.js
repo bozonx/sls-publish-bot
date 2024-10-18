@@ -28,7 +28,11 @@ export async function useApiMe() {
 
   // TODO: кэшировать в session Storage
 
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+  const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
+
+  res.data.value.cfg = res.data.value.cfg && JSON.parse(res.data.value.cfg);
+
+  return res;
 }
 
 ////// GET LISTS

@@ -15,7 +15,7 @@ app.patch('/me', async (c) => {
 	const { userId } = c.get(SESSION_PARAM);
 	const { id: excludedId, ...data } = await c.req.json();
 
-	return c.json(await updateBase(c, tableName, { id: userId }, data));
+	return c.json(await updateBase(c, tableName, data, { id: userId }));
 });
 
 export default app;

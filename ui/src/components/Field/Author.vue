@@ -1,52 +1,55 @@
 <script setup>
 const props = defineProps(["modelValue", "preLoadedData", "handleSubmit"]);
-const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
 
-const form$ = ref(null);
+const { data: me } = await useApiMe();
 
-onMounted(async () => {
-  if (props.preLoadedData)
-    form$.value.load({
-      ...props.preLoadedData,
-      // payloadJson:
-      //   props.preLoadedData.payloadJson &&
-      //   stringifyYaml(JSON.parse(props.preLoadedData.payloadJson)),
-    });
-});
+const authorRef = ref(null);
+const customAuthorRef = ref(null);
+const noAuthor = ref(false);
+const authorName = me.value.cfg.authorName;
 
-watchEffect(() => {
-  emit("update:modelValue", form$.value);
-});
-
-const prepareData = (FormData, form$) => {
-  form$.data.createdByUserId = props.createdByUserId;
-  // form$.data.socialMediaId = props.socialMediaId;
-  // TODO: add name, payloadJson?
-
-  return formSubmitHelper("/auth/posts")(FormData, form$);
+const handleSetUserAuthor = () => {
+  authorRef.value.value = authorName;
 };
 
-const handleSubmit = async (form$, FormData) => {
-  // Using form$.data will INCLUDE conditional elements and it
-  // will submit the form as "Content-Type: application/json".
-  const data = form$.data;
+const handleNoAuthorChange = (isChecked) => {
+  if (isChecked) {
+    authorRef.value.value = null;
+  }
 
-  console.log(111, data);
+  noAuthor.value = isChecked;
 };
 
-// :endpoint="false"
-//  @submit="handleSubmit"
-
-// TODO: add - author
+const handleCustomAuthorChange = (value) => {
+  authorRef.value.value = value;
+};
 </script>
 
 <template>
-  <Vueform :endpoint="false" ref="form$" @submit="handleSubmit">
-    <TextElement name="customAuthor" :label="$t('customAuthor')" />
-
-    <CheckboxElement name="noAuthor">
-      {{ t("noAuthor") }}
-    </CheckboxElement>
-  </Vueform>
+  <TextElement
+    name="author"
+    ref="authorRef"
+    :disabled="true"
+    :columns="{ container: 3 }"
+  />
+  <ButtonElement
+    v-if="authorName"
+    name="setAuthorName"
+    secondary
+    :submits="false"
+    :button-label="t('setAuthor') + ': ' + authorName"
+    :disabled="noAuthor || authorRef?.value === authorName"
+    @click="handleSetUserAuthor"
+  />
+  <TextElement
+    name="customAuthor"
+    ref="customAuthorRef"
+    :label="$t('customAuthor')"
+    :disabled="noAuthor"
+    @change="handleCustomAuthorChange"
+  />
+  <CheckboxElement name="noAuthor" @change="handleNoAuthorChange">
+    {{ t("noAuthor") }}
+  </CheckboxElement>
 </template>

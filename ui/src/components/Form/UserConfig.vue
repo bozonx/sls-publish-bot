@@ -11,26 +11,18 @@ const { t } = useI18n();
 const form$ = ref(null);
 const schema = ref({
   name: { type: "text", label: t("name") },
-  descr: {
-    type: "textarea",
-    label: t("description"),
-  },
   cfg: {
-    type: "textarea",
+    type: "object",
     label: t("config"),
-    default: "{}",
+    schema: {
+      authorName: { type: "text", label: t("authorName") },
+    },
   },
   id: { type: "hidden", default: props.preLoadedData?.id },
 });
 
 onMounted(async () => {
-  if (props.preLoadedData)
-    form$.value.load({
-      ...props.preLoadedData,
-      cfg:
-        props.preLoadedData.cfg &&
-        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
-    });
+  if (props.preLoadedData) form$.value.load(props.preLoadedData);
 });
 
 watchEffect(() => {
@@ -38,9 +30,10 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
+  // form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
+  form$.data.cfg = JSON.stringify(form$.data.cfg);
 
-  return formSubmitHelper("/auth/workspaces")(FormData, form$);
+  return formSubmitHelper("/auth/users/me")(FormData, form$);
 };
 </script>
 

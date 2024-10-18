@@ -41,4 +41,6 @@ const handleSnDelete = () => {
     <SmartButton :label="$t('save')" @click="handleSnSave" />
     <SmartButton :label="$t('deleteSn')" @click="handleSnDelete" />
   </div>
+
+  <Fieldset :legend="$t('manageSmTags')"> manage </Fieldset>
 </template>

@@ -5,8 +5,6 @@ const props = defineProps([
   "method",
   "handleSuccess",
   // for creating
-  "createdByUserId",
-  // for creating
   "socialMediaId",
 ]);
 const emit = defineEmits(["update:modelValue"]);
@@ -19,8 +17,8 @@ onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
       ...props.preLoadedData,
-      payloadJson: props.preLoadedData.payloadJson
-        ? JSON.parse(props.preLoadedData.payloadJson)
+      payload: props.preLoadedData.payload
+        ? JSON.parse(props.preLoadedData.payload)
         : {},
     });
 });
@@ -30,8 +28,7 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  form$.data.payloadJson = JSON.stringify(paramsFormModel.value.data);
-  form$.data.createdByUserId = props.createdByUserId;
+  form$.data.payload = JSON.stringify(paramsFormModel.value.data);
   form$.data.socialMediaId = props.socialMediaId;
 
   return formSubmitHelper("/auth/posts")(FormData, form$);
@@ -43,7 +40,12 @@ const generateName = () => {
 </script>
 
 <template>
-  <Vueform :endpoint="prepareData" :method="props.method" ref="form$" @success="props.handleSuccess">
+  <Vueform
+    :endpoint="prepareData"
+    :method="props.method"
+    ref="form$"
+    @success="props.handleSuccess"
+  >
     <div class="flex gap-x-2 col-span-12 w-full">
       <div class="flex-1">
         <TextElement name="name" :label="$t('name')" />
@@ -52,10 +54,16 @@ const generateName = () => {
         <SmartButton :label="$t('generate')" @click.prevent="generateName" />
       </div>
     </div>
+    <TextareaElement name="descr" :label="$t('description')" />
     <TextareaElement name="text" :label="$t('textMd')" />
+    <FieldAuthor />
+    <FieldDateTime />
   </Vueform>
 
   <div class="mt-12">
-    <FormPostParams v-model="paramsFormModel" :preLoadedData="form$?.data?.payloadJson" />
+    <FormPostParams
+      v-model="paramsFormModel"
+      :preLoadedData="form$?.data?.payloadJson"
+    />
   </div>
 </template>

@@ -27,7 +27,7 @@ for (const sn of allBlogsSn) {
   items.push({
     // TODO: только для дзена ???
     label: `${t("postType.article")} ${makeSnName(sn)}`,
-    to: `/blog/${props.blog.id}/article-${sn.id}`,
+    to: `/blog-${props.blog.id}/article-${sn.id}`,
   });
 }
 
@@ -48,8 +48,8 @@ const allSmSupportedPosts = sns.value.filter((i) =>
 // }
 if (allSmSupportedPosts.length) {
   items.push({
-    label: t("postType.post"),
-    to: `/blog/${props.blog.id}/post`,
+    label: t("createPost"),
+    to: `/blog-${props.blog.id}/post`,
   });
 }
 
@@ -61,22 +61,22 @@ const allSmSupportedMicroPosts = sns.value.filter((i) =>
 
 if (allSmSupportedMicroPosts.length) {
   items.push({
-    label: t("postType.microPost"),
-    to: `/blog/${props.blog.id}/micropost`,
+    label: t("createMicroPost"),
+    to: `/blog-${props.blog.id}/micropost`,
   });
 }
 
 items.push({
   label: t("tasks"),
-  to: `/blog/${props.blog.id}/tasks`,
+  to: `/blog-${props.blog.id}/tasks`,
 });
 items.push({
   label: t("conserves"),
-  to: `/blog/${props.blog.id}/conserves`,
+  to: `/blog-${props.blog.id}/conserves`,
 });
 items.push({
   label: t("alreadyPublished"),
-  to: `/blog/${props.blog.id}/published`,
+  to: `/blog-${props.blog.id}/published`,
 });
 </script>
 

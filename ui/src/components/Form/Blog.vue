@@ -12,6 +12,10 @@ const { t } = useI18n();
 const form$ = ref(null);
 const schema = ref({
   name: { type: "text", label: t("name") },
+  descr: {
+    type: "textarea",
+    label: t("description"),
+  },
   cfg: {
     type: "textarea",
     label: t("config"),
@@ -43,5 +47,11 @@ const prepareData = (FormData, form$) => {
 </script>
 
 <template>
-  <Vueform :endpoint="prepareData" :method="props.method" ref="form$" :schema="schema" @success="props.handleSuccess" />
+  <Vueform
+    :endpoint="prepareData"
+    :method="props.method"
+    ref="form$"
+    :schema="schema"
+    @success="props.handleSuccess"
+  />
 </template>

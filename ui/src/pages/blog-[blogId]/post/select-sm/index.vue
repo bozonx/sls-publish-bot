@@ -20,7 +20,7 @@ definePageParams({
   categoryTitle: blog.value.name,
   categoryUrl: `/blog/${route.params.blogId}`,
   title: t("selectPubSns"),
-  backUrl: `/blog/${route.params.blogId}/post`,
+  backUrl: `/blog-${route.params.blogId}/post`,
 });
 </script>
 
@@ -30,7 +30,10 @@ definePageParams({
   <AppPostDetails postData="postData" />
 
   <div v-for="sm in allSmSupportedPosts">
-    <Fieldset v-if="sm.type === SOCIAL_MEDIAS.telegram" :legend="$t('socialMedia.telegram')">
+    <Fieldset
+      v-if="sm.type === SOCIAL_MEDIAS.telegram"
+      :legend="$t('socialMedia.telegram')"
+    >
       <AppTelegramPubSetup postData="postData" />
     </Fieldset>
   </div>
