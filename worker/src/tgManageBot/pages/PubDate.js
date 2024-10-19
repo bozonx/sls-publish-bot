@@ -57,15 +57,15 @@ export class PubDate extends PubPageBase {
 			`${await makeStatePreview(c, this.state.pub)}\n\n` +
 			t(c, 'selectDateDescr');
 
-		const daysBtn = [];
-
-		for (let i = 3; i <= 6; i++) {
-			daysBtn.push({
-				id: 'DAY',
-				label: makeClosestDayLabel(c, i),
-				payload: i,
-			});
-		}
+		// const daysBtn = [];
+		//
+		// for (let i = 3; i <= 6; i++) {
+		// 	daysBtn.push({
+		// 		id: 'DAY',
+		// 		label: makeClosestDayLabel(c, i),
+		// 		payload: i,
+		// 	});
+		// }
 
 		return defineMenu([
 			[
@@ -85,7 +85,14 @@ export class PubDate extends PubPageBase {
 					payload: 2,
 				},
 			],
-			[...daysBtn],
+			[
+				...[3, 4, 5, 6].map((i) => ({
+					id: 'DAY',
+					label: makeClosestDayLabel(c, i),
+					payload: i,
+				})),
+			],
+			// [...daysBtn],
 			[
 				{
 					id: 'backBtn',

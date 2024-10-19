@@ -29,6 +29,7 @@ watchEffect(async () => {
   border-radius: 0.5rem;
   background: var(--gray-100);
   color: var(--gray-900);
+  white-space: nowrap;
 }
 
 .dark .smart-btn {

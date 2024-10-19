@@ -1,4 +1,5 @@
 import yaml from "js-yaml";
+export * from "../../../worker/src/exportHelpers.js";
 
 export function parseYaml(str) {
   return yaml.load(str);

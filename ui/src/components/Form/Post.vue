@@ -7,8 +7,11 @@ const props = defineProps([
   // for creating
   "socialMediaId",
 ]);
+const route = useRoute();
 const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
+
+const { data: blog } = await useApiGetBlog(route.params.blogId);
 
 const form$ = ref(null);
 const paramsFormModel = ref(null);
@@ -40,12 +43,7 @@ const generateName = () => {
 </script>
 
 <template>
-  <Vueform
-    :endpoint="prepareData"
-    :method="props.method"
-    ref="form$"
-    @success="props.handleSuccess"
-  >
+  <Vueform :endpoint="prepareData" :method="props.method" ref="form$" @success="props.handleSuccess">
     <div class="flex gap-x-2 col-span-12 w-full">
       <div class="flex-1">
         <TextElement name="name" :label="$t('name')" />
@@ -62,14 +60,12 @@ const generateName = () => {
     </GroupElement>
 
     <GroupElement name="dateGroup" :before="$t('publicationDate')">
-      <FieldDateTime />
+      <FieldDate :blog="blog" />
+      <FieldTime :blog="blog" />
     </GroupElement>
   </Vueform>
 
   <div class="mt-12">
-    <FormPostParams
-      v-model="paramsFormModel"
-      :preLoadedData="form$?.data?.payloadJson"
-    />
+    <FormPostParams v-model="paramsFormModel" :preLoadedData="form$?.data?.payloadJson" />
   </div>
 </template>

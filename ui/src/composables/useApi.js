@@ -30,7 +30,7 @@ export async function useApiMe() {
 
   const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
 
-  res.data.value.cfg = res.data.value.cfg && JSON.parse(res.data.value.cfg);
+  res.data.value.cfg = res.data.value.cfg ? JSON.parse(res.data.value.cfg) : {};
 
   return res;
 }
@@ -67,6 +67,18 @@ export async function useApiListSmTasks(smId) {
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
+export async function useApiListBlogTags(blogId = null) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task?blog-id=${blogId}`;
+
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
+export async function useApiListSmTags(smId = null) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task?social-media-id=${smId}`;
+
+  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
 ////// GET ITEM
 
 export async function useApiGetMyWorkspace(id) {
@@ -75,16 +87,36 @@ export async function useApiGetMyWorkspace(id) {
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
+// TODO: remove
 export async function useApiGetMyBlog(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
+export async function useApiGetBlog(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
+  const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
+
+  res.data.value.cfg = res.data.value.cfg ? JSON.parse(res.data.value.cfg) : {};
+
+  return res;
+}
+
+// TODO: remove
 export async function useApiGetMySn(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
 
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
+}
+
+export async function useApiGetSn(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
+  const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
+
+  res.data.value.cfg = res.data.value.cfg ? JSON.parse(res.data.value.cfg) : {};
+
+  return res;
 }
 
 export async function useApiGetTask(id) {

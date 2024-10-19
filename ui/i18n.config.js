@@ -22,7 +22,7 @@ export default defineI18nConfig(() => ({
       postAuthor: "Post author",
       authorName: "Author name",
       publicationDate: "Publication date",
-      date: "Date",
+      // date: "Date",
       time: "Time",
       blogParams: "Blog params",
       blogs: "Blogs",
@@ -78,6 +78,7 @@ export default defineI18nConfig(() => ({
       sureDeleteBlog: "Are you sure you want to delete this blog?",
       previwLinkOnTop: "Preview link on top",
       previewLink: "Link for preview",
+      closestDays: ["Today", "Tomorrow", "Aftertomorrow"],
       socialMedia: {
         dzen: "Dzen",
         telegram: "Telegram",
@@ -116,7 +117,7 @@ export default defineI18nConfig(() => ({
       authorName: "Имя автора",
       postAuthor: "Автор",
       publicationDate: "Дата публикации",
-      date: "Дата",
+      // date: "Дата",
       time: "Время",
       blogParams: "Параметры блога",
       blogs: "Блоги",
@@ -173,6 +174,7 @@ export default defineI18nConfig(() => ({
       sureDeleteSn: "Удалить эту соц сеть?",
       previewLink: "Ссылка для предпросмотра",
       previwLinkOnTop: "Предпросмотр ссылки сверху",
+      closestDays: ["Сегодня", "Завтра", "Послезавтра"],
       socialMedia: {
         dzen: "Дзен",
         telegram: "Telegram",

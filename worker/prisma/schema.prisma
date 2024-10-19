@@ -86,7 +86,6 @@ model Blog {
   workspaceId Int
   Permission  Permission[]
   SocialMedia SocialMedia[]
-  Tag         Tag[]
   Task        Task[]
 }
 
@@ -104,24 +103,10 @@ model SocialMedia {
   blog       Blog         @relation(fields: [blogId], references: [id])
   blogId     Int
   Permission Permission[]
-  Tag        Tag[]
   Post       Post[]
   Task       Task[]
 }
 
-// has to have blogId or socialMediaId
-model Tag {
-  id            Int          @id @default(autoincrement())
-  name          String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  // means tag of specific blog. For all the sm
-  blog          Blog?        @relation(fields: [blogId], references: [id])
-  blogId        Int?
-  // means tag of specific sm
-  socialMedia   SocialMedia? @relation(fields: [socialMediaId], references: [id])
-  socialMediaId Int?
-}
 
 model Post {
   id            Int         @id @default(autoincrement())
@@ -197,4 +182,19 @@ model ChangeLog {
 //   workspace   Workspace @relation(fields: [workspaceId], references: [id])
 //   workspaceId Int
 //   // media
+// }
+
+
+// has to have blogId or socialMediaId
+// model Tag {
+//   id            Int          @id @default(autoincrement())
+//   name          String
+//   createdAt     DateTime     @default(now())
+//   updatedAt     DateTime     @updatedAt
+//   // means tag of specific blog. For all the sm
+//   blog          Blog?        @relation(fields: [blogId], references: [id])
+//   blogId        Int?
+//   // means tag of specific sm
+//   socialMedia   SocialMedia? @relation(fields: [socialMediaId], references: [id])
+//   socialMediaId Int?
 // }

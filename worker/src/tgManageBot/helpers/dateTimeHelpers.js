@@ -24,12 +24,6 @@ export function makeHumanRuDateCompact(c, isoDateStr, timeZone) {
 	return getShortWeekDay(isoDateStr) + ` ${shortDate}`;
 }
 
-export function makeShortDateFromIsoDate(isoDateStr) {
-	const [, monthStr, dayStr] = isoDateStr.split('-');
-
-	return `${dayStr}.${monthStr}`;
-}
-
 export function isoDateToLongLocaleRuDate(isoDateStr) {
 	return new Date(`${isoDateStr}T00:00Z`).toLocaleDateString('ru-RU', {
 		timeZone: '+00:00',
@@ -39,18 +33,11 @@ export function isoDateToLongLocaleRuDate(isoDateStr) {
 	});
 }
 
-export function getShortWeekDay(isoDateStr) {
-	return new Date(`${isoDateStr}T00:00Z`).toLocaleDateString('ru-RU', {
-		timeZone: '+00:00',
-		weekday: 'short',
-	});
-}
-
 export function convertDateTimeToTsMinutes(date, time, timeZone) {
 	return Math.floor(
 		new Date(makeIsoDateFromPubState({ date, time }) + timeZone).getTime() /
-			1000 /
-			60,
+		1000 /
+		60,
 	);
 }
 
@@ -63,13 +50,6 @@ export function timeToMinutes(time) {
 
 	if (hourNum >= 0) return hourNum * 60 + minutesNum;
 	else return hourNum * 60 - minutesNum;
-}
-
-export function todayPlusDaysIsoDate(plusDay = 0, timeZone) {
-	const plusDateTs =
-		new Date().getTime() + Number(plusDay) * 24 * 60 * 60 * 1000;
-
-	return makeIsoLocaleDate(plusDateTs, timeZone);
 }
 
 export function makeIsoLocaleDate(specifiedDate, timeZone) {
@@ -140,30 +120,6 @@ export function isTimePast(
 	return testMinutesTs < nowMinutesTs;
 }
 
-export function normalizeTime(rawTime) {
-	if (
-		!String(rawTime)
-			.trim()
-			.match(/^\d{1,2}\:\d{1,2}$/)
-	)
-		return false;
-
-	const [hourStr, minuteStr] = rawTime.trim().split(':');
-	const time = `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
-
-	if (new Date(`2024-08-06T${time}`).toString() === 'Invalid Date')
-		return false;
-
-	// const hour = Number(hourStr.trim());
-	// const minute = Number(minuteStr.trim());
-	//
-	// if (Number.isNaN(hour) || Number.isNaN(minute)) return false;
-	// else if (hour < 0 || hour > 24) return false;
-	// else if (minute < 0 || minute > 60) return false;
-
-	return time;
-}
-
 export function normalizeShortDateToIsoDate(localeShortDate, timeZone) {
 	const timeZoneMs = timeToMinutes(timeZone) * 60 * 1000;
 
@@ -199,4 +155,50 @@ export function normalizeShortDateToIsoDate(localeShortDate, timeZone) {
 	if (new Date(isoDate).toString() === 'Invalid Date') return false;
 
 	return isoDate;
+}
+
+export function makeShortDateFromIsoDate(isoDateStr) {
+	const [, monthStr, dayStr] = isoDateStr.split('-');
+
+	return `${dayStr}.${monthStr}`;
+}
+
+export function getShortWeekDay(isoDateStr) {
+	return new Date(`${isoDateStr}T00:00Z`).toLocaleDateString('ru-RU', {
+		timeZone: '+00:00',
+		weekday: 'short',
+	});
+}
+
+////////// Shared with UI
+
+export function todayPlusDaysIsoDate(plusDay = 0, timeZone) {
+	const plusDateTs =
+		new Date().getTime() + Number(plusDay) * 24 * 60 * 60 * 1000;
+
+	return makeIsoLocaleDate(plusDateTs, timeZone);
+}
+
+export function normalizeTime(rawTime) {
+	if (
+		!String(rawTime)
+			.trim()
+			.match(/^\d{1,2}\:\d{1,2}$/)
+	)
+		return false;
+
+	const [hourStr, minuteStr] = rawTime.trim().split(':');
+	const time = `${make2SignDigitStr(hourStr)}:${make2SignDigitStr(minuteStr)}`;
+
+	if (new Date(`2024-08-06T${time}`).toString() === 'Invalid Date')
+		return false;
+
+	// const hour = Number(hourStr.trim());
+	// const minute = Number(minuteStr.trim());
+	//
+	// if (Number.isNaN(hour) || Number.isNaN(minute)) return false;
+	// else if (hour < 0 || hour > 24) return false;
+	// else if (minute < 0 || minute > 60) return false;
+
+	return time;
 }

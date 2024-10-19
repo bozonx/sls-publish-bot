@@ -58,44 +58,28 @@ const handleBlogDelete = () => {
 
       <div class="flex gap-x-2">
         <SmartButton :label="$t('save')" @click="handleBlogSave" />
-        <SmartButton
-          :label="$t('deleteBlog')"
-          @click="handleBlogDelete"
-          :disabled="sns?.length"
-        />
+        <SmartButton :label="$t('deleteBlog')" @click="handleBlogDelete" :disabled="sns?.length" />
       </div>
     </Fieldset>
 
-    <Fieldset :legend="$t('manageBlogTags')"> manage </Fieldset>
+    <Fieldset :legend="$t('manageBlogTags')">
+      <AppTagManager :blog="blog" />
+    </Fieldset>
 
     <Fieldset :legend="$t('snsOfBlog')">
       <SimpleList :data="sns" :status="snsStatus">
         <template #item="{ item }">
-          <SmartListItem
-            :label="makeSnName(item)"
-            :to="`/settings/sn-${item.id}`"
-          />
+          <SmartListItem :label="makeSnName(item)" :to="`/settings/sn-${item.id}`" />
         </template>
       </SimpleList>
 
       <div class="mt-4">
-        <SmartButton
-          :label="$t('createSn')"
-          @click="createSnModalOpen = true"
-        />
+        <SmartButton :label="$t('createSn')" @click="createSnModalOpen = true" />
       </div>
     </Fieldset>
 
-    <SimpleFormModal
-      v-model="createSnModalOpen"
-      :header="$t('createSnModalHeader')"
-      @save="handleCreateSnSave"
-    >
-      <FormSocialMedia
-        v-model="snFormModel"
-        :blogId="blog.id"
-        :handleSuccess="handleSnSuccess"
-      />
+    <SimpleFormModal v-model="createSnModalOpen" :header="$t('createSnModalHeader')" @save="handleCreateSnSave">
+      <FormSocialMedia v-model="snFormModel" :blogId="blog.id" :handleSuccess="handleSnSuccess" />
     </SimpleFormModal>
   </template>
 </template>
