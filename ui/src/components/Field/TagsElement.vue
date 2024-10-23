@@ -1,37 +1,78 @@
-<script setup>
-const props = defineProps(["blog", "label"]);
-// const route = useRoute();
-const { t } = useI18n();
+<script>
+import { defineElement, TagsElement } from "@vueform/vueform";
 
-const form$ = ref(null);
-// const textRef = ref(null);
-const items = ref([]);
+export default defineElement({
+  name: "FieldTagsElement",
+  nullValue: [],
+  setup(setupProps, { element }) {
+    const props = toRefs(setupProps);
+    const { update, model } = element;
+    const inputValue = ref("");
+    const defaultClasses = ref({
+      container: "form-text form-text-type ", // added to the element's outermost DOM in ElementLayout
+      inputWrapper:
+        "w-full flex flex-1 transition-input duration-200 border-solid form-border-width-input form-shadow-input form-input-group group form-radius-input form-h-input-height form-bg-input-success form-color-input-success form-border-color-input-success hover:form-shadow-input-hover focused:form-shadow-input-focus focused:form-ring focused-hover:form-shadow-input-hover",
+      input:
+        "w-full bg-transparent h-full form-p-input form-radius-input form-text with-floating:form-p-input-floating form-color-input-success form-autofill-success",
+      input_danger: "has-errors",
+      input_sm: "text-sm",
+      input_md: "text-base",
+      input_lg: "text-lg",
+      $input: (classes, { Size }) => [
+        classes.input,
+        classes[`input_${Size}`],
+        // isDanger ? classes.input_danger : null,
+      ],
+    });
 
-const handleSave = () => {
-  const tags = [...form$.value.data.tags];
-  console.log(222, tags);
-};
+    const handleInput = (event) => {
+      inputValue.value = event.target.value;
+    };
 
-const handleAddTags = async () => {
-  const tags = parseTagsFromInput(form$.value.data.newTag);
+    const handleAddTags = async () => {
+      const tags = parseTagsFromInput(inputValue.value);
 
-  // TODO: здесь могут быть дубли
-  tags.forEach((i) => items.value.push(i));
+      update([...model.value, ...tags]);
 
-  form$.value.elements$.tags.select(tags);
-};
+      inputValue.value = "";
+    };
+
+    return {
+      handleInput,
+      inputValue,
+      defaultClasses,
+      handleAddTags,
+    };
+  },
+});
 </script>
 
 <template>
-  <!-- <Vueform :endpoint="false" ref="form$"> -->
-  <TagsElement name="tags" :items="items" :readOnly="true" />
-  <TextElement name="newTag" :placeholder="$t('writeNewTags')" />
-  <ButtonElement name="addTags" :submit="false" @click="handleAddTags">{{
-    $t("add")
-  }}</ButtonElement>
-  <!-- </Vueform> -->
-
-  <!-- <div class="mt-4"> -->
-  <!-- <SmartButton :label="$t('save')" @click="handleSave" /> -->
-  <!-- </div> -->
+  <ElementLayout>
+    <template #element>
+      <div v-if="value?.length" class="mb-4">
+        <Tag v-for="tag of value" severity="warn" :value="tag" />
+      </div>
+      <div :class="classes.inputWrapper">
+        <input
+          ref="input"
+          type="text"
+          :name="name"
+          :id="name"
+          :value="inputValue"
+          @input="handleInput"
+          v-bind="aria"
+          :class="classes.input"
+          :placeholder="$t('writeNewTags')"
+        />
+      </div>
+      <ButtonElement
+        name="addTags"
+        :submit="false"
+        :disabled="!inputValue"
+        @click="handleAddTags"
+        >{{ $t("add") }}
+      </ButtonElement>
+    </template>
+  </ElementLayout>
 </template>

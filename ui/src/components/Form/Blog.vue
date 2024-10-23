@@ -29,7 +29,7 @@ onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
       ...props.preLoadedData,
-      cfg: props.preLoadedData.cfg && stringifyYaml(props.preLoadedData.cfg),
+      cfg: stringifyYaml(props.preLoadedData.cfg),
     });
 });
 
@@ -39,6 +39,7 @@ watchEffect(() => {
 
 const prepareData = (FormData, form$) => {
   form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
+  form$.data.tags = form$.data.tags.join(",");
 
   return formSubmitHelper("/auth/blogs")(FormData, form$);
 };
@@ -54,10 +55,7 @@ const prepareData = (FormData, form$) => {
     <TextElement name="name" :label="$t('name')" />
     <TextareaElement name="descr" :label="$t('description')" />
     <TextareaElement name="cfg" :label="$t('config')" />
-    <!-- <Fieldset :legend="$t('manageBlogTags')"> -->
-    <!-- <AppTagManager :blog="blog" /> -->
-    <!-- </Fieldset> -->
-    <FieldTagsElement :blog="blog" :label="$t('manageBlogTags')" />
+    <FieldTagsElement name="tags" :label="$t('manageBlogTags')" />
 
     <HiddenElement name="id" :default="props.preLoadedData?.id" />
     <HiddenElement name="workspaceId" :default="props.wpid" />

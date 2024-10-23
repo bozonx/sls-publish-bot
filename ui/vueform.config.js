@@ -3,7 +3,8 @@ import en from "@vueform/vueform/locales/en";
 import ru from "@vueform/vueform/locales/ru";
 import tailwind from "@vueform/vueform/dist/tailwind";
 import { defineConfig } from "@vueform/vueform";
-import PubTagsElement from "./src/components/Field/PubTagsElement.vue";
+// import PubTagsElement from "./src/components/Field/PubTagsElement.vue";
+import FieldTagsElement from "./src/components/Field/TagsElement.vue";
 
 // const runtimeConfig = useRuntimeConfig();
 //
@@ -16,7 +17,7 @@ export default defineConfig({
   theme: tailwind,
   locales: { en, ru },
   locale: "en",
-  elements: [PubTagsElement],
+  elements: [FieldTagsElement],
   // endpoints: {
   //   submit: {
   //     url: runtimeConfig.public.apiBaseUrl,
