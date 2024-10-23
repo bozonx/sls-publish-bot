@@ -15,6 +15,7 @@ export default defineI18nConfig(() => ({
       delete: "Delete",
       cancel: "Cancel",
       ok: "Ok",
+      add: "Add",
       name: "Name",
       description: "Description (optional)",
       customAuthor: "Custom author name",
@@ -78,6 +79,8 @@ export default defineI18nConfig(() => ({
       sureDeleteBlog: "Are you sure you want to delete this blog?",
       previwLinkOnTop: "Preview link on top",
       previewLink: "Link for preview",
+      postGitPath: "Path to blog articles on Github",
+      writeNewTags: "Write new tags",
       closestDays: ["Today", "Tomorrow", "Aftertomorrow"],
       socialMedia: {
         dzen: "Dzen",
@@ -110,6 +113,7 @@ export default defineI18nConfig(() => ({
       delete: "Удалить",
       cancel: "Отменить",
       ok: "ОК",
+      add: "Добавить",
       name: "Название",
       description: "Описание (не обязательно)",
       customAuthor: "Другое имя автора",
@@ -174,6 +178,9 @@ export default defineI18nConfig(() => ({
       sureDeleteSn: "Удалить эту соц сеть?",
       previewLink: "Ссылка для предпросмотра",
       previwLinkOnTop: "Предпросмотр ссылки сверху",
+      postGitPath: "Путь к статьям блога на Github",
+      writeNewTags: "Напишите новые тэги",
+      // TODO: delete???
       closestDays: ["Сегодня", "Завтра", "Послезавтра"],
       socialMedia: {
         dzen: "Дзен",

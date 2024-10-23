@@ -3,7 +3,7 @@ const props = defineProps(["blog", "status"]);
 // const route = useRoute();
 const { t } = useI18n();
 // const blogConf = JSON.parse(props.blog);
-const { data: sns, status: snsStatus } = await useApiListMySns(props.blog.id);
+const { data: sns, status: snsStatus } = await useApiListSns(props.blog.id);
 
 // const allTypes = {};
 

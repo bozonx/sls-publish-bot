@@ -6,7 +6,7 @@ definePageParams({
   showHome: false,
   title: t("appTitle"),
 });
-const { data, status } = await useApiListMyWorkspaces();
+const { data, status } = await useApiListWorkspaces();
 </script>
 
 <template>

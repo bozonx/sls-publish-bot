@@ -4,7 +4,7 @@ const route = useRoute();
 const confirm = useSimpleConfirm();
 // const toast = useToast();
 
-const { data: sn, status: snStatus } = await useApiGetMySn(route.params.snId);
+const { data: sn, status: snStatus } = await useApiGetSn(route.params.snId);
 const snFormModel = ref(null);
 
 definePageParams({
@@ -18,7 +18,7 @@ const handleSnSave = () => {
 
 const handleSnDelete = () => {
   confirm(t("confirmDeletion"), t("sureDeleteSn"), t("delete"), async () => {
-    const { status: deleteStatus } = await useApiDeleteMySn(sn.value.id);
+    const { status: deleteStatus } = await useApiDeleteSn(sn.value.id);
 
     if (deleteStatus.value === "success") {
       navigateTo(`/settings/blog-${sn.value.blogId}`);

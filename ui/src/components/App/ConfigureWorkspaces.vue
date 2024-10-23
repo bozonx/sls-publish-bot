@@ -3,7 +3,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 // const { data: user } = await useApiMe();
-const { data, status } = await useApiListMyWorkspaces();
+const { data, status } = await useApiListWorkspaces();
 const createModalOpen = ref(false);
 const formModel = ref(null);
 
@@ -21,15 +21,25 @@ const handleSuccess = (response, form$) => {
 <template>
   <SimpleList :data="data" :status="status">
     <template #item="{ item }">
-      <SmartListItem :label="item.name" :to="`/settings/workspace-${item.id}`" />
+      <SmartListItem
+        :label="item.name"
+        :to="`/settings/workspace-${item.id}`"
+      />
     </template>
   </SimpleList>
 
   <div class="mt-4">
-    <SmartButton :label="$t('createWorkspace')" @click="createModalOpen = true" />
+    <SmartButton
+      :label="$t('createWorkspace')"
+      @click="createModalOpen = true"
+    />
   </div>
 
-  <SimpleFormModal v-model="createModalOpen" :header="$t('createWorkspaceModalHeader')" @save="handleSave">
+  <SimpleFormModal
+    v-model="createModalOpen"
+    :header="$t('createWorkspaceModalHeader')"
+    @save="handleSave"
+  >
     <FormWorkspace v-model="formModel" :handleSuccess="handleSuccess" />
   </SimpleFormModal>
 </template>

@@ -23,24 +23,19 @@ const schema = ref({
     items: Object.keys(SOCIAL_MEDIAS),
   },
   cfg: {
-    type: "textarea",
+    type: "object",
     label: t("config"),
-    // TODO: взависимости от типа нужно подбирать конфиг по умолчанию
-    // default: BLOG_DEFAULT_YAML_CONFIG,
-    default: "",
+    schema: {
+      // TODO: взависимости от типа нужно подбирать конфиг по умолчанию
+      postGitPath: { type: "text", label: t("postGitPath") },
+    },
   },
   id: { type: "hidden", default: props.preLoadedData?.id },
   blogId: { type: "hidden", default: props.blogId },
 });
 
 onMounted(async () => {
-  if (props.preLoadedData)
-    form$.value.load({
-      ...props.preLoadedData,
-      cfg:
-        props.preLoadedData.cfg &&
-        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
-    });
+  if (props.preLoadedData) form$.value.load(props.preLoadedData);
 });
 
 watchEffect(() => {
@@ -48,7 +43,7 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  form$.data.cfg = JSON.stringify(parseYaml(form$.data.cfg)) || "";
+  form$.data.cfg = JSON.stringify(form$.data.cfg) || "";
 
   return formSubmitHelper("/auth/social-media")(FormData, form$);
 };

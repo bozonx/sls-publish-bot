@@ -4,10 +4,10 @@ const route = useRoute();
 const confirm = useSimpleConfirm();
 // const toast = useToast();
 
-const { data: workspace, status: workspaceStatus } = await useApiGetMyWorkspace(
+const { data: workspace, status: workspaceStatus } = await useApiGetWorkspace(
   route.params.wsId,
 );
-const { data: blogs, status: blogsStatus } = await useApiListMyBlogs(
+const { data: blogs, status: blogsStatus } = await useApiListBlogs(
   workspace.value.id,
 );
 const createBlogModalOpen = ref(false);
@@ -39,7 +39,7 @@ const handleWorkspaceDelete = () => {
     t("sureDeleteWorkspace"),
     t("delete"),
     async () => {
-      const { status: deleteStatus } = await useApiDeleteMyWorkspace(
+      const { status: deleteStatus } = await useApiDeleteWorkspace(
         workspace.value.id,
       );
 

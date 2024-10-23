@@ -10,28 +10,26 @@ const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
 
 const form$ = ref(null);
-const schema = ref({
-  name: { type: "text", label: t("name") },
-  descr: {
-    type: "textarea",
-    label: t("description"),
-  },
-  cfg: {
-    type: "textarea",
-    label: t("config"),
-    default: "",
-  },
-  id: { type: "hidden", default: props.preLoadedData?.id },
-  workspaceId: { type: "hidden", default: props.wpid },
-});
+// const schema = ref({
+//   name: { type: "text", label: t("name") },
+//   descr: {
+//     type: "textarea",
+//     label: t("description"),
+//   },
+//   cfg: {
+//     type: "textarea",
+//     label: t("config"),
+//     default: "",
+//   },
+//   id: { type: "hidden", default: props.preLoadedData?.id },
+//   workspaceId: { type: "hidden", default: props.wpid },
+// });
 
 onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
       ...props.preLoadedData,
-      cfg:
-        props.preLoadedData.cfg &&
-        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
+      cfg: props.preLoadedData.cfg && stringifyYaml(props.preLoadedData.cfg),
     });
 });
 
@@ -51,7 +49,17 @@ const prepareData = (FormData, form$) => {
     :endpoint="prepareData"
     :method="props.method"
     ref="form$"
-    :schema="schema"
     @success="props.handleSuccess"
-  />
+  >
+    <TextElement name="name" :label="$t('name')" />
+    <TextareaElement name="descr" :label="$t('description')" />
+    <TextareaElement name="cfg" :label="$t('config')" />
+    <!-- <Fieldset :legend="$t('manageBlogTags')"> -->
+    <!-- <AppTagManager :blog="blog" /> -->
+    <!-- </Fieldset> -->
+    <FieldTagsElement :blog="blog" :label="$t('manageBlogTags')" />
+
+    <HiddenElement name="id" :default="props.preLoadedData?.id" />
+    <HiddenElement name="workspaceId" :default="props.wpid" />
+  </Vueform>
 </template>

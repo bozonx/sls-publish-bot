@@ -37,22 +37,48 @@ export async function useApiMe() {
 
 ////// GET LISTS
 
-export async function useApiListMyWorkspaces() {
+export async function useApiListWorkspaces() {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces`;
+  const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
 
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+  res.data.value.map((i) => {
+    return {
+      ...i,
+      cfg: i.cfg ? JSON.parse(i.cfg) : {},
+    };
+  });
+
+  return res;
 }
 
-export async function useApiListMyBlogs(wpid) {
+export async function useApiListBlogs(wpid) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs?workspace-id=${wpid}`;
+  const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
 
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+  res.data.value.map((i) => {
+    return {
+      ...i,
+      cfg: i.cfg ? JSON.parse(i.cfg) : {},
+      tags: i.tags ? i.tags.split(",") : [],
+    };
+  });
+
+  return res;
 }
 
-export async function useApiListMySns(blogId) {
+export async function useApiListSns(blogId) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media?blog-id=${blogId}`;
+  const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
 
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+  res.data.value.map((i) => {
+    return {
+      ...i,
+      cfg: i.cfg ? JSON.parse(i.cfg) : {},
+      tags: i.tags ? i.tags.split(",") : [],
+    };
+  });
+
+  return res;
 }
 
 export async function useApiListBlogTasks(blogId) {
@@ -67,35 +93,10 @@ export async function useApiListSmTasks(smId) {
   return useAsyncData(url, async () => $fetch(url, fetchOptions));
 }
 
-export async function useApiListBlogTags(blogId = null) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task?blog-id=${blogId}`;
-
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
-}
-
-export async function useApiListSmTags(smId = null) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/auth/task?social-media-id=${smId}`;
-
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
-}
-
 ////// GET ITEM
 
-export async function useApiGetMyWorkspace(id) {
+export async function useApiGetWorkspace(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
-
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
-}
-
-// TODO: remove
-export async function useApiGetMyBlog(id) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
-
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
-}
-
-export async function useApiGetBlog(id) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
   const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
 
   res.data.value.cfg = res.data.value.cfg ? JSON.parse(res.data.value.cfg) : {};
@@ -103,11 +104,16 @@ export async function useApiGetBlog(id) {
   return res;
 }
 
-// TODO: remove
-export async function useApiGetMySn(id) {
-  const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
+export async function useApiGetBlog(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
+  const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
 
-  return useAsyncData(url, async () => $fetch(url, fetchOptions));
+  res.data.value.cfg = res.data.value.cfg ? JSON.parse(res.data.value.cfg) : {};
+  res.data.value.tags = res.data.value.tags
+    ? res.data.value.tags.split(",")
+    : [];
+
+  return res;
 }
 
 export async function useApiGetSn(id) {
@@ -115,6 +121,9 @@ export async function useApiGetSn(id) {
   const res = await useAsyncData(url, async () => $fetch(url, fetchOptions));
 
   res.data.value.cfg = res.data.value.cfg ? JSON.parse(res.data.value.cfg) : {};
+  res.data.value.tags = res.data.value.tags
+    ? res.data.value.tags.split(",")
+    : [];
 
   return res;
 }
@@ -127,7 +136,7 @@ export async function useApiGetTask(id) {
 
 ////// DELETE ITEM
 
-export async function useApiDeleteMyWorkspace(id) {
+export async function useApiDeleteWorkspace(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/workspaces/${id}`;
 
   return useAsyncData(url, async () =>
@@ -135,7 +144,7 @@ export async function useApiDeleteMyWorkspace(id) {
   );
 }
 
-export async function useApiDeleteMyBlog(id) {
+export async function useApiDeleteBlog(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/blogs/${id}`;
 
   return useAsyncData(url, async () =>
@@ -143,7 +152,7 @@ export async function useApiDeleteMyBlog(id) {
   );
 }
 
-export async function useApiDeleteMySn(id) {
+export async function useApiDeleteSn(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/social-media/${id}`;
 
   return useAsyncData(url, async () =>

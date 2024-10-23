@@ -27,9 +27,7 @@ onMounted(async () => {
   if (props.preLoadedData)
     form$.value.load({
       ...props.preLoadedData,
-      cfg:
-        props.preLoadedData.cfg &&
-        stringifyYaml(JSON.parse(props.preLoadedData.cfg)),
+      cfg: stringifyYaml(props.preLoadedData.cfg),
     });
 });
 

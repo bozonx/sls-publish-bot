@@ -4,10 +4,10 @@ const route = useRoute();
 const confirm = useSimpleConfirm();
 // const toast = useToast();
 
-const { data: blog, status: blogStatus } = await useApiGetMyBlog(
+const { data: blog, status: blogStatus } = await useApiGetBlog(
   route.params.blogId,
 );
-const { data: sns, status: snsStatus } = await useApiListMySns(
+const { data: sns, status: snsStatus } = await useApiListSns(
   route.params.blogId,
 );
 const createSnModalOpen = ref(false);
@@ -35,7 +35,7 @@ const handleSnSuccess = (response, form$) => {
 
 const handleBlogDelete = () => {
   confirm(t("confirmDeletion"), t("sureDeleteBlog"), t("delete"), async () => {
-    const { status: deleteStatus } = await useApiDeleteMyBlog(blog.value.id);
+    const { status: deleteStatus } = await useApiDeleteBlog(blog.value.id);
 
     if (deleteStatus.value === "success") {
       navigateTo(`/settings/workspace-${blog.value.workspaceId}`);
@@ -58,28 +58,42 @@ const handleBlogDelete = () => {
 
       <div class="flex gap-x-2">
         <SmartButton :label="$t('save')" @click="handleBlogSave" />
-        <SmartButton :label="$t('deleteBlog')" @click="handleBlogDelete" :disabled="sns?.length" />
+        <SmartButton
+          :label="$t('deleteBlog')"
+          @click="handleBlogDelete"
+          :disabled="sns?.length"
+        />
       </div>
-    </Fieldset>
-
-    <Fieldset :legend="$t('manageBlogTags')">
-      <AppTagManager :blog="blog" />
     </Fieldset>
 
     <Fieldset :legend="$t('snsOfBlog')">
       <SimpleList :data="sns" :status="snsStatus">
         <template #item="{ item }">
-          <SmartListItem :label="makeSnName(item)" :to="`/settings/sn-${item.id}`" />
+          <SmartListItem
+            :label="makeSnName(item)"
+            :to="`/settings/sn-${item.id}`"
+          />
         </template>
       </SimpleList>
 
       <div class="mt-4">
-        <SmartButton :label="$t('createSn')" @click="createSnModalOpen = true" />
+        <SmartButton
+          :label="$t('createSn')"
+          @click="createSnModalOpen = true"
+        />
       </div>
     </Fieldset>
 
-    <SimpleFormModal v-model="createSnModalOpen" :header="$t('createSnModalHeader')" @save="handleCreateSnSave">
-      <FormSocialMedia v-model="snFormModel" :blogId="blog.id" :handleSuccess="handleSnSuccess" />
+    <SimpleFormModal
+      v-model="createSnModalOpen"
+      :header="$t('createSnModalHeader')"
+      @save="handleCreateSnSave"
+    >
+      <FormSocialMedia
+        v-model="snFormModel"
+        :blogId="blog.id"
+        :handleSuccess="handleSnSuccess"
+      />
     </SimpleFormModal>
   </template>
 </template>

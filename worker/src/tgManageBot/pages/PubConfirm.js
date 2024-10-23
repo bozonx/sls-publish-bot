@@ -12,6 +12,7 @@ export class PubConfirm extends PubPageBase {
 		// show preview
 		await this.printFinalPost(this.me[USER_KEYS.tgChatId], this.state.pub);
 
+		// TODO: может передать текст и медиа чтобы расчиталась длина
 		const shortPubState = {
 			[PUB_KEYS.date]: this.state.pub[PUB_KEYS.date],
 			[PUB_KEYS.time]: this.state.pub[PUB_KEYS.time],

@@ -52,6 +52,8 @@ export function exscidedPostTextLimit(fullPostLength, mediaCount = 0) {
 }
 
 export function calculateTextLengths(c, pubState) {
+	if (!pubState[PUB_KEYS.textHtml]) return [0, 0];
+
 	const contentLength = htmlToCleanText(pubState[PUB_KEYS.textHtml])?.length;
 	const fullPostLength =
 		pubState[PUB_KEYS.template] &&
@@ -180,8 +182,8 @@ export function makePostItemLabel(c, dbItem, markStaled = true) {
 	if (
 		markStaled &&
 		itemPubMinutes <=
-		curTimeMinutes -
-		c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLISHING_MINUS_MINUTES
+			curTimeMinutes -
+				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLISHING_MINUS_MINUTES
 	) {
 		dateTimeLabel = t(c, 'staleMark');
 	} else {
