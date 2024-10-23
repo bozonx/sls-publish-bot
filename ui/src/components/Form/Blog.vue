@@ -55,7 +55,7 @@ const prepareData = (FormData, form$) => {
     <TextElement name="name" :label="$t('name')" />
     <TextareaElement name="descr" :label="$t('description')" />
     <TextareaElement name="cfg" :label="$t('config')" />
-    <FieldTagsElement name="tags" :label="$t('manageBlogTags')" />
+    <FieldTagsElement name="tags" :label="$t('tags')" />
 
     <HiddenElement name="id" :default="props.preLoadedData?.id" />
     <HiddenElement name="workspaceId" :default="props.wpid" />

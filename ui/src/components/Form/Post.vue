@@ -43,7 +43,12 @@ const generateName = () => {
 </script>
 
 <template>
-  <Vueform :endpoint="prepareData" :method="props.method" ref="form$" @success="props.handleSuccess">
+  <Vueform
+    :endpoint="prepareData"
+    :method="props.method"
+    ref="form$"
+    @success="props.handleSuccess"
+  >
     <div class="flex gap-x-2 col-span-12 w-full">
       <div class="flex-1">
         <TextElement name="name" :label="$t('name')" />
@@ -55,17 +60,18 @@ const generateName = () => {
     <TextareaElement name="descr" :label="$t('description')" />
     <TextareaElement name="text" :label="$t('textMd')" />
 
-    <GroupElement name="authorGroup" :before="$t('postAuthor')">
-      <FieldAuthor />
-    </GroupElement>
+    <FieldAuthorElement name="author" :label="$t('postAuthor')" />
+    <!-- <GroupElement name="authorGroup" :before="$t('postAuthor')"> -->
+    <!--   <FieldAuthor /> -->
+    <!-- </GroupElement> -->
 
     <GroupElement name="dateGroup" :before="$t('publicationDate')">
       <FieldDate :blog="blog" />
       <FieldTime :blog="blog" />
     </GroupElement>
-  </Vueform>
 
-  <div class="mt-12">
-    <FormPostParams v-model="paramsFormModel" :preLoadedData="form$?.data?.payloadJson" />
-  </div>
+    <ObjectElement name="payload">
+      <FieldTagsElement name="tags" :label="$t('tags')" />
+    </ObjectElement>
+  </Vueform>
 </template>

@@ -42,6 +42,7 @@ export default defineElement({
       inputValue,
       defaultClasses,
       handleAddTags,
+      input: ref(null),
     };
   },
 });

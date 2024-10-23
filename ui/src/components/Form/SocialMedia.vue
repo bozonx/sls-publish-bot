@@ -71,7 +71,7 @@ const prepareData = (FormData, form$) => {
       :items="Object.keys(SOCIAL_MEDIAS)"
     />
     <TextareaElement name="cfg" :label="$t('config')" />
-    <FieldTagsElement name="tags" :label="$t('manageBlogTags')" />
+    <FieldTagsElement name="tags" :label="$t('tags')" />
 
     <HiddenElement name="id" :default="props.preLoadedData?.id" />
     <HiddenElement name="blogId" :default="props.blogId" />

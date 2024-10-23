@@ -2,8 +2,8 @@
 const route = useRoute();
 const { t } = useI18n();
 
-const { data: blog, status } = await useApiGetMyBlog(route.params.blogId);
-const { data: sns, status: snsStatus } = await useApiListMySns(
+const { data: blog, status } = await useApiGetBlog(route.params.blogId);
+const { data: sns, status: snsStatus } = await useApiListSns(
   route.params.blogId,
 );
 const postData = useLocalStateGet(LOCAL_STATES.newPost);
