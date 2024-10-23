@@ -18,10 +18,10 @@ CREATE TABLE "Permission" (
     "payload" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "toUserId" INTEGER NOT NULL,
     "blogId" INTEGER,
     "socialMediaId" INTEGER,
-    CONSTRAINT "Permission_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Permission_toUserId_fkey" FOREIGN KEY ("toUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Permission_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "Permission_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
@@ -57,6 +57,7 @@ CREATE TABLE "Blog" (
     "name" TEXT NOT NULL,
     "descr" TEXT,
     "cfg" TEXT NOT NULL,
+    "tags" TEXT,
     "orderNum" INTEGER,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
@@ -71,23 +72,12 @@ CREATE TABLE "SocialMedia" (
     "name" TEXT,
     "descr" TEXT,
     "cfg" TEXT NOT NULL,
+    "tags" TEXT,
     "orderNum" INTEGER,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "blogId" INTEGER NOT NULL,
     CONSTRAINT "SocialMedia_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "Tag" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    "blogId" INTEGER,
-    "socialMediaId" INTEGER,
-    CONSTRAINT "Tag_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT "Tag_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -111,8 +101,8 @@ CREATE TABLE "Task" (
     "name" TEXT,
     "descr" TEXT,
     "type" TEXT NOT NULL,
-    "dateTime" DATETIME NOT NULL,
-    "payload" TEXT NOT NULL,
+    "execDateTime" DATETIME NOT NULL,
+    "payload" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "postId" INTEGER,
@@ -126,15 +116,15 @@ CREATE TABLE "Task" (
 -- CreateTable
 CREATE TABLE "ChangeLog" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT,
+    "msg" TEXT,
     "type" TEXT NOT NULL,
     "dateTime" DATETIME NOT NULL,
-    "payload" TEXT NOT NULL,
+    "payload" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "actionByUserId" INTEGER NOT NULL,
+    "actionByUserId" INTEGER,
     "postId" INTEGER,
     "taskId" INTEGER,
-    CONSTRAINT "ChangeLog_actionByUserId_fkey" FOREIGN KEY ("actionByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "ChangeLog_actionByUserId_fkey" FOREIGN KEY ("actionByUserId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "ChangeLog_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "ChangeLog_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );

@@ -8,7 +8,8 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters", "relationJoins"]
+  // , "relationJoins"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -39,8 +40,12 @@ model Permission {
   payload       String
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  user          User         @relation(fields: [userId], references: [id])
-  userId        Int
+  // which user give a permission
+  // fromUser          User         @relation(fields: [fromUserId], references: [id])
+  // fromUserId        Int
+  // which user has given a permission
+  toUser        User         @relation(fields: [toUserId], references: [id])
+  toUserId      Int
   // permissions only for specific blog
   blog          Blog?        @relation(fields: [blogId], references: [id])
   blogId        Int?
@@ -75,14 +80,16 @@ model GuestsByWorkspace {
 }
 
 model Blog {
-  id          Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   descr       String?
   cfg         String
+  // list of tags of blog separated by ","
+  tags        String?
   orderNum    Int?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id])
   workspaceId Int
   Permission  Permission[]
   SocialMedia SocialMedia[]
@@ -97,6 +104,8 @@ model SocialMedia {
   name       String?
   descr      String?
   cfg        String
+  // list of sm of blog separated by ","
+  tags       String?
   orderNum   Int?
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
@@ -107,14 +116,13 @@ model SocialMedia {
   Task       Task[]
 }
 
-
 model Post {
   id            Int         @id @default(autoincrement())
   name          String?
   descr         String?
-  // time of publication
+  // time of publication in UTC
   pubDateTime   DateTime?
-  // JSON additional data of post
+  // data of post in JSON
   payload       String?
   // data of publicated post, depends on certain social media
   // JSON data. It is set only after publication has happened
@@ -134,14 +142,12 @@ model Task {
   name          String?
   descr         String?
   type          String
-  // time of execution in utc
-  dateTime      DateTime
+  // time of execution in UTC
+  execDateTime  DateTime
   // json
-  payload       String
+  payload       String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  // createdByUser   User        @relation(fields: [createdByUserId], references: [id])
-  // createdByUserId Int
   post          Post?        @relation(fields: [postId], references: [id])
   postId        Int?
   // you need to specify blogId or socialMediaId
@@ -156,45 +162,17 @@ model Task {
 
 model ChangeLog {
   id             Int      @id @default(autoincrement())
-  name           String?
+  msg            String?
   type           String
-  // time in utc
+  // event time in utc
   dateTime       DateTime
   // json
-  payload        String
+  payload        String?
   createdAt      DateTime @default(now())
-  actionByUser   User     @relation(fields: [actionByUserId], references: [id])
-  actionByUserId Int
+  actionByUser   User?    @relation(fields: [actionByUserId], references: [id])
+  actionByUserId Int?
   post           Post?    @relation(fields: [postId], references: [id])
   postId         Int?
   task           Task?    @relation(fields: [taskId], references: [id])
   taskId         Int?
 }
-
-// model Inbox {
-//   id          Int       @id @default(autoincrement())
-//   name        String?
-//   payloadJson String?
-//   createdAt   DateTime  @default(now())
-//   updatedAt   DateTime  @updatedAt
-//   byUser      User      @relation(fields: [byUserId], references: [id])
-//   byUserId    Int
-//   workspace   Workspace @relation(fields: [workspaceId], references: [id])
-//   workspaceId Int
-//   // media
-// }
-
-
-// has to have blogId or socialMediaId
-// model Tag {
-//   id            Int          @id @default(autoincrement())
-//   name          String
-//   createdAt     DateTime     @default(now())
-//   updatedAt     DateTime     @updatedAt
-//   // means tag of specific blog. For all the sm
-//   blog          Blog?        @relation(fields: [blogId], references: [id])
-//   blogId        Int?
-//   // means tag of specific sm
-//   socialMedia   SocialMedia? @relation(fields: [socialMediaId], references: [id])
-//   socialMediaId Int?
-// }
