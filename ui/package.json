@@ -19,7 +19,7 @@
     "@vueform/nuxt": "^1.7.0",
     "@vueuse/core": "^11.0.3",
     "@vueuse/nuxt": "^11.0.3",
-    "dayjs-nuxt": "^2.1.9",
+    "dayjs-nuxt": "^2.1.11",
     "js-yaml": "^4.1.0",
     "nuxt": "^3.13.0",
     "nuxt-lodash": "^2.5.3",

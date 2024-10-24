@@ -160,10 +160,35 @@ export async function useApiDeleteSn(id) {
   );
 }
 
+export async function useApiDeletePost(id) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/post/${id}`;
+
+  return useAsyncData(url, async () =>
+    $fetch(url, { method: "DELETE", ...fetchOptions }),
+  );
+}
+
 export async function useApiDeleteTask(id) {
   const url = `${runtimeConfig.public.apiBaseUrl}/auth/task/${id}`;
 
   return useAsyncData(url, async () =>
     $fetch(url, { method: "DELETE", ...fetchOptions }),
+  );
+}
+
+////// CREATE ITEM
+
+export async function useApiCreatePost(body) {
+  const url = `${runtimeConfig.public.apiBaseUrl}/auth/post`;
+
+  return useAsyncData(url, async () =>
+    $fetch(url, {
+      method: "POST",
+      body: {
+        ...body,
+        payload: JSON.stringify(body.payload),
+      },
+      ...fetchOptions,
+    }),
   );
 }

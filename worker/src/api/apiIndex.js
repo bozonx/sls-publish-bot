@@ -9,6 +9,7 @@ import apiWorkspace from './apiWorkspace.js';
 import apiBlog from './apiBlog.js';
 import apiSocialMedia from './apiSocialMedia.js';
 import apiTask from './apiTask.js';
+import apiPost from './apiPost.js';
 import apiPermission from './apiPermission.js';
 import apiChangeLog from './apiChangeLog.js';
 
@@ -40,6 +41,7 @@ app.route('/auth/workspaces', apiWorkspace);
 app.route('/auth/blogs', apiBlog);
 app.route('/auth/social-media', apiSocialMedia);
 app.route('/auth/task', apiTask);
+app.route('/auth/post', apiPost);
 app.route('/auth/permission', apiPermission);
 app.route('/auth/apiChangeLog', apiChangeLog);
 

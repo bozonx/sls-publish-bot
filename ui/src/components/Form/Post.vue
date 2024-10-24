@@ -11,11 +11,11 @@ const props = defineProps([
 const route = useRoute();
 const emit = defineEmits(["update:modelValue"]);
 const { t } = useI18n();
+const dayjs = useDayjs();
 
 const { data: blog } = await useApiGetBlog(route.params.blogId);
 
 const form$ = ref(null);
-const paramsFormModel = ref(null);
 const nameDirty = ref(false);
 const postTypes = Object.keys(POST_TYPES).map((i) => ({
   label: t(`postType.` + i),
@@ -27,12 +27,17 @@ const templates = blog.value.cfg.templates?.[props.postType]?.map((i) => ({
 }));
 
 onMounted(async () => {
+  const { pubDateTime, payload, ...rest } = props.preLoadedData;
+  // TODO: convert to MSK
+  const date = dayjs(pubDateTime).format("YYYY-MM-DD");
+  const time = dayjs(pubDateTime).format("HH:mm");
+
   if (props.preLoadedData)
     form$.value.load({
-      ...props.preLoadedData,
-      payload: props.preLoadedData.payload
-        ? JSON.parse(props.preLoadedData.payload)
-        : {},
+      ...rest,
+      ...payload,
+      date,
+      time,
     });
 });
 
@@ -41,8 +46,8 @@ watchEffect(() => {
 });
 
 const prepareData = (FormData, form$) => {
-  form$.data.payload = JSON.stringify(paramsFormModel.value.data);
-  form$.data.socialMediaId = props.socialMediaId;
+  // form$.data.payload = JSON.stringify(form$.data.payload);
+  // TODO: do it
 
   return formSubmitHelper("/auth/posts")(FormData, form$);
 };
@@ -70,6 +75,26 @@ const handleInputClear = () => {
 
   nameDirty.value = false;
 };
+
+function collectData() {
+  const { textMd, date, time, tags, ...rest } = form$.value.data;
+  const localDate = `${date}T${time}:00Z`;
+  // TODO: convert to UTC
+  const pubDateTime = localDate;
+
+  return {
+    ...rest,
+    pubDateTime,
+    payload: {
+      textMd,
+      tags,
+    },
+  };
+}
+
+defineExpose({
+  collectData,
+});
 </script>
 
 <template>
@@ -125,8 +150,8 @@ const handleInputClear = () => {
       <FieldTime :blog="blog" />
     </GroupElement>
 
-    <ObjectElement name="payload">
-      <FieldTagsElement name="tags" :label="$t('tags')" />
-    </ObjectElement>
+    <FieldTagsElement name="tags" :label="$t('tags')" />
+
+    <HiddenElement name="socialMediaId" :value="props.socialMediaId" />
   </Vueform>
 </template>

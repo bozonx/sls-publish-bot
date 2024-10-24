@@ -2891,10 +2891,10 @@ date-fns@^3.6.0:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.6.0.tgz#f20ca4fe94f8b754951b24240676e8618c0206bf"
   integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
 
-dayjs-nuxt@^2.1.9:
-  version "2.1.9"
-  resolved "https://registry.yarnpkg.com/dayjs-nuxt/-/dayjs-nuxt-2.1.9.tgz#e36d722873bcf82a00b15d294855b36caac35786"
-  integrity sha512-7L1X8Wm+O2s2o+YK8RH1GK0SUUsh7l0lnIzsjaLGvyu64asLs2KVNoh25J4tQurdILp2TyrFaTo/k3k/ZPub9Q==
+dayjs-nuxt@^2.1.11:
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/dayjs-nuxt/-/dayjs-nuxt-2.1.11.tgz#cc6c597f58b7d0d701ed3505cd5d6a56e17c3ba3"
+  integrity sha512-KDDNiET7KAKf6yzL3RaPWq5aV7ql9QTt5fIDYv+4eOegDmnEQGjwkKYADDystsKtPjt7QZerpVbhC96o3BIyqQ==
   dependencies:
     "@nuxt/kit" "^3.7.4"
     dayjs "^1.11.10"

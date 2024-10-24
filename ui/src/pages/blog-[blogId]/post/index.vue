@@ -5,6 +5,7 @@ const { t } = useI18n();
 const postData = useLocalStateGet(LOCAL_STATES.newPost);
 // const me = await useApiMe();
 const postFormModel = ref(null);
+const postFormRef = ref(null);
 
 definePageParams({
   title: t("postData"),
@@ -12,23 +13,25 @@ definePageParams({
 });
 
 const handlePostSave = () => {
-  useLocalStateSet(LOCAL_STATES.newPost, postFormModel.value.data);
-
+  useLocalStateSet(LOCAL_STATES.newPost, postFormRef.value.collectData());
   navigateTo(`/blog-${route.params.blogId}/post/select-sm`);
 };
-const saveToConserves = () => {
-  console.log(1111, postFormModel.value.data);
+const handleToConserves = async () => {
+  const res = await useApiCreatePost(postFormRef.value.collectData());
+
+  console.log(1111, res);
 };
 </script>
 
 <template>
   <FormPost
     v-model="postFormModel"
+    ref="postFormRef"
     :preLoadedData="postData"
     :postType="POST_TYPES.post"
   />
 
-  <div class="mt-4">
+  <div class="mt-4 flex gap-x-2">
     <SmartButton
       :label="$t('next')"
       @click="handlePostSave"

@@ -11,7 +11,6 @@ import {
 	TG_HOME_PAGE,
 	EDIT_ITEM_NAME,
 	DB_TABLE_NAMES,
-	TAG_KEYS,
 } from '../constants.js';
 
 export class PubTags extends PubPageBase {
