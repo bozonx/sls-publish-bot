@@ -83,16 +83,21 @@ CREATE TABLE "SocialMedia" (
 -- CreateTable
 CREATE TABLE "Post" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "type" TEXT NOT NULL,
     "name" TEXT,
     "descr" TEXT,
     "pubDateTime" DATETIME,
-    "payload" TEXT,
+    "payload" TEXT NOT NULL,
     "pubData" TEXT,
     "author" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "socialMediaId" INTEGER NOT NULL,
-    CONSTRAINT "Post_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "blogId" INTEGER,
+    "socialMediaId" INTEGER,
+    "referencePostId" INTEGER,
+    CONSTRAINT "Post_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Post_socialMediaId_fkey" FOREIGN KEY ("socialMediaId") REFERENCES "SocialMedia" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Post_referencePostId_fkey" FOREIGN KEY ("referencePostId") REFERENCES "Post" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable

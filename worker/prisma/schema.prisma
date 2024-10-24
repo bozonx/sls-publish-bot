@@ -34,15 +34,16 @@ model User {
 }
 
 model Permission {
-  id            Int          @id @default(autoincrement())
-  name          String?
-  descr         String?
-  payload       String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  // which user give a permission
-  // fromUser          User         @relation(fields: [fromUserId], references: [id])
-  // fromUserId        Int
+  id        Int      @id @default(autoincrement())
+  name      String?
+  descr     String?
+  payload   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // to which workspace this permission has given
+  // workspace   Workspace     @relation(fields: [workspaceId], references: [id])
+  // workspaceId Int
+
   // which user has given a permission
   toUser        User         @relation(fields: [toUserId], references: [id])
   toUserId      Int
@@ -55,15 +56,16 @@ model Permission {
 }
 
 model Workspace {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  descr             String?
-  cfg               String
-  orderNum          Int?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  byUser            User                @relation(fields: [byUserId], references: [id])
-  byUserId          Int
+  id        Int      @id @default(autoincrement())
+  name      String
+  descr     String?
+  cfg       String
+  orderNum  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  byUser    User     @relation(fields: [byUserId], references: [id])
+  byUserId  Int
+
   GuestsByWorkspace GuestsByWorkspace[]
   Blog              Blog[]
 }
@@ -80,67 +82,83 @@ model GuestsByWorkspace {
 }
 
 model Blog {
-  id          Int           @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   descr       String?
   cfg         String
   // list of tags of blog separated by ","
   tags        String?
   orderNum    Int?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  workspace   Workspace     @relation(fields: [workspaceId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId Int
+
   Permission  Permission[]
   SocialMedia SocialMedia[]
   Task        Task[]
+  Post        Post[]
 }
 
 model SocialMedia {
-  id         Int          @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   // e.g telegram, dzen, etc
-  type       String
+  type      String
   // optional name in case if there several similar social media
-  name       String?
-  descr      String?
-  cfg        String
+  name      String?
+  descr     String?
+  cfg       String
   // list of sm of blog separated by ","
-  tags       String?
-  orderNum   Int?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  blog       Blog         @relation(fields: [blogId], references: [id])
-  blogId     Int
+  tags      String?
+  orderNum  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  blogId    Int
+
   Permission Permission[]
-  Post       Post[]
   Task       Task[]
+  Post       Post[]
 }
 
 model Post {
-  id            Int         @id @default(autoincrement())
-  name          String?
-  descr         String?
+  id              Int          @id @default(autoincrement())
+  // Type of post for separating in UI:
+  //   post, micropost, short, video, podcast
+  type            String
+  name            String?
+  descr           String?
   // time of publication in UTC
-  pubDateTime   DateTime?
+  pubDateTime     DateTime?
   // data of post in JSON
-  payload       String?
+  payload         String
   // data of publicated post, depends on certain social media
   // JSON data. It is set only after publication has happened
-  pubData       String?
+  pubData         String?
   // the final selected author
-  author        String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  socialMedia   SocialMedia @relation(fields: [socialMediaId], references: [id])
-  socialMediaId Int
-  Task          Task[]
-  ChangeLog     ChangeLog[]
+  author          String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  // if blog means this is post for several social media
+  blog            Blog?        @relation(fields: [blogId], references: [id])
+  blogId          Int?
+  // if sm means this is post only for certain social media
+  socialMedia     SocialMedia? @relation(fields: [socialMediaId], references: [id])
+  socialMediaId   Int?
+  // this post for social media references to the main post of blog
+  referencePost   Post?        @relation("PostReference", fields: [referencePostId], references: [id])
+  referencePostId Int?
+
+  References Post[]      @relation("PostReference")
+  Task       Task[]
+  ChangeLog  ChangeLog[]
 }
 
 model Task {
   id            Int          @id @default(autoincrement())
   name          String?
   descr         String?
+  // createPost, etc
   type          String
   // time of execution in UTC
   execDateTime  DateTime
@@ -157,12 +175,14 @@ model Task {
   // if specified means task only for specified social media
   socialMedia   SocialMedia? @relation(fields: [socialMediaId], references: [id])
   socialMediaId Int?
-  ChangeLog     ChangeLog[]
+
+  ChangeLog ChangeLog[]
 }
 
 model ChangeLog {
   id             Int      @id @default(autoincrement())
   msg            String?
+  // update, delete
   type           String
   // event time in utc
   dateTime       DateTime
