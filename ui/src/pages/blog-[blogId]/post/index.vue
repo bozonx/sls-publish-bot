@@ -12,21 +12,31 @@ definePageParams({
 });
 
 const handlePostSave = () => {
-  console.log(1111, postFormModel.value.data);
-
   useLocalStateSet(LOCAL_STATES.newPost, postFormModel.value.data);
 
   navigateTo(`/blog-${route.params.blogId}/post/select-sm`);
 };
+const saveToConserves = () => {
+  console.log(1111, postFormModel.value.data);
+};
 </script>
 
 <template>
-  <FormPost v-model="postFormModel" :preLoadedData="postData" />
+  <FormPost
+    v-model="postFormModel"
+    :preLoadedData="postData"
+    :postType="POST_TYPES.post"
+  />
 
   <div class="mt-4">
     <SmartButton
       :label="$t('next')"
       @click="handlePostSave"
+      :disabled="postFormModel?.invalid"
+    />
+    <SmartButton
+      :label="$t('saveToConserves')"
+      @click="handleToConserves"
       :disabled="postFormModel?.invalid"
     />
   </div>

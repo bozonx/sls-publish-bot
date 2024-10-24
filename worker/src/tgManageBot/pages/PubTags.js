@@ -7,7 +7,6 @@ import {
 } from '../helpers/helpers.js';
 import { breakArray, makeStringArrayUnique } from '../helpers/lib.js';
 import {
-	PUB_KEYS,
 	DEFAULT_BTN_ITEM_ID,
 	TG_HOME_PAGE,
 	EDIT_ITEM_NAME,

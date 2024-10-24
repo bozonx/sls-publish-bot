@@ -3,4 +3,7 @@ export {
 	normalizeTime,
 } from './tgManageBot/helpers/dateTimeHelpers.js';
 
-export { parseTagsFromInput } from './tgManageBot/helpers/helpers.js';
+export {
+	parseTagsFromInput,
+	generatePostName,
+} from './tgManageBot/helpers/helpers.js';

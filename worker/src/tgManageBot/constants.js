@@ -1,14 +1,6 @@
 import { POST_PAYLOAD } from '../commonConstants.js';
 
-export {
-	DB_TABLE_NAMES,
-	CTX_KEYS,
-	USER_KEYS,
-	POST_KEYS,
-	SM_KEYS,
-	TAG_KEYS,
-	POST_PAYLOAD,
-} from '../commonConstants.js';
+export * from '../commonConstants.js';
 
 export const CACHE_PREFIX = 'CACHE';
 export const QUERY_MARKER = 'PageRouter';
@@ -18,7 +10,6 @@ export const TG_HOME_PAGE = 'tg-manager-home';
 export const MAIN_HOME = 'home';
 export const EDIT_ITEM_NAME = 'editItem';
 // export const DEFAULT_SOCIAL_MEDIA = 'telegram';
-export const MENU_ITEM_LABEL_LENGTH = 40;
 export const PUBLICATION_ADD_NOW_SEC = 5;
 export const DEFAULT_PUB_PLUS_DAY = 1;
 // export const USER_SENT_TO_ADMIN_MSG_DELIMITER = '-----';
@@ -31,6 +22,20 @@ export const MAX_TEXT_POST_LENGTH = 4096;
 // export const APP_CFG_KEYS = {
 // 	templates: 'templates',
 // };
+
+export const CTX_KEYS = {
+	// session state from db
+	session: 'session',
+	// user object from DB
+	me: 'me',
+	KV: 'KV',
+	DB_CRUD: 'DB_CRUD',
+	WEB_APP_URL: 'WEB_APP_URL',
+	BOT_SESSION_TTL_DAYS: 'BOT_SESSION_TTL_DAYS',
+	APP_DEBUG: 'APP_DEBUG',
+	TEST_MODE: 'TEST_MODE',
+};
+
 export const TEMPLATE_NAMES = {
 	default: 'default',
 	byFollower: 'byFollower',

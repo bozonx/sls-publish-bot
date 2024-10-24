@@ -14,7 +14,6 @@ import {
 	CTX_KEYS,
 	QUERY_MARKER,
 	PUB_KEYS,
-	TAG_KEYS,
 	USER_KEYS,
 	USER_CFG_KEYS,
 	USER_PERMISSIONS_KEYS,
@@ -182,8 +181,8 @@ export function makePostItemLabel(c, dbItem, markStaled = true) {
 	if (
 		markStaled &&
 		itemPubMinutes <=
-			curTimeMinutes -
-				c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLISHING_MINUS_MINUTES
+		curTimeMinutes -
+		c.ctx[CTX_KEYS.session].sm[SM_KEYS.cfg].PUBLISHING_MINUS_MINUTES
 	) {
 		dateTimeLabel = t(c, 'staleMark');
 	} else {
@@ -388,6 +387,25 @@ export function getTemplates() {
 		],
 		[TEMPLATE_NAMES.noFooter]: ['${CONTENT}\n\n', '${AUTHOR}\n\n', '${TAGS}'],
 	};
+}
+
+export function generatePostName(text, maxLength) {
+	if (!text) return text;
+
+	return (
+		text
+			.trim()
+			.substring(0, maxLength)
+			.trim()
+			// remove line breark
+			.replace(/\n/g, ' ')
+			// remove no words and numeric chars
+			// .replace(/[^\p{L}\p{N}_\-\s.,]/gu, ' ')
+			.replace(/[^\p{L}\p{N}\s]/gu, ' ')
+			// remove space douplicates
+			.replace(/[\s]{2,}/g, ' ')
+			.trim()
+	);
 }
 
 // export function makeInitialAdminUser(MAIN_ADMIN_TG_USER_ID) {

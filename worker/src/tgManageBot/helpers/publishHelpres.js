@@ -5,6 +5,7 @@ import {
 	makeUserNameFromMsg,
 	makeListOfScheduledForDescr,
 	getTemplates,
+	generatePostName,
 } from './helpers.js';
 import {
 	convertTgEntitiesToTgHtml,
@@ -22,7 +23,7 @@ import {
 	POST_KEYS,
 	SM_KEYS,
 	// DEFAULT_SOCIAL_MEDIA,
-	MENU_ITEM_LABEL_LENGTH,
+	POST_NAME_LENGTH,
 } from '../constants.js';
 
 export function makeHashTags(tags) {
@@ -209,17 +210,10 @@ export function convertDbPostToPubState(dbItem) {
 }
 
 export function makeScheduledItemName(pubState) {
-	const fromText = htmlToCleanText(pubState[PUB_KEYS.textHtml])
-		?.trim()
-		.substring(0, MENU_ITEM_LABEL_LENGTH)
-		.trim()
-		// remove line breark
-		.replace(/\n/g, ' ')
-		// remove no words and numeric chars
-		// .replace(/[^\p{L}\p{N}_\-\s.,]/gu, ' ')
-		.replace(/[^\p{L}\p{N}\s]/gu, ' ')
-		// remove space douplicates
-		.replace(/[\s]{2,}/g, ' ');
+	const fromText = generatePostName(
+		htmlToCleanText(pubState[PUB_KEYS.textHtml]),
+		POST_NAME_LENGTH,
+	);
 
 	if (fromText) return fromText;
 	else if (pubState[PUB_KEYS.tags]?.length) {

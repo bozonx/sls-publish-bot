@@ -111,10 +111,10 @@ model SocialMedia {
   // list of sm of blog separated by ","
   tags      String?
   orderNum  Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   blog      Blog     @relation(fields: [blogId], references: [id])
   blogId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   Permission Permission[]
   Task       Task[]

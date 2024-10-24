@@ -1,3 +1,4 @@
+export const POST_NAME_LENGTH = 40;
 export const DB_TABLE_NAMES = {
 	User: 'User',
 	Workspace: 'Workspace',
@@ -7,53 +8,42 @@ export const DB_TABLE_NAMES = {
 	Post: 'Post',
 };
 
-export const CTX_KEYS = {
-	// session state from db
-	session: 'session',
-	// user object from DB
-	me: 'me',
-	KV: 'KV',
-	DB_CRUD: 'DB_CRUD',
-	WEB_APP_URL: 'WEB_APP_URL',
-	BOT_SESSION_TTL_DAYS: 'BOT_SESSION_TTL_DAYS',
-	APP_DEBUG: 'APP_DEBUG',
-	TEST_MODE: 'TEST_MODE',
-};
-
 export const USER_KEYS = {
 	id: 'id',
 	tgUserId: 'tgUserId',
 	tgChatId: 'tgChatId',
+	lang: 'lang',
 	name: 'name',
 	cfg: 'cfg',
-	lang: 'lang',
+	createdAt: 'createdAt',
+	updatedAt: 'updatedAt',
 };
 export const POST_KEYS = {
 	id: 'id',
+	type: 'type',
 	name: 'name',
-	// time of real publication
-	pubTimestampMinutes: 'pubTimestampMinutes',
-	// data of publicated item such as message_id
-	publicatedData: 'publicatedData',
+	descr: 'descr',
+	pubDateTime: 'pubDateTime',
 	payload: 'payload',
+	pubData: 'pubData',
 	author: 'author',
-	createdByUserId: 'createdByUserId',
-	updatedByUserId: 'updatedByUserId',
-	forcePublishedByUserId: 'forcePublishedByUserId',
-	changedTimeByUserId: 'changedTimeByUserId',
+	blogId: 'blogId',
 	socialMediaId: 'socialMediaId',
+	referencePostId: 'referencePostId',
+	createdAt: 'createdAt',
+	updatedAt: 'updatedAt',
 };
 export const SM_KEYS = {
 	id: 'id',
+	type: 'type',
 	name: 'name',
+	descr: 'descr',
 	cfg: 'cfg',
-	blog: 'blog',
-};
-export const TAG_KEYS = {
-	id: 'id',
-	name: 'name',
-	socialMediaId: 'socialMediaId',
+	tags: 'tags',
+	orderNum: 'orderNum',
 	blogId: 'blogId',
+	createdAt: 'createdAt',
+	updatedAt: 'updatedAt',
 };
 
 // common post payload
@@ -62,13 +52,10 @@ export const POST_PAYLOAD = {
 	// textMdV1Raw: 'textMdV1Raw',
 	media: 'media',
 	tags: 'tags',
+	// social media's template
 	template: 'template',
-	// the final selected author
-	// author: 'author',
 	// obviously do not use author
 	noAuthor: 'noAuthor',
 	// author name which has been inputted
 	customAuthor: 'customAuthor',
-	// date: 'date',
-	// time: 'time',
 };
